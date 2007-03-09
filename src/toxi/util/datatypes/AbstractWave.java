@@ -1,0 +1,84 @@
+/* 
+ * Copyright (c) 2006, 2007 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+package toxi.util.datatypes;
+
+public abstract class AbstractWave {
+
+	protected float theta, orig;
+
+	protected float freq;
+
+	protected float amp = 1;
+
+	protected float offset = 0;
+
+	protected float value = 0;
+
+	/**
+	 * @param theta2
+	 * @param delta2
+	 */
+	public AbstractWave(float theta, float freq) {
+		this.theta = this.orig = theta;
+		this.freq = freq;
+		System.out.println(this.getClass().getName() + " theta: " + theta
+				+ " freq: " + freq);
+	}
+
+	public AbstractWave(float theta, float freq, float amp, float offset) {
+		this(theta, freq);
+		this.amp = amp;
+		this.offset = offset;
+	}
+
+	public void setAmp(float amp) {
+		this.amp = amp;
+	}
+
+	public abstract float update();
+
+	public float getValue() {
+		return value;
+	}
+
+	public float getTheta() {
+		return theta;
+	}
+
+	public void setTheta(float theta) {
+		this.theta = this.orig = theta;
+	}
+
+	/**
+	 * @return
+	 */
+	public float getFreq() {
+		return freq;
+	}
+
+	public void setFreq(float freq) {
+		this.freq = freq;
+	}
+
+	public void reset() {
+		theta = orig;
+	}
+}
