@@ -21,7 +21,6 @@ package toxi.audio;
 
 import toxi.math.FastMath;
 import toxi.util.datatypes.AbstractWave;
-import toxi.util.datatypes.SineWave;
 import net.java.games.sound3d.Source;
 import net.java.games.sound3d.Vec3f;
 

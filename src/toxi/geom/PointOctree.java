@@ -37,12 +37,6 @@ public class PointOctree {
 	 */
 	private float minNodeSize = 4;
 
-	/**
-	 * optional setting for {@link #draw(PApplet)} method to skip every Nth
-	 * object in the tree
-	 */
-	private int drawSkipDensity = 0;
-
 	protected PointOctree parent;
 
 	protected PointOctree[] children;

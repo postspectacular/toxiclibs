@@ -32,7 +32,7 @@ import toxi.video.capture.plugins.ProcessorPlugin;
  */
 public class ProcessorPipeline {
 
-	private ArrayList pipeline = new ArrayList();
+	private ArrayList<ProcessorPlugin> pipeline = new ArrayList<ProcessorPlugin>();
 
 	private LibCompVis host;
 
@@ -74,6 +74,7 @@ public class ProcessorPipeline {
 	 * @return
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	private ProcessorPlugin getPluginInstance(Class c, String id)
 			throws InvocationTargetException {
 		try {
@@ -93,8 +94,8 @@ public class ProcessorPipeline {
 		}
 	}
 
-	public ArrayList list() {
-		return new ArrayList(pipeline);
+	public ArrayList<ProcessorPlugin> list() {
+		return new ArrayList<ProcessorPlugin>(pipeline);
 	}
 
 	public ProcessorPlugin getPluginForID(String id) {

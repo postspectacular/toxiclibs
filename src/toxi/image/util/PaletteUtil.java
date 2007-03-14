@@ -29,6 +29,7 @@ package toxi.image.util;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+@SuppressWarnings("unchecked")
 public class PaletteUtil {
 
 	/**
