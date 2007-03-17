@@ -24,22 +24,58 @@ import toxi.math.FastMath;
 import toxi.math.InterpolateStrategy;
 
 public class Vec3D {
-	public float x, y, z;
+	/**
+	 * X coordinate
+	 */
+	public float x;
 
+	/**
+	 * Y coordinate
+	 */
+	public float y;
+
+	/**
+	 * Z coordinate
+	 */
+	public float z;
+
+	/**
+	 * Creates a new zero vector
+	 */
 	public Vec3D() {
 		x = y = z = 0;
 	}
 
-	public Vec3D(float a, float b, float c) {
-		x = a;
-		y = b;
-		z = c;
+	/**
+	 * Creates a new vector with the given coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public Vec3D(float x, float y, float z) {
+		this.x = x;
+		this.y = x;
+		this.z = z;
 	}
 
+	/**
+	 * Creates a new vector with the coordinates by given one
+	 * 
+	 * @param v
+	 *            vector to be copied
+	 */
 	public Vec3D(Vec3D v) {
 		set(v);
 	}
 
+	/**
+	 * Overrides coordinates with the ones of the given vector
+	 * 
+	 * @param v
+	 *            vector to be copied
+	 * @return itself
+	 */
 	public Vec3D set(Vec3D v) {
 		x = v.x;
 		y = v.y;
@@ -47,21 +83,44 @@ public class Vec3D {
 		return this;
 	}
 
-	public Vec3D set(float a, float b, float c) {
-		x = a;
-		y = b;
-		z = c;
+	/**
+	 * Overrides coordinates with the given values
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return itself
+	 */
+	public Vec3D set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
 		return this;
 	}
 
+	/**
+	 * Checks if vector has a magnitude of 0
+	 * 
+	 * @return true, if vector = {0,0,0}
+	 */
 	public boolean isZeroVector() {
 		return x == 0 && y == 0 && z == 0;
 	}
 
+	/**
+	 * Produces the normalized version as a new vector
+	 * 
+	 * @return new vector
+	 */
 	public Vec3D getNormalized() {
 		return new Vec3D(this).normalize();
 	}
 
+	/**
+	 * Normalizes the vector so that its magnitude = 1
+	 * 
+	 * @return itself
+	 */
 	public Vec3D normalize() {
 		float mag = FastMath.sqrt(x * x + y * y + z * z);
 		if (mag > 0) {
@@ -73,36 +132,124 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Limits a vector's magnitude to the length given
+	 * 
+	 * @param lim
+	 *            new maximum magnitude
+	 * @return result as new vector
+	 */
+	public Vec3D getLimited(float lim) {
+		if (magSquared() > lim * lim) {
+			return getNormalized().scaleSelf(lim);
+		}
+		return new Vec3D(this);
+	}
+
+	/**
+	 * Limits the vector's magnitude to the length given
+	 * 
+	 * @param lim
+	 *            new maximum magnitude
+	 * @return itself
+	 */
+	public Vec3D limit(float lim) {
+		if (magSquared() > lim * lim) {
+			return normalize().scaleSelf(lim);
+		}
+		return this;
+	}
+
+	/**
+	 * Calculates the magnitude/eucledian length of the vector
+	 * 
+	 * @return vector length
+	 */
 	public float magnitude() {
 		return FastMath.sqrt(x * x + y * y + z * z);
 	}
 
+	/**
+	 * Calculates only the squared magnitude/length of the vector. Useful for
+	 * inverse square law applications and/or for speed reasons or if the real
+	 * eucledian distance is not required (e.g. sorting)
+	 * 
+	 * @return squared distance (x^2 + y^2 + z^2)
+	 */
 	public float magSquared() {
 		return x * x + y * y + z * z;
 	}
 
+	/**
+	 * Calculates distance to another vector
+	 * 
+	 * @param v
+	 *            non-null vector
+	 * @return distance or NaN if v=null
+	 */
 	public float distanceTo(Vec3D v) {
-		float dx = x - v.x;
-		float dy = y - v.y;
-		float dz = z - v.z;
-		return FastMath.sqrt(dx * dx + dy * dy + dz * dz);
+		if (v != null) {
+			float dx = x - v.x;
+			float dy = y - v.y;
+			float dz = z - v.z;
+			return FastMath.sqrt(dx * dx + dy * dy + dz * dz);
+		} else {
+			return Float.NaN;
+		}
 	}
 
+	/**
+	 * Calculates the squared distance to another vector
+	 * 
+	 * @see #magSquared()
+	 * @param v
+	 *            non-null vector
+	 * @return distance or NaN if v=null
+	 */
 	public float distanceToSquared(Vec3D v) {
-		float dx = x - v.x;
-		float dy = y - v.y;
-		float dz = z - v.z;
-		return dx * dx + dy * dy + dz * dz;
+		if (v != null) {
+			float dx = x - v.x;
+			float dy = y - v.y;
+			float dz = z - v.z;
+			return dx * dx + dy * dy + dz * dz;
+		} else {
+			return Float.NaN;
+		}
 	}
 
+	/**
+	 * Subtracts vector v and returns result as new vector
+	 * 
+	 * @param v
+	 *            vector to be subtracted
+	 * @return result as new vector
+	 */
 	public Vec3D sub(Vec3D v) {
 		return new Vec3D(x - v.x, y - v.y, z - v.z);
 	}
 
+	/**
+	 * Subtracts vector {a,b,c} and returns result as new vector
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @param c
+	 *            Z coordinate
+	 * @return result as new vector
+	 */
 	public Vec3D sub(float a, float b, float c) {
 		return new Vec3D(x - a, y - b, z - c);
 	}
 
+	/**
+	 * Subtracts vector v and overrides coordinates with result
+	 * 
+	 * @param v
+	 *            vector to be subtracted
+	 * @return itself
+	 */
 	public Vec3D subSelf(Vec3D v) {
 		x -= v.x;
 		y -= v.y;
@@ -110,6 +257,17 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Subtracts vector {a,b,c} and overrides coordinates with result
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @param c
+	 *            Z coordinate
+	 * @return itself
+	 */
 	public Vec3D subSelf(float a, float b, float c) {
 		x -= a;
 		y -= b;
@@ -117,14 +275,43 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Add vector v and returns result as new vector
+	 * 
+	 * @param v
+	 *            vector to add
+	 * @return result as new vector
+	 */
 	public Vec3D add(Vec3D v) {
 		return new Vec3D(x + v.x, y + v.y, z + v.z);
 	}
 
+	/**
+	 * Adds vector {a,b,c} and returns result as new vector
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @param c
+	 *            Z coordinate
+	 * @return result as new vector
+	 */
 	public Vec3D add(float a, float b, float c) {
 		return new Vec3D(x + a, y + b, z + c);
 	}
 
+	/**
+	 * Adds vector v and overrides coordinates with result
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @param c
+	 *            Z coordinate
+	 * @return itself
+	 */
 	public Vec3D addSelf(Vec3D v) {
 		x += v.x;
 		y += v.y;
@@ -132,6 +319,17 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Adds vector {a,b,c} and overrides coordinates with result
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @param c
+	 *            Z coordinate
+	 * @return itself
+	 */
 	public Vec3D addSelf(float a, float b, float c) {
 		x += a;
 		y += b;
@@ -139,17 +337,51 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Scales vector uniformly and returns result as new vector
+	 * 
+	 * @param s
+	 *            scale factor
+	 * @return new vector
+	 */
 	public Vec3D scale(float s) {
 		return new Vec3D(x * s, y * s, z * s);
 	}
 
+	/**
+	 * Scales vector non-uniformly and returns result as new vector
+	 * 
+	 * @param a
+	 *            scale factor for X coordinate
+	 * @param b
+	 *            scale factor for Y coordinate
+	 * @param c
+	 *            scale factor for Z coordinate
+	 * @return new vector
+	 */
 	public Vec3D scale(float a, float b, float c) {
 		return new Vec3D(x * a, y * b, z * c);
 	}
 
+	/**
+	 * Scales vector non-uniformly by vector v and returns result as new vector
+	 * 
+	 * @param v
+	 *            scale vector
+	 * @return new vector
+	 */
 	public Vec3D scale(Vec3D s) {
 		return new Vec3D(x * s.x, y * s.y, z * s.z);
 	}
+
+	/**
+	 * Scales vector non-uniformly by vector v and overrides coordinates with
+	 * result
+	 * 
+	 * @param s
+	 *            scale vector
+	 * @return itself
+	 */
 
 	public Vec3D scaleSelf(Vec3D s) {
 		x *= s.x;
@@ -158,6 +390,13 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Scales vector uniformly and overrides coordinates with result
+	 * 
+	 * @param s
+	 *            scale factor
+	 * @return itself
+	 */
 	public Vec3D scaleSelf(float s) {
 		x *= s;
 		y *= s;
@@ -165,6 +404,18 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Scales vector non-uniformly by vector {a,b,c} and overrides coordinates
+	 * with result
+	 * 
+	 * @param a
+	 *            scale factor for X coordinate
+	 * @param b
+	 *            scale factor for Y coordinate
+	 * @param c
+	 *            scale factor for Z coordinate
+	 * @return itself
+	 */
 	public Vec3D scaleSelf(float a, float b, float c) {
 		x *= a;
 		y *= b;
@@ -172,6 +423,12 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
+	 * with result
+	 * 
+	 * @return itself
+	 */
 	public Vec3D invert() {
 		x = -x;
 		y = -y;
@@ -179,22 +436,56 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Scales vector uniformly by factor -1 ( v = -v )
+	 * 
+	 * @return result as new vector
+	 */
 	public Vec3D getInverted() {
 		return new Vec3D(-x, -y, -z);
 	}
 
+	/**
+	 * Calculates cross-product with vector v. The resulting vector is
+	 * perpendicular to both the current and supplied vector.
+	 * 
+	 * @param v
+	 *            vector to cross
+	 * @return cross-product as new vector
+	 */
 	public Vec3D cross(Vec3D v) {
 		return new Vec3D(y * v.z - v.y * z, z * v.x - v.z * x, x * v.y - v.x
 				* y);
 	}
 
+	/**
+	 * Calculates cross-product with vector v. The resulting vector is
+	 * perpendicular to both the current and supplied vector and overrides the
+	 * current.
+	 * 
+	 * @param v
+	 * @return itself
+	 */
 	public Vec3D crossSelf(Vec3D v) {
-		x = y * v.z - v.y * z;
-		y = z * v.x - v.z * x;
+		float cx = y * v.z - v.y * z;
+		float cy = z * v.x - v.z * x;
 		z = x * v.y - v.x * y;
+		y = cy;
+		x = cx;
 		return this;
 	}
 
+	/**
+	 * Calculates cross-product with vector v. The resulting vector is
+	 * perpendicular to both the current and supplied vector and stored in the
+	 * supplied result vector.
+	 * 
+	 * @param v
+	 *            vector to cross
+	 * @param result
+	 *            result vector
+	 * @return result vector
+	 */
 	public Vec3D crossInto(Vec3D v, Vec3D result) {
 		float rx = y * v.z - v.y * z;
 		float ry = z * v.x - v.z * x;
@@ -203,10 +494,21 @@ public class Vec3D {
 		return result;
 	}
 
+	/**
+	 * Computes the scalar product (dot product) with the given vector
+	 * 
+	 * @param v
+	 * @return dot product
+	 */
 	public float dot(Vec3D v) {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer(32);
 		sb.append("{x:");
@@ -219,16 +521,48 @@ public class Vec3D {
 		return sb.toString();
 	}
 
+	/**
+	 * Interpolates the vector towards the given target vector, using linear
+	 * interpolation
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @return result as new vector
+	 */
 	public Vec3D interpolateTo(Vec3D v, float f) {
 		return new Vec3D(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z)
 				* f);
 	}
 
+	/**
+	 * Interpolates the vector towards the given target vector, using the given
+	 * {@link InterpolateStrategy}
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @param s
+	 *            InterpolateStrategy instance
+	 * @return result as new vector
+	 */
 	public Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
 		return new Vec3D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f), s
 				.interpolate(z, v.z, f));
 	}
 
+	/**
+	 * Interpolates the vector towards the given target vector, using linear
+	 * interpolation
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @return itself, result overrides current vector
+	 */
 	public Vec3D interpolateToSelf(Vec3D v, float f) {
 		x += (v.x - x) * f;
 		y += (v.y - y) * f;
@@ -236,23 +570,55 @@ public class Vec3D {
 		return this;
 	}
 
+	/**
+	 * Interpolates the vector towards the given target vector, using the given
+	 * {@link InterpolateStrategy}
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @param s
+	 *            InterpolateStrategy instance
+	 * @return itself, result overrides current vector
+	 */
 	public Vec3D interpolateToSelf(Vec3D v, float f, InterpolateStrategy s) {
 		x = s.interpolate(x, v.x, f);
 		y = s.interpolate(y, v.y, f);
 		z = s.interpolate(z, v.z, f);
-    return this;
+		return this;
 	}
 
+	/**
+	 * Computes the angle between this vector and vector V. This function
+	 * assumes both vectors are normalized, if this can't be guaranteed, use the
+	 * alternative implementation {@link #angleBetween(Vec3D, boolean)}
+	 * 
+	 * @param v
+	 *            vector
+	 * @return angle in radians, or {@link Float.NaN} if vectors are parallel
+	 */
 	public float angleBetween(Vec3D v) {
-		return (float) Math.acos(FastMath.min(dot(v), 1.0f));
+		return (float) Math.acos(dot(v));
 	}
 
+	/**
+	 * Computes the angle between this vector and vector V
+	 * 
+	 * @param v
+	 *            vector
+	 * @param forceNormalize
+	 *            true, if normalized versions of the vectors are to be used
+	 *            (Note: only copies will be used, original vectors will not be
+	 *            altered by this method)
+	 * @return angle in radians
+	 */
 	public float angleBetween(Vec3D v, boolean forceNormalize) {
 		float theta;
 		if (forceNormalize) {
-			theta = FastMath.min(getNormalized().dot(v.getNormalized()), 1.0f);
+			theta = getNormalized().dot(v.getNormalized());
 		} else {
-			theta = FastMath.min(dot(v), 1.0f);
+			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
 	}
@@ -260,6 +626,7 @@ public class Vec3D {
 	// intersection code adapted from C version at http://www.peroxide.dk/
 
 	/**
+	 * 
 	 * Normalized directional vectors expected
 	 * 
 	 * @return: distance to plane in world units, -1 if no intersection.
