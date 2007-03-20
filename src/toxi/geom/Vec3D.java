@@ -23,7 +23,45 @@ package toxi.geom;
 import toxi.math.FastMath;
 import toxi.math.InterpolateStrategy;
 
+/**
+ * Comprehensive 3D vector class with additional basic intersection and
+ * collision detection features.
+ * 
+ * @author Karsten Schmidt
+ * 
+ */
 public class Vec3D {
+
+	/**
+	 * Defines positive X axis
+	 */
+	public static final Vec3D X_AXIS = new Vec3D(1, 0, 0);
+
+	/**
+	 * Defines positive Y axis
+	 */
+	public static final Vec3D Y_AXIS = new Vec3D(0, 1, 0);
+
+	/**
+	 * Defines positive Z axis
+	 */
+	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
+
+	/**
+	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
+	 */
+	public static final int PLANE_FRONT = -1;
+
+	/**
+	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
+	 */
+	public static final int PLANE_BACK = 1;
+
+	/**
+	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
+	 */
+	public static final int ON_PLANE = 0;
+
 	/**
 	 * X coordinate
 	 */
@@ -60,7 +98,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Creates a new vector with the coordinates by given one
+	 * Creates a new vector with the coordinates of the given vector
 	 * 
 	 * @param v
 	 *            vector to be copied
@@ -133,7 +171,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Limits a vector's magnitude to the length given
+	 * Creates a copy of the vector with its magnitude limited to the length given
 	 * 
 	 * @param lim
 	 *            new maximum magnitude
@@ -172,9 +210,9 @@ public class Vec3D {
 	/**
 	 * Calculates only the squared magnitude/length of the vector. Useful for
 	 * inverse square law applications and/or for speed reasons or if the real
-	 * eucledian distance is not required (e.g. sorting)
+	 * eucledian distance is not required (e.g. sorting).
 	 * 
-	 * @return squared distance (x^2 + y^2 + z^2)
+	 * @return squared magnitude (x^2 + y^2 + z^2)
 	 */
 	public float magSquared() {
 		return x * x + y * y + z * z;
@@ -218,7 +256,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Subtracts vector v and returns result as new vector
+	 * Subtracts vector v and returns result as new vector.
 	 * 
 	 * @param v
 	 *            vector to be subtracted
@@ -229,7 +267,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Subtracts vector {a,b,c} and returns result as new vector
+	 * Subtracts vector {a,b,c} and returns result as new vector.
 	 * 
 	 * @param a
 	 *            X coordinate
@@ -244,7 +282,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Subtracts vector v and overrides coordinates with result
+	 * Subtracts vector v and overrides coordinates with result.
 	 * 
 	 * @param v
 	 *            vector to be subtracted
@@ -258,7 +296,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Subtracts vector {a,b,c} and overrides coordinates with result
+	 * Subtracts vector {a,b,c} and overrides coordinates with result.
 	 * 
 	 * @param a
 	 *            X coordinate
@@ -276,7 +314,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Add vector v and returns result as new vector
+	 * Add vector v and returns result as new vector.
 	 * 
 	 * @param v
 	 *            vector to add
@@ -287,7 +325,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Adds vector {a,b,c} and returns result as new vector
+	 * Adds vector {a,b,c} and returns result as new vector.
 	 * 
 	 * @param a
 	 *            X coordinate
@@ -302,14 +340,10 @@ public class Vec3D {
 	}
 
 	/**
-	 * Adds vector v and overrides coordinates with result
+	 * Adds vector v and overrides coordinates with result.
 	 * 
-	 * @param a
-	 *            X coordinate
-	 * @param b
-	 *            Y coordinate
-	 * @param c
-	 *            Z coordinate
+	 * @param v
+	 *            vector to add
 	 * @return itself
 	 */
 	public Vec3D addSelf(Vec3D v) {
@@ -320,7 +354,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Adds vector {a,b,c} and overrides coordinates with result
+	 * Adds vector {a,b,c} and overrides coordinates with result.
 	 * 
 	 * @param a
 	 *            X coordinate
@@ -338,7 +372,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Scales vector uniformly and returns result as new vector
+	 * Scales vector uniformly and returns result as new vector.
 	 * 
 	 * @param s
 	 *            scale factor
@@ -349,7 +383,7 @@ public class Vec3D {
 	}
 
 	/**
-	 * Scales vector non-uniformly and returns result as new vector
+	 * Scales vector non-uniformly and returns result as new vector.
 	 * 
 	 * @param a
 	 *            scale factor for X coordinate
@@ -366,7 +400,7 @@ public class Vec3D {
 	/**
 	 * Scales vector non-uniformly by vector v and returns result as new vector
 	 * 
-	 * @param v
+	 * @param s
 	 *            scale vector
 	 * @return new vector
 	 */
@@ -495,7 +529,9 @@ public class Vec3D {
 	}
 
 	/**
-	 * Computes the scalar product (dot product) with the given vector
+	 * Computes the scalar product (dot product) with the given vector.
+	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry</a>
 	 * 
 	 * @param v
 	 * @return dot product
@@ -596,7 +632,7 @@ public class Vec3D {
 	 * 
 	 * @param v
 	 *            vector
-	 * @return angle in radians, or {@link Float.NaN} if vectors are parallel
+	 * @return angle in radians, or NaN if vectors are parallel
 	 */
 	public float angleBetween(Vec3D v) {
 		return (float) Math.acos(dot(v));
@@ -611,7 +647,7 @@ public class Vec3D {
 	 *            true, if normalized versions of the vectors are to be used
 	 *            (Note: only copies will be used, original vectors will not be
 	 *            altered by this method)
-	 * @return angle in radians
+	 * @return angle in radians, or NaN if vectors are parallel
 	 */
 	public float angleBetween(Vec3D v, boolean forceNormalize) {
 		float theta;
@@ -623,19 +659,56 @@ public class Vec3D {
 		return (float) Math.acos(theta);
 	}
 
-	// intersection code adapted from C version at http://www.peroxide.dk/
+	/**
+	 * Computes the vector's direction in the XY plane (for example for 2D
+	 * points). The positive X axis equals 0 degrees.
+	 * 
+	 * @return rotation angle
+	 */
+	public float headingXY() {
+		return (float) Math.atan2(y, x);
+	}
 
 	/**
+	 * Computes the vector's direction in the XZ plane. The positive X axis
+	 * equals 0 degrees.
 	 * 
-	 * Normalized directional vectors expected
-	 * 
-	 * @return: distance to plane in world units, -1 if no intersection.
+	 * @return rotation angle
 	 */
+	public float headingXZ() {
+		return (float) Math.atan2(z, x);
+	}
 
-	public float intersectRayPlane(Vec3D rayDir, Vec3D pOrigin, Vec3D pNormal) {
-		float d = -pNormal.dot(pOrigin);
-		float numer = pNormal.dot(this) + d;
-		float denom = pNormal.dot(rayDir);
+	/**
+	 * Computes the vector's direction in the YZ plane. The positive Z axis
+	 * equals 0 degrees.
+	 * 
+	 * @return rotation angle
+	 */
+	public float headingYZ() {
+		return (float) Math.atan2(y, z);
+	}
+
+	// intersection code below is adapted from C version at
+	// http://www.peroxide.dk/
+
+	/**
+	 * Calculates the distance of the vector to the given plane in the specified
+	 * direction. A plane is specified by a 3D point and a normal vector
+	 * perpendicular to the plane. Normalized directional vectors expected (for
+	 * rayDir and planeNormal).
+	 * 
+	 * @param rayDir
+	 *            intersection direction
+	 * @param planeOrigin
+	 * @param planeNormal
+	 * @return distance to plane in world units, -1 if no intersection.
+	 */
+	public float intersectRayPlane(Vec3D rayDir, Vec3D planeOrigin,
+			Vec3D planeNormal) {
+		float d = -planeNormal.dot(planeOrigin);
+		float numer = planeNormal.dot(this) + d;
+		float denom = planeNormal.dot(rayDir);
 
 		// normal is orthogonal to vector, cant intersect
 		if (FastMath.abs(denom) < FastMath.EPS)
@@ -645,16 +718,23 @@ public class Vec3D {
 	}
 
 	/**
-	 * Normalized directional vectors expected
+	 * Calculates the distance of the vector to the given sphere in the
+	 * specified direction. A sphere is defined by a 3D point and a radius.
+	 * Normalized directional vectors expected.
 	 * 
+	 * @param rayDir
+	 *            intersection direction
+	 * @param sphereOrigin
+	 * @param sphereRadius
 	 * @return distance to sphere in world units, -1 if no intersection.
 	 */
 
-	public float intersectRaySphere(Vec3D rayDir, Vec3D sOrigin, float sRadius) {
-		Vec3D q = sOrigin.sub(this);
+	public float intersectRaySphere(Vec3D rayDir, Vec3D sphereOrigin,
+			float sphereRadius) {
+		Vec3D q = sphereOrigin.sub(this);
 		float c = q.magnitude();
 		float v = q.dot(rayDir);
-		float d = sRadius * sRadius - (c * c - v * v);
+		float d = sphereRadius * sphereRadius - (c * c - v * v);
 
 		// If there was no intersection, return -1
 		if (d < 0.0)
@@ -665,9 +745,13 @@ public class Vec3D {
 	}
 
 	/**
-	 * Notes : Triangle should be defined in clockwise order a,b,c
+	 * Checks if point vector is inside the triangle created by the points a, b
+	 * and c. These points will create a plane and the point checked will have
+	 * to be on this plane in the region between a,b,c.
 	 * 
-	 * @return: TRUE if point is in triangle, FALSE if not.
+	 * Note: The triangle must be defined in clockwise order a,b,c
+	 * 
+	 * @return true, if point is in triangle.
 	 */
 
 	public boolean isInTriangle(Vec3D a, Vec3D b, Vec3D c) {
@@ -683,9 +767,14 @@ public class Vec3D {
 	}
 
 	/**
-	 * Helper function for closestPointOnTriangle()
 	 * 
-	 * @return closest point on line segment
+	 * Helper function for {@link #closestPointOnTriangle(Vec3D, Vec3D, Vec3D)}
+	 * 
+	 * @param a
+	 *            start point of line segment
+	 * @param b
+	 *            end point of line segment
+	 * @return closest point on the line segment a -> b
 	 */
 
 	public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
@@ -712,7 +801,16 @@ public class Vec3D {
 	}
 
 	/**
-	 * @return closest point on line triangle edge
+	 * Finds and returns the closest point on any of the edges of the given
+	 * triangle.
+	 * 
+	 * @param a
+	 *            triangle vertex
+	 * @param b
+	 *            triangle vertex
+	 * @param c
+	 *            triangle vertex
+	 * @return closest point
 	 */
 
 	public Vec3D closestPointOnTriangle(Vec3D a, Vec3D b, Vec3D c) {
@@ -738,7 +836,13 @@ public class Vec3D {
 	}
 
 	/**
-	 * @return TRUE if point is in sphere, FALSE if not.
+	 * Checks if the point is inside the given sphere.
+	 * 
+	 * @param sO
+	 *            sphere origin/centre
+	 * @param sR
+	 *            sphere radius
+	 * @return true, if point is in sphere
 	 */
 
 	public boolean isInSphere(Vec3D sO, float sR) {
@@ -747,6 +851,13 @@ public class Vec3D {
 	}
 
 	/**
+	 * Calculates the normal vector on the given ellipsoid in the direction of
+	 * the current point.
+	 * 
+	 * @param eO
+	 *            ellipsoid origin/centre
+	 * @param eR
+	 *            ellipsoid radius
 	 * @return a unit normal vector to the tangent plane of the ellipsoid in the
 	 *         point.
 	 */
@@ -762,15 +873,16 @@ public class Vec3D {
 	}
 
 	/**
-	 * @return One of 3 classification codes
+	 * Checks and classifies the relative position of the point to the given
+	 * plane.
+	 * 
+	 * @param pO
+	 *            plane origin
+	 * @param pN
+	 *            plane normal vector
+	 * @return One of the 3 classification codes: PLANE_FRONT, PLANE_BACK,
+	 *         ON_PLANE
 	 */
-
-	public static final int PLANE_FRONT = -1;
-
-	public static final int PLANE_BACK = 1;
-
-	public static final int ON_PLANE = 0;
-
 	public int classifyPoint(Vec3D pO, Vec3D pN) {
 		Vec3D dir = pO.sub(this);
 		float d = dir.dot(pN);
@@ -782,17 +894,30 @@ public class Vec3D {
 		return ON_PLANE;
 	}
 
-	// from Real-Time Collision Detection by Christer Ericson, published
-	// by Morgan Kaufmann Publishers, Copyright 2005 Elsevier Inc
+	/**
+	 * Computes the the point closest to the current vector on the surface of
+	 * triangle abc.
+	 * 
+	 * From Real-Time Collision Detection by Christer Ericson, published by
+	 * Morgan Kaufmann Publishers, Copyright 2005 Elsevier Inc
+	 * 
+	 * @param a
+	 *            triangle vertex
+	 * @param b
+	 *            triangle vertex
+	 * @param c
+	 *            triangle vertex
+	 * @return closest point on triangle (result may also be one of a, b or c)
+	 */
 
-	public Vec3D closestPointTriangle(Vec3D p, Vec3D a, Vec3D b, Vec3D c) {
+	public Vec3D closestPointTriangle(Vec3D a, Vec3D b, Vec3D c) {
 		Vec3D ab = b.sub(a);
 		Vec3D ac = c.sub(a);
 		Vec3D bc = c.sub(b);
 
-		Vec3D pa = p.sub(a);
-		Vec3D pb = p.sub(b);
-		Vec3D pc = p.sub(c);
+		Vec3D pa = this.sub(a);
+		Vec3D pb = this.sub(b);
+		Vec3D pc = this.sub(c);
 
 		// Compute parametric position s for projection P' of P on AB,
 		// P' = A + s*AB, s = snom/(snom+sdenom)
@@ -819,7 +944,7 @@ public class Vec3D {
 
 		// P is outside (or on) AB if the triple scalar product [N PA PB] <= 0
 		Vec3D n = ab.cross(ac);
-		float vc = n.dot(a.sub(p).crossSelf(b.sub(p)));
+		float vc = n.dot(a.sub(this).crossSelf(b.sub(this)));
 
 		// If P outside AB and within feature region of AB,
 		// return projection of P onto AB
@@ -829,7 +954,7 @@ public class Vec3D {
 		}
 
 		// P is outside (or on) BC if the triple scalar product [N PB PC] <= 0
-		float va = n.dot(b.sub(p).crossSelf(c.sub(p)));
+		float va = n.dot(b.sub(this).crossSelf(c.sub(this)));
 		// If P outside BC and within feature region of BC,
 		// return projection of P onto BC
 		if (va <= 0.0f && unom >= 0.0f && udenom >= 0.0f) {
@@ -838,7 +963,7 @@ public class Vec3D {
 		}
 
 		// P is outside (or on) CA if the triple scalar product [N PC PA] <= 0
-		float vb = n.dot(c.sub(p).crossSelf(a.sub(p)));
+		float vb = n.dot(c.sub(this).crossSelf(a.sub(this)));
 		// If P outside CA and within feature region of CA,
 		// return projection of P onto CA
 		if (vb <= 0.0f && tnom >= 0.0f && tdenom >= 0.0f) {
@@ -855,12 +980,28 @@ public class Vec3D {
 		return a.scale(u).addSelf(b.scale(v)).addSelf(c.scale(w));
 	}
 
-	// Returns true if sphere s intersects triangle ABC, false otherwise.
-	// The Vec3D p on abc closest to the sphere center is also returned
+	/**
+	 * Considers the current vector as centre of a collision sphere with radius
+	 * r and checks if the triangle abc intersects with this sphere. The Vec3D p
+	 * The point on abc closest to the sphere center is returned via the
+	 * supplied result vector argument.
+	 * 
+	 * @param r
+	 *            collision sphere radius
+	 * @param a
+	 *            triangle vertex
+	 * @param b
+	 *            triangle vertex
+	 * @param c
+	 *            triangle vertex
+	 * @param result
+	 *            a non-null vector for storing the result
+	 * @return true, if sphere intersects triangle ABC
+	 */
 	public boolean intersectSphereTriangle(float r, Vec3D a, Vec3D b, Vec3D c,
 			Vec3D result) {
 		// Find Vec3D P on triangle ABC closest to sphere center
-		result.set(closestPointTriangle(this, a, b, c));
+		result.set(this.closestPointTriangle(a, b, c));
 
 		// Sphere and triangle intersect if the (squared) distance from sphere
 		// center to Vec3D p is less than the (squared) sphere radius
@@ -868,6 +1009,11 @@ public class Vec3D {
 		return v.x * v.x + v.y * v.y + v.z * v.z <= r * r;
 	}
 
+	/**
+	 * Factory method.
+	 * 
+	 * @return a new random normalized vector.
+	 */
 	public static final Vec3D randomVector() {
 		Vec3D rnd = new Vec3D((float) Math.random() * 2 - 1, (float) Math
 				.random() * 2 - 1, (float) Math.random() * 2 - 1);
