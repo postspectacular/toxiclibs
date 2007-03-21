@@ -78,7 +78,7 @@ public class Vec3D {
 	public float z;
 
 	/**
-	 * Creates a new zero vector
+	 * Creates a new zero vect	`or
 	 */
 	public Vec3D() {
 		x = y = z = 0;
@@ -93,7 +93,7 @@ public class Vec3D {
 	 */
 	public Vec3D(float x, float y, float z) {
 		this.x = x;
-		this.y = x;
+		this.y = y;
 		this.z = z;
 	}
 
