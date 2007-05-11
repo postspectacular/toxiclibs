@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package toxi.util.datatypes;
+package toxi.math.waves;
 
 public class AMFMSineWave extends AbstractWave {
 
@@ -73,9 +73,9 @@ public class AMFMSineWave extends AbstractWave {
 		return amod;
 	}
 	
-	public void reset() {
-		super.reset();
-		fmod.reset();
-		amod.reset();
+	public void resetTheta() {
+		super.resetTheta();
+		fmod.resetTheta();
+		amod.resetTheta();
 	}
 }

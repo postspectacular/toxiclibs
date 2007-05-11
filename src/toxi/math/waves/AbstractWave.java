@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package toxi.util.datatypes;
+package toxi.math.waves;
 
 public abstract class AbstractWave {
 
@@ -53,6 +53,10 @@ public abstract class AbstractWave {
 		this.amp = amp;
 	}
 
+	public float getAmp() {
+		return amp;
+	}
+	
 	public abstract float update();
 
 	public float getValue() {
@@ -67,18 +71,24 @@ public abstract class AbstractWave {
 		this.theta = this.orig = theta;
 	}
 
+	public void resetTheta() {
+		theta = orig;
+	}
+
 	/**
-	 * @return
+	 * Returns the wave's frequency.
+	 * @return frequency, default is 1.
 	 */
-	public float getFreq() {
+	public float getFrequency() {
 		return freq;
 	}
 
-	public void setFreq(float freq) {
+	/**
+	 * 
+	 * @param freq
+	 */
+	public void setFrequency(float freq) {
 		this.freq = freq;
 	}
 
-	public void reset() {
-		theta = orig;
-	}
 }

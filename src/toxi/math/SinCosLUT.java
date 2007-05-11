@@ -18,12 +18,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package toxi.util.datatypes;
+package toxi.math;
 
 public class SinCosLUT {
 
 	// set table precision to 0.5 degrees
-	public static final float SC_PRECISION = 0.5f;
+	public static final float SC_PRECISION = 0.25f;
 
 	// caculate reciprocal for conversions
 	public static final float SC_INV_PREC = 1 / SC_PRECISION;
@@ -35,9 +35,9 @@ public class SinCosLUT {
 
 	public static final float[] cosLUT = new float[SC_PERIOD];
 
-	public static final float DEG_TO_RAD = (float)(Math.PI / 180.0f);
+	public static final float DEG_TO_RAD = (float) (Math.PI / 180.0f);
 
-	public static final float RAD_TO_DEG = (float)(180.0f / Math.PI);
+	public static final float RAD_TO_DEG = (float) (180.0f / Math.PI);
 
 	// init sin/cos tables with values
 	// should be called from setup()
@@ -47,5 +47,24 @@ public class SinCosLUT {
 			cosLUT[i] = (float) Math.cos(i * DEG_TO_RAD * SC_PRECISION);
 		}
 	}
+
+	public static float sin(float radians) {
+		if (radians >= 0) {
+			int idx = (int) (radians * RAD_TO_DEG * SC_PRECISION);
+			idx %= SC_PERIOD;
+			return sinLUT[idx];
+		}
+		// FIXME add support for negative inputs
+		return 0;
+	}
 	
+	public static float cos(float radians) {
+		if (radians >= 0) {
+			int idx = (int) (radians * RAD_TO_DEG * SC_PRECISION);
+			idx %= SC_PERIOD;
+			return cosLUT[idx];
+		}
+		// FIXME add support for negative inputs
+		return 0;
+	}
 }

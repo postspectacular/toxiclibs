@@ -20,7 +20,7 @@
 package toxi.audio;
 
 import toxi.math.FastMath;
-import toxi.util.datatypes.AbstractWave;
+import toxi.math.waves.AbstractWave;
 import net.java.games.sound3d.Source;
 import net.java.games.sound3d.Vec3f;
 

@@ -129,7 +129,7 @@ public class PointOctree {
 	
 	public ArrayList getPointsWithinSquaredRadius(Vec3D p, float clipRadius) {
 		ArrayList results = null;
-		float radius = dim2 * dim2 * 3;
+		float radius = dim2 * dim2 * 4;
 		if (p.sub(centre).magSquared() < clipRadius + radius) {
 			if (data != null) {
 				for (int i = data.size() - 1; i >= 0; i--) {

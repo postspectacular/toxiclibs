@@ -14,7 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import net.java.games.sound3d.Source;
 import toxi.math.FastMath;
-import toxi.util.datatypes.SineWave;
+import toxi.math.waves.SineWave;
 
 /**
  * @author kschmidt
