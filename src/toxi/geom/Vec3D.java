@@ -78,7 +78,7 @@ public class Vec3D {
 	public float z;
 
 	/**
-	 * Creates a new zero vect	`or
+	 * Creates a new zero vect `or
 	 */
 	public Vec3D() {
 		x = y = z = 0;
@@ -171,7 +171,8 @@ public class Vec3D {
 	}
 
 	/**
-	 * Creates a copy of the vector with its magnitude limited to the length given
+	 * Creates a copy of the vector with its magnitude limited to the length
+	 * given
 	 * 
 	 * @param lim
 	 *            new maximum magnitude
@@ -547,13 +548,8 @@ public class Vec3D {
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer(32);
-		sb.append("{x:");
-		sb.append(x);
-		sb.append(", y:");
-		sb.append(y);
-		sb.append(", z:");
-		sb.append(z);
-		sb.append("}");
+		sb.append("{x:").append(x).append(", y:").append(y).append(", z:")
+				.append(z).append("}");
 		return sb.toString();
 	}
 
@@ -848,6 +844,28 @@ public class Vec3D {
 	public boolean isInSphere(Vec3D sO, float sR) {
 		float d = this.sub(sO).magnitude();
 		return (d <= sR);
+	}
+
+	/**
+	 * Checks if the point is inside the given axis-aligned bounding box.
+	 * 
+	 * @param bO
+	 *            bounding box origin/center
+	 * @param bDim
+	 *            bounding box dimensions
+	 * @return true, if point is inside the box
+	 */
+	public boolean isInAABB(Vec3D bO, Vec3D bDim) {
+		float w = bDim.x * 0.5f;
+		if (x < bO.x - w || x > bO.x + w)
+			return false;
+		w = bDim.y * 0.5f;
+		if (y < bO.y - w || y > bO.y + w)
+			return false;
+		w = bDim.z * 0.5f;
+		if (z < bO.z - w || z > bO.z + w)
+			return false;
+		return true;
 	}
 
 	/**

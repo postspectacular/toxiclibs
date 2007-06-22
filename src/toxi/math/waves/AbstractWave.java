@@ -39,8 +39,6 @@ public abstract class AbstractWave {
 	public AbstractWave(float theta, float freq) {
 		this.theta = this.orig = theta;
 		this.freq = freq;
-		System.out.println(this.getClass().getName() + " theta: " + theta
-				+ " freq: " + freq);
 	}
 
 	public AbstractWave(float theta, float freq, float amp, float offset) {
@@ -91,4 +89,14 @@ public abstract class AbstractWave {
 		this.freq = freq;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		StringBuffer sb=new StringBuffer();
+		sb.append(this.getClass().getName()).append(" theta: ").append(theta);
+		sb.append(" freq: ").append(freq);
+		sb.append(" amp: ").append(amp);
+		return sb.toString();
+	}
 }

@@ -1,4 +1,9 @@
+toxi.audio
 toxi.geom
 toxi.image.util
 toxi.math
+toxi.math.noise
+toxi.math.waves
 toxi.util.datatypes
+toxi.video.capture
+toxi.video.capture.plugins
