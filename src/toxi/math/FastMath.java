@@ -23,11 +23,11 @@ public class FastMath {
 
 	public static final float PI = (float) Math.PI;
 
-	public static final float HALF_PI = PI / 2.0f;
+	public static final float HALF_PI = PI * 0.5f;
 
-	public static final float THIRD_PI = PI / 3.0f;
+	public static final float THIRD_PI = PI * 0.333333333f;
 
-	public static final float QUARTER_PI = PI / 4.0f;
+	public static final float QUARTER_PI = PI * 0.25f;
 
 	public static final float TWO_PI = PI * 2.0f;
 
