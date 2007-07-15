@@ -205,7 +205,7 @@ public class Vec3D {
 	 * @return vector length
 	 */
 	public float magnitude() {
-		return FastMath.sqrt(x * x + y * y + z * z);
+		return (float)Math.sqrt(x * x + y * y + z * z);
 	}
 
 	/**
@@ -685,6 +685,36 @@ public class Vec3D {
 		return (float) Math.atan2(y, z);
 	}
 
+	/**
+	 * Rotates the vector around the giving axis
+	 * @param axis rotation axis vector
+	 * @param theta rotation angle (in radians)
+	 * @return
+	 */
+	public Vec3D rotateAroundAxis(Vec3D axis, float theta) {
+		float ux = axis.x * x;
+		float uy = axis.x * y;
+		float uz = axis.x * z;
+		float vx = axis.y * x;
+		float vy = axis.y * y;
+		float vz = axis.y * z;
+		float wx = axis.z * x;
+		float wy = axis.z * y;
+		float wz = axis.z * z;
+		float si = (float)Math.sin(theta);
+		float co = (float)Math.cos(theta);
+		float xx = axis.x * (ux + vy + wz)
+				+ (x * (axis.y * axis.y + axis.z * axis.z) - axis.x * (vy + wz)) * co
+				+ (-wy + vz) * si;
+		float yy = axis.y * (ux + vy + wz)
+				+ (y * (axis.x * axis.x + axis.z * axis.z) - axis.y * (ux + wz)) * co
+				+ (wx - uz) * si;
+		float zz = axis.z * (ux + vy + wz)
+				+ (z * (axis.x * axis.x + axis.y * axis.y) - axis.z * (ux + vy)) * co
+				+ (-vx + uy) * si;
+		return new Vec3D(xx, yy, zz);
+	}
+
 	// intersection code below is adapted from C version at
 	// http://www.peroxide.dk/
 
@@ -737,7 +767,7 @@ public class Vec3D {
 			return -1;
 
 		// Return the distance to the [first] intersecting point
-		return v - FastMath.sqrt(d);
+		return v - (float)Math.sqrt(d);
 	}
 
 	/**
@@ -774,7 +804,7 @@ public class Vec3D {
 	 */
 
 	public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
-		// Determine t (the length of the vector from ‘a’ to 'this')
+		// Determine t (the length of the vector from ï¿½aï¿½ to 'this')
 		Vec3D c = sub(a);
 		Vec3D v = b.sub(a);
 
@@ -783,7 +813,7 @@ public class Vec3D {
 
 		float t = v.dot(c);
 
-		// Check to see if ‘t’ is beyond the extents of the line segment
+		// Check to see if ï¿½tï¿½ is beyond the extents of the line segment
 		if (t < 0.0f)
 			return a;
 		if (t > d)
