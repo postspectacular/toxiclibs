@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="javadoc">
-<target name="javadoc">
-<javadoc access="public" author="true" classpath="lib/core.jar:lib/joal.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="toxi.util.datatypes,toxi.video.capture,toxi.geom,toxi.audio,toxi.math.noise,toxi.math,toxi.math.waves,toxi.video.capture.plugins,toxi.image.util" source="1.5" sourcepath="src" splitindex="true" use="true" version="true"/>
-</target>
+	<target name="javadoc">
+		<javadoc access="public" author="true" classpath="lib/core.jar:lib/joal.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="toxi.util.datatypes,toxi.video.capture,toxi.geom,toxi.audio,toxi.math.noise,toxi.math,toxi.math.waves,toxi.video.capture.plugins,toxi.image.util" source="1.5" sourcepath="src" splitindex="true" use="true" version="true" />
+	</target>
 </project>

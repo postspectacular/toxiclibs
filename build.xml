@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="toxiclibs" default="release">
+	<!-- This needs to change with every release -->
+	<property name="toxiclibs.version" value="0005" />
+	<property name="toxiclibs.jdk.level" value="5" />
+	<property name="toxiclibs.zip.comment" value="toxiclibs - assorted utils v${sunflow.version}" />
+	<property name="toxiclibs.libs" value="libs" />
+	<property name="toxiclibs.jar.filename" value="toxiclibs.jar" />
+
+	<!-- Basic targets -->
+	<target name="init">
+		<property name="src.dir" value="src" />
+		<property name="build.dir" value="build" />
+		<property name="release.dir" value="dist" />
+		<!-- build folder contains temporary files needed to create release level files -->
+		<property name="build.classes.dir" value="${build.dir}/classes" />
+		<property name="build.manifest" value="${build.dir}/toxiclibs.mf" />
+		<property name="build.jar" value="${build.dir}/toxiclibs.jar" />
+		<!-- release folder contains files which may be distributed in some way or another -->
+		<property name="release.javadoc.dir" value="${release.dir}/docs" />
+		<property name="release.src.zip" value="${release.dir}/src.zip" />
+		<property name="release.bin.zip" value="${release.dir}/libraries/toxiclibs/toxiclibs-${toxiclibs.version}.zip" />
+	</target>
+
+	<target name="clean" depends="init" description="Remove build files created this scripts">
+		<delete dir="${build.dir}" />
+		<delete dir="${release.dir}" />
+	</target>
+
+
+	<!-- build directory targets -->
+	<target name="compile" depends="init" description="Compile source">
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${toxiclibs.jdk.level}" target="${toxiclibs.jdk.level}" classpath="${toxiclibs.libs}">
+			<compilerarg value="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<target name="create_manifest" description="Create the Sunflow jar manifest">
+		<echo file="${build.manifest}" append="false" message="Manifest-Version: 1.0${line.separator}" />
+	</target>
+
+	<target name="jars" depends="compile, create_manifest" description="Create jar files required for execution">
+		<mkdir dir="${release.dir}" />
+		<jar jarfile="${release.dir}/${toxiclibs.jar.filename}" manifest="${build.manifest}">
+			<fileset dir="${build.classes.dir}" />
+		</jar>
+		<!-- <copy todir="${release.dir}" file="${sunflow.libs}" />  -->
+	</target>
+
+	<!-- release directory targets -->
+	<target name="zips" depends="jars" description="Create release zip files">
+		<mkdir dir="${release.dir}" />
+		<zip destfile="${release.bin.zip}" comment="${toxiclibs.zip.comment} - Binary release">
+			<zipfileset dir="${release.dir}" includes="*.jar" prefix="toxiclibs" />
+			<!-- <zipfileset dir="." includes="CHANGELOG" prefix="toxiclibs" />  -->
+			<zipfileset dir="." includes="LICENSE" prefix="toxiclibs" />
+			<zipfileset dir="." includes="README" prefix="toxiclibs" />
+		</zip>
+		<zip destfile="${release.src.zip}" comment="${sunflow.zip.comment} - Source code release">
+			<zipfileset dir="src" prefix="toxiclibs/src" />
+			<zipfileset dir="." includes="build.xml" prefix="toxiclibs" />
+			<!-- <zipfileset dir="." includes="${toxiclibs.libs}" prefix="toxiclibs" /> -->
+			<zipfileset dir="." includes="CHANGELOG" prefix="toxiclibs" />
+			<zipfileset dir="." includes="LICENSE" prefix="toxiclibs" />
+			<zipfileset dir="." includes="README" prefix="toxiclibs" />
+		</zip>
+	</target>
+
+	<target name="javadoc" depends="init" description="Generate documentation">
+		<mkdir dir="${release.javadoc.dir}" />
+		<javadoc classpath="${toxiclibs.libs}" destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs v${toxiclibs.version}">
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="release" depends="zips, javadoc" />
+
+</project>
