@@ -12,8 +12,7 @@ first drop the "toxiclibs" folder into the "libraries" folder of your
 Processing installation. You'll then need to restart Processing in order
 for it to find this new library.
 
-Source code is saved with the .jar file or follow the SVN
-instructions over here:
+Source code is available via SVN, instructions over here:
 
 http://code.google.com/p/toxiclibs/source
 
