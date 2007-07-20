@@ -15,7 +15,7 @@ int NUM = 100;
 boolean showOctree = false;
 
 // use clip sphere or bounding box
-boolean useSphere = true;
+boolean useSphere = false;
 
 // view rotation
 float xrot = THIRD_PI;
@@ -69,11 +69,12 @@ void draw() {
   fill(0,255,0);
   noStroke();
   long t0=System.currentTimeMillis();
+  ArrayList points=null;
   if (useSphere) {
-    ArrayList points=octree.getPointsWithinSphere(cursor,RADIUS);
+    points=octree.getPointsWithinSphere(cursor,RADIUS);
   } 
   else {
-    ArrayList points=octree.getPointsWithinBox(new AABB(cursor,new Vec3D(RADIUS,RADIUS,RADIUS)));
+    points=octree.getPointsWithinBox(new AABB(cursor,new Vec3D(RADIUS,RADIUS,RADIUS)));
   }
   long dt=System.currentTimeMillis()-t0;
   int numClipped=0;
@@ -95,7 +96,7 @@ void draw() {
   popMatrix();
   fill(0);
   text("total: "+numParticles,10,30);
-  text("clipped: "+numClipped+" (time: "+(dt/1000.0)+"ms)",10,50);
+  text("clipped: "+numClipped+" (time: "+dt+"ms)",10,50);
 }
 
 void keyPressed() {
