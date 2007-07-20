@@ -23,19 +23,30 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
+/**
+ * Implements a spatial subdivision tree to work efficiently with large numbers
+ * of 3D particles. This octree can only be used for particle type objects and
+ * does NOT support 3D mesh geometry as other forms of Octrees do.
+ * 
+ * For further reference also see the OctreeDemo in the /examples folder.
+ * 
+ */
 public class PointOctree extends AABB {
 
 	/**
 	 * tree recursion limit
 	 */
-	private float maxTreeDepth = 8;
+	private float maxTreeDepth = 6;
 
 	/**
-	 * tree recursion limit, number of world units when cells are not subdivided
-	 * any further
+	 * alternative tree recursion limit, number of world units when cells are
+	 * not subdivided any further
 	 */
 	private float minNodeSize = 4;
 
+	/**
+	 * 
+	 */
 	protected PointOctree parent;
 
 	protected PointOctree[] children;
@@ -50,12 +61,30 @@ public class PointOctree extends AABB {
 
 	protected int depth = 0;
 
+	/**
+	 * Constructs a new PointOctree node within the AABB cube volume:
+	 * {o.x, o.y, o.z} ... {o.x+size, o.y+size, o.z+size}
+	 * 
+	 * @param o
+	 *            tree origin
+	 * @param size
+	 *            size of the tree volume along a single axis
+	 */
 	public PointOctree(Vec3D o, float size) {
 		this(null, o, size);
 	}
 
+	/**
+	 * Constructs a new PointOctree node within the AABB cube volume:
+	 * {o.x, o.y, o.z} ... {o.x+size, o.y+size, o.z+size}
+	 * 
+	 * @param p parent node
+	 * @param o tree origin
+	 * @param size size of the tree volume along a single axis
+	 */
 	public PointOctree(PointOctree p, Vec3D o, float size) {
-		super(o.add(size * .5f, size * .5f, size * .5f), new Vec3D(size, size,size).scale(0.5f));
+		super(o.add(size * .5f, size * .5f, size * .5f), new Vec3D(size, size,
+				size).scale(0.5f));
 		parent = p;
 		if (parent != null)
 			depth = parent.depth + 1;
@@ -65,11 +94,24 @@ public class PointOctree extends AABB {
 		numChildren = 0;
 	}
 
+	/**
+	 * Computes the local octant for the given point
+	 * @param plocal point in the node-local coordinate system
+	 * @return octant index
+	 */
 	protected int getOctantID(Vec3D plocal) {
 		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
 				+ (plocal.z >= dim2 ? 4 : 0);
 	}
 
+	/**
+	 * Adds a new point/particle to the tree structure. All points are stored
+	 * within leaf nodes only. The tree implementation is using lazy
+	 * instantiation for all intermediate tree levels.
+	 * 
+	 * @param p
+	 * @return
+	 */
 	public boolean addPoint(Vec3D p) {
 		// check if point is inside cube
 		if (p.isInAABB(this)) {
@@ -87,9 +129,8 @@ public class PointOctree extends AABB {
 				}
 				int octant = getOctantID(plocal);
 				if (children[octant] == null) {
-					Vec3D off = offset.add(new Vec3D(
-							(octant & 1) != 0 ? dim2 : 0,
-							(octant & 2) != 0 ? dim2 : 0,
+					Vec3D off = offset.add(new Vec3D((octant & 1) != 0 ? dim2
+							: 0, (octant & 2) != 0 ? dim2 : 0,
 							(octant & 4) != 0 ? dim2 : 0));
 					children[octant] = new PointOctree(this, off, dim2);
 					numChildren++;
@@ -102,6 +143,13 @@ public class PointOctree extends AABB {
 		return false;
 	}
 
+	/**
+	 * Finds the leaf node which spatially relates to the given point
+	 * 
+	 * @param p
+	 *            point to check
+	 * @return leaf node
+	 */
 	protected PointOctree getLeafForPoint(Vec3D p) {
 		// if not a leaf node...
 		if (p.isInAABB(this)) {
@@ -117,10 +165,24 @@ public class PointOctree extends AABB {
 		return null;
 	}
 
-	public ArrayList getPointsWithinSphere(Vec3D p, float clipRadius) {
-		return getPointsWithinSphere(new Sphere(p, clipRadius));
+	/**
+	 * Selects all stored points within the given sphere volume
+	 * 
+	 * @param sphereOrigin
+	 * @param clipRadius
+	 * @return selected points
+	 */
+	public ArrayList getPointsWithinSphere(Vec3D sphereOrigin, float clipRadius) {
+		return getPointsWithinSphere(new Sphere(sphereOrigin, clipRadius));
 	}
 
+	/**
+	 * Selects all stored points within the given sphere volume
+	 * 
+	 * @param s
+	 *            sphere
+	 * @return selected points
+	 */
 	public ArrayList getPointsWithinSphere(Sphere s) {
 		ArrayList results = null;
 		if (this.intersectsSphere(s)) {
@@ -149,6 +211,13 @@ public class PointOctree extends AABB {
 		return results;
 	}
 
+	/**
+	 * Selects all stored points within the given axis-aligned bounding box.
+	 * 
+	 * @param b
+	 *            AABB
+	 * @return all points with the box volume
+	 */
 	public ArrayList getPointsWithinBox(AABB b) {
 		ArrayList results = null;
 		if (this.intersectsBox(b)) {
@@ -177,6 +246,10 @@ public class PointOctree extends AABB {
 		return results;
 	}
 
+	// FIXME remove PApplet dependency
+	/**
+	 * @param app
+	 */
 	public void draw(PApplet app) {
 		if (numChildren > 0) {
 			app.noFill();
@@ -192,22 +265,48 @@ public class PointOctree extends AABB {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.geom.AABB#toString()
+	 */
 	public String toString() {
 		return "<octree> offset: " + super.toString() + " size: " + dim;
 	}
 
+	/**
+	 * Returns maximum recursion level (tree depth). Together with the minimum
+	 * node size this level acts as a recursion limit. This value should be
+	 * adjusted based on the overall size of the tree volume and object density.
+	 * Default value is 6.
+	 * 
+	 * @return maximum tree depth limit
+	 */
 	public float getMaxDepth() {
 		return maxTreeDepth;
 	}
 
+	/**
+	 * @param maxTreeDepth
+	 */
 	public void setMaxDepth(float maxTreeDepth) {
 		this.maxTreeDepth = maxTreeDepth;
 	}
 
+	/**
+	 * Returns the minimum size of nodes (in world units). This value acts as
+	 * tree recursion limit since nodes smaller than this size are not
+	 * subdivided further. Leaf node are always smaller or equal to this size.
+	 * 
+	 * @return the minimum size of tree nodes
+	 */
 	public float getMinNodeSize() {
 		return minNodeSize;
 	}
 
+	/**
+	 * @param minNodeSize
+	 */
 	public void setMinNodeSize(float minNodeSize) {
 		this.minNodeSize = minNodeSize;
 	}
