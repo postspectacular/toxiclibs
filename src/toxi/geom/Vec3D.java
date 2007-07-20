@@ -114,7 +114,7 @@ public class Vec3D {
 	 *            vector to be copied
 	 * @return itself
 	 */
-	public Vec3D set(Vec3D v) {
+	public final Vec3D set(Vec3D v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -129,7 +129,7 @@ public class Vec3D {
 	 * @param z
 	 * @return itself
 	 */
-	public Vec3D set(float x, float y, float z) {
+	public final Vec3D set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -141,7 +141,7 @@ public class Vec3D {
 	 * 
 	 * @return true, if vector = {0,0,0}
 	 */
-	public boolean isZeroVector() {
+	public final boolean isZeroVector() {
 		return x == 0 && y == 0 && z == 0;
 	}
 
@@ -150,7 +150,7 @@ public class Vec3D {
 	 * 
 	 * @return new vector
 	 */
-	public Vec3D getNormalized() {
+	public final Vec3D getNormalized() {
 		return new Vec3D(this).normalize();
 	}
 
@@ -159,7 +159,7 @@ public class Vec3D {
 	 * 
 	 * @return itself
 	 */
-	public Vec3D normalize() {
+	public final Vec3D normalize() {
 		float mag = FastMath.sqrt(x * x + y * y + z * z);
 		if (mag > 0) {
 			mag = 1f / mag;
@@ -178,7 +178,7 @@ public class Vec3D {
 	 *            new maximum magnitude
 	 * @return result as new vector
 	 */
-	public Vec3D getLimited(float lim) {
+	public final Vec3D getLimited(float lim) {
 		if (magSquared() > lim * lim) {
 			return getNormalized().scaleSelf(lim);
 		}
@@ -192,7 +192,7 @@ public class Vec3D {
 	 *            new maximum magnitude
 	 * @return itself
 	 */
-	public Vec3D limit(float lim) {
+	public final Vec3D limit(float lim) {
 		if (magSquared() > lim * lim) {
 			return normalize().scaleSelf(lim);
 		}
@@ -204,8 +204,8 @@ public class Vec3D {
 	 * 
 	 * @return vector length
 	 */
-	public float magnitude() {
-		return (float)Math.sqrt(x * x + y * y + z * z);
+	public final float magnitude() {
+		return FastMath.sqrt(x * x + y * y + z * z);
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class Vec3D {
 	 * 
 	 * @return squared magnitude (x^2 + y^2 + z^2)
 	 */
-	public float magSquared() {
+	public final float magSquared() {
 		return x * x + y * y + z * z;
 	}
 
@@ -226,7 +226,7 @@ public class Vec3D {
 	 *            non-null vector
 	 * @return distance or NaN if v=null
 	 */
-	public float distanceTo(Vec3D v) {
+	public final float distanceTo(Vec3D v) {
 		if (v != null) {
 			float dx = x - v.x;
 			float dy = y - v.y;
@@ -245,7 +245,7 @@ public class Vec3D {
 	 *            non-null vector
 	 * @return distance or NaN if v=null
 	 */
-	public float distanceToSquared(Vec3D v) {
+	public final float distanceToSquared(Vec3D v) {
 		if (v != null) {
 			float dx = x - v.x;
 			float dy = y - v.y;
@@ -263,7 +263,7 @@ public class Vec3D {
 	 *            vector to be subtracted
 	 * @return result as new vector
 	 */
-	public Vec3D sub(Vec3D v) {
+	public final Vec3D sub(Vec3D v) {
 		return new Vec3D(x - v.x, y - v.y, z - v.z);
 	}
 
@@ -278,7 +278,7 @@ public class Vec3D {
 	 *            Z coordinate
 	 * @return result as new vector
 	 */
-	public Vec3D sub(float a, float b, float c) {
+	public final Vec3D sub(float a, float b, float c) {
 		return new Vec3D(x - a, y - b, z - c);
 	}
 
@@ -289,7 +289,7 @@ public class Vec3D {
 	 *            vector to be subtracted
 	 * @return itself
 	 */
-	public Vec3D subSelf(Vec3D v) {
+	public final Vec3D subSelf(Vec3D v) {
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
@@ -307,7 +307,7 @@ public class Vec3D {
 	 *            Z coordinate
 	 * @return itself
 	 */
-	public Vec3D subSelf(float a, float b, float c) {
+	public final Vec3D subSelf(float a, float b, float c) {
 		x -= a;
 		y -= b;
 		z -= c;
@@ -321,7 +321,7 @@ public class Vec3D {
 	 *            vector to add
 	 * @return result as new vector
 	 */
-	public Vec3D add(Vec3D v) {
+	public final Vec3D add(Vec3D v) {
 		return new Vec3D(x + v.x, y + v.y, z + v.z);
 	}
 
@@ -336,7 +336,7 @@ public class Vec3D {
 	 *            Z coordinate
 	 * @return result as new vector
 	 */
-	public Vec3D add(float a, float b, float c) {
+	public final Vec3D add(float a, float b, float c) {
 		return new Vec3D(x + a, y + b, z + c);
 	}
 
@@ -347,7 +347,7 @@ public class Vec3D {
 	 *            vector to add
 	 * @return itself
 	 */
-	public Vec3D addSelf(Vec3D v) {
+	public final Vec3D addSelf(Vec3D v) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
@@ -365,7 +365,7 @@ public class Vec3D {
 	 *            Z coordinate
 	 * @return itself
 	 */
-	public Vec3D addSelf(float a, float b, float c) {
+	public final Vec3D addSelf(float a, float b, float c) {
 		x += a;
 		y += b;
 		z += c;
@@ -464,10 +464,10 @@ public class Vec3D {
 	 * 
 	 * @return itself
 	 */
-	public Vec3D invert() {
-		x = -x;
-		y = -y;
-		z = -z;
+	public final Vec3D invert() {
+		x *= -1;
+		y *= -1;
+		z *= -1;
 		return this;
 	}
 
@@ -476,7 +476,7 @@ public class Vec3D {
 	 * 
 	 * @return result as new vector
 	 */
-	public Vec3D getInverted() {
+	public final Vec3D getInverted() {
 		return new Vec3D(-x, -y, -z);
 	}
 
@@ -488,7 +488,7 @@ public class Vec3D {
 	 *            vector to cross
 	 * @return cross-product as new vector
 	 */
-	public Vec3D cross(Vec3D v) {
+	public final Vec3D cross(Vec3D v) {
 		return new Vec3D(y * v.z - v.y * z, z * v.x - v.z * x, x * v.y - v.x
 				* y);
 	}
@@ -501,7 +501,7 @@ public class Vec3D {
 	 * @param v
 	 * @return itself
 	 */
-	public Vec3D crossSelf(Vec3D v) {
+	public final Vec3D crossSelf(Vec3D v) {
 		float cx = y * v.z - v.y * z;
 		float cy = z * v.x - v.z * x;
 		z = x * v.y - v.x * y;
@@ -521,7 +521,7 @@ public class Vec3D {
 	 *            result vector
 	 * @return result vector
 	 */
-	public Vec3D crossInto(Vec3D v, Vec3D result) {
+	public final Vec3D crossInto(Vec3D v, Vec3D result) {
 		float rx = y * v.z - v.y * z;
 		float ry = z * v.x - v.z * x;
 		float rz = x * v.y - v.x * y;
@@ -537,7 +537,7 @@ public class Vec3D {
 	 * @param v
 	 * @return dot product
 	 */
-	public float dot(Vec3D v) {
+	public final float dot(Vec3D v) {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
@@ -630,7 +630,7 @@ public class Vec3D {
 	 *            vector
 	 * @return angle in radians, or NaN if vectors are parallel
 	 */
-	public float angleBetween(Vec3D v) {
+	public final float angleBetween(Vec3D v) {
 		return (float) Math.acos(dot(v));
 	}
 
@@ -645,7 +645,7 @@ public class Vec3D {
 	 *            altered by this method)
 	 * @return angle in radians, or NaN if vectors are parallel
 	 */
-	public float angleBetween(Vec3D v, boolean forceNormalize) {
+	public final float angleBetween(Vec3D v, boolean forceNormalize) {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
@@ -661,7 +661,7 @@ public class Vec3D {
 	 * 
 	 * @return rotation angle
 	 */
-	public float headingXY() {
+	public final float headingXY() {
 		return (float) Math.atan2(y, x);
 	}
 
@@ -671,7 +671,7 @@ public class Vec3D {
 	 * 
 	 * @return rotation angle
 	 */
-	public float headingXZ() {
+	public final float headingXZ() {
 		return (float) Math.atan2(z, x);
 	}
 
@@ -681,17 +681,20 @@ public class Vec3D {
 	 * 
 	 * @return rotation angle
 	 */
-	public float headingYZ() {
+	public final float headingYZ() {
 		return (float) Math.atan2(y, z);
 	}
 
 	/**
 	 * Rotates the vector around the giving axis
-	 * @param axis rotation axis vector
-	 * @param theta rotation angle (in radians)
+	 * 
+	 * @param axis
+	 *            rotation axis vector
+	 * @param theta
+	 *            rotation angle (in radians)
 	 * @return
 	 */
-	public Vec3D rotateAroundAxis(Vec3D axis, float theta) {
+	public final Vec3D rotateAroundAxis(Vec3D axis, float theta) {
 		float ux = axis.x * x;
 		float uy = axis.x * y;
 		float uz = axis.x * z;
@@ -701,17 +704,20 @@ public class Vec3D {
 		float wx = axis.z * x;
 		float wy = axis.z * y;
 		float wz = axis.z * z;
-		float si = (float)Math.sin(theta);
-		float co = (float)Math.cos(theta);
-		float xx = axis.x * (ux + vy + wz)
-				+ (x * (axis.y * axis.y + axis.z * axis.z) - axis.x * (vy + wz)) * co
-				+ (-wy + vz) * si;
-		float yy = axis.y * (ux + vy + wz)
-				+ (y * (axis.x * axis.x + axis.z * axis.z) - axis.y * (ux + wz)) * co
-				+ (wx - uz) * si;
-		float zz = axis.z * (ux + vy + wz)
-				+ (z * (axis.x * axis.x + axis.y * axis.y) - axis.z * (ux + vy)) * co
-				+ (-vx + uy) * si;
+		double si = Math.sin(theta);
+		double co = Math.cos(theta);
+		float xx = (float) (axis.x
+				* (ux + vy + wz)
+				+ (x * (axis.y * axis.y + axis.z * axis.z) - axis.x * (vy + wz))
+				* co + (-wy + vz) * si);
+		float yy = (float) (axis.y
+				* (ux + vy + wz)
+				+ (y * (axis.x * axis.x + axis.z * axis.z) - axis.y * (ux + wz))
+				* co + (wx - uz) * si);
+		float zz = (float) (axis.z
+				* (ux + vy + wz)
+				+ (z * (axis.x * axis.x + axis.y * axis.y) - axis.z * (ux + vy))
+				* co + (-vx + uy) * si);
 		return new Vec3D(xx, yy, zz);
 	}
 
@@ -767,7 +773,7 @@ public class Vec3D {
 			return -1;
 
 		// Return the distance to the [first] intersecting point
-		return v - (float)Math.sqrt(d);
+		return v - (float) Math.sqrt(d);
 	}
 
 	/**
@@ -872,8 +878,20 @@ public class Vec3D {
 	 */
 
 	public boolean isInSphere(Vec3D sO, float sR) {
-		float d = this.sub(sO).magnitude();
-		return (d <= sR);
+		float d = this.sub(sO).magSquared();
+		return (d <= sR * sR);
+	}
+
+	/**
+	 * Checks if the point is inside the given sphere.
+	 * 
+	 * @param s
+	 *            bounding sphere to check
+	 * @return true, if point is inside
+	 */
+	public boolean isInSphere(Sphere s) {
+		float d = this.sub(s).magSquared();
+		return (d <= s.radius * s.radius);
 	}
 
 	/**
@@ -882,20 +900,31 @@ public class Vec3D {
 	 * @param bO
 	 *            bounding box origin/center
 	 * @param bDim
-	 *            bounding box dimensions
+	 *            bounding box extends (half measure)
 	 * @return true, if point is inside the box
 	 */
 	public boolean isInAABB(Vec3D bO, Vec3D bDim) {
-		float w = bDim.x * 0.5f;
+		float w = bDim.x;
 		if (x < bO.x - w || x > bO.x + w)
 			return false;
-		w = bDim.y * 0.5f;
+		w = bDim.y;
 		if (y < bO.y - w || y > bO.y + w)
 			return false;
-		w = bDim.z * 0.5f;
+		w = bDim.z;
 		if (z < bO.z - w || z > bO.z + w)
 			return false;
 		return true;
+	}
+
+	/**
+	 * Checks if the point is inside the given AABB.
+	 * 
+	 * @param box
+	 *            bounding box to check
+	 * @return true, if point is inside
+	 */
+	public boolean isInAABB(AABB box) {
+		return isInAABB(box, box.extend);
 	}
 
 	/**

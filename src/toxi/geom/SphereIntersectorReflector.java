@@ -20,6 +20,10 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 		sRadius = new Vec3D(r, r, r);
 	}
 
+	public SphereIntersectorReflector(Sphere s) {
+		this(s,s.radius);
+	}
+	
 	/* (non-Javadoc)
 	 * @see toxi.geom.Intersector#intersectsRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
 	 */

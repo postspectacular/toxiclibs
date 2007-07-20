@@ -23,8 +23,7 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 
-@SuppressWarnings("unchecked")
-public class PointOctree {
+public class PointOctree extends AABB {
 
 	/**
 	 * tree recursion limit
@@ -47,29 +46,23 @@ public class PointOctree {
 
 	protected float dim, dim2, dimMag;
 
-	protected Vec3D offset, centre;
+	protected Vec3D offset;
 
 	protected int depth = 0;
 
 	public PointOctree(Vec3D o, float size) {
-		this(null,o,size);
+		this(null, o, size);
 	}
-	
+
 	public PointOctree(PointOctree p, Vec3D o, float size) {
+		super(o.add(size * .5f, size * .5f, size * .5f), new Vec3D(size, size,size).scale(0.5f));
 		parent = p;
 		if (parent != null)
 			depth = parent.depth + 1;
-		offset = o;
 		dim = size;
 		dim2 = dim * 0.5f;
-		centre = offset.add(new Vec3D(dim2, dim2, dim2));
+		offset = o;
 		numChildren = 0;
-	}
-
-	public boolean isPointInside(Vec3D p) {
-		return (p.x >= offset.x && p.x < offset.x + dim && p.y >= offset.y
-				&& p.y < offset.y + dim && p.z >= offset.z && p.z < offset.z
-				+ dim);
 	}
 
 	protected int getOctantID(Vec3D plocal) {
@@ -79,7 +72,7 @@ public class PointOctree {
 
 	public boolean addPoint(Vec3D p) {
 		// check if point is inside cube
-		if (isPointInside(p)) {
+		if (p.isInAABB(this)) {
 			// only add data to leaves for now
 			if (depth == maxTreeDepth || dim <= minNodeSize) {
 				if (data == null) {
@@ -94,8 +87,9 @@ public class PointOctree {
 				}
 				int octant = getOctantID(plocal);
 				if (children[octant] == null) {
-					Vec3D off = offset.add(new Vec3D((octant & 1) != 0 ? dim2
-							: 0, (octant & 2) != 0 ? dim2 : 0,
+					Vec3D off = offset.add(new Vec3D(
+							(octant & 1) != 0 ? dim2 : 0,
+							(octant & 2) != 0 ? dim2 : 0,
 							(octant & 4) != 0 ? dim2 : 0));
 					children[octant] = new PointOctree(this, off, dim2);
 					numChildren++;
@@ -110,7 +104,7 @@ public class PointOctree {
 
 	protected PointOctree getLeafForPoint(Vec3D p) {
 		// if not a leaf node...
-		if (isPointInside(p)) {
+		if (p.isInAABB(this)) {
 			if (numChildren > 0) {
 				int octant = getOctantID(p.sub(offset));
 				if (children[octant] != null) {
@@ -123,18 +117,17 @@ public class PointOctree {
 		return null;
 	}
 
-	public ArrayList getPointsWithinRadius(Vec3D p, float clipRadius) {
-		return getPointsWithinSquaredRadius(p, clipRadius*clipRadius);
+	public ArrayList getPointsWithinSphere(Vec3D p, float clipRadius) {
+		return getPointsWithinSphere(new Sphere(p, clipRadius));
 	}
-	
-	public ArrayList getPointsWithinSquaredRadius(Vec3D p, float clipRadius) {
+
+	public ArrayList getPointsWithinSphere(Sphere s) {
 		ArrayList results = null;
-		float radius = dim2 * dim2 * 4;
-		if (p.sub(centre).magSquared() < clipRadius + radius) {
+		if (this.intersectsSphere(s)) {
 			if (data != null) {
 				for (int i = data.size() - 1; i >= 0; i--) {
 					Vec3D q = (Vec3D) data.get(i);
-					if (p.sub(q).magSquared() < clipRadius) {
+					if (q.isInSphere(s)) {
 						if (results == null) {
 							results = new ArrayList();
 						}
@@ -146,8 +139,35 @@ public class PointOctree {
 				results = new ArrayList();
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
-						ArrayList points = children[i]
-								.getPointsWithinSquaredRadius(p, clipRadius);
+						ArrayList points = children[i].getPointsWithinSphere(s);
+						if (points != null)
+							results.addAll(points);
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	public ArrayList getPointsWithinBox(AABB b) {
+		ArrayList results = null;
+		if (this.intersectsBox(b)) {
+			if (data != null) {
+				for (int i = data.size() - 1; i >= 0; i--) {
+					Vec3D q = (Vec3D) data.get(i);
+					if (q.isInAABB(b)) {
+						if (results == null) {
+							results = new ArrayList();
+						}
+						results.add(q);
+					}
+				}
+				return results;
+			} else if (numChildren > 0) {
+				results = new ArrayList();
+				for (int i = 0; i < 8; i++) {
+					if (children[i] != null) {
+						ArrayList points = children[i].getPointsWithinBox(b);
 						if (points != null)
 							results.addAll(points);
 					}
@@ -162,7 +182,7 @@ public class PointOctree {
 			app.noFill();
 			app.stroke(depth * 24, 50);
 			app.pushMatrix();
-			app.translate(centre.x, centre.y, centre.z);
+			app.translate(x, y, z);
 			app.box(dim);
 			app.popMatrix();
 			for (int i = 0; i < 8; i++) {
@@ -173,7 +193,7 @@ public class PointOctree {
 	}
 
 	public String toString() {
-		return "<octree> offset: " + offset + " size: " + dim;
+		return "<octree> offset: " + super.toString() + " size: " + dim;
 	}
 
 	public float getMaxDepth() {
