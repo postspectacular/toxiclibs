@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
 	<!-- This needs to change with every release -->
-	<property name="toxiclibs.version" value="0005" />
+	<property name="toxiclibs.version" value="0006" />
 	<property name="toxiclibs.jdk.level" value="5" />
 	<property name="toxiclibs.zip.comment" value="toxiclibs - assorted classes for Java &amp; Processing v${toxiclibs.version}" />
 	<property name="toxiclibs.libs" value="lib" />
