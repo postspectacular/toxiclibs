@@ -33,7 +33,7 @@ public class LinearInterpolation implements InterpolateStrategy {
 	/* (non-Javadoc)
 	 * @see toxi.math.InterpolateStrategy#interpolate(float, float, float)
 	 */
-	public float interpolate(float a, float b, float f) {
+	public final float interpolate(float a, float b, float f) {
 		return a+(b-a)*f;
 	}
 

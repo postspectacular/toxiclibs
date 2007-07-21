@@ -35,9 +35,9 @@ public class SinCosLUT {
 
 	public static final float[] cosLUT = new float[SC_PERIOD];
 
-	public static final float DEG_TO_RAD = (float) (Math.PI / 180.0f);
+	public static final float DEG_TO_RAD = (float) (Math.PI / 180.0);
 
-	public static final float RAD_TO_DEG = (float) (180.0f / Math.PI);
+	public static final float RAD_TO_DEG = (float) (180.0 / Math.PI);
 
 	// init sin/cos tables with values
 	// should be called from setup()
@@ -48,17 +48,18 @@ public class SinCosLUT {
 		}
 	}
 
-	public static float sin(float radians) {
+	public static final float sin(float radians) {
 		if (radians >= 0) {
 			int idx = (int) (radians * RAD_TO_DEG * SC_PRECISION);
 			idx %= SC_PERIOD;
 			return sinLUT[idx];
 		}
 		// FIXME add support for negative inputs
+		// FIXME add LERP for fractional index values
 		return 0;
 	}
 	
-	public static float cos(float radians) {
+	public static final float cos(float radians) {
 		if (radians >= 0) {
 			int idx = (int) (radians * RAD_TO_DEG * SC_PRECISION);
 			idx %= SC_PERIOD;

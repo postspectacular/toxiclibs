@@ -50,7 +50,6 @@ public class AMFMSineWave extends AbstractWave {
 	/* (non-Javadoc)
 	 * @see toxi.math.datatypes.AbstractWave#update()
 	 */
-	@Override
 	public float update() {
 		value = amod.update() * (float)Math.sin(theta * fmod.update()) + offset;
 		theta+=freq;
@@ -73,9 +72,9 @@ public class AMFMSineWave extends AbstractWave {
 		return amod;
 	}
 	
-	public void resetTheta() {
-		super.resetTheta();
-		fmod.resetTheta();
-		amod.resetTheta();
+	public void reset() {
+		super.reset();
+		fmod.reset();
+		amod.reset();
 	}
 }

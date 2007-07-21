@@ -33,8 +33,8 @@ public class CosineInterpolation implements InterpolateStrategy {
 	/* (non-Javadoc)
 	 * @see toxi.math.InterpolateStrategy#interpolate(float, float, float)
 	 */
-	public float interpolate(float a, float b, float f) {
-		return a+(b-a)*(1-0.5f*(float)Math.cos(f*FastMath.PI));
+	public final float interpolate(float a, float b, float f) {
+		return a+(b-a)*(float)(1-0.5*Math.cos(f*FastMath.PI));
 	}
 
 }

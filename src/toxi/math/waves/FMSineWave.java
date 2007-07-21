@@ -22,9 +22,7 @@ package toxi.math.waves;
 public class FMSineWave extends AbstractWave {
 
 	private AbstractWave fmod;
-	/**
-	 * 
-	 */
+
 	public FMSineWave(float theta, float freq, AbstractWave fmod) {
 		super(theta,freq);
 		this.fmod = fmod;
@@ -38,7 +36,6 @@ public class FMSineWave extends AbstractWave {
 	/* (non-Javadoc)
 	 * @see toxi.math.datatypes.AbstractWave#update()
 	 */
-	@Override
 	public float update() {
 		value = (float)(Math.sin(theta*fmod.update()) * amp) + offset;
 		theta+=freq;

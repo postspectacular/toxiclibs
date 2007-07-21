@@ -22,12 +22,12 @@ package toxi.math.waves;
 
 public class SineWave extends AbstractWave {
 
-	public SineWave(float theta, float delta) {
-		super(theta,delta);
+	public SineWave(float theta, float freq) {
+		super(theta,freq);
 	}
 
-	public SineWave(float theta, float delta, float amp, float offset) {
-		super(theta,delta,amp,offset);
+	public SineWave(float theta, float freq, float amp, float offset) {
+		super(theta,freq,amp,offset);
 	}
 	
 	public float update() {

@@ -20,29 +20,47 @@
 
 package toxi.math.waves;
 
+/**
+ * Abstract wave oscillator type 
+ * 
+ */
 public abstract class AbstractWave {
 
 	protected float theta, orig;
 
 	protected float freq;
 
-	protected float amp = 1;
+	protected float amp;
 
-	protected float offset = 0;
+	protected float offset;
 
 	protected float value = 0;
 
 	/**
-	 * @param theta2
-	 * @param delta2
+	 * @param theta
 	 */
-	public AbstractWave(float theta, float freq) {
-		this.theta = this.orig = theta;
-		this.freq = freq;
+	public AbstractWave(float theta) {
+		this(theta, 1, 1, 0);
 	}
 
+	/**
+	 * 
+	 * @param theta
+	 * @param delta
+	 */
+	public AbstractWave(float theta, float freq) {
+		this(theta, freq, 1, 0);
+	}
+
+	/**
+	 * @param theta
+	 * @param freq
+	 * @param amp
+	 * @param offset
+	 */
 	public AbstractWave(float theta, float freq, float amp, float offset) {
-		this(theta, freq);
+		this.theta = this.orig = theta;
+		this.freq = freq;
 		this.amp = amp;
 		this.offset = offset;
 	}
@@ -54,7 +72,7 @@ public abstract class AbstractWave {
 	public float getAmp() {
 		return amp;
 	}
-	
+
 	public abstract float update();
 
 	public float getValue() {
@@ -69,12 +87,13 @@ public abstract class AbstractWave {
 		this.theta = this.orig = theta;
 	}
 
-	public void resetTheta() {
+	public void reset() {
 		theta = orig;
 	}
 
 	/**
 	 * Returns the wave's frequency.
+	 * 
 	 * @return frequency, default is 1.
 	 */
 	public float getFrequency() {
@@ -89,11 +108,13 @@ public abstract class AbstractWave {
 		this.freq = freq;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb=new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		sb.append(this.getClass().getName()).append(" theta: ").append(theta);
 		sb.append(" freq: ").append(freq);
 		sb.append(" amp: ").append(amp);

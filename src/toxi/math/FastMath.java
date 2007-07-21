@@ -58,7 +58,7 @@ public class FastMath {
 		return x < 0 ? -x : x;
 	}
 
-	public static float fastInverseSqrt(float x) {
+	public static final float fastInverseSqrt(float x) {
 		float half = 0.5F * x;
 		int i = Float.floatToIntBits(x);
 		i = 0x5f375a86 - (i >> 1);
@@ -96,27 +96,27 @@ public class FastMath {
 		return Float.intBitsToFloat((int) ((b + 127 - y) * (1 << 23)));
 	}
 
-	public static int min(int a, int b) {
+	public static final int min(int a, int b) {
 		return a < b ? a : b;
 	}
 
-	public static int max(int a, int b) {
+	public static final int max(int a, int b) {
 		return a > b ? a : b;
 	}
 
-	public static float min(float a, float b) {
+	public static final float min(float a, float b) {
 		return a < b ? a : b;
 	}
 
-	public static float max(float a, float b) {
+	public static final float max(float a, float b) {
 		return a > b ? a : b;
 	}
 
-	public static float clip(float a, float min, float max) {
+	public static final float clip(float a, float min, float max) {
 		return a < min ? min : (a > max ? max : a);
 	}
 
-	public static int clip(int a, int min, int max) {
+	public static final int clip(int a, int min, int max) {
 		return a < min ? min : (a > max ? max : a);
 	}
 }
