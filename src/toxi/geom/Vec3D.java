@@ -1096,4 +1096,16 @@ public class Vec3D {
 				.random() * 2 - 1, (float) Math.random() * 2 - 1);
 		return rnd.normalize();
 	}
+	
+	public static final Vec3D fromXYTheta(float theta) {
+		return new Vec3D((float) Math.cos(theta),(float)Math.sin(theta),0);
+	}
+	
+	public static final Vec3D fromXZTheta(float theta) {
+		return new Vec3D((float) Math.cos(theta), 0, (float)Math.sin(theta));
+	}
+	
+	public static final Vec3D fromYZTheta(float theta) {
+		return new Vec3D(0, (float) Math.cos(theta),(float)Math.sin(theta));
+	}
 }
