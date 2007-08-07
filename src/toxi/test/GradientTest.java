@@ -1,7 +1,7 @@
 package toxi.test;
 
 import processing.core.PApplet;
-import toxi.image.util.ARGBGradient;
+import toxi.image.colour.ARGBGradient;
 import junit.framework.TestCase;
 
 public class GradientTest extends TestCase {
