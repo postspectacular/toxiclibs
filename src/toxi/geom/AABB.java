@@ -27,7 +27,7 @@ import toxi.math.FastMath;
  */
 public class AABB extends Vec3D {
 
-	Vec3D extend;
+	public Vec3D extend;
 
 	public AABB(Vec3D pos, Vec3D extend) {
 		super(pos);

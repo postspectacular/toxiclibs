@@ -200,6 +200,30 @@ public class Vec3D {
 	}
 
 	/**
+	 * Forcefully fits the vector in the given AABB.
+	 * 
+	 * @param box
+	 * @return itself
+	 */
+	public final Vec3D constrain(AABB box) {
+		x = FastMath.max(FastMath.min(x, box.maxX()), box.minX());
+		y = FastMath.max(FastMath.min(y, box.maxY()), box.minY());
+		z = FastMath.max(FastMath.min(z, box.maxZ()), box.minZ());
+		return this;
+	}
+
+	/**
+	 * Creates a copy of the vector which forcefully fits in the given AABB.
+	 * @param box
+	 * @return fitted vector
+	 */
+	public final Vec3D getConstrained(AABB box) {
+		return new Vec3D(FastMath.max(FastMath.min(x, box.maxX()), box.minX()),
+				FastMath.max(FastMath.min(y, box.maxY()), box.minY()), FastMath
+						.max(FastMath.min(z, box.maxZ()), box.minZ()));
+	}
+
+	/**
 	 * Calculates the magnitude/eucledian length of the vector
 	 * 
 	 * @return vector length
@@ -1089,23 +1113,24 @@ public class Vec3D {
 	/**
 	 * Factory method.
 	 * 
-	 * @return a new random normalized vector.
+	 * @return a new random normalized unit vector.
 	 */
 	public static final Vec3D randomVector() {
 		Vec3D rnd = new Vec3D((float) Math.random() * 2 - 1, (float) Math
 				.random() * 2 - 1, (float) Math.random() * 2 - 1);
 		return rnd.normalize();
 	}
+
 	
 	public static final Vec3D fromXYTheta(float theta) {
-		return new Vec3D((float) Math.cos(theta),(float)Math.sin(theta),0);
+		return new Vec3D((float) Math.cos(theta), (float) Math.sin(theta), 0);
 	}
-	
+
 	public static final Vec3D fromXZTheta(float theta) {
-		return new Vec3D((float) Math.cos(theta), 0, (float)Math.sin(theta));
+		return new Vec3D((float) Math.cos(theta), 0, (float) Math.sin(theta));
 	}
-	
+
 	public static final Vec3D fromYZTheta(float theta) {
-		return new Vec3D(0, (float) Math.cos(theta),(float)Math.sin(theta));
+		return new Vec3D(0, (float) Math.cos(theta), (float) Math.sin(theta));
 	}
 }
