@@ -1,12 +1,9 @@
-import toxi.util.datatypes.*;
-import toxi.math.noise.*;
-import toxi.image.util.*;
-import toxi.math.waves.*;
 import toxi.geom.*;
 import toxi.math.*;
 
 void setup() {
   size(200,200);
+  background(0);
   InterpolateStrategy is=new LinearInterpolation();
   InterpolateStrategy is2=new CircularInterpolation();
   InterpolateStrategy is2f=new CircularInterpolation(true);

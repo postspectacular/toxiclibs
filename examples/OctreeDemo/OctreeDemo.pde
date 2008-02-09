@@ -12,10 +12,10 @@ float RADIUS = 20;
 int NUM = 100;
 
 // show octree debug info
-boolean showOctree = false;
+boolean showOctree = true;
 
-// use clip sphere or bounding box
-boolean useSphere = false;
+// use clip sphere or axis aligned bounding box
+boolean useSphere = true;
 
 // view rotation
 float xrot = THIRD_PI;
@@ -100,6 +100,7 @@ void draw() {
 }
 
 void keyPressed() {
+  // add NUM new particles within a sphere of radius DIM2
   for(int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));
   numParticles+=NUM;
 }
