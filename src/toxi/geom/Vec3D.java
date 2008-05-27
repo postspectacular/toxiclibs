@@ -20,7 +20,9 @@
 
 package toxi.geom;
 
-import toxi.math.FastMath;
+import java.util.Random;
+
+import toxi.math.MathUtils;
 import toxi.math.InterpolateStrategy;
 
 /**
@@ -30,7 +32,7 @@ import toxi.math.InterpolateStrategy;
  * @author Karsten Schmidt
  * 
  */
-public class Vec3D {
+public class Vec3D implements Comparable {
 
 	/**
 	 * Defines positive X axis
@@ -46,21 +48,6 @@ public class Vec3D {
 	 * Defines positive Z axis
 	 */
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
-
-	/**
-	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
-	 */
-	public static final int PLANE_FRONT = -1;
-
-	/**
-	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
-	 */
-	public static final int PLANE_BACK = 1;
-
-	/**
-	 * Classifier constant for {@link #classifyPoint(Vec3D, Vec3D)}
-	 */
-	public static final int ON_PLANE = 0;
 
 	/**
 	 * X coordinate
@@ -108,6 +95,23 @@ public class Vec3D {
 	}
 
 	/**
+	 * @return a new independent instance/copy of a given vector
+	 */
+	public final Vec3D copy() {
+		return new Vec3D(this);
+	}
+
+	/**
+	 * Sets all vector components to 0.
+	 * 
+	 * @return itself
+	 */
+	public final Vec3D clear() {
+		x = y = z = 0;
+		return this;
+	}
+
+	/**
 	 * Overrides coordinates with the ones of the given vector
 	 * 
 	 * @param v
@@ -143,6 +147,7 @@ public class Vec3D {
 	 */
 	public final boolean isZeroVector() {
 		return x == 0 && y == 0 && z == 0;
+		// return magnitude()<FastMath.EPS;
 	}
 
 	/**
@@ -160,7 +165,7 @@ public class Vec3D {
 	 * @return itself
 	 */
 	public final Vec3D normalize() {
-		float mag = FastMath.sqrt(x * x + y * y + z * z);
+		float mag = MathUtils.sqrt(x * x + y * y + z * z);
 		if (mag > 0) {
 			mag = 1f / mag;
 			x *= mag;
@@ -206,21 +211,20 @@ public class Vec3D {
 	 * @return itself
 	 */
 	public final Vec3D constrain(AABB box) {
-		x = FastMath.max(FastMath.min(x, box.maxX()), box.minX());
-		y = FastMath.max(FastMath.min(y, box.maxY()), box.minY());
-		z = FastMath.max(FastMath.min(z, box.maxZ()), box.minZ());
+		x = MathUtils.max(MathUtils.min(x, box.maxX()), box.minX());
+		y = MathUtils.max(MathUtils.min(y, box.maxY()), box.minY());
+		z = MathUtils.max(MathUtils.min(z, box.maxZ()), box.minZ());
 		return this;
 	}
 
 	/**
 	 * Creates a copy of the vector which forcefully fits in the given AABB.
+	 * 
 	 * @param box
 	 * @return fitted vector
 	 */
 	public final Vec3D getConstrained(AABB box) {
-		return new Vec3D(FastMath.max(FastMath.min(x, box.maxX()), box.minX()),
-				FastMath.max(FastMath.min(y, box.maxY()), box.minY()), FastMath
-						.max(FastMath.min(z, box.maxZ()), box.minZ()));
+		return new Vec3D(this).constrain();
 	}
 
 	/**
@@ -229,7 +233,7 @@ public class Vec3D {
 	 * @return vector length
 	 */
 	public final float magnitude() {
-		return FastMath.sqrt(x * x + y * y + z * z);
+		return MathUtils.sqrt(x * x + y * y + z * z);
 	}
 
 	/**
@@ -248,14 +252,14 @@ public class Vec3D {
 	 * 
 	 * @param v
 	 *            non-null vector
-	 * @return distance or NaN if v=null
+	 * @return distance or Float.NaN if v=null
 	 */
 	public final float distanceTo(Vec3D v) {
 		if (v != null) {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			float dz = z - v.z;
-			return FastMath.sqrt(dx * dx + dy * dy + dz * dz);
+			return MathUtils.sqrt(dx * dx + dy * dy + dz * dz);
 		} else {
 			return Float.NaN;
 		}
@@ -403,7 +407,7 @@ public class Vec3D {
 	 *            scale factor
 	 * @return new vector
 	 */
-	public Vec3D scale(float s) {
+	public final Vec3D scale(float s) {
 		return new Vec3D(x * s, y * s, z * s);
 	}
 
@@ -418,7 +422,7 @@ public class Vec3D {
 	 *            scale factor for Z coordinate
 	 * @return new vector
 	 */
-	public Vec3D scale(float a, float b, float c) {
+	public final Vec3D scale(float a, float b, float c) {
 		return new Vec3D(x * a, y * b, z * c);
 	}
 
@@ -429,7 +433,7 @@ public class Vec3D {
 	 *            scale vector
 	 * @return new vector
 	 */
-	public Vec3D scale(Vec3D s) {
+	public final Vec3D scale(Vec3D s) {
 		return new Vec3D(x * s.x, y * s.y, z * s.z);
 	}
 
@@ -442,7 +446,7 @@ public class Vec3D {
 	 * @return itself
 	 */
 
-	public Vec3D scaleSelf(Vec3D s) {
+	public final Vec3D scaleSelf(Vec3D s) {
 		x *= s.x;
 		y *= s.y;
 		z *= s.z;
@@ -456,7 +460,7 @@ public class Vec3D {
 	 *            scale factor
 	 * @return itself
 	 */
-	public Vec3D scaleSelf(float s) {
+	public final Vec3D scaleSelf(float s) {
 		x *= s;
 		y *= s;
 		z *= s;
@@ -475,7 +479,7 @@ public class Vec3D {
 	 *            scale factor for Z coordinate
 	 * @return itself
 	 */
-	public Vec3D scaleSelf(float a, float b, float c) {
+	public final Vec3D scaleSelf(float a, float b, float c) {
 		x *= a;
 		y *= b;
 		z *= c;
@@ -502,6 +506,109 @@ public class Vec3D {
 	 */
 	public final Vec3D getInverted() {
 		return new Vec3D(-x, -y, -z);
+	}
+
+	/**
+	 * Creates a new vector whose components are the integer value of their
+	 * current values
+	 * 
+	 * @return result as new vector
+	 */
+	public final Vec3D getFloored() {
+		return new Vec3D(MathUtils.fastFloor(x), MathUtils.fastFloor(y),
+				MathUtils.fastFloor(z));
+	}
+
+	/**
+	 * Replaces the vector components with integer values of their current
+	 * values
+	 * 
+	 * @return itself
+	 */
+	public final Vec3D floor() {
+		x = MathUtils.fastFloor(x);
+		y = MathUtils.fastFloor(y);
+		z = MathUtils.fastFloor(z);
+		return this;
+	}
+
+	/**
+	 * Creates a new vector whose components are the fractional part of their
+	 * current values
+	 * 
+	 * @return result as new vector
+	 */
+	public final Vec3D getFrac() {
+		return new Vec3D((float) (x - Math.floor(x)), (float) (y - Math
+				.floor(y)), (float) (z - Math.floor(z)));
+	}
+
+	/**
+	 * Replaces the vector components with the fractional part of their current
+	 * values
+	 * 
+	 * @return itself
+	 */
+	public final Vec3D frac() {
+		x -= MathUtils.fastFloor(x);
+		y -= MathUtils.fastFloor(y);
+		z -= MathUtils.fastFloor(z);
+		return this;
+	}
+
+	/**
+	 * Applies a uniform modulo operation to the vector, using the same base for
+	 * all components.
+	 * 
+	 * @param base
+	 * @return itself
+	 */
+	public final Vec3D modSelf(float base) {
+		x %= base;
+		y %= base;
+		z %= base;
+		return this;
+	}
+
+	/**
+	 * Calculates modulo operation for each vector component separately.
+	 * 
+	 * @param bx
+	 * @param by
+	 * @param bz
+	 * @return itself
+	 */
+
+	public final Vec3D modSelf(float bx, float by, float bz) {
+		x %= bx;
+		y %= by;
+		z %= bz;
+		return this;
+	}
+
+	/**
+	 * Constructs a new vector consisting of the smallest components of both
+	 * vectors.
+	 * 
+	 * @param b
+	 *            comparing vector
+	 * @return result as new vector
+	 */
+	public static final Vec3D min(Vec3D a, Vec3D b) {
+		return new Vec3D(MathUtils.min(a.x, b.x), MathUtils.min(a.y, b.y),
+				MathUtils.min(a.z, b.z));
+	}
+
+	/**
+	 * Constructs a new vector consisting of the largest components of both
+	 * vectors.
+	 * 
+	 * @param b
+	 * @return result as new vector
+	 */
+	public static final Vec3D max(Vec3D a, Vec3D b) {
+		return new Vec3D(MathUtils.max(a.x, b.x), MathUtils.max(a.y, b.y),
+				MathUtils.max(a.z, b.z));
 	}
 
 	/**
@@ -587,7 +694,7 @@ public class Vec3D {
 	 *            interpolation factor (should be in the range 0..1)
 	 * @return result as new vector
 	 */
-	public Vec3D interpolateTo(Vec3D v, float f) {
+	public final Vec3D interpolateTo(Vec3D v, float f) {
 		return new Vec3D(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z)
 				* f);
 	}
@@ -619,7 +726,7 @@ public class Vec3D {
 	 *            interpolation factor (should be in the range 0..1)
 	 * @return itself, result overrides current vector
 	 */
-	public Vec3D interpolateToSelf(Vec3D v, float f) {
+	public final Vec3D interpolateToSelf(Vec3D v, float f) {
 		x += (v.x - x) * f;
 		y += (v.y - y) * f;
 		z += (v.z - z) * f;
@@ -710,6 +817,81 @@ public class Vec3D {
 	}
 
 	/**
+	 * Rotates the vector by the given angle around the X axis.
+	 * 
+	 * @param theta
+	 * @return itself
+	 */
+	public final Vec3D rotateX(float theta) {
+		float co = (float) Math.cos(theta);
+		float si = (float) Math.sin(theta);
+		float yy = co * z - si * y;
+		z = si * z + co * y;
+		y = yy;
+		return this;
+	}
+
+	/**
+	 * Creates a new vector rotated by the given angle around the X axis.
+	 * 
+	 * @param theta
+	 * @return rotated vector
+	 */
+	public final Vec3D getRotatedX(float theta) {
+		return new Vec3D(this).rotateX(theta);
+	}
+
+	/**
+	 * Rotates the vector by the given angle around the Y axis.
+	 * 
+	 * @param theta
+	 * @return itself
+	 */
+	public final Vec3D rotateY(float theta) {
+		float co = (float) Math.cos(theta);
+		float si = (float) Math.sin(theta);
+		float xx = co * x - si * z;
+		z = si * x + co * z;
+		x = xx;
+		return this;
+	}
+
+	/**
+	 * Creates a new vector rotated by the given angle around the Y axis.
+	 * 
+	 * @param theta
+	 * @return rotated vector
+	 */
+	public final Vec3D getRotatedY(float theta) {
+		return new Vec3D(this).rotateY(theta);
+	}
+
+	/**
+	 * Rotates the vector by the given angle around the Z axis.
+	 * 
+	 * @param theta
+	 * @return itself
+	 */
+	public final Vec3D rotateZ(float theta) {
+		float co = (float) Math.cos(theta);
+		float si = (float) Math.sin(theta);
+		float xx = co * x - si * y;
+		y = si * x + co * y;
+		x = xx;
+		return this;
+	}
+
+	/**
+	 * Creates a new vector rotated by the given angle around the Z axis.
+	 * 
+	 * @param theta
+	 * @return rotated vector
+	 */
+	public final Vec3D getRotatedZ(float theta) {
+		return new Vec3D(this).rotateZ(theta);
+	}
+
+	/**
 	 * Rotates the vector around the giving axis
 	 * 
 	 * @param axis
@@ -760,6 +942,8 @@ public class Vec3D {
 	 * @param planeNormal
 	 * @return distance to plane in world units, -1 if no intersection.
 	 */
+	// FIXME this is kind of obsolete since the arrival of the Plane class, but
+	// needs amends to reflector code
 	public float intersectRayPlane(Vec3D rayDir, Vec3D planeOrigin,
 			Vec3D planeNormal) {
 		float d = -planeNormal.dot(planeOrigin);
@@ -767,7 +951,7 @@ public class Vec3D {
 		float denom = planeNormal.dot(rayDir);
 
 		// normal is orthogonal to vector, cant intersect
-		if (FastMath.abs(denom) < FastMath.EPS)
+		if (MathUtils.abs(denom) < MathUtils.EPS)
 			return -1;
 
 		return -(numer / denom);
@@ -785,6 +969,8 @@ public class Vec3D {
 	 * @return distance to sphere in world units, -1 if no intersection.
 	 */
 
+	// FIXME this really should be part of either Sphere or
+	// SphereIntersectorReflector
 	public float intersectRaySphere(Vec3D rayDir, Vec3D sphereOrigin,
 			float sphereRadius) {
 		Vec3D q = sphereOrigin.sub(this);
@@ -798,28 +984,6 @@ public class Vec3D {
 
 		// Return the distance to the [first] intersecting point
 		return v - (float) Math.sqrt(d);
-	}
-
-	/**
-	 * Checks if point vector is inside the triangle created by the points a, b
-	 * and c. These points will create a plane and the point checked will have
-	 * to be on this plane in the region between a,b,c.
-	 * 
-	 * Note: The triangle must be defined in clockwise order a,b,c
-	 * 
-	 * @return true, if point is in triangle.
-	 */
-
-	public boolean isInTriangle(Vec3D a, Vec3D b, Vec3D c) {
-		Vec3D v1 = sub(a).normalize();
-		Vec3D v2 = sub(b).normalize();
-		Vec3D v3 = sub(c).normalize();
-
-		float total_angles = (float) Math.acos(v1.dot(v2));
-		total_angles += (float) Math.acos(v2.dot(v3));
-		total_angles += (float) Math.acos(v3.dot(v1));
-
-		return (FastMath.abs(total_angles - FastMath.TWO_PI) <= 0.005f);
 	}
 
 	/**
@@ -843,7 +1007,7 @@ public class Vec3D {
 
 		float t = v.dot(c);
 
-		// Check to see if �t� is beyond the extents of the line segment
+		// Check to see if t is beyond the extents of the line segment
 		if (t < 0.0f)
 			return a;
 		if (t > d)
@@ -857,41 +1021,6 @@ public class Vec3D {
 	}
 
 	/**
-	 * Finds and returns the closest point on any of the edges of the given
-	 * triangle.
-	 * 
-	 * @param a
-	 *            triangle vertex
-	 * @param b
-	 *            triangle vertex
-	 * @param c
-	 *            triangle vertex
-	 * @return closest point
-	 */
-
-	public Vec3D closestPointOnTriangle(Vec3D a, Vec3D b, Vec3D c) {
-		Vec3D Rab = closestPointOnLine(a, b);
-		Vec3D Rbc = closestPointOnLine(b, c);
-		Vec3D Rca = closestPointOnLine(c, a);
-
-		float dAB = sub(Rab).magnitude();
-		float dBC = sub(Rbc).magnitude();
-		float dCA = sub(Rca).magnitude();
-
-		float min = dAB;
-		Vec3D result = Rab;
-
-		if (dBC < min) {
-			min = dBC;
-			result = Rbc;
-		}
-		if (dCA < min)
-			result = Rca;
-
-		return result;
-	}
-
-	/**
 	 * Checks if the point is inside the given sphere.
 	 * 
 	 * @param sO
@@ -900,7 +1029,7 @@ public class Vec3D {
 	 *            sphere radius
 	 * @return true, if point is in sphere
 	 */
-
+	// FIXME move to Sphere
 	public boolean isInSphere(Vec3D sO, float sR) {
 		float d = this.sub(sO).magSquared();
 		return (d <= sR * sR);
@@ -913,6 +1042,7 @@ public class Vec3D {
 	 *            bounding sphere to check
 	 * @return true, if point is inside
 	 */
+	// FIXME move to Sphere
 	public boolean isInSphere(Sphere s) {
 		float d = this.sub(s).magSquared();
 		return (d <= s.radius * s.radius);
@@ -927,6 +1057,7 @@ public class Vec3D {
 	 *            bounding box extends (half measure)
 	 * @return true, if point is inside the box
 	 */
+
 	public boolean isInAABB(Vec3D bO, Vec3D bDim) {
 		float w = bDim.x;
 		if (x < bO.x - w || x > bO.x + w)
@@ -948,7 +1079,15 @@ public class Vec3D {
 	 * @return true, if point is inside
 	 */
 	public boolean isInAABB(AABB box) {
-		return isInAABB(box, box.extend);
+		Vec3D min = box.getMin();
+		Vec3D max = box.getMax();
+		if (x < min.x || x > max.x)
+			return false;
+		if (y < min.y || y > max.y)
+			return false;
+		if (z < min.z || z > max.z)
+			return false;
+		return true;
 	}
 
 	/**
@@ -966,119 +1105,11 @@ public class Vec3D {
 	public Vec3D tangentPlaneNormalOfEllipsoid(Vec3D eO, Vec3D eR) {
 		Vec3D p = this.sub(eO);
 
-		float a2 = eR.x * eR.x;
-		float b2 = eR.y * eR.y;
-		float c2 = eR.z * eR.z;
+		float xr2 = eR.x * eR.x;
+		float yr2 = eR.y * eR.y;
+		float zr2 = eR.z * eR.z;
 
-		return new Vec3D(p.x / a2, p.y / b2, p.z / c2).normalize();
-	}
-
-	/**
-	 * Checks and classifies the relative position of the point to the given
-	 * plane.
-	 * 
-	 * @param pO
-	 *            plane origin
-	 * @param pN
-	 *            plane normal vector
-	 * @return One of the 3 classification codes: PLANE_FRONT, PLANE_BACK,
-	 *         ON_PLANE
-	 */
-	public int classifyPoint(Vec3D pO, Vec3D pN) {
-		Vec3D dir = pO.sub(this);
-		float d = dir.dot(pN);
-		if (d < -FastMath.EPS)
-			return PLANE_FRONT;
-		else if (d > FastMath.EPS)
-			return PLANE_BACK;
-
-		return ON_PLANE;
-	}
-
-	/**
-	 * Computes the the point closest to the current vector on the surface of
-	 * triangle abc.
-	 * 
-	 * From Real-Time Collision Detection by Christer Ericson, published by
-	 * Morgan Kaufmann Publishers, Copyright 2005 Elsevier Inc
-	 * 
-	 * @param a
-	 *            triangle vertex
-	 * @param b
-	 *            triangle vertex
-	 * @param c
-	 *            triangle vertex
-	 * @return closest point on triangle (result may also be one of a, b or c)
-	 */
-
-	public Vec3D closestPointTriangle(Vec3D a, Vec3D b, Vec3D c) {
-		Vec3D ab = b.sub(a);
-		Vec3D ac = c.sub(a);
-		Vec3D bc = c.sub(b);
-
-		Vec3D pa = this.sub(a);
-		Vec3D pb = this.sub(b);
-		Vec3D pc = this.sub(c);
-
-		// Compute parametric position s for projection P' of P on AB,
-		// P' = A + s*AB, s = snom/(snom+sdenom)
-		float snom = pa.dot(ab);
-		float sdenom = pb.dot(a.sub(b));
-
-		// Compute parametric position t for projection P' of P on AC,
-		// P' = A + t*AC, s = tnom/(tnom+tdenom)
-		float tnom = pa.dot(ac);
-		float tdenom = pc.dot(a.sub(c));
-
-		if (snom <= 0.0f && tnom <= 0.0f)
-			return a; // Vertex region early out
-
-		// Compute parametric position u for projection P' of P on BC,
-		// P' = B + u*BC, u = unom/(unom+udenom)
-		float unom = pb.dot(bc);
-		float udenom = pc.dot(b.sub(c));
-
-		if (sdenom <= 0.0f && unom <= 0.0f)
-			return b; // Vertex region early out
-		if (tdenom <= 0.0f && udenom <= 0.0f)
-			return c; // Vertex region early out
-
-		// P is outside (or on) AB if the triple scalar product [N PA PB] <= 0
-		Vec3D n = ab.cross(ac);
-		float vc = n.dot(a.sub(this).crossSelf(b.sub(this)));
-
-		// If P outside AB and within feature region of AB,
-		// return projection of P onto AB
-		if (vc <= 0.0f && snom >= 0.0f && sdenom >= 0.0f) {
-			// return a + snom / (snom + sdenom) * ab;
-			return a.add(ab.scaleSelf(snom / (snom + sdenom)));
-		}
-
-		// P is outside (or on) BC if the triple scalar product [N PB PC] <= 0
-		float va = n.dot(b.sub(this).crossSelf(c.sub(this)));
-		// If P outside BC and within feature region of BC,
-		// return projection of P onto BC
-		if (va <= 0.0f && unom >= 0.0f && udenom >= 0.0f) {
-			// return b + unom / (unom + udenom) * bc;
-			return b.add(bc.scaleSelf(unom / (unom + udenom)));
-		}
-
-		// P is outside (or on) CA if the triple scalar product [N PC PA] <= 0
-		float vb = n.dot(c.sub(this).crossSelf(a.sub(this)));
-		// If P outside CA and within feature region of CA,
-		// return projection of P onto CA
-		if (vb <= 0.0f && tnom >= 0.0f && tdenom >= 0.0f) {
-			// return a + tnom / (tnom + tdenom) * ac;
-			return a.add(ac.scaleSelf(tnom / (tnom + tdenom)));
-		}
-
-		// P must project inside face region. Compute Q using barycentric
-		// coordinates
-		float u = va / (va + vb + vc);
-		float v = vb / (va + vb + vc);
-		float w = 1.0f - u - v; // = vc / (va + vb + vc)
-		// return u * a + v * b + w * c;
-		return a.scale(u).addSelf(b.scale(v)).addSelf(c.scale(w));
+		return new Vec3D(p.x / xr2, p.y / yr2, p.z / zr2).normalize();
 	}
 
 	/**
@@ -1099,19 +1130,21 @@ public class Vec3D {
 	 *            a non-null vector for storing the result
 	 * @return true, if sphere intersects triangle ABC
 	 */
+	// FIXME this needs to be moved out from Vec3D in either
 	public boolean intersectSphereTriangle(float r, Vec3D a, Vec3D b, Vec3D c,
 			Vec3D result) {
 		// Find Vec3D P on triangle ABC closest to sphere center
-		result.set(this.closestPointTriangle(a, b, c));
+		result.set(new Triangle(a, b, c).closestPoint(this));
 
 		// Sphere and triangle intersect if the (squared) distance from sphere
 		// center to Vec3D p is less than the (squared) sphere radius
 		Vec3D v = result.sub(this);
-		return v.x * v.x + v.y * v.y + v.z * v.z <= r * r;
+		return v.magSquared() <= r * r;
 	}
 
 	/**
-	 * Factory method.
+	 * Static factory method. Creates a new random unit vector using the default
+	 * Math.random() Random instance.
 	 * 
 	 * @return a new random normalized unit vector.
 	 */
@@ -1121,16 +1154,93 @@ public class Vec3D {
 		return rnd.normalize();
 	}
 
-	
+	/**
+	 * Static factory method. Creates a new random unit vector using the given
+	 * Random generator instance. I recommend to have a look at the
+	 * https://uncommons-maths.dev.java.net library for a good choice of
+	 * reliable and high quality random number generators.
+	 * 
+	 * @return a new random normalized unit vector.
+	 */
+	public static final Vec3D randomVector(Random rnd) {
+		Vec3D v = new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1,
+				rnd.nextFloat() * 2 - 1);
+		return v.normalize();
+	}
+
+	/**
+	 * Creates a new vector from the given angle in the XY plane. The Z
+	 * component of the vector will be zero.
+	 * 
+	 * The resulting vector for theta=0 is equal to the positive X axis.
+	 * 
+	 * @param theta
+	 * @return
+	 */
 	public static final Vec3D fromXYTheta(float theta) {
 		return new Vec3D((float) Math.cos(theta), (float) Math.sin(theta), 0);
 	}
 
+	/**
+	 * Creates a new vector from the given angle in the XZ plane. The Y
+	 * component of the vector will be zero.
+	 * 
+	 * The resulting vector for theta=0 is equal to the positive X axis.
+	 * 
+	 * @param theta
+	 * @return
+	 */
 	public static final Vec3D fromXZTheta(float theta) {
 		return new Vec3D((float) Math.cos(theta), 0, (float) Math.sin(theta));
 	}
 
+	/**
+	 * Creates a new vector from the given angle in the YZ plane. The X
+	 * component of the vector will be zero.
+	 * 
+	 * The resulting vector for theta=0 is equal to the positive Y axis.
+	 * 
+	 * @param theta
+	 * @return
+	 */
 	public static final Vec3D fromYZTheta(float theta) {
 		return new Vec3D(0, (float) Math.cos(theta), (float) Math.sin(theta));
+	}
+
+	/**
+	 * Replaces all vector components with the signum of their original values.
+	 * In other words if a components value was negative its new value will be
+	 * -1, if zero => 0, if positive => +1
+	 * 
+	 * @return itself
+	 */
+	public Vec3D signum() {
+		x = (x < 0 ? -1 : x == 0 ? 0 : 1);
+		y = (y < 0 ? -1 : y == 0 ? 0 : 1);
+		z = (z < 0 ? -1 : z == 0 ? 0 : 1);
+		return this;
+	}
+
+	/**
+	 * Creates a new vector in which all components are replaced with the signum
+	 * of their original values. In other words if a components value was
+	 * negative its new value will be -1, if zero => 0, if positive => +1
+	 * 
+	 * @return result vector
+	 */
+	public Vec3D getSignum() {
+		return new Vec3D(this).signum();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(T)
+	 */
+	public int compareTo(Object obj) {
+		Vec3D v = (Vec3D) obj;
+		if (x == v.x && y == v.y && z == v.z)
+			return 0;
+		if (magSquared() < v.magSquared())
+			return -1;
+		return 1;
 	}
 }

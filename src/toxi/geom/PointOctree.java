@@ -20,8 +20,8 @@
 package toxi.geom;
 
 import java.util.ArrayList;
-
-import processing.core.PApplet;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Implements a spatial subdivision tree to work efficiently with large numbers
@@ -34,15 +34,10 @@ import processing.core.PApplet;
 public class PointOctree extends AABB {
 
 	/**
-	 * tree recursion limit
-	 */
-	private float maxTreeDepth = 6;
-
-	/**
 	 * alternative tree recursion limit, number of world units when cells are
 	 * not subdivided any further
 	 */
-	private float minNodeSize = 4;
+	protected float minNodeSize = 4;
 
 	/**
 	 * 
@@ -55,15 +50,17 @@ public class PointOctree extends AABB {
 
 	protected ArrayList data;
 
-	protected float dim, dim2, dimMag;
+	protected float dim, dim2;
 
 	protected Vec3D offset;
 
 	protected int depth = 0;
 
+	private boolean isAutoReducing=false;
+
 	/**
-	 * Constructs a new PointOctree node within the AABB cube volume:
-	 * {o.x, o.y, o.z} ... {o.x+size, o.y+size, o.z+size}
+	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
+	 * o.z} ... {o.x+size, o.y+size, o.z+size}
 	 * 
 	 * @param o
 	 *            tree origin
@@ -71,35 +68,40 @@ public class PointOctree extends AABB {
 	 *            size of the tree volume along a single axis
 	 */
 	public PointOctree(Vec3D o, float size) {
-		this(null, o, size);
+		this(null, o, size / 2);
 	}
 
 	/**
-	 * Constructs a new PointOctree node within the AABB cube volume:
-	 * {o.x, o.y, o.z} ... {o.x+size, o.y+size, o.z+size}
+	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
+	 * o.z} ... {o.x+size, o.y+size, o.z+size}
 	 * 
-	 * @param p parent node
-	 * @param o tree origin
-	 * @param size size of the tree volume along a single axis
+	 * @param p
+	 *            parent node
+	 * @param o
+	 *            tree origin
+	 * @param halfSize
+	 *            half length of the tree volume along a single axis
 	 */
-	public PointOctree(PointOctree p, Vec3D o, float size) {
-		super(o.add(size * .5f, size * .5f, size * .5f), new Vec3D(size, size,
-				size).scale(0.5f));
+	private PointOctree(PointOctree p, Vec3D o, float halfSize) {
+		super(o.add(halfSize, halfSize, halfSize), new Vec3D(halfSize,
+				halfSize, halfSize));
 		parent = p;
 		if (parent != null)
 			depth = parent.depth + 1;
-		dim = size;
-		dim2 = dim * 0.5f;
+		dim = halfSize * 2;
+		dim2 = dim;
 		offset = o;
 		numChildren = 0;
 	}
 
 	/**
-	 * Computes the local octant for the given point
-	 * @param plocal point in the node-local coordinate system
+	 * Computes the local child octant/cube index for the given point
+	 * 
+	 * @param plocal
+	 *            point in the node-local coordinate system
 	 * @return octant index
 	 */
-	protected int getOctantID(Vec3D plocal) {
+	protected final int getOctantID(Vec3D plocal) {
 		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
 				+ (plocal.z >= dim2 ? 4 : 0);
 	}
@@ -116,7 +118,7 @@ public class PointOctree extends AABB {
 		// check if point is inside cube
 		if (p.isInAABB(this)) {
 			// only add data to leaves for now
-			if (depth == maxTreeDepth || dim <= minNodeSize) {
+			if (dim2 <= minNodeSize) {
 				if (data == null) {
 					data = new ArrayList();
 				}
@@ -144,11 +146,81 @@ public class PointOctree extends AABB {
 	}
 
 	/**
+	 * Adds all points of the collection to the octree. IMPORTANT: Points need
+	 * be of type Vec3D or have subclassed it.
+	 * 
+	 * @param points
+	 *            point collection
+	 * @return true, if all points have been added successfully.
+	 */
+	public boolean addAll(Collection points) {
+		Iterator i = points.iterator();
+		boolean addedAll = true;
+		while (i.hasNext()) {
+			addedAll &= addPoint((Vec3D) i.next());
+		}
+		return addedAll;
+	}
+
+	/**
+	 * Enables/disables auto reduction of branches after points have been
+	 * deleted from the tree. Turned off by default.
+	 * 
+	 * @param state true, to enable feature
+	 */
+	public void setTreeAutoReduction(boolean state) {
+		isAutoReducing = state;
+	}
+
+	/**
+	 * Removes a point from the tree and (optionally) tries to release memory by
+	 * reducing now empty sub-branches.
+	 * 
+	 * @param p
+	 *            point to delete
+	 * @return true, if the point was found & removed
+	 */
+	public boolean remove(Vec3D p) {
+		boolean found = false;
+		PointOctree leaf = getLeafForPoint(p);
+		if (leaf != null) {
+			if (leaf.data.remove(p)) {
+				found = true;
+				if (isAutoReducing && leaf.data.size() == 0) {
+					leaf.reduceBranch();
+				}
+			}
+		}
+		return found;
+	}
+
+	public void removeAll(Collection points) {
+		Iterator i = points.iterator();
+		while (i.hasNext()) {
+			remove((Vec3D) i.next());
+		}
+	}
+
+	private void reduceBranch() {
+		if (data != null && data.size() == 0)
+			data = null;
+		if (numChildren > 0) {
+			for (int i = 0; i < 8; i++) {
+				if (children[i] != null && children[i].data == null)
+					children[i] = null;
+			}
+		}
+		if (parent != null) {
+			parent.reduceBranch();
+		}
+	}
+
+	/**
 	 * Finds the leaf node which spatially relates to the given point
 	 * 
 	 * @param p
 	 *            point to check
-	 * @return leaf node
+	 * @return leaf node or null if point is outside the tree dimensions
 	 */
 	protected PointOctree getLeafForPoint(Vec3D p) {
 		// if not a leaf node...
@@ -196,14 +268,15 @@ public class PointOctree extends AABB {
 						results.add(q);
 					}
 				}
-				return results;
 			} else if (numChildren > 0) {
-				results = new ArrayList();
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
 						ArrayList points = children[i].getPointsWithinSphere(s);
-						if (points != null)
+						if (points != null) {
+							if (results == null)
+								results = new ArrayList();
 							results.addAll(points);
+						}
 					}
 				}
 			}
@@ -231,14 +304,15 @@ public class PointOctree extends AABB {
 						results.add(q);
 					}
 				}
-				return results;
 			} else if (numChildren > 0) {
-				results = new ArrayList();
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
 						ArrayList points = children[i].getPointsWithinBox(b);
-						if (points != null)
+						if (points != null) {
+							if (results == null)
+								results = new ArrayList();
 							results.addAll(points);
+						}
 					}
 				}
 			}
@@ -247,23 +321,12 @@ public class PointOctree extends AABB {
 	}
 
 	// FIXME remove PApplet dependency
-	/**
-	 * @param app
+	/*
+	 * public void draw(PApplet app) { if (numChildren > 0) { app.noFill();
+	 * app.stroke(depth * 24, 50); app.pushMatrix(); app.translate(x, y, z);
+	 * app.box(dim); app.popMatrix(); for (int i = 0; i < 8; i++) { if
+	 * (children[i] != null) children[i].draw(app); } } } //
 	 */
-	public void draw(PApplet app) {
-		if (numChildren > 0) {
-			app.noFill();
-			app.stroke(depth * 24, 50);
-			app.pushMatrix();
-			app.translate(x, y, z);
-			app.box(dim);
-			app.popMatrix();
-			for (int i = 0; i < 8; i++) {
-				if (children[i] != null)
-					children[i].draw(app);
-			}
-		}
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -272,25 +335,6 @@ public class PointOctree extends AABB {
 	 */
 	public String toString() {
 		return "<octree> offset: " + super.toString() + " size: " + dim;
-	}
-
-	/**
-	 * Returns maximum recursion level (tree depth). Together with the minimum
-	 * node size this level acts as a recursion limit. This value should be
-	 * adjusted based on the overall size of the tree volume and object density.
-	 * Default value is 6.
-	 * 
-	 * @return maximum tree depth limit
-	 */
-	public float getMaxDepth() {
-		return maxTreeDepth;
-	}
-
-	/**
-	 * @param maxTreeDepth
-	 */
-	public void setMaxDepth(float maxTreeDepth) {
-		this.maxTreeDepth = maxTreeDepth;
 	}
 
 	/**
