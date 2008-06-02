@@ -224,7 +224,7 @@ public class Vec3D implements Comparable {
 	 * @return fitted vector
 	 */
 	public final Vec3D getConstrained(AABB box) {
-		return new Vec3D(this).constrain();
+		return new Vec3D(this).constrain(box);
 	}
 
 	/**
