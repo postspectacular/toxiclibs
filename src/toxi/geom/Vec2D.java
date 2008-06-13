@@ -24,7 +24,6 @@ import java.awt.Rectangle;
 import java.util.Random;
 
 import toxi.math.MathUtils;
-import toxi.math.InterpolateStrategy;
 
 /**
  * Comprehensive 2D vector class with additional basic intersection and

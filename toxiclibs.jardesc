@@ -11,11 +11,11 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.math.noise"/>
         <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.geom"/>
+        <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.math.noise"/>
         <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.math.waves"/>
-        <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.util.datatypes"/>
         <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.math"/>
+        <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.util.datatypes"/>
         <javaElement handleIdentifier="=toxiclibs/src&lt;toxi.image.util"/>
     </selectedElements>
 </jardesc>

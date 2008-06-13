@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="toxiclibs" default="release">
+	<!-- This needs to change with every release -->
+	<property name="project.name" value="prefutils" />
+	<property name="lib.version" value="0009" />
+	<property name="lib.jdk.level" value="1.4" />
+	<property name="lib.zip.comment" value="${project.name} - preference file wrapper for Java &amp; Processing v${lib.version}" />
+	<property name="lib.libs.path" value="lib" />
+	<property name="lib.jar.filename" value="${project.name}.jar" />
+
+	<!-- Basic targets -->
+	<target name="init">
+		<property name="src.dir" value="../src.prefs" />
+		<property name="build.dir" value="../bin" />
+		<property name="release.dir" value="../dist" />
+		<!-- build folder contains temporary files needed to create release level files -->
+		<property name="build.classes.dir" value="${build.dir}" />
+		<property name="build.manifest" value="${build.dir}/${project.name}.mf" />
+		<property name="build.jar" value="${build.dir}/${project.name}.jar" />
+		<!-- release folder contains files which may be distributed in some way or another -->
+		<property name="release.javadoc.dir" value="../docs" />
+		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
+		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
+		<property name="release.examples.dir" value="../examples"/>
+	</target>
+
+	<target name="clean" depends="init" description="Remove build files created this scripts">
+		<delete dir="${build.dir}" />
+		<delete dir="${release.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+
+	<!-- build directory targets -->
+	<target name="compile" depends="init" description="Compile source">
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}" classpath="${lib.libs.path}">
+			<compilerarg value="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<target name="create_manifest" description="Create the jar manifest">
+		<echo file="${build.manifest}" append="false" message="Manifest-Version: 1.0${line.separator}" />
+	</target>
+
+	<target name="jars" depends="create_manifest" description="Create jar files required for execution">
+		<mkdir dir="${release.dir}" />
+		<jar jarfile="${release.dir}/${lib.jar.filename}" manifest="${build.manifest}">
+			<fileset dir="${build.classes.dir}" />
+		</jar>
+	</target>
+
+	<!-- release directory targets -->
+	<target name="zips" depends="jars" description="Create release zip files">
+		<mkdir dir="${release.dir}" />
+		<zip destfile="${release.bin.zip}" comment="${lib.zip.comment} - Binary release">
+			<zipfileset dir="${release.dir}" includes="*.jar" prefix="${project.name}/library" />
+			<zipfileset dir="." includes="CHANGELOG" prefix="${project.name}" />
+			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />
+			<zipfileset dir="." includes="README" prefix="${project.name}" />
+			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
+			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+		</zip>
+		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
+			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
+			<!-- <zipfileset dir="${toxiclibs.libs}" prefix="${project.name}/lib" /> -->
+			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
+			<zipfileset dir="." includes="build.xml" prefix="${project.name}" />
+			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />
+			<zipfileset dir="." includes="CHANGELOG" prefix="${project.name}" />
+			<zipfileset dir="." includes="README" prefix="${project.name}" />
+		</zip>
+	</target>
+
+	<target name="javadoc" depends="init" description="Generate documentation">
+		<mkdir dir="${release.javadoc.dir}" />
+		<javadoc classpath="${lib.libs.path}" destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="release" depends="init, clean, compile, javadoc, zips" />
+
+</project>

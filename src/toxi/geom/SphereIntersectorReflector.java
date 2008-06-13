@@ -1,6 +1,8 @@
 package toxi.geom;
 
-import toxi.math.FastMath;
+import com.sun.org.apache.bcel.internal.generic.MULTIANEWARRAY;
+
+import toxi.math.MathUtils;
 
 public class SphereIntersectorReflector implements Intersector, Reflector {
 	protected Vec3D sOrigin, sRadius;
@@ -50,7 +52,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 					sRadius);
 			// compute the reflection angle
 			reflectTheta = isectDir.angleBetween(sphereNormal, true) * 2
-					+ FastMath.PI;
+					+ MathUtils.PI;
 			// then form a perpendicular vector standing on the plane spanned by
 			// isectDir and sphereNormal
 			// this vector will be used to mirror the ray around the

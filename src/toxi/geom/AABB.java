@@ -20,7 +20,7 @@
 
 package toxi.geom;
 
-import toxi.math.FastMath;
+import toxi.math.MathUtils;;
 
 /**
  * Axis-aligned bounding box with basic intersection features for Ray, AABB and
@@ -139,9 +139,9 @@ public class AABB extends Vec3D {
 	 */
 	public boolean intersectsBox(AABB b) {
 		Vec3D t = b.sub(this);
-		return FastMath.abs(t.x) <= (extend.x + b.extend.x)
-				&& FastMath.abs(t.y) <= (extend.y + b.extend.y)
-				&& FastMath.abs(t.z) <= (extend.z + b.extend.z);
+		return MathUtils.abs(t.x) <= (extend.x + b.extend.x)
+				&& MathUtils.abs(t.y) <= (extend.y + b.extend.y)
+				&& MathUtils.abs(t.z) <= (extend.z + b.extend.z);
 	}
 
 	/**

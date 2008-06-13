@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src.prefs"/>
+	<classpathentry kind="src" path="src.audio"/>
+	<classpathentry kind="src" path="src.video"/>
+	<classpathentry kind="src" path="src.test"/>
+	<classpathentry kind="src" path="src.image"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>

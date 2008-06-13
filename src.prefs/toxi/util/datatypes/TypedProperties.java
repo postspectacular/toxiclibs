@@ -22,7 +22,6 @@ package toxi.util.datatypes;
 
 import java.util.Properties;
 
-@SuppressWarnings("serial")
 public class TypedProperties extends Properties {
 
 	public boolean getBoolean(String id, boolean defState) {
