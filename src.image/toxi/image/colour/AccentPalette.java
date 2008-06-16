@@ -20,7 +20,7 @@
 
 package toxi.image.colour;
 
-import toxi.math.FastMath;
+import toxi.math.MathUtils;
 
 /**
  * A colour palette made up of a set of base colours and a second one defining
@@ -45,7 +45,7 @@ public class AccentPalette {
 	}
 
 	public int pickRandomColour() {
-		if (FastMath.random(1f)<baseAccentRatio) {
+		if (MathUtils.random(1f)<baseAccentRatio) {
 			return baseCols.pickRandomColour();
 		} else {
 			return accentCols.pickRandomColour();

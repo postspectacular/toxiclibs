@@ -3,7 +3,7 @@ package toxi.image.colour;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import toxi.math.FastMath;
+import toxi.math.MathUtils;
 
 public class ARGBGradient {
 
@@ -117,7 +117,7 @@ public class ARGBGradient {
 				}
 			}
 			if (currPoint != activeGradient.last()) {
-				float fdith = FastMath.clip(frac + FastMath.random(-1f, 1f)
+				float fdith = MathUtils.clip(frac + MathUtils.random(-1f, 1f)
 						* maxDither, 0f, 1f);
 				result[idx] = blend(currPoint.col, nextPoint.col, fdith);
 			} else {
@@ -134,6 +134,6 @@ public class ARGBGradient {
 	}
 
 	public void setMaxDither(float maxDither) {
-		this.maxDither = FastMath.clip(maxDither, 0f, 0.1f);
+		this.maxDither = MathUtils.clip(maxDither, 0f, 0.1f);
 	}
 }

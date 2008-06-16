@@ -1,6 +1,6 @@
 package toxi.image.colour;
 
-import toxi.math.FastMath;
+import toxi.math.MathUtils;
 
 public class Palette {
 	protected int[] colours;
@@ -12,10 +12,10 @@ public class Palette {
 	}
 
 	public int pickRandomColour() {
-		int newID = FastMath.random(colours.length);
+		int newID = MathUtils.random(colours.length);
 		if (colours.length > 1) {
 			while (newID == lastPickedID)
-				newID = FastMath.random(colours.length);
+				newID = MathUtils.random(colours.length);
 		}
 		lastPickedID = newID;
 		return colours[lastPickedID];
