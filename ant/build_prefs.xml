@@ -21,7 +21,7 @@
 		<property name="release.javadoc.dir" value="../docs" />
 		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
 		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
-		<property name="release.examples.dir" value="../examples"/>
+		<property name="release.examples.dir" value="../examples/prefs"/>
 	</target>
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
@@ -59,12 +59,11 @@
 			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />
 			<zipfileset dir="." includes="README" prefix="${project.name}" />
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
-			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+			<!-- <zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" /> -->
 		</zip>
 		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
 			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
-			<!-- <zipfileset dir="${toxiclibs.libs}" prefix="${project.name}/lib" /> -->
-			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+			<!-- <zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" /> -->
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir="." includes="build.xml" prefix="${project.name}" />
 			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />

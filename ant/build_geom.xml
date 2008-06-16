@@ -10,18 +10,18 @@
 
 	<!-- Basic targets -->
 	<target name="init">
-		<property name="src.dir" value="src" />
-		<property name="build.dir" value="bin" />
-		<property name="release.dir" value="dist" />
+		<property name="src.dir" value="../src.geom" />
+		<property name="build.dir" value="../bin" />
+		<property name="release.dir" value="../dist" />
 		<!-- build folder contains temporary files needed to create release level files -->
 		<property name="build.classes.dir" value="${build.dir}" />
 		<property name="build.manifest" value="${build.dir}/${project.name}.mf" />
 		<property name="build.jar" value="${build.dir}/${project.name}.jar" />
 		<!-- release folder contains files which may be distributed in some way or another -->
-		<property name="release.javadoc.dir" value="docs" />
+		<property name="release.javadoc.dir" value="../docs" />
 		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
 		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
-		<property name="release.examples.dir" value="examples"/>
+		<property name="release.examples.dir" value="../examples/geom"/>
 	</target>
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
@@ -62,7 +62,6 @@
 		</zip>
 		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
 			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
-			<!-- <zipfileset dir="${toxiclibs.libs}" prefix="${project.name}/lib" /> -->
 			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir="." includes="build.xml" prefix="${project.name}" />
