@@ -2,8 +2,8 @@
 <project name="toxiclibs" default="release">
 	<!-- This needs to change with every release -->
 	<property name="project.name" value="geomutils" />
-	<property name="lib.version" value="0009" />
-	<property name="lib.jdk.level" value="4" />
+	<property name="lib.version" value="0010" />
+	<property name="lib.jdk.level" value="1.4" />
 	<property name="lib.zip.comment" value="${project.name} - assorted geometry classes for Java &amp; Processing v${lib.version}" />
 	<property name="lib.libs.path" value="lib" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
@@ -80,6 +80,6 @@
 		</javadoc>
 	</target>
 
-	<target name="release" depends="init, javadoc, zips" />
+	<target name="release" depends="init, clean, compile, javadoc, zips" />
 
 </project>

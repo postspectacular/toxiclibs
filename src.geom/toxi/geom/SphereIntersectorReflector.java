@@ -1,7 +1,5 @@
 package toxi.geom;
 
-import com.sun.org.apache.bcel.internal.generic.MULTIANEWARRAY;
-
 import toxi.math.MathUtils;
 
 public class SphereIntersectorReflector implements Intersector, Reflector {

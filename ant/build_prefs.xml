@@ -2,7 +2,7 @@
 <project name="toxiclibs" default="release">
 	<!-- This needs to change with every release -->
 	<property name="project.name" value="prefutils" />
-	<property name="lib.version" value="0009" />
+	<property name="lib.version" value="0010" />
 	<property name="lib.jdk.level" value="1.4" />
 	<property name="lib.zip.comment" value="${project.name} - preference file wrapper for Java &amp; Processing v${lib.version}" />
 	<property name="lib.libs.path" value="lib" />
@@ -27,7 +27,6 @@
 	<target name="clean" depends="init" description="Remove build files created this scripts">
 		<delete dir="${build.dir}" />
 		<delete dir="${release.dir}" />
-		<mkdir dir="${build.dir}" />
 	</target>
 
 
