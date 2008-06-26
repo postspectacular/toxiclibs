@@ -64,7 +64,7 @@ public class Vec3D implements Comparable {
 	public float z;
 
 	/**
-	 * Creates a new zero vect `or
+	 * Creates a new zero vector
 	 */
 	public Vec3D() {
 		x = y = z = 0;
@@ -598,6 +598,13 @@ public class Vec3D implements Comparable {
 				MathUtils.min(a.z, b.z));
 	}
 
+	public final Vec3D minSelf(Vec3D b) {
+		x=MathUtils.min(x, b.x);
+		y=MathUtils.min(y, b.y);
+		z=MathUtils.min(z, b.z);
+		return this;
+	}
+	
 	/**
 	 * Constructs a new vector consisting of the largest components of both
 	 * vectors.
@@ -610,6 +617,13 @@ public class Vec3D implements Comparable {
 				MathUtils.max(a.z, b.z));
 	}
 
+	public final Vec3D maxSelf(Vec3D b) {
+		x=MathUtils.max(x, b.x);
+		y=MathUtils.max(y, b.y);
+		z=MathUtils.max(z, b.z);
+		return this;
+	}
+	
 	/**
 	 * Calculates cross-product with vector v. The resulting vector is
 	 * perpendicular to both the current and supplied vector.

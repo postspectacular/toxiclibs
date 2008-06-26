@@ -91,6 +91,10 @@ public class AABB extends Vec3D {
 		return new Vec3D(max);
 	}
 
+	public final Vec3D getExtend() {
+		return new Vec3D(extend);
+	}
+	
 	/**
 	 * @param c
 	 *            sphere centre
