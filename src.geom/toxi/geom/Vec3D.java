@@ -117,7 +117,7 @@ public class Vec3D implements Comparable {
 	 *            vector to be copied
 	 * @return itself
 	 */
-	public final Vec3D set(Vec3D v) {
+	public Vec3D set(Vec3D v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
@@ -132,7 +132,7 @@ public class Vec3D implements Comparable {
 	 * @param z
 	 * @return itself
 	 */
-	public final Vec3D set(float x, float y, float z) {
+	public Vec3D set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -599,12 +599,12 @@ public class Vec3D implements Comparable {
 	}
 
 	public final Vec3D minSelf(Vec3D b) {
-		x=MathUtils.min(x, b.x);
-		y=MathUtils.min(y, b.y);
-		z=MathUtils.min(z, b.z);
+		x = MathUtils.min(x, b.x);
+		y = MathUtils.min(y, b.y);
+		z = MathUtils.min(z, b.z);
 		return this;
 	}
-	
+
 	/**
 	 * Constructs a new vector consisting of the largest components of both
 	 * vectors.
@@ -618,12 +618,12 @@ public class Vec3D implements Comparable {
 	}
 
 	public final Vec3D maxSelf(Vec3D b) {
-		x=MathUtils.max(x, b.x);
-		y=MathUtils.max(y, b.y);
-		z=MathUtils.max(z, b.z);
+		x = MathUtils.max(x, b.x);
+		y = MathUtils.max(y, b.y);
+		z = MathUtils.max(z, b.z);
 		return this;
 	}
-	
+
 	/**
 	 * Calculates cross-product with vector v. The resulting vector is
 	 * perpendicular to both the current and supplied vector.
@@ -676,7 +676,8 @@ public class Vec3D implements Comparable {
 	/**
 	 * Computes the scalar product (dot product) with the given vector.
 	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry</a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
+	 *      /a>
 	 * 
 	 * @param v
 	 * @return dot product
@@ -911,7 +912,7 @@ public class Vec3D implements Comparable {
 	 *            rotation axis vector
 	 * @param theta
 	 *            rotation angle (in radians)
-	 * @return
+	 * @return itself
 	 */
 	public final Vec3D rotateAroundAxis(Vec3D axis, float theta) {
 		float ux = axis.x * x;
@@ -937,7 +938,18 @@ public class Vec3D implements Comparable {
 				* (ux + vy + wz)
 				+ (z * (axis.x * axis.x + axis.y * axis.y) - axis.z * (ux + vy))
 				* co + (-vx + uy) * si);
-		return new Vec3D(xx, yy, zz);
+		x = xx;
+		y = yy;
+		z = zz;
+		return this;
+	}
+
+	/**
+	 * @see #rotateAroundAxis(Vec3D, float)
+	 * @return new result vector
+	 */
+	public final Vec3D getRotatedAroundAxis(Vec3D axis, float theta) {
+		return new Vec3D(this).rotateAroundAxis(axis, theta);
 	}
 
 	// intersection code below is adapted from C version at
@@ -1001,7 +1013,7 @@ public class Vec3D implements Comparable {
 
 	/**
 	 * 
-	 * Helper function for {@link #closestPointOnTriangle(Vec3D, Vec3D, Vec3D)}
+	 * Helper function for {@link toxi.geom.Triangle#closedPoint(Vec3D)}
 	 * 
 	 * @param a
 	 *            start point of line segment
@@ -1147,7 +1159,7 @@ public class Vec3D implements Comparable {
 	public boolean intersectSphereTriangle(float r, Vec3D a, Vec3D b, Vec3D c,
 			Vec3D result) {
 		// Find Vec3D P on triangle ABC closest to sphere center
-		result.set(new Triangle(a, b, c).closestPoint(this));
+		result.set(new Triangle(a, b, c).closestPointOnSurface(this));
 
 		// Sphere and triangle intersect if the (squared) distance from sphere
 		// center to Vec3D p is less than the (squared) sphere radius
@@ -1188,7 +1200,7 @@ public class Vec3D implements Comparable {
 	 * The resulting vector for theta=0 is equal to the positive X axis.
 	 * 
 	 * @param theta
-	 * @return
+	 * @return new vector in the XY plane
 	 */
 	public static final Vec3D fromXYTheta(float theta) {
 		return new Vec3D((float) Math.cos(theta), (float) Math.sin(theta), 0);
@@ -1201,7 +1213,7 @@ public class Vec3D implements Comparable {
 	 * The resulting vector for theta=0 is equal to the positive X axis.
 	 * 
 	 * @param theta
-	 * @return
+	 * @return new vector in the XZ plane
 	 */
 	public static final Vec3D fromXZTheta(float theta) {
 		return new Vec3D((float) Math.cos(theta), 0, (float) Math.sin(theta));
@@ -1214,7 +1226,7 @@ public class Vec3D implements Comparable {
 	 * The resulting vector for theta=0 is equal to the positive Y axis.
 	 * 
 	 * @param theta
-	 * @return
+	 * @return new vector in the YZ plane
 	 */
 	public static final Vec3D fromYZTheta(float theta) {
 		return new Vec3D(0, (float) Math.cos(theta), (float) Math.sin(theta));
@@ -1245,11 +1257,15 @@ public class Vec3D implements Comparable {
 		return new Vec3D(this).signum();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(T)
+	/**
+	 * Compares the length of the vector with another one.
+	 * 
+	 * @param vec
+	 *            vector to compare with
+	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
-	public int compareTo(Object obj) {
-		Vec3D v = (Vec3D) obj;
+	public int compareTo(Object vec) {
+		Vec3D v = (Vec3D) vec;
 		if (x == v.x && y == v.y && z == v.z)
 			return 0;
 		if (magSquared() < v.magSquared())

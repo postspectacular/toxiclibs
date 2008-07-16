@@ -59,15 +59,11 @@ public class Triangle {
 	}
 
 	/**
-	 * Finds and returns the closest point on any of the edges of the given
-	 * triangle.
+	 * Finds and returns the closest point on any of the triangle edges to the
+	 * point given.
 	 * 
-	 * @param a
-	 *            triangle vertex
-	 * @param b
-	 *            triangle vertex
-	 * @param c
-	 *            triangle vertex
+	 * @param p
+	 *            point to check
 	 * @return closest point
 	 */
 
@@ -94,22 +90,23 @@ public class Triangle {
 	}
 
 	/**
+	 * @see #closestPointOnSurface(Vec3D)
+	 * @deprecated
+	 */
+	public Vec3D closedPoint(Vec3D p) {
+		return closestPointOnSurface(p);
+	}
+
+	/**
 	 * Computes the the point closest to the current vector on the surface of
 	 * triangle abc.
 	 * 
 	 * From Real-Time Collision Detection by Christer Ericson, published by
 	 * Morgan Kaufmann Publishers, Copyright 2005 Elsevier Inc
 	 * 
-	 * @param a
-	 *            triangle vertex
-	 * @param b
-	 *            triangle vertex
-	 * @param c
-	 *            triangle vertex
 	 * @return closest point on triangle (result may also be one of a, b or c)
 	 */
-
-	public Vec3D closestPoint(Vec3D p) {
+	public Vec3D closestPointOnSurface(Vec3D p) {
 		Vec3D ab = b.sub(a);
 		Vec3D ac = c.sub(a);
 		Vec3D bc = c.sub(b);

@@ -20,58 +20,81 @@
 
 package toxi.math.waves;
 
+/**
+ * <p>
+ * Amplitude and frequency modulated sine wave. Uses 2 secondary waves to
+ * modulate the shape of the main wave.
+ * </p>
+ * 
+ * <p>
+ * <strong>Note:</strong> You must NEVER call the update() method on the
+ * modulating waves.
+ * </p>
+ */
 public class AMFMSineWave extends AbstractWave {
 
 	private AbstractWave fmod;
 	private AbstractWave amod;
 
 	/**
-	 * @param theta
+	 * Creates a new instance from
+	 * 
+	 * @param phase
 	 * @param freq
+	 * @param fmod
+	 * @param amod
 	 */
-	public AMFMSineWave(float theta, float delta, AbstractWave fmod, AbstractWave amod) {
-		super(theta, delta);
+	public AMFMSineWave(float phase, float freq, AbstractWave fmod,
+			AbstractWave amod) {
+		super(phase, freq);
 		this.amod = amod;
 		this.fmod = fmod;
 	}
 
 	/**
-	 * @param theta
-	 * @param freq
-	 * @param amp
+	 * @param phase
+	 * @param delta
 	 * @param offset
+	 * @param fmod
+	 * @param amod
 	 */
-	public AMFMSineWave(float theta, float delta, float offset, AbstractWave fmod, AbstractWave amod) {
-		super(theta, delta, 1, offset);
+	public AMFMSineWave(float phase, float delta, float offset,
+			AbstractWave fmod, AbstractWave amod) {
+		super(phase, delta, 1, offset);
 		this.amod = amod;
 		this.fmod = fmod;
 	}
 
-	/* (non-Javadoc)
-	 * @see toxi.math.datatypes.AbstractWave#update()
+	/**
+	 * Progresses the wave and updates the result value. You must NEVER call the
+	 * update() method on the 2 modulating wave since this is handled
+	 * automatically by this method.
+	 * 
+	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
-		value = amod.update() * (float)Math.sin(theta * fmod.update()) + offset;
-		theta+=freq;
+		value = amod.update() * (float) Math.sin(phase * fmod.update())
+				+ offset;
+		phase += freq;
 		return value;
 	}
 
 	public void setFMod(AbstractWave fmod) {
 		this.fmod = fmod;
 	}
-	
+
 	public void setAMod(AbstractWave amod) {
 		this.amod = amod;
 	}
-	
+
 	public AbstractWave getFMod() {
 		return fmod;
 	}
-	
+
 	public AbstractWave getAMod() {
 		return amod;
 	}
-	
+
 	public void reset() {
 		super.reset();
 		fmod.reset();

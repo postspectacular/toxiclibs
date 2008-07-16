@@ -566,7 +566,8 @@ public class Vec2D {
 	/**
 	 * Computes the scalar product (dot product) with the given vector.
 	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry</a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
+	 *      /a>
 	 * 
 	 * @param v
 	 * @return dot product
@@ -914,13 +915,12 @@ public class Vec2D {
 	}
 
 	/**
-	 * Creates a new vector from the given angle in the XY plane. The Z
-	 * component of the vector will be zero.
+	 * Creates a new vector from the given angle in the XY plane.
 	 * 
 	 * The resulting vector for theta=0 is equal to the positive X axis.
 	 * 
 	 * @param theta
-	 * @return
+	 * @return new vector pointing into the direction of the passed in angle
 	 */
 	public static final Vec2D fromTheta(float theta) {
 		return new Vec2D((float) Math.cos(theta), (float) Math.sin(theta));

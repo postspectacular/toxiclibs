@@ -20,19 +20,42 @@
 
 package toxi.math.waves;
 
+/**
+ * Standard Sine wave at fixed frequency and values normalized to the given
+ * amplitude.
+ */
 public class SineWave extends AbstractWave {
 
-	public SineWave(float theta, float freq) {
-		super(theta,freq);
+	/**
+	 * @param phase
+	 *            starting phase
+	 * @param freq
+	 *            in radians (not Hertz)
+	 */
+	public SineWave(float phase, float freq) {
+		super(phase, freq);
 	}
 
-	public SineWave(float theta, float freq, float amp, float offset) {
-		super(theta,freq,amp,offset);
+	/**
+	 * @param phase
+	 *            starting phase
+	 * @param freq
+	 *            in radians (not Hertz)
+	 * @param amp
+	 *            amplitude factor
+	 * @param offset
+	 *            centre oscillation value
+	 */
+	public SineWave(float phase, float freq, float amp, float offset) {
+		super(phase, freq, amp, offset);
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see toxi.math.waves.AbstractWave#update()
+	 */
 	public float update() {
-		value = (float)(Math.sin(theta) * amp) + offset;
-		theta+=freq;
+		value = (float) (Math.sin(phase) * amp) + offset;
+		phase += freq;
 		return value;
 	}
 }

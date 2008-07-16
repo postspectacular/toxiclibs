@@ -21,12 +21,12 @@
 package toxi.math.waves;
 
 /**
- * Abstract wave oscillator type 
- * 
+ * Abstract wave oscillator type which needs to be subclassed to implement
+ * different waveforms.
  */
 public abstract class AbstractWave {
 
-	protected float theta, orig;
+	protected float phase, orig;
 
 	protected float freq;
 
@@ -37,29 +37,29 @@ public abstract class AbstractWave {
 	protected float value = 0;
 
 	/**
-	 * @param theta
+	 * @param phase
 	 */
-	public AbstractWave(float theta) {
-		this(theta, 1, 1, 0);
+	public AbstractWave(float phase) {
+		this(phase, 1, 1, 0);
 	}
 
 	/**
 	 * 
-	 * @param theta
-	 * @param delta
+	 * @param phase
+	 * @param freq
 	 */
-	public AbstractWave(float theta, float freq) {
-		this(theta, freq, 1, 0);
+	public AbstractWave(float phase, float freq) {
+		this(phase, freq, 1, 0);
 	}
 
 	/**
-	 * @param theta
+	 * @param phase
 	 * @param freq
 	 * @param amp
 	 * @param offset
 	 */
-	public AbstractWave(float theta, float freq, float amp, float offset) {
-		this.theta = this.orig = theta;
+	public AbstractWave(float phase, float freq, float amp, float offset) {
+		this.phase = this.orig = phase;
 		this.freq = freq;
 		this.amp = amp;
 		this.offset = offset;
@@ -79,16 +79,16 @@ public abstract class AbstractWave {
 		return value;
 	}
 
-	public float getTheta() {
-		return theta;
+	public float getPhase() {
+		return phase;
 	}
 
-	public void setTheta(float theta) {
-		this.theta = this.orig = theta;
+	public void setPhase(float phase) {
+		this.phase = this.orig = phase;
 	}
 
 	public void reset() {
-		theta = orig;
+		phase = orig;
 	}
 
 	/**
@@ -115,7 +115,7 @@ public abstract class AbstractWave {
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(this.getClass().getName()).append(" theta: ").append(theta);
+		sb.append(this.getClass().getName()).append(" phase: ").append(phase);
 		sb.append(" freq: ").append(freq);
 		sb.append(" amp: ").append(amp);
 		return sb.toString();

@@ -27,12 +27,8 @@ public interface Intersector {
 
 	/**
 	 * Check if entity intersects with the given ray
-	 * 
-	 * @param pos
-	 *            ray origin
-	 * @param dir
-	 *            ray direction
-	 * @return true, if intersects
+	 * @param ray ray to check
+	 * @return true, if ray hits the entity
 	 */
 	public abstract boolean intersectsRay(Ray3D ray);
 

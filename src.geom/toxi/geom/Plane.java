@@ -68,13 +68,8 @@ public class Plane extends Vec3D {
 	}
 
 	/**
-	 * Checks and classifies the relative position of the point to the given
-	 * plane.
+	 * Classifies the relative position of the given point to the plane.
 	 * 
-	 * @param pO
-	 *            plane origin
-	 * @param pN
-	 *            plane normal vector
 	 * @return One of the 3 integer classification codes: PLANE_FRONT,
 	 *         PLANE_BACK, ON_PLANE
 	 */
@@ -84,13 +79,13 @@ public class Plane extends Vec3D {
 			return PLANE_FRONT;
 		else if (d > MathUtils.EPS)
 			return PLANE_BACK;
-
 		return ON_PLANE;
 	}
-	
+
 	public String toString() {
-		StringBuffer sb=new StringBuffer();
-		sb.append("origin: ").append(super.toString()).append(" norm: ").append(normal.toString());
+		StringBuffer sb = new StringBuffer();
+		sb.append("origin: ").append(super.toString()).append(" norm: ")
+				.append(normal.toString());
 		return sb.toString();
 	}
 }

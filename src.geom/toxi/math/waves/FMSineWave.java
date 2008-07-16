@@ -19,26 +19,42 @@
  */
 package toxi.math.waves;
 
+/**
+ * <p>
+ * Frequency modulated sine wave. Uses a secondary wave to modulate the
+ * frequency of the main wave.
+ * </p>
+ * 
+ * <p>
+ * <strong>Note:</strong> You must NEVER call the update() method on the
+ * modulating wave.
+ * </p>
+ */
 public class FMSineWave extends AbstractWave {
 
 	private AbstractWave fmod;
 
-	public FMSineWave(float theta, float freq, AbstractWave fmod) {
-		super(theta,freq);
+	public FMSineWave(float phase, float freq, AbstractWave fmod) {
+		super(phase, freq);
 		this.fmod = fmod;
 	}
-	
-	public FMSineWave(float theta, float freq, float amp, float offset, AbstractWave fmod) {
-		super(theta,freq,amp,offset);
+
+	public FMSineWave(float phase, float freq, float amp, float offset,
+			AbstractWave fmod) {
+		super(phase, freq, amp, offset);
 		this.fmod = fmod;
 	}
-	
-	/* (non-Javadoc)
-	 * @see toxi.math.datatypes.AbstractWave#update()
+
+	/**
+	 * Progresses the wave and updates the result value. You must NEVER call the
+	 * update() method on the modulating wave since this is handled
+	 * automatically by this method.
+	 * 
+	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
-		value = (float)(Math.sin(theta*fmod.update()) * amp) + offset;
-		theta+=freq;
+		value = (float) (Math.sin(phase * fmod.update()) * amp) + offset;
+		phase += freq;
 		return value;
 	}
 

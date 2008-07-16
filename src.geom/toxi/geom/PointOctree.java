@@ -56,7 +56,7 @@ public class PointOctree extends AABB {
 
 	protected int depth = 0;
 
-	private boolean isAutoReducing=false;
+	private boolean isAutoReducing = false;
 
 	/**
 	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
@@ -112,7 +112,7 @@ public class PointOctree extends AABB {
 	 * instantiation for all intermediate tree levels.
 	 * 
 	 * @param p
-	 * @return
+	 * @return true, if point has been added successfully
 	 */
 	public boolean addPoint(Vec3D p) {
 		// check if point is inside cube
@@ -166,7 +166,8 @@ public class PointOctree extends AABB {
 	 * Enables/disables auto reduction of branches after points have been
 	 * deleted from the tree. Turned off by default.
 	 * 
-	 * @param state true, to enable feature
+	 * @param state
+	 *            true, to enable feature
 	 */
 	public void setTreeAutoReduction(boolean state) {
 		isAutoReducing = state;
@@ -323,7 +324,7 @@ public class PointOctree extends AABB {
 	// FIXME remove PApplet dependency
 	/*
 	 * public void draw(PApplet app) { if (numChildren > 0) { app.noFill();
-	 * app.stroke(depth * 24, 50); app.pushMatrix(); app.translate(x, y, z);
+	 * app.stroke(depth 24, 50); app.pushMatrix(); app.translate(x, y, z);
 	 * app.box(dim); app.popMatrix(); for (int i = 0; i < 8; i++) { if
 	 * (children[i] != null) children[i].draw(app); } } } //
 	 */
