@@ -44,16 +44,12 @@ public class VerletSpring {
 		Vec3D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
 		float dist = delta.magnitude() + 0.00001f;
-		float normD = (dist - restLength) / dist;
-		delta.scaleSelf(strength * normD).limit(maxDelta);
+		float normD = (dist - restLength)
+				/ (dist * (1f / a.weight + 1f / b.weight));
 		if (!a.isLocked && !isALocked)
-			a.addSelf(delta);
+			a.addSelf(delta.scale(strength * normD * 1 / a.weight));
 		if (!b.isLocked && !isBLocked)
-			b.subSelf(delta);
-	}
-
-	public void setMaxMagnitude(float len) {
-		maxDelta = len;
+			b.subSelf(delta.scale(strength * normD * 1 / b.weight));
 	}
 
 	public void lockA(boolean s) {

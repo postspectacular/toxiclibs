@@ -25,9 +25,9 @@ import toxi.geom.Vec3D;
 public class VerletParticle extends Vec3D {
 	protected Vec3D prev, temp;
 
-	public float weight = 1;
+	public float weight = 1.0f;
 
-	boolean isLocked;
+	protected boolean isLocked;
 
 	public VerletParticle(float x, float y, float z) {
 		super(x, y, z);
@@ -36,9 +36,7 @@ public class VerletParticle extends Vec3D {
 	}
 
 	public VerletParticle(Vec3D v) {
-		super(v);
-		prev = new Vec3D(v);
-		temp = new Vec3D();
+		this(v.x,v.y,v.z);
 	}
 
 	void update(float force) {

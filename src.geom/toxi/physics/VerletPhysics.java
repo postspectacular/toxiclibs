@@ -26,34 +26,70 @@ import java.util.Iterator;
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
 
-public class Verlet {
+public class VerletPhysics {
 	public ArrayList particles;
 	public ArrayList springs;
 
+	/**
+	 * Default friction value = 0.15
+	 */
 	public float friction = 0.15f;
-	public float timeStep = 0.02f;
+
+	/**
+	 * Default time step = 0.02
+	 */
+	public float timeStep = 0.01f;
+
+	/**
+	 * Default iterations for verlet solver = 50
+	 */
 	public int numIterations = 50;
 
-	final public Vec3D gravity = new Vec3D();
+	/**
+	 * Gravity vector (by default inactive)
+	 */
+	public Vec3D gravity = new Vec3D();
 
 	public AABB worldBox;
 
-	public Verlet() {
+	/**
+	 * Initializes a Verlet engine instance using the default values.
+	 */
+	public VerletPhysics() {
 		particles = new ArrayList();
 		springs = new ArrayList();
 	}
 
-	public Verlet(Vec3D gravity, int numIterations, float friction, float timeStep) {
+	/**
+	 * Initializes an Verlet engine instance with the passed in configuration.
+	 * 
+	 * @param gravity
+	 *            3D gravity vector
+	 * @param numIterations
+	 *            iterations per time step for verlet solver
+	 * @param friction
+	 *            friction value 0...1
+	 * @param timeStep
+	 *            time step for calculating forces
+	 */
+	public VerletPhysics(Vec3D gravity, int numIterations, float friction,
+			float timeStep) {
 		this.gravity.set(gravity);
-		this.numIterations=numIterations;
-		this.friction=friction;
-		this.timeStep=timeStep;
+		this.numIterations = numIterations;
+		this.friction = friction;
+		this.timeStep = timeStep;
 	}
-	
+
+	/**
+	 * @param p
+	 */
 	public void addParticle(VerletParticle p) {
 		particles.add(p);
 	}
 
+	/**
+	 * @param s
+	 */
 	public void addSpring(VerletSpring s) {
 		springs.add(s);
 	}
@@ -78,7 +114,7 @@ public class Verlet {
 
 	protected void updateParticles() {
 		float force = 1.0f - friction * timeStep * timeStep;
-		// TODO use weight for friction too
+		// TODO use weight for friction too?
 		Iterator i = particles.iterator();
 		while (i.hasNext()) {
 			VerletParticle p = (VerletParticle) i.next();
