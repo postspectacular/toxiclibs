@@ -26,8 +26,21 @@ import java.util.Iterator;
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
 
+/**
+ * 3D particle physics engine using Verlet integration based on:
+ * http://en.wikipedia.org/wiki/Verlet_integration
+ * http://www.teknikus.dk/tj/gdc2001.htm
+ * 
+ */
 public class VerletPhysics {
+	/**
+	 * List of particles (Vec3D subclassed)
+	 */
 	public ArrayList particles;
+
+	/**
+	 * List of spring/sticks connectors
+	 */
 	public ArrayList springs;
 
 	/**
@@ -50,6 +63,9 @@ public class VerletPhysics {
 	 */
 	public Vec3D gravity = new Vec3D();
 
+	/**
+	 * Optional 3D bounding box to constrain particles too
+	 */
 	public AABB worldBox;
 
 	/**
@@ -81,26 +97,56 @@ public class VerletPhysics {
 	}
 
 	/**
+	 * Adds a particle to the list
+	 * 
 	 * @param p
+	 * @return itself
 	 */
-	public void addParticle(VerletParticle p) {
+	public VerletPhysics addParticle(VerletParticle p) {
 		particles.add(p);
+		return this;
 	}
 
 	/**
+	 * Adds a spring connector
+	 * 
 	 * @param s
+	 * @return itself
 	 */
-	public void addSpring(VerletSpring s) {
+	public VerletPhysics addSpring(VerletSpring s) {
 		springs.add(s);
+		return this;
 	}
 
-	public void update() {
+	/**
+	 * Sets bounding box
+	 * 
+	 * @param world
+	 * @return itself
+	 */
+	public VerletPhysics setWorldBox(AABB world) {
+		worldBox = world;
+		return this;
+	}
+
+	/**
+	 * Progresses the physics simulation by 1 time step and updates all forces
+	 * and particle positions accordingly
+	 * 
+	 * @return itself
+	 */
+	public VerletPhysics update() {
 		applyGravity();
 		updateParticles();
 		updateSprings();
-		updateCollisions();
+		if (worldBox != null)
+			constrainToBounds();
+		return this;
 	}
 
+	/**
+	 * Applies gravity force to all particles
+	 */
 	protected void applyGravity() {
 		if (!gravity.isZeroVector()) {
 			Iterator i = particles.iterator();
@@ -112,6 +158,9 @@ public class VerletPhysics {
 		}
 	}
 
+	/**
+	 * Updates all particle positions
+	 */
 	protected void updateParticles() {
 		float force = 1.0f - friction * timeStep * timeStep;
 		// TODO use weight for friction too?
@@ -122,6 +171,9 @@ public class VerletPhysics {
 		}
 	}
 
+	/**
+	 * Updates all spring connections based on new particle positions
+	 */
 	protected void updateSprings() {
 		for (int i = 0; i < numIterations; i++) {
 			Iterator is = springs.iterator();
@@ -132,14 +184,28 @@ public class VerletPhysics {
 		}
 	}
 
-	protected void updateCollisions() {
+	/**
+	 * Constrains all particle positions to the world bounding box set
+	 */
+	protected void constrainToBounds() {
 		Iterator i = particles.iterator();
 		while (i.hasNext()) {
 			VerletParticle p = (VerletParticle) i.next();
+			// since this method is protected we rely here that worldBox isn't
+			// null
 			p.constrain(worldBox);
 		}
 	}
 
+	/**
+	 * Attempts to find the spring element between the 2 particles supplied
+	 * 
+	 * @param a
+	 *            particle 1
+	 * @param b
+	 *            particle 2
+	 * @return spring instance, or null if not found
+	 */
 	public VerletSpring getSpring(Vec3D a, Vec3D b) {
 		Iterator is = springs.iterator();
 		while (is.hasNext()) {
