@@ -1,7 +1,0 @@
-0009
-=====================================
-A added Plane class
-M moved classifyPoint() from Vec3D to Plane class
-A added addAll() method to PointOctree
-A added AABB-Ray intersection
-A added sign()/getSigned() method to Vec3D

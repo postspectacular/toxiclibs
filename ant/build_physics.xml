@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
 	<!-- This needs to change with every release -->
-	<property name="project.name" value="geomutils" />
-	<property name="srcfolder.id" value="geom" />
-	<property name="lib.version" value="0010" />
+	<property name="project.name" value="verletphysics" />
+	<property name="srcfolder.id" value="physics" />
+	<property name="lib.version" value="0001" />
 	<property name="lib.jdk.level" value="1.4" />
-	<property name="lib.zip.comment" value="${project.name} - assorted geometry classes for Java &amp; Processing v${lib.version}" />
-	<property name="lib.libs.path" value="${" />
+	<property name="lib.zip.comment" value="${project.name} - particle verlet physics engine v${lib.version}" />
+	<property name="lib.libs.path" value="../lib;../lib/geomutils.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
 
 	<!-- Basic targets -->
@@ -23,6 +23,7 @@
 		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
 		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
 		<property name="release.examples.dir" value="../examples/${srcfolder.id}"/>
+		<property name="readme.file" value="../readme/${srcfolder.id}/README"/>
 	</target>
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
@@ -55,8 +56,9 @@
 		<mkdir dir="${release.dir}" />
 		<zip destfile="${release.bin.zip}" comment="${lib.zip.comment} - Binary release">
 			<zipfileset dir="${release.dir}" includes="*.jar" prefix="${project.name}/library" />
+			<zipfileset dir="." includes="CHANGELOG" prefix="${project.name}" />
 			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />
-			<zipfileset dir="." includes="README" prefix="${project.name}" />
+			<zipfileset dir="." includes="${readme.file}" prefix="${project.name}" />
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
 		</zip>
@@ -66,7 +68,7 @@
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir="." includes="build.xml" prefix="${project.name}" />
 			<zipfileset dir="." includes="LICENSE" prefix="${project.name}" />
-			<zipfileset dir="." includes="README" prefix="${project.name}" />
+			<zipfileset dir="." includes="${readme.file}" prefix="${project.name}" />
 		</zip>
 	</target>
 
