@@ -19,8 +19,9 @@
  */
 package toxi.audio;
 
-import toxi.math.FastMath;
+import toxi.math.MathUtils;
 import toxi.math.waves.AbstractWave;
+
 import net.java.games.sound3d.Source;
 import net.java.games.sound3d.Vec3f;
 
@@ -68,7 +69,7 @@ public class DynamicSoundSource {
 	 * 
 	 */
 	private void randomDecay() {
-		decay = FastMath.random(0.95f, 0.995f);
+		decay = MathUtils.random(0.95f, 0.995f);
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class DynamicSoundSource {
 			System.out.println(this + ": " + isActive);
 			if (isActive) {
 				activeTime = System.currentTimeMillis();
-				activeDuration = FastMath.random(minDuration, maxDuration);
+				activeDuration = MathUtils.random(minDuration, maxDuration);
 				isExpired = false;
 				System.out.println("new duration: " + activeDuration);
 			}

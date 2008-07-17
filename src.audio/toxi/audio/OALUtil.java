@@ -31,7 +31,6 @@ import net.java.games.joal.ALCcontext;
 import net.java.games.joal.ALCdevice;
 import net.java.games.joal.ALException;
 import net.java.games.joal.ALFactory;
-import net.java.games.joal.util.ALut;
 import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
 import net.java.games.sound3d.*;

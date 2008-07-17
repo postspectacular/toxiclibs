@@ -1,3 +1,23 @@
+/* 
+ * Copyright (c) 2006-2008 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+ 
 import processing.opengl.*;
 import toxi.geom.*;
 
@@ -21,7 +41,7 @@ boolean useSphere = true;
 float xrot = THIRD_PI;
 float zrot = 0.1;
 
-PointOctree octree;
+VisibleOctree octree;
 Vec3D cursor = new Vec3D();
 
 // start with one particle
@@ -31,7 +51,7 @@ void setup() {
   size(800,600,OPENGL);
   textFont(loadFont("AudimatMonoLight-18.vlw"));
   // setup empty octree so that it's centered around the world origin
-  octree=new PointOctree(new Vec3D(-1,-1,-1).scaleSelf(DIM2),DIM);
+  octree=new VisibleOctree(new Vec3D(-1,-1,-1).scaleSelf(DIM2),DIM);
   // add an initial particle at the origin
   octree.addPoint(new Vec3D());
 }
@@ -55,7 +75,7 @@ void draw() {
   rotateZ(zrot);
   scale(3);
   // show debug view of tree
-  if (showOctree) octree.draw(this);
+  if (showOctree) octree.draw();
   // show crosshair 3D cursor
   stroke(255,0,0);
   noFill();

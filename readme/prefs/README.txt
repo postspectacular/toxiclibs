@@ -1,12 +1,11 @@
 This is a separate release of a subset of the available classes in the toxiclibs library.
 
-Only the following packages are included:
+Only the following package is included:
 
-toxi.geom.*
-toxi.math.*
+toxi.util.datatypes
 
 If you're going to use these classes for Processing projects,
-first drop the "geomutils" folder into the "libraries" folder of your
+first drop the "prefutils" folder into the "libraries" folder of your
 Processing installation. You'll then need to restart Processing in order
 for it to find this new library.
 

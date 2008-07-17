@@ -28,19 +28,20 @@ boolean newBlob=true;
 int drawMode=1;
 
 void setup() {
-  size(400,400,OPENGL);
+  size(800,800,OPENGL);
   smooth();
   cursor(CROSS);
 }
 
 void draw() {
   if (newBlob) {
-    blob=new SplineBlob(random(random(1)<0.8 ? 90: 40,120),random(200,300),8);
+    blob=new SplineBlob(random(random(1)<0.8 ? 90 : 40, 120),random(200,300),10);
     spineBlob=new SpineSplineBlob(blob);
     newBlob=false;
   }
   background(255);
   translate(mouseX,mouseY,0);
+  scale(2);
   if ((drawMode&1)!=0) blob.draw();
   if ((drawMode&2)!=0) spineBlob.draw();
 }
