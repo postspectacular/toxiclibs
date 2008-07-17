@@ -89,7 +89,7 @@ public class PointOctree extends AABB {
 		if (parent != null)
 			depth = parent.depth + 1;
 		dim = halfSize * 2;
-		dim2 = dim;
+		dim2 = halfSize;
 		offset = o;
 		numChildren = 0;
 	}
@@ -134,13 +134,11 @@ public class PointOctree extends AABB {
 					Vec3D off = offset.add(new Vec3D((octant & 1) != 0 ? dim2
 							: 0, (octant & 2) != 0 ? dim2 : 0,
 							(octant & 4) != 0 ? dim2 : 0));
-					children[octant] = new PointOctree(this, off, dim2);
+					children[octant] = new PointOctree(this, off, dim2/2);
 					numChildren++;
 				}
 				return children[octant].addPoint(p);
 			}
-		} else {
-			// println("point "+p+" is outside");
 		}
 		return false;
 	}

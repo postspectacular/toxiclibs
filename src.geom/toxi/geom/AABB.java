@@ -130,8 +130,11 @@ public class AABB extends Vec3D {
 	 * @return itself
 	 */
 	public final AABB updateBounds() {
-		this.min = this.sub(extent);
-		this.max = this.add(extent);
+		// this is check is necessary for the constructor
+		if (extent != null) {
+			this.min = this.sub(extent);
+			this.max = this.add(extent);
+		}
 		return this;
 	}
 
@@ -211,7 +214,9 @@ public class AABB extends Vec3D {
 
 	/**
 	 * Checks if the box intersects the passed in one.
-	 * @param box box to check
+	 * 
+	 * @param box
+	 *            box to check
 	 * @return true, if boxes overlap
 	 */
 	public boolean intersectsBox(AABB box) {
