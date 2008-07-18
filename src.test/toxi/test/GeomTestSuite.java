@@ -52,4 +52,10 @@ public class GeomTestSuite extends TestCase {
 		points=t.getPointsWithinBox(new AABB(new Vec3D(50,50,50),new Vec3D(50,50,50)));
 		assertEquals(points.size()==2, true);
 	}
+	
+	public void testClosestPoint() {
+		Vec3D a=new Vec3D();
+		Vec3D b=new Vec3D(100,0,0);
+		System.out.println(new Vec3D(50,50,0).closestPointOnLine(a, b));
+	}
 }

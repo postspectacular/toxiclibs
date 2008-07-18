@@ -1023,7 +1023,6 @@ public class Vec3D implements Comparable {
 	 */
 
 	public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
-		// Determine t (the length of the vector from �a� to 'this')
 		Vec3D c = sub(a);
 		Vec3D v = b.sub(a);
 
@@ -1040,7 +1039,7 @@ public class Vec3D implements Comparable {
 
 		// Return the point between 'a' and 'b'
 		// set length of V to t. V is normalized so this is easy
-		v.scale(t);
+		v.scaleSelf(t);
 
 		return a.add(v);
 	}
