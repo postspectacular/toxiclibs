@@ -11,7 +11,6 @@ public class GeomTestSuite extends TestCase {
 	public void testReflectRay() {
 		SphereIntersectorReflector si=new SphereIntersectorReflector(new Vec3D(0,0,0),10);
 		Ray3D r=si.reflectRay(new Ray3D(new Vec3D(0,100,0),new Vec3D(0,-1,0)));
-		System.out.println(MathUtils.abs(r.getDirection().y-1));
 		assertEquals(MathUtils.abs(r.getDirection().y-1)<0.002, true);
 	}
 
@@ -56,6 +55,11 @@ public class GeomTestSuite extends TestCase {
 	public void testClosestPoint() {
 		Vec3D a=new Vec3D();
 		Vec3D b=new Vec3D(100,0,0);
-		System.out.println(new Vec3D(50,50,0).closestPointOnLine(a, b));
+		Vec3D c=new Vec3D(50,50,0);
+		Vec3D isec=c.closestPointOnLine(a, b);
+		assertEquals(MathUtils.abs(isec.x-c.x)<0.5,true);
+		c=new Vec3D(-50,-50,0);
+		isec=c.closestPointOnLine(a, b);
+		assertEquals(isec.equals(a),true);
 	}
 }
