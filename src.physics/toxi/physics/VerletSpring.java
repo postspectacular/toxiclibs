@@ -22,17 +22,57 @@ package toxi.physics;
 
 import toxi.geom.Vec3D;
 
+/**
+ * <p>
+ * A spring class connecting two VerletParticles in space. Based on the
+ * configuration of the spring instance and that of the physics engine, the
+ * behaviour of the spring can vary between springy and stiff/stick like.
+ * </p>
+ * 
+ * <p>
+ * The simulation takes particle weights into account and can be configured to
+ * lock either particle in space in order to force the other one to move. This
+ * is sometimes handy for resolving collisions (currently outside the scope of
+ * this library).
+ * </p>
+ * 
+ * @see toxi.physics.VerletPhysics
+ * @author toxi
+ * 
+ */
 public class VerletSpring {
+	/**
+	 * Spring end points / particles
+	 */
 	public VerletParticle a, b;
 
+	/**
+	 * Spring rest length to which it always wants to return too
+	 */
 	public float restLength;
 
+	/**
+	 * Spring strength, possible value range depends on engine configuration
+	 * (time step, friction)
+	 */
 	public float strength;
 
+	/**
+	 * Flag, if either particle is locked in space (only within the scope of
+	 * this spring)
+	 */
 	protected boolean isALocked, isBLocked;
 
-	protected float maxDelta;
-
+	/**
+	 * @param a
+	 *            1st particle
+	 * @param b
+	 *            2nd particle
+	 * @param len
+	 *            desired rest length
+	 * @param str
+	 *            spring strength
+	 */
 	public VerletSpring(VerletParticle a, VerletParticle b, float len, float str) {
 		this.a = a;
 		this.b = b;
@@ -40,23 +80,44 @@ public class VerletSpring {
 		strength = str;
 	}
 
-	void update() {
+	/**
+	 * Updates both particle positions (if not locked) based on their current
+	 * distance, weight and spring configuration	 * 
+	 */
+	protected void update() {
 		Vec3D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
 		float dist = delta.magnitude() + 0.00001f;
-		float normD = (dist - restLength)
-				/ (dist * (1f / a.weight + 1f / b.weight));
+		float normDistStrength = (dist - restLength)
+				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
 		if (!a.isLocked && !isALocked)
-			a.addSelf(delta.scale(strength * normD * 1 / a.weight));
+			a.addSelf(delta.scale(normDistStrength * 1 / a.weight));
 		if (!b.isLocked && !isBLocked)
-			b.subSelf(delta.scale(strength * normD * 1 / b.weight));
+			b.subSelf(delta.scale(normDistStrength * 1 / b.weight));
 	}
 
-	public void lockA(boolean s) {
+	/**
+	 * (Un)Locks the 1st end point of the spring. <b>NOTE: this acts purely
+	 * within the scope of this spring instance and does NOT call
+	 * {@link VerletParticle#lock()}</b>
+	 * 
+	 * @param s
+	 * @return itself
+	 */
+	public VerletSpring lockA(boolean s) {
 		isALocked = s;
+		return this;
 	}
 
-	public void lockB(boolean s) {
+	/**
+	 * (Un)Locks the 2nd end point of the spring
+	 * 
+	 * @param s
+	 * @return itself
+	 */
+
+	public VerletSpring lockB(boolean s) {
 		isBLocked = s;
+		return this;
 	}
 }

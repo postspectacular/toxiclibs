@@ -66,7 +66,7 @@ public class VerletPhysics {
 	/**
 	 * Optional 3D bounding box to constrain particles too
 	 */
-	public AABB worldBox;
+	public AABB worldBounds;
 
 	/**
 	 * Initializes a Verlet engine instance using the default values.
@@ -90,7 +90,7 @@ public class VerletPhysics {
 	 */
 	public VerletPhysics(Vec3D gravity, int numIterations, float friction,
 			float timeStep) {
-		this.gravity.set(gravity);
+		if (gravity!=null) this.gravity.set(gravity);
 		this.numIterations = numIterations;
 		this.friction = friction;
 		this.timeStep = timeStep;
@@ -114,7 +114,7 @@ public class VerletPhysics {
 	 * @return itself
 	 */
 	public VerletPhysics addSpring(VerletSpring s) {
-		springs.add(s);
+		if (getSpring(s.a,s.b)==null) springs.add(s);
 		return this;
 	}
 
@@ -124,8 +124,8 @@ public class VerletPhysics {
 	 * @param world
 	 * @return itself
 	 */
-	public VerletPhysics setWorldBox(AABB world) {
-		worldBox = world;
+	public VerletPhysics setWorldBounds(AABB world) {
+		worldBounds = world;
 		return this;
 	}
 
@@ -139,8 +139,7 @@ public class VerletPhysics {
 		applyGravity();
 		updateParticles();
 		updateSprings();
-		if (worldBox != null)
-			constrainToBounds();
+		constrainToBounds();
 		return this;
 	}
 
@@ -193,7 +192,10 @@ public class VerletPhysics {
 			VerletParticle p = (VerletParticle) i.next();
 			// since this method is protected we rely here that worldBox isn't
 			// null
-			p.constrain(worldBox);
+			if (p.bounds != null)
+				p.constrain(p.bounds);
+			if (worldBounds != null)
+				p.constrain(worldBounds);
 		}
 	}
 

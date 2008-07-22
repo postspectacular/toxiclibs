@@ -20,26 +20,90 @@ package toxi.physics;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import toxi.geom.Vec3D;
+import toxi.geom.*;
 
+/**
+ * An individual 3D particle for use by the VerletPhysics and VerletSpring
+ * classes. A particle has weight, can be locked in space and its position
+ * constrained inside an (optional) axis-aligned bounding box.
+ * 
+ * @author toxi
+ */
 public class VerletParticle extends Vec3D {
 	protected Vec3D prev, temp;
-
-	public float weight = 1.0f;
-
 	protected boolean isLocked;
 
+	/**
+	 * Bounding box, by default set to null to disable
+	 */
+	public AABB bounds;
+
+	/**
+	 * Particle weight, default = 1
+	 */
+	public float weight = 1.0f;
+
+	/**
+	 * Creates particle at position xyz
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public VerletParticle(float x, float y, float z) {
 		super(x, y, z);
 		prev = new Vec3D(this);
 		temp = new Vec3D();
 	}
 
-	public VerletParticle(Vec3D v) {
-		this(v.x,v.y,v.z);
+	/**
+	 * Creates particle at position xyz with weight w
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param w
+	 */
+	public VerletParticle(float x, float y, float z, float w) {
+		this(x, y, z);
+		weight = w;
 	}
 
-	void update(float force) {
+	/**
+	 * Creates particle at the position of the passed in vector
+	 * 
+	 * @param v
+	 *            position
+	 */
+	public VerletParticle(Vec3D v) {
+		this(v.x, v.y, v.z);
+	}
+
+	/**
+	 * Creates particle with weight w at the position of the passed in vector
+	 * 
+	 * @param v
+	 *            position
+	 * @param w
+	 *            weight
+	 */
+	public VerletParticle(Vec3D v, float w) {
+		this(v.x, v.y, v.z);
+		weight = w;
+	}
+
+	/**
+	 * Creates a copy of the passed in particle
+	 * 
+	 * @param p
+	 */
+	public VerletParticle(VerletParticle p) {
+		this(p.x, p.y, p.z);
+		weight = p.weight;
+		isLocked = p.isLocked;
+	}
+
+	protected void update(float force) {
 		if (!isLocked) {
 			temp.set(this);
 			addSelf(sub(prev).scaleSelf(force));
@@ -47,12 +111,24 @@ public class VerletParticle extends Vec3D {
 		}
 	}
 
-	public void lock() {
+	/**
+	 * Locks/immobilizes particle in space
+	 * 
+	 * @return itself
+	 */
+	public VerletParticle lock() {
 		isLocked = true;
+		return this;
 	}
 
-	public void unlock() {
+	/**
+	 * Unlocks particle again
+	 * 
+	 * @return itself
+	 */
+	public VerletParticle unlock() {
 		prev.set(this);
 		isLocked = false;
+		return this;
 	}
 }
