@@ -29,12 +29,11 @@
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
 		<delete dir="${build.dir}" />
+		<delete dir="${release.javadoc.dir}" />
 		<delete file="${release.bin.zip}/" />
 		<delete file="${release.src.zip}/" />
 	</target>
 
-
-	<!-- build directory targets -->
 	<target name="compile" depends="init" description="Compile source">
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">

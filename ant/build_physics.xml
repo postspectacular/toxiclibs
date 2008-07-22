@@ -29,6 +29,7 @@
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
 		<delete dir="${build.dir}" />
+		<delete dir="${release.javadoc.dir}" />
 		<delete file="${release.bin.zip}/" />
 		<delete file="${release.src.zip}/" />
 	</target>
