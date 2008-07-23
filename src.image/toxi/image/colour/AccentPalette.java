@@ -53,14 +53,14 @@ public class AccentPalette {
 	}
 	
 	/**
-	 * @return
+	 * @return ARGB value of last colour picked
 	 */
 	public int getLastPickedBaseColour() {
 		return baseCols.getLastPickedColour();
 	}
 
 	/**
-	 * @return
+	 * @return ARGB value of last colour picked
 	 */
 	public int getLastPickedAccentColour() {
 		return accentCols.getLastPickedColour();

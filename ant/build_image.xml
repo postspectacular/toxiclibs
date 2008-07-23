@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="toxiclibs" default="release">
+	<!-- This needs to change with every release -->
+	<property name="project.name" value="imageutils" />
+	<property name="srcfolder.id" value="image" />
+	<property name="lib.version" value="0001" />
+	<property name="lib.jdk.level" value="1.4" />
+	<property name="lib.zip.comment" value="${project.name} - image and colour utilities v${lib.version}" />
+	<property name="lib.libs.path" value="../lib/core.jar" />
+	<property name="lib.jar.filename" value="${project.name}.jar" />
+
+	<!-- Basic targets -->
+	<target name="init">
+		<property name="src.dir" value="../src.${srcfolder.id}" />
+		<property name="build.dir" value="../bin" />
+		<property name="release.dir" value="../dist" />
+		<!-- build folder contains temporary files needed to create release level files -->
+		<property name="build.classes.dir" value="${build.dir}" />
+		<property name="build.manifest" value="${build.dir}/${project.name}.mf" />
+		<property name="build.jar" value="${build.dir}/${lib.jar.filename}" />
+		<!-- release folder contains files which may be distributed in some way or another -->
+		<property name="release.javadoc.dir" value="../docs" />
+		<property name="release.jar" value="${release.dir}/${lib.jar.filename}" />
+		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
+		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
+		<property name="release.examples.dir" value="../examples/${srcfolder.id}" />
+		<property name="readme.dir" value="../readme/${srcfolder.id}" />
+	</target>
+
+	<target name="clean" depends="init" description="Remove build files created this scripts">
+		<delete dir="${build.dir}" />
+		<delete dir="${release.javadoc.dir}" />
+		<delete file="${release.bin.zip}/" />
+		<delete file="${release.src.zip}/" />
+	</target>
+
+
+	<!-- build directory targets -->
+	<target name="compile" depends="init" description="Compile source">
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
+			<compilerarg value="-Xlint:unchecked" />
+			<classpath>
+				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${lib.libs.path}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="create_manifest" description="Create the jar manifest">
+		<echo file="${build.manifest}" append="false" message="Manifest-Version: 1.0${line.separator}" />
+	</target>
+
+	<target name="jars" depends="create_manifest" description="Create jar files required for execution">
+		<mkdir dir="${release.dir}" />
+		<jar jarfile="${release.jar}" manifest="${build.manifest}">
+			<fileset dir="${build.classes.dir}" />
+		</jar>
+	</target>
+
+	<!-- release directory targets -->
+	<target name="zips" depends="jars" description="Create release zip files">
+		<mkdir dir="${release.dir}" />
+		<zip destfile="${release.bin.zip}" comment="${lib.zip.comment} - Binary release">
+			<zipfileset dir="${release.dir}" includes="${project.name}.jar" prefix="${project.name}/library" />
+			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
+			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
+			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
+		</zip>
+		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
+			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
+			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
+			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
+			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
+			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
+		</zip>
+	</target>
+
+	<target name="javadoc" depends="init" description="Generate documentation">
+		<mkdir dir="${release.javadoc.dir}" />
+		<javadoc destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
+			<classpath>
+				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${lib.libs.path}" />
+			</classpath>
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="release" depends="init, clean, compile, javadoc, zips" />
+
+</project>

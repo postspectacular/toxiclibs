@@ -83,6 +83,7 @@ public class TiledFrameExporter {
 				int x = tileID % numTiles;
 				int y = tileID / numTiles;
 				parent.loadPixels();
+				// TODO add optional callback hook for post-processing tile
 				buffer.set(x * parent.width, y * parent.height, parent.g);
 				if (tileID == offsets.length - 1)
 					buffer.save(parent.sketchPath(fileName + "_" + buffer.width + "x"

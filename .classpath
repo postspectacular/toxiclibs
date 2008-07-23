@@ -5,7 +5,7 @@
 	<classpathentry including="../src.geom" kind="src" path="src.audio"/>
 	<classpathentry kind="src" path="src.video"/>
 	<classpathentry kind="src" path="src.test"/>
-	<classpathentry kind="src" path="src.image"/>
+	<classpathentry including="../lib/core.jar|../src.geom/toxi/geom/*.java|toxi/image/util/*.java" kind="src" path="src.image"/>
 	<classpathentry kind="src" path="src.net"/>
 	<classpathentry including="../src.geom/toxi/geom/*.java|toxi/physics/*.java" kind="src" path="src.physics"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

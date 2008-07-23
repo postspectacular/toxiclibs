@@ -160,7 +160,7 @@ public class Filter8bit {
 	/**
 	 * @param img
 	 * @param isInverted
-	 * @return
+	 * @return filtered result as new image
 	 */
 	public static PImage erodePixels(PImage img, boolean isInverted) {
 		PImage img2 = new PImage(img.width, img.height);
@@ -174,7 +174,7 @@ public class Filter8bit {
 	 * @param width
 	 * @param height
 	 * @param isInverted
-	 * @return
+	 * @return filtered pixel array
 	 */
 	public static int[] erodePixels(int[] pixels, int width, int height,
 			boolean isInverted) {
