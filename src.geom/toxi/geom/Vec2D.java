@@ -472,6 +472,16 @@ public class Vec2D {
 		return new Vec2D(-x, -y);
 	}
 
+	public final Vec2D abs() {
+		x=MathUtils.abs(x);
+		y=MathUtils.abs(y);
+		return this;
+	}
+	
+	public final Vec2D getAbs() {
+		return new Vec2D(this).abs();
+	}
+	
 	/**
 	 * Creates a new vector whose components are the integer value of their
 	 * current values

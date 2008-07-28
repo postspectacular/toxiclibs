@@ -507,6 +507,17 @@ public class Vec3D implements Comparable {
 		return new Vec3D(-x, -y, -z);
 	}
 
+	public final Vec3D abs() {
+		x = MathUtils.abs(x);
+		y = MathUtils.abs(y);
+		z = MathUtils.abs(z);
+		return this;
+	}
+
+	public final Vec3D getAbs() {
+		return new Vec3D(this).abs();
+	}
+
 	/**
 	 * Creates a new vector whose components are the integer value of their
 	 * current values
@@ -692,7 +703,7 @@ public class Vec3D implements Comparable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb = new StringBuffer(32);
+		StringBuffer sb = new StringBuffer(48);
 		sb.append("{x:").append(x).append(", y:").append(y).append(", z:")
 				.append(z).append("}");
 		return sb.toString();

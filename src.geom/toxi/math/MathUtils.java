@@ -147,7 +147,7 @@ public class MathUtils {
 	 * @return floored value as integer
 	 */
 	public static final int fastFloor(float x) {
-		return x > 0 ? (int) x : (int) x - 1;
+		return x >= 0 ? (int) x : (int) x - 1;
 	}
 
 	/**
