@@ -517,6 +517,30 @@ public class Vec2D {
 	}
 
 	/**
+	 * Replaces all vector components with the signum of their original values.
+	 * In other words if a components value was negative its new value will be
+	 * -1, if zero => 0, if positive => +1
+	 * 
+	 * @return itself
+	 */
+	public Vec2D signum() {
+		x = (x < 0 ? -1 : x == 0 ? 0 : 1);
+		y = (y < 0 ? -1 : y == 0 ? 0 : 1);
+		return this;
+	}
+
+	/**
+	 * Creates a new vector in which all components are replaced with the signum
+	 * of their original values. In other words if a components value was
+	 * negative its new value will be -1, if zero => 0, if positive => +1
+	 * 
+	 * @return result vector
+	 */
+	public Vec2D getSignum() {
+		return new Vec2D(this).signum();
+	}
+	
+	/**
 	 * Constructs a new vector consisting of the smallest components of both
 	 * vectors.
 	 * 
