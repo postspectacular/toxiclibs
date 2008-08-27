@@ -154,7 +154,7 @@ public class Vec3D implements Comparable {
 	 * 
 	 * @return new vector
 	 */
-	public final Vec3D getNormalized() {
+	public Vec3D getNormalized() {
 		return new Vec3D(this).normalize();
 	}
 
@@ -163,7 +163,7 @@ public class Vec3D implements Comparable {
 	 * 
 	 * @return itself
 	 */
-	public final Vec3D normalize() {
+	public Vec3D normalize() {
 		float mag = MathUtils.sqrt(x * x + y * y + z * z);
 		if (mag > 0) {
 			mag = 1f / mag;
@@ -231,7 +231,7 @@ public class Vec3D implements Comparable {
 	 * 
 	 * @return vector length
 	 */
-	public final float magnitude() {
+	public float magnitude() {
 		return MathUtils.sqrt(x * x + y * y + z * z);
 	}
 
@@ -242,7 +242,7 @@ public class Vec3D implements Comparable {
 	 * 
 	 * @return squared magnitude (x^2 + y^2 + z^2)
 	 */
-	public final float magSquared() {
+	public float magSquared() {
 		return x * x + y * y + z * z;
 	}
 
@@ -406,7 +406,7 @@ public class Vec3D implements Comparable {
 	 *            scale factor
 	 * @return new vector
 	 */
-	public final Vec3D scale(float s) {
+	public Vec3D scale(float s) {
 		return new Vec3D(x * s, y * s, z * s);
 	}
 
@@ -421,7 +421,7 @@ public class Vec3D implements Comparable {
 	 *            scale factor for Z coordinate
 	 * @return new vector
 	 */
-	public final Vec3D scale(float a, float b, float c) {
+	public Vec3D scale(float a, float b, float c) {
 		return new Vec3D(x * a, y * b, z * c);
 	}
 
@@ -432,7 +432,7 @@ public class Vec3D implements Comparable {
 	 *            scale vector
 	 * @return new vector
 	 */
-	public final Vec3D scale(Vec3D s) {
+	public Vec3D scale(Vec3D s) {
 		return new Vec3D(x * s.x, y * s.y, z * s.z);
 	}
 
@@ -445,7 +445,7 @@ public class Vec3D implements Comparable {
 	 * @return itself
 	 */
 
-	public final Vec3D scaleSelf(Vec3D s) {
+	public Vec3D scaleSelf(Vec3D s) {
 		x *= s.x;
 		y *= s.y;
 		z *= s.z;
@@ -459,7 +459,7 @@ public class Vec3D implements Comparable {
 	 *            scale factor
 	 * @return itself
 	 */
-	public final Vec3D scaleSelf(float s) {
+	public Vec3D scaleSelf(float s) {
 		x *= s;
 		y *= s;
 		z *= s;
@@ -478,7 +478,7 @@ public class Vec3D implements Comparable {
 	 *            scale factor for Z coordinate
 	 * @return itself
 	 */
-	public final Vec3D scaleSelf(float a, float b, float c) {
+	public Vec3D scaleSelf(float a, float b, float c) {
 		x *= a;
 		y *= b;
 		z *= c;

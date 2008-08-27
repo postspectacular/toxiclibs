@@ -105,7 +105,7 @@ public class PointOctree extends AABB {
 		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
 				+ (plocal.z >= dim2 ? 4 : 0);
 	}
-
+	
 	/**
 	 * Adds a new point/particle to the tree structure. All points are stored
 	 * within leaf nodes only. The tree implementation is using lazy
@@ -319,14 +319,6 @@ public class PointOctree extends AABB {
 		return results;
 	}
 
-	// FIXME remove PApplet dependency
-	/*
-	 * public void draw(PApplet app) { if (numChildren > 0) { app.noFill();
-	 * app.stroke(depth 24, 50); app.pushMatrix(); app.translate(x, y, z);
-	 * app.box(dim); app.popMatrix(); for (int i = 0; i < 8; i++) { if
-	 * (children[i] != null) children[i].draw(app); } } } //
-	 */
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -352,5 +344,25 @@ public class PointOctree extends AABB {
 	 */
 	public void setMinNodeSize(float minNodeSize) {
 		this.minNodeSize = minNodeSize;
+	}
+	
+	public float getNodeSize() {
+		return dim;
+	}
+	
+	/**
+	 * @return the number of child nodes (max. 8)
+	 */
+	public int getNumChildren() {
+		return numChildren;
+	}
+	
+	/**
+	 * @return a copy of the child nodes array
+	 */
+	public PointOctree[] getChildren() {
+		PointOctree[] clones=new PointOctree[8];
+		System.arraycopy(children, 0, clones, 0, 8);
+		return clones;
 	}
 }

@@ -2,6 +2,8 @@ package toxi.test;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.MULTIANEWARRAY;
+
 import toxi.geom.*;
 import toxi.math.MathUtils;
 import junit.framework.TestCase;
@@ -61,5 +63,12 @@ public class GeomTestSuite extends TestCase {
 		c=new Vec3D(-50,-50,0);
 		isec=c.closestPointOnLine(a, b);
 		assertEquals(isec.equals(a),true);
+	}
+	
+	public void testSlerp() {
+		Quaternion a=new Quaternion(Vec3D.X_AXIS,0);
+		Quaternion b=new Quaternion(Vec3D.Y_AXIS,0);
+		a.interpolateTo(b, 0.5);
+		System.out.println(a);
 	}
 }

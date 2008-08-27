@@ -1,3 +1,16 @@
+/**
+PointOctree demo showing how to use the structure to efficiently retrieve
+and isolate particle like objects within a defined neighbourhood from a much
+larger set of objects.
+
+Key controls:
+
+SPACE : add 100 more particles
+S : choose between sphere and bounding box culling.
+O : toggle display of the octree structure
+- / + : adjust the size of the culling radius
+*/
+
 /* 
  * Copyright (c) 2006-2008 Karsten Schmidt
  * 
@@ -17,7 +30,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 import processing.opengl.*;
 import toxi.geom.*;
 
@@ -35,7 +48,7 @@ int NUM = 100;
 boolean showOctree = true;
 
 // use clip sphere or axis aligned bounding box
-boolean useSphere = true;
+boolean useSphere = false;
 
 // view rotation
 float xrot = THIRD_PI;
@@ -48,7 +61,7 @@ Vec3D cursor = new Vec3D();
 int numParticles = 1;
 
 void setup() {
-  size(800,600,OPENGL);
+  size(1024,768,OPENGL);
   textFont(loadFont("AudimatMonoLight-18.vlw"));
   // setup empty octree so that it's centered around the world origin
   octree=new VisibleOctree(new Vec3D(-1,-1,-1).scaleSelf(DIM2),DIM);
@@ -73,7 +86,7 @@ void draw() {
   }
   rotateX(xrot);
   rotateZ(zrot);
-  scale(3);
+  scale(4);
   // show debug view of tree
   if (showOctree) octree.draw();
   // show crosshair 3D cursor
@@ -86,7 +99,6 @@ void draw() {
   vertex(DIM2,cursor.y,0);
   endShape();
   // show particles within the specific clip radius
-  fill(0,255,0);
   noStroke();
   long t0=System.currentTimeMillis();
   ArrayList points=null;
@@ -105,6 +117,7 @@ void draw() {
       Vec3D p = (Vec3D)iter.next();
       pushMatrix();
       translate(p.x,p.y,p.z);
+      fill(abs(p.x)*8,abs(p.y)*8,abs(p.z)*8);
       box(2);
       popMatrix();
     }
@@ -120,7 +133,22 @@ void draw() {
 }
 
 void keyPressed() {
-  // add NUM new particles within a sphere of radius DIM2
-  for(int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));
-  numParticles+=NUM;
+  key|=0x20;
+  if (key==' ') {
+    // add NUM new particles within a sphere of radius DIM2
+    for(int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));
+    numParticles+=NUM;
+  } 
+  else if (key=='s') {
+    useSphere=!useSphere;
+  } 
+  else if (key=='o') {
+    showOctree=!showOctree;
+  }
+  else if (key=='-') {
+    RADIUS=max(RADIUS-1,2);
+  }
+  else if (key=='=') {
+    RADIUS=min(RADIUS+1,DIM);
+  }
 }
