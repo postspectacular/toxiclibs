@@ -7,14 +7,14 @@ package toxi.math.noise;
  * @author Stefan Gustavson, Linkping University, Sweden (stegu at itn dot liu
  *         dot se)
  * 
- * Slight optimizations & restructuring by
+ *         Slight optimizations & restructuring by
  * @author Karsten Schmidt (info at toxi dot co dot uk)
  * 
  */
+
 public class SimplexNoise {
 
 	private static final double SQRT3 = Math.sqrt(3.0);
-
 	private static final double SQRT5 = Math.sqrt(5.0);
 
 	/**
@@ -22,27 +22,16 @@ public class SimplexNoise {
 	 * pre-multiplied.
 	 */
 	private static final double F2 = 0.5 * (SQRT3 - 1.0);
-
 	private static final double G2 = (3.0 - SQRT3) / 6.0;
-
-	private static final double G22 = G2 * 2.0 - 1.0;
+	private static final double G22 = G2 * 2.0 - 1;
 
 	private static final double F3 = 1.0 / 3.0;
-
 	private static final double G3 = 1.0 / 6.0;
 
-	private static final double G32 = G3 * 2.0;
-
-	private static final double G33 = G3 * 3.0 - 1.0;
-
 	private static final double F4 = (SQRT5 - 1.0) / 4.0;
-
 	private static final double G4 = (5.0 - SQRT5) / 20.0;
-
 	private static final double G42 = G4 * 2.0;
-
 	private static final double G43 = G4 * 3.0;
-
 	private static final double G44 = G4 * 4.0 - 1.0;
 
 	/**
@@ -98,7 +87,7 @@ public class SimplexNoise {
 	 */
 	private static int perm[] = new int[0x200];
 	static {
-		for (int i = 0; i < 0x100; i++)
+		for (int i = 0; i < 0x200; i++)
 			perm[i] = p[i & 0xff];
 	}
 
@@ -186,7 +175,6 @@ public class SimplexNoise {
 	 *            coordinate
 	 * @return noise value in range -1 ... +1.
 	 */
-	// FIXME this seems to be semi-broken currently?? Strange artefacts appearing
 	public static double noise(double x, double y) {
 		double n0, n1, n2; // Noise contributions from the three corners
 		// Skew the input space to determine which simplex cell we're in
@@ -194,9 +182,8 @@ public class SimplexNoise {
 		int i = fastfloor(x + s);
 		int j = fastfloor(y + s);
 		double t = (i + j) * G2;
-		// Unskew the cell origin back to (x,y) space
 		double x0 = x - (i - t); // The x,y distances from the cell origin
-		double y0 = y - (i - t);
+		double y0 = y - (j - t);
 		// For the 2D case, the simplex shape is an equilateral triangle.
 		// Determine which simplex we are in.
 		int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)
@@ -212,8 +199,8 @@ public class SimplexNoise {
 		// A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
 		// a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
 		// c = (3-sqrt(3))/6
-		double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y)
-		// unskewed coords
+		double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed
+		// coords
 		double y1 = y0 - j1 + G2;
 		double x2 = x0 + G22; // Offsets for last corner in (x,y)
 		// unskewed coords
@@ -221,7 +208,6 @@ public class SimplexNoise {
 		// Work out the hashed gradient indices of the three simplex corners
 		int ii = i & 0xff;
 		int jj = j & 0xff;
-
 		// Calculate the contribution from the three corners
 		double t0 = 0.5 - x0 * x0 - y0 * y0;
 		if (t0 < 0)
@@ -267,13 +253,15 @@ public class SimplexNoise {
 	public static double noise(double x, double y, double z) {
 		double n0, n1, n2, n3; // Noise contributions from the four corners
 		// Skew the input space to determine which simplex cell we're in
+		// final double F3 = 1.0 / 3.0;
 		double s = (x + y + z) * F3; // Very nice and simple skew factor
 		// for 3D
 		int i = fastfloor(x + s);
 		int j = fastfloor(y + s);
 		int k = fastfloor(z + s);
+		// final double G3 = 1.0 / 6.0; // Very nice and simple unskew factor,
+		// too
 		double t = (i + j + k) * G3;
-		// Unskew the cell origin back to (x,y,z) space
 		double x0 = x - (i - t); // The x,y,z distances from the cell origin
 		double y0 = y - (j - t);
 		double z0 = z - (k - t);
@@ -340,18 +328,17 @@ public class SimplexNoise {
 		// a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z),
 		// where
 		// c = 1/6.
-		double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z)
-		// coords
+		double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
 		double y1 = y0 - j1 + G3;
 		double z1 = z0 - k1 + G3;
-		double x2 = x0 - i2 + G32; // Offsets for third corner in (x,y,z)
+		double x2 = x0 - i2 + F3; // Offsets for third corner in (x,y,z)
 		// coords
-		double y2 = y0 - j2 + G32;
-		double z2 = z0 - k2 + G32;
-		double x3 = x0 + G33; // Offsets for last corner in
-		// (x,y,z) coords
-		double y3 = y0 + G33;
-		double z3 = z0 + G33;
+		double y2 = y0 - j2 + F3;
+		double z2 = z0 - k2 + F3;
+		double x3 = x0 - 0.5; // Offsets for last corner in (x,y,z)
+		// coords
+		double y3 = y0 - 0.5;
+		double z3 = z0 - 0.5;
 		// Work out the hashed gradient indices of the four simplex corners
 		int ii = i & 0xff;
 		int jj = j & 0xff;
@@ -408,8 +395,10 @@ public class SimplexNoise {
 	 *            coordinate
 	 * @return noise value in range -1 ... +1
 	 */
-	// FIXME this seems to be semi-broken currently?? Strange artefacts appearing
+	// FIXME this seems to be semi-broken currently?? Strange artefacts
+	// appearing
 	public static double noise(double x, double y, double z, double w) {
+		// The skewing and unskewing factors are hairy again for the 4D case
 		double n0, n1, n2, n3, n4; // Noise contributions from the five corners
 		// Skew the (x,y,z,w) space to determine which cell of 24 simplices
 		// we're in
@@ -419,18 +408,16 @@ public class SimplexNoise {
 		int k = fastfloor(z + s);
 		int l = fastfloor(w + s);
 		double t = (i + j + k + l) * G4; // Factor for 4D unskewing
-		// Unskew the cell origin back to (x,y,z,w) space
-		double x0 = x - (i - t); // The x,y,z,w distances from the cell
-		// origin
-		double y0 = y - (j - t);
-		double z0 = z - (k - t);
-		double w0 = w - (l - t);
+		double x0 = x - (i-t); // The x,y,z,w distances from the cell origin
+		double y0 = y - (j-t);
+		double z0 = z - (k-t);
+		double w0 = w - (l-t);
 		// For the 4D case, the simplex is a 4D shape I won't even try to
 		// describe.
 		// To find out which of the 24 possible simplices we're in, we need to
 		// determine the magnitude ordering of x0, y0, z0 and w0.
 		// The method below is a good way of finding the ordering of x,y,z,w and
-		// then find the correct traversal order for the simplex weï¿½re in.
+		// then find the correct traversal order for the simplex we’re in.
 		// First, six pair-wise comparisons are performed between each possible
 		// pair
 		// of the four coordinates, and the results are used to add up binary
@@ -491,21 +478,23 @@ public class SimplexNoise {
 		double y2 = y0 - j2 + G42;
 		double z2 = z0 - k2 + G42;
 		double w2 = w0 - l2 + G42;
+
 		double x3 = x0 - i3 + G43; // Offsets for fourth corner in
 		// (x,y,z,w) coords
 		double y3 = y0 - j3 + G43;
 		double z3 = z0 - k3 + G43;
 		double w3 = w0 - l3 + G43;
-		double x4 = x0 - 1.0 + G44; // Offsets for last corner in
-		// (x,y,z,w) coords
+		double x4 = x0 + G44; // Offsets for last corner in (x,y,z,w)
+		// coords
 		double y4 = y0 + G44;
 		double z4 = z0 + G44;
 		double w4 = w0 + G44;
+
 		// Work out the hashed gradient indices of the five simplex corners
-		int ii = i & 255;
-		int jj = j & 255;
-		int kk = k & 255;
-		int ll = l & 255;
+		int ii = i & 0xff;
+		int jj = j & 0xff;
+		int kk = k & 0xff;
+		int ll = l & 0xff;
 
 		// Calculate the contribution from the five corners
 		double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
