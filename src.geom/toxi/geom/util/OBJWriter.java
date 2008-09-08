@@ -5,14 +5,24 @@ import java.io.PrintWriter;
 
 import toxi.geom.Vec3D;
 
+/**
+ * Extremely bare bones Wavefront OBJ 3D format exporter. Purely handles the
+ * writing of data to the .obj file, but does not have any form of mesh
+ * management.
+ * 
+ * Might get some more TLC in future versions.
+ * 
+ * @author toxi
+ * 
+ */
 public class OBJWriter {
 
-	final String VERSION = "0.24";
+	public final String VERSION = "0.25";
 
-	FileOutputStream objStream;
-	PrintWriter objWriter;
+	protected FileOutputStream objStream;
+	protected PrintWriter objWriter;
 
-	void beginSave(String fn) {
+	public void beginSave(String fn) {
 		try {
 			objStream = new FileOutputStream(fn);
 			objWriter = new PrintWriter(objStream);
@@ -22,7 +32,7 @@ public class OBJWriter {
 		}
 	}
 
-	void endSave() {
+	public void endSave() {
 		try {
 			objWriter.flush();
 			objWriter.close();
@@ -33,19 +43,19 @@ public class OBJWriter {
 		}
 	}
 
-	void newObject(String name) {
+	public void newObject(String name) {
 		objWriter.println("o " + name);
 	}
 
-	void vertex(Vec3D v) {
+	public void vertex(Vec3D v) {
 		objWriter.println("v " + v.x + " " + v.y + " " + v.z);
 	}
 
-	void face(int a, int b, int c) {
+	public void face(int a, int b, int c) {
 		objWriter.println("f " + a + " " + b + " " + c);
 	}
 
-	void faceList() {
+	public void faceList() {
 		objWriter.println("s off");
 	}
 }

@@ -2,6 +2,10 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
+/**
+ * Quaternion implementation with SLERP based on http://is.gd/2n9s
+ * 
+ */
 public class Quaternion {
 
 	public static final float DOT_THRESHOLD = 0.9995f;
@@ -136,20 +140,59 @@ public class Quaternion {
 		return this;
 	}
 
-	public Quaternion interpolateTo(Quaternion b, float t) {
-		float dot = new Vec3D(x,y,z).dot(new Vec3D(b.x,b.y,b.z));
+	/**
+	 * Spherical interpolation to target quat (code ported from
+	 * http://is.gd/2n7t)
+	 * 
+	 * @param target
+	 *            quaternion
+	 * @param t
+	 *            interpolation factor (0..1)
+	 * @return
+	 */
+	public Quaternion interpolateTo(Quaternion target, float t) {
+		float dot = new Vec3D(x, y, z).dot(new Vec3D(target.x, target.y,
+				target.z));
 		if (dot > DOT_THRESHOLD) {
-			Quaternion result = new Quaternion(w + (b.w - w) * t, x + (b.x - x)
-					* t, y + (b.y - y) * t, z + (b.z - z) * t);
+			Quaternion result = new Quaternion(w + (target.w - w) * t, x
+					+ (target.x - x) * t, y + (target.y - y) * t, z
+					+ (target.z - z) * t);
 			result.normalize();
 			return result;
 		}
 		dot = MathUtils.clip(dot, -1, 1);
-		float theta = (float) Math.acos(dot) * t;
-		Quaternion q = b.sub(scale(dot));
+		double theta = Math.acos(dot) * t;
+		Quaternion q = target.sub(scale(dot));
 		q.normalize();
-		return scale((float) Math.cos(theta)).add(
-				q.scale((float) Math.sin(theta)));
+		return scale((float) Math.cos(theta)).addSelf(
+				q.scaleSelf((float) Math.sin(theta)));
+	}
+
+	/**
+	 * Converts the quat into a 4x4 Matrix. Assumes the quat is currently
+	 * normalized (if not, you'll need to call {@link #normalize()} first). This
+	 * calculation would be a lot more complicated for non-unit length
+	 * quaternions Note: The constructor of Matrix4 expects the Matrix in
+	 * column-major format like expected by OpenGL
+	 * 
+	 * @return result matrix
+	 */
+	public Matrix4x4 getMatrix() {
+		float x2 = x * x;
+		float y2 = y * y;
+		float z2 = z * z;
+		float xy = x * y;
+		float xz = x * z;
+		float yz = y * z;
+		float wx = w * x;
+		float wy = w * y;
+		float wz = w * z;
+
+		return new Matrix4x4(1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz),
+				2.0f * (xz + wy), 0.0f, 2.0f * (xy + wz),
+				1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 0.0f,
+				2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (x2 + y2),
+				0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	public String toString() {

@@ -1,10 +1,14 @@
 package toxi.geom;
 
 /**
- * Implements a simple 4x4 matrix class
+ * Implements a simple row-major 4x4 matrix class, all matrix operations are
+ * applied to new instances. Use {@link #transpose()} to convert from
+ * column-major formats...
  */
 
-// FIXME still needs lots of refactoring
+// FIXME considere OpenGL is using column-major ordering
+// TODO add methods to apply to current instance only
+// TODO still needs lots of refactoring
 public class Matrix4x4 {
 
 	public double[][] matrix;
@@ -24,9 +28,9 @@ public class Matrix4x4 {
 	public Matrix4x4(Matrix4x4 m) {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
-				matrix[i][j]=m.matrix[i][j];
+				matrix[i][j] = m.matrix[i][j];
 	}
-	
+
 	public Matrix4x4(double v11, double v12, double v13, double v14,
 			double v21, double v22, double v23, double v24, double v31,
 			double v32, double v33, double v34, double v41, double v42,
