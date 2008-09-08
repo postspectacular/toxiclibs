@@ -148,7 +148,7 @@ public class Quaternion {
 	 *            quaternion
 	 * @param t
 	 *            interpolation factor (0..1)
-	 * @return
+	 * @return new interpolated quat
 	 */
 	public Quaternion interpolateTo(Quaternion target, float t) {
 		float dot = new Vec3D(x, y, z).dot(new Vec3D(target.x, target.y,
