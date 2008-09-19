@@ -90,7 +90,8 @@ public class VerletPhysics {
 	 */
 	public VerletPhysics(Vec3D gravity, int numIterations, float friction,
 			float timeStep) {
-		if (gravity!=null) this.gravity.set(gravity);
+		if (gravity != null)
+			this.gravity.set(gravity);
 		this.numIterations = numIterations;
 		this.friction = friction;
 		this.timeStep = timeStep;
@@ -114,8 +115,46 @@ public class VerletPhysics {
 	 * @return itself
 	 */
 	public VerletPhysics addSpring(VerletSpring s) {
-		if (getSpring(s.a,s.b)==null) springs.add(s);
+		if (getSpring(s.a, s.b) == null)
+			springs.add(s);
 		return this;
+	}
+
+	/**
+	 * Removes a spring connector from the simulation instance.
+	 * 
+	 * @param s
+	 *            spring to remove
+	 * @return true, if the spring has been removed
+	 */
+	public boolean removeSpring(VerletSpring s) {
+		return springs.remove(s);
+	}
+
+	/**
+	 * Removes a spring connector and its both end point particles from the
+	 * simulation
+	 * 
+	 * @param s
+	 *            spring to remove
+	 * @return true, only if spring AND particles have been removed successfully
+	 */
+	public boolean removeSpringElements(VerletSpring s) {
+		if (removeSpring(s)) {
+			return (removeParticle(s.a) && removeParticle(s.b));
+		}
+		return false;
+	}
+
+	/**
+	 * Removes a particle from the simulation.
+	 * 
+	 * @param p
+	 *            particle to remove
+	 * @return true, if removed successfully
+	 */
+	public boolean removeParticle(VerletParticle p) {
+		return particles.remove(p);
 	}
 
 	/**
