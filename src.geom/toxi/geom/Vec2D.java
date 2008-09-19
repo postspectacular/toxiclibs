@@ -240,7 +240,7 @@ public class Vec2D {
 	 *            non-null vector
 	 * @return distance or Float.NaN if v=null
 	 */
-	public final float distanceTo(Vec3D v) {
+	public final float distanceTo(Vec2D v) {
 		if (v != null) {
 			float dx = x - v.x;
 			float dy = y - v.y;
@@ -258,7 +258,7 @@ public class Vec2D {
 	 *            non-null vector
 	 * @return distance or NaN if v=null
 	 */
-	public final float distanceToSquared(Vec3D v) {
+	public final float distanceToSquared(Vec2D v) {
 		if (v != null) {
 			float dx = x - v.x;
 			float dy = y - v.y;
