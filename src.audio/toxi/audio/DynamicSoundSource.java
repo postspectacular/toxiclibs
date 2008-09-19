@@ -95,8 +95,8 @@ public class DynamicSoundSource {
 	}
 
 	/**
-	 * @param isActive
-	 *            the isActive to set
+	 * @param state
+	 *            new activation state
 	 */
 	public void setActive(boolean state) {
 		if (state != isActive) {
@@ -156,8 +156,9 @@ public class DynamicSoundSource {
 	}
 
 	/**
-	 * @param usePanning
-	 *            the usePanning to set
+	 * @param panning
+	 *            new panning wave to use (or null to disable panning
+	 *            altogether)
 	 */
 	public void usePanning(AbstractWave panning) {
 		this.usePanning = panning != null;

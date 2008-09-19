@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -41,19 +42,19 @@ public class DynamicSoundSourceMixer {
 
 	private String baseDir;
 
-	private HashMap<String,DynamicSoundSource> staticSources = new HashMap<String,DynamicSoundSource>();
-	
-	private HashMap<String,DynamicSoundSource> dynamicLoops = new HashMap<String,DynamicSoundSource>();
-	
+	private HashMap staticSources = new HashMap();
+
+	private HashMap dynamicLoops = new HashMap();
+
 	public DynamicSoundSourceMixer() {
 		audiosys = new OALUtil();
 		audiosys.getListener().setGain(1);
 	}
-	
+
 	public DynamicSoundSourceMixer(OALUtil asys) {
 		audiosys = asys;
 	}
-	
+
 	public void addStaticLoop(InputStream is) {
 		try {
 			Source s = audiosys.loadSource(is);
@@ -68,11 +69,13 @@ public class DynamicSoundSourceMixer {
 	public void setBaseDir(String dir) {
 		baseDir = dir;
 	}
-	
+
 	public void playAll() {
-		for(String key : staticSources.keySet()) {
-			DynamicSoundSource src=staticSources.get(key);
+		Iterator i = staticSources.keySet().iterator();
+		while (i.hasNext()) {
+			DynamicSoundSource src = (DynamicSoundSource) staticSources
+					.get((String) i.next());
 			src.play();
 		}
- 	}
+	}
 }

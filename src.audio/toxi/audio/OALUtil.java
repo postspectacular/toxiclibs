@@ -41,7 +41,7 @@ public class OALUtil {
 
 	private ALC alc;
 
-	private ArrayList buffers = new ArrayList<Buffer>();
+	private ArrayList buffers = new ArrayList();
 
 	public OALUtil() {
 		try {
@@ -132,9 +132,9 @@ public class OALUtil {
 
 	/**
 	 * @param stream
-	 * @return
 	 * @throws IOException
 	 * @throws UnsupportedAudioFileException
+	 * @return new Source instance
 	 */
 	public Source loadSource(InputStream stream)
 			throws UnsupportedAudioFileException, IOException {
@@ -147,7 +147,7 @@ public class OALUtil {
 
 	/**
 	 * @param buffer
-	 * @return
+	 * @return new Source instance
 	 */
 	public Source createSource(Buffer buffer) {
 		return AudioSystem3D.generateSource(buffer);
