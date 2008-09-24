@@ -90,6 +90,7 @@ public class VerletPhysics {
 	 */
 	public VerletPhysics(Vec3D gravity, int numIterations, float friction,
 			float timeStep) {
+		this();
 		if (gravity != null)
 			this.gravity.set(gravity);
 		this.numIterations = numIterations;
