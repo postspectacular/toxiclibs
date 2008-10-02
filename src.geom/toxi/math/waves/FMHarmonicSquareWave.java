@@ -31,7 +31,7 @@ package toxi.math.waves;
  * modulating wave.
  * </p>
  */
-public class FMBandwidthLimitedSquareWave extends AbstractWave {
+public class FMHarmonicSquareWave extends AbstractWave {
 
 	public AbstractWave fmod;
 
@@ -50,18 +50,18 @@ public class FMBandwidthLimitedSquareWave extends AbstractWave {
 	 * @param amp
 	 * @param offset
 	 */
-	public FMBandwidthLimitedSquareWave(float phase, float freq, float amp,
+	public FMHarmonicSquareWave(float phase, float freq, float amp,
 			float offset) {
 		this(phase, freq, amp, offset, new ConstantWave(0));
 	}
 
-	public FMBandwidthLimitedSquareWave(float phase, float freq,
+	public FMHarmonicSquareWave(float phase, float freq,
 			AbstractWave fmod) {
 		super(phase, freq);
 		this.fmod = fmod;
 	}
 
-	public FMBandwidthLimitedSquareWave(float phase, float freq, float amp,
+	public FMHarmonicSquareWave(float phase, float freq, float amp,
 			float offset, AbstractWave fmod) {
 		super(phase, freq, amp, offset);
 		this.fmod = fmod;
