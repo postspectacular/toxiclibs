@@ -1,0 +1,5 @@
+0002
+--------------------------------------------------------------------------------
+! VerletPhysics: fixed bug in alternative constructor which didn't initialize
+  Arraylists
++ VerletMinDistanceSpring

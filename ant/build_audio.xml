@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
 	<!-- This needs to change with every release -->
-	<property name="project.name" value="verletphysics" />
-	<property name="srcfolder.id" value="physics" />
-	<property name="lib.version" value="0002" />
+	<property name="project.name" value="libjoal" />
+	<property name="srcfolder.id" value="audio" />
+	<property name="lib.version" value="0001" />
 	<property name="lib.jdk.level" value="1.4" />
-	<property name="lib.zip.comment" value="${project.name} - particle verlet physics engine v${lib.version}" />
-	<property name="lib.libs.path" value="../lib" />
+	<property name="lib.zip.comment" value="${project.name} - JOAL convenience wrapper &amp; audio utils v${lib.version}" />
+	<property name="lib.libs.path" value="../lib/joal.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
 
 	<!-- Basic targets -->
@@ -34,15 +34,13 @@
 		<delete file="${release.src.zip}/" />
 	</target>
 
-
-	<!-- build directory targets -->
 	<target name="compile" depends="init" description="Compile source">
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
-				<pathelement location="${release.dir}/geomutils.jar" />
 				<pathelement location="${lib.libs.path}" />
+				<pathelement location="${release.dir}/geomutils.jar" />
 			</classpath>
 		</javac>
 	</target>
@@ -67,7 +65,6 @@
 			<zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
 			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
-			<zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
 		</zip>
 		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
 			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
@@ -75,7 +72,6 @@
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
-			<zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
 		</zip>
 	</target>
 
@@ -83,8 +79,8 @@
 		<mkdir dir="${release.javadoc.dir}" />
 		<javadoc destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
-				<pathelement location="${release.dir}/geomutils.jar" />
 				<pathelement location="${lib.libs.path}" />
+				<pathelement location="${release.dir}/geomutils.jar" />
 			</classpath>
 			<packageset dir="${src.dir}" defaultexcludes="yes">
 				<include name="**" />

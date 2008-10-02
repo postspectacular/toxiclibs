@@ -1,0 +1,7 @@
+0012
+--------------------------------------------------------------------------------
++ FMSawtoothWave
++ FMSquareWave
++ FMBandwidthLimitedSquareWave
++ ConstantWave
+* made all wave properties public and deprecated the existing getters/setters
