@@ -29,7 +29,7 @@ public class SineWave extends AbstractWave {
 	/**
 	 * @param phase
 	 *            starting phase
-	 * @param freq
+	 * @param frequency
 	 *            in radians (not Hertz)
 	 */
 	public SineWave(float phase, float freq) {
@@ -39,7 +39,7 @@ public class SineWave extends AbstractWave {
 	/**
 	 * @param phase
 	 *            starting phase
-	 * @param freq
+	 * @param frequency
 	 *            in radians (not Hertz)
 	 * @param amp
 	 *            amplitude factor
@@ -55,7 +55,7 @@ public class SineWave extends AbstractWave {
 	 */
 	public float update() {
 		value = (float) (Math.sin(phase) * amp) + offset;
-		phase += freq;
+		cyclePhase(frequency);
 		return value;
 	}
 }

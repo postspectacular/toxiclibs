@@ -33,14 +33,14 @@ package toxi.math.waves;
  */
 public class AMFMSineWave extends AbstractWave {
 
-	private AbstractWave fmod;
-	private AbstractWave amod;
+	public AbstractWave fmod;
+	public AbstractWave amod;
 
 	/**
 	 * Creates a new instance from
 	 * 
 	 * @param phase
-	 * @param freq
+	 * @param frequency
 	 * @param fmod
 	 * @param amod
 	 */
@@ -53,14 +53,14 @@ public class AMFMSineWave extends AbstractWave {
 
 	/**
 	 * @param phase
-	 * @param delta
+	 * @param freq
 	 * @param offset
 	 * @param fmod
 	 * @param amod
 	 */
-	public AMFMSineWave(float phase, float delta, float offset,
+	public AMFMSineWave(float phase, float freq, float offset,
 			AbstractWave fmod, AbstractWave amod) {
-		super(phase, delta, 1, offset);
+		super(phase, freq, 1, offset);
 		this.amod = amod;
 		this.fmod = fmod;
 	}
@@ -73,28 +73,49 @@ public class AMFMSineWave extends AbstractWave {
 	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
-		value = amod.update() * (float) Math.sin(phase * fmod.update())
-				+ offset;
-		phase += freq;
+		amp = amod.update();
+		value = amp * (float) Math.sin(phase) + offset;
+		cyclePhase(frequency + fmod.update());
 		return value;
 	}
 
+	/**
+	 * @deprecated
+	 * @param fmod
+	 */
 	public void setFMod(AbstractWave fmod) {
 		this.fmod = fmod;
 	}
 
+	/**
+	 * @deprecated
+	 * @param amod
+	 */
 	public void setAMod(AbstractWave amod) {
 		this.amod = amod;
 	}
 
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public AbstractWave getFMod() {
 		return fmod;
 	}
 
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public AbstractWave getAMod() {
 		return amod;
 	}
 
+	/**
+	 * Resets this wave and its modulating waves as well.
+	 * 
+	 * @see toxi.math.waves.AbstractWave#reset()
+	 */
 	public void reset() {
 		super.reset();
 		fmod.reset();

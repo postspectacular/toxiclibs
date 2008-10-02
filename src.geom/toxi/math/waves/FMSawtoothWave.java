@@ -17,12 +17,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package toxi.math.waves;
 
 /**
  * <p>
- * Frequency modulated sine wave. Uses a secondary wave to modulate the
- * frequency of the main wave.
+ * Frequency modulated bandwidth unlimited pure sawtooth wave. Uses a secondary
+ * wave to modulate the frequency of the main wave.
  * </p>
  * 
  * <p>
@@ -30,20 +31,29 @@ package toxi.math.waves;
  * modulating wave.
  * </p>
  */
-public class FMSineWave extends AbstractWave {
+public class FMSawtoothWave extends AbstractWave {
 
 	public AbstractWave fmod;
 
-	public FMSineWave(float phase, float freq, float amp, float offset) {
+	/**
+	 * Convenience constructor to create a non frequency modulated sawtooth.
+	 * 
+	 * @param phase
+	 * @param freq
+	 *            base frequency (in radians)
+	 * @param amp
+	 * @param offset
+	 */
+	public FMSawtoothWave(float phase, float freq, float amp, float offset) {
 		this(phase, freq, amp, offset, new ConstantWave(0));
 	}
 
-	public FMSineWave(float phase, float freq, AbstractWave fmod) {
+	public FMSawtoothWave(float phase, float freq, AbstractWave fmod) {
 		super(phase, freq);
 		this.fmod = fmod;
 	}
 
-	public FMSineWave(float phase, float freq, float amp, float offset,
+	public FMSawtoothWave(float phase, float freq, float amp, float offset,
 			AbstractWave fmod) {
 		super(phase, freq, amp, offset);
 		this.fmod = fmod;
@@ -57,7 +67,7 @@ public class FMSineWave extends AbstractWave {
 	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
-		value = (float) (Math.sin(phase) * amp) + offset;
+		value = ((phase / TWO_PI) * 2 - 1) * amp + offset;
 		cyclePhase(frequency + fmod.update());
 		return value;
 	}

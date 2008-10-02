@@ -21,7 +21,8 @@ package toxi.math.waves;
 
 /**
  * <p>
- * Frequency modulated sine wave. Uses a secondary wave to modulate the
+ * Frequency modulated <strong>bandwidth-limited</strong> square wave using a
+ * fourier series of harmonics. Also uses a secondary wave to modulate the
  * frequency of the main wave.
  * </p>
  * 
@@ -30,21 +31,38 @@ package toxi.math.waves;
  * modulating wave.
  * </p>
  */
-public class FMSineWave extends AbstractWave {
+public class FMBandwidthLimitedSquareWave extends AbstractWave {
 
 	public AbstractWave fmod;
 
-	public FMSineWave(float phase, float freq, float amp, float offset) {
+	/**
+	 * Maximum harmonics to add (make sure you stay under Nyquist freq), default
+	 * = 9
+	 */
+	public int maxHarmonics = 3;
+
+	/**
+	 * Convenience constructor to create a non frequency modulated square wave
+	 * 
+	 * @param phase
+	 * @param freq
+	 *            base frequency (in radians)
+	 * @param amp
+	 * @param offset
+	 */
+	public FMBandwidthLimitedSquareWave(float phase, float freq, float amp,
+			float offset) {
 		this(phase, freq, amp, offset, new ConstantWave(0));
 	}
 
-	public FMSineWave(float phase, float freq, AbstractWave fmod) {
+	public FMBandwidthLimitedSquareWave(float phase, float freq,
+			AbstractWave fmod) {
 		super(phase, freq);
 		this.fmod = fmod;
 	}
 
-	public FMSineWave(float phase, float freq, float amp, float offset,
-			AbstractWave fmod) {
+	public FMBandwidthLimitedSquareWave(float phase, float freq, float amp,
+			float offset, AbstractWave fmod) {
 		super(phase, freq, amp, offset);
 		this.fmod = fmod;
 	}
@@ -57,7 +75,11 @@ public class FMSineWave extends AbstractWave {
 	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
-		value = (float) (Math.sin(phase) * amp) + offset;
+		value = 0;
+		for (int i = 1; i <= maxHarmonics; i += 2) {
+			value += 1.0 / i * (float) Math.sin(i * phase);
+		}
+		value = value * amp + offset;
 		cyclePhase(frequency + fmod.update());
 		return value;
 	}
