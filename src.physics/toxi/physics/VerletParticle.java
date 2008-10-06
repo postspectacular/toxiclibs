@@ -21,7 +21,7 @@ package toxi.physics;
  */
 
 import toxi.geom.*;
-import toxi.physics.constraint.*;
+import toxi.physics.constraints.IParticleConstraint;
 
 /**
  * An individual 3D particle for use by the VerletPhysics and VerletSpring

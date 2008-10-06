@@ -1,7 +1,9 @@
 /**
  * 
  */
-package toxi.physics;
+package toxi.physics.constraints;
+
+import toxi.physics.VerletParticle;
 
 /**
  * Defines an interface used to constrain VerletParticles based on a custom

@@ -1,9 +1,10 @@
 /**
  * 
  */
-package toxi.physics;
+package toxi.physics.constraints;
 
 import toxi.geom.Vec3D;
+import toxi.physics.VerletParticle;
 
 /**
  * @author toxi
