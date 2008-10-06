@@ -6,8 +6,8 @@ package toxi.physics;
 import toxi.geom.Vec3D;
 
 /**
- * Implements a spring whose maximum relaxation distance at every time step can be
- * limited to achieve better (if physically incorrect) stability of the whole
+ * Implements a spring whose maximum relaxation distance at every time step can
+ * be limited to achieve better (if physically incorrect) stability of the whole
  * spring system.
  * 
  * @author toxi
@@ -50,13 +50,17 @@ public class VerletConstrainedSpring extends VerletSpring {
 		float dist = delta.magnitude() + 0.00001f;
 		float normDistStrength = (dist - restLength)
 				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
-		if (!a.isLocked && !isALocked)
+		if (!a.isLocked && !isALocked) {
 			a
 					.addSelf(delta.scale(normDistStrength * 1 / a.weight)
 							.limit(limit));
-		if (!b.isLocked && !isBLocked)
+			a.applyConstraint();
+		}
+		if (!b.isLocked && !isBLocked) {
 			b
 					.subSelf(delta.scale(normDistStrength * 1 / b.weight)
 							.limit(limit));
+			b.applyConstraint();
+		}
 	}
 }

@@ -90,10 +90,14 @@ public class VerletSpring {
 		float dist = delta.magnitude() + 0.00001f;
 		float normDistStrength = (dist - restLength)
 				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
-		if (!a.isLocked && !isALocked)
+		if (!a.isLocked && !isALocked) {
 			a.addSelf(delta.scale(normDistStrength * 1 / a.weight));
-		if (!b.isLocked && !isBLocked)
-			b.subSelf(delta.scale(normDistStrength * 1 / b.weight));
+			a.applyConstraint();
+		}
+		if (!b.isLocked && !isBLocked) {
+			b.addSelf(delta.scale(-normDistStrength * 1 / b.weight));
+			b.applyConstraint();
+		}
 	}
 
 	/**

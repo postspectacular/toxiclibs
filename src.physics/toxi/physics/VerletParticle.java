@@ -21,6 +21,7 @@ package toxi.physics;
  */
 
 import toxi.geom.*;
+import toxi.physics.constraint.*;
 
 /**
  * An individual 3D particle for use by the VerletPhysics and VerletSpring
@@ -38,6 +39,8 @@ public class VerletParticle extends Vec3D {
 	 */
 	public AABB bounds;
 
+	public IParticleConstraint constraint;
+	
 	/**
 	 * Particle weight, default = 1
 	 */
@@ -130,5 +133,9 @@ public class VerletParticle extends Vec3D {
 		prev.set(this);
 		isLocked = false;
 		return this;
+	}
+	
+	protected void applyConstraint() {
+		if (constraint!=null) constraint.apply(this);
 	}
 }
