@@ -24,7 +24,7 @@
 		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
 		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
 		<property name="release.examples.dir" value="../examples/${srcfolder.id}" />
-		<property name="readme.dir" value="../readme/${srcfolder.id}" />
+		<property name="readme.dir" value="../readme1st/${srcfolder.id}" />
 	</target>
 
 	<target name="clean" depends="init" description="Remove build files created this scripts">
