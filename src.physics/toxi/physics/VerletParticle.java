@@ -20,7 +20,8 @@ package toxi.physics;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import toxi.geom.*;
+import toxi.geom.AABB;
+import toxi.geom.Vec3D;
 import toxi.physics.constraints.IParticleConstraint;
 
 /**
@@ -39,8 +40,12 @@ public class VerletParticle extends Vec3D {
 	 */
 	public AABB bounds;
 
+	/**
+	 * An optional particle constraint, called immediately after a particle is
+	 * updated (and only used if particle is unlocked (default)
+	 */
 	public IParticleConstraint constraint;
-	
+
 	/**
 	 * Particle weight, default = 1
 	 */
@@ -111,6 +116,8 @@ public class VerletParticle extends Vec3D {
 			temp.set(this);
 			addSelf(sub(prev).scaleSelf(force));
 			prev.set(temp);
+			if (constraint != null)
+				constraint.apply(this);
 		}
 	}
 
@@ -134,8 +141,9 @@ public class VerletParticle extends Vec3D {
 		isLocked = false;
 		return this;
 	}
-	
+
 	protected void applyConstraint() {
-		if (constraint!=null) constraint.apply(this);
+		if (constraint != null)
+			constraint.apply(this);
 	}
 }

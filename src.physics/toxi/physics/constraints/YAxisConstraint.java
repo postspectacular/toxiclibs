@@ -7,12 +7,17 @@ import toxi.geom.Vec3D;
 import toxi.physics.VerletParticle;
 
 /**
- * @author toxi
- * 
+ * Constrains a particle's movement by only allowing free movement along the Y
+ * axis of the point given in the constructor (XZ are locked).
  */
+
 public class YAxisConstraint implements IParticleConstraint {
 
-	private Vec3D constraint;
+	/**
+	 * Constraint vector whose XZ components are used to restrict particle
+	 * movement
+	 */
+	public Vec3D constraint;
 
 	public YAxisConstraint(Vec3D constraint) {
 		this.constraint = constraint;
