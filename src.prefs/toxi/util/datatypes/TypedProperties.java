@@ -20,23 +20,118 @@
 
 package toxi.util.datatypes;
 
+import java.io.FileInputStream;
 import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 public class TypedProperties extends Properties {
 
-	public boolean getBoolean(String id, boolean defState) {
-		return Boolean.parseBoolean(getProperty(id, "" + defState));
+	public static final String DELIM = "\t\n\r\f\u00A0,";
+
+	private static final Logger logger = Logger.getLogger(TypedProperties.class
+			.getName());
+
+	/**
+	 * Attempts to load properties from the specified (absolute) file path (In
+	 * Processing use sketchPath() or dataPath() to build absolute path).
+	 * 
+	 * @param path
+	 *            config file
+	 * @return true, if successful.
+	 */
+	public boolean load(String path) {
+		try {
+			load(new FileInputStream(path));
+			return true;
+		} catch (Exception e) {
+			logger
+					.severe("error opening config file: " + path
+							+ ". exiting...");
+			return false;
+		}
 	}
 
-	public int getInt(String id, int defVal) {
-		return Integer.parseInt(getProperty(id, "" + defVal));
+	/**
+	 * Returns a property as boolean.
+	 * 
+	 * @param id
+	 *            property name
+	 * @param defaultState
+	 * @return prop value
+	 */
+	public boolean getBoolean(String id, boolean defaultState) {
+		return Boolean.parseBoolean(getProperty(id, "" + defaultState));
 	}
 
-	public int getHexInt(String id, int defVal) {
-		return Integer.parseInt(getProperty(id, Integer.toHexString(defVal)),16);
+	/**
+	 * Returns a property as integer.
+	 * 
+	 * @param id
+	 *            property name
+	 * @param defaultValue
+	 * @return prop value
+	 */
+	public int getInt(String id, int defaultValue) {
+		return Integer.parseInt(getProperty(id, "" + defaultValue));
 	}
 
+	/**
+	 * Returns a hexadecimal property as integer
+	 * 
+	 * @param id
+	 *            prop name
+	 * @param defaultValue
+	 * @return prop value
+	 */
+	public int getHexInt(String id, int defaultValue) {
+		return Integer.parseInt(getProperty(id, Integer
+				.toHexString(defaultValue)), 16);
+	}
+
+	/**
+	 * Returns a property as float.
+	 * 
+	 * @param id
+	 * @param defVal
+	 * @return
+	 */
 	public float getFloat(String id, float defVal) {
 		return Float.parseFloat(getProperty(id, "" + defVal));
+	}
+
+	/**
+	 * Returns a property as int[] array
+	 * 
+	 * @param id
+	 *            prop name
+	 * @return prop items as array
+	 */
+	public int[] getIntArray(String id) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+		int pieces[] = new int[tokenizer.countTokens()];
+		int index = 0;
+		while (tokenizer.hasMoreTokens()) {
+			try {
+				pieces[index++] = Integer.parseInt(tokenizer.nextToken());
+			} catch (NumberFormatException e) {
+				pieces[index++] = 0;
+			}
+		}
+		return pieces;
+	}
+
+	public float[] getFloatArray(String id) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+		float pieces[] = new float[tokenizer.countTokens()];
+		int index = 0;
+		while (tokenizer.hasMoreTokens()) {
+			try {
+				pieces[index++] = Float.parseFloat(tokenizer.nextToken());
+			} catch (NumberFormatException e) {
+				pieces[index++] = 0;
+			}
+		}
+		return pieces;
 	}
 }
