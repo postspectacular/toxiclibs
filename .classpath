@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src.prefs"/>
 	<classpathentry kind="src" path="src.geom"/>
-	<classpathentry including="../src.geom/toxi/math/*.java" kind="src" path="src.audio"/>
+	<classpathentry including="../src.geom/toxi/math/*.java|toxi/audio/*.java" kind="src" path="src.audio"/>
 	<classpathentry kind="src" path="src.video"/>
 	<classpathentry including="../src.geom/toxi/geom/*.java|../src.image/toxi/image/*.java" kind="src" path="src.test"/>
 	<classpathentry including="../lib/core.jar|../src.geom/toxi/geom/*.java|toxi/image/util/*.java" kind="src" path="src.image"/>
@@ -12,7 +12,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/args4j-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/joal.jar"/>
+	<classpathentry kind="lib" path="lib/joal.jar" sourcepath="C:/java/javalibs/joal/joal-1.1.2-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/java/javalibs/joal/joal-1.1.2-docs/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogl.jar"/>
 	<classpathentry kind="lib" path="lib/opengl.jar"/>
 	<classpathentry kind="output" path="bin"/>
