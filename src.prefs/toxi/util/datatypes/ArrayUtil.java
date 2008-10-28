@@ -13,7 +13,7 @@ public class ArrayUtil {
 	 * 
 	 * @param array
 	 */
-	public void shuffle(Object[] array) {
+	public static void shuffle(Object[] array) {
 		shuffle(array, new Random());
 	}
 
@@ -24,7 +24,7 @@ public class ArrayUtil {
 	 * @param array
 	 * @param rnd
 	 */
-	public void shuffle(Object[] array, Random rnd) {
+	public static void shuffle(Object[] array, Random rnd) {
 		int N = array.length;
 		for (int i = 0; i < N; i++) {
 			int r = i + (int) (rnd.nextFloat() * (N - i)); // between i and N-1

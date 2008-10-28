@@ -101,7 +101,8 @@ public class TypedProperties extends Properties {
 	}
 
 	/**
-	 * Returns a property as int[] array
+	 * Returns a comma delimited property value as int[] array. Non-integer
+	 * items will be ignored.
 	 * 
 	 * @param id
 	 *            prop name
@@ -113,25 +114,63 @@ public class TypedProperties extends Properties {
 		int index = 0;
 		while (tokenizer.hasMoreTokens()) {
 			try {
-				pieces[index++] = Integer.parseInt(tokenizer.nextToken());
+				pieces[index] = Integer.parseInt(tokenizer.nextToken());
+				index++;
 			} catch (NumberFormatException e) {
-				pieces[index++] = 0;
+				// ignore non-integer items
 			}
 		}
-		return pieces;
+		int[] result = new int[index];
+		System.arraycopy(pieces, 0, result, 0, index);
+		return result;
 	}
 
+	/**
+	 * Returns a comma delimited property value as float[] array.
+	 * 
+	 * @param id
+	 *            prop name
+	 * @return prop items as array
+	 */
 	public float[] getFloatArray(String id) {
 		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
 		float pieces[] = new float[tokenizer.countTokens()];
 		int index = 0;
 		while (tokenizer.hasMoreTokens()) {
 			try {
-				pieces[index++] = Float.parseFloat(tokenizer.nextToken());
+				pieces[index] = Float.parseFloat(tokenizer.nextToken());
+				index++;
 			} catch (NumberFormatException e) {
-				pieces[index++] = 0;
+				// ignore
 			}
 		}
-		return pieces;
+		float[] result = new float[index];
+		System.arraycopy(pieces, 0, result, 0, index);
+		return result;
+	}
+
+	/**
+	 * Returns a comma delimited property value as byte[] array. Non-byte values
+	 * will be ignored.
+	 * 
+	 * @param id
+	 *            prop name
+	 * @return prop values as array
+	 */
+	public byte[] getByteArray(String id) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+		byte[] pieces = new byte[tokenizer.countTokens()];
+		int index = 0;
+		while (tokenizer.hasMoreTokens()) {
+			try {
+				pieces[index] = Byte.parseByte(tokenizer.nextToken());
+				index++;
+			} catch (NumberFormatException e) {
+				// ignore non-integer items
+			}
+		}
+		byte[] result = new byte[index];
+		System.arraycopy(pieces, 0, result, 0, index);
+		return result;
 	}
 }

@@ -23,7 +23,7 @@ public class MultiTimbralManager {
 	protected int currIndex;
 
 	public MultiTimbralManager(int num) {
-		logger.info("allocating " + num + " audio voices");
+		logger.info("attempting to allocate " + num + " audio voices");
 		Source[] tmp = AudioSystem3D.generateSources(num);
 		maxSources = tmp.length;
 		pool = new SourceState[maxSources];

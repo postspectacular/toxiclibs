@@ -21,11 +21,10 @@ package toxi.audio;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import net.java.games.joal.AL;
 import net.java.games.joal.ALC;
 import net.java.games.joal.ALCcontext;
 import net.java.games.joal.ALCdevice;
@@ -33,15 +32,16 @@ import net.java.games.joal.ALException;
 import net.java.games.joal.ALFactory;
 import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
-import net.java.games.sound3d.*;
+import net.java.games.sound3d.AudioSystem3D;
+import net.java.games.sound3d.Buffer;
+import net.java.games.sound3d.Listener;
+import net.java.games.sound3d.Source;
 
 public class OALUtil {
-
-	private AL al;
+	private static final Logger logger = Logger.getLogger(OALUtil.class
+			.getName());
 
 	private ALC alc;
-
-	private ArrayList buffers = new ArrayList();
 
 	public OALUtil() {
 		try {
@@ -56,7 +56,6 @@ public class OALUtil {
 		AudioSystem3D.init();
 
 		alc = ALFactory.getALC();
-		al = ALFactory.getAL();
 
 		ALCdevice device;
 		ALCcontext context;
@@ -75,7 +74,7 @@ public class OALUtil {
 					"Error getting specifier for default OpenAL device");
 		}
 
-		System.out.println("Using device " + deviceSpecifier);
+		logger.info("Using device " + deviceSpecifier);
 
 		// Create audio context.
 		context = alc.alcCreateContext(device, null);
@@ -109,7 +108,6 @@ public class OALUtil {
 		alc.alcDestroyContext(curContext);
 		alc.alcCloseDevice(curDevice);
 
-		al = null;
 		alc = null;
 	}
 
