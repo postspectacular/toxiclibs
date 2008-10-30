@@ -40,9 +40,9 @@ import net.java.games.joal.util.ALut;
 import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
 
-public class LibOAL {
+public class JOALUtil {
 
-	private static final Logger logger = Logger.getLogger(LibOAL.class
+	private static final Logger logger = Logger.getLogger(JOALUtil.class
 			.getName());
 
 	private ArrayList buffers;
@@ -57,7 +57,7 @@ public class LibOAL {
 
 	private EAX eax;
 
-	public LibOAL() {
+	public JOALUtil() {
 		try {
 			ALut.alutInit();
 			al = ALFactory.getAL();

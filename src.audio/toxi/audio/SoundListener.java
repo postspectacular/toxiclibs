@@ -25,7 +25,7 @@ import net.java.games.joal.AL;
 
 public class SoundListener extends Vec3D {
 
-	private LibOAL liboal;
+	private JOALUtil liboal;
 
 	private float[] pos = { 0.0f, 0.0f, 0.0f };
 
@@ -33,7 +33,7 @@ public class SoundListener extends Vec3D {
 
 	private float[] orient = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
 
-	protected SoundListener(LibOAL lib) {
+	protected SoundListener(JOALUtil lib) {
 		super();
 		liboal = lib;
 		setGain(1f);

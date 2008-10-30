@@ -19,7 +19,7 @@ public class MultiTimbralManager {
 	protected int maxSources;
 	protected int currIndex;
 
-	public MultiTimbralManager(LibOAL liboal, int num) {
+	public MultiTimbralManager(JOALUtil liboal, int num) {
 		logger.info("attempting to allocate " + num + " audio voices");
 		AudioSource[] tmp = liboal.generateSources(num);
 		maxSources = tmp.length;
