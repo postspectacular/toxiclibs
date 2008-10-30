@@ -1,0 +1,4 @@
+0002
+--------------------------------------------------------------------------------
+A TypedProperties: added new load method & accessors to parse arrays
+A new class ArrayUtils: shuffle & reverse methods for arrays

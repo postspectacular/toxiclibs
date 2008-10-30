@@ -91,11 +91,11 @@ public class TypedProperties extends Properties {
 	 * Returns a property as float.
 	 * 
 	 * @param id
-	 * @param defVal
-	 * @return
+	 * @param defaultValue
+	 * @return prop value
 	 */
-	public float getFloat(String id, float defVal) {
-		return Float.parseFloat(getProperty(id, "" + defVal));
+	public float getFloat(String id, float defaultValue) {
+		return Float.parseFloat(getProperty(id, "" + defaultValue));
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class TypedProperties extends Properties {
 	 * supplying an empty int[] array as default value.
 	 * 
 	 * @param id
-	 * @return
+	 * @return prop values as array
 	 */
 	public int[] getIntArray(String id) {
 		return getIntArray(id, new int[0]);
@@ -143,7 +143,7 @@ public class TypedProperties extends Properties {
 	 * automatically supplying an empty float[] array as default value.
 	 * 
 	 * @param id
-	 * @return
+	 * @return prop values as array
 	 */
 	public float[] getFloatArray(String id) {
 		return getFloatArray(id, new float[0]);
@@ -182,7 +182,7 @@ public class TypedProperties extends Properties {
 	 * supplying an empty byte[] as default value.
 	 * 
 	 * @param id
-	 * @return
+	 * @return prop values as array
 	 */
 	public byte[] getByteArray(String id) {
 		return getByteArray(id, new byte[0]);
