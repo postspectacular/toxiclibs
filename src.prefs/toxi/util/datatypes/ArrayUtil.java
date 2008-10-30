@@ -8,8 +8,8 @@ import java.util.Random;
 public class ArrayUtil {
 
 	/**
-	 * Rearranges the array items in random order. Operation is in-place, no
-	 * copy is created.
+	 * Rearranges the array items in random order using the default
+	 * java.util.Random generator. Operation is in-place, no copy is created.
 	 * 
 	 * @param array
 	 */
@@ -31,6 +31,71 @@ public class ArrayUtil {
 			Object swap = array[i];
 			array[i] = array[r];
 			array[r] = swap;
+		}
+	}
+
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
+	public static void reverse(Object[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			Object tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
+		}
+	}
+
+	public static void reverse(byte[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			byte tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
+		}
+	}
+
+	public static void reverse(short[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			short tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
+		}
+	}
+
+	public static void reverse(char[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			char tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
+		}
+	}
+
+	public static void reverse(int[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			int tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
+		}
+	}
+
+	public static void reverse(float[] array) {
+		int len = array.length - 1;
+		int len2 = array.length / 2;
+		for (int i = 0; i < len2; i++) {
+			float tmp = array[i];
+			array[i] = array[len - i];
+			array[len - i] = tmp;
 		}
 	}
 }

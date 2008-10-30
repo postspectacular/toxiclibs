@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import net.java.games.joal.AL;
 import net.java.games.joal.ALC;
 import net.java.games.joal.ALCcontext;
 import net.java.games.joal.ALCdevice;
@@ -43,6 +44,8 @@ public class OALUtil {
 
 	private ALC alc;
 
+	private AL al;
+
 	public OALUtil() {
 		try {
 			initOpenAL();
@@ -56,6 +59,7 @@ public class OALUtil {
 		AudioSystem3D.init();
 
 		alc = ALFactory.getALC();
+		al = ALFactory.getAL();
 
 		ALCdevice device;
 		ALCcontext context;
@@ -109,6 +113,7 @@ public class OALUtil {
 		alc.alcCloseDevice(curDevice);
 
 		alc = null;
+		al = null;
 	}
 
 	public Buffer loadBuffer(InputStream is)
@@ -149,5 +154,13 @@ public class OALUtil {
 	 */
 	public Source createSource(Buffer buffer) {
 		return AudioSystem3D.generateSource(buffer);
+	}
+
+	public AL getAL() {
+		return al;
+	}
+
+	public ALC getALContext() {
+		return alc;
 	}
 }

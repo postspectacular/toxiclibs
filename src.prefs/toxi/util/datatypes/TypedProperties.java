@@ -45,9 +45,7 @@ public class TypedProperties extends Properties {
 			load(new FileInputStream(path));
 			return true;
 		} catch (Exception e) {
-			logger
-					.severe("error opening config file: " + path
-							+ ". exiting...");
+			logger.warning("error opening config file: " + path);
 			return false;
 		}
 	}
@@ -101,6 +99,17 @@ public class TypedProperties extends Properties {
 	}
 
 	/**
+	 * Shorthand wrapper for {{@link #getIntArray(String, int[])} automatically
+	 * supplying an empty int[] array as default value.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public int[] getIntArray(String id) {
+		return getIntArray(id, new int[0]);
+	}
+
+	/**
 	 * Returns a comma delimited property value as int[] array. Non-integer
 	 * items will be ignored.
 	 * 
@@ -108,8 +117,9 @@ public class TypedProperties extends Properties {
 	 *            prop name
 	 * @return prop items as array
 	 */
-	public int[] getIntArray(String id) {
-		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+	public int[] getIntArray(String id, int[] defaultArray) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+				DELIM);
 		int pieces[] = new int[tokenizer.countTokens()];
 		int index = 0;
 		while (tokenizer.hasMoreTokens()) {
@@ -120,9 +130,23 @@ public class TypedProperties extends Properties {
 				// ignore non-integer items
 			}
 		}
-		int[] result = new int[index];
-		System.arraycopy(pieces, 0, result, 0, index);
-		return result;
+		if (index > 0) {
+			int[] result = new int[index];
+			System.arraycopy(pieces, 0, result, 0, index);
+			return result;
+		} else
+			return defaultArray;
+	}
+
+	/**
+	 * Shorthand wrapper for {@link #getFloatArray(String, float[])}
+	 * automatically supplying an empty float[] array as default value.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public float[] getFloatArray(String id) {
+		return getFloatArray(id, new float[0]);
 	}
 
 	/**
@@ -132,8 +156,9 @@ public class TypedProperties extends Properties {
 	 *            prop name
 	 * @return prop items as array
 	 */
-	public float[] getFloatArray(String id) {
-		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+	public float[] getFloatArray(String id, float[] defaultArray) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+				DELIM);
 		float pieces[] = new float[tokenizer.countTokens()];
 		int index = 0;
 		while (tokenizer.hasMoreTokens()) {
@@ -144,9 +169,23 @@ public class TypedProperties extends Properties {
 				// ignore
 			}
 		}
-		float[] result = new float[index];
-		System.arraycopy(pieces, 0, result, 0, index);
-		return result;
+		if (index > 0) {
+			float[] result = new float[index];
+			System.arraycopy(pieces, 0, result, 0, index);
+			return result;
+		} else
+			return defaultArray;
+	}
+
+	/**
+	 * Shorthand wrapper for {@link #getByteArray(String, byte[])} automatically
+	 * supplying an empty byte[] as default value.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public byte[] getByteArray(String id) {
+		return getByteArray(id, new byte[0]);
 	}
 
 	/**
@@ -157,8 +196,9 @@ public class TypedProperties extends Properties {
 	 *            prop name
 	 * @return prop values as array
 	 */
-	public byte[] getByteArray(String id) {
-		StringTokenizer tokenizer = new StringTokenizer(getProperty(id), DELIM);
+	public byte[] getByteArray(String id, byte[] defaultArray) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+				DELIM);
 		byte[] pieces = new byte[tokenizer.countTokens()];
 		int index = 0;
 		while (tokenizer.hasMoreTokens()) {
@@ -169,8 +209,11 @@ public class TypedProperties extends Properties {
 				// ignore non-integer items
 			}
 		}
-		byte[] result = new byte[index];
-		System.arraycopy(pieces, 0, result, 0, index);
-		return result;
+		if (index > 0) {
+			byte[] result = new byte[index];
+			System.arraycopy(pieces, 0, result, 0, index);
+			return result;
+		} else
+			return defaultArray;
 	}
 }
