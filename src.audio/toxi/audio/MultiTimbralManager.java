@@ -2,9 +2,6 @@ package toxi.audio;
 
 import java.util.logging.Logger;
 
-import net.java.games.sound3d.AudioSystem3D;
-import net.java.games.sound3d.Source;
-
 /**
  * Implements a manager to play a number of shared samples in a multitimbral
  * manner without interrupting/restarting the playback of currently playing
@@ -22,20 +19,20 @@ public class MultiTimbralManager {
 	protected int maxSources;
 	protected int currIndex;
 
-	public MultiTimbralManager(int num) {
+	public MultiTimbralManager(LibOAL liboal, int num) {
 		logger.info("attempting to allocate " + num + " audio voices");
-		Source[] tmp = AudioSystem3D.generateSources(num);
+		AudioSource[] tmp = liboal.generateSources(num);
 		maxSources = tmp.length;
 		pool = new SourceState[maxSources];
 		for (int i = 0; i < maxSources; i++) {
-			net.java.games.sound3d.Source src = tmp[i];
+			AudioSource src = tmp[i];
 			src.setReferenceDistance(100);
 			src.setGain(1);
 			pool[i] = new SourceState(src);
 		}
 	}
 
-	public Source getNextVoice() {
+	public AudioSource getNextVoice() {
 		boolean hasFreeSource = false;
 		int numIterations = 0;
 		int origID = currIndex;
@@ -78,11 +75,11 @@ public class MultiTimbralManager {
 	}
 
 	class SourceState {
-		Source src;
+		AudioSource src;
 		boolean isActive;
 		long startTime;
 
-		SourceState(Source src) {
+		SourceState(AudioSource src) {
 			this.src = src;
 		}
 
@@ -93,7 +90,7 @@ public class MultiTimbralManager {
 
 		boolean updateStatus() {
 			isActive = isActive
-					&& (src.getLooping() || src.getBuffersProcessed() == 0);
+					&& (src.isLooping() || src.getBuffersProcessed() == 0);
 			return isActive;
 		}
 	}
