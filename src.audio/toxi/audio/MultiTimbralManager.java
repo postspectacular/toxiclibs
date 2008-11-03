@@ -56,6 +56,7 @@ public class MultiTimbralManager {
 			for (int i = 0; i < maxSources; i++) {
 				if (pool[i].startTime < now) {
 					id = i;
+					pool[i].src.stop();
 					now = pool[i].startTime;
 				}
 			}
