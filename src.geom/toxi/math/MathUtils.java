@@ -169,4 +169,20 @@ public class MathUtils {
 	public static final int ceilPowerOf2(int x) {
 		return (int) Math.pow(2, (int) (Math.log(x) / LOG2 + 0.5));
 	}
+
+	public static final int min(int a, int b, int c) {
+		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
+	}
+
+	public static final float min(float a, float b, float c) {
+		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
+	}
+
+	public static final int max(int a, int b, int c) {
+		return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+	}
+
+	public static final float max(float a, float b, float c) {
+		return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+	}
 }

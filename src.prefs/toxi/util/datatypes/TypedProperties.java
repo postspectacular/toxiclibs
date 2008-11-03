@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2006-2008 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 package toxi.util.datatypes;
@@ -44,7 +44,8 @@ public class TypedProperties extends Properties {
 		try {
 			load(new FileInputStream(path));
 			return true;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			logger.warning("error opening config file: " + path);
 			return false;
 		}
@@ -126,7 +127,8 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Integer.parseInt(tokenizer.nextToken());
 				index++;
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				// ignore non-integer items
 			}
 		}
@@ -134,7 +136,8 @@ public class TypedProperties extends Properties {
 			int[] result = new int[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		} else
+		}
+		else
 			return defaultArray;
 	}
 
@@ -165,7 +168,8 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Float.parseFloat(tokenizer.nextToken());
 				index++;
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				// ignore
 			}
 		}
@@ -173,7 +177,8 @@ public class TypedProperties extends Properties {
 			float[] result = new float[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		} else
+		}
+		else
 			return defaultArray;
 	}
 
@@ -205,7 +210,8 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Byte.parseByte(tokenizer.nextToken());
 				index++;
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				// ignore non-integer items
 			}
 		}
@@ -213,7 +219,33 @@ public class TypedProperties extends Properties {
 			byte[] result = new byte[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		} else
+		}
+		else
+			return defaultArray;
+	}
+
+	public String[] getStringArray(String id) {
+		return getStringArray(id, new String[0]);
+	}
+
+	public String[] getStringArray(String id, String[] defaultArray) {
+		StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+				DELIM);
+		int index = 0;
+		String[] pieces = null;
+		while (tokenizer.hasMoreTokens()) {
+			if (pieces == null)
+				pieces = new String[tokenizer.countTokens()];
+			String token = tokenizer.nextToken();
+			if (token.length() > 0)
+				pieces[index++] = token;
+		}
+		if (index > 0) {
+			String[] result = new String[index];
+			System.arraycopy(pieces, 0, result, 0, index);
+			return result;
+		}
+		else
 			return defaultArray;
 	}
 }

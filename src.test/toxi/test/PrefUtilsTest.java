@@ -35,6 +35,12 @@ public class PrefUtilsTest extends TestCase {
 	public void testEmptyArray() {
 		int[] items = config.getIntArray("test.emptyarray");
 		assertEquals(0, items.length);
+		float[] fitems = config.getFloatArray("test.emptyarray");
+		assertEquals(0, fitems.length);
+		byte[] bitems = config.getByteArray("test.emptyarray");
+		assertEquals(0, bitems.length);
+		String[] sitems = config.getStringArray("test.emptyarray");
+		assertEquals(0, sitems.length);
 	}
 
 	public void testArrayReverse() {
@@ -43,5 +49,11 @@ public class PrefUtilsTest extends TestCase {
 		for (int i = 0; i < array.length; i++) {
 			System.out.println(array[i]);
 		}
+	}
+
+	public void testStringArray() {
+		String[] items = config.getStringArray("test.stringarray");
+		assertEquals(3, items.length);
+		assertEquals(true, items[1].equalsIgnoreCase("world"));
 	}
 }
