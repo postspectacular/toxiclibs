@@ -26,10 +26,10 @@ public class PrefUtilsTest extends TestCase {
 
 	public void testFloatArray() {
 		float[] items = config.getFloatArray("test.floatarray");
-		assertEquals(3.1415926f, items[0]);
+		assertEquals(3.1415926f, items[0], 0.001);
 		// 2nd item is NaN, so should be ignored
 		// and 23.42 becomes 2nd array item
-		assertEquals(23.42f, items[1]);
+		assertEquals(23.42f, items[1], 0.001);
 	}
 
 	public void testEmptyArray() {
