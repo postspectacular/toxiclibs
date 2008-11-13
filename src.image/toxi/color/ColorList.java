@@ -15,6 +15,10 @@ public class ColorList {
 
 	}
 
+	public ColorList(Color c) {
+		colors.add(c);
+	}
+
 	public ColorList(ArrayList colours) {
 		this.colors.addAll(colours);
 	}
@@ -39,6 +43,15 @@ public class ColorList {
 		return strategy.createListFromColour(c);
 	}
 
+	public static final ColorList createUsingStrategy(String name, Color c) {
+		ColorTheoryStrategy strategy = ColorTheoryFactory.getInstance()
+				.getStrategyForName(name);
+		if (strategy != null) {
+			strategy.createListFromColour(c);
+		}
+		return null;
+	}
+
 	public static final ColorList createFromARGBImage(int[] pixels, int num,
 			boolean uniqueOnly) {
 		ArrayList colours = new ArrayList();
@@ -57,8 +70,7 @@ public class ColorList {
 						}
 					}
 				} while (!isUnique);
-			}
-			else {
+			} else {
 				idx = MathUtils.random(pixels.length);
 			}
 			index[i] = idx;
@@ -179,8 +191,7 @@ public class ColorList {
 		Comparator comparator = criteria.getComparator();
 		if (comparator != null) {
 			return sortByComparator(comparator, isReversed);
-		}
-		else
+		} else
 			return null;
 	}
 
@@ -224,5 +235,12 @@ public class ColorList {
 
 	public ColorList getReverse() {
 		return new ColorList(colors).reverse();
+	}
+
+	public Color get(int i) {
+		if (i > 0 && i < colors.size())
+			return (Color) colors.get(i);
+		else
+			return null;
 	}
 }

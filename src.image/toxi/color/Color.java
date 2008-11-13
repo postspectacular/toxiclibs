@@ -89,6 +89,10 @@ public class Color {
 		return col;
 	}
 
+	public Color copy() {
+		return new Color(this);
+	}
+
 	public int toARGB() {
 		return (int) (rgb[0] * 255) << 16 | (int) (rgb[1] * 255) << 8
 				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;
@@ -139,8 +143,7 @@ public class Color {
 			rgb[0] = ((rgbInt >> 16) & 0xff) * INV8BIT;
 			rgb[1] = ((rgbInt >> 8) & 0xff) * INV8BIT;
 			rgb[2] = (rgbInt & 0xff) * INV8BIT;
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			rgb[0] = rgb[1] = rgb[2] = 0;
 		}
 		return rgb;
@@ -201,28 +204,23 @@ public class Color {
 				rgb[0] = v;
 				rgb[1] = t;
 				rgb[2] = p;
-			}
-			else if (i == 1) {
+			} else if (i == 1) {
 				rgb[0] = q;
 				rgb[1] = v;
 				rgb[2] = p;
-			}
-			else if (i == 2) {
+			} else if (i == 2) {
 				rgb[0] = p;
 				rgb[1] = v;
 				rgb[2] = t;
-			}
-			else if (i == 3) {
+			} else if (i == 3) {
 				rgb[0] = p;
 				rgb[1] = q;
 				rgb[2] = v;
-			}
-			else if (i == 4) {
+			} else if (i == 4) {
 				rgb[0] = t;
 				rgb[1] = p;
 				rgb[2] = v;
-			}
-			else {
+			} else {
 				rgb[0] = v;
 				rgb[1] = p;
 				rgb[2] = q;
@@ -365,12 +363,12 @@ public class Color {
 
 	public Color darken(float step) {
 		hsv[2] = MathUtils.clip(hsv[2] - step, 0, 1);
-		return this;
+		return setHSV(hsv);
 	}
 
 	public Color lighten(float step) {
 		hsv[2] = MathUtils.clip(hsv[2] + step, 0, 1);
-		return this;
+		return setHSV(hsv);
 	}
 
 	public Color getDarkened(float step) {
@@ -381,9 +379,27 @@ public class Color {
 		return new Color(this).lighten(step);
 	}
 
+	public Color saturate(float step) {
+		hsv[1] = MathUtils.clip(hsv[1] + step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public Color desaturate(float step) {
+		hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public Color getSaturated(float step) {
+		return new Color(this).saturate(step);
+	}
+
+	public Color getDesaturated(float step) {
+		return new Color(this).desaturate(step);
+	}
+
 	public Color rotateRYB(float theta) {
 		float h = hsv[0] * 360;
-		theta = theta % 360;
+		theta %= 360;
 
 		Vec2D[] wheel = new Vec2D[] { new Vec2D(0, 0), new Vec2D(15, 8),
 				new Vec2D(30, 17), new Vec2D(45, 26), new Vec2D(60, 34),
@@ -424,13 +440,19 @@ public class Color {
 		}
 
 		hsv[0] = (h % 360) / 360.0f;
-		setHSV(hsv);
-
-		return this;
+		return setHSV(hsv);
 	}
 
 	public Color getRotatedRYB(float angle) {
 		return new Color(this).rotateRYB(angle);
+	}
+
+	public Color complement() {
+		return rotateRYB(180);
+	}
+
+	public Color getComplement() {
+		return new Color(this).complement();
 	}
 
 	public Color invert() {
@@ -441,7 +463,8 @@ public class Color {
 	}
 
 	public Color getAnalog(float angle, float delta) {
-		Color clr = rotateRYB(angle * MathUtils.random(-1f, 1f));
+		Color clr = new Color(this)
+				.rotateRYB(angle * MathUtils.random(-1f, 1f));
 		clr.hsv[1] += delta * MathUtils.random(1f, 1f);
 		clr.hsv[2] += delta * MathUtils.random(1f, 1f);
 		return clr.setHSV(hsv);
@@ -493,6 +516,11 @@ public class Color {
 			return alpha;
 		}
 		return 0;
+	}
+
+	public void setHue(float hue) {
+		hsv[0] = MathUtils.clip(hue, 0, 1);
+		setHSV(hsv);
 	}
 
 }

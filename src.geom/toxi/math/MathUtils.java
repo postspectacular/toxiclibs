@@ -139,6 +139,14 @@ public class MathUtils {
 		return a < min ? min : (a > max ? max : a);
 	}
 
+	public static final float clipNormalized(float a) {
+		if (a < 0)
+			return 0;
+		if (a > 1)
+			return 1;
+		return a;
+	}
+
 	/**
 	 * This method is a *lot* faster than using (int)Math.floor(x).
 	 * 
