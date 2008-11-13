@@ -94,6 +94,13 @@ public class Color {
 				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;
 	}
 
+	public String toString() {
+		return "rgb: " + rgb[0] + "," + rgb[1] + "," + rgb[2] + " hsv: "
+				+ hsv[0] + "," + hsv[1] + "," + hsv[2] + " cmyk: " + cmyk[0]
+				+ "," + cmyk[1] + "," + cmyk[2] + "," + cmyk[3] + " alpha: "
+				+ alpha;
+	}
+
 	public Color setRGB(float[] newRGB) {
 		rgb[0] = MathUtils.clip(newRGB[0], 0, 1);
 		rgb[1] = MathUtils.clip(newRGB[1], 0, 1);
@@ -153,8 +160,8 @@ public class Color {
 	public static final float[] cmykToRGB(float c, float m, float y, float k,
 			float[] rgb) {
 		rgb[0] = 1.0f - MathUtils.min(1.0f, c + k);
-		rgb[0] = 1.0f - MathUtils.min(1.0f, m + k);
-		rgb[0] = 1.0f - MathUtils.min(1.0f, y + k);
+		rgb[1] = 1.0f - MathUtils.min(1.0f, m + k);
+		rgb[2] = 1.0f - MathUtils.min(1.0f, y + k);
 		return rgb;
 	}
 
@@ -248,6 +255,10 @@ public class Color {
 		h = h * (60.0f / 360);
 		if (h < 0)
 			h = h + 1.0f;
+
+		hsv[0] = h;
+		hsv[1] = s;
+		hsv[2] = v;
 		return hsv;
 	}
 
