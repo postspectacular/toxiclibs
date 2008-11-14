@@ -6,11 +6,32 @@ import toxi.math.MathUtils;
 
 public class Color {
 
+	protected static final Vec2D[] RYB_WHEEL = new Vec2D[] { new Vec2D(0, 0),
+			new Vec2D(15, 8), new Vec2D(30, 17), new Vec2D(45, 26),
+			new Vec2D(60, 34), new Vec2D(75, 41), new Vec2D(90, 48),
+			new Vec2D(105, 54), new Vec2D(120, 60), new Vec2D(135, 81),
+			new Vec2D(150, 103), new Vec2D(165, 123), new Vec2D(180, 138),
+			new Vec2D(195, 155), new Vec2D(210, 171), new Vec2D(225, 187),
+			new Vec2D(240, 204), new Vec2D(255, 219), new Vec2D(270, 234),
+			new Vec2D(285, 251), new Vec2D(300, 267), new Vec2D(315, 282),
+			new Vec2D(330, 298), new Vec2D(345, 329), new Vec2D(360, 0) };
+
 	public static final float BLACK_POINT = 0.02f;
 	public static final float WHITE_POINT = 0.99f;
 	public static final float GREY_THRESHOLD = 0.01f;
 
 	public static final float INV8BIT = 1f / 255;
+
+	public static final Color RED = newRGB(1, 0, 0);
+	public static final Color GREEN = newRGB(0, 1, 0);
+	public static final Color BLUE = newRGB(0, 0, 1);
+	public static final Color CYAN = newRGB(0, 1, 1);
+	public static final Color MAGENTA = newRGB(1, 0, 1);
+	public static final Color YELLOW = newRGB(1, 1, 0);
+	public static final Color BLACK = newRGB(0, 0, 0);
+	public static final Color WHITE = newRGB(1, 1, 1);
+
+	public static final double EPS = .001;
 
 	protected float[] rgb;
 	protected float[] cmyk;
@@ -61,9 +82,8 @@ public class Color {
 	}
 
 	public static final Color newARGB(int argb) {
-		return newRGBA(((argb >> 16) & 0xff) / 255f,
-				((argb >> 8) & 0xff) / 255f, (argb & 0xff) / 255f,
-				(argb >>> 24) / 255f);
+		return newRGBA(((argb >> 16) & 0xff) * INV8BIT, ((argb >> 8) & 0xff)
+				* INV8BIT, (argb & 0xff) * INV8BIT, (argb >>> 24) * INV8BIT);
 	}
 
 	public static final Color newHSV(float h, float s, float v) {
@@ -125,7 +145,9 @@ public class Color {
 	}
 
 	public Color setHSV(float[] newHSV) {
-		hsv[0] = MathUtils.clip(newHSV[0], 0, 1);
+		hsv[0] = newHSV[0] % 1;
+		if (hsv[0] < 0)
+			hsv[0]++;
 		hsv[1] = MathUtils.clip(newHSV[1], 0, 1);
 		hsv[2] = MathUtils.clip(newHSV[2], 0, 1);
 		hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
@@ -397,28 +419,18 @@ public class Color {
 		return new Color(this).desaturate(step);
 	}
 
-	public Color rotateRYB(float theta) {
+	public Color rotateRYB(int theta) {
 		float h = hsv[0] * 360;
 		theta %= 360;
 
-		Vec2D[] wheel = new Vec2D[] { new Vec2D(0, 0), new Vec2D(15, 8),
-				new Vec2D(30, 17), new Vec2D(45, 26), new Vec2D(60, 34),
-				new Vec2D(75, 41), new Vec2D(90, 48), new Vec2D(105, 54),
-				new Vec2D(120, 60), new Vec2D(135, 81), new Vec2D(150, 103),
-				new Vec2D(165, 123), new Vec2D(180, 138), new Vec2D(195, 155),
-				new Vec2D(210, 171), new Vec2D(225, 187), new Vec2D(240, 204),
-				new Vec2D(255, 219), new Vec2D(270, 234), new Vec2D(285, 251),
-				new Vec2D(300, 267), new Vec2D(315, 282), new Vec2D(330, 298),
-				new Vec2D(345, 329), new Vec2D(360, 0) };
-
 		float resultHue = 0;
-		for (int i = 0; i < wheel.length - 1; i++) {
-			Vec2D p = wheel[i];
-			Vec2D q = wheel[i + 1];
+		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
+			Vec2D p = RYB_WHEEL[i];
+			Vec2D q = RYB_WHEEL[i + 1];
 			if (q.y < p.y)
 				q.y += 360;
 			if (p.y <= h && h <= q.y) {
-				resultHue = 1.0f * p.x + (q.x - p.x) * (h - p.y) / (q.y - p.y);
+				resultHue = p.x + (q.x - p.x) * (h - p.y) / (q.y - p.y);
 				break;
 			}
 		}
@@ -428,13 +440,13 @@ public class Color {
 
 		// For the given angle, find out what hue is
 		// located there on the artistic color wheel.
-		for (int i = 0; i < wheel.length - 1; i++) {
-			Vec2D p = wheel[i];
-			Vec2D q = wheel[i + 1];
+		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
+			Vec2D p = RYB_WHEEL[i];
+			Vec2D q = RYB_WHEEL[i + 1];
 			if (q.y < p.y)
 				q.y += 360;
 			if (p.x <= resultHue && resultHue <= q.x) {
-				h = 1.0f * p.y + (q.y - p.y) * (resultHue - p.x) / (q.x - p.x);
+				h = p.y + (q.y - p.y) * (resultHue - p.x) / (q.x - p.x);
 				break;
 			}
 		}
@@ -443,7 +455,7 @@ public class Color {
 		return setHSV(hsv);
 	}
 
-	public Color getRotatedRYB(float angle) {
+	public Color getRotatedRYB(int angle) {
 		return new Color(this).rotateRYB(angle);
 	}
 
@@ -462,12 +474,15 @@ public class Color {
 		return setRGB(rgb);
 	}
 
+	public Color analog(float angle, float delta) {
+		rotateRYB((int) (angle * MathUtils.random(-1f, 1f)));
+		hsv[1] += delta * MathUtils.random(1f, 1f);
+		hsv[2] += delta * MathUtils.random(1f, 1f);
+		return setHSV(hsv);
+	}
+
 	public Color getAnalog(float angle, float delta) {
-		Color clr = new Color(this)
-				.rotateRYB(angle * MathUtils.random(-1f, 1f));
-		clr.hsv[1] += delta * MathUtils.random(1f, 1f);
-		clr.hsv[2] += delta * MathUtils.random(1f, 1f);
-		return clr.setHSV(hsv);
+		return new Color(this).analog(angle, delta);
 	}
 
 	public Color setSaturation(float saturation) {
@@ -523,4 +538,39 @@ public class Color {
 		setHSV(hsv);
 	}
 
+	public Color adjustConstrast(float amount) {
+		if (hsv[2] < 0.5)
+			return darken(amount);
+		else
+			return lighten(amount);
+	}
+
+	public Color adjustRGB(float r, float g, float b) {
+		return setRGB(new float[] { rgb[0] + r, rgb[1] + g, rgb[2] + b });
+	}
+
+	public Color adjustHSV(float h, float s, float v) {
+		return setHSV(new float[] { hsv[0] + h, hsv[1] + s, hsv[2] + v });
+	}
+
+	public boolean equals(Object o) {
+		if (o != null) {
+			try {
+				Color c = (Color) o;
+				float dr = c.rgb[0] - rgb[0];
+				float dg = c.rgb[1] - rgb[1];
+				float db = c.rgb[2] - rgb[2];
+				float da = c.alpha - alpha;
+				double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+				System.out.println(d);
+				return d < EPS;
+			} catch (ClassCastException e) {
+			}
+		}
+		return false;
+	}
+
+	public int hashCode() {
+		return (int) (rgb[0] * 1000000 + rgb[1] * 100000 + rgb[2] * 10000 + alpha * 1000);
+	}
 }

@@ -32,7 +32,7 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
 				new Vec2D(-1, -0.5f), new Vec2D(-2, 1) };
 		for (int i = 0; i < tones.length; i++) {
 			Vec2D currTone = tones[i];
-			Color c = clr.getRotatedRYB(theta * currTone.x);
+			Color c = clr.getRotatedRYB((int) (theta * currTone.x));
 			float t = 0.44f - currTone.y * 0.1f;
 			if (clr.brightness() - contrast * currTone.y < t)
 				c.setBrightness(t);
@@ -54,6 +54,6 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
 	}
 
 	public String toString() {
-		return NAME;
+		return NAME + " contrast: " + contrast + " theta: " + theta;
 	}
 }

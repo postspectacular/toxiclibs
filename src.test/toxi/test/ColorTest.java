@@ -46,4 +46,12 @@ public class ColorTest extends TestCase {
 			System.out.println(c);
 		}
 	}
+
+	public void testColorListContains() {
+		ColorList list = new ColorList();
+		list.add(Color.RED);
+		list.add(Color.GREEN);
+		list.add(Color.BLUE);
+		assertEquals(true, list.contains(Color.newRGB(0, 0, 0.995f)));
+	}
 }

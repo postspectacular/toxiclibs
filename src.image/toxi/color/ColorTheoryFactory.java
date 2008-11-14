@@ -14,6 +14,10 @@ public class ColorTheoryFactory {
 	public static final String LEFT_SPLIT_COMPLEMENTARY = LeftSplitComplementaryStrategy.NAME;
 	public static final String RIGHT_SPLIT_COMPLEMENTARY = LeftSplitComplementaryStrategy.NAME;
 	public static final String ANALOGOUS = AnalogousStrategy.NAME;
+	public static final String MONOCHROME = MonochromeTheoryStrategy.NAME;
+	public static final String TRIAD = TriadTheoryStrategy.NAME;
+	public static final String TETRAD = TetradTheoryStrategy.NAME;
+	public static final String COMPOUND = CompoundTheoryStrategy.NAME;
 
 	private static ColorTheoryFactory instance;
 
@@ -33,6 +37,10 @@ public class ColorTheoryFactory {
 		registerImplementation(new LeftSplitComplementaryStrategy());
 		registerImplementation(new RightSplitComplementaryStrategy());
 		registerImplementation(new AnalogousStrategy());
+		registerImplementation(new MonochromeTheoryStrategy());
+		registerImplementation(new TriadTheoryStrategy());
+		registerImplementation(new TetradTheoryStrategy());
+		registerImplementation(new CompoundTheoryStrategy());
 	}
 
 	public void registerImplementation(ColorTheoryStrategy impl) {

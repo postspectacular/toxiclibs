@@ -195,6 +195,10 @@ public class ColorList {
 			return null;
 	}
 
+	public ColorList sort() {
+		return sortByCriteria(ColorAccessCriteria.HUE, false);
+	}
+
 	public ColorList clusterSort(ColorAccessCriteria clusterCriteria,
 			ColorAccessCriteria subClusterCriteria, int numClusters,
 			boolean isReversed) {
@@ -242,5 +246,13 @@ public class ColorList {
 			return (Color) colors.get(i);
 		else
 			return null;
+	}
+
+	public boolean contains(Color c) {
+		for (Iterator i = colors.iterator(); i.hasNext();) {
+			if (i.next().equals(c))
+				return true;
+		}
+		return false;
 	}
 }
