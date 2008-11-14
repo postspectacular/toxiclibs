@@ -20,9 +20,10 @@
 
 package toxi.audio;
 
-import toxi.geom.Vec3D;
 import net.java.games.joal.AL;
+import toxi.geom.Vec3D;
 
+// TODO add fluid interface and add getters with Vec3D return type
 public class SoundListener extends Vec3D {
 
 	private JOALUtil liboal;
@@ -91,7 +92,7 @@ public class SoundListener extends Vec3D {
 
 	public final void setOrientation(float[] o) {
 		orient = o;
-		liboal.getAL().alListenerfv(AL.AL_VELOCITY, vel, 0);
+		liboal.getAL().alListenerfv(AL.AL_ORIENTATION, vel, 0);
 	}
 
 	public float[] getOrientation() {

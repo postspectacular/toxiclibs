@@ -30,6 +30,7 @@ public class MultiTimbralManager {
 			src.setGain(1);
 			pool[i] = new SourceState(src);
 		}
+		logger.info("done. all sources created.");
 	}
 
 	public AudioSource getNextVoice() {
@@ -56,10 +57,10 @@ public class MultiTimbralManager {
 			for (int i = 0; i < maxSources; i++) {
 				if (pool[i].startTime < now) {
 					id = i;
-					pool[i].src.stop();
 					now = pool[i].startTime;
 				}
 			}
+			pool[id].src.stop();
 			logger.warning("no free src, using oldest slot #" + id);
 			currIndex = (id + 1) % maxSources;
 		}
