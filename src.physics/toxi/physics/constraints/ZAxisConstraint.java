@@ -10,7 +10,7 @@ import toxi.physics.VerletParticle;
  * Constrains a particle's movement by only allowing free movement along the Z
  * axis of the point given in the constructor (XY are locked).
  */
-public class ZAxisConstraint implements IParticleConstraint {
+public class ZAxisConstraint implements ParticleConstraint {
 
 	/**
 	 * Constraint vector whose XY components are used to restrict particle

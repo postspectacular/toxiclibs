@@ -1,4 +1,4 @@
-package toxi.physics;
+package toxi.physics2d;
 
 /* 
  * Copyright (c) 2008 Karsten Schmidt
@@ -20,9 +20,10 @@ package toxi.physics;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import toxi.geom.AABB;
-import toxi.geom.Vec3D;
-import toxi.physics.constraints.ParticleConstraint;
+import java.awt.Rectangle;
+
+import toxi.geom.Vec2D;
+import toxi.physics2d.constraints.Particle2DConstraint;
 
 /**
  * An individual 3D particle for use by the VerletPhysics and VerletSpring
@@ -31,20 +32,20 @@ import toxi.physics.constraints.ParticleConstraint;
  * 
  * @author toxi
  */
-public class VerletParticle extends Vec3D {
-	protected Vec3D prev, temp;
+public class VerletParticle2D extends Vec2D {
+	protected Vec2D prev, temp;
 	protected boolean isLocked;
 
 	/**
 	 * Bounding box, by default set to null to disable
 	 */
-	public AABB bounds;
+	public Rectangle bounds;
 
 	/**
 	 * An optional particle constraint, called immediately after a particle is
 	 * updated (and only used if particle is unlocked (default)
 	 */
-	public ParticleConstraint constraint;
+	public Particle2DConstraint constraint;
 
 	/**
 	 * Particle weight, default = 1
@@ -56,12 +57,11 @@ public class VerletParticle extends Vec3D {
 	 * 
 	 * @param x
 	 * @param y
-	 * @param z
 	 */
-	public VerletParticle(float x, float y, float z) {
-		super(x, y, z);
-		prev = new Vec3D(this);
-		temp = new Vec3D();
+	public VerletParticle2D(float x, float y) {
+		super(x, y);
+		prev = new Vec2D(this);
+		temp = new Vec2D();
 	}
 
 	/**
@@ -69,11 +69,10 @@ public class VerletParticle extends Vec3D {
 	 * 
 	 * @param x
 	 * @param y
-	 * @param z
 	 * @param w
 	 */
-	public VerletParticle(float x, float y, float z, float w) {
-		this(x, y, z);
+	public VerletParticle2D(float x, float y, float w) {
+		this(x, y);
 		weight = w;
 	}
 
@@ -83,8 +82,8 @@ public class VerletParticle extends Vec3D {
 	 * @param v
 	 *            position
 	 */
-	public VerletParticle(Vec3D v) {
-		this(v.x, v.y, v.z);
+	public VerletParticle2D(Vec2D v) {
+		this(v.x, v.y);
 	}
 
 	/**
@@ -95,8 +94,8 @@ public class VerletParticle extends Vec3D {
 	 * @param w
 	 *            weight
 	 */
-	public VerletParticle(Vec3D v, float w) {
-		this(v.x, v.y, v.z);
+	public VerletParticle2D(Vec2D v, float w) {
+		this(v.x, v.y);
 		weight = w;
 	}
 
@@ -105,8 +104,8 @@ public class VerletParticle extends Vec3D {
 	 * 
 	 * @param p
 	 */
-	public VerletParticle(VerletParticle p) {
-		this(p.x, p.y, p.z);
+	public VerletParticle2D(VerletParticle2D p) {
+		this(p.x, p.y);
 		weight = p.weight;
 		isLocked = p.isLocked;
 	}
@@ -126,7 +125,7 @@ public class VerletParticle extends Vec3D {
 	 * 
 	 * @return itself
 	 */
-	public VerletParticle lock() {
+	public VerletParticle2D lock() {
 		isLocked = true;
 		return this;
 	}
@@ -136,7 +135,7 @@ public class VerletParticle extends Vec3D {
 	 * 
 	 * @return itself
 	 */
-	public VerletParticle unlock() {
+	public VerletParticle2D unlock() {
 		prev.set(this);
 		isLocked = false;
 		return this;

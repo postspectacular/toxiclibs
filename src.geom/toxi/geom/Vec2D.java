@@ -23,7 +23,8 @@ package toxi.geom;
 import java.awt.Rectangle;
 import java.util.Random;
 
-import toxi.math.*;
+import toxi.math.InterpolateStrategy;
+import toxi.math.MathUtils;
 
 /**
  * Comprehensive 2D vector class with additional basic intersection and
@@ -473,15 +474,15 @@ public class Vec2D {
 	}
 
 	public final Vec2D abs() {
-		x=MathUtils.abs(x);
-		y=MathUtils.abs(y);
+		x = MathUtils.abs(x);
+		y = MathUtils.abs(y);
 		return this;
 	}
-	
+
 	public final Vec2D getAbs() {
 		return new Vec2D(this).abs();
 	}
-	
+
 	/**
 	 * Creates a new vector whose components are the integer value of their
 	 * current values
@@ -549,7 +550,7 @@ public class Vec2D {
 	public Vec2D getSignum() {
 		return new Vec2D(this).signum();
 	}
-	
+
 	/**
 	 * Constructs a new vector consisting of the smallest components of both
 	 * vectors.
@@ -752,6 +753,17 @@ public class Vec2D {
 	 */
 	public final Vec2D getRotated(float theta) {
 		return new Vec2D(this).rotate(theta);
+	}
+
+	public final Vec2D perpendicular() {
+		float t = x;
+		x = -y;
+		y = t;
+		return this;
+	}
+
+	public final Vec2D getPerpendicular() {
+		return new Vec2D(this).perpendicular();
 	}
 
 	/**

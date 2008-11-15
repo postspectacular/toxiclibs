@@ -1,25 +1,25 @@
 /**
  * 
  */
-package toxi.physics.constraints;
+package toxi.physics2d.constraints;
 
-import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+import toxi.geom.Vec2D;
+import toxi.physics2d.VerletParticle2D;
 
 /**
  * Constrains a particle's movement by only allowing free movement along the Y
  * axis of the point given in the constructor (XZ are locked).
  */
 
-public class YAxisConstraint implements ParticleConstraint {
+public class YAxisConstraint implements Particle2DConstraint {
 
 	/**
 	 * Constraint vector whose XZ components are used to restrict particle
 	 * movement
 	 */
-	public Vec3D constraint;
+	public Vec2D constraint;
 
-	public YAxisConstraint(Vec3D constraint) {
+	public YAxisConstraint(Vec2D constraint) {
 		this.constraint = constraint;
 	}
 
@@ -28,9 +28,8 @@ public class YAxisConstraint implements ParticleConstraint {
 	 * 
 	 * @see toxi.physics.IParticleConstraint#apply(toxi.physics.VerletParticle)
 	 */
-	public void apply(VerletParticle p) {
+	public void apply(VerletParticle2D p) {
 		p.x = constraint.x;
-		p.z = constraint.z;
 	}
 
 }
