@@ -76,6 +76,10 @@ public class ColorRange extends ColorList {
 		for (Iterator i = list.iterator(); i.hasNext();) {
 			Color c = (Color) i.next();
 			hueConstraint.add(new FloatRange(c.hue(), c.hue()));
+			saturationConstraint.add(new FloatRange(c.saturation(), c
+					.saturation()));
+			brightnessConstraint.add(new FloatRange(c.brightness(), c
+					.brightness()));
 		}
 	}
 
@@ -200,6 +204,15 @@ public class ColorRange extends ColorList {
 			list.add(getColor(c, variance));
 		}
 		return list;
+	}
+
+	public ColorRange merge(Color c) {
+		hueConstraint.add(new FloatRange(c.hue(), c.hue()));
+		saturationConstraint
+				.add(new FloatRange(c.saturation(), c.saturation()));
+		brightnessConstraint
+				.add(new FloatRange(c.brightness(), c.brightness()));
+		return this;
 	}
 
 	public ColorRange merge(ColorRange range) {

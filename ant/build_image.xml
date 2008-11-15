@@ -42,6 +42,7 @@
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${release.dir}/prefutils.jar" />
 				<pathelement location="${lib.libs.path}" />
 			</classpath>
 		</javac>
@@ -82,6 +83,7 @@
 		<javadoc destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
 				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${release.dir}/prefutils.jar" />
 				<pathelement location="${lib.libs.path}" />
 			</classpath>
 			<packageset dir="${src.dir}" defaultexcludes="yes">

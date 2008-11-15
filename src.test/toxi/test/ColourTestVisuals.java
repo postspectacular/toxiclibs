@@ -56,7 +56,7 @@ public class ColourTestVisuals extends PApplet {
 			yoff += SWATCH_HEIGHT + 10;
 			idx++;
 		}
-		yoff = 300;
+		yoff = 240;
 		for (Iterator i = ColorRange.PRESETS.iterator(); i.hasNext();) {
 			ColorRange range = (ColorRange) i.next();
 			sorted = range.getColors(100);
@@ -65,9 +65,16 @@ public class ColourTestVisuals extends PApplet {
 			swatches(sorted, 10, yoff);
 			yoff += SWATCH_HEIGHT + 10;
 		}
-		ColorRange range = ColorRange.FRESH.getMerged(ColorRange.DARK);
-		sorted = range.getColors(Color.CYAN, 100, 0.15f);
-		sorted = sorted.sortByCriteria(ColorAccessCriteria.BRIGHTNESS, false);
+		ColorRange range = ColorRange.FRESH.getMerged(ColorRange.BRIGHT).merge(
+				ColorRange.LIGHT).merge(Color.WHITE);
+		sorted = range.getColors(Color.MAGENTA, 100, 0.35f);
+		sorted = sorted.sortByDistance(false);
+		swatches(sorted, 10, yoff);
+		yoff += SWATCH_HEIGHT + 10;
+		range = new ColorRange(ColorList.createUsingStrategy(ColorTheoryFactory
+				.getInstance().getStrategyForName(
+						ColorTheoryFactory.SPLIT_COMPLEMENTARY), Color.YELLOW));
+		sorted = range.getColors(100).sortByDistance(false);
 		swatches(sorted, 10, yoff);
 		yoff += SWATCH_HEIGHT + 10;
 	}
