@@ -16,8 +16,8 @@ public class Color {
 			new Vec2D(285, 251), new Vec2D(300, 267), new Vec2D(315, 282),
 			new Vec2D(330, 298), new Vec2D(345, 329), new Vec2D(360, 0) };
 
-	public static final float BLACK_POINT = 0.02f;
-	public static final float WHITE_POINT = 0.99f;
+	public static final float BLACK_POINT = 0.08f;
+	public static final float WHITE_POINT = 1f;
 	public static final float GREY_THRESHOLD = 0.01f;
 
 	public static final float INV8BIT = 1f / 255;
@@ -372,11 +372,11 @@ public class Color {
 	}
 
 	public boolean isWhite() {
-		return (rgb[0] > WHITE_POINT && rgb[1] > WHITE_POINT && rgb[2] > WHITE_POINT);
+		return (rgb[0] >= WHITE_POINT && rgb[0] == rgb[1] && rgb[0] == rgb[2]);
 	}
 
 	public boolean isBlack() {
-		return (rgb[0] < BLACK_POINT && rgb[1] < BLACK_POINT && rgb[2] < BLACK_POINT);
+		return (rgb[0] <= BLACK_POINT && rgb[0] == rgb[1] && rgb[0] == rgb[2]);
 	}
 
 	public boolean isGrey() {
@@ -562,7 +562,6 @@ public class Color {
 				float db = c.rgb[2] - rgb[2];
 				float da = c.alpha - alpha;
 				double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
-				System.out.println(d);
 				return d < EPS;
 			} catch (ClassCastException e) {
 			}

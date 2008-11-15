@@ -1,6 +1,7 @@
 package toxi.util.datatypes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import toxi.math.MathUtils;
@@ -67,6 +68,15 @@ public class FloatRangeSet {
 
 	public void add(FloatRange hues) {
 		items.add(hues);
+	}
+
+	public void addAll(FloatRangeSet set) {
+		for (Iterator i = set.items.iterator(); i.hasNext();) {
+			FloatRange r = (FloatRange) i.next();
+			if (!items.contains(r)) {
+				items.add(r);
+			}
+		}
 	}
 
 }

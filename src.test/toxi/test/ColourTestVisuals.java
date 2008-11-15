@@ -10,7 +10,6 @@ import toxi.color.ColorRange;
 import toxi.color.ColorTheoryFactory;
 import toxi.color.ColorTheoryStrategy;
 import toxi.math.MathUtils;
-import toxi.util.datatypes.FloatRange;
 
 public class ColourTestVisuals extends PApplet {
 
@@ -57,20 +56,20 @@ public class ColourTestVisuals extends PApplet {
 			yoff += SWATCH_HEIGHT + 10;
 			idx++;
 		}
-
-		ColorRange range = new ColorRange();
-		range.hueConstraint.getCurrent().max = 0.2f;
-		range.saturationConstraint.getCurrent().min = 0.8f;
-		range.brightnessConstraint.getCurrent().min = 0.25f;
-		range.addHueConstraint(new FloatRange(.66f, 0.75f));
-		range.addSaturationConstraint(new FloatRange(0, 0));
-		sorted = range.getColors(100).clusterSort(
-				ColorAccessCriteria.BRIGHTNESS, ColorAccessCriteria.SATURATION,
-				4, false);
-		swatches(sorted, 10, 400);
-		swatch(sorted.getDarkest(), 10, 450);
-		swatch(sorted.getAverage(), 20, 450);
-		swatch(sorted.getLightest(), 30, 450);
+		yoff = 300;
+		for (Iterator i = ColorRange.PRESETS.iterator(); i.hasNext();) {
+			ColorRange range = (ColorRange) i.next();
+			sorted = range.getColors(100);
+			sorted = sorted.sortByCriteria(ColorAccessCriteria.BRIGHTNESS,
+					false);
+			swatches(sorted, 10, yoff);
+			yoff += SWATCH_HEIGHT + 10;
+		}
+		ColorRange range = ColorRange.FRESH.getMerged(ColorRange.DARK);
+		sorted = range.getColors(Color.CYAN, 100, 0.15f);
+		sorted = sorted.sortByCriteria(ColorAccessCriteria.BRIGHTNESS, false);
+		swatches(sorted, 10, yoff);
+		yoff += SWATCH_HEIGHT + 10;
 	}
 
 	private void swatches(ColorList sorted, int x, int y) {

@@ -1,5 +1,6 @@
 package toxi.util.datatypes;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -97,5 +98,13 @@ public class ArrayUtil {
 			array[i] = array[len - i];
 			array[len - i] = tmp;
 		}
+	}
+
+	public static ArrayList arrayToList(Object[] array) {
+		ArrayList list = new ArrayList(array.length);
+		for (int i = 0; i < array.length; i++) {
+			list.add(array[i]);
+		}
+		return list;
 	}
 }

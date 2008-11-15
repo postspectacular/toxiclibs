@@ -215,10 +215,8 @@ public class ColorList {
 			if (c.getComponentValue(clusterCriteria) < d) {
 				ArrayList slice = new ArrayList();
 				slice.addAll(sorted.subList(i, j));
-				System.out.println("adding slice: " + slice.size());
 				Collections.sort(slice, subClusterCriteria.getComparator());
 				clusters.addAll(slice);
-				System.out.println("total: " + clusters.size());
 				d -= 1.0f / numClusters;
 				i = j;
 			}
