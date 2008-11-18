@@ -38,7 +38,7 @@ public class SimplexNoise {
 	 * Gradient vectors for 3D (pointing to mid points of all edges of a unit
 	 * cube)
 	 */
-	private static final int grad3[][] = { { 1, 1, 0 }, { -1, 1, 0 },
+	private static final int[][] grad3 = { { 1, 1, 0 }, { -1, 1, 0 },
 			{ 1, -1, 0 }, { -1, -1, 0 }, { 1, 0, 1 }, { -1, 0, 1 },
 			{ 1, 0, -1 }, { -1, 0, -1 }, { 0, 1, 1 }, { 0, -1, 1 },
 			{ 0, 1, -1 }, { 0, -1, -1 } };
@@ -47,7 +47,7 @@ public class SimplexNoise {
 	 * Gradient vectors for 4D (pointing to mid points of all edges of a unit 4D
 	 * hypercube)
 	 */
-	private static final int grad4[][] = { { 0, 1, 1, 1 }, { 0, 1, 1, -1 },
+	private static final int[][] grad4 = { { 0, 1, 1, 1 }, { 0, 1, 1, -1 },
 			{ 0, 1, -1, 1 }, { 0, 1, -1, -1 }, { 0, -1, 1, 1 },
 			{ 0, -1, 1, -1 }, { 0, -1, -1, 1 }, { 0, -1, -1, -1 },
 			{ 1, 0, 1, 1 }, { 1, 0, 1, -1 }, { 1, 0, -1, 1 }, { 1, 0, -1, -1 },
@@ -62,7 +62,7 @@ public class SimplexNoise {
 	/**
 	 * Permutation table
 	 */
-	private static final int p[] = { 151, 160, 137, 91, 90, 15, 131, 13, 201,
+	private static final int[] p = { 151, 160, 137, 91, 90, 15, 131, 13, 201,
 			95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37,
 			240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62,
 			94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33, 88, 237, 149, 56,
@@ -85,17 +85,18 @@ public class SimplexNoise {
 	 * To remove the need for index wrapping, double the permutation table
 	 * length
 	 */
-	private static int perm[] = new int[0x200];
+	private static int[] perm = new int[0x200];
 	static {
-		for (int i = 0; i < 0x200; i++)
+		for (int i = 0; i < 0x200; i++) {
 			perm[i] = p[i & 0xff];
+		}
 	}
 
 	/**
 	 * A lookup table to traverse the simplex around a given point in 4D.
 	 * Details can be found where this table is used, in the 4D noise method.
 	 */
-	private static final int simplex[][] = { { 0, 1, 2, 3 }, { 0, 1, 3, 2 },
+	private static final int[][] simplex = { { 0, 1, 2, 3 }, { 0, 1, 3, 2 },
 			{ 0, 0, 0, 0 }, { 0, 2, 3, 1 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
 			{ 0, 0, 0, 0 }, { 1, 2, 3, 0 }, { 0, 2, 1, 3 }, { 0, 0, 0, 0 },
 			{ 0, 3, 1, 2 }, { 0, 3, 2, 1 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
@@ -176,7 +177,8 @@ public class SimplexNoise {
 	 * @return noise value in range -1 ... +1.
 	 */
 	public static double noise(double x, double y) {
-		double n0, n1, n2; // Noise contributions from the three corners
+		double n0 = 0, n1 = 0, n2 = 0; // Noise contributions from the three
+		// corners
 		// Skew the input space to determine which simplex cell we're in
 		double s = (x + y) * F2; // Hairy factor for 2D
 		int i = fastfloor(x + s);
@@ -207,26 +209,20 @@ public class SimplexNoise {
 		int jj = j & 0xff;
 		// Calculate the contribution from the three corners
 		double t0 = 0.5 - x0 * x0 - y0 * y0;
-		if (t0 < 0)
-			n0 = 0.0;
-		else {
+		if (t0 > 0) {
 			t0 *= t0;
 			int gi0 = perm[ii + perm[jj]] % 12;
 			n0 = t0 * t0 * dot(grad3[gi0], x0, y0); // (x,y) of grad3 used for
 			// 2D gradient
 		}
 		double t1 = 0.5 - x1 * x1 - y1 * y1;
-		if (t1 < 0)
-			n1 = 0.0;
-		else {
+		if (t1 > 0) {
 			t1 *= t1;
 			int gi1 = perm[ii + i1 + perm[jj + j1]] % 12;
 			n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
 		}
 		double t2 = 0.5 - x2 * x2 - y2 * y2;
-		if (t2 < 0)
-			n2 = 0.0;
-		else {
+		if (t2 > 0) {
 			t2 *= t2;
 			int gi2 = perm[ii + 1 + perm[jj + 1]] % 12;
 			n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
@@ -248,7 +244,9 @@ public class SimplexNoise {
 	 * @return noise value in range -1 ... +1
 	 */
 	public static double noise(double x, double y, double z) {
-		double n0, n1, n2, n3; // Noise contributions from the four corners
+		double n0 = 0, n1 = 0, n2 = 0, n3 = 0;
+		// Noise contributions from the
+		// four corners
 		// Skew the input space to determine which simplex cell we're in
 		// final double F3 = 1.0 / 3.0;
 		double s = (x + y + z) * F3; // Very nice and simple skew factor
@@ -343,33 +341,25 @@ public class SimplexNoise {
 
 		// Calculate the contribution from the four corners
 		double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-		if (t0 < 0)
-			n0 = 0.0;
-		else {
+		if (t0 > 0) {
 			t0 *= t0;
 			int gi0 = perm[ii + perm[jj + perm[kk]]] % 12;
 			n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);
 		}
 		double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-		if (t1 < 0)
-			n1 = 0.0;
-		else {
+		if (t1 > 0) {
 			t1 *= t1;
 			int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;
 			n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);
 		}
 		double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-		if (t2 < 0)
-			n2 = 0.0;
-		else {
+		if (t2 > 0) {
 			t2 *= t2;
 			int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
 			n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);
 		}
 		double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-		if (t3 < 0)
-			n3 = 0.0;
-		else {
+		if (t3 > 0) {
 			t3 *= t3;
 			int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
 			n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);
@@ -394,7 +384,8 @@ public class SimplexNoise {
 	 */
 	public static double noise(double x, double y, double z, double w) {
 		// The skewing and unskewing factors are hairy again for the 4D case
-		double n0, n1, n2, n3, n4; // Noise contributions from the five corners
+		double n0 = 0, n1 = 0, n2 = 0, n3 = 0, n4 = 0; // Noise contributions
+														// from the five corners
 		// Skew the (x,y,z,w) space to determine which cell of 24 simplices
 		double s = (x + y + z + w) * F4; // Factor for 4D skewing
 		int i = fastfloor(x + s);
@@ -484,44 +475,34 @@ public class SimplexNoise {
 
 		// Calculate the contribution from the five corners
 		double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-		if (t0 < 0)
-			n0 = 0.0;
-		else {
+		if (t0 > 0) {
 			t0 *= t0;
 			int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32;
 			n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);
 		}
 		double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-		if (t1 < 0)
-			n1 = 0.0;
-		else {
+		if (t1 > 0) {
 			t1 *= t1;
 			int gi1 = perm[ii + i1
 					+ perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32;
 			n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);
 		}
 		double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-		if (t2 < 0)
-			n2 = 0.0;
-		else {
+		if (t2 > 0) {
 			t2 *= t2;
 			int gi2 = perm[ii + i2
 					+ perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32;
 			n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);
 		}
 		double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-		if (t3 < 0)
-			n3 = 0.0;
-		else {
+		if (t3 > 0) {
 			t3 *= t3;
 			int gi3 = perm[ii + i3
 					+ perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;
 			n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);
 		}
 		double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-		if (t4 < 0)
-			n4 = 0.0;
-		else {
+		if (t4 > 0) {
 			t4 *= t4;
 			int gi4 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
 			n4 = t4 * t4 * dot(grad4[gi4], x4, y4, z4, w4);

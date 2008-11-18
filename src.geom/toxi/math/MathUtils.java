@@ -88,7 +88,7 @@ public class MathUtils {
 
 	public static final float sqrt(float x) {
 		x = fastInverseSqrt(x);
-		if (x != 0.0f) {
+		if (x > 0) {
 			return 1.0f / x;
 		} else
 			return 0;
@@ -107,7 +107,7 @@ public class MathUtils {
 	public static final float fastPow(float a, float b) {
 		float x = Float.floatToRawIntBits(a);
 		x *= 1.0f / (1 << 23);
-		x = x - 127;
+		x -= 127;
 		float y = x - (int) Math.floor(x);
 		b *= x + (y - y * y) * 0.346607f;
 		y = b - (int) Math.floor(b);
