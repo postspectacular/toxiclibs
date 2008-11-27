@@ -14,7 +14,7 @@ import toxi.util.datatypes.FloatRangeSet;
 /**
  * 
  */
-public class ColorRange extends ColorList {
+public class ColorRange {
 
 	public static final float DEFAULT_VARIANCE = 0.035f;
 
