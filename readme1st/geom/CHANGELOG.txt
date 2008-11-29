@@ -1,7 +1,13 @@
 0012
 --------------------------------------------------------------------------------
+toxi.math.waves
 + FMSawtoothWave
 + FMSquareWave
 + FMBandwidthLimitedSquareWave
 + ConstantWave
 * made all wave properties public and deprecated the existing getters/setters
+
+toxi.math.MathUtils
+* deprecated fastInverseSqrt(), sqrt(), fastPow() since not faster at all anymore
+* renamed fastFloor() into floor() (it's still faster than Math.floor() though)
++ added degrees(), radians() for conversion

@@ -3,7 +3,7 @@
 	<!-- This needs to change with every release -->
 	<property name="project.name" value="geomutils" />
 	<property name="srcfolder.id" value="geom" />
-	<property name="lib.version" value="0013" />
+	<property name="lib.version" value="0012" />
 	<property name="lib.jdk.level" value="1.4" />
 	<property name="lib.zip.comment" value="${project.name} - assorted geometry classes for Java &amp; Processing v${lib.version}" />
 	<property name="lib.libs.path" value="../lib" />
