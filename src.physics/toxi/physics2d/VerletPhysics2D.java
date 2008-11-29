@@ -213,11 +213,11 @@ public class VerletPhysics2D {
 	 * Updates all spring connections based on new particle positions
 	 */
 	protected void updateSprings() {
-		for (int i = 0; i < numIterations; i++) {
+		for (int i = numIterations; i > 0; i--) {
 			Iterator is = springs.iterator();
 			while (is.hasNext()) {
 				VerletSpring2D s = (VerletSpring2D) is.next();
-				s.update();
+				s.update(i == 1);
 			}
 		}
 	}
@@ -229,12 +229,12 @@ public class VerletPhysics2D {
 		Iterator i = particles.iterator();
 		while (i.hasNext()) {
 			VerletParticle2D p = (VerletParticle2D) i.next();
-			// since this method is protected we rely here that worldBox isn't
-			// null
-			if (p.bounds != null)
+			if (p.bounds != null) {
 				p.constrain(p.bounds);
-			if (worldBounds != null)
+			}
+			if (worldBounds != null) {
 				p.constrain(worldBounds);
+			}
 		}
 	}
 

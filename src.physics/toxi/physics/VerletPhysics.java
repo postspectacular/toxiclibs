@@ -214,11 +214,11 @@ public class VerletPhysics {
 	 * Updates all spring connections based on new particle positions
 	 */
 	protected void updateSprings() {
-		for (int i = 0; i < numIterations; i++) {
+		for (int i = numIterations; i > 0; i--) {
 			Iterator is = springs.iterator();
 			while (is.hasNext()) {
 				VerletSpring s = (VerletSpring) is.next();
-				s.update();
+				s.update(i == 1);
 			}
 		}
 	}

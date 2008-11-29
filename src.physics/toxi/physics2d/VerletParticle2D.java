@@ -145,4 +145,8 @@ public class VerletParticle2D extends Vec2D {
 		if (constraint != null)
 			constraint.apply(this);
 	}
+
+	public Vec2D getPreviousPosition() {
+		return prev;
+	}
 }

@@ -18,7 +18,7 @@ public class VerletConstrainedSpring extends VerletSpring {
 	/**
 	 * Maximum relaxation distance for either end of the spring in world units
 	 */
-	public float limit = Integer.MAX_VALUE;
+	public float limit = Float.MAX_VALUE;
 
 	/**
 	 * @param a
@@ -44,23 +44,25 @@ public class VerletConstrainedSpring extends VerletSpring {
 		this.limit = limit;
 	}
 
-	protected void update() {
+	protected void update(boolean applyConstraints) {
 		Vec3D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + 0.00001f;
+		float dist = delta.magnitude() + EPS;
+		float invWeightA = 1f / a.weight;
+		float invWeightB = 1f / b.weight;
 		float normDistStrength = (dist - restLength)
-				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
+				/ (dist * (invWeightA + invWeightB)) * strength;
 		if (!a.isLocked && !isALocked) {
-			a
-					.addSelf(delta.scale(normDistStrength * 1 / a.weight)
-							.limit(limit));
-			a.applyConstraint();
+			a.addSelf(delta.scale(normDistStrength * invWeightA).limit(limit));
+			if (applyConstraints) {
+				a.applyConstraint();
+			}
 		}
 		if (!b.isLocked && !isBLocked) {
-			b
-					.subSelf(delta.scale(normDistStrength * 1 / b.weight)
-							.limit(limit));
-			b.applyConstraint();
+			b.subSelf(delta.scale(normDistStrength * invWeightB).limit(limit));
+			if (applyConstraints) {
+				b.applyConstraint();
+			}
 		}
 	}
 }

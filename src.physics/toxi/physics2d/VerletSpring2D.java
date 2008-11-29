@@ -42,6 +42,8 @@ import toxi.physics.VerletParticle;
  * 
  */
 public class VerletSpring2D {
+	protected static final float EPS = 1e-6f;
+
 	/**
 	 * Spring end points / particles
 	 */
@@ -50,13 +52,13 @@ public class VerletSpring2D {
 	/**
 	 * Spring rest length to which it always wants to return too
 	 */
-	public float restLength;
+	protected float restLength;
 
 	/**
 	 * Spring strength, possible value range depends on engine configuration
 	 * (time step, friction)
 	 */
-	public float strength;
+	protected float strength;
 
 	/**
 	 * Flag, if either particle is locked in space (only within the scope of
@@ -86,19 +88,25 @@ public class VerletSpring2D {
 	 * Updates both particle positions (if not locked) based on their current
 	 * distance, weight and spring configuration *
 	 */
-	protected void update() {
+	protected void update(boolean applyConstraints) {
 		Vec2D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + 0.00001f;
+		float dist = delta.magnitude() + EPS;
+		float invWeightA = 1f / a.weight;
+		float invWeightB = 1f / b.weight;
 		float normDistStrength = (dist - restLength)
-				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
+				/ (dist * (invWeightA + invWeightB)) * strength;
 		if (!a.isLocked && !isALocked) {
-			a.addSelf(delta.scale(normDistStrength * 1 / a.weight));
-			a.applyConstraint();
+			a.addSelf(delta.scale(normDistStrength * invWeightA));
+			if (applyConstraints) {
+				a.applyConstraint();
+			}
 		}
 		if (!b.isLocked && !isBLocked) {
-			b.addSelf(delta.scale(-normDistStrength * 1 / b.weight));
-			b.applyConstraint();
+			b.addSelf(delta.scale(-normDistStrength * invWeightB));
+			if (applyConstraints) {
+				b.applyConstraint();
+			}
 		}
 	}
 
@@ -125,5 +133,23 @@ public class VerletSpring2D {
 	public VerletSpring2D lockB(boolean s) {
 		isBLocked = s;
 		return this;
+	}
+
+	public VerletSpring2D setRestLength(float len) {
+		restLength = len;
+		return this;
+	}
+
+	public float getRestLength() {
+		return restLength;
+	}
+
+	public VerletSpring2D setStrength(float strength) {
+		this.strength = strength;
+		return this;
+	}
+
+	public float getStrength() {
+		return strength;
 	}
 }

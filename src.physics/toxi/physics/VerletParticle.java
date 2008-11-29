@@ -146,4 +146,8 @@ public class VerletParticle extends Vec3D {
 		if (constraint != null)
 			constraint.apply(this);
 	}
+
+	public Vec3D getPreviousPosition() {
+		return prev;
+	}
 }

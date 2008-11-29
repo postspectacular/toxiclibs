@@ -13,12 +13,13 @@ import toxi.geom.Vec2D;
  * @author toxi
  * 
  */
-public class VerletConstrainedSpring extends VerletSpring2D {
+public class VerletConstrainedSpring2D extends VerletSpring2D {
 
 	/**
 	 * Maximum relaxation distance for either end of the spring in world units
+	 * (by default unlimited until set by user)
 	 */
-	public float limit = Integer.MAX_VALUE;
+	public float limit = Float.MAX_VALUE;
 
 	/**
 	 * @param a
@@ -26,7 +27,7 @@ public class VerletConstrainedSpring extends VerletSpring2D {
 	 * @param len
 	 * @param str
 	 */
-	public VerletConstrainedSpring(VerletParticle2D a, VerletParticle2D b,
+	public VerletConstrainedSpring2D(VerletParticle2D a, VerletParticle2D b,
 			float len, float str) {
 		super(a, b, len, str);
 	}
@@ -38,29 +39,31 @@ public class VerletConstrainedSpring extends VerletSpring2D {
 	 * @param str
 	 * @param limit
 	 */
-	public VerletConstrainedSpring(VerletParticle2D a, VerletParticle2D b,
+	public VerletConstrainedSpring2D(VerletParticle2D a, VerletParticle2D b,
 			float len, float str, float limit) {
 		super(a, b, len, str);
 		this.limit = limit;
 	}
 
-	protected void update() {
+	protected void update(boolean applyConstraints) {
 		Vec2D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + 0.00001f;
+		float dist = delta.magnitude() + EPS;
+		float invWeightA = 1f / a.weight;
+		float invWeightB = 1f / b.weight;
 		float normDistStrength = (dist - restLength)
-				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
+				/ (dist * (invWeightA + invWeightB)) * strength;
 		if (!a.isLocked && !isALocked) {
-			a
-					.addSelf(delta.scale(normDistStrength * 1 / a.weight)
-							.limit(limit));
-			a.applyConstraint();
+			a.addSelf(delta.scale(normDistStrength * invWeightA).limit(limit));
+			if (applyConstraints) {
+				a.applyConstraint();
+			}
 		}
 		if (!b.isLocked && !isBLocked) {
-			b
-					.subSelf(delta.scale(normDistStrength * 1 / b.weight)
-							.limit(limit));
-			b.applyConstraint();
+			b.subSelf(delta.scale(normDistStrength * invWeightB).limit(limit));
+			if (applyConstraints) {
+				b.applyConstraint();
+			}
 		}
 	}
 }

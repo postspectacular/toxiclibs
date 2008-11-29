@@ -41,6 +41,9 @@ import toxi.geom.Vec3D;
  * 
  */
 public class VerletSpring {
+
+	protected static final float EPS = 1e-6f;
+
 	/**
 	 * Spring end points / particles
 	 */
@@ -82,21 +85,27 @@ public class VerletSpring {
 
 	/**
 	 * Updates both particle positions (if not locked) based on their current
-	 * distance, weight and spring configuration	 * 
+	 * distance, weight and spring configuration *
 	 */
-	protected void update() {
+	protected void update(boolean applyConstraints) {
 		Vec3D delta = b.sub(a);
 		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + 0.00001f;
+		float dist = delta.magnitude() + EPS;
+		float invWeightA = 1f / a.weight;
+		float invWeightB = 1f / b.weight;
 		float normDistStrength = (dist - restLength)
-				/ (dist * (1f / a.weight + 1f / b.weight)) * strength;
+				/ (dist * (invWeightA + invWeightB)) * strength;
 		if (!a.isLocked && !isALocked) {
-			a.addSelf(delta.scale(normDistStrength * 1 / a.weight));
-			a.applyConstraint();
+			a.addSelf(delta.scale(normDistStrength * invWeightA));
+			if (applyConstraints) {
+				a.applyConstraint();
+			}
 		}
 		if (!b.isLocked && !isBLocked) {
-			b.addSelf(delta.scale(-normDistStrength * 1 / b.weight));
-			b.applyConstraint();
+			b.addSelf(delta.scale(-normDistStrength * invWeightB));
+			if (applyConstraints) {
+				b.applyConstraint();
+			}
 		}
 	}
 
