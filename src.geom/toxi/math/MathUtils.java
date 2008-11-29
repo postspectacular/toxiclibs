@@ -37,6 +37,18 @@ public class MathUtils {
 
 	public static final float EPS = 1.1920928955078125E-7f;
 
+	public static final float DEG2RAD = PI / 180;
+
+	public static final float RAD2DEG = 180 / PI;
+
+	public static final float radians(float degrees) {
+		return degrees * DEG2RAD;
+	}
+
+	public static final float degrees(float radians) {
+		return radians * RAD2DEG;
+	}
+
 	public static final float random(float max) {
 		return (float) Math.random() * max;
 	}
@@ -78,6 +90,11 @@ public class MathUtils {
 		return x < 0 ? -x : x;
 	}
 
+	/**
+	 * @deprecated
+	 * @param x
+	 * @return
+	 */
 	public static final float fastInverseSqrt(float x) {
 		float half = 0.5F * x;
 		int i = Float.floatToIntBits(x);
@@ -86,6 +103,11 @@ public class MathUtils {
 		return x * (1.5F - half * x * x);
 	}
 
+	/**
+	 * @deprecated
+	 * @param x
+	 * @return
+	 */
 	public static final float sqrt(float x) {
 		x = fastInverseSqrt(x);
 		if (x > 0) {
@@ -103,6 +125,8 @@ public class MathUtils {
 	 * @param b
 	 *            a number
 	 * @return a^b
+	 * 
+	 * @deprecated
 	 */
 	public static final float fastPow(float a, float b) {
 		float x = Float.floatToRawIntBits(a);
@@ -139,6 +163,13 @@ public class MathUtils {
 		return a < min ? min : (a > max ? max : a);
 	}
 
+	/**
+	 * Clips the value to the 0.0 .. 1.0 interval
+	 * 
+	 * @param a
+	 * @return
+	 * @since 0012
+	 */
 	public static final float clipNormalized(float a) {
 		if (a < 0)
 			return 0;
@@ -153,9 +184,19 @@ public class MathUtils {
 	 * @param x
 	 *            value to be floored
 	 * @return floored value as integer
+	 * @since 0012
+	 */
+	public static final int floor(float x) {
+		return x >= 0 ? (int) x : (int) x - 1;
+	}
+
+	/**
+	 * @param x
+	 * @return
+	 * @deprecated renamed into {@link #floor(float)}
 	 */
 	public static final int fastFloor(float x) {
-		return x >= 0 ? (int) x : (int) x - 1;
+		return floor(x);
 	}
 
 	/**

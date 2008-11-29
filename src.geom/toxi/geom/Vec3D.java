@@ -22,7 +22,8 @@ package toxi.geom;
 
 import java.util.Random;
 
-import toxi.math.*;
+import toxi.math.InterpolateStrategy;
+import toxi.math.MathUtils;
 
 /**
  * Comprehensive 3D vector class with additional basic intersection and
@@ -525,8 +526,8 @@ public class Vec3D implements Comparable {
 	 * @return result as new vector
 	 */
 	public final Vec3D getFloored() {
-		return new Vec3D(MathUtils.fastFloor(x), MathUtils.fastFloor(y),
-				MathUtils.fastFloor(z));
+		return new Vec3D(MathUtils.floor(x), MathUtils.floor(y), MathUtils
+				.floor(z));
 	}
 
 	/**
@@ -536,9 +537,9 @@ public class Vec3D implements Comparable {
 	 * @return itself
 	 */
 	public final Vec3D floor() {
-		x = MathUtils.fastFloor(x);
-		y = MathUtils.fastFloor(y);
-		z = MathUtils.fastFloor(z);
+		x = MathUtils.floor(x);
+		y = MathUtils.floor(y);
+		z = MathUtils.floor(z);
 		return this;
 	}
 
@@ -560,9 +561,9 @@ public class Vec3D implements Comparable {
 	 * @return itself
 	 */
 	public final Vec3D frac() {
-		x -= MathUtils.fastFloor(x);
-		y -= MathUtils.fastFloor(y);
-		z -= MathUtils.fastFloor(z);
+		x -= MathUtils.floor(x);
+		y -= MathUtils.floor(y);
+		z -= MathUtils.floor(z);
 		return this;
 	}
 

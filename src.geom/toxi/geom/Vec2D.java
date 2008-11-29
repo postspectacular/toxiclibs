@@ -490,7 +490,7 @@ public class Vec2D {
 	 * @return result as new vector
 	 */
 	public final Vec2D getFloored() {
-		return new Vec2D(MathUtils.fastFloor(x), MathUtils.fastFloor(y));
+		return new Vec2D(MathUtils.floor(x), MathUtils.floor(y));
 	}
 
 	/**
@@ -500,8 +500,8 @@ public class Vec2D {
 	 * @return itself
 	 */
 	public final Vec2D floor() {
-		x = MathUtils.fastFloor(x);
-		y = MathUtils.fastFloor(y);
+		x = MathUtils.floor(x);
+		y = MathUtils.floor(y);
 		return this;
 	}
 
@@ -512,7 +512,7 @@ public class Vec2D {
 	 * @return result as new vector
 	 */
 	public final Vec2D getFrac() {
-		return new Vec2D(x - MathUtils.fastFloor(x), y - MathUtils.fastFloor(y));
+		return new Vec2D(x - MathUtils.floor(x), y - MathUtils.floor(y));
 	}
 
 	/**
@@ -522,8 +522,8 @@ public class Vec2D {
 	 * @return itself
 	 */
 	public final Vec2D frac() {
-		x -= MathUtils.fastFloor(x);
-		y -= MathUtils.fastFloor(y);
+		x -= MathUtils.floor(x);
+		y -= MathUtils.floor(y);
 		return this;
 	}
 
