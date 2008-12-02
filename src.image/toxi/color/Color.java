@@ -476,8 +476,8 @@ public class Color {
 
 	public Color analog(float angle, float delta) {
 		rotateRYB((int) (angle * MathUtils.random(-1f, 1f)));
-		hsv[1] += delta * MathUtils.random(1f, 1f);
-		hsv[2] += delta * MathUtils.random(1f, 1f);
+		hsv[1] += delta * MathUtils.random(-1f, 1f);
+		hsv[2] += delta * MathUtils.random(-1f, 1f);
 		return setHSV(hsv);
 	}
 
