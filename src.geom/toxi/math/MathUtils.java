@@ -66,11 +66,11 @@ public class MathUtils {
 	}
 
 	public static final float random(Random rnd, float max) {
-		return (float) rnd.nextDouble() * max;
+		return rnd.nextFloat() * max;
 	}
 
 	public static final float random(Random rnd, float min, float max) {
-		return (float) rnd.nextDouble() * (max - min) + min;
+		return rnd.nextFloat() * (max - min) + min;
 	}
 
 	public static final int random(Random rnd, int max) {
@@ -79,6 +79,25 @@ public class MathUtils {
 
 	public static final int random(Random rnd, int min, int max) {
 		return (int) (rnd.nextDouble() * (max - min)) + min;
+	}
+
+	/**
+	 * Returns a random number in the interval -1 .. +1.
+	 * 
+	 * @return random float
+	 */
+	public static final float normalizedRandom() {
+		return (float) Math.random() * 2 - 1;
+	}
+
+	/**
+	 * Returns a random number in the interval -1 .. +1 using the {@link Random}
+	 * instance provided.
+	 * 
+	 * @return random float
+	 */
+	public static final float normalizedRandom(Random rnd) {
+		return rnd.nextFloat() * 2 - 1;
 	}
 
 	public static final int abs(int x) {

@@ -46,6 +46,43 @@ public class Vec2D {
 	public static final Vec2D Y_AXIS = new Vec2D(0, 1);
 
 	/**
+	 * Creates a new vector from the given angle in the XY plane.
+	 * 
+	 * The resulting vector for theta=0 is equal to the positive X axis.
+	 * 
+	 * @param theta
+	 * @return new vector pointing into the direction of the passed in angle
+	 */
+	public static final Vec2D fromTheta(float theta) {
+		return new Vec2D((float) Math.cos(theta), (float) Math.sin(theta));
+	}
+
+	/**
+	 * Static factory method. Creates a new random unit vector using the default
+	 * Math.random() Random instance.
+	 * 
+	 * @return a new random normalized unit vector.
+	 */
+	public static final Vec2D randomVector() {
+		Vec2D rnd = new Vec2D((float) Math.random() * 2 - 1, (float) Math
+				.random() * 2 - 1);
+		return rnd.normalize();
+	}
+
+	/**
+	 * Static factory method. Creates a new random unit vector using the given
+	 * Random generator instance. I recommend to have a look at the
+	 * https://uncommons-maths.dev.java.net library for a good choice of
+	 * reliable and high quality random number generators.
+	 * 
+	 * @return a new random normalized unit vector.
+	 */
+	public static final Vec2D randomVector(Random rnd) {
+		Vec2D v = new Vec2D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1);
+		return v.normalize();
+	}
+
+	/**
 	 * X coordinate
 	 */
 	public float x;
@@ -83,253 +120,10 @@ public class Vec2D {
 		set(v);
 	}
 
-	/**
-	 * @return a new independent instance/copy of a given vector
-	 */
-	public final Vec2D copy() {
-		return new Vec2D(this);
-	}
-
-	/**
-	 * Sets all vector components to 0.
-	 * 
-	 * @return itself
-	 */
-	public final Vec2D clear() {
-		x = y = 0;
+	public final Vec2D abs() {
+		x = MathUtils.abs(x);
+		y = MathUtils.abs(y);
 		return this;
-	}
-
-	/**
-	 * Overrides coordinates with the ones of the given vector
-	 * 
-	 * @param v
-	 *            vector to be copied
-	 * @return itself
-	 */
-	public final Vec2D set(Vec2D v) {
-		x = v.x;
-		y = v.y;
-		return this;
-	}
-
-	/**
-	 * Overrides coordinates with the given values
-	 * 
-	 * @param x
-	 * @param y
-	 * @return itself
-	 */
-	public final Vec2D set(float x, float y) {
-		this.x = x;
-		this.y = y;
-		return this;
-	}
-
-	/**
-	 * Checks if vector has a magnitude of 0
-	 * 
-	 * @return true, if vector = {0,0,0}
-	 */
-	public final boolean isZeroVector() {
-		return x == 0 && y == 0;
-		// return magnitude()<FastMath.EPS;
-	}
-
-	/**
-	 * Produces the normalized version as a new vector
-	 * 
-	 * @return new vector
-	 */
-	public final Vec2D getNormalized() {
-		return new Vec2D(this).normalize();
-	}
-
-	/**
-	 * Normalizes the vector so that its magnitude = 1
-	 * 
-	 * @return itself
-	 */
-	public final Vec2D normalize() {
-		float mag = MathUtils.sqrt(x * x + y * y);
-		if (mag > 0) {
-			mag = 1f / mag;
-			x *= mag;
-			y *= mag;
-		}
-		return this;
-	}
-
-	/**
-	 * Creates a copy of the vector with its magnitude limited to the length
-	 * given
-	 * 
-	 * @param lim
-	 *            new maximum magnitude
-	 * @return result as new vector
-	 */
-	public final Vec2D getLimited(float lim) {
-		if (magSquared() > lim * lim) {
-			return getNormalized().scaleSelf(lim);
-		}
-		return new Vec2D(this);
-	}
-
-	/**
-	 * Limits the vector's magnitude to the length given
-	 * 
-	 * @param lim
-	 *            new maximum magnitude
-	 * @return itself
-	 */
-	public final Vec2D limit(float lim) {
-		if (magSquared() > lim * lim) {
-			return normalize().scaleSelf(lim);
-		}
-		return this;
-	}
-
-	/**
-	 * Forcefully fits the vector in the given rectangle.
-	 * 
-	 * @param r
-	 * @return itself
-	 */
-
-	public final Vec2D constrain(Rectangle r) {
-		x = MathUtils.max(MathUtils.min(x, r.x + r.width), r.x);
-		y = MathUtils.max(MathUtils.min(y, r.y + r.height), r.y);
-		return this;
-	}
-
-	/**
-	 * Creates a copy of the vector which forcefully fits in the given
-	 * rectangle.
-	 * 
-	 * @param r
-	 * @return fitted vector
-	 */
-	public final Vec2D getConstrained(Rectangle r) {
-		return new Vec2D(MathUtils.max(MathUtils.min(x, r.x + r.width), r.x),
-				MathUtils.max(MathUtils.min(y, r.y + r.height), r.y));
-	}
-
-	/**
-	 * Calculates the magnitude/eucledian length of the vector
-	 * 
-	 * @return vector length
-	 */
-	public final float magnitude() {
-		return MathUtils.sqrt(x * x + y * y);
-	}
-
-	/**
-	 * Calculates only the squared magnitude/length of the vector. Useful for
-	 * inverse square law applications and/or for speed reasons or if the real
-	 * eucledian distance is not required (e.g. sorting).
-	 * 
-	 * @return squared magnitude (x^2 + y^2)
-	 */
-	public final float magSquared() {
-		return x * x + y * y;
-	}
-
-	/**
-	 * Calculates distance to another vector
-	 * 
-	 * @param v
-	 *            non-null vector
-	 * @return distance or Float.NaN if v=null
-	 */
-	public final float distanceTo(Vec2D v) {
-		if (v != null) {
-			float dx = x - v.x;
-			float dy = y - v.y;
-			return MathUtils.sqrt(dx * dx + dy * dy);
-		} else {
-			return Float.NaN;
-		}
-	}
-
-	/**
-	 * Calculates the squared distance to another vector
-	 * 
-	 * @see #magSquared()
-	 * @param v
-	 *            non-null vector
-	 * @return distance or NaN if v=null
-	 */
-	public final float distanceToSquared(Vec2D v) {
-		if (v != null) {
-			float dx = x - v.x;
-			float dy = y - v.y;
-			return dx * dx + dy * dy;
-		} else {
-			return Float.NaN;
-		}
-	}
-
-	/**
-	 * Subtracts vector v and returns result as new vector.
-	 * 
-	 * @param v
-	 *            vector to be subtracted
-	 * @return result as new vector
-	 */
-	public final Vec2D sub(Vec2D v) {
-		return new Vec2D(x - v.x, y - v.y);
-	}
-
-	/**
-	 * Subtracts vector {a,b,c} and returns result as new vector.
-	 * 
-	 * @param a
-	 *            X coordinate
-	 * @param b
-	 *            Y coordinate
-	 * @return result as new vector
-	 */
-	public final Vec2D sub(float a, float b) {
-		return new Vec2D(x - a, y - b);
-	}
-
-	/**
-	 * Subtracts vector v and overrides coordinates with result.
-	 * 
-	 * @param v
-	 *            vector to be subtracted
-	 * @return itself
-	 */
-	public final Vec2D subSelf(Vec2D v) {
-		x -= v.x;
-		y -= v.y;
-		return this;
-	}
-
-	/**
-	 * Subtracts vector {a,b,c} and overrides coordinates with result.
-	 * 
-	 * @param a
-	 *            X coordinate
-	 * @param b
-	 *            Y coordinate
-	 * @return itself
-	 */
-	public final Vec2D subSelf(float a, float b) {
-		x -= a;
-		y -= b;
-		return this;
-	}
-
-	/**
-	 * Add vector v and returns result as new vector.
-	 * 
-	 * @param v
-	 *            vector to add
-	 * @return result as new vector
-	 */
-	public final Vec2D add(Vec2D v) {
-		return new Vec2D(x + v.x, y + v.y);
 	}
 
 	/**
@@ -346,16 +140,14 @@ public class Vec2D {
 	}
 
 	/**
-	 * Adds vector v and overrides coordinates with result.
+	 * Add vector v and returns result as new vector.
 	 * 
 	 * @param v
 	 *            vector to add
-	 * @return itself
+	 * @return result as new vector
 	 */
-	public final Vec2D addSelf(Vec2D v) {
-		x += v.x;
-		y += v.y;
-		return this;
+	public final Vec2D add(Vec2D v) {
+		return new Vec2D(x + v.x, y + v.y);
 	}
 
 	/**
@@ -374,315 +166,15 @@ public class Vec2D {
 	}
 
 	/**
-	 * Scales vector uniformly and returns result as new vector.
-	 * 
-	 * @param s
-	 *            scale factor
-	 * @return new vector
-	 */
-	public final Vec2D scale(float s) {
-		return new Vec2D(x * s, y * s);
-	}
-
-	/**
-	 * Scales vector non-uniformly and returns result as new vector.
-	 * 
-	 * @param a
-	 *            scale factor for X coordinate
-	 * @param b
-	 *            scale factor for Y coordinate
-	 * @return new vector
-	 */
-	public final Vec2D scale(float a, float b) {
-		return new Vec2D(x * a, y * b);
-	}
-
-	/**
-	 * Scales vector non-uniformly by vector v and returns result as new vector
-	 * 
-	 * @param s
-	 *            scale vector
-	 * @return new vector
-	 */
-	public final Vec2D scale(Vec2D s) {
-		return new Vec2D(x * s.x, y * s.y);
-	}
-
-	/**
-	 * Scales vector non-uniformly by vector v and overrides coordinates with
-	 * result
-	 * 
-	 * @param s
-	 *            scale vector
-	 * @return itself
-	 */
-
-	public final Vec2D scaleSelf(Vec2D s) {
-		x *= s.x;
-		y *= s.y;
-		return this;
-	}
-
-	/**
-	 * Scales vector uniformly and overrides coordinates with result
-	 * 
-	 * @param s
-	 *            scale factor
-	 * @return itself
-	 */
-	public final Vec2D scaleSelf(float s) {
-		x *= s;
-		y *= s;
-		return this;
-	}
-
-	/**
-	 * Scales vector non-uniformly by vector {a,b,c} and overrides coordinates
-	 * with result
-	 * 
-	 * @param a
-	 *            scale factor for X coordinate
-	 * @param b
-	 *            scale factor for Y coordinate
-	 * @return itself
-	 */
-	public final Vec2D scaleSelf(float a, float b) {
-		x *= a;
-		y *= b;
-		return this;
-	}
-
-	/**
-	 * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
-	 * with result
-	 * 
-	 * @return itself
-	 */
-	public final Vec2D invert() {
-		x *= -1;
-		y *= -1;
-		return this;
-	}
-
-	/**
-	 * Scales vector uniformly by factor -1 ( v = -v )
-	 * 
-	 * @return result as new vector
-	 */
-	public final Vec2D getInverted() {
-		return new Vec2D(-x, -y);
-	}
-
-	public final Vec2D abs() {
-		x = MathUtils.abs(x);
-		y = MathUtils.abs(y);
-		return this;
-	}
-
-	public final Vec2D getAbs() {
-		return new Vec2D(this).abs();
-	}
-
-	/**
-	 * Creates a new vector whose components are the integer value of their
-	 * current values
-	 * 
-	 * @return result as new vector
-	 */
-	public final Vec2D getFloored() {
-		return new Vec2D(MathUtils.floor(x), MathUtils.floor(y));
-	}
-
-	/**
-	 * Replaces the vector components with integer values of their current
-	 * values
-	 * 
-	 * @return itself
-	 */
-	public final Vec2D floor() {
-		x = MathUtils.floor(x);
-		y = MathUtils.floor(y);
-		return this;
-	}
-
-	/**
-	 * Creates a new vector whose components are the fractional part of their
-	 * current values
-	 * 
-	 * @return result as new vector
-	 */
-	public final Vec2D getFrac() {
-		return new Vec2D(x - MathUtils.floor(x), y - MathUtils.floor(y));
-	}
-
-	/**
-	 * Replaces the vector components with the fractional part of their current
-	 * values
-	 * 
-	 * @return itself
-	 */
-	public final Vec2D frac() {
-		x -= MathUtils.floor(x);
-		y -= MathUtils.floor(y);
-		return this;
-	}
-
-	/**
-	 * Replaces all vector components with the signum of their original values.
-	 * In other words if a components value was negative its new value will be
-	 * -1, if zero => 0, if positive => +1
-	 * 
-	 * @return itself
-	 */
-	public Vec2D signum() {
-		x = (x < 0 ? -1 : x == 0 ? 0 : 1);
-		y = (y < 0 ? -1 : y == 0 ? 0 : 1);
-		return this;
-	}
-
-	/**
-	 * Creates a new vector in which all components are replaced with the signum
-	 * of their original values. In other words if a components value was
-	 * negative its new value will be -1, if zero => 0, if positive => +1
-	 * 
-	 * @return result vector
-	 */
-	public Vec2D getSignum() {
-		return new Vec2D(this).signum();
-	}
-
-	/**
-	 * Constructs a new vector consisting of the smallest components of both
-	 * vectors.
+	 * Adds vector v and overrides coordinates with result.
 	 * 
 	 * @param v
-	 *            comparing vector
-	 * @return result as new vector
-	 */
-	public final Vec2D min(Vec2D v) {
-		return new Vec2D(MathUtils.min(x, v.x), MathUtils.min(y, v.y));
-	}
-
-	/**
-	 * Adjusts the vector components to the minimum values of both vectors
-	 * 
-	 * @param v
+	 *            vector to add
 	 * @return itself
 	 */
-	public final Vec2D minSelf(Vec2D v) {
-		x = MathUtils.min(x, v.x);
-		y = MathUtils.min(y, v.y);
-		return this;
-	}
-
-	/**
-	 * Constructs a new vector consisting of the largest components of both
-	 * vectors.
-	 * 
-	 * @param v
-	 * @return result as new vector
-	 */
-	public final Vec2D max(Vec2D v) {
-		return new Vec2D(MathUtils.max(x, v.x), MathUtils.max(y, v.y));
-	}
-
-	/**
-	 * Adjusts the vector components to the maximum values of both vectors
-	 * 
-	 * @param v
-	 * @return itself
-	 */
-	public final Vec2D maxSelf(Vec2D v) {
-		x = MathUtils.max(x, v.x);
-		y = MathUtils.max(y, v.y);
-		return this;
-	}
-
-	/**
-	 * Computes the scalar product (dot product) with the given vector.
-	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
-	 *      /a>
-	 * 
-	 * @param v
-	 * @return dot product
-	 */
-	public final float dot(Vec2D v) {
-		return x * v.x + y * v.y;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		StringBuffer sb = new StringBuffer(32);
-		sb.append("{x:").append(x).append(", y:").append(y).append("}");
-		return sb.toString();
-	}
-
-	/**
-	 * Interpolates the vector towards the given target vector, using linear
-	 * interpolation
-	 * 
-	 * @param v
-	 *            target vector
-	 * @param f
-	 *            interpolation factor (should be in the range 0..1)
-	 * @return result as new vector
-	 */
-	public final Vec2D interpolateTo(Vec2D v, float f) {
-		return new Vec2D(x + (v.x - x) * f, y + (v.y - y) * f);
-	}
-
-	/**
-	 * Interpolates the vector towards the given target vector, using the given
-	 * {@link InterpolateStrategy}
-	 * 
-	 * @param v
-	 *            target vector
-	 * @param f
-	 *            interpolation factor (should be in the range 0..1)
-	 * @param s
-	 *            InterpolateStrategy instance
-	 * @return result as new vector
-	 */
-	public Vec2D interpolateTo(Vec2D v, float f, InterpolateStrategy s) {
-		return new Vec2D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f));
-	}
-
-	/**
-	 * Interpolates the vector towards the given target vector, using linear
-	 * interpolation
-	 * 
-	 * @param v
-	 *            target vector
-	 * @param f
-	 *            interpolation factor (should be in the range 0..1)
-	 * @return itself, result overrides current vector
-	 */
-	public final Vec2D interpolateToSelf(Vec2D v, float f) {
-		x += (v.x - x) * f;
-		y += (v.y - y) * f;
-		return this;
-	}
-
-	/**
-	 * Interpolates the vector towards the given target vector, using the given
-	 * {@link InterpolateStrategy}
-	 * 
-	 * @param v
-	 *            target vector
-	 * @param f
-	 *            interpolation factor (should be in the range 0..1)
-	 * @param s
-	 *            InterpolateStrategy instance
-	 * @return itself, result overrides current vector
-	 */
-	public Vec2D interpolateToSelf(Vec2D v, float f, InterpolateStrategy s) {
-		x = s.interpolate(x, v.x, f);
-		y = s.interpolate(y, v.y, f);
+	public final Vec2D addSelf(Vec2D v) {
+		x += v.x;
+		y += v.y;
 		return this;
 	}
 
@@ -721,98 +213,13 @@ public class Vec2D {
 	}
 
 	/**
-	 * Computes the vector's direction in the XY plane (for example for 2D
-	 * points). The positive X axis equals 0 degrees.
+	 * Sets all vector components to 0.
 	 * 
-	 * @return rotation angle
-	 */
-	public final float heading() {
-		return (float) Math.atan2(y, x);
-	}
-
-	/**
-	 * Rotates the vector by the given angle around the Z axis.
-	 * 
-	 * @param theta
 	 * @return itself
 	 */
-	public final Vec2D rotate(float theta) {
-		float co = (float) Math.cos(theta);
-		float si = (float) Math.sin(theta);
-		float xx = co * x - si * y;
-		y = si * x + co * y;
-		x = xx;
+	public final Vec2D clear() {
+		x = y = 0;
 		return this;
-	}
-
-	/**
-	 * Creates a new vector rotated by the given angle around the Z axis.
-	 * 
-	 * @param theta
-	 * @return rotated vector
-	 */
-	public final Vec2D getRotated(float theta) {
-		return new Vec2D(this).rotate(theta);
-	}
-
-	public final Vec2D perpendicular() {
-		float t = x;
-		x = -y;
-		y = t;
-		return this;
-	}
-
-	public final Vec2D getPerpendicular() {
-		return new Vec2D(this).perpendicular();
-	}
-
-	/**
-	 * Calculates the distance of the vector to the given sphere in the
-	 * specified direction. A sphere is defined by a 3D point and a radius.
-	 * Normalized directional vectors expected.
-	 * 
-	 * @param rayDir
-	 *            intersection direction
-	 * @param circleOrigin
-	 * @param circleRadius
-	 * @return distance to sphere in world units, -1 if no intersection.
-	 */
-
-	public float intersectRayCircle(Vec2D rayDir, Vec2D circleOrigin,
-			float circleRadius) {
-		Vec2D q = circleOrigin.sub(this);
-		float c = q.magnitude();
-		float v = q.dot(rayDir);
-		float d = circleRadius * circleRadius - (c * c - v * v);
-
-		// If there was no intersection, return -1
-		if (d < 0.0)
-			return -1;
-
-		// Return the distance to the [first] intersecting point
-		return v - (float) Math.sqrt(d);
-	}
-
-	/**
-	 * Checks if point vector is inside the triangle created by the points a, b
-	 * and c. These points will create a plane and the point checked will have
-	 * to be on this plane in the region between a,b,c.
-	 * 
-	 * Note: The triangle must be defined in clockwise order a,b,c
-	 * 
-	 * @return true, if point is in triangle.
-	 */
-
-	public boolean isInTriangle(Vec2D a, Vec2D b, Vec2D c) {
-		Vec2D v1 = sub(a).normalize();
-		Vec2D v2 = sub(b).normalize();
-		Vec2D v3 = sub(c).normalize();
-
-		float total_angles = (float) Math.acos(v1.dot(v2));
-		total_angles += (float) Math.acos(v2.dot(v3));
-		total_angles += (float) Math.acos(v3.dot(v1));
-
-		return (MathUtils.abs(total_angles - MathUtils.TWO_PI) <= 0.005f);
 	}
 
 	/**
@@ -885,6 +292,304 @@ public class Vec2D {
 	}
 
 	/**
+	 * Forcefully fits the vector in the given rectangle.
+	 * 
+	 * @param r
+	 * @return itself
+	 */
+
+	public final Vec2D constrain(Rectangle r) {
+		x = MathUtils.clip(x, r.x, r.x + r.width);
+		y = MathUtils.clip(y, r.y, r.y + r.height);
+		return this;
+	}
+
+	/**
+	 * @return a new independent instance/copy of a given vector
+	 */
+	public final Vec2D copy() {
+		return new Vec2D(this);
+	}
+
+	/**
+	 * Calculates distance to another vector
+	 * 
+	 * @param v
+	 *            non-null vector
+	 * @return distance or Float.NaN if v=null
+	 */
+	public final float distanceTo(Vec2D v) {
+		if (v != null) {
+			float dx = x - v.x;
+			float dy = y - v.y;
+			return (float) Math.sqrt(dx * dx + dy * dy);
+		} else {
+			return Float.NaN;
+		}
+	}
+
+	/**
+	 * Calculates the squared distance to another vector
+	 * 
+	 * @see #magSquared()
+	 * @param v
+	 *            non-null vector
+	 * @return distance or NaN if v=null
+	 */
+	public final float distanceToSquared(Vec2D v) {
+		if (v != null) {
+			float dx = x - v.x;
+			float dy = y - v.y;
+			return dx * dx + dy * dy;
+		} else {
+			return Float.NaN;
+		}
+	}
+
+	/**
+	 * Computes the scalar product (dot product) with the given vector.
+	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
+	 *      /a>
+	 * 
+	 * @param v
+	 * @return dot product
+	 */
+	public final float dot(Vec2D v) {
+		return x * v.x + y * v.y;
+	}
+
+	/**
+	 * Replaces the vector components with integer values of their current
+	 * values
+	 * 
+	 * @return itself
+	 */
+	public final Vec2D floor() {
+		x = MathUtils.floor(x);
+		y = MathUtils.floor(y);
+		return this;
+	}
+
+	/**
+	 * Replaces the vector components with the fractional part of their current
+	 * values
+	 * 
+	 * @return itself
+	 */
+	public final Vec2D frac() {
+		x -= MathUtils.floor(x);
+		y -= MathUtils.floor(y);
+		return this;
+	}
+
+	public final Vec2D getAbs() {
+		return new Vec2D(this).abs();
+	}
+
+	/**
+	 * Creates a copy of the vector which forcefully fits in the given
+	 * rectangle.
+	 * 
+	 * @param r
+	 * @return fitted vector
+	 */
+	public final Vec2D getConstrained(Rectangle r) {
+		return new Vec2D(this).constrain(r);
+	}
+
+	/**
+	 * Creates a new vector whose components are the integer value of their
+	 * current values
+	 * 
+	 * @return result as new vector
+	 */
+	public final Vec2D getFloored() {
+		return new Vec2D(this).floor();
+	}
+
+	/**
+	 * Creates a new vector whose components are the fractional part of their
+	 * current values
+	 * 
+	 * @return result as new vector
+	 */
+	public final Vec2D getFrac() {
+		return new Vec2D(this).frac();
+	}
+
+	/**
+	 * Scales vector uniformly by factor -1 ( v = -v )
+	 * 
+	 * @return result as new vector
+	 */
+	public final Vec2D getInverted() {
+		return new Vec2D(-x, -y);
+	}
+
+	/**
+	 * Creates a copy of the vector with its magnitude limited to the length
+	 * given
+	 * 
+	 * @param lim
+	 *            new maximum magnitude
+	 * @return result as new vector
+	 */
+	public final Vec2D getLimited(float lim) {
+		if (magSquared() > lim * lim) {
+			return getNormalized().scaleSelf(lim);
+		}
+		return new Vec2D(this);
+	}
+
+	/**
+	 * Produces the normalized version as a new vector
+	 * 
+	 * @return new vector
+	 */
+	public final Vec2D getNormalized() {
+		return new Vec2D(this).normalize();
+	}
+
+	public final Vec2D getPerpendicular() {
+		return new Vec2D(this).perpendicular();
+	}
+
+	/**
+	 * Creates a new vector rotated by the given angle around the Z axis.
+	 * 
+	 * @param theta
+	 * @return rotated vector
+	 */
+	public final Vec2D getRotated(float theta) {
+		return new Vec2D(this).rotate(theta);
+	}
+
+	/**
+	 * Creates a new vector in which all components are replaced with the signum
+	 * of their original values. In other words if a components value was
+	 * negative its new value will be -1, if zero => 0, if positive => +1
+	 * 
+	 * @return result vector
+	 */
+	public Vec2D getSignum() {
+		return new Vec2D(this).signum();
+	}
+
+	/**
+	 * Computes the vector's direction in the XY plane (for example for 2D
+	 * points). The positive X axis equals 0 degrees.
+	 * 
+	 * @return rotation angle
+	 */
+	public final float heading() {
+		return (float) Math.atan2(y, x);
+	}
+
+	/**
+	 * Interpolates the vector towards the given target vector, using linear
+	 * interpolation
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @return result as new vector
+	 */
+	public final Vec2D interpolateTo(Vec2D v, float f) {
+		return new Vec2D(x + (v.x - x) * f, y + (v.y - y) * f);
+	}
+
+	/**
+	 * Interpolates the vector towards the given target vector, using the given
+	 * {@link InterpolateStrategy}
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @param s
+	 *            InterpolateStrategy instance
+	 * @return result as new vector
+	 */
+	public Vec2D interpolateTo(Vec2D v, float f, InterpolateStrategy s) {
+		return new Vec2D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f));
+	}
+
+	/**
+	 * Interpolates the vector towards the given target vector, using linear
+	 * interpolation
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @return itself, result overrides current vector
+	 */
+	public final Vec2D interpolateToSelf(Vec2D v, float f) {
+		x += (v.x - x) * f;
+		y += (v.y - y) * f;
+		return this;
+	}
+
+	/**
+	 * Interpolates the vector towards the given target vector, using the given
+	 * {@link InterpolateStrategy}
+	 * 
+	 * @param v
+	 *            target vector
+	 * @param f
+	 *            interpolation factor (should be in the range 0..1)
+	 * @param s
+	 *            InterpolateStrategy instance
+	 * @return itself, result overrides current vector
+	 */
+	public Vec2D interpolateToSelf(Vec2D v, float f, InterpolateStrategy s) {
+		x = s.interpolate(x, v.x, f);
+		y = s.interpolate(y, v.y, f);
+		return this;
+	}
+
+	/**
+	 * Calculates the distance of the vector to the given sphere in the
+	 * specified direction. A sphere is defined by a 3D point and a radius.
+	 * Normalized directional vectors expected.
+	 * 
+	 * @param rayDir
+	 *            intersection direction
+	 * @param circleOrigin
+	 * @param circleRadius
+	 * @return distance to sphere in world units, -1 if no intersection.
+	 */
+
+	public float intersectRayCircle(Vec2D rayDir, Vec2D circleOrigin,
+			float circleRadius) {
+		Vec2D q = circleOrigin.sub(this);
+		float distSquared = q.magSquared();
+		float v = q.dot(rayDir);
+		float d = circleRadius * circleRadius - (distSquared - v * v);
+
+		// If there was no intersection, return -1
+		if (d < 0.0)
+			return -1;
+
+		// Return the distance to the [first] intersecting point
+		return v - (float) Math.sqrt(d);
+	}
+
+	/**
+	 * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
+	 * with result
+	 * 
+	 * @return itself
+	 */
+	public final Vec2D invert() {
+		x *= -1;
+		y *= -1;
+		return this;
+	}
+
+	/**
 	 * Checks if the point is inside the given sphere.
 	 * 
 	 * @param sO
@@ -895,7 +600,7 @@ public class Vec2D {
 	 */
 
 	public boolean isInCircle(Vec2D sO, float sR) {
-		float d = this.sub(sO).magSquared();
+		float d = sub(sO).magSquared();
 		return (d <= sR * sR);
 	}
 
@@ -912,6 +617,348 @@ public class Vec2D {
 		if (y < r.y || y > r.y + r.height)
 			return false;
 		return true;
+	}
+
+	/**
+	 * Checks if point vector is inside the triangle created by the points a, b
+	 * and c. These points will create a plane and the point checked will have
+	 * to be on this plane in the region between a,b,c.
+	 * 
+	 * Note: The triangle must be defined in clockwise order a,b,c
+	 * 
+	 * @return true, if point is in triangle.
+	 */
+
+	public boolean isInTriangle(Vec2D a, Vec2D b, Vec2D c) {
+		Vec2D v1 = sub(a).normalize();
+		Vec2D v2 = sub(b).normalize();
+		Vec2D v3 = sub(c).normalize();
+
+		double total_angles = Math.acos(v1.dot(v2));
+		total_angles += Math.acos(v2.dot(v3));
+		total_angles += Math.acos(v3.dot(v1));
+
+		return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
+	}
+
+	/**
+	 * Checks if vector has a magnitude of 0
+	 * 
+	 * @return true, if vector = {0,0,0}
+	 */
+	public final boolean isZeroVector() {
+		return x == 0 && y == 0;
+		// return magnitude()<FastMath.EPS;
+	}
+
+	public final Vec2D jitter(float j) {
+		return jitter(j, j);
+	}
+
+	/**
+	 * Adds random jitter to the vector.
+	 * 
+	 * @param jx
+	 *            maximum x jitter
+	 * @param jy
+	 *            maximum y jitter
+	 * @return itself
+	 */
+	public final Vec2D jitter(float jx, float jy) {
+		x += MathUtils.normalizedRandom() * jx;
+		y += MathUtils.normalizedRandom() * jy;
+		return this;
+	}
+
+	public final Vec2D jitter(Vec2D jv) {
+		return jitter(jv.x, jv.y);
+	}
+
+	/**
+	 * Limits the vector's magnitude to the length given
+	 * 
+	 * @param lim
+	 *            new maximum magnitude
+	 * @return itself
+	 */
+	public final Vec2D limit(float lim) {
+		if (magSquared() > lim * lim) {
+			return normalize().scaleSelf(lim);
+		}
+		return this;
+	}
+
+	/**
+	 * Calculates the magnitude/eucledian length of the vector
+	 * 
+	 * @return vector length
+	 */
+	public final float magnitude() {
+		return (float) Math.sqrt(x * x + y * y);
+	}
+
+	/**
+	 * Calculates only the squared magnitude/length of the vector. Useful for
+	 * inverse square law applications and/or for speed reasons or if the real
+	 * eucledian distance is not required (e.g. sorting).
+	 * 
+	 * @return squared magnitude (x^2 + y^2)
+	 */
+	public final float magSquared() {
+		return x * x + y * y;
+	}
+
+	/**
+	 * Constructs a new vector consisting of the largest components of both
+	 * vectors.
+	 * 
+	 * @param v
+	 * @return result as new vector
+	 */
+	public final Vec2D max(Vec2D v) {
+		return new Vec2D(MathUtils.max(x, v.x), MathUtils.max(y, v.y));
+	}
+
+	/**
+	 * Adjusts the vector components to the maximum values of both vectors
+	 * 
+	 * @param v
+	 * @return itself
+	 */
+	public final Vec2D maxSelf(Vec2D v) {
+		x = MathUtils.max(x, v.x);
+		y = MathUtils.max(y, v.y);
+		return this;
+	}
+
+	/**
+	 * Constructs a new vector consisting of the smallest components of both
+	 * vectors.
+	 * 
+	 * @param v
+	 *            comparing vector
+	 * @return result as new vector
+	 */
+	public final Vec2D min(Vec2D v) {
+		return new Vec2D(MathUtils.min(x, v.x), MathUtils.min(y, v.y));
+	}
+
+	/**
+	 * Adjusts the vector components to the minimum values of both vectors
+	 * 
+	 * @param v
+	 * @return itself
+	 */
+	public final Vec2D minSelf(Vec2D v) {
+		x = MathUtils.min(x, v.x);
+		y = MathUtils.min(y, v.y);
+		return this;
+	}
+
+	/**
+	 * Normalizes the vector so that its magnitude = 1
+	 * 
+	 * @return itself
+	 */
+	public final Vec2D normalize() {
+		float mag = (float) Math.sqrt(x * x + y * y);
+		if (mag > 0) {
+			x /= mag;
+			y /= mag;
+		}
+		return this;
+	}
+
+	public final Vec2D perpendicular() {
+		float t = x;
+		x = -y;
+		y = t;
+		return this;
+	}
+
+	/**
+	 * Rotates the vector by the given angle around the Z axis.
+	 * 
+	 * @param theta
+	 * @return itself
+	 */
+	public final Vec2D rotate(float theta) {
+		float co = (float) Math.cos(theta);
+		float si = (float) Math.sin(theta);
+		float xx = co * x - si * y;
+		y = si * x + co * y;
+		x = xx;
+		return this;
+	}
+
+	/**
+	 * Scales vector uniformly and returns result as new vector.
+	 * 
+	 * @param s
+	 *            scale factor
+	 * @return new vector
+	 */
+	public final Vec2D scale(float s) {
+		return new Vec2D(x * s, y * s);
+	}
+
+	/**
+	 * Scales vector non-uniformly and returns result as new vector.
+	 * 
+	 * @param a
+	 *            scale factor for X coordinate
+	 * @param b
+	 *            scale factor for Y coordinate
+	 * @return new vector
+	 */
+	public final Vec2D scale(float a, float b) {
+		return new Vec2D(x * a, y * b);
+	}
+
+	/**
+	 * Scales vector non-uniformly by vector v and returns result as new vector
+	 * 
+	 * @param s
+	 *            scale vector
+	 * @return new vector
+	 */
+	public final Vec2D scale(Vec2D s) {
+		return new Vec2D(x * s.x, y * s.y);
+	}
+
+	/**
+	 * Scales vector uniformly and overrides coordinates with result
+	 * 
+	 * @param s
+	 *            scale factor
+	 * @return itself
+	 */
+	public final Vec2D scaleSelf(float s) {
+		x *= s;
+		y *= s;
+		return this;
+	}
+
+	/**
+	 * Scales vector non-uniformly by vector {a,b,c} and overrides coordinates
+	 * with result
+	 * 
+	 * @param a
+	 *            scale factor for X coordinate
+	 * @param b
+	 *            scale factor for Y coordinate
+	 * @return itself
+	 */
+	public final Vec2D scaleSelf(float a, float b) {
+		x *= a;
+		y *= b;
+		return this;
+	}
+
+	/**
+	 * Scales vector non-uniformly by vector v and overrides coordinates with
+	 * result
+	 * 
+	 * @param s
+	 *            scale vector
+	 * @return itself
+	 */
+
+	public final Vec2D scaleSelf(Vec2D s) {
+		x *= s.x;
+		y *= s.y;
+		return this;
+	}
+
+	/**
+	 * Overrides coordinates with the given values
+	 * 
+	 * @param x
+	 * @param y
+	 * @return itself
+	 */
+	public final Vec2D set(float x, float y) {
+		this.x = x;
+		this.y = y;
+		return this;
+	}
+
+	/**
+	 * Overrides coordinates with the ones of the given vector
+	 * 
+	 * @param v
+	 *            vector to be copied
+	 * @return itself
+	 */
+	public final Vec2D set(Vec2D v) {
+		x = v.x;
+		y = v.y;
+		return this;
+	}
+
+	/**
+	 * Replaces all vector components with the signum of their original values.
+	 * In other words if a components value was negative its new value will be
+	 * -1, if zero => 0, if positive => +1
+	 * 
+	 * @return itself
+	 */
+	public Vec2D signum() {
+		x = (x < 0 ? -1 : x == 0 ? 0 : 1);
+		y = (y < 0 ? -1 : y == 0 ? 0 : 1);
+		return this;
+	}
+
+	/**
+	 * Subtracts vector {a,b,c} and returns result as new vector.
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @return result as new vector
+	 */
+	public final Vec2D sub(float a, float b) {
+		return new Vec2D(x - a, y - b);
+	}
+
+	/**
+	 * Subtracts vector v and returns result as new vector.
+	 * 
+	 * @param v
+	 *            vector to be subtracted
+	 * @return result as new vector
+	 */
+	public final Vec2D sub(Vec2D v) {
+		return new Vec2D(x - v.x, y - v.y);
+	}
+
+	/**
+	 * Subtracts vector {a,b,c} and overrides coordinates with result.
+	 * 
+	 * @param a
+	 *            X coordinate
+	 * @param b
+	 *            Y coordinate
+	 * @return itself
+	 */
+	public final Vec2D subSelf(float a, float b) {
+		x -= a;
+		y -= b;
+		return this;
+	}
+
+	/**
+	 * Subtracts vector v and overrides coordinates with result.
+	 * 
+	 * @param v
+	 *            vector to be subtracted
+	 * @return itself
+	 */
+	public final Vec2D subSelf(Vec2D v) {
+		x -= v.x;
+		y -= v.y;
+		return this;
 	}
 
 	/**
@@ -935,40 +982,14 @@ public class Vec2D {
 		return new Vec2D(p.x / xr2, p.y / yr2).normalize();
 	}
 
-	/**
-	 * Static factory method. Creates a new random unit vector using the default
-	 * Math.random() Random instance.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return a new random normalized unit vector.
+	 * @see java.lang.Object#toString()
 	 */
-	public static final Vec2D randomVector() {
-		Vec2D rnd = new Vec2D((float) Math.random() * 2 - 1, (float) Math
-				.random() * 2 - 1);
-		return rnd.normalize();
-	}
-
-	/**
-	 * Static factory method. Creates a new random unit vector using the given
-	 * Random generator instance. I recommend to have a look at the
-	 * https://uncommons-maths.dev.java.net library for a good choice of
-	 * reliable and high quality random number generators.
-	 * 
-	 * @return a new random normalized unit vector.
-	 */
-	public static final Vec2D randomVector(Random rnd) {
-		Vec2D v = new Vec2D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1);
-		return v.normalize();
-	}
-
-	/**
-	 * Creates a new vector from the given angle in the XY plane.
-	 * 
-	 * The resulting vector for theta=0 is equal to the positive X axis.
-	 * 
-	 * @param theta
-	 * @return new vector pointing into the direction of the passed in angle
-	 */
-	public static final Vec2D fromTheta(float theta) {
-		return new Vec2D((float) Math.cos(theta), (float) Math.sin(theta));
+	public String toString() {
+		StringBuffer sb = new StringBuffer(32);
+		sb.append("{x:").append(x).append(", y:").append(y).append("}");
+		return sb.toString();
 	}
 }
