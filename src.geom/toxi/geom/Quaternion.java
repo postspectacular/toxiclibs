@@ -72,7 +72,7 @@ public class Quaternion {
 
 	public float[] getValue() {
 		float[] res = new float[4];
-		float sa = MathUtils.sqrt(1.0f - w * w);
+		float sa = (float) Math.sqrt(1.0f - w * w);
 		if (sa < MathUtils.EPS)
 			sa = 1.0f;
 		else
@@ -85,11 +85,11 @@ public class Quaternion {
 	}
 
 	public float magnitude() {
-		return MathUtils.sqrt(x * x + y * y + z * z + w * w);
+		return (float) Math.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	public Quaternion normalize() {
-		float mag = MathUtils.sqrt(x * x + y * y + z * z + w * w);
+		float mag = (float) Math.sqrt(x * x + y * y + z * z + w * w);
 		if (mag > 0) {
 			mag = 1f / mag;
 			x *= mag;

@@ -40,7 +40,7 @@ public class AMFMSineWave extends AbstractWave {
 	 * Creates a new instance from
 	 * 
 	 * @param phase
-	 * @param frequency
+	 * @param freq
 	 * @param fmod
 	 * @param amod
 	 */
@@ -97,7 +97,6 @@ public class AMFMSineWave extends AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @return
 	 */
 	public AbstractWave getFMod() {
 		return fmod;
@@ -105,7 +104,6 @@ public class AMFMSineWave extends AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @return
 	 */
 	public AbstractWave getAMod() {
 		return amod;

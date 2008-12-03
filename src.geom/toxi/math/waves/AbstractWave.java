@@ -55,7 +55,7 @@ public abstract class AbstractWave {
 	/**
 	 * 
 	 * @param phase
-	 * @param frequency
+	 * @param freq
 	 */
 	public AbstractWave(float phase, float freq) {
 		this(phase, freq, 1, 0);
@@ -63,7 +63,7 @@ public abstract class AbstractWave {
 
 	/**
 	 * @param phase
-	 * @param frequency
+	 * @param freq
 	 * @param amp
 	 * @param offset
 	 */
@@ -98,7 +98,7 @@ public abstract class AbstractWave {
 	/**
 	 * Progresses phase and ensures it remains in the 0...TWO_PI interval.
 	 * 
-	 * @param frequency
+	 * @param freq
 	 *            normalized progress frequency
 	 * @return update phase value
 	 */
@@ -120,7 +120,6 @@ public abstract class AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @param amp
 	 */
 	// @Deprecated
 	public float getAmp() {
@@ -129,7 +128,6 @@ public abstract class AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @return
 	 */
 	// @Deprecated
 	public float getValue() {
@@ -138,7 +136,6 @@ public abstract class AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @return
 	 */
 	// @Deprecated
 	public float getPhase() {
@@ -165,7 +162,6 @@ public abstract class AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @return
 	 */
 	// @Deprecated
 	public float getFrequency() {
@@ -174,7 +170,7 @@ public abstract class AbstractWave {
 
 	/**
 	 * @deprecated
-	 * @param frequency
+	 * @param freq
 	 */
 	// @Deprecated
 	public void setFrequency(float freq) {

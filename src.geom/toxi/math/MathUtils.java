@@ -111,8 +111,6 @@ public class MathUtils {
 
 	/**
 	 * @deprecated
-	 * @param x
-	 * @return
 	 */
 	public static final float fastInverseSqrt(float x) {
 		float half = 0.5F * x;
@@ -124,8 +122,6 @@ public class MathUtils {
 
 	/**
 	 * @deprecated
-	 * @param x
-	 * @return
 	 */
 	public static final float sqrt(float x) {
 		x = fastInverseSqrt(x);
@@ -183,10 +179,10 @@ public class MathUtils {
 	}
 
 	/**
-	 * Clips the value to the 0.0 .. 1.0 interval
+	 * Clips the value to the 0.0 .. 1.0 interval.
 	 * 
 	 * @param a
-	 * @return
+	 * @return clipped value
 	 * @since 0012
 	 */
 	public static final float clipNormalized(float a) {
@@ -210,8 +206,6 @@ public class MathUtils {
 	}
 
 	/**
-	 * @param x
-	 * @return
 	 * @deprecated renamed into {@link #floor(float)}
 	 */
 	public static final int fastFloor(float x) {

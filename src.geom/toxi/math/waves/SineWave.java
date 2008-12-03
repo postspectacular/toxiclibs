@@ -29,7 +29,7 @@ public class SineWave extends AbstractWave {
 	/**
 	 * @param phase
 	 *            starting phase
-	 * @param frequency
+	 * @param freq
 	 *            in radians (not Hertz)
 	 */
 	public SineWave(float phase, float freq) {
@@ -39,7 +39,7 @@ public class SineWave extends AbstractWave {
 	/**
 	 * @param phase
 	 *            starting phase
-	 * @param frequency
+	 * @param freq
 	 *            in radians (not Hertz)
 	 * @param amp
 	 *            amplitude factor
@@ -50,7 +50,9 @@ public class SineWave extends AbstractWave {
 		super(phase, freq, amp, offset);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.math.waves.AbstractWave#update()
 	 */
 	public float update() {
