@@ -213,6 +213,28 @@ public class Vec2D {
 	}
 
 	/**
+	 * Compares the length of the vector with another one.
+	 * 
+	 * @param vec
+	 *            vector to compare with
+	 * @return -1 if other vector is longer, 0 if both are equal or else +1
+	 */
+	public int compareTo(Object vec) {
+		Vec3D v = (Vec3D) vec;
+		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0)
+			return 0;
+		if (magSquared() < v.magSquared())
+			return -1;
+		return 1;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Vec3D v = (Vec3D) obj;
+		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0);
+	}
+
+	/**
 	 * Sets all vector components to 0.
 	 * 
 	 * @return itself

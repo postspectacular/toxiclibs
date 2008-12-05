@@ -1,4 +1,7 @@
-package toxi.color;
+package toxi.color.theory;
+
+import toxi.color.Color;
+import toxi.color.ColorList;
 
 public interface ColorTheoryStrategy {
 

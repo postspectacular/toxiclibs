@@ -100,6 +100,14 @@ public class MathUtils {
 		return rnd.nextFloat() * 2 - 1;
 	}
 
+	public static final boolean flipCoin() {
+		return Math.random() < 0.5;
+	}
+
+	public static final boolean flipCoin(Random rnd) {
+		return rnd.nextBoolean();
+	}
+
 	public static final int abs(int x) {
 		int y = x >> 31;
 		return (x ^ y) - y;

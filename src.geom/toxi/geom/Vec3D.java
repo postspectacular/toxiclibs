@@ -335,11 +335,19 @@ public class Vec3D implements Comparable {
 	 */
 	public int compareTo(Object vec) {
 		Vec3D v = (Vec3D) vec;
-		if (x == v.x && y == v.y && z == v.z)
+		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0
+				&& Float.compare(z, v.z) == 0)
 			return 0;
 		if (magSquared() < v.magSquared())
 			return -1;
 		return 1;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Vec3D v = (Vec3D) obj;
+		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0 && Float
+				.compare(z, v.z) == 0);
 	}
 
 	/**
@@ -712,6 +720,7 @@ public class Vec3D implements Comparable {
 	 * @param planeOrigin
 	 * @param planeNormal
 	 * @return distance to plane in world units, -1 if no intersection.
+	 * @deprecated
 	 */
 	// FIXME this is kind of obsolete since the arrival of the Plane class, but
 	// needs amends to reflector code

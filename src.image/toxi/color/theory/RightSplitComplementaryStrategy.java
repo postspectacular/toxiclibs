@@ -1,13 +1,16 @@
 /**
  * 
  */
-package toxi.color;
+package toxi.color.theory;
+
+import toxi.color.Color;
+import toxi.color.ColorList;
 
 /**
  * @author toxi
  * 
  */
-public class LeftSplitComplementaryStrategy implements ColorTheoryStrategy {
+public class RightSplitComplementaryStrategy implements ColorTheoryStrategy {
 
 	/*
 	 * (non-Javadoc)
@@ -15,10 +18,10 @@ public class LeftSplitComplementaryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromColour(toxi.color.Color)
 	 */
-	public static final String NAME = "leftSplitComplementary";
+	public static final String NAME = "rightSplitComplementary";
 
 	public ColorList createListFromColour(Color src) {
-		Color left = src.getComplement().rotateRYB(-30).lighten(0.1f);
+		Color left = src.getComplement().rotateRYB(30).lighten(0.1f);
 		ColorList colors = ColorTheoryFactory.getInstance().getStrategyForName(
 				ColorTheoryFactory.COMPLEMENTARY).createListFromColour(src);
 		for (int i = 3; i < 6; i++) {

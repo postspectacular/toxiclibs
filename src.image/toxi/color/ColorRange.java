@@ -4,7 +4,6 @@
 package toxi.color;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import toxi.math.MathUtils;
 import toxi.util.datatypes.ArrayUtil;
@@ -16,6 +15,9 @@ import toxi.util.datatypes.FloatRangeSet;
  */
 public class ColorRange {
 
+	/**
+	 * Default hue variance for {@link #getColor(Color, float)}.
+	 */
 	public static final float DEFAULT_VARIANCE = 0.035f;
 
 	public static final ColorRange LIGHT = new ColorRange(null, new FloatRange(
@@ -48,16 +50,19 @@ public class ColorRange {
 	public static final ColorRange HARD = new ColorRange(null, new FloatRange(
 			0.9f, 1.0f), new FloatRange(0.4f, 1.0f), "hard");
 
+	/**
+	 * List of ColorRange presets.
+	 */
 	public static ArrayList PRESETS = ArrayUtil.arrayToList(new ColorRange[] {
 			BRIGHT, DARK, LIGHT, FRESH, HARD, SOFT, WEAK, NEUTRAL });
 
-	public FloatRangeSet hueConstraint;
-	public FloatRangeSet saturationConstraint;
-	public FloatRangeSet brightnessConstraint;
-	public FloatRangeSet alphaConstraint;
+	protected FloatRangeSet hueConstraint;
+	protected FloatRangeSet saturationConstraint;
+	protected FloatRangeSet brightnessConstraint;
+	protected FloatRangeSet alphaConstraint;
 
-	public FloatRange white;
-	public FloatRange black;
+	protected FloatRange white;
+	protected FloatRange black;
 
 	protected String name;
 
@@ -73,8 +78,7 @@ public class ColorRange {
 	public ColorRange(ColorList list) {
 		this();
 		hueConstraint.items.clear();
-		for (Iterator i = list.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
+		for (Color c : list) {
 			hueConstraint.add(new FloatRange(c.hue(), c.hue()));
 			saturationConstraint.add(new FloatRange(c.saturation(), c
 					.saturation()));
@@ -147,7 +151,7 @@ public class ColorRange {
 		range.name = name;
 
 		if (c != null) {
-			float hue = c.hue() + variance * MathUtils.random(-1f, 1f);
+			float hue = c.hue() + variance * MathUtils.normalizedRandom();
 			range.hueConstraint = new FloatRangeSet(new FloatRange(hue, hue));
 			range.alphaConstraint = new FloatRangeSet(new FloatRange(c.alpha,
 					c.alpha));
@@ -180,10 +184,10 @@ public class ColorRange {
 				return Color.newHSVA(c.hue(), 0, white.pickRandom(), c.alpha());
 			}
 			if (c.isGrey()) {
-				return Color.newHSVA(c.hue(), 0, MathUtils.random(black
-						.pickRandom(), white.pickRandom()), c.alpha());
+				return Color.newHSVA(c.hue(), 0, MathUtils.flipCoin() ? black
+						.pickRandom() : white.pickRandom(), c.alpha());
 			}
-			h = c.hue() + variance * MathUtils.random(-1f, 1f);
+			h = c.hue() + variance * MathUtils.normalizedRandom();
 			a = c.alpha();
 		} else {
 			h = hueConstraint.pickRandom().pickRandom();
@@ -206,7 +210,7 @@ public class ColorRange {
 		return list;
 	}
 
-	public ColorRange merge(Color c) {
+	public ColorRange add(Color c) {
 		hueConstraint.add(new FloatRange(c.hue(), c.hue()));
 		saturationConstraint
 				.add(new FloatRange(c.saturation(), c.saturation()));
@@ -215,7 +219,7 @@ public class ColorRange {
 		return this;
 	}
 
-	public ColorRange merge(ColorRange range) {
+	public ColorRange add(ColorRange range) {
 		hueConstraint.addAll(range.hueConstraint);
 		saturationConstraint.addAll(range.saturationConstraint);
 		brightnessConstraint.addAll(range.brightnessConstraint);
@@ -227,7 +231,7 @@ public class ColorRange {
 		return this;
 	}
 
-	public ColorRange getMerged(ColorRange range) {
-		return copy().merge(range);
+	public ColorRange getSum(ColorRange range) {
+		return copy().add(range);
 	}
 }

@@ -1,15 +1,18 @@
 package toxi.color;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import toxi.color.theory.ColorTheoryFactory;
+import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
 
-public class ColorList {
+public class ColorList implements Iterable<Color> {
 
-	protected ArrayList colors = new ArrayList();
+	protected ArrayList<Color> colors = new ArrayList<Color>();
 
 	/**
 	 * Creates an empty list.
@@ -35,8 +38,8 @@ public class ColorList {
 	 *            source list
 	 */
 	public ColorList(ColorList list) {
-		for (Iterator i = list.iterator(); i.hasNext();) {
-			this.colors.add(((Color) i.next()).copy());
+		for (Color c : list) {
+			this.colors.add(c.copy());
 		}
 	}
 
@@ -45,7 +48,7 @@ public class ColorList {
 	 * 
 	 * @param colours
 	 */
-	public ColorList(ArrayList colours) {
+	public ColorList(ArrayList<Color> colours) {
 		this.colors.addAll(colours);
 	}
 
@@ -55,8 +58,8 @@ public class ColorList {
 	 * @param colourArray
 	 */
 	public ColorList(Color[] colourArray) {
-		for (int i = 0; i < colourArray.length; i++)
-			colors.add(colourArray[i]);
+		for (Color c : colourArray)
+			colors.add(c);
 	}
 
 	/**
@@ -65,8 +68,8 @@ public class ColorList {
 	 * @param argbArray
 	 */
 	public ColorList(int[] argbArray) {
-		for (int i = 0; i < argbArray.length; i++) {
-			colors.add(Color.newARGB(argbArray[i]));
+		for (int c : argbArray) {
+			colors.add(Color.newARGB(c));
 		}
 	}
 
@@ -75,7 +78,7 @@ public class ColorList {
 	 * 
 	 * @return
 	 */
-	public Iterator iterator() {
+	public Iterator<Color> iterator() {
 		return colors.iterator();
 	}
 
@@ -162,6 +165,17 @@ public class ColorList {
 	}
 
 	/**
+	 * Add the all entries of the Color collection to the list.
+	 * 
+	 * @param collection
+	 * @return itself
+	 */
+	public ColorList addAll(Collection<Color> collection) {
+		colors.addAll(collection);
+		return this;
+	}
+
+	/**
 	 * Finds and returns the darkest color of the list.
 	 * 
 	 * @return darkest color or null if there're no entries yet.
@@ -169,8 +183,7 @@ public class ColorList {
 	public Color getDarkest() {
 		Color darkest = null;
 		float minBrightness = Float.MAX_VALUE;
-		for (Iterator i = colors.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
+		for (Color c : colors) {
 			if (c.hsv[2] < minBrightness) {
 				darkest = c;
 				minBrightness = c.hsv[2];
@@ -187,8 +200,7 @@ public class ColorList {
 	public Color getLightest() {
 		Color lightest = null;
 		float maxBrightness = Float.MIN_VALUE;
-		for (Iterator i = colors.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
+		for (Color c : colors) {
 			if (c.hsv[2] > maxBrightness) {
 				lightest = c;
 				maxBrightness = c.hsv[2];
@@ -207,8 +219,7 @@ public class ColorList {
 		float g = 0;
 		float b = 0;
 		float a = 0;
-		for (Iterator i = colors.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
+		for (Color c : colors) {
 			r += c.rgb[0];
 			g += c.rgb[1];
 			b += c.rgb[2];
@@ -233,8 +244,8 @@ public class ColorList {
 	public ColorList getBlended(float amount) {
 		Color[] clrs = new Color[colors.size()];
 		for (int i = 0; i < clrs.length; i++) {
-			Color c = (Color) colors.get(i > 0 ? i - 1 : clrs.length - 1);
-			clrs[i] = ((Color) colors.get(i)).getBlended(c, amount);
+			Color c = colors.get(i > 0 ? i - 1 : clrs.length - 1);
+			clrs[i] = colors.get(i).getBlended(c, amount);
 		}
 		return new ColorList(clrs);
 	}
@@ -255,9 +266,9 @@ public class ColorList {
 
 		// Remove the darkest color from the stack,
 		// put it in the sorted list as starting element.
-		ArrayList stack = new ArrayList(colors);
+		ArrayList<Color> stack = new ArrayList<Color>(colors);
 		stack.remove(root);
-		ArrayList sorted = new ArrayList(colors.size());
+		ArrayList<Color> sorted = new ArrayList<Color>(colors.size());
 		sorted.add(root);
 
 		// Now find the color in the stack closest to that color.
@@ -265,11 +276,11 @@ public class ColorList {
 		// Now find the color closest to that color, etc.
 		int sortedCount = 0;
 		while (stack.size() > 1) {
-			Color closest = (Color) stack.get(0);
-			Color lastSorted = (Color) sorted.get(sortedCount);
+			Color closest = stack.get(0);
+			Color lastSorted = sorted.get(sortedCount);
 			float distance = closest.distanceTo(lastSorted);
 			for (int i = stack.size() - 1; i >= 0; i--) {
-				Color c = (Color) stack.get(i);
+				Color c = stack.get(i);
 				float d = c.distanceTo(lastSorted);
 				if (d < distance) {
 					closest = c;
@@ -295,7 +306,8 @@ public class ColorList {
 	 * @param isReversed
 	 * @return itself
 	 */
-	protected ColorList sortByComparator(Comparator comp, boolean isReversed) {
+	protected ColorList sortByComparator(Comparator<Color> comp,
+			boolean isReversed) {
 		Collections.sort(colors, comp);
 		if (isReversed) {
 			Collections.reverse(colors);
@@ -312,7 +324,7 @@ public class ColorList {
 	 */
 	public ColorList sortByCriteria(ColorAccessCriteria criteria,
 			boolean isReversed) {
-		Comparator comparator = criteria.getComparator();
+		Comparator<Color> comparator = criteria.getComparator();
 		if (comparator != null) {
 			return sortByComparator(comparator, isReversed);
 		} else {
@@ -342,18 +354,18 @@ public class ColorList {
 	public ColorList clusterSort(ColorAccessCriteria clusterCriteria,
 			ColorAccessCriteria subClusterCriteria, int numClusters,
 			boolean isReversed) {
-		ArrayList sorted = new ArrayList(colors);
+		ArrayList<Color> sorted = new ArrayList<Color>(colors);
 		Collections.sort(sorted, clusterCriteria.getComparator());
 		Collections.reverse(sorted);
-		ArrayList clusters = new ArrayList();
+		ArrayList<Color> clusters = new ArrayList<Color>();
 
 		float d = 1;
 		int i = 0;
 		int num = sorted.size();
 		for (int j = 0; j < num; j++) {
-			Color c = (Color) sorted.get(j);
+			Color c = sorted.get(j);
 			if (c.getComponentValue(clusterCriteria) < d) {
-				ArrayList slice = new ArrayList();
+				ArrayList<Color> slice = new ArrayList<Color>();
 				slice.addAll(sorted.subList(i, j));
 				Collections.sort(slice, subClusterCriteria.getComparator());
 				clusters.addAll(slice);
@@ -361,7 +373,7 @@ public class ColorList {
 				i = j;
 			}
 		}
-		ArrayList slice = new ArrayList();
+		ArrayList<Color> slice = new ArrayList<Color>();
 		slice.addAll(sorted.subList(i, sorted.size()));
 		Collections.sort(slice, subClusterCriteria.getComparator());
 		clusters.addAll(slice);
@@ -398,19 +410,19 @@ public class ColorList {
 	 * @return
 	 */
 	public Color get(int i) {
-		return (Color) colors.get(i);
+		return colors.get(i);
 	}
 
 	/**
 	 * Checks if the given color is part of the list. Check is done by value,
 	 * not instance.
 	 * 
-	 * @param c
+	 * @param col
 	 * @return true, if the color is present.
 	 */
-	public boolean contains(Color c) {
-		for (Iterator i = colors.iterator(); i.hasNext();) {
-			if (i.next().equals(c))
+	public boolean contains(Color col) {
+		for (Color c : colors) {
+			if (c.equals(col))
 				return true;
 		}
 		return false;

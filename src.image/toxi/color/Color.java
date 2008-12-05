@@ -212,7 +212,7 @@ public class Color {
 	}
 
 	public static final float[] hsvToRGB(float h, float s, float v, float[] rgb) {
-		if (s == 0)
+		if (s == 0.0)
 			rgb[0] = rgb[1] = rgb[2] = v;
 		else {
 			h = h / (60.0f / 360);
@@ -260,10 +260,10 @@ public class Color {
 		float v = MathUtils.max(r, g, b);
 		float d = v - MathUtils.min(r, g, b);
 
-		if (v != 0)
+		if (v != 0.0)
 			s = d / v;
 
-		if (s != 0) {
+		if (s != 0.0) {
 			if (r == v)
 				h = (g - b) / d;
 			else if (g == v)
@@ -417,6 +417,10 @@ public class Color {
 
 	public Color getDesaturated(float step) {
 		return new Color(this).desaturate(step);
+	}
+
+	public Color rotateRYB(float theta) {
+		return rotateRYB((int) MathUtils.degrees(theta));
 	}
 
 	public Color rotateRYB(int theta) {

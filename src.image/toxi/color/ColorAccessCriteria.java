@@ -50,7 +50,7 @@ public class ColorAccessCriteria {
 		return component;
 	}
 
-	public Comparator getComparator() {
+	public Comparator<Color> getComparator() {
 		if (comparator == null) {
 			switch (mode) {
 			case HSV_MODE:
@@ -64,6 +64,7 @@ public class ColorAccessCriteria {
 				break;
 			case ALPHA_MODE:
 				comparator = new AlphaComparator();
+				break;
 			}
 		}
 		return comparator;

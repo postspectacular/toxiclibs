@@ -2,7 +2,7 @@ package toxi.color;
 
 import java.util.Comparator;
 
-public class CMYKComparator implements Comparator {
+public class CMYKComparator implements Comparator<Color> {
 
 	private final int component;
 
@@ -10,12 +10,10 @@ public class CMYKComparator implements Comparator {
 		component = comp;
 	}
 
-	public int compare(Object a, Object b) {
-		Color ca = (Color) a;
-		Color cb = (Color) b;
-		if (ca.cmyk[component] < cb.cmyk[component])
+	public int compare(Color a, Color b) {
+		if (a.cmyk[component] < b.cmyk[component])
 			return -1;
-		if (ca.cmyk[component] > cb.cmyk[component])
+		if (a.cmyk[component] > b.cmyk[component])
 			return 1;
 		else
 			return 0;

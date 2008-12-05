@@ -2,14 +2,12 @@ package toxi.color;
 
 import java.util.Comparator;
 
-public class AlphaComparator implements Comparator {
+public class AlphaComparator implements Comparator<Color> {
 
-	public int compare(Object a, Object b) {
-		Color ca = (Color) a;
-		Color cb = (Color) b;
-		if (ca.alpha < cb.alpha)
+	public int compare(Color a, Color b) {
+		if (a.alpha < b.alpha)
 			return -1;
-		if (ca.alpha > cb.alpha)
+		if (a.alpha > b.alpha)
 			return 1;
 		else
 			return 0;

@@ -1,8 +1,10 @@
 /**
  * 
  */
-package toxi.color;
+package toxi.color.theory;
 
+import toxi.color.Color;
+import toxi.color.ColorList;
 import toxi.geom.Vec2D;
 import toxi.math.MathUtils;
 

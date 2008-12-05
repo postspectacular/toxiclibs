@@ -2,7 +2,7 @@ package toxi.color;
 
 import java.util.Comparator;
 
-public class RGBComparator implements Comparator {
+public class RGBComparator implements Comparator<Color> {
 
 	private final int component;
 
@@ -10,12 +10,10 @@ public class RGBComparator implements Comparator {
 		component = comp;
 	}
 
-	public int compare(Object a, Object b) {
-		Color ca = (Color) a;
-		Color cb = (Color) b;
-		if (ca.rgb[component] < cb.rgb[component])
+	public int compare(Color a, Color b) {
+		if (a.rgb[component] < b.rgb[component])
 			return -1;
-		if (ca.rgb[component] > cb.rgb[component])
+		if (a.rgb[component] > b.rgb[component])
 			return 1;
 		else
 			return 0;

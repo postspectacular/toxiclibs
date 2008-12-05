@@ -21,14 +21,12 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 	}
 
 	public SphereIntersectorReflector(Sphere s) {
-		this(s,s.radius);
+		this(s, s.radius);
 	}
-	
-	/* (non-Javadoc)
-	 * @see toxi.geom.Intersector#intersectsRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
-	 */
+
 	public boolean intersectsRay(Ray3D ray) {
-		isectDist = ray.intersectRaySphere(ray.getDirection(), sOrigin, sRadius.x);
+		isectDist = ray.intersectRaySphere(ray.getDirection(), sOrigin,
+				sRadius.x);
 		if (isectDist >= 0) {
 			// get the intersection point
 			isectPos = ray.add(ray.getDirection().scale(isectDist));
@@ -39,7 +37,9 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Reflector#reflectRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
 	 */
 	public Ray3D reflectRay(Ray3D ray) {
@@ -58,26 +58,30 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 			Vec3D reflectNormal = isectDir.getNormalized().cross(sphereNormal)
 					.normalize();
 			if (!reflectNormal.isZeroVector()) {
-			// compute the reflected ray direction
-			reflectedDir = isectDir.getNormalized().rotateAroundAxis(
-					reflectNormal, reflectTheta);
+				// compute the reflected ray direction
+				reflectedDir = isectDir.getNormalized().rotateAroundAxis(
+						reflectNormal, reflectTheta);
 			} else {
 				reflectedDir = isectDir.getInverted();
 			}
-			return new Ray3D(isectPos,reflectedDir);
+			return new Ray3D(isectPos, reflectedDir);
 		} else {
 			return null;
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Reflector#getReflectionAngle()
 	 */
 	public float getReflectionAngle() {
 		return reflectTheta;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Reflector#getReflectedRayPointAtDistance(float)
 	 */
 	public Vec3D getReflectedRayPointAtDistance(float dist) {
@@ -87,21 +91,27 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 			return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Intersector#getIntersectionPoint()
 	 */
 	public Vec3D getIntersectionPoint() {
 		return isectPos;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Intersector#getIntersectionDistance()
 	 */
 	public float getIntersectionDistance() {
 		return isectDist;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Intersector#getIntersectionDir(boolean)
 	 */
 	public Vec3D getIntersectionDir(boolean normalized) {
@@ -114,7 +124,9 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see toxi.geom.Intersector#getNormalAtIntersection()
 	 */
 	public Vec3D getNormalAtIntersection() {

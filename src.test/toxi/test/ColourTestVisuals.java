@@ -7,8 +7,8 @@ import toxi.color.Color;
 import toxi.color.ColorAccessCriteria;
 import toxi.color.ColorList;
 import toxi.color.ColorRange;
-import toxi.color.ColorTheoryFactory;
-import toxi.color.ColorTheoryStrategy;
+import toxi.color.theory.ColorTheoryFactory;
+import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
 
 public class ColourTestVisuals extends PApplet {
@@ -65,8 +65,8 @@ public class ColourTestVisuals extends PApplet {
 			swatches(sorted, 10, yoff);
 			yoff += SWATCH_HEIGHT + 10;
 		}
-		ColorRange range = ColorRange.FRESH.getMerged(ColorRange.BRIGHT).merge(
-				ColorRange.LIGHT).merge(Color.WHITE);
+		ColorRange range = ColorRange.FRESH.getSum(ColorRange.BRIGHT).add(
+				ColorRange.LIGHT).add(Color.WHITE);
 		sorted = range.getColors(Color.MAGENTA, 100, 0.35f);
 		sorted = sorted.sortByDistance(false);
 		swatches(sorted, 10, yoff);

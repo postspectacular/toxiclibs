@@ -2,8 +2,6 @@ package toxi.geom;
 
 import java.util.ArrayList;
 
-import toxi.math.MathUtils;
-
 /**
  * This is a generic 3D B-Spline class for curves of arbitrary length, control
  * handles and patches are created and joined automatically as described here:
@@ -18,7 +16,7 @@ public class Spline3D {
 	protected float[] bi;
 
 	private int numP;
-	public ArrayList vertices;
+	public ArrayList<Vec3D> vertices;
 
 	public BernsteinPolynomial bernstein;
 
@@ -66,12 +64,12 @@ public class Spline3D {
 	 *            resolution
 	 * @return list of Vec3D vertices along the curve
 	 */
-	public ArrayList computeVertices(int res) {
+	public ArrayList<Vec3D> computeVertices(int res) {
 		if (bernstein == null || bernstein.resolution != res) {
 			bernstein = new BernsteinPolynomial(res);
 		}
 		if (vertices == null)
-			vertices = new ArrayList();
+			vertices = new ArrayList<Vec3D>();
 		else
 			vertices.clear();
 		findCPoints();

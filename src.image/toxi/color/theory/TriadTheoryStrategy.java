@@ -1,15 +1,18 @@
 /**
  * 
  */
-package toxi.color;
+package toxi.color.theory;
+
+import toxi.color.Color;
+import toxi.color.ColorList;
 
 /**
  * @author toxi
  * 
  */
-public class SplitComplementaryStrategy implements ColorTheoryStrategy {
+public class TriadTheoryStrategy implements ColorTheoryStrategy {
 
-	public static final String NAME = "splitComplementary";
+	public static final String NAME = "triad";
 
 	/*
 	 * (non-Javadoc)
@@ -18,11 +21,9 @@ public class SplitComplementaryStrategy implements ColorTheoryStrategy {
 	 * toxi.color.ColorTheoryStrategy#createListFromColour(toxi.color.Color)
 	 */
 	public ColorList createListFromColour(Color src) {
-		Color clr = src.copy();
-		ColorList colors = new ColorList(clr);
-		clr = clr.getComplement();
-		colors.add(clr.getRotatedRYB(-30).lighten(0.1f));
-		colors.add(clr.getRotatedRYB(30).lighten(0.1f));
+		ColorList colors = new ColorList(src.copy());
+		colors.add(src.getRotatedRYB(120).lighten(0.1f));
+		colors.add(src.getRotatedRYB(-120).lighten(0.1f));
 		return colors;
 	}
 
@@ -38,4 +39,5 @@ public class SplitComplementaryStrategy implements ColorTheoryStrategy {
 	public String toString() {
 		return NAME;
 	}
+
 }

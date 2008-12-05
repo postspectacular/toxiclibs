@@ -1,7 +1,8 @@
-package toxi.color;
+package toxi.color.theory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 /**
  * Registry & object factory for color theory strategies.
@@ -21,7 +22,7 @@ public class ColorTheoryFactory {
 
 	private static ColorTheoryFactory instance;
 
-	private final HashMap implementations = new HashMap();
+	private final HashMap<String, ColorTheoryStrategy> implementations = new HashMap<String, ColorTheoryStrategy>();
 
 	public static ColorTheoryFactory getInstance() {
 		if (instance == null) {
@@ -48,14 +49,14 @@ public class ColorTheoryFactory {
 	}
 
 	public ColorTheoryStrategy getStrategyForName(String id) {
-		return (ColorTheoryStrategy) implementations.get(id);
+		return implementations.get(id);
 	}
 
-	public ArrayList getRegisteredNames() {
-		return new ArrayList(implementations.keySet());
+	public ArrayList<String> getRegisteredNames() {
+		return new ArrayList<String>(implementations.keySet());
 	}
 
-	public ArrayList getRegisteredStrategies() {
-		return new ArrayList(implementations.values());
+	public ArrayList<ColorTheoryStrategy> getRegisteredStrategies() {
+		return new ArrayList<ColorTheoryStrategy>(implementations.values());
 	}
 }
