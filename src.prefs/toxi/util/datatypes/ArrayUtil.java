@@ -5,6 +5,8 @@ import java.util.Random;
 
 /**
  * A collection of array utilities.
+ * 
+ * @author toxi
  */
 public class ArrayUtil {
 
@@ -50,6 +52,11 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
 	public static void reverse(byte[] array) {
 		int len = array.length - 1;
 		int len2 = array.length / 2;
@@ -60,6 +67,11 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
 	public static void reverse(short[] array) {
 		int len = array.length - 1;
 		int len2 = array.length / 2;
@@ -70,6 +82,11 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
 	public static void reverse(char[] array) {
 		int len = array.length - 1;
 		int len2 = array.length / 2;
@@ -80,6 +97,11 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
 	public static void reverse(int[] array) {
 		int len = array.length - 1;
 		int len2 = array.length / 2;
@@ -90,6 +112,11 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Reverses the item order of the supplied array.
+	 * 
+	 * @param array
+	 */
 	public static void reverse(float[] array) {
 		int len = array.length - 1;
 		int len2 = array.length / 2;
@@ -100,6 +127,12 @@ public class ArrayUtil {
 		}
 	}
 
+	/**
+	 * Converts the object array into an {@link ArrayList}.
+	 * 
+	 * @param array
+	 * @return
+	 */
 	public static ArrayList arrayToList(Object[] array) {
 		ArrayList list = new ArrayList(array.length);
 		for (int i = 0; i < array.length; i++) {

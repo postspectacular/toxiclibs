@@ -113,7 +113,7 @@ public class ColorRange {
 		brightnessConstraint = new FloatRangeSet(bri != null ? bri
 				: new FloatRange(0, 1));
 		alphaConstraint = new FloatRangeSet(alpha != null ? alpha
-				: new FloatRange(1, 1));
+				: new FloatRange(0, 1));
 		this.name = name != null ? name : "untitled";
 		if (white == null) {
 			this.white = new FloatRange(1, 1);
@@ -233,5 +233,21 @@ public class ColorRange {
 
 	public ColorRange getSum(ColorRange range) {
 		return copy().add(range);
+	}
+
+	public boolean contains(Color c) {
+		boolean isInRange = isValueInConstraint(c.hue(), hueConstraint);
+		isInRange &= isValueInConstraint(c.saturation(), saturationConstraint);
+		isInRange &= isValueInConstraint(c.brightness(), brightnessConstraint);
+		isInRange &= isValueInConstraint(c.alpha(), alphaConstraint);
+		return isInRange;
+	}
+
+	protected boolean isValueInConstraint(float val, FloatRangeSet rangeSet) {
+		boolean isValid = false;
+		for (FloatRange r : rangeSet) {
+			isValid |= r.isValueInRange(val);
+		}
+		return isValid;
 	}
 }

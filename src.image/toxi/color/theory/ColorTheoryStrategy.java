@@ -3,6 +3,14 @@ package toxi.color.theory;
 import toxi.color.Color;
 import toxi.color.ColorList;
 
+/**
+ * A simple interface for implementing rules used to create color palettes. The
+ * library currently comes with 10 default implementations realising different
+ * color theory approaches.
+ * 
+ * @author toxi
+ * 
+ */
 public interface ColorTheoryStrategy {
 
 	/**

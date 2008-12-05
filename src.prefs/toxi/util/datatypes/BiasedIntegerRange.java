@@ -25,6 +25,7 @@ public class BiasedIntegerRange extends IntegerRange {
 		this.standardDeviation = sd * 0.5f;
 	}
 
+	@Override
 	public int pickRandom() {
 		current = (int) (random.nextGaussian() * standardDeviation * (max - min))
 				+ bias;
@@ -32,6 +33,7 @@ public class BiasedIntegerRange extends IntegerRange {
 		return current;
 	}
 
+	@Override
 	public String toString() {
 		return "BiasedIntegerRange: " + min + " -> " + max + " bias: " + bias
 				+ " q: " + standardDeviation;

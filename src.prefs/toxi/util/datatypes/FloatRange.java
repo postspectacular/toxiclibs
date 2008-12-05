@@ -29,6 +29,7 @@ public class FloatRange {
 		return current;
 	}
 
+	@Override
 	public String toString() {
 		return "FloatRange: " + min + " -> " + max;
 	}
@@ -38,5 +39,9 @@ public class FloatRange {
 		range.current = current;
 		range.random = random;
 		return range;
+	}
+
+	public boolean isValueInRange(float val) {
+		return val >= min && val <= max;
 	}
 }

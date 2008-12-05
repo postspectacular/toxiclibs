@@ -4,7 +4,15 @@ import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
+/**
+ * Floating point color class with implicit RGB, HSV, CMYK access modes,
+ * conversion and color theory utils. Based on the <a href="">Colors library</a>
+ * for <a href="http:/Nodebox.net/">NodeBox</a>
+ * 
+ */
 public class Color {
+
+	private static final float INV60DEGREES = 60.0f / 360;
 
 	protected static final Vec2D[] RYB_WHEEL = new Vec2D[] { new Vec2D(0, 0),
 			new Vec2D(15, 8), new Vec2D(30, 17), new Vec2D(45, 26),
@@ -16,9 +24,9 @@ public class Color {
 			new Vec2D(285, 251), new Vec2D(300, 267), new Vec2D(315, 282),
 			new Vec2D(330, 298), new Vec2D(345, 329), new Vec2D(360, 0) };
 
-	public static final float BLACK_POINT = 0.08f;
-	public static final float WHITE_POINT = 1f;
-	public static final float GREY_THRESHOLD = 0.01f;
+	public static float BLACK_POINT = 0.08f;
+	public static float WHITE_POINT = 1f;
+	public static float GREY_THRESHOLD = 0.01f;
 
 	public static final float INV8BIT = 1f / 255;
 
@@ -212,10 +220,10 @@ public class Color {
 	}
 
 	public static final float[] hsvToRGB(float h, float s, float v, float[] rgb) {
-		if (s == 0.0)
+		if (Float.compare(s, 0.0f) == 0) {
 			rgb[0] = rgb[1] = rgb[2] = v;
-		else {
-			h = h / (60.0f / 360);
+		} else {
+			h /= INV60DEGREES;
 			int i = (int) h;
 			float f = h - i;
 			float p = v * (1 - s);
@@ -260,21 +268,24 @@ public class Color {
 		float v = MathUtils.max(r, g, b);
 		float d = v - MathUtils.min(r, g, b);
 
-		if (v != 0.0)
+		if (v != 0.0) {
 			s = d / v;
-
+		}
 		if (s != 0.0) {
-			if (r == v)
+			if (Float.compare(r, v) == 0) {
 				h = (g - b) / d;
-			else if (g == v)
+			} else if (Float.compare(g, v) == 0) {
 				h = 2 + (b - r) / d;
-			else
+			} else {
 				h = 4 + (r - g) / d;
+			}
 		}
 
-		h = h * (60.0f / 360);
-		if (h < 0)
-			h = h + 1.0f;
+		h *= INV60DEGREES;
+
+		if (h < 0) {
+			h += 1.0f;
+		}
 
 		hsv[0] = h;
 		hsv[1] = s;
@@ -303,10 +314,11 @@ public class Color {
 		rgb[2] = z;
 		for (int i = 0; i < 3; i++) {
 			float p = (float) Math.pow(rgb[i], 3);
-			if (p > 0.008856)
+			if (p > 0.008856) {
 				rgb[i] = p;
-			else
+			} else {
 				rgb[i] = (rgb[i] - 16 / 116.0f) / 7.787f;
+			}
 		}
 
 		// Observer = 2, Illuminant = D65
@@ -319,10 +331,11 @@ public class Color {
 		rgb[2] = x * 0.0557f + y * -0.2040f + z * 1.0570f;
 		double tpow = 1 / 2.4;
 		for (int i = 0; i < 3; i++) {
-			if (rgb[i] > 0.0031308)
+			if (rgb[i] > 0.0031308) {
 				rgb[i] = (float) (1.055 * Math.pow(rgb[i], tpow) - 0.055);
-			else
+			} else {
 				rgb[i] = 12.92f * rgb[i];
+			}
 		}
 		return rgb;
 	}
@@ -372,11 +385,13 @@ public class Color {
 	}
 
 	public boolean isWhite() {
-		return (rgb[0] >= WHITE_POINT && rgb[0] == rgb[1] && rgb[0] == rgb[2]);
+		return (rgb[0] >= WHITE_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
+				.compare(rgb[0], rgb[2]) == 0);
 	}
 
 	public boolean isBlack() {
-		return (rgb[0] <= BLACK_POINT && rgb[0] == rgb[1] && rgb[0] == rgb[2]);
+		return (rgb[0] <= BLACK_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
+				.compare(rgb[0], rgb[2]) == 0);
 	}
 
 	public boolean isGrey() {
@@ -431,8 +446,9 @@ public class Color {
 		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
 			Vec2D p = RYB_WHEEL[i];
 			Vec2D q = RYB_WHEEL[i + 1];
-			if (q.y < p.y)
+			if (q.y < p.y) {
 				q.y += 360;
+			}
 			if (p.y <= h && h <= q.y) {
 				resultHue = p.x + (q.x - p.x) * (h - p.y) / (q.y - p.y);
 				break;
@@ -447,8 +463,9 @@ public class Color {
 		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
 			Vec2D p = RYB_WHEEL[i];
 			Vec2D q = RYB_WHEEL[i + 1];
-			if (q.y < p.y)
+			if (q.y < p.y) {
 				q.y += 360;
+			}
 			if (p.x <= resultHue && resultHue <= q.x) {
 				h = p.y + (q.y - p.y) * (resultHue - p.x) / (q.x - p.x);
 				break;
@@ -461,6 +478,10 @@ public class Color {
 
 	public Color getRotatedRYB(int angle) {
 		return new Color(this).rotateRYB(angle);
+	}
+
+	public Color getRotatedRYB(float theta) {
+		return new Color(this).rotateRYB(theta);
 	}
 
 	public Color complement() {
@@ -478,15 +499,23 @@ public class Color {
 		return setRGB(rgb);
 	}
 
-	public Color analog(float angle, float delta) {
-		rotateRYB((int) (angle * MathUtils.random(-1f, 1f)));
-		hsv[1] += delta * MathUtils.random(-1f, 1f);
-		hsv[2] += delta * MathUtils.random(-1f, 1f);
+	public Color analog(int angle, float delta) {
+		rotateRYB((int) (angle * MathUtils.normalizedRandom()));
+		hsv[1] += delta * MathUtils.normalizedRandom();
+		hsv[2] += delta * MathUtils.normalizedRandom();
 		return setHSV(hsv);
 	}
 
-	public Color getAnalog(float angle, float delta) {
+	public Color analog(float theta, float delta) {
+		return analog(MathUtils.degrees(theta), delta);
+	}
+
+	public Color getAnalog(int angle, float delta) {
 		return new Color(this).analog(angle, delta);
+	}
+
+	public Color getAnalog(float theta, float delta) {
+		return new Color(this).analog(theta, delta);
 	}
 
 	public Color setSaturation(float saturation) {
@@ -514,12 +543,10 @@ public class Color {
 	public float distanceTo(Color c) {
 		float hue = hsv[0] * MathUtils.TWO_PI;
 		float hue2 = c.hsv[0] * MathUtils.TWO_PI;
-		Vec3D v1 = new Vec3D((float) Math.cos(hue) * hsv[1], (float) Math
-				.sin(hue)
-				* hsv[1], hsv[2]);
-		Vec3D v2 = new Vec3D((float) Math.cos(hue2) * c.hsv[1], (float) Math
-				.sin(hue2)
-				* c.hsv[1], c.hsv[2]);
+		Vec3D v1 = new Vec3D((float) (Math.cos(hue) * hsv[1]), (float) (Math
+				.sin(hue) * hsv[1]), hsv[2]);
+		Vec3D v2 = new Vec3D((float) (Math.cos(hue2) * c.hsv[1]), (float) (Math
+				.sin(hue2) * c.hsv[1]), c.hsv[2]);
 		return v1.distanceTo(v2);
 	}
 
@@ -538,15 +565,16 @@ public class Color {
 	}
 
 	public void setHue(float hue) {
-		hsv[0] = MathUtils.clip(hue, 0, 1);
+		hue %= 1.0;
+		if (hue < 0.0) {
+			hue++;
+		}
+		hsv[0] = hue;
 		setHSV(hsv);
 	}
 
 	public Color adjustConstrast(float amount) {
-		if (hsv[2] < 0.5)
-			return darken(amount);
-		else
-			return lighten(amount);
+		return hsv[2] < 0.5 ? darken(amount) : lighten(amount);
 	}
 
 	public Color adjustRGB(float r, float g, float b) {
@@ -559,16 +587,13 @@ public class Color {
 
 	public boolean equals(Object o) {
 		if (o != null) {
-			try {
-				Color c = (Color) o;
-				float dr = c.rgb[0] - rgb[0];
-				float dg = c.rgb[1] - rgb[1];
-				float db = c.rgb[2] - rgb[2];
-				float da = c.alpha - alpha;
-				double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
-				return d < EPS;
-			} catch (ClassCastException e) {
-			}
+			Color c = (Color) o;
+			float dr = c.rgb[0] - rgb[0];
+			float dg = c.rgb[1] - rgb[1];
+			float db = c.rgb[2] - rgb[2];
+			float da = c.alpha - alpha;
+			double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+			return d < EPS;
 		}
 		return false;
 	}

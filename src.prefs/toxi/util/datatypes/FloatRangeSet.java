@@ -6,21 +6,21 @@ import java.util.Random;
 
 import toxi.math.MathUtils;
 
-public class FloatRangeSet {
+public class FloatRangeSet implements Iterable<FloatRange> {
 
-	public ArrayList items;
+	public ArrayList<FloatRange> items;
 	public int currID = -1;
 	public FloatRange current;
 
 	protected Random random = new Random();
 
-	public FloatRangeSet(ArrayList items) {
-		this.items = new ArrayList(items);
+	public FloatRangeSet(ArrayList<FloatRange> items) {
+		this.items = new ArrayList<FloatRange>(items);
 		pickRandom();
 	}
 
 	public FloatRangeSet(FloatRange r) {
-		items = new ArrayList();
+		items = new ArrayList<FloatRange>();
 		items.add(r);
 		current = r;
 	}
@@ -47,7 +47,7 @@ public class FloatRangeSet {
 
 	public FloatRange pickRandom() {
 		currID = MathUtils.random(random, items.size());
-		current = (FloatRange) items.get(currID);
+		current = items.get(currID);
 		return current;
 	}
 
@@ -62,7 +62,7 @@ public class FloatRangeSet {
 		} else {
 			currID = 0;
 		}
-		current = (FloatRange) items.get(currID);
+		current = items.get(currID);
 		return current;
 	}
 
@@ -71,12 +71,14 @@ public class FloatRangeSet {
 	}
 
 	public void addAll(FloatRangeSet set) {
-		for (Iterator i = set.items.iterator(); i.hasNext();) {
-			FloatRange r = (FloatRange) i.next();
+		for (FloatRange r : set) {
 			if (!items.contains(r)) {
 				items.add(r);
 			}
 		}
 	}
 
+	public Iterator<FloatRange> iterator() {
+		return items.iterator();
+	}
 }

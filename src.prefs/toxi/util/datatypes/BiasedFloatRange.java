@@ -25,6 +25,7 @@ public class BiasedFloatRange extends FloatRange {
 		this.standardDeviation = sd * 0.5f;
 	}
 
+	@Override
 	public float pickRandom() {
 		current = (float) (random.nextGaussian() * standardDeviation * (max - min))
 				+ bias;
@@ -32,6 +33,7 @@ public class BiasedFloatRange extends FloatRange {
 		return current;
 	}
 
+	@Override
 	public String toString() {
 		return "BiasedFloatRange: " + min + " -> " + max + " bias: " + bias
 				+ " q: " + standardDeviation;

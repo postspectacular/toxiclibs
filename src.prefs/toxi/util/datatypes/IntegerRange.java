@@ -29,7 +29,12 @@ public class IntegerRange {
 		return current;
 	}
 
+	@Override
 	public String toString() {
 		return "IntegerRange: " + min + " -> " + max;
+	}
+
+	public boolean isValueInRange(int val) {
+		return val >= min && val < max;
 	}
 }

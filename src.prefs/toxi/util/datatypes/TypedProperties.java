@@ -25,6 +25,12 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+/**
+ * Convenience wrapper providing typed access to Java {@link Properties} files.
+ * 
+ * @author toxi
+ * 
+ */
 public class TypedProperties extends Properties {
 
 	public static final String DELIM = "\t\n\r\f\u00A0,";
@@ -44,8 +50,7 @@ public class TypedProperties extends Properties {
 		try {
 			load(new FileInputStream(path));
 			return true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			logger.warning("error opening config file: " + path);
 			return false;
 		}
@@ -127,8 +132,7 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Integer.parseInt(tokenizer.nextToken());
 				index++;
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				// ignore non-integer items
 			}
 		}
@@ -136,8 +140,7 @@ public class TypedProperties extends Properties {
 			int[] result = new int[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		}
-		else
+		} else
 			return defaultArray;
 	}
 
@@ -168,8 +171,7 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Float.parseFloat(tokenizer.nextToken());
 				index++;
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				// ignore
 			}
 		}
@@ -177,8 +179,7 @@ public class TypedProperties extends Properties {
 			float[] result = new float[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		}
-		else
+		} else
 			return defaultArray;
 	}
 
@@ -210,8 +211,7 @@ public class TypedProperties extends Properties {
 			try {
 				pieces[index] = Byte.parseByte(tokenizer.nextToken());
 				index++;
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				// ignore non-integer items
 			}
 		}
@@ -219,8 +219,7 @@ public class TypedProperties extends Properties {
 			byte[] result = new byte[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		}
-		else
+		} else
 			return defaultArray;
 	}
 
@@ -244,8 +243,7 @@ public class TypedProperties extends Properties {
 			String[] result = new String[index];
 			System.arraycopy(pieces, 0, result, 0, index);
 			return result;
-		}
-		else
+		} else
 			return defaultArray;
 	}
 }

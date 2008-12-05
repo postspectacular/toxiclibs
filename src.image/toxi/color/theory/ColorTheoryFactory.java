@@ -3,9 +3,9 @@ package toxi.color.theory;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 /**
- * Registry & object factory for color theory strategies.
+ * Registry & object factory for default {@link ColorTheoryStrategy}
+ * implementations as well as custom ones.
  */
 public class ColorTheoryFactory {
 
