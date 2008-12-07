@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 /**
  * Implements a manager to play a number of shared samples in a multitimbral
  * manner without interrupting/restarting the playback of currently playing
- * samples. This is different to the default JOAL way of accessing sources
+ * sources. This is different to the default JOAL way of accessing sources
  * directly. The manager is keeping track of active sources and will attempt to
  * assign free ones for newly requested playbacks. If all voices are active, the
- * oldest one will be used for new samples.
+ * oldest one will be stopped and used as the newly requested voice.
  */
 public class MultiTimbralManager {
 
@@ -33,6 +33,14 @@ public class MultiTimbralManager {
 		logger.info("done. all sources created.");
 	}
 
+	/**
+	 * Attempts to find an available, currently unused {@link AudioSource}
+	 * instance which can then be configured and played by the client
+	 * application. If no free source is available the oldest playing one will
+	 * be stopped and returned as free.
+	 * 
+	 * @return a free AudioSource instance
+	 */
 	public AudioSource getNextVoice() {
 		boolean hasFreeSource = false;
 		int numIterations = 0;
@@ -68,12 +76,22 @@ public class MultiTimbralManager {
 		return pool[id].src;
 	}
 
+	/**
+	 * Uses the class' logger to print out status information about the current
+	 * usage of the managed audio sources.
+	 */
 	public void debug() {
-		String info = "";
+		String sources = "";
+		int numActive = 0;
 		for (int i = 0; i < maxSources; i++) {
-			info += pool[i].isActive + ",";
+			if (pool[i].isActive) {
+				sources += i + ",";
+				numActive++;
+			}
 		}
+		String info = "active sources: " + numActive;
 		logger.info(info);
+		logger.info(sources);
 	}
 
 	class SourceState {

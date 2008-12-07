@@ -26,13 +26,11 @@ import toxi.geom.Vec3D;
 // TODO add fluid interface and add getters with Vec3D return type
 public class SoundListener extends Vec3D {
 
-	private JOALUtil liboal;
+	protected JOALUtil liboal;
 
-	private float[] pos = { 0.0f, 0.0f, 0.0f };
-
-	private float[] vel = { 0.0f, 0.0f, 0.0f };
-
-	private float[] orient = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
+	protected float[] pos = { 0.0f, 0.0f, 0.0f };
+	protected float[] vel = { 0.0f, 0.0f, 0.0f };
+	protected float[] orient = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
 
 	protected SoundListener(JOALUtil lib) {
 		super();
@@ -44,6 +42,13 @@ public class SoundListener extends Vec3D {
 
 	public void setGain(float gain) {
 		liboal.getAL().alListenerf(AL.AL_GAIN, gain);
+	}
+
+	public void updatePosition() {
+		pos[0] = x;
+		pos[1] = y;
+		pos[2] = z;
+		liboal.getAL().alListenerfv(AL.AL_POSITION, pos, 0);
 	}
 
 	public void setPosition(float xx, float yy, float zz) {
@@ -79,24 +84,25 @@ public class SoundListener extends Vec3D {
 		return vel;
 	}
 
-	public void setOrientation(float fx, float fy, float fz, float ux,
-			float uy, float uz) {
-		orient[0] = fx;
-		orient[1] = fy;
-		orient[2] = fz;
-		orient[3] = ux;
-		orient[4] = uy;
-		orient[5] = uz;
+	public void setOrientation(float forwardX, float forwardY, float forwardZ,
+			float upX, float upY, float upZ) {
+		orient[0] = forwardX;
+		orient[1] = forwardY;
+		orient[2] = forwardZ;
+		orient[3] = upX;
+		orient[4] = upY;
+		orient[5] = upZ;
 		setOrientation(orient);
 	}
 
 	public final void setOrientation(float[] o) {
-		orient = o;
-		liboal.getAL().alListenerfv(AL.AL_ORIENTATION, vel, 0);
+		if (o.length == 6) {
+			orient = o;
+			liboal.getAL().alListenerfv(AL.AL_ORIENTATION, vel, 0);
+		}
 	}
 
 	public float[] getOrientation() {
 		return orient;
 	}
-
 }

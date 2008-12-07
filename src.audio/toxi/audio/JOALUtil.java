@@ -40,42 +40,64 @@ import net.java.games.joal.util.ALut;
 import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
 
+/**
+ * JOAL convenience wrapper
+ * 
+ * @author toxi
+ */
 public class JOALUtil {
 
-	private static final Logger logger = Logger.getLogger(JOALUtil.class
+	protected static final Logger logger = Logger.getLogger(JOALUtil.class
 			.getName());
 
-	private ArrayList buffers;
-	private ArrayList sources;
+	protected static JOALUtil instance;
 
-	private SoundListener listener;
+	protected ArrayList<Integer> buffers;
+	protected ArrayList<Integer> sources;
 
-	private AL al;
-	private ALC alc;
+	protected SoundListener listener;
 
-	private boolean isEAX;
+	protected AL al;
+	protected ALC alc;
+	protected EAX eax;
 
-	private EAX eax;
+	protected boolean isInited;
+	protected boolean isEAX;
 
-	public JOALUtil() {
-		try {
-			ALut.alutInit();
-			al = ALFactory.getAL();
-			alc = ALFactory.getALC();
-		} catch (ALException e) {
-			throw new RuntimeException("OpenAL could not be initialized: "
-					+ e.getMessage());
+	protected JOALUtil() {
+	}
+
+	public static JOALUtil getInstance() {
+		if (instance == null) {
+			synchronized (JOALUtil.class) {
+				if (instance == null) {
+					instance = new JOALUtil();
+				}
+			}
 		}
+		return instance;
 	}
 
 	public boolean init(boolean attemptEAX) {
-		buffers = new ArrayList();
-		sources = new ArrayList();
-		listener = new SoundListener(this);
-		isEAX = al.alIsExtensionPresent("EAX2.0");
-		if (isEAX && attemptEAX)
-			initEAX();
-		return (al.alGetError() == AL.AL_NO_ERROR);
+		if (!isInited) {
+			try {
+				ALut.alutInit();
+				al = ALFactory.getAL();
+				alc = ALFactory.getALC();
+			} catch (ALException e) {
+				throw new RuntimeException("OpenAL could not be initialized: "
+						+ e.getMessage());
+			}
+			buffers = new ArrayList<Integer>();
+			sources = new ArrayList<Integer>();
+			listener = new SoundListener(this);
+			isEAX = al.alIsExtensionPresent("EAX2.0");
+			if (isEAX && attemptEAX) {
+				initEAX();
+			}
+			isInited = (al.alGetError() == AL.AL_NO_ERROR);
+		}
+		return isInited;
 	}
 
 	private void initEAX() {
@@ -90,14 +112,14 @@ public class JOALUtil {
 		logger.info("shutting down JOAL");
 		int[] tmpbuf = new int[buffers.size()];
 		for (int i = 0; i < tmpbuf.length; i++) {
-			tmpbuf[i] = ((Integer) buffers.get(i)).intValue();
+			tmpbuf[i] = buffers.get(i);
 		}
 		al.alDeleteBuffers(tmpbuf.length, tmpbuf, 0);
 		buffers.clear();
 		logger.info(tmpbuf.length + " buffers released");
 		int[] tmpsrc = new int[sources.size()];
 		for (int i = 0; i < tmpsrc.length; i++) {
-			tmpsrc[i] = ((Integer) sources.get(i)).intValue();
+			tmpsrc[i] = sources.get(i);
 		}
 		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
 		sources.clear();
@@ -118,10 +140,9 @@ public class JOALUtil {
 		AudioBuffer[] result = new AudioBuffer[numBuffers];
 		int[] arr = new int[numBuffers];
 		al.alGenBuffers(numBuffers, arr, 0);
-
 		for (int i = 0; i < numBuffers; i++) {
 			result[i] = new AudioBuffer(al, arr[i]);
-			buffers.add(new Integer(arr[i]));
+			buffers.add(arr[i]);
 		}
 		return result;
 	}
@@ -131,10 +152,8 @@ public class JOALUtil {
 		AudioBuffer result;
 		AudioBuffer[] tmp = generateBuffers(1);
 		result = tmp[0];
-
 		WAVData wd = WAVLoader.loadFromStream(is);
 		result.configure(wd.data, wd.format, wd.freq);
-
 		return result;
 	}
 
@@ -154,12 +173,10 @@ public class JOALUtil {
 		AudioSource[] result = new AudioSource[numSources];
 		int[] arr = new int[numSources];
 		al.alGenSources(numSources, arr, 0);
-
 		for (int i = 0; i < numSources; i++) {
 			result[i] = new AudioSource(al, arr[i]);
-			sources.add(new Integer(arr[i]));
+			sources.add(arr[i]);
 		}
-
 		return result;
 	}
 

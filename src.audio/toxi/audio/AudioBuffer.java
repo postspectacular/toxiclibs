@@ -11,13 +11,14 @@ public class AudioBuffer {
 	public final static int FORMAT_STEREO8 = AL.AL_FORMAT_STEREO8;
 	public final static int FORMAT_STEREO16 = AL.AL_FORMAT_STEREO16;
 
-	protected final int bufferID;
-
+	protected final AL al;
 	protected ByteBuffer data;
+
+	protected final int bufferID;
 
 	protected boolean isConfigured = false;
 
-	protected final AL al;
+	protected int[] alResult = new int[1];
 
 	public AudioBuffer(AL al, int bufferID) {
 		this.bufferID = bufferID;
@@ -56,10 +57,8 @@ public class AudioBuffer {
 	 * @return the bit-depth of the data
 	 */
 	public int getBitDepth() {
-		int[] i = new int[1];
-		al.alGetBufferi(bufferID, AL.AL_BITS, i, 0);
-
-		return i[0];
+		al.alGetBufferi(bufferID, AL.AL_BITS, alResult, 0);
+		return alResult[0];
 	}
 
 	/**
@@ -68,10 +67,9 @@ public class AudioBuffer {
 	 * @return the number of audio channels.
 	 */
 	public int getNumChannels() {
-		int[] i = new int[1];
-		al.alGetBufferi(bufferID, AL.AL_CHANNELS, i, 0);
+		al.alGetBufferi(bufferID, AL.AL_CHANNELS, alResult, 0);
 
-		return i[0];
+		return alResult[0];
 	}
 
 	/**
@@ -89,10 +87,8 @@ public class AudioBuffer {
 	 * @return the frequency of the data
 	 */
 	public int getFrequency() {
-		int[] i = new int[1];
-		al.alGetBufferi(bufferID, AL.AL_FREQUENCY, i, 0);
-
-		return i[0];
+		al.alGetBufferi(bufferID, AL.AL_FREQUENCY, alResult, 0);
+		return alResult[0];
 	}
 
 	/**
@@ -101,10 +97,8 @@ public class AudioBuffer {
 	 * @return the size of the data.
 	 */
 	public int getByteSize() {
-		int[] i = new int[1];
-		al.alGetBufferi(bufferID, AL.AL_SIZE, i, 0);
-
-		return i[0];
+		al.alGetBufferi(bufferID, AL.AL_SIZE, alResult, 0);
+		return alResult[0];
 	}
 
 	/**
@@ -113,7 +107,7 @@ public class AudioBuffer {
 	 * @return sample size.
 	 */
 	public int getSampleSize() {
-		return getByteSize() / (getBitDepth() / 8);
+		return getByteSize() * 8 / getBitDepth();
 	}
 
 	public int getID() {
