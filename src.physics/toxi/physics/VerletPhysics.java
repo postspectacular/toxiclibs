@@ -21,7 +21,6 @@
 package toxi.physics;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
@@ -36,12 +35,12 @@ public class VerletPhysics {
 	/**
 	 * List of particles (Vec3D subclassed)
 	 */
-	public ArrayList particles;
+	public ArrayList<VerletParticle> particles;
 
 	/**
 	 * List of spring/sticks connectors
 	 */
-	public ArrayList springs;
+	public ArrayList<VerletSpring> springs;
 
 	/**
 	 * Default friction value = 0.15
@@ -72,8 +71,8 @@ public class VerletPhysics {
 	 * Initializes a Verlet engine instance using the default values.
 	 */
 	public VerletPhysics() {
-		particles = new ArrayList();
-		springs = new ArrayList();
+		particles = new ArrayList<VerletParticle>();
+		springs = new ArrayList<VerletSpring>();
 	}
 
 	/**
@@ -188,9 +187,7 @@ public class VerletPhysics {
 	 */
 	protected void applyGravity() {
 		if (!gravity.isZeroVector()) {
-			Iterator i = particles.iterator();
-			while (i.hasNext()) {
-				VerletParticle p = (VerletParticle) i.next();
+			for (VerletParticle p : particles) {
 				if (!p.isLocked)
 					p.addSelf(gravity.scale(p.weight));
 			}
@@ -202,10 +199,7 @@ public class VerletPhysics {
 	 */
 	protected void updateParticles() {
 		float force = 1.0f - friction * timeStep * timeStep;
-		// TODO use weight for friction too?
-		Iterator i = particles.iterator();
-		while (i.hasNext()) {
-			VerletParticle p = (VerletParticle) i.next();
+		for (VerletParticle p : particles) {
 			p.update(force);
 		}
 	}
@@ -215,9 +209,7 @@ public class VerletPhysics {
 	 */
 	protected void updateSprings() {
 		for (int i = numIterations; i > 0; i--) {
-			Iterator is = springs.iterator();
-			while (is.hasNext()) {
-				VerletSpring s = (VerletSpring) is.next();
+			for (VerletSpring s : springs) {
 				s.update(i == 1);
 			}
 		}
@@ -227,15 +219,15 @@ public class VerletPhysics {
 	 * Constrains all particle positions to the world bounding box set
 	 */
 	protected void constrainToBounds() {
-		Iterator i = particles.iterator();
-		while (i.hasNext()) {
-			VerletParticle p = (VerletParticle) i.next();
-			// since this method is protected we rely here that worldBox isn't
-			// null
-			if (p.bounds != null)
+		for (VerletParticle p : particles) {
+			if (p.bounds != null) {
 				p.constrain(p.bounds);
-			if (worldBounds != null)
+			}
+		}
+		if (worldBounds != null) {
+			for (VerletParticle p : particles) {
 				p.constrain(worldBounds);
+			}
 		}
 	}
 
@@ -249,9 +241,7 @@ public class VerletPhysics {
 	 * @return spring instance, or null if not found
 	 */
 	public VerletSpring getSpring(Vec3D a, Vec3D b) {
-		Iterator is = springs.iterator();
-		while (is.hasNext()) {
-			VerletSpring s = (VerletSpring) is.next();
+		for (VerletSpring s : springs) {
 			if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
 				return s;
 			}

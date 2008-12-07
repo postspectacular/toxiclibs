@@ -22,7 +22,6 @@ package toxi.physics2d;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import toxi.geom.Vec2D;
 
@@ -36,12 +35,12 @@ public class VerletPhysics2D {
 	/**
 	 * List of particles (Vec2D subclassed)
 	 */
-	public ArrayList particles;
+	public ArrayList<VerletParticle2D> particles;
 
 	/**
 	 * List of spring/sticks connectors
 	 */
-	public ArrayList springs;
+	public ArrayList<VerletSpring2D> springs;
 
 	/**
 	 * Default friction value = 0.15
@@ -72,8 +71,8 @@ public class VerletPhysics2D {
 	 * Initializes a Verlet engine instance using the default values.
 	 */
 	public VerletPhysics2D() {
-		particles = new ArrayList();
-		springs = new ArrayList();
+		particles = new ArrayList<VerletParticle2D>();
+		springs = new ArrayList<VerletSpring2D>();
 	}
 
 	/**
@@ -188,9 +187,7 @@ public class VerletPhysics2D {
 	 */
 	protected void applyGravity() {
 		if (!gravity.isZeroVector()) {
-			Iterator i = particles.iterator();
-			while (i.hasNext()) {
-				VerletParticle2D p = (VerletParticle2D) i.next();
+			for (VerletParticle2D p : particles) {
 				if (!p.isLocked)
 					p.addSelf(gravity.scale(p.weight));
 			}
@@ -202,9 +199,7 @@ public class VerletPhysics2D {
 	 */
 	protected void updateParticles() {
 		float force = 1.0f - friction * timeStep * timeStep;
-		Iterator i = particles.iterator();
-		while (i.hasNext()) {
-			VerletParticle2D p = (VerletParticle2D) i.next();
+		for (VerletParticle2D p : particles) {
 			p.update(force);
 		}
 	}
@@ -214,9 +209,7 @@ public class VerletPhysics2D {
 	 */
 	protected void updateSprings() {
 		for (int i = numIterations; i > 0; i--) {
-			Iterator is = springs.iterator();
-			while (is.hasNext()) {
-				VerletSpring2D s = (VerletSpring2D) is.next();
+			for (VerletSpring2D s : springs) {
 				s.update(i == 1);
 			}
 		}
@@ -226,13 +219,13 @@ public class VerletPhysics2D {
 	 * Constrains all particle positions to the world bounding box set
 	 */
 	protected void constrainToBounds() {
-		Iterator i = particles.iterator();
-		while (i.hasNext()) {
-			VerletParticle2D p = (VerletParticle2D) i.next();
+		for (VerletParticle2D p : particles) {
 			if (p.bounds != null) {
 				p.constrain(p.bounds);
 			}
-			if (worldBounds != null) {
+		}
+		if (worldBounds != null) {
+			for (VerletParticle2D p : particles) {
 				p.constrain(worldBounds);
 			}
 		}
@@ -248,9 +241,7 @@ public class VerletPhysics2D {
 	 * @return spring instance, or null if not found
 	 */
 	public VerletSpring2D getSpring(Vec2D a, Vec2D b) {
-		Iterator is = springs.iterator();
-		while (is.hasNext()) {
-			VerletSpring2D s = (VerletSpring2D) is.next();
+		for (VerletSpring2D s : springs) {
 			if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
 				return s;
 			}

@@ -9,7 +9,7 @@ public class ColorAccessCriteria {
 	public static final int CMYK_MODE = 2;
 	public static final int ALPHA_MODE = 3;
 
-	private Comparator comparator;
+	private Comparator<Color> comparator;
 
 	public static final ColorAccessCriteria HUE = new ColorAccessCriteria(
 			HSV_MODE, 0);

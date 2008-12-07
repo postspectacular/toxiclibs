@@ -15,9 +15,15 @@
 	<classpathentry kind="lib" path="lib/joal.jar" sourcepath="C:/java/javalibs/joal/joal-1.1.2-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/java/javalibs/joal/joal-1.1.2-docs/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogl.jar"/>
 	<classpathentry kind="lib" path="lib/opengl.jar"/>
+	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
