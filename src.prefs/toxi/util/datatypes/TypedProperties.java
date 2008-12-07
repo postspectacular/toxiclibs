@@ -31,6 +31,8 @@ import java.util.logging.Logger;
  * @author toxi
  * 
  */
+
+@SuppressWarnings("serial")
 public class TypedProperties extends Properties {
 
 	public static final String DELIM = "\t\n\r\f\u00A0,";
@@ -172,7 +174,7 @@ public class TypedProperties extends Properties {
 				pieces[index] = Float.parseFloat(tokenizer.nextToken());
 				index++;
 			} catch (NumberFormatException e) {
-				// ignore
+				// ignore NaN items
 			}
 		}
 		if (index > 0) {
@@ -233,11 +235,13 @@ public class TypedProperties extends Properties {
 		int index = 0;
 		String[] pieces = null;
 		while (tokenizer.hasMoreTokens()) {
-			if (pieces == null)
+			if (pieces == null) {
 				pieces = new String[tokenizer.countTokens()];
+			}
 			String token = tokenizer.nextToken();
-			if (token.length() > 0)
+			if (token.length() > 0) {
 				pieces[index++] = token;
+			}
 		}
 		if (index > 0) {
 			String[] result = new String[index];
