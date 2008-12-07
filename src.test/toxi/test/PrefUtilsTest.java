@@ -2,6 +2,7 @@ package toxi.test;
 
 import junit.framework.TestCase;
 import toxi.util.datatypes.ArrayUtil;
+import toxi.util.datatypes.GenericSet;
 import toxi.util.datatypes.TypedProperties;
 
 public class PrefUtilsTest extends TestCase {
@@ -46,14 +47,19 @@ public class PrefUtilsTest extends TestCase {
 	public void testArrayReverse() {
 		byte[] array = new byte[] { 1, 2, 3, 4, 5 };
 		ArrayUtil.reverse(array);
-		for (int i = 0; i < array.length; i++) {
-			System.out.println(array[i]);
-		}
+
 	}
 
 	public void testStringArray() {
 		String[] items = config.getStringArray("test.stringarray");
 		assertEquals(3, items.length);
 		assertEquals(true, items[1].equalsIgnoreCase("world"));
+	}
+
+	public void testObjectSet() {
+		GenericSet<String> strings = new GenericSet<String>("Hello");
+		String s = strings.pickRandom();
+		assertEquals(s, "Hello");
+		assertTrue(strings.contains("Hello"));
 	}
 }
