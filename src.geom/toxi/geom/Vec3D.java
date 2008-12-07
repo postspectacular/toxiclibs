@@ -1314,4 +1314,8 @@ public class Vec3D implements Comparable {
 				.append(z).append("}");
 		return sb.toString();
 	}
+
+	public float[] toArray() {
+		return new float[] { x, y, z };
+	}
 }

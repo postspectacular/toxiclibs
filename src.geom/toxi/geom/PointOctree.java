@@ -48,7 +48,7 @@ public class PointOctree extends AABB {
 
 	protected byte numChildren;
 
-	protected ArrayList data;
+	protected ArrayList<Vec3D> data;
 
 	protected float dim, dim2;
 
@@ -105,7 +105,7 @@ public class PointOctree extends AABB {
 		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
 				+ (plocal.z >= dim2 ? 4 : 0);
 	}
-	
+
 	/**
 	 * Adds a new point/particle to the tree structure. All points are stored
 	 * within leaf nodes only. The tree implementation is using lazy
@@ -120,7 +120,7 @@ public class PointOctree extends AABB {
 			// only add data to leaves for now
 			if (dim2 <= minNodeSize) {
 				if (data == null) {
-					data = new ArrayList();
+					data = new ArrayList<Vec3D>();
 				}
 				data.add(p);
 				return true;
@@ -134,7 +134,7 @@ public class PointOctree extends AABB {
 					Vec3D off = offset.add(new Vec3D((octant & 1) != 0 ? dim2
 							: 0, (octant & 2) != 0 ? dim2 : 0,
 							(octant & 4) != 0 ? dim2 : 0));
-					children[octant] = new PointOctree(this, off, dim2/2);
+					children[octant] = new PointOctree(this, off, dim2 / 2);
 					numChildren++;
 				}
 				return children[octant].addPoint(p);
@@ -151,8 +151,8 @@ public class PointOctree extends AABB {
 	 *            point collection
 	 * @return true, if all points have been added successfully.
 	 */
-	public boolean addAll(Collection points) {
-		Iterator i = points.iterator();
+	public boolean addAll(Collection<Vec3D> points) {
+		Iterator<Vec3D> i = points.iterator();
 		boolean addedAll = true;
 		while (i.hasNext()) {
 			addedAll &= addPoint((Vec3D) i.next());
@@ -193,8 +193,8 @@ public class PointOctree extends AABB {
 		return found;
 	}
 
-	public void removeAll(Collection points) {
-		Iterator i = points.iterator();
+	public void removeAll(Collection<Vec3D> points) {
+		Iterator<Vec3D> i = points.iterator();
 		while (i.hasNext()) {
 			remove((Vec3D) i.next());
 		}
@@ -243,7 +243,8 @@ public class PointOctree extends AABB {
 	 * @param clipRadius
 	 * @return selected points
 	 */
-	public ArrayList getPointsWithinSphere(Vec3D sphereOrigin, float clipRadius) {
+	public ArrayList<Vec3D> getPointsWithinSphere(Vec3D sphereOrigin,
+			float clipRadius) {
 		return getPointsWithinSphere(new Sphere(sphereOrigin, clipRadius));
 	}
 
@@ -254,15 +255,15 @@ public class PointOctree extends AABB {
 	 *            sphere
 	 * @return selected points
 	 */
-	public ArrayList getPointsWithinSphere(Sphere s) {
-		ArrayList results = null;
+	public ArrayList<Vec3D> getPointsWithinSphere(Sphere s) {
+		ArrayList<Vec3D> results = null;
 		if (this.intersectsSphere(s)) {
 			if (data != null) {
 				for (int i = data.size() - 1; i >= 0; i--) {
 					Vec3D q = (Vec3D) data.get(i);
 					if (q.isInSphere(s)) {
 						if (results == null) {
-							results = new ArrayList();
+							results = new ArrayList<Vec3D>();
 						}
 						results.add(q);
 					}
@@ -270,10 +271,12 @@ public class PointOctree extends AABB {
 			} else if (numChildren > 0) {
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
-						ArrayList points = children[i].getPointsWithinSphere(s);
+						ArrayList<Vec3D> points = children[i]
+								.getPointsWithinSphere(s);
 						if (points != null) {
-							if (results == null)
-								results = new ArrayList();
+							if (results == null) {
+								results = new ArrayList<Vec3D>();
+							}
 							results.addAll(points);
 						}
 					}
@@ -290,15 +293,15 @@ public class PointOctree extends AABB {
 	 *            AABB
 	 * @return all points with the box volume
 	 */
-	public ArrayList getPointsWithinBox(AABB b) {
-		ArrayList results = null;
+	public ArrayList<Vec3D> getPointsWithinBox(AABB b) {
+		ArrayList<Vec3D> results = null;
 		if (this.intersectsBox(b)) {
 			if (data != null) {
 				for (int i = data.size() - 1; i >= 0; i--) {
 					Vec3D q = (Vec3D) data.get(i);
 					if (q.isInAABB(b)) {
 						if (results == null) {
-							results = new ArrayList();
+							results = new ArrayList<Vec3D>();
 						}
 						results.add(q);
 					}
@@ -306,10 +309,12 @@ public class PointOctree extends AABB {
 			} else if (numChildren > 0) {
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
-						ArrayList points = children[i].getPointsWithinBox(b);
+						ArrayList<Vec3D> points = children[i]
+								.getPointsWithinBox(b);
 						if (points != null) {
-							if (results == null)
-								results = new ArrayList();
+							if (results == null) {
+								results = new ArrayList<Vec3D>();
+							}
 							results.addAll(points);
 						}
 					}
@@ -345,23 +350,23 @@ public class PointOctree extends AABB {
 	public void setMinNodeSize(float minNodeSize) {
 		this.minNodeSize = minNodeSize;
 	}
-	
+
 	public float getNodeSize() {
 		return dim;
 	}
-	
+
 	/**
 	 * @return the number of child nodes (max. 8)
 	 */
 	public int getNumChildren() {
 		return numChildren;
 	}
-	
+
 	/**
 	 * @return a copy of the child nodes array
 	 */
 	public PointOctree[] getChildren() {
-		PointOctree[] clones=new PointOctree[8];
+		PointOctree[] clones = new PointOctree[8];
 		System.arraycopy(children, 0, clones, 0, 8);
 		return clones;
 	}

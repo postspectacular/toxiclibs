@@ -1014,4 +1014,8 @@ public class Vec2D {
 		sb.append("{x:").append(x).append(", y:").append(y).append("}");
 		return sb.toString();
 	}
+
+	public float[] toArray() {
+		return new float[] { x, y };
+	}
 }
