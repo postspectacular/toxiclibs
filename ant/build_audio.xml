@@ -4,7 +4,7 @@
 	<property name="project.name" value="libjoal" />
 	<property name="srcfolder.id" value="audio" />
 	<property name="lib.version" value="0002" />
-	<property name="lib.jdk.level" value="1.4" />
+	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - JOAL convenience wrapper &amp; audio utils v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/joal.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />

@@ -4,7 +4,7 @@
 	<property name="project.name" value="imageutils" />
 	<property name="srcfolder.id" value="image" />
 	<property name="lib.version" value="0002" />
-	<property name="lib.jdk.level" value="1.4" />
+	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - image and colour utilities v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/core.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
