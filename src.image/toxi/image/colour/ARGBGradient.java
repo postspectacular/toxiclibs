@@ -7,7 +7,7 @@ import toxi.math.MathUtils;
 
 public class ARGBGradient {
 
-	private class GradPoint implements Comparable {
+	private class GradPoint implements Comparable<GradPoint> {
 		float pos;
 
 		int col;
@@ -17,7 +17,7 @@ public class ARGBGradient {
 			col = c;
 		}
 
-		public int compareTo(Object o) {
+		public int compareTo(GradPoint o) {
 			GradPoint p = (GradPoint) o;
 			if (p.pos == pos)
 				return 0;
@@ -25,12 +25,12 @@ public class ARGBGradient {
 		}
 	}
 
-	private TreeSet gradient;
+	private TreeSet<GradPoint> gradient;
 
 	private float maxDither;
 
 	public ARGBGradient() {
-		gradient = new TreeSet();
+		gradient = new TreeSet<GradPoint>();
 	}
 
 	// add a new colour at specified position
@@ -65,17 +65,15 @@ public class ARGBGradient {
 		float endPos = pos + steps;
 		// find 1st colour needed, clamp start position to positive values only
 		// pos = (pos > -1) ? pos : 0;
-		Iterator iter = gradient.iterator();
-		while (iter.hasNext()) {
-			GradPoint gp = (GradPoint) iter.next();
+		for (GradPoint gp : gradient) {
 			if (gp.pos <= pos) {
 				currPoint = gp;
 			}
 		}
 		boolean isPremature = currPoint == null;
-		TreeSet activeGradient = null;
+		TreeSet<GradPoint> activeGradient = null;
 		if (!isPremature) {
-			activeGradient = (TreeSet) gradient.tailSet(currPoint);
+			activeGradient = (TreeSet<GradPoint>) gradient.tailSet(currPoint);
 		} else {
 			// start position is before 1st gradient colour, so use whole
 			// gradient
@@ -83,11 +81,11 @@ public class ARGBGradient {
 			currPoint = (GradPoint) activeGradient.first();
 		}
 		float currWidth = 0;
-		iter = activeGradient.iterator();
+		Iterator<GradPoint> iter = activeGradient.iterator();
 		if (currPoint != activeGradient.last()) {
-			nextPoint = (GradPoint) iter.next();
+			nextPoint = iter.next();
 			if (iter.hasNext())
-				nextPoint = (GradPoint) iter.next();
+				nextPoint = iter.next();
 			if (isPremature) {
 				currWidth = 1f / (currPoint.pos - pos);
 			} else {
@@ -108,7 +106,7 @@ public class ARGBGradient {
 				currPoint = nextPoint;
 				isPremature = false;
 				if (iter.hasNext()) {
-					nextPoint = (GradPoint) iter.next();
+					nextPoint = iter.next();
 					if (currPoint != activeGradient.last()) {
 						currWidth = 1f / (nextPoint.pos - currPoint.pos);
 					} else
@@ -117,8 +115,8 @@ public class ARGBGradient {
 				}
 			}
 			if (currPoint != activeGradient.last()) {
-				float fdith = MathUtils.clip(frac + MathUtils.random(-1f, 1f)
-						* maxDither, 0f, 1f);
+				float fdith = MathUtils.clip(frac
+						+ MathUtils.normalizedRandom() * maxDither, 0f, 1f);
 				result[idx] = blend(currPoint.col, nextPoint.col, fdith);
 			} else {
 				result[idx] = currPoint.col;

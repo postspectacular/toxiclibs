@@ -30,9 +30,12 @@ package toxi.image.colour;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import toxi.math.MathUtils;
+
 /**
  * @deprecated
  */
+@Deprecated
 public class PaletteUtil {
 
 	/**
@@ -46,23 +49,22 @@ public class PaletteUtil {
 	 */
 	public static int[] sortBySaturation(int[] cols) {
 		int[] sorted = new int[cols.length];
-		Hashtable ht = new Hashtable();
+		Hashtable<Integer, Integer> ht = new Hashtable<Integer, Integer>();
 		for (int i = 0; i < cols.length; i++) {
 			int r = (cols[i] >> 16) & 0xff;
 			int g = (cols[i] >> 8) & 0xff;
 			int b = cols[i] & 0xff;
-			int maxComponent = max(r, g, b);
+			int maxComponent = MathUtils.max(r, g, b);
 			if (maxComponent > 0) {
-				sorted[i] = (int) ((maxComponent - min(r, g, b))
+				sorted[i] = (int) ((maxComponent - MathUtils.min(r, g, b))
 						/ (float) maxComponent * 0x7fffffff);
-			}
-			else
+			} else
 				sorted[i] = 0;
-			ht.put(new Integer(sorted[i]), new Integer(cols[i]));
+			ht.put(sorted[i], cols[i]);
 		}
 		Arrays.sort(sorted);
 		for (int i = 0; i < sorted.length; i++) {
-			sorted[i] = ((Integer) ht.get(new Integer(sorted[i]))).intValue();
+			sorted[i] = ht.get(sorted[i]);
 		}
 		return sorted;
 	}
@@ -79,17 +81,17 @@ public class PaletteUtil {
 
 	public static int[] sortByLuminance(int[] cols) {
 		int[] sorted = new int[cols.length];
-		Hashtable ht = new Hashtable();
+		Hashtable<Integer, Integer> ht = new Hashtable<Integer, Integer>();
 		for (int i = 0; i < cols.length; i++) {
 			// luminance = 0.3*red + 0.59*green + 0.11*blue
 			// same equation in fixed point math...
 			sorted[i] = (77 * (cols[i] >> 16 & 0xff) + 151
 					* (cols[i] >> 8 & 0xff) + 28 * (cols[i] & 0xff));
-			ht.put(new Integer(sorted[i]), new Integer(cols[i]));
+			ht.put(sorted[i], cols[i]);
 		}
 		Arrays.sort(sorted);
 		for (int i = 0; i < sorted.length; i++) {
-			sorted[i] = ((Integer) ht.get(new Integer(sorted[i]))).intValue();
+			sorted[i] = ht.get(sorted[i]);
 		}
 		return sorted;
 	}
@@ -108,7 +110,7 @@ public class PaletteUtil {
 
 	public static int[] sortByProximity(int[] cols, int basecol) {
 		int[] sorted = new int[cols.length];
-		Hashtable ht = new Hashtable();
+		Hashtable<Integer, Integer> ht = new Hashtable<Integer, Integer>();
 		int br = (basecol >> 16) & 0xff;
 		int bg = (basecol >> 8) & 0xff;
 		int bb = basecol & 0xff;
@@ -118,36 +120,12 @@ public class PaletteUtil {
 			int b = cols[i] & 0xff;
 			sorted[i] = (br - r) * (br - r) + (bg - g) * (bg - g) + (bb - b)
 					* (bb - b);
-			ht.put(new Integer(sorted[i]), new Integer(cols[i]));
+			ht.put(sorted[i], cols[i]);
 		}
 		Arrays.sort(sorted);
 		for (int i = 0; i < sorted.length; i++) {
-			sorted[i] = ((Integer) ht.get(new Integer(sorted[i]))).intValue();
+			sorted[i] = ht.get(sorted[i]);
 		}
 		return sorted;
-	}
-
-	/**
-	 * Minimum of three
-	 * 
-	 * @param a
-	 * @param b
-	 * @param c
-	 * @return the smallest of 3 numbers
-	 */
-	private static final int min(int a, int b, int c) {
-		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
-	}
-
-	/**
-	 * Maximum of three
-	 * 
-	 * @param a
-	 * @param b
-	 * @param c
-	 * @return the largest of 3 numbers
-	 */
-	private static final int max(int a, int b, int c) {
-		return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
 	}
 }

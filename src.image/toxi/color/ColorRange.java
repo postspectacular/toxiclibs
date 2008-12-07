@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import toxi.math.MathUtils;
 import toxi.util.datatypes.ArrayUtil;
 import toxi.util.datatypes.FloatRange;
-import toxi.util.datatypes.FloatRangeSet;
+import toxi.util.datatypes.GenericSet;
 
 /**
  * 
@@ -56,10 +56,10 @@ public class ColorRange {
 	public static ArrayList PRESETS = ArrayUtil.arrayToList(new ColorRange[] {
 			BRIGHT, DARK, LIGHT, FRESH, HARD, SOFT, WEAK, NEUTRAL });
 
-	protected FloatRangeSet hueConstraint;
-	protected FloatRangeSet saturationConstraint;
-	protected FloatRangeSet brightnessConstraint;
-	protected FloatRangeSet alphaConstraint;
+	protected GenericSet<FloatRange> hueConstraint;
+	protected GenericSet<FloatRange> saturationConstraint;
+	protected GenericSet<FloatRange> brightnessConstraint;
+	protected GenericSet<FloatRange> alphaConstraint;
 
 	protected FloatRange white;
 	protected FloatRange black;
@@ -77,7 +77,7 @@ public class ColorRange {
 
 	public ColorRange(ColorList list) {
 		this();
-		hueConstraint.items.clear();
+		hueConstraint.clear();
 		for (Color c : list) {
 			hueConstraint.add(new FloatRange(c.hue(), c.hue()));
 			saturationConstraint.add(new FloatRange(c.saturation(), c
@@ -106,13 +106,13 @@ public class ColorRange {
 	public ColorRange(FloatRange hue, FloatRange sat, FloatRange bri,
 			FloatRange alpha, FloatRange black, FloatRange white, String name) {
 		super();
-		hueConstraint = new FloatRangeSet(hue != null ? hue : new FloatRange(0,
-				1));
-		saturationConstraint = new FloatRangeSet(sat != null ? sat
+		hueConstraint = new GenericSet<FloatRange>(hue != null ? hue
 				: new FloatRange(0, 1));
-		brightnessConstraint = new FloatRangeSet(bri != null ? bri
+		saturationConstraint = new GenericSet<FloatRange>(sat != null ? sat
 				: new FloatRange(0, 1));
-		alphaConstraint = new FloatRangeSet(alpha != null ? alpha
+		brightnessConstraint = new GenericSet<FloatRange>(bri != null ? bri
+				: new FloatRange(0, 1));
+		alphaConstraint = new GenericSet<FloatRange>(alpha != null ? alpha
 				: new FloatRange(0, 1));
 		this.name = name != null ? name : "untitled";
 		if (white == null) {
@@ -152,9 +152,10 @@ public class ColorRange {
 
 		if (c != null) {
 			float hue = c.hue() + variance * MathUtils.normalizedRandom();
-			range.hueConstraint = new FloatRangeSet(new FloatRange(hue, hue));
-			range.alphaConstraint = new FloatRangeSet(new FloatRange(c.alpha,
-					c.alpha));
+			range.hueConstraint = new GenericSet<FloatRange>(new FloatRange(
+					hue, hue));
+			range.alphaConstraint = new GenericSet<FloatRange>(new FloatRange(
+					c.alpha, c.alpha));
 		} else {
 			range.hueConstraint = hueConstraint.copy();
 			range.alphaConstraint = alphaConstraint.copy();
@@ -220,10 +221,10 @@ public class ColorRange {
 	}
 
 	public ColorRange add(ColorRange range) {
-		hueConstraint.addAll(range.hueConstraint);
-		saturationConstraint.addAll(range.saturationConstraint);
-		brightnessConstraint.addAll(range.brightnessConstraint);
-		alphaConstraint.addAll(range.alphaConstraint);
+		hueConstraint.addAll(range.hueConstraint.getItems());
+		saturationConstraint.addAll(range.saturationConstraint.getItems());
+		brightnessConstraint.addAll(range.brightnessConstraint.getItems());
+		alphaConstraint.addAll(range.alphaConstraint.getItems());
 		black.min = MathUtils.min(black.min, range.black.min);
 		black.max = MathUtils.max(black.max, range.black.max);
 		white.min = MathUtils.min(white.min, range.white.min);
@@ -243,7 +244,8 @@ public class ColorRange {
 		return isInRange;
 	}
 
-	protected boolean isValueInConstraint(float val, FloatRangeSet rangeSet) {
+	protected boolean isValueInConstraint(float val,
+			GenericSet<FloatRange> rangeSet) {
 		boolean isValid = false;
 		for (FloatRange r : rangeSet) {
 			isValid |= r.isValueInRange(val);

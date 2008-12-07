@@ -2,6 +2,7 @@ package toxi.image.colour;
 
 import toxi.math.MathUtils;
 
+@Deprecated
 public class Palette {
 	protected int[] colours;
 

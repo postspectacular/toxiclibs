@@ -26,13 +26,14 @@ import toxi.math.MathUtils;
  * A colour palette made up of a set of base colours and a second one defining
  * accent colours
  */
+@Deprecated
 public class AccentPalette {
 
 	Palette baseCols;
 	Palette accentCols;
 
 	float baseAccentRatio;
-	
+
 	/**
 	 * @param baseCols
 	 * @param accentCols
@@ -41,17 +42,17 @@ public class AccentPalette {
 	public AccentPalette(Palette baseCols, Palette accentCols, float ratio) {
 		this.baseCols = baseCols;
 		this.accentCols = accentCols;
-		baseAccentRatio=ratio;
+		baseAccentRatio = ratio;
 	}
 
 	public int pickRandomColour() {
-		if (MathUtils.random(1f)<baseAccentRatio) {
+		if (MathUtils.random(1f) < baseAccentRatio) {
 			return baseCols.pickRandomColour();
 		} else {
 			return accentCols.pickRandomColour();
 		}
 	}
-	
+
 	/**
 	 * @return ARGB value of last colour picked
 	 */
@@ -64,5 +65,5 @@ public class AccentPalette {
 	 */
 	public int getLastPickedAccentColour() {
 		return accentCols.getLastPickedColour();
-	}	
+	}
 }
