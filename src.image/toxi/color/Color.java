@@ -94,6 +94,10 @@ public class Color {
 				* INV8BIT, (argb & 0xff) * INV8BIT, (argb >>> 24) * INV8BIT);
 	}
 
+	public static Color newHSV(ColorHue h, float s, float v) {
+		return newHSV(h.getHue(), s, v);
+	}
+
 	public static final Color newHSV(float h, float s, float v) {
 		return newHSVA(h, s, v, 1);
 	}
@@ -396,6 +400,10 @@ public class Color {
 
 	public boolean isGrey() {
 		return hsv[1] < GREY_THRESHOLD;
+	}
+
+	public boolean isPrimary() {
+		return ColorHue.isPrimary(hsv[0]);
 	}
 
 	public Color darken(float step) {

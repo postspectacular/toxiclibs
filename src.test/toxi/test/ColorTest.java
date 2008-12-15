@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 import toxi.color.Color;
 import toxi.color.ColorAccessCriteria;
+import toxi.color.ColorHue;
 import toxi.color.ColorList;
 import toxi.color.ColorRange;
+import toxi.color.ColorTheme;
 import toxi.color.theory.ColorTheoryFactory;
 import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
@@ -71,5 +73,19 @@ public class ColorTest extends TestCase {
 		assertTrue(ColorRange.BRIGHT.contains(Color.RED));
 		assertFalse(ColorRange.DARK.contains(Color.RED));
 		assertFalse(ColorRange.BRIGHT.contains(Color.WHITE));
+	}
+
+	public void testHues() {
+		assertTrue(ColorHue.GREEN.isPrimary());
+		assertFalse(ColorHue.LIME.isPrimary());
+		Color hue = Color.newHSV(ColorHue.CYAN, 0.5f, 0.2f);
+		assertFalse(hue.isPrimary());
+	}
+
+	public void testThemes() {
+		ColorTheme t = new ColorTheme("dark blue");
+		for (ColorRange r : t.ranges) {
+			System.out.println(r.getColor());
+		}
 	}
 }

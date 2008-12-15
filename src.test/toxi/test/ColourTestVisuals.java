@@ -20,6 +20,7 @@ public class ColourTestVisuals extends PApplet {
 	public void setup() {
 		size(1024, 768);
 		noLoop();
+		textFont(createFont("arial", 12));
 	}
 
 	public void draw() {
@@ -56,13 +57,18 @@ public class ColourTestVisuals extends PApplet {
 			yoff += SWATCH_HEIGHT + 10;
 			idx++;
 		}
-		yoff = 240;
-		for (Iterator i = ColorRange.PRESETS.iterator(); i.hasNext();) {
+		yoff = 210;
+		col = Color.newHSV(MathUtils.random(1f), MathUtils.random(1f),
+				MathUtils.random(1f));
+		for (Iterator i = ColorRange.PRESETS.values().iterator(); i.hasNext();) {
 			ColorRange range = (ColorRange) i.next();
-			sorted = range.getColors(100);
+			sorted = range.getColors(col, 100, 0.1f);
 			sorted = sorted.sortByCriteria(ColorAccessCriteria.BRIGHTNESS,
 					false);
 			swatches(sorted, 10, yoff);
+			fill(255);
+			text(range.getName(), 15 + 100 * (SWATCH_WIDTH + SWATCH_GAP), yoff
+					+ SWATCH_HEIGHT);
 			yoff += SWATCH_HEIGHT + 10;
 		}
 		ColorRange range = ColorRange.FRESH.getSum(ColorRange.BRIGHT).add(

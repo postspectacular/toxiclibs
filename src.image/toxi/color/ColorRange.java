@@ -3,10 +3,9 @@
  */
 package toxi.color;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import toxi.math.MathUtils;
-import toxi.util.datatypes.ArrayUtil;
 import toxi.util.datatypes.FloatRange;
 import toxi.util.datatypes.GenericSet;
 
@@ -50,11 +49,36 @@ public class ColorRange {
 	public static final ColorRange HARD = new ColorRange(null, new FloatRange(
 			0.9f, 1.0f), new FloatRange(0.4f, 1.0f), "hard");
 
+	public static final ColorRange WARM = new ColorRange(null, new FloatRange(
+			0.6f, 0.9f), new FloatRange(0.4f, 0.9f), null, new FloatRange(0.2f,
+			0.2f), new FloatRange(0.8f, 1.0f), "warm");
+
+	public static final ColorRange COOL = new ColorRange(null, new FloatRange(
+			0.05f, 0.2f), new FloatRange(0.9f, 1.0f), null, null,
+			new FloatRange(0.95f, 1.0f), "cool");
+
+	public static final ColorRange INTENSE = new ColorRange(null,
+			new FloatRange(0.9f, 1.0f), new FloatRange(0.2f, 0.35f), "intense")
+			.addBrightnessRange(new FloatRange(0.8f, 1.0f));
+
 	/**
 	 * List of ColorRange presets.
 	 */
-	public static ArrayList PRESETS = ArrayUtil.arrayToList(new ColorRange[] {
-			BRIGHT, DARK, LIGHT, FRESH, HARD, SOFT, WEAK, NEUTRAL });
+	public static final HashMap<String, ColorRange> PRESETS = new HashMap<String, ColorRange>();
+
+	static {
+		PRESETS.put(BRIGHT.getName(), BRIGHT);
+		PRESETS.put(DARK.getName(), DARK);
+		PRESETS.put(LIGHT.getName(), LIGHT);
+		PRESETS.put(FRESH.getName(), FRESH);
+		PRESETS.put(HARD.getName(), HARD);
+		PRESETS.put(SOFT.getName(), SOFT);
+		PRESETS.put(WEAK.getName(), WEAK);
+		PRESETS.put(NEUTRAL.getName(), NEUTRAL);
+		PRESETS.put(WARM.getName(), WARM);
+		PRESETS.put(COOL.getName(), COOL);
+		PRESETS.put(INTENSE.getName(), INTENSE);
+	}
 
 	protected GenericSet<FloatRange> hueConstraint;
 	protected GenericSet<FloatRange> saturationConstraint;
@@ -73,6 +97,11 @@ public class ColorRange {
 	public ColorRange(Color c) {
 		this(new FloatRange(c.hue(), c.hue()), null, null, null, null, null,
 				null);
+	}
+
+	public ColorRange(ColorHue hue) {
+		this(new FloatRange(hue.getHue(), hue.getHue()), null, null, null, null,
+				null, null);
 	}
 
 	public ColorRange(ColorList list) {
@@ -127,17 +156,17 @@ public class ColorRange {
 		}
 	}
 
-	public ColorRange addHueConstraint(FloatRange hue) {
+	public ColorRange addHueRange(FloatRange hue) {
 		hueConstraint.add(hue);
 		return this;
 	}
 
-	public ColorRange addSaturationConstraint(FloatRange sat) {
+	public ColorRange addSaturationRange(FloatRange sat) {
 		saturationConstraint.add(sat);
 		return this;
 	}
 
-	public ColorRange addBrightnessConstraint(FloatRange bri) {
+	public ColorRange addBrightnessRange(FloatRange bri) {
 		brightnessConstraint.add(bri);
 		return this;
 	}
@@ -199,6 +228,12 @@ public class ColorRange {
 		return Color.newHSVA(h, s, b, a);
 	}
 
+	public Color getColor(ColorHue hue) {
+		return Color.newHSVA(hue.getHue(), saturationConstraint.pickRandom()
+				.pickRandom(), brightnessConstraint.pickRandom().pickRandom(),
+				alphaConstraint.pickRandom().pickRandom());
+	}
+
 	public ColorList getColors(int num) {
 		return getColors(null, num, DEFAULT_VARIANCE);
 	}
@@ -217,6 +252,13 @@ public class ColorRange {
 				.add(new FloatRange(c.saturation(), c.saturation()));
 		brightnessConstraint
 				.add(new FloatRange(c.brightness(), c.brightness()));
+		return this;
+	}
+
+	public ColorRange add(ColorHue hue) {
+		hueConstraint.add(new FloatRange(hue.getHue(), hue.getHue()));
+		saturationConstraint.add(new FloatRange(0, 1));
+		brightnessConstraint.add(new FloatRange(0, 1));
 		return this;
 	}
 
@@ -251,5 +293,17 @@ public class ColorRange {
 			isValid |= r.isValueInRange(val);
 		}
 		return isValid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public static boolean isPresetName(String item) {
+		return PRESETS.get(item) != null;
+	}
+
+	public static ColorRange getPresetForName(String item) {
+		return PRESETS.get(item);
 	}
 }
