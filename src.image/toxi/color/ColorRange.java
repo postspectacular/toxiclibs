@@ -3,6 +3,7 @@
  */
 package toxi.color;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import toxi.math.MathUtils;
@@ -67,17 +68,19 @@ public class ColorRange {
 	public static final HashMap<String, ColorRange> PRESETS = new HashMap<String, ColorRange>();
 
 	static {
-		PRESETS.put(BRIGHT.getName(), BRIGHT);
-		PRESETS.put(DARK.getName(), DARK);
-		PRESETS.put(LIGHT.getName(), LIGHT);
-		PRESETS.put(FRESH.getName(), FRESH);
-		PRESETS.put(HARD.getName(), HARD);
-		PRESETS.put(SOFT.getName(), SOFT);
-		PRESETS.put(WEAK.getName(), WEAK);
-		PRESETS.put(NEUTRAL.getName(), NEUTRAL);
-		PRESETS.put(WARM.getName(), WARM);
-		PRESETS.put(COOL.getName(), COOL);
-		PRESETS.put(INTENSE.getName(), INTENSE);
+		Field[] fields = ColorRange.class.getDeclaredFields();
+		try {
+			for (Field f : fields) {
+				if (f.getType() == ColorRange.class) {
+					String id = f.getName();
+					PRESETS.put(id, (ColorRange) f.get(null));
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected GenericSet<FloatRange> hueConstraint;
@@ -100,19 +103,15 @@ public class ColorRange {
 	}
 
 	public ColorRange(ColorHue hue) {
-		this(new FloatRange(hue.getHue(), hue.getHue()), null, null, null, null,
-				null, null);
+		this(new FloatRange(hue.getHue(), hue.getHue()), null, null, null,
+				null, null, null);
 	}
 
 	public ColorRange(ColorList list) {
 		this();
 		hueConstraint.clear();
 		for (Color c : list) {
-			hueConstraint.add(new FloatRange(c.hue(), c.hue()));
-			saturationConstraint.add(new FloatRange(c.saturation(), c
-					.saturation()));
-			brightnessConstraint.add(new FloatRange(c.brightness(), c
-					.brightness()));
+			add(c);
 		}
 	}
 
@@ -142,7 +141,7 @@ public class ColorRange {
 		brightnessConstraint = new GenericSet<FloatRange>(bri != null ? bri
 				: new FloatRange(0, 1));
 		alphaConstraint = new GenericSet<FloatRange>(alpha != null ? alpha
-				: new FloatRange(0, 1));
+				: new FloatRange(1, 1));
 		this.name = name != null ? name : "untitled";
 		if (white == null) {
 			this.white = new FloatRange(1, 1);
@@ -252,6 +251,7 @@ public class ColorRange {
 				.add(new FloatRange(c.saturation(), c.saturation()));
 		brightnessConstraint
 				.add(new FloatRange(c.brightness(), c.brightness()));
+		alphaConstraint.add(new FloatRange(c.alpha, c.alpha));
 		return this;
 	}
 
@@ -299,11 +299,7 @@ public class ColorRange {
 		return name;
 	}
 
-	public static boolean isPresetName(String item) {
-		return PRESETS.get(item) != null;
-	}
-
 	public static ColorRange getPresetForName(String item) {
-		return PRESETS.get(item);
+		return PRESETS.get(item.toUpperCase());
 	}
 }

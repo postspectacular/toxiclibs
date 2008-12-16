@@ -306,8 +306,7 @@ public class ColorList implements Iterable<Color> {
 	 * @param isReversed
 	 * @return itself
 	 */
-	protected ColorList sortByComparator(Comparator<Color> comp,
-			boolean isReversed) {
+	public ColorList sortByComparator(Comparator<Color> comp, boolean isReversed) {
 		Collections.sort(colors, comp);
 		if (isReversed) {
 			Collections.reverse(colors);

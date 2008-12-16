@@ -9,6 +9,7 @@ import toxi.color.ColorHue;
 import toxi.color.ColorList;
 import toxi.color.ColorRange;
 import toxi.color.ColorTheme;
+import toxi.color.NamedColor;
 import toxi.color.theory.ColorTheoryFactory;
 import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
@@ -80,12 +81,28 @@ public class ColorTest extends TestCase {
 		assertFalse(ColorHue.LIME.isPrimary());
 		Color hue = Color.newHSV(ColorHue.CYAN, 0.5f, 0.2f);
 		assertFalse(hue.isPrimary());
+		String hueName = "pink";
+		ColorHue h = ColorHue.getForName(hueName);
+		assertEquals(hueName, h.getName());
+		h = ColorHue.getClosest(100 / 360.0f, false);
+		assertEquals("lime", h.getName());
+		h = ColorHue.getClosest(100 / 360.0f, true);
+		assertEquals("green", h.getName());
 	}
 
 	public void testThemes() {
-		ColorTheme t = new ColorTheme("dark blue");
-		for (ColorRange r : t.ranges) {
-			System.out.println(r.getColor());
+		ColorTheme t = new ColorTheme("test");
+		t.addRange("dark blue", 0.5f);
+		t.addRange("soft orange", 0.5f);
+		ColorList cols = t.getColors(1000);
+		for (Color c : cols) {
+			System.out.println(c);
+			assertNotNull(c);
 		}
+	}
+
+	public void testNamedColors() {
+		Color c = NamedColor.getForName("cyan");
+		assertEquals(NamedColor.CYAN, c);
 	}
 }

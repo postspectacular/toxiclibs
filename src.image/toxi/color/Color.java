@@ -558,6 +558,13 @@ public class Color {
 		return v1.distanceTo(v2);
 	}
 
+	public float RGBDistanceTo(Color c) {
+		float dr = rgb[0] - c.rgb[0];
+		float dg = rgb[1] - c.rgb[1];
+		float db = rgb[2] - c.rgb[2];
+		return (float) Math.sqrt(dr * dr + dg * dg + db * db);
+	}
+
 	public float getComponentValue(ColorAccessCriteria criteria) {
 		switch (criteria.getMode()) {
 		case ColorAccessCriteria.HSV_MODE:
@@ -594,7 +601,7 @@ public class Color {
 	}
 
 	public boolean equals(Object o) {
-		if (o != null) {
+		if (o != null && o instanceof Color) {
 			Color c = (Color) o;
 			float dr = c.rgb[0] - rgb[0];
 			float dg = c.rgb[1] - rgb[1];
@@ -609,4 +616,17 @@ public class Color {
 	public int hashCode() {
 		return (int) (rgb[0] * 1000000 + rgb[1] * 100000 + rgb[2] * 10000 + alpha * 1000);
 	}
+
+	public ColorHue getClosestHue() {
+		return ColorHue.getClosest(hsv[0], false);
+	}
+
+	public ColorHue getClosestHue(boolean primaryOnly) {
+		return ColorHue.getClosest(hsv[0], primaryOnly);
+	}
+
+	public float luminance() {
+		return rgb[0] * 0.299f + rgb[1] * 0.587f + rgb[2] * 0.114f;
+	}
+
 }

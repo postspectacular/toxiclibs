@@ -8,8 +8,7 @@ public class ColorAccessCriteria {
 	public static final int RGB_MODE = 1;
 	public static final int CMYK_MODE = 2;
 	public static final int ALPHA_MODE = 3;
-
-	private Comparator<Color> comparator;
+	public static final int DIRECT_MODE = 4;
 
 	public static final ColorAccessCriteria HUE = new ColorAccessCriteria(
 			HSV_MODE, 0);
@@ -35,11 +34,21 @@ public class ColorAccessCriteria {
 	public static final ColorAccessCriteria ALPHA = new ColorAccessCriteria(
 			ALPHA_MODE, 0);
 
+	public static final ColorAccessCriteria LUMINANCE = new ColorAccessCriteria(
+			DIRECT_MODE, 0, new LuminanceComparator());
+
 	private final int mode, component;
+	private Comparator<Color> comparator;
 
 	private ColorAccessCriteria(int mode, int compID) {
+		this(mode, compID, null);
+	}
+
+	private ColorAccessCriteria(int mode, int compID,
+			Comparator<Color> comparator) {
 		this.mode = mode;
 		this.component = compID;
+		this.comparator = comparator;
 	}
 
 	protected int getMode() {
