@@ -81,7 +81,7 @@
 
 	<target name="javadoc" depends="init" description="Generate documentation">
 		<mkdir dir="${release.javadoc.dir}" />
-		<javadoc destdir="${release.javadoc.dir}" access="protected" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
+		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
 				<pathelement location="${release.dir}/geomutils.jar" />
 				<pathelement location="${lib.libs.path}" />

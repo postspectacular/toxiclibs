@@ -3,18 +3,19 @@ package toxi.test;
 import java.util.Iterator;
 
 import processing.core.PApplet;
-import toxi.color.Color;
-import toxi.color.ColorAccessCriteria;
-import toxi.color.ColorList;
-import toxi.color.ColorRange;
-import toxi.color.ColorTheme;
-import toxi.color.NamedColor;
+import toxi.colour.Colour;
+import toxi.colour.AccessCriteria;
+import toxi.colour.ColourList;
+import toxi.colour.ColourRange;
+import toxi.colour.ColourTheme;
+import toxi.math.MathUtils;
 
 public class ColorThemeVisuals extends PApplet {
 
 	private static final float SWATCH_HEIGHT = 40;
 	private static final float SWATCH_WIDTH = 5;
 	private static final int SWATCH_GAP = 1;
+	private static final float MAX_SIZE = 150;
 
 	public void setup() {
 		size(1024, 768);
@@ -25,51 +26,52 @@ public class ColorThemeVisuals extends PApplet {
 	}
 
 	public void draw() {
-		background(255);
-		ColorTheme t = new ColorTheme("test");
-		t.addRange("dark blue", 0.5f);
-		t.addRange("bright orange", 1);
-		t.addRange(ColorRange.WARM, NamedColor.DARKORCHID, 1);
-		t.addRange(ColorRange.COOL, null, 0.25f);
-		t.addRange("fresh teal", 0.05f);
-
-		t = new ColorTheme("sand");
+		ColourTheme t = new ColourTheme("test");
 		t.addRange("soft ivory", 0.5f);
-		t.addRange("dark goldenrod", 0.25f);
-		t.addRange("warm saddlebrown", 0.25f);
+		t.addRange(ColourRange.BRIGHT, Colour.newRandom(), MathUtils.random(
+				0.02f, 0.05f));
+		t.addRange("intense goldenrod", 0.25f);
+		t.addRange("warm saddlebrown", 0.15f);
 		t.addRange("fresh teal", 0.05f);
-
-		ColorList list = t.getColors(500);
-		list.sortByCriteria(ColorAccessCriteria.LUMINANCE, false);
-		discs(list);
-		// list.sortByDistance(false);
-		// swatches(list, 10, 60);
-	}
-
-	private void swatches(ColorList sorted, int x, int y) {
-		noStroke();
-		for (Iterator i = sorted.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
-			swatch(c, x, y);
-			x += SWATCH_WIDTH + SWATCH_GAP;
+		t.addRange("bright yellow", 0.05f);
+		ColourList list = t.getColors(160);
+		list.sortByCriteria(AccessCriteria.LUMINANCE, false);
+		if (!mousePressed) {
+			background(list.getLightest().toARGB());
+			discs(list);
+		} else {
+			background(0);
+			list.sortByDistance(false);
+			swatches(list, 20, 60);
 		}
-	}
-
-	private void discs(ColorList list) {
-		for (Iterator i = list.iterator(); i.hasNext();) {
-			Color c = (Color) i.next();
-			fill(c.toARGB());
-			float r = random(100);
-			ellipse(random(width), random(height), r, r);
-		}
-	}
-
-	private void swatch(Color c, int x, int y) {
-		fill(c.toARGB());
-		rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
 	}
 
 	public void keyPressed() {
 		redraw();
 	}
+
+	private void swatches(ColourList sorted, int x, int y) {
+		noStroke();
+		for (Iterator i = sorted.iterator(); i.hasNext();) {
+			Colour c = (Colour) i.next();
+			fill(c.toARGB());
+			rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
+			x += SWATCH_WIDTH + SWATCH_GAP;
+		}
+	}
+
+	private void discs(ColourList list) {
+		float numCols = list.size();
+		for (int i = 0; i < 300; i++) {
+			Colour c = list.get((int) random(numCols)).copy();
+			c.alpha = random(0.5f, 1);
+			fill(c.toARGB());
+			c = list.get((int) random(numCols));
+			stroke(c.toARGB());
+			strokeWeight(random(10));
+			float r = random(MAX_SIZE);
+			ellipse(random(width), random(height), r, r);
+		}
+	}
+
 }

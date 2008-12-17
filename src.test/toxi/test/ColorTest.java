@@ -3,39 +3,39 @@ package toxi.test;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import toxi.color.Color;
-import toxi.color.ColorAccessCriteria;
-import toxi.color.ColorHue;
-import toxi.color.ColorList;
-import toxi.color.ColorRange;
-import toxi.color.ColorTheme;
-import toxi.color.NamedColor;
-import toxi.color.theory.ColorTheoryFactory;
-import toxi.color.theory.ColorTheoryStrategy;
+import toxi.colour.AccessCriteria;
+import toxi.colour.Colour;
+import toxi.colour.ColourList;
+import toxi.colour.ColourRange;
+import toxi.colour.ColourTheme;
+import toxi.colour.Hue;
+import toxi.colour.NamedColour;
+import toxi.colour.theory.ColorTheoryRegistry;
+import toxi.colour.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
 
 public class ColorTest extends TestCase {
 
 	public void testColor() {
-		Color c = Color.newHex("00ffff");
+		Colour c = Colour.newHex("00ffff");
 		System.out.println(c);
 		assertEquals(0.5, c.hue(), 0.001);
 		assertEquals(1.0, c.brightness(), 0.001);
-		Color d = Color.newCMYK(1.0f, 0, 0, 0);
+		Colour d = Colour.newCMYK(1.0f, 0, 0, 0);
 		System.out.println(d);
-		float delta = c.distanceTo(d);
+		float delta = c.distanceToHSV(d);
 		assertEquals(0.0f, delta);
 	}
 
 	public void testColorList() {
-		ColorList list = new ColorList();
+		ColourList list = new ColourList();
 		for (int i = 0; i < 10; i++)
-			list.add(Color.newHSV(MathUtils.random(1f), MathUtils.random(1f),
+			list.add(Colour.newHSV(MathUtils.random(1f), MathUtils.random(1f),
 					MathUtils.random(1f)));
-		ColorAccessCriteria criteria = ColorAccessCriteria.RED;
-		ColorList sorted = list.sortByCriteria(criteria, false);
-		Color prev = null;
-		for (Color c : sorted) {
+		AccessCriteria criteria = AccessCriteria.RED;
+		ColourList sorted = list.sortByCriteria(criteria, false);
+		Colour prev = null;
+		for (Colour c : sorted) {
 			System.out.println(c);
 			if (prev != null) {
 				assertTrue(prev.getComponentValue(criteria) <= c
@@ -44,65 +44,63 @@ public class ColorTest extends TestCase {
 			prev = c;
 		}
 		System.out.println("cluster sort...");
-		sorted = list.clusterSort(ColorAccessCriteria.HUE,
-				ColorAccessCriteria.BRIGHTNESS, 3, false);
-		for (Color c : sorted) {
+		sorted = list.clusterSort(AccessCriteria.HUE,
+				AccessCriteria.BRIGHTNESS, 3, false);
+		for (Colour c : sorted) {
 			System.out.println(c);
 		}
 	}
 
 	public void testColorListContains() {
-		ColorList list = new ColorList();
-		list.add(Color.RED);
-		list.add(Color.GREEN);
-		list.add(Color.BLUE);
-		assertEquals(true, list.contains(Color.newRGB(0, 0, 1f)));
+		ColourList list = new ColourList();
+		list.add(Colour.RED);
+		list.add(Colour.GREEN);
+		list.add(Colour.BLUE);
+		assertEquals(true, list.contains(Colour.newRGB(0, 0, 1f)));
+	}
+
+	public void testHues() {
+		assertTrue(Hue.GREEN.isPrimary());
+		assertFalse(Hue.LIME.isPrimary());
+		Colour hue = Colour.newHSV(Hue.CYAN, 0.5f, 0.2f);
+		assertFalse(hue.isPrimary());
+		String hueName = "pink";
+		Hue h = Hue.getForName(hueName);
+		assertEquals(hueName, h.getName());
+		h = Hue.getClosest(100 / 360.0f, false);
+		assertEquals("lime", h.getName());
+		h = Hue.getClosest(100 / 360.0f, true);
+		assertEquals("green", h.getName());
+	}
+
+	public void testNamedColors() {
+		Colour c = NamedColour.getForName("cyan");
+		assertEquals(NamedColour.CYAN, c);
+	}
+
+	public void testRangeContainment() {
+		assertTrue(ColourRange.BRIGHT.contains(Colour.RED));
+		assertFalse(ColourRange.DARK.contains(Colour.RED));
+		assertFalse(ColourRange.BRIGHT.contains(Colour.WHITE));
 	}
 
 	public void testStrategyName() {
-		ArrayList<String> names = ColorTheoryFactory.getInstance()
-				.getRegisteredNames();
+		ArrayList<String> names = ColorTheoryRegistry.getRegisteredNames();
 		for (String name : names) {
-			ColorTheoryStrategy strategy = ColorTheoryFactory.getInstance()
+			ColorTheoryStrategy strategy = ColorTheoryRegistry
 					.getStrategyForName(name);
 			System.out.println(name);
 			assertNotNull(strategy);
 		}
 	}
 
-	public void testRangeContainment() {
-		assertTrue(ColorRange.BRIGHT.contains(Color.RED));
-		assertFalse(ColorRange.DARK.contains(Color.RED));
-		assertFalse(ColorRange.BRIGHT.contains(Color.WHITE));
-	}
-
-	public void testHues() {
-		assertTrue(ColorHue.GREEN.isPrimary());
-		assertFalse(ColorHue.LIME.isPrimary());
-		Color hue = Color.newHSV(ColorHue.CYAN, 0.5f, 0.2f);
-		assertFalse(hue.isPrimary());
-		String hueName = "pink";
-		ColorHue h = ColorHue.getForName(hueName);
-		assertEquals(hueName, h.getName());
-		h = ColorHue.getClosest(100 / 360.0f, false);
-		assertEquals("lime", h.getName());
-		h = ColorHue.getClosest(100 / 360.0f, true);
-		assertEquals("green", h.getName());
-	}
-
 	public void testThemes() {
-		ColorTheme t = new ColorTheme("test");
+		ColourTheme t = new ColourTheme("test");
 		t.addRange("dark blue", 0.5f);
 		t.addRange("soft orange", 0.5f);
-		ColorList cols = t.getColors(1000);
-		for (Color c : cols) {
-			System.out.println(c);
+		ColourList cols = t.getColors(1000);
+		for (Colour c : cols) {
 			assertNotNull(c);
 		}
-	}
-
-	public void testNamedColors() {
-		Color c = NamedColor.getForName("cyan");
-		assertEquals(NamedColor.CYAN, c);
 	}
 }

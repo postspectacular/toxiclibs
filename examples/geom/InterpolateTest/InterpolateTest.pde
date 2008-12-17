@@ -23,31 +23,38 @@ import toxi.math.*;
 
 void setup() {
   size(200,200);
+
+}
+
+void draw() {
   background(0);
-  InterpolateStrategy is=new LinearInterpolation();
-  InterpolateStrategy is2=new CircularInterpolation();
-  InterpolateStrategy is2f=new CircularInterpolation(true);
-  InterpolateStrategy is3=new SigmoidInterpolation(1.5);
-  InterpolateStrategy is4=new CosineInterpolation();
+  
+  InterpolateStrategy linear=new LinearInterpolation();
+  InterpolateStrategy circular=new CircularInterpolation();
+  InterpolateStrategy invCircular=new CircularInterpolation(true);
+  InterpolateStrategy sigmoid=new SigmoidInterpolation((float)mouseX/width*4);
+  InterpolateStrategy cosine=new CosineInterpolation();
+  
   for(float x=0; x<width; x++) {
+    float t=x/width;
     //linear
-    float y=is.interpolate(0,height,x/width);
+    float y=linear.interpolate(0,height,t);
     stroke(255,0,0);
     point(x,y);
     // circular (ease out)
-    y=is2.interpolate(0,height,x/width);
+    y=circular.interpolate(0,height,t);
     stroke(0,250,0);
     point(x,y);
     // circular flipped (ease in)
-    y=is2f.interpolate(0,height,x/width);
+    y=invCircular.interpolate(0,height,t);
     stroke(0,250,255);
     point(x,y);
     // sigmoid (try setting sharpness in constructor)
-    y=is3.interpolate(0,height,x/width);
+    y=sigmoid.interpolate(0,height,t);
     stroke(255,0,255);
     point(x,y);
     // cosine
-    y=is4.interpolate(0,height,x/width);
+    y=cosine.interpolate(0,height,t);
     stroke(255,255,0);
     point(x,y);
   }

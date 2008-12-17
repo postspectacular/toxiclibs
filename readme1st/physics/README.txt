@@ -4,20 +4,27 @@ Only the following package is included:
 
 toxi.physics.*
 
+This library also depends on the following other packages:
+
+toxi.math (geomutils-0012 release or later)
+
 If you're going to use these classes for Processing projects,
 first drop the "verletphysics" folder into the "libraries" folder of your
-Processing installation. You'll then need to restart Processing in order
+Processing sketchbook and ensure the above listed dependent libraries
+are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
 
 Source code is available via SVN, instructions over here:
 http://code.google.com/p/toxiclibs/source
 
-JavaDocs are available in the "docs" folder:
-http://code.google.com/p/toxiclibs/download/list
+JavaDocs are available in the "docs" folder of each download.
+
+http://toxiclibs.googlecode.com/
+http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2008 Karsten Schmidt <info at toxi co uk>
+Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -33,4 +40,4 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA

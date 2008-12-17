@@ -132,7 +132,7 @@ public class ArrayUtil {
 	 * Converts the generic array into an {@link ArrayList} of the same type.
 	 * 
 	 * @param array
-	 * @return
+	 * @return array list version
 	 */
 	public static <T> ArrayList<T> arrayToList(T[] array) {
 		ArrayList<T> list = new ArrayList<T>(array.length);
