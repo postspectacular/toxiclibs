@@ -173,7 +173,10 @@ public class ColourRange {
 		return PRESETS.get(name.toUpperCase());
 	}
 
-	protected ColourRange() {
+	/**
+	 * Only used internally by {@link #copy()}, doesn't initialize anything.
+	 */
+	private ColourRange() {
 
 	}
 
@@ -333,14 +336,14 @@ public class ColourRange {
 	}
 
 	/**
-	 * Add the given hue as hue constraint.
+	 * Adds the range between min-max as possible alpha values for this range.
 	 * 
-	 * @param hue
+	 * @param min
+	 * @param max
 	 * @return itself
 	 */
-	public ColourRange add(Hue hue) {
-		hueConstraint.add(new FloatRange(hue.getHue(), hue.getHue()));
-		return this;
+	public ColourRange addAlphaRange(float min, float max) {
+		return addAlphaRange(new FloatRange(min, max));
 	}
 
 	/**
@@ -356,6 +359,18 @@ public class ColourRange {
 	}
 
 	/**
+	 * Adds the range between min-max as possible brightness values for this
+	 * range.
+	 * 
+	 * @param min
+	 * @param max
+	 * @return itself
+	 */
+	public ColourRange addBrightnessRange(float min, float max) {
+		return addBrightnessRange(new FloatRange(min, max));
+	}
+
+	/**
 	 * Adds an additional brightness constraint.
 	 * 
 	 * @param bri
@@ -364,6 +379,35 @@ public class ColourRange {
 	 */
 	public ColourRange addBrightnessRange(FloatRange bri) {
 		brightnessConstraint.add(bri);
+		return this;
+	}
+
+	/**
+	 * Add the given hue as hue constraint.
+	 * 
+	 * @param hue
+	 * @return itself
+	 */
+	public ColourRange addHue(Hue hue) {
+		hueConstraint.add(new FloatRange(hue.getHue(), hue.getHue()));
+		return this;
+	}
+
+	/**
+	 * Adds the range between min-max as possible hue values for this range. If
+	 * max < min then two intervals are added: {min ... 1.0} and {0.0 ... max}
+	 * 
+	 * @param min
+	 * @param max
+	 * @return itself
+	 */
+	public ColourRange addHueRange(float min, float max) {
+		if (max >= min) {
+			addHueRange(new FloatRange(min, max));
+		} else {
+			addHueRange(new FloatRange(min, 1));
+			addHueRange(new FloatRange(0, max));
+		}
 		return this;
 	}
 
@@ -380,6 +424,18 @@ public class ColourRange {
 	}
 
 	/**
+	 * Adds the range between min-max as possible saturation values for this
+	 * range.
+	 * 
+	 * @param min
+	 * @param max
+	 * @return itself
+	 */
+	public ColourRange addSaturationRange(float min, float max) {
+		return addAlphaRange(new FloatRange(min, max));
+	}
+
+	/**
 	 * Adds an additional saturation constraint.
 	 * 
 	 * @param sat
@@ -392,8 +448,8 @@ public class ColourRange {
 	}
 
 	/**
-	 * Checks if the given colour is within the constraints defined for this
-	 * range.
+	 * Checks if all HSVA components of the given colour are within the
+	 * constraints defined for this range.
 	 * 
 	 * @param c
 	 *            colour to check

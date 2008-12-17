@@ -208,7 +208,7 @@ public class Colour {
 	 * @param a
 	 * @param b
 	 * @param rgb
-	 * @return
+	 * @return rgb array
 	 */
 	public static final float[] labToRGB(float l, float a, float b, float[] rgb) {
 		float y = (l + 16) / 116.0f;
@@ -343,7 +343,7 @@ public class Colour {
 	/**
 	 * Factory method. Creates new random colour.
 	 * 
-	 * @return
+	 * @return random colour
 	 */
 	public static final Colour newRandom() {
 		return newRGBA(MathUtils.random(1f), MathUtils.random(1f), MathUtils
@@ -457,6 +457,11 @@ public class Colour {
 		cmyk = new float[4];
 	}
 
+	/**
+	 * Creates a deep copy of the given colour.
+	 * 
+	 * @param c
+	 */
 	public Colour(Colour c) {
 		this();
 		System.arraycopy(c.rgb, 0, rgb, 0, 3);
@@ -465,14 +470,40 @@ public class Colour {
 		this.alpha = c.alpha;
 	}
 
+	/**
+	 * Changes the brightness of the colour by the given amount in the direction
+	 * towards either the black or white point (depending on if current
+	 * brightness >= 50%)
+	 * 
+	 * @param amount
+	 * @return itself
+	 */
 	public Colour adjustConstrast(float amount) {
 		return hsv[2] < 0.5 ? darken(amount) : lighten(amount);
 	}
 
+	/**
+	 * Adds the given HSV values as offsets to the current colour. Hue will
+	 * automatically wrap.
+	 * 
+	 * @param h
+	 * @param s
+	 * @param v
+	 * @return itself
+	 */
 	public Colour adjustHSV(float h, float s, float v) {
 		return setHSV(new float[] { hsv[0] + h, hsv[1] + s, hsv[2] + v });
 	}
 
+	/**
+	 * Adds the given RGB values as offsets to the current colour. Colour will
+	 * clip at black or white.
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @return itself
+	 */
 	public Colour adjustRGB(float r, float g, float b) {
 		return setRGB(new float[] { rgb[0] + r, rgb[1] + g, rgb[2] + b });
 	}
@@ -484,6 +515,17 @@ public class Colour {
 		return alpha;
 	}
 
+	/**
+	 * Rotates this colour by a random amount (not exceeding the one specified)
+	 * and creates variations in saturation and brightness based on the 2nd
+	 * parameter.
+	 * 
+	 * @param theta
+	 *            max. rotation angle (in radians)
+	 * @param delta
+	 *            max. sat/bri variance
+	 * @return itself
+	 */
 	public Colour analog(float theta, float delta) {
 		return analog(MathUtils.degrees(theta), delta);
 	}
@@ -503,6 +545,15 @@ public class Colour {
 		return cmyk[0];
 	}
 
+	/**
+	 * Blends the colour with the given one by the stated amount
+	 * 
+	 * @param c
+	 *            target colour
+	 * @param t
+	 *            interpolation factor
+	 * @return itself
+	 */
 	public Colour blend(Colour c, float t) {
 		rgb[0] += (c.rgb[0] - rgb[0]) * t;
 		rgb[1] += (c.rgb[1] - rgb[1]) * t;
@@ -519,10 +570,16 @@ public class Colour {
 		return rgb[2];
 	}
 
+	/**
+	 * @return colour HSV brightness (not luminance!)
+	 */
 	public float brightness() {
 		return hsv[2];
 	}
 
+	/**
+	 * @return ifself, as complementary colour
+	 */
 	public Colour complement() {
 		return rotateRYB(180);
 	}
@@ -549,6 +606,13 @@ public class Colour {
 		return setHSV(hsv);
 	}
 
+	/**
+	 * Calculates the CMYK distance to the given colour.
+	 * 
+	 * @param c
+	 *            target colour
+	 * @return distance
+	 */
 	public float distanceToCMYK(Colour c) {
 		float dc = cmyk[0] - c.cmyk[0];
 		float dm = cmyk[1] - c.cmyk[1];
@@ -557,6 +621,13 @@ public class Colour {
 		return (float) Math.sqrt(dc * dc + dm * dm + dy * dy + dk * dk);
 	}
 
+	/**
+	 * Calculates the HSV distance to the given colour.
+	 * 
+	 * @param c
+	 *            target colour
+	 * @return distance
+	 */
 	public float distanceToHSV(Colour c) {
 		float hue = hsv[0] * MathUtils.TWO_PI;
 		float hue2 = c.hsv[0] * MathUtils.TWO_PI;
@@ -567,6 +638,13 @@ public class Colour {
 		return v1.distanceTo(v2);
 	}
 
+	/**
+	 * Calculates the RGB distance to the given colour.
+	 * 
+	 * @param c
+	 *            target colour
+	 * @return distance
+	 */
 	public float distanceToRGB(Colour c) {
 		float dr = rgb[0] - c.rgb[0];
 		float dg = rgb[1] - c.rgb[1];
@@ -600,10 +678,18 @@ public class Colour {
 		return new Colour(this).blend(c, t);
 	}
 
+	/**
+	 * @return an instance of the closest named hue to this colour.
+	 */
 	public Hue getClosestHue() {
 		return Hue.getClosest(hsv[0], false);
 	}
 
+	/**
+	 * @param primaryOnly
+	 *            if true, only primary colour hues are considered
+	 * @return an instance of the closest named (primary) hue to this colour.
+	 */
 	public Hue getClosestHue(boolean primaryOnly) {
 		return Hue.getClosest(hsv[0], primaryOnly);
 	}
@@ -626,26 +712,52 @@ public class Colour {
 		return 0;
 	}
 
+	/**
+	 * @param step
+	 * @return a darkened copy
+	 */
 	public Colour getDarkened(float step) {
 		return new Colour(this).darken(step);
 	}
 
+	/**
+	 * @param step
+	 * @return a desaturated copy
+	 */
 	public Colour getDesaturated(float step) {
 		return new Colour(this).desaturate(step);
 	}
 
+	/**
+	 * @param step
+	 * @return a lightened copy
+	 */
 	public Colour getLightened(float step) {
 		return new Colour(this).lighten(step);
 	}
 
+	/**
+	 * @param theta
+	 *            rotation angle in radians
+	 * @return a RYB rotated copy
+	 */
 	public Colour getRotatedRYB(float theta) {
 		return new Colour(this).rotateRYB(theta);
 	}
 
+	/**
+	 * @param angle
+	 *            rotation angle in degrees
+	 * @return a RYB rotated copy
+	 */
 	public Colour getRotatedRYB(int angle) {
 		return new Colour(this).rotateRYB(angle);
 	}
 
+	/**
+	 * @param step
+	 * @return a saturated copy
+	 */
 	public Colour getSaturated(float step) {
 		return new Colour(this).saturate(step);
 	}
@@ -663,10 +775,18 @@ public class Colour {
 		return (int) (rgb[0] * 1000000 + rgb[1] * 100000 + rgb[2] * 10000 + alpha * 1000);
 	}
 
+	/**
+	 * @return the colour's hue
+	 */
 	public float hue() {
 		return hsv[0];
 	}
 
+	/**
+	 * Inverts the colour.
+	 * 
+	 * @return itself
+	 */
 	public Colour invert() {
 		rgb[0] = 1 - rgb[0];
 		rgb[1] = 1 - rgb[1];
@@ -674,29 +794,58 @@ public class Colour {
 		return setRGB(rgb);
 	}
 
+	/**
+	 * @return true, if all rgb component values are equal and less than
+	 *         {@link #BLACK_POINT}
+	 */
 	public boolean isBlack() {
 		return (rgb[0] <= BLACK_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
 				.compare(rgb[0], rgb[2]) == 0);
 	}
 
+	/**
+	 * @return true, if the saturation component value is less than
+	 *         {@link #GREY_THRESHOLD}
+	 */
 	public boolean isGrey() {
 		return hsv[1] < GREY_THRESHOLD;
 	}
 
+	/**
+	 * @return true, if this colours hue is matching one of the 7 defined
+	 *         primary hues.
+	 */
 	public boolean isPrimary() {
 		return Hue.isPrimary(hsv[0]);
 	}
 
+	/**
+	 * @return true, if all rgb component values are equal and greater than
+	 *         {@link #WHITE_POINT}
+	 */
 	public boolean isWhite() {
 		return (rgb[0] >= WHITE_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
 				.compare(rgb[0], rgb[2]) == 0);
 	}
 
+	/**
+	 * Lightens the colour by stated amount.
+	 * 
+	 * @param step
+	 *            lighten amount
+	 * @return itself
+	 */
 	public Colour lighten(float step) {
 		hsv[2] = MathUtils.clip(hsv[2] + step, 0, 1);
 		return setHSV(hsv);
 	}
 
+	/**
+	 * Computes the colour's luminance using this formula: lum=0.299*red +
+	 * 0.587*green + 0.114 *blue
+	 * 
+	 * @return luminance
+	 */
 	public float luminance() {
 		return rgb[0] * 0.299f + rgb[1] * 0.587f + rgb[2] * 0.114f;
 	}
@@ -876,6 +1025,11 @@ public class Colour {
 		return setCMYK(cmyk);
 	}
 
+	/**
+	 * Converts the colour into a packed ARGB int.
+	 * 
+	 * @return colour as int
+	 */
 	public int toARGB() {
 		return (int) (rgb[0] * 255) << 16 | (int) (rgb[1] * 255) << 8
 				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;

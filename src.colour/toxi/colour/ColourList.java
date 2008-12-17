@@ -408,6 +408,18 @@ public class ColourList implements Iterable<Colour> {
 	}
 
 	/**
+	 * Inverts all colours in the list.
+	 * 
+	 * @return itself
+	 */
+	public ColourList invert() {
+		for (Colour c : colours) {
+			c.invert();
+		}
+		return this;
+	}
+
+	/**
 	 * Returns an iterator over the internal list. This means the list can be
 	 * accessed via standard Iterator loops.
 	 * 
