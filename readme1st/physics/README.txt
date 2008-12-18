@@ -6,6 +6,7 @@ toxi.physics.*
 
 This library also depends on the following other packages:
 
+toxi.geom (geomutils-0012 release or later)
 toxi.math (geomutils-0012 release or later)
 
 If you're going to use these classes for Processing projects,
