@@ -1,8 +1,5 @@
 /**
- * ColourTheme demo showing the following:
- * - construction of colour themes via textual descriptions of shades and colours
- * - adding an random element to the theme
- * - showing off different sort modes for the created ColourList
+ * ColourRange demo showing the following:
  *
  * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the colour theme
  *
@@ -16,7 +13,7 @@ import toxi.colour.theory.*;
 import toxi.math.*;
 import toxi.util.datatypes.*;
 
-float   SWATCH_HEIGHT = 40;
+float   SWATCH_HEIGHT = 24;
 float   SWATCH_WIDTH = 5;
 int     SWATCH_GAP = 1;
 
@@ -28,7 +25,7 @@ boolean showDiscs=true;
 void setup() {
   size(1024, 768);
   noLoop();
-    textFont(createFont("arial", 12));
+    textFont(createFont("arial", 9));
 
 }
 

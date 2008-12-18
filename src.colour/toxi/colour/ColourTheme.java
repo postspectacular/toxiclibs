@@ -98,14 +98,23 @@ public class ColourTheme {
 	public Colour getColor() {
 		float rnd = MathUtils.random(1f);
 		for (ThemePart t : parts) {
-			if (t.weight / weightedSum >= rnd) {
+			float currWeight = t.weight / weightedSum;
+			if (currWeight >= rnd) {
 				return t.getColor();
 			}
-			rnd -= t.weight / weightedSum;
+			rnd -= currWeight;
 		}
 		return null;
 	}
 
+	/**
+	 * Creates a {@link ColourList} of {@link Colour}s based on the theme's
+	 * ranges and balance defined by their weights
+	 * 
+	 * @param num
+	 *            number of colours to create
+	 * @return new list
+	 */
 	public ColourList getColors(int num) {
 		ColourList list = new ColourList();
 		for (int i = 0; i < num; i++) {
@@ -114,4 +123,10 @@ public class ColourTheme {
 		return list;
 	}
 
+	/**
+	 * @return the theme's name
+	 */
+	public String getName() {
+		return name;
+	}
 }

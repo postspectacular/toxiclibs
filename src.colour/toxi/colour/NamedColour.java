@@ -26,6 +26,7 @@
 package toxi.colour;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -237,5 +238,14 @@ public class NamedColour {
 	 */
 	public static final Colour getForName(String name) {
 		return namedColorMap.get(name.toUpperCase());
+	}
+
+	/**
+	 * Returns the names of all defined colours.
+	 * 
+	 * @return list of name
+	 */
+	public static final ArrayList<String> getNames() {
+		return new ArrayList<String>(namedColorMap.keySet());
 	}
 }
