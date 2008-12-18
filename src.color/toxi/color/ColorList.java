@@ -38,9 +38,9 @@ import toxi.math.MathUtils;
 
 /**
  * A container class of concrete colors. ColorLists can be built manually and
- * are also created when working with {@link ColorRange}s. The class has
- * various methods to manipulate all colors in the list in parallel, as well as
- * sort them by various criteria.
+ * are also created when working with {@link ColorRange}s. The class has various
+ * methods to manipulate all colors in the list in parallel, as well as sort
+ * them by various criteria.
  * 
  * @see ColorRange
  * @see AccessCriteria
@@ -53,8 +53,8 @@ public class ColorList implements Iterable<TColor> {
 	protected ArrayList<TColor> colors = new ArrayList<TColor>();
 
 	/**
-	 * Factory method. Creates a new ColorList of colors sampled from the
-	 * given ARGB image array.
+	 * Factory method. Creates a new ColorList of colors sampled from the given
+	 * ARGB image array.
 	 * 
 	 * @param pixels
 	 *            int array of ARGB pixels
@@ -103,7 +103,7 @@ public class ColorList implements Iterable<TColor> {
 	 */
 	public static final ColorList createUsingStrategy(
 			ColorTheoryStrategy strategy, TColor c) {
-		return strategy.createListFromcolor(c);
+		return strategy.createListFromColor(c);
 	}
 
 	/**
@@ -118,10 +118,11 @@ public class ColorList implements Iterable<TColor> {
 	public static final ColorList createUsingStrategy(String name, TColor c) {
 		ColorTheoryStrategy strategy = ColorTheoryRegistry
 				.getStrategyForName(name);
+		ColorList list = null;
 		if (strategy != null) {
-			return strategy.createListFromcolor(c);
+			list = strategy.createListFromColor(c);
 		}
-		return null;
+		return list;
 	}
 
 	/**
@@ -132,34 +133,13 @@ public class ColorList implements Iterable<TColor> {
 	}
 
 	/**
-	 * Creates a ColorList by wrapping the given ArrayList of colors. No
-	 * copies of the given colors are created (shallow copy only).
+	 * Creates a ColorList by wrapping the given ArrayList of colors. No copies
+	 * of the given colors are created (shallow copy only).
 	 * 
 	 * @param colors
 	 */
 	public ColorList(ArrayList<TColor> colors) {
 		this.colors.addAll(colors);
-	}
-
-	/**
-	 * Creates a color list with the supplied color as first entry.
-	 * 
-	 * @param c
-	 *            color
-	 */
-	public ColorList(TColor c) {
-		this.colors.add(c.copy());
-	}
-
-	/**
-	 * Creates new ColorList from the given array of colors No copies of the
-	 * given colors are created (shallow copy only).
-	 * 
-	 * @param colorArray
-	 */
-	public ColorList(TColor[] colorArray) {
-		for (TColor c : colorArray)
-			colors.add(c);
 	}
 
 	/**
@@ -183,6 +163,28 @@ public class ColorList implements Iterable<TColor> {
 	public ColorList(int[] argbArray) {
 		for (int c : argbArray) {
 			colors.add(TColor.newARGB(c));
+		}
+	}
+
+	/**
+	 * Creates a color list with the supplied color as first entry.
+	 * 
+	 * @param c
+	 *            color
+	 */
+	public ColorList(TColor c) {
+		this.colors.add(c.copy());
+	}
+
+	/**
+	 * Creates new ColorList from the given array of colors No copies of the
+	 * given colors are created (shallow copy only).
+	 * 
+	 * @param colorArray
+	 */
+	public ColorList(TColor[] colorArray) {
+		for (TColor c : colorArray) {
+			colors.add(c);
 		}
 	}
 
@@ -305,8 +307,9 @@ public class ColorList implements Iterable<TColor> {
 	 */
 	public boolean contains(TColor color) {
 		for (TColor c : colors) {
-			if (c.equals(color))
+			if (c.equals(color)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -537,8 +540,9 @@ public class ColorList implements Iterable<TColor> {
 	 * @return itself
 	 */
 	public ColorList sortByDistance(DistanceProxy proxy, boolean isReversed) {
-		if (colors.size() == 0)
+		if (colors.size() == 0) {
 			return this;
+		}
 
 		TColor root = getDarkest();
 
@@ -578,8 +582,8 @@ public class ColorList implements Iterable<TColor> {
 	}
 
 	/**
-	 * Sorts the list by proximity to the given target color (using RGB
-	 * distance metrics).
+	 * Sorts the list by proximity to the given target color (using RGB distance
+	 * metrics).
 	 * 
 	 * @see #sortByProximityTo(TColor, DistanceProxy, boolean)
 	 * @param target

@@ -1,12 +1,12 @@
 import processing.opengl.*;
 
 /**
- * colorTheme demo showing the following:
- * - construction of color themes via textual descriptions of shades and colors
+ * ColorTheme demo showing the following:
+ * - construction of TColorthemes via textual descriptions of shades and Colors
  * - adding an random element to the theme
- * - showing off different sort modes for the created colorList
+ * - showing off different sort modes for the created ColorList
  *
- * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the color theme
+ * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the TColortheme
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
  */
@@ -33,8 +33,8 @@ void setup() {
 void draw() {
   noiseSeed(System.currentTimeMillis());
   // first define our new theme
-  colorTheme t = new colorTheme("test");
-  // add different color options, each with their own weight
+  ColorTheme t = new ColorTheme("test");
+  // add different TColoroptions, each with their own weight
   t.addRange("soft ivory", 0.5);
   t.addRange("intense goldenrod", 0.25);
   t.addRange("warm saddlebrown", 0.15);
@@ -42,10 +42,10 @@ void draw() {
   t.addRange("bright yellowgreen", 0.05);
 
   // now add another random hue which is using only bright shades
-  t.addRange(colorRange.BRIGHT, color.newRandom(), random(0.02, 0.05));
+  t.addRange(ColorRange.BRIGHT, TColor.newRandom(), random(0.02, 0.05));
 
-  // use the color theme to create a list of 160 colors
-  colorList list = t.getColors(160);
+  // use the TColortheme to create a list of 160 Colors
+  ColorList list = t.getColors(160);
 
   background(list.getLightest().toARGB());
   drawSpline(list);
@@ -56,7 +56,7 @@ void keyPressed() {
   redraw();
 }
 
-void drawSpline(colorList list) {
+void drawSpline(ColorList list) {
   noStroke();
   float numCols = list.size();
   Vec3D[] points=new Vec3D[NUM_POINTS];

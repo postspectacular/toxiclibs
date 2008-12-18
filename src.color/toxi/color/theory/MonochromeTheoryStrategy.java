@@ -25,8 +25,8 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 import toxi.math.MathUtils;
 
 /**
@@ -42,10 +42,11 @@ public class MonochromeTheoryStrategy implements ColorTheoryStrategy {
 
 	private static final float wrap(float x, float min, float threshold,
 			float plus) {
-		if (x - min < threshold)
+		if (x - min < threshold) {
 			return x + plus;
-		else
+		} else {
 			return x - min;
+		}
 	}
 
 	/*
@@ -54,7 +55,7 @@ public class MonochromeTheoryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 
 		ColorList colors = new ColorList(src.copy());
 

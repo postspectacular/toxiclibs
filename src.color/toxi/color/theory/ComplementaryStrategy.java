@@ -25,8 +25,8 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 
 /**
  * Creates 5 additional colors in relation to the given base color:
@@ -51,7 +51,7 @@ public class ComplementaryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 		ColorList colors = new ColorList(src.copy());
 		// # A contrasting color: much darker or lighter than the original.
 		TColor c = src.copy();
@@ -70,10 +70,11 @@ public class ComplementaryStrategy implements ColorTheoryStrategy {
 
 		// A contrasting complement: very dark or very light.
 		c = src.getComplement();
-		if (c.brightness() > 0.3)
+		if (c.brightness() > 0.3) {
 			c.setBrightness(0.1f + c.brightness() * 0.25f);
-		else
+		} else {
 			c.setBrightness(1.0f - c.brightness() * 0.25f);
+		}
 		colors.add(c);
 
 		// The complement and a light supporting variant.

@@ -25,14 +25,14 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 import toxi.geom.Vec2D;
 import toxi.math.MathUtils;
 
 /**
- * Creates a new palette of 4 similar (slightly paler) colors in addition to
- * the given start color. The hue variance and contrast can be adjusted.
+ * Creates a new palette of 4 similar (slightly paler) colors in addition to the
+ * given start color. The hue variance and contrast can be adjusted.
  */
 public class AnalogousStrategy implements ColorTheoryStrategy {
 
@@ -76,7 +76,7 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 		contrast = MathUtils.clipNormalized(contrast);
 		TColor clr = src.copy();
 		ColorList colors = new ColorList(clr);

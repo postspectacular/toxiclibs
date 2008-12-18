@@ -1,8 +1,8 @@
 /**
  * ColorTheory demo showing the following:
- * - application of colorTheoryStrategies to create harmonious color palettes
+ * - application of ColorTheoryStrategies to create harmonious TColorpalettes
  * - using the generated palettes to create additional shades
- * - sorting colorLists
+ * - sorting ColorLists
  *
  * Press any key to re-generate all with a random base TColor
  *
@@ -34,14 +34,14 @@ void setup() {
 
 void draw() {
   background(0);
-  TColor col = colorRange.DARK.getColor();
+  TColor col = ColorRange.DARK.getColor();
   int yoff = 130;
   ArrayList strategies = ColorTheoryRegistry.getRegisteredStrategies();
   for (Iterator i=strategies.iterator(); i.hasNext();) {
     ColorTheoryStrategy s = (ColorTheoryStrategy) i.next();
-    colorList list = colorList.createUsingStrategy(s, col);
+    ColorList list = ColorList.createUsingStrategy(s, col);
     swatches(list, 235, yoff);
-    list=new colorRange(list).addBrightnessRange(0,1).getColors(null,100,0.05);
+    list=new ColorRange(list).addBrightnessRange(0,1).getColors(null,100,0.05);
     list.sortByDistance(false);
     swatches(list,335,yoff);
     fill(255);
@@ -60,7 +60,7 @@ void swatch(TColor c, int x, int y) {
   rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
 }
 
-void swatches(colorList sorted, int x, int y) {
+void swatches(ColorList sorted, int x, int y) {
   noStroke();
   for (Iterator i = sorted.iterator(); i.hasNext();) {
     TColor c = (TColor) i.next();

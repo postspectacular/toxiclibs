@@ -25,8 +25,8 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 
 /**
  * Implements the <a href="http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#complementary"
@@ -46,7 +46,7 @@ public class SingleComplementStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 		ColorList list = new ColorList(new TColor(src));
 		list.add(src.getComplement());
 		return list;

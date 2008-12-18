@@ -1,12 +1,12 @@
 import processing.opengl.*;
 
 /**
- * colorTheme demo showing the following:
- * - construction of color themes via textual descriptions of shades and colors
+ * ColorTheme demo showing the following:
+ * - construction of TColor themes via textual descriptions of shades and Colors
  * - adding an random element to the theme
- * - showing off different sort modes for the created colorList
+ * - showing off different sort modes for the created ColorList
  *
- * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the color theme
+ * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the TColor theme
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
  */
@@ -36,9 +36,9 @@ void setup() {
 
 void draw() {
   // first define our new theme
-  colorTheme t = new colorTheme("test");
-  
-  // add different color options, each with their own weight
+  ColorTheme t = new ColorTheme("test");
+
+  // add different TColor options, each with their own weight
   t.addRange("soft ivory", 0.5);
   t.addRange("intense goldenrod", 0.25);
   t.addRange("warm saddlebrown", 0.15);
@@ -46,10 +46,10 @@ void draw() {
   t.addRange("bright yellowgreen", 0.05);
 
   // now add another random hue which is using only bright shades
-  t.addRange(colorRange.BRIGHT, color.newRandom(), random(0.02, 0.05));
+  t.addRange(ColorRange.BRIGHT, TColor.newRandom(), random(0.02, 0.05));
 
-  // use the color theme to create a list of 160 colors
-  colorList list = t.getColors(160);
+  // use the TColor theme to create a list of 160 Colors
+  ColorList list = t.getColors(160);
 
   if (showDiscs) {
     background(list.getLightest().toARGB());
@@ -78,7 +78,7 @@ void draw() {
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByProximityTo(Namedcolor.WHITE,new RGBDistanceProxy(),false);
+    list.sortByProximityTo(NamedColor.WHITE,new RGBDistanceProxy(),false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
   }
@@ -90,20 +90,20 @@ void keyPressed() {
   redraw();
 }
 
-void swatches(colorList sorted, int x, int y) {
+void swatches(ColorList sorted, int x, int y) {
   noStroke();
   for (Iterator i = sorted.iterator(); i.hasNext();) {
-    color c = (color) i.next();
+    TColor c = (TColor) i.next();
     fill(c.toARGB());
     rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
     x += SWATCH_WIDTH + SWATCH_GAP;
   }
 }
 
-void discs(colorList list) {
+void discs(ColorList list) {
   float numCols = list.size();
   for (int i = 0; i < NUM_DISCS; i++) {
-    color c = list.get((int) random(numCols)).copy();
+    TColor c = list.get((int) random(numCols)).copy();
     c.alpha = random(0.5, 1);
     fill(c.toARGB());
     c = list.get((int) random(numCols));
@@ -114,3 +114,4 @@ void discs(colorList list) {
     ellipse(random(width), random(height), r, r);
   }
 }
+

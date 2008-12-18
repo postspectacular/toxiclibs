@@ -25,8 +25,8 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 
 /**
  * @author toxi
@@ -42,10 +42,10 @@ public class LeftSplitComplementaryStrategy implements ColorTheoryStrategy {
 	 */
 	public static final String NAME = "leftSplitComplementary";
 
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 		TColor left = src.getComplement().rotateRYB(-30).lighten(0.1f);
 		ColorList colors = ColorTheoryRegistry.COMPLEMENTARY
-				.createListFromcolor(src);
+				.createListFromColor(src);
 		for (int i = 3; i < 6; i++) {
 			TColor c = colors.get(i);
 			c.setHue(left.hue());

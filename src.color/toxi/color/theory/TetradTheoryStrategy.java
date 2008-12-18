@@ -25,8 +25,8 @@
  */
 package toxi.color.theory;
 
-import toxi.color.TColor;
 import toxi.color.ColorList;
+import toxi.color.TColor;
 
 /**
  * Implements the <a href="http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#rectangle"
@@ -47,20 +47,22 @@ public class TetradTheoryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromcolor(TColor src) {
+	public ColorList createListFromColor(TColor src) {
 		ColorList colors = new ColorList(src.copy());
 		TColor c = src.getRotatedRYB(theta);
-		if (c.brightness() < 0.5)
+		if (c.brightness() < 0.5) {
 			c.lighten(0.2f);
-		else
+		} else {
 			c.darken(0.2f);
+		}
 		colors.add(c);
 
 		c = src.getRotatedRYB(theta * 2);
-		if (c.brightness() < 0.5)
+		if (c.brightness() < 0.5) {
 			c.lighten(0.1f);
-		else
+		} else {
 			c.darken(0.1f);
+		}
 		colors.add(c);
 
 		colors.add(src.getRotatedRYB(theta * 3).lighten(0.1f));
