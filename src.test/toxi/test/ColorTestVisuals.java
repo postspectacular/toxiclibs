@@ -79,7 +79,7 @@ public class ColorTestVisuals extends PApplet {
 		swatches(sorted, 10, yoff);
 		yoff += SWATCH_HEIGHT + 10;
 		range = new ColorRange(ColorTheoryRegistry.SPLIT_COMPLEMENTARY
-				.createListFromcolor(TColor.YELLOW));
+				.createListFromColor(TColor.YELLOW));
 		sorted = range.getColors(100).sortByDistance(false);
 		swatches(sorted, 10, yoff);
 		yoff += SWATCH_HEIGHT + 10;
