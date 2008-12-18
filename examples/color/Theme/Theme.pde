@@ -2,11 +2,10 @@ import processing.opengl.*;
 
 /**
  * ColorTheme demo showing the following:
- * - construction of TColorthemes via textual descriptions of shades and Colors
+ * - construction of TColorthemes via textual descriptions of shades and colors
  * - adding an random element to the theme
- * - showing off different sort modes for the created ColorList
  *
- * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the TColortheme
+ * Press any key to re-generate a random variation of the color theme
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
  */
@@ -34,17 +33,17 @@ void draw() {
   noiseSeed(System.currentTimeMillis());
   // first define our new theme
   ColorTheme t = new ColorTheme("test");
-  // add different TColoroptions, each with their own weight
+  // add different color options, each with their own weight
   t.addRange("soft ivory", 0.5);
   t.addRange("intense goldenrod", 0.25);
   t.addRange("warm saddlebrown", 0.15);
   t.addRange("fresh teal", 0.05);
-  t.addRange("bright yellowgreen", 0.05);
+  t.addRange("bright yellow", 0.05);
 
   // now add another random hue which is using only bright shades
   t.addRange(ColorRange.BRIGHT, TColor.newRandom(), random(0.02, 0.05));
 
-  // use the TColortheme to create a list of 160 Colors
+  // use the TColortheme to create a list of 160 colors
   ColorList list = t.getColors(160);
 
   background(list.getLightest().toARGB());
@@ -72,5 +71,3 @@ void drawSpline(ColorList list) {
     ellipse(v.x,v.y,noise(v.y*0.01)*XRAD,noise(v.x*0.01)*YRAD);
   }
 }
-
-

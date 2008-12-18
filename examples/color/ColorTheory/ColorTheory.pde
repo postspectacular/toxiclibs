@@ -1,6 +1,6 @@
 /**
  * ColorTheory demo showing the following:
- * - application of ColorTheoryStrategies to create harmonious TColorpalettes
+ * - application of ColorTheoryStrategies to create harmonious colorpalettes
  * - using the generated palettes to create additional shades
  * - sorting ColorLists
  *
@@ -68,8 +68,3 @@ void swatches(ColorList sorted, int x, int y) {
     x += SWATCH_WIDTH + SWATCH_GAP;
   }
 }
-
-
-
-
-

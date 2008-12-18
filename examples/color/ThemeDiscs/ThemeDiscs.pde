@@ -4,9 +4,8 @@ import processing.opengl.*;
  * ColorTheme demo showing the following:
  * - construction of TColor themes via textual descriptions of shades and Colors
  * - adding an random element to the theme
- * - showing off different sort modes for the created ColorList
  *
- * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the TColor theme
+ * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the color theme
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
  */
@@ -38,7 +37,7 @@ void draw() {
   // first define our new theme
   ColorTheme t = new ColorTheme("test");
 
-  // add different TColor options, each with their own weight
+  // add different color options, each with their own weight
   t.addRange("soft ivory", 0.5);
   t.addRange("intense goldenrod", 0.25);
   t.addRange("warm saddlebrown", 0.15);
@@ -114,4 +113,3 @@ void discs(ColorList list) {
     ellipse(random(width), random(height), r, r);
   }
 }
-

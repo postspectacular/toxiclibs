@@ -1,7 +1,9 @@
 /**
  * ColorRange demo showing the following:
- *
- * Press SPACE to toggle rendering mode, any other key will re-generate a random variation of the TColor theme
+ * - different sort modes for ColorLists
+ * - creating different shades (sets of shades) by applying ColorRanges
+ * 
+ * Press any key to re-generate a random variation
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
  */
@@ -25,7 +27,7 @@ boolean showDiscs=true;
 void setup() {
   size(1024, 768);
   noLoop();
-    textFont(createFont("arial", 9));
+  textFont(createFont("arial", 9));
 
 }
 
@@ -55,31 +57,29 @@ void draw() {
   swatches(sorted, 10, yoff);
   yoff += SWATCH_HEIGHT + 10;
 
-  TColor col = TColor.newHSV(MathUtils.random(1f), MathUtils.random(
-  0.75f, 1f), MathUtils.random(1f));
+  TColor col = TColor.newHSV(random(1), random(0.75, 1), random(1));
   int idx = 0;
   yoff = 10;
-  for (Iterator i = ColorTheoryRegistry.getRegisteredStrategies()
-				.iterator(); i.hasNext();) {
-      ColorTheoryStrategy strategy = (ColorTheoryStrategy) i.next();
-    System.out.println(strategy);
-    sorted = ColorList.createUsingStrategy(strategy, col);
+  ArrayList strategies=ColorTheoryRegistry.getRegisteredStrategies();
+  for (Iterator i = strategies.iterator(); i.hasNext();) {
+    ColorTheoryStrategy s = (ColorTheoryStrategy) i.next();
+    System.out.println(s);
+    sorted = ColorList.createUsingStrategy(s, col);
     sorted = sorted.sortByDistance(false);
     swatches(sorted, 900, yoff);
     yoff += SWATCH_HEIGHT + 10;
     idx++;
   }
   yoff = 260;
-  col = TColor.newHSV(MathUtils.random(1f), MathUtils.random(1f),
-  MathUtils.random(1f));
-  for (Iterator i = ColorRange.PRESETS.values().iterator(); i.hasNext();) {
+  col = TColor.newRandom();
+  Collection ranges=ColorRange.PRESETS.values();
+  for (Iterator i = ranges.iterator(); i.hasNext();) {
     ColorRange range = (ColorRange) i.next();
     sorted = range.getColors(col, 100, 0.1f);
     sorted = sorted.sortByCriteria(AccessCriteria.BRIGHTNESS, false);
     swatches(sorted, 10, yoff);
     fill(255);
-    text(range.getName(), 15 + 100 * (SWATCH_WIDTH + SWATCH_GAP), yoff
-      + SWATCH_HEIGHT);
+    text(range.getName(), 15 + 100 * (SWATCH_WIDTH + SWATCH_GAP), yoff + SWATCH_HEIGHT);
     yoff += SWATCH_HEIGHT + 10;
   }
   ColorRange range = ColorRange.FRESH.getSum(ColorRange.BRIGHT).add(
@@ -113,5 +113,4 @@ void swatches(ColorList sorted, int x, int y) {
     x += SWATCH_WIDTH + SWATCH_GAP;
   }
 }
-
 
