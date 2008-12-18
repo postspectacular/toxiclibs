@@ -86,12 +86,6 @@ public class SimplexNoise {
 	 * length
 	 */
 	private static int[] perm = new int[0x200];
-	static {
-		for (int i = 0; i < 0x200; i++) {
-			perm[i] = p[i & 0xff];
-		}
-	}
-
 	/**
 	 * A lookup table to traverse the simplex around a given point in 4D.
 	 * Details can be found where this table is used, in the 4D noise method.
@@ -114,15 +108,10 @@ public class SimplexNoise {
 			{ 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 3, 1, 0, 2 }, { 0, 0, 0, 0 },
 			{ 3, 2, 0, 1 }, { 3, 2, 1, 0 } };
 
-	/**
-	 * This method is a *lot* faster than using (int)Math.floor(x).
-	 * 
-	 * @param x
-	 *            value to be floored
-	 * @return
-	 */
-	private static final int fastfloor(double x) {
-		return x > 0 ? (int) x : (int) x - 1;
+	static {
+		for (int i = 0; i < 0x200; i++) {
+			perm[i] = p[i & 0xff];
+		}
 	}
 
 	/**
@@ -165,6 +154,17 @@ public class SimplexNoise {
 	 */
 	private static double dot(int g[], double x, double y, double z, double w) {
 		return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
+	}
+
+	/**
+	 * This method is a *lot* faster than using (int)Math.floor(x).
+	 * 
+	 * @param x
+	 *            value to be floored
+	 * @return
+	 */
+	private static final int fastfloor(double x) {
+		return x > 0 ? (int) x : (int) x - 1;
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class SimplexNoise {
 	public static double noise(double x, double y, double z, double w) {
 		// The skewing and unskewing factors are hairy again for the 4D case
 		double n0 = 0, n1 = 0, n2 = 0, n3 = 0, n4 = 0; // Noise contributions
-														// from the five corners
+		// from the five corners
 		// Skew the (x,y,z,w) space to determine which cell of 24 simplices
 		double s = (x + y + z + w) * F4; // Factor for 4D skewing
 		int i = fastfloor(x + s);
@@ -402,23 +402,29 @@ public class SimplexNoise {
 		// To find out which of the 24 possible simplices we're in, we need to
 		// determine the magnitude ordering of x0, y0, z0 and w0.
 		// The method below is a good way of finding the ordering of x,y,z,w and
-		// then find the correct traversal order for the simplex we’re in.
+		// then find the correct traversal order for the simplex were in.
 		// First, six pair-wise comparisons are performed between each possible
 		// pair of the four coordinates, and the results are used to add up
 		// binary bits for an integer index.
 		int c = 0;
-		if (x0 > y0)
+		if (x0 > y0) {
 			c = 0x20;
-		if (x0 > z0)
+		}
+		if (x0 > z0) {
 			c |= 0x10;
-		if (y0 > z0)
+		}
+		if (y0 > z0) {
 			c |= 0x08;
-		if (x0 > w0)
+		}
+		if (x0 > w0) {
 			c |= 0x04;
-		if (y0 > w0)
+		}
+		if (y0 > w0) {
 			c |= 0x02;
-		if (z0 > w0)
+		}
+		if (z0 > w0) {
 			c |= 0x01;
+		}
 		int i1, j1, k1, l1; // The integer offsets for the second simplex corner
 		int i2, j2, k2, l2; // The integer offsets for the third simplex corner
 		int i3, j3, k3, l3; // The integer offsets for the fourth simplex corner

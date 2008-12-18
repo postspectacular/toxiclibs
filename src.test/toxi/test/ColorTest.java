@@ -3,39 +3,39 @@ package toxi.test;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import toxi.colour.AccessCriteria;
-import toxi.colour.Colour;
-import toxi.colour.ColourList;
-import toxi.colour.ColourRange;
-import toxi.colour.ColourTheme;
-import toxi.colour.Hue;
-import toxi.colour.NamedColour;
-import toxi.colour.theory.ColorTheoryRegistry;
-import toxi.colour.theory.ColorTheoryStrategy;
+import toxi.color.AccessCriteria;
+import toxi.color.ColorList;
+import toxi.color.ColorRange;
+import toxi.color.ColorTheme;
+import toxi.color.Hue;
+import toxi.color.NamedColor;
+import toxi.color.TColor;
+import toxi.color.theory.ColorTheoryRegistry;
+import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
 
 public class ColorTest extends TestCase {
 
 	public void testColor() {
-		Colour c = Colour.newHex("00ffff");
+		TColor c = TColor.newHex("00ffff");
 		System.out.println(c);
 		assertEquals(0.5, c.hue(), 0.001);
 		assertEquals(1.0, c.brightness(), 0.001);
-		Colour d = Colour.newCMYK(1.0f, 0, 0, 0);
+		TColor d = TColor.newCMYK(1.0f, 0, 0, 0);
 		System.out.println(d);
 		float delta = c.distanceToHSV(d);
 		assertEquals(0.0f, delta);
 	}
 
 	public void testColorList() {
-		ColourList list = new ColourList();
+		ColorList list = new ColorList();
 		for (int i = 0; i < 10; i++)
-			list.add(Colour.newHSV(MathUtils.random(1f), MathUtils.random(1f),
+			list.add(TColor.newHSV(MathUtils.random(1f), MathUtils.random(1f),
 					MathUtils.random(1f)));
 		AccessCriteria criteria = AccessCriteria.RED;
-		ColourList sorted = list.sortByCriteria(criteria, false);
-		Colour prev = null;
-		for (Colour c : sorted) {
+		ColorList sorted = list.sortByCriteria(criteria, false);
+		TColor prev = null;
+		for (TColor c : sorted) {
 			System.out.println(c);
 			if (prev != null) {
 				assertTrue(prev.getComponentValue(criteria) <= c
@@ -46,23 +46,23 @@ public class ColorTest extends TestCase {
 		System.out.println("cluster sort...");
 		sorted = list.clusterSort(AccessCriteria.HUE,
 				AccessCriteria.BRIGHTNESS, 3, false);
-		for (Colour c : sorted) {
+		for (TColor c : sorted) {
 			System.out.println(c);
 		}
 	}
 
 	public void testColorListContains() {
-		ColourList list = new ColourList();
-		list.add(Colour.RED);
-		list.add(Colour.GREEN);
-		list.add(Colour.BLUE);
-		assertEquals(true, list.contains(Colour.newRGB(0, 0, 1f)));
+		ColorList list = new ColorList();
+		list.add(TColor.RED);
+		list.add(TColor.GREEN);
+		list.add(TColor.BLUE);
+		assertEquals(true, list.contains(TColor.newRGB(0, 0, 1f)));
 	}
 
 	public void testHues() {
 		assertTrue(Hue.GREEN.isPrimary());
 		assertFalse(Hue.LIME.isPrimary());
-		Colour hue = Colour.newHSV(Hue.CYAN, 0.5f, 0.2f);
+		TColor hue = TColor.newHSV(Hue.CYAN, 0.5f, 0.2f);
 		assertFalse(hue.isPrimary());
 		String hueName = "pink";
 		Hue h = Hue.getForName(hueName);
@@ -74,14 +74,14 @@ public class ColorTest extends TestCase {
 	}
 
 	public void testNamedColors() {
-		Colour c = NamedColour.getForName("cyan");
-		assertEquals(NamedColour.CYAN, c);
+		TColor c = NamedColor.getForName("cyan");
+		assertEquals(NamedColor.CYAN, c);
 	}
 
 	public void testRangeContainment() {
-		assertTrue(ColourRange.BRIGHT.contains(Colour.RED));
-		assertFalse(ColourRange.DARK.contains(Colour.RED));
-		assertFalse(ColourRange.BRIGHT.contains(Colour.WHITE));
+		assertTrue(ColorRange.BRIGHT.contains(TColor.RED));
+		assertFalse(ColorRange.DARK.contains(TColor.RED));
+		assertFalse(ColorRange.BRIGHT.contains(TColor.WHITE));
 	}
 
 	public void testStrategyName() {
@@ -95,11 +95,11 @@ public class ColorTest extends TestCase {
 	}
 
 	public void testThemes() {
-		ColourTheme t = new ColourTheme("test");
+		ColorTheme t = new ColorTheme("test");
 		t.addRange("dark blue", 0.5f);
 		t.addRange("soft orange", 0.5f);
-		ColourList cols = t.getColors(1000);
-		for (Colour c : cols) {
+		ColorList cols = t.getColors(1000);
+		for (TColor c : cols) {
 			assertNotNull(c);
 		}
 	}

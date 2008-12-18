@@ -25,9 +25,9 @@ import toxi.video.capture.ProcessorPipeline;
 
 public class BorderPlugin extends ProcessorPlugin {
 
-	public static final String BORDER_COLOUR = "libcv.plugin.border.colour";
+	public static final String BORDER_color = "libcv.plugin.border.color";
 
-	private int colour = 0xff000000;
+	private int color = 0xff000000;
 
 	/**
 	 * @param p
@@ -43,8 +43,8 @@ public class BorderPlugin extends ProcessorPlugin {
 	 * @see toxi.video.capture.plugins.ProcessorPlugin#configure(java.util.HashMap)
 	 */
 	public void configure(HashMap conf) {
-		colour = ((Integer) conf.get(BORDER_COLOUR)).intValue();
-		colour |= 0xff000000;
+		color = ((Integer) conf.get(BORDER_color)).intValue();
+		color |= 0xff000000;
 	}
 
 	/*
@@ -54,7 +54,7 @@ public class BorderPlugin extends ProcessorPlugin {
 	 */
 	public HashMap getConfig() {
 		HashMap config = new HashMap();
-		config.put(BORDER_COLOUR, new Integer(colour));
+		config.put(BORDER_color, new Integer(color));
 		return config;
 	}
 
@@ -67,7 +67,7 @@ public class BorderPlugin extends ProcessorPlugin {
 		int w1 = w - 1;
 		int h1 = h - 1;
 		int idx = 0;
-		final int value = colour;
+		final int value = color;
 		for (int x = 0; x < w; x++)
 			pixels[idx++] = value;
 		for (int y = 1; y < h1; y++) {
