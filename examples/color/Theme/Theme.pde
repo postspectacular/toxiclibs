@@ -1,5 +1,3 @@
-import processing.opengl.*;
-
 /**
  * ColorTheme demo showing the following:
  * - construction of TColorthemes via textual descriptions of shades and colors

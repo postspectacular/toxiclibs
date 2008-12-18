@@ -1,0 +1,4 @@
+0001 - 2008-12-18
+--------------------------------------------------------------------------------
+! Java 1.5 syntax
+! initial release, inspired by the python "colors" library for NodeBox

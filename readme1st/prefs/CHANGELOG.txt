@@ -1,4 +1,12 @@
-0002
+0003 - 2008-12-18
 --------------------------------------------------------------------------------
-A TypedProperties: added new load method & accessors to parse arrays
-A new class ArrayUtils: shuffle & reverse methods for arrays
+! switched to Java 1.5 syntax
++ new classes to express ranges and typed sets with a common/similar access pattern
++ new class SingletonRegistry: to dynamically turn any class into a singleton
+M additions to ArrayUtils
+
+0002 - 2008-10-29
+--------------------------------------------------------------------------------
++ TypedProperties: added new load method & accessors to parse arrays
++ new class ArrayUtils: shuffle & reverse methods for arrays
+ 

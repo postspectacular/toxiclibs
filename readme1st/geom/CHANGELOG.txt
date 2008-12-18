@@ -1,5 +1,7 @@
-0012
+0012 - 2008-12-18
 --------------------------------------------------------------------------------
+! switched to Java 1.5 syntax
+
 toxi.math.waves
 + FMSawtoothWave
 + FMSquareWave

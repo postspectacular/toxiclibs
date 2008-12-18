@@ -7,6 +7,7 @@ toxi.color.theory
 
 This library also depends on the following other packages:
 
+toxi.geom (geomutils-0012 release or later)
 toxi.math (geomutils-0012 release or later)
 toxi.util.datatypes (prefutils-0003 release or later)
 
