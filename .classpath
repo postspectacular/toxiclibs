@@ -13,17 +13,24 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/args4j-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/joal.jar" sourcepath="C:/java/javalibs/joal/joal-1.1.2-src.zip">
+	<classpathentry kind="lib" path="lib/joal/gluegen-rt.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/java/javalibs/joal/joal-1.1.2-docs/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/joal"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jogl.jar"/>
-	<classpathentry kind="lib" path="lib/opengl.jar"/>
-	<classpathentry kind="lib" path="lib/gluegen-rt.jar">
+	<classpathentry kind="lib" path="lib/joal/joal.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/joal"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/jogl"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl/jogl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/jogl"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

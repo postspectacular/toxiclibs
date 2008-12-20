@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2006, 2007 Karsten Schmidt
+ * Copyright (c) 2006-2008 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,7 +41,9 @@ import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
 
 /**
- * JOAL convenience wrapper
+ * <a href="https://joal.dev.java.net/">JOAL</a> convenience wrapper. Full
+ * documentation forthcoming. Please see the attached Processing demo & source
+ * distribution of this package for basic usage.
  * 
  * @author toxi
  */
@@ -78,6 +80,23 @@ public class JOALUtil {
 		return instance;
 	}
 
+	/**
+	 * Initializes the OpenAL context. Safe to be called multiple times (only
+	 * first time is executed).
+	 * 
+	 * @return true, if successful
+	 */
+	public boolean init() {
+		return init(false);
+	}
+
+	/**
+	 * Initializes the OpenAL context and if parameter is true, will attempt to
+	 * also setup an EAX environment.
+	 * 
+	 * @param attemptEAX
+	 * @return true, if successful (does not care if EAX is supported).
+	 */
 	public boolean init(boolean attemptEAX) {
 		if (!isInited) {
 			try {
@@ -108,6 +127,9 @@ public class JOALUtil {
 				EAXConstants.DSPROPERTY_EAXLISTENER_ENVIRONMENT, b);
 	}
 
+	/**
+	 * Destroys all objects, sources, buffers, contexts created by
+	 */
 	public void shutdown() {
 		logger.info("shutting down JOAL");
 		int[] tmpbuf = new int[buffers.size()];
@@ -115,14 +137,12 @@ public class JOALUtil {
 			tmpbuf[i] = buffers.get(i);
 		}
 		al.alDeleteBuffers(tmpbuf.length, tmpbuf, 0);
-		buffers.clear();
 		logger.info(tmpbuf.length + " buffers released");
 		int[] tmpsrc = new int[sources.size()];
 		for (int i = 0; i < tmpsrc.length; i++) {
 			tmpsrc[i] = sources.get(i);
 		}
 		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
-		sources.clear();
 		logger.info(tmpsrc.length + " sources released");
 
 		ALCcontext curContext = alc.alcGetCurrentContext();
@@ -134,8 +154,20 @@ public class JOALUtil {
 
 		alc = null;
 		al = null;
+		buffers = null;
+		sources = null;
+
+		isInited = false;
 	}
 
+	/**
+	 * Creates the specified number of audio sample buffers and returns an array
+	 * of {@link AudioBuffer} wrappers.
+	 * 
+	 * @param numBuffers
+	 *            number of requested buffers
+	 * @return array
+	 */
 	public AudioBuffer[] generateBuffers(int numBuffers) {
 		AudioBuffer[] result = new AudioBuffer[numBuffers];
 		int[] arr = new int[numBuffers];
@@ -147,6 +179,15 @@ public class JOALUtil {
 		return result;
 	}
 
+	/**
+	 * Loads a WAV file from the given {@link InputStream}.
+	 * 
+	 * @param is
+	 *            input stream
+	 * @return buffer wrapper instance
+	 * @throws UnsupportedAudioFileException
+	 * @throws IOException
+	 */
 	public AudioBuffer loadBuffer(InputStream is)
 			throws UnsupportedAudioFileException, IOException {
 		AudioBuffer result;
@@ -157,6 +198,15 @@ public class JOALUtil {
 		return result;
 	}
 
+	/**
+	 * Loads a WAV file (mono/stereo) from the specified file name
+	 * 
+	 * @param fileName
+	 *            audio file name
+	 * @return buffer wrapper instance
+	 * @throws IOException
+	 * @throws UnsupportedAudioFileException
+	 */
 	public AudioBuffer loadBuffer(String fileName) throws IOException,
 			UnsupportedAudioFileException {
 		AudioBuffer result;
@@ -169,6 +219,14 @@ public class JOALUtil {
 		return result;
 	}
 
+	/**
+	 * Creates the specified number of hardware audio sources required to
+	 * actually play the sample data stored in {@link AudioBuffer}s.
+	 * 
+	 * @param numSources
+	 *            number of sources required
+	 * @return array
+	 */
 	public AudioSource[] generateSources(int numSources) {
 		AudioSource[] result = new AudioSource[numSources];
 		int[] arr = new int[numSources];
@@ -180,10 +238,21 @@ public class JOALUtil {
 		return result;
 	}
 
+	/**
+	 * Returns a direct reference to the OpenAL API.
+	 * 
+	 * @return JOAL context
+	 */
 	public AL getAL() {
 		return al;
 	}
 
+	/**
+	 * Returns the {@link SoundListener} instance for the associated OpenAL
+	 * context.
+	 * 
+	 * @return listener object
+	 */
 	public SoundListener getListener() {
 		if (listener == null) {
 			listener = new SoundListener(this);
@@ -191,6 +260,11 @@ public class JOALUtil {
 		return listener;
 	}
 
+	/**
+	 * Checks if EAX are supported by the underlying hardware.
+	 * 
+	 * @return true, if supported.
+	 */
 	public boolean isEAXSupported() {
 		return isEAX;
 	}

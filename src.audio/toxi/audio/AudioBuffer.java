@@ -1,9 +1,36 @@
+/*
+ * Copyright (c) 2006-2008 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package toxi.audio;
 
 import java.nio.ByteBuffer;
 
 import net.java.games.joal.AL;
 
+/**
+ * A wrapper for the actual sample data byte buffer in memory. The buffer can be
+ * queried to find out more information about the underlying audio data.
+ * 
+ * @author toxi
+ * 
+ */
 public class AudioBuffer {
 
 	public final static int FORMAT_MONO8 = AL.AL_FORMAT_MONO8;
@@ -15,8 +42,6 @@ public class AudioBuffer {
 	protected ByteBuffer data;
 
 	protected final int bufferID;
-
-	protected boolean isConfigured = false;
 
 	protected int[] alResult = new int[1];
 
@@ -37,10 +62,8 @@ public class AudioBuffer {
 	 *            the frequency of the data
 	 */
 	public void configure(ByteBuffer data, int format, int freq) {
-		if (!isConfigured) {
-			this.data = data;
-			al.alBufferData(bufferID, format, data, data.capacity(), freq);
-		}
+		this.data = data;
+		al.alBufferData(bufferID, format, data, data.capacity(), freq);
 	}
 
 	/**
@@ -110,6 +133,11 @@ public class AudioBuffer {
 		return getByteSize() * 8 / getBitDepth();
 	}
 
+	/**
+	 * Returns the OpenAL reference ID for this buffer.
+	 * 
+	 * @return id
+	 */
 	public int getID() {
 		return bufferID;
 	}

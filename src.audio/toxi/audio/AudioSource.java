@@ -1,5 +1,5 @@
-/* 
- * Copyright (c) 2006, 2007 Karsten Schmidt
+/*
+ * Copyright (c) 2006-2008 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,6 +24,22 @@ import net.java.games.joal.AL;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
+/**
+ * A wrapper for {@link AudioBuffer}s and similar to the built in JOAL
+ * net.java.games.sound3d.Source, though less restrictive. The class extends
+ * {@link Vec3D} and so can be used to position the sound in 3D space (provided
+ * the underlying audio hardware does support 3D audio). Unfortunately due to
+ * OpenAL's limitations only mono samples can be positioned in that way. Stereo
+ * samples will can only manipulated in terms of gain/volume.
+ * 
+ * <p>
+ * If the position of an AudioSource is changed via the public x,y,z vector
+ * components, the <code>updatePosition()</code> method needs to be called
+ * afterwards in order to reflect the changes in the OpenAL context.
+ * 
+ * @author toxi
+ * 
+ */
 public class AudioSource extends Vec3D {
 
 	protected AL al;
@@ -179,6 +195,10 @@ public class AudioSource extends Vec3D {
 
 	public final void setPosition(Vec3D p) {
 		setPosition(p.x, p.y, p.z);
+	}
+
+	public final void updatePosition() {
+		setPosition(x, y, z);
 	}
 
 	public void setReferenceDistance(float d) {

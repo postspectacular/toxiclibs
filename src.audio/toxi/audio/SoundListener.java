@@ -1,5 +1,5 @@
-/* 
- * Copyright (c) 2006, 2007 Karsten Schmidt
+/*
+ * Copyright (c) 2006-2008 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,9 +23,24 @@ package toxi.audio;
 import net.java.games.joal.AL;
 import toxi.geom.Vec3D;
 
-// TODO add fluid interface and add getters with Vec3D return type
+/**
+ * The concept of a SoundListener refers directly to the user's instance in the
+ * virtual (audio) world. By setting the 3D position, velocity and orientation
+ * of the listener, the underlying audio hardware can produce a realistic 3D
+ * spatial sound simulation (incl. doppler effect, volume falloff etc.).
+ * 
+ * <p>
+ * Like {@link AudioSource}, this class extends {@link Vec3D} and so if the
+ * position of the listener is changed via the public x,y,z vector components,
+ * the <code>updatePosition()</code> method needs to be called afterwards in
+ * order to reflect these changes in the OpenAL context.
+ * 
+ * @author toxi
+ * 
+ */
 public class SoundListener extends Vec3D {
 
+	// TODO add fluid interface and add getters with Vec3D return type
 	protected JOALUtil liboal;
 
 	protected float[] pos = { 0.0f, 0.0f, 0.0f };

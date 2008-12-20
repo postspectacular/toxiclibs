@@ -1,0 +1,3 @@
+application.linux=joal.jar,libjoal_native.so,gluegen-rt.jar,libgluegen-rt.so,audioutils.jar
+application.macosx=joal.jar,libjoal_native.jnilib,gluegen-rt.jar,libgluegen-rt.jnilib,audioutils.jar
+application.windows=joal.jar,joal_native.dll,gluegen-rt.jar,gluegen-rt.dll,audioutils.jar
