@@ -6,13 +6,19 @@ toxi.audio
 
 This library also depends on the following other packages:
 
+JOAL (bundled with binary distribution):
 net.java.games.joal
 net.java.games.joal.eax
 net.java.games.joal.util
 javax.sound.sampled
 
+toxiclibs geomutils-0012 or later:
+toxi.geom.*;
+toxi.math.*;
+toxi.math.waves.*;
+
 If you're going to use these classes for Processing projects,
-first drop the "libjoal" folder into the "libraries" folder of your
+first drop the "audioutils" folder into the "libraries" folder of your
 Processing sketchbook and ensure the above listed dependent libraries
 are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
