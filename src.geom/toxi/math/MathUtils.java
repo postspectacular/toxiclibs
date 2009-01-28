@@ -71,6 +71,9 @@ public class MathUtils {
 	 */
 	public static final float RAD2DEG = 180 / PI;
 
+	private static final float SHIFT23 = 1 << 23;
+	private static final float INV_SHIFT23 = 1.0f / SHIFT23;
+
 	/**
 	 * @param x
 	 * @return absolute value of x
@@ -148,7 +151,7 @@ public class MathUtils {
 
 	/**
 	 * Computes a fast approximation to <code>Math.pow(a, b)</code>. Adapted
-	 * from <url>http://www.dctsystems.co.uk/Software/power.html</url>.
+	 * from http://www.dctsystems.co.uk/Software/power.html.
 	 * 
 	 * @param a
 	 *            a positive number
@@ -156,18 +159,16 @@ public class MathUtils {
 	 *            a number
 	 * @return a^b
 	 * 
-	 * @deprecated
 	 */
-	@Deprecated
 	public static final float fastPow(float a, float b) {
 		float x = Float.floatToRawIntBits(a);
-		x *= 1.0f / (1 << 23);
+		x *= INV_SHIFT23;
 		x -= 127;
-		float y = x - (int) Math.floor(x);
+		float y = x - (x >= 0 ? (int) x : (int) x - 1);
 		b *= x + (y - y * y) * 0.346607f;
-		y = b - (int) Math.floor(b);
+		y = b - (b >= 0 ? (int) b : (int) b - 1);
 		y = (y - y * y) * 0.33971f;
-		return Float.intBitsToFloat((int) ((b + 127 - y) * (1 << 23)));
+		return Float.intBitsToFloat((int) ((b + 127 - y) * SHIFT23));
 	}
 
 	public static final boolean flipCoin() {
@@ -331,7 +332,8 @@ public class MathUtils {
 		x = fastInverseSqrt(x);
 		if (x > 0) {
 			return 1.0f / x;
-		} else
+		} else {
 			return 0;
+		}
 	}
 }
