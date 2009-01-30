@@ -33,7 +33,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec2D {
+public class Vec2D implements DimensionalVector {
 
 	/**
 	 * Defines positive X axis
@@ -44,6 +44,16 @@ public class Vec2D {
 	 * Defines positive Y axis
 	 */
 	public static final Vec2D Y_AXIS = new Vec2D(0, 1);
+
+	/**
+	 * X coordinate
+	 */
+	public float x;
+
+	/**
+	 * Y coordinate
+	 */
+	public float y;
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane.
@@ -81,16 +91,6 @@ public class Vec2D {
 		Vec2D v = new Vec2D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1);
 		return v.normalize();
 	}
-
-	/**
-	 * X coordinate
-	 */
-	public float x;
-
-	/**
-	 * Y coordinate
-	 */
-	public float y;
 
 	/**
 	 * Creates a new zero vector
@@ -213,28 +213,6 @@ public class Vec2D {
 	}
 
 	/**
-	 * Compares the length of the vector with another one.
-	 * 
-	 * @param vec
-	 *            vector to compare with
-	 * @return -1 if other vector is longer, 0 if both are equal or else +1
-	 */
-	public int compareTo(Object vec) {
-		Vec3D v = (Vec3D) vec;
-		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0)
-			return 0;
-		if (magSquared() < v.magSquared())
-			return -1;
-		return 1;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Vec3D v = (Vec3D) obj;
-		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0);
-	}
-
-	/**
 	 * Sets all vector components to 0.
 	 * 
 	 * @return itself
@@ -266,10 +244,12 @@ public class Vec2D {
 		float t = v.dot(c);
 
 		// Check to see if point is beyond the extents of the line segment
-		if (t < 0.0f)
+		if (t < 0.0f) {
 			return a;
-		if (t > d)
+		}
+		if (t > d) {
 			return b;
+		}
 
 		// Return the point between 'a' and 'b'
 		// set length of V to t. V is normalized so this is easy
@@ -307,10 +287,29 @@ public class Vec2D {
 			min = dBC;
 			result = Rbc;
 		}
-		if (dCA < min)
+		if (dCA < min) {
 			result = Rca;
+		}
 
 		return result;
+	}
+
+	/**
+	 * Compares the length of the vector with another one.
+	 * 
+	 * @param vec
+	 *            vector to compare with
+	 * @return -1 if other vector is longer, 0 if both are equal or else +1
+	 */
+	public int compareTo(Object vec) {
+		Vec3D v = (Vec3D) vec;
+		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0) {
+			return 0;
+		}
+		if (magSquared() < v.magSquared()) {
+			return -1;
+		}
+		return 1;
 	}
 
 	/**
@@ -381,6 +380,12 @@ public class Vec2D {
 		return x * v.x + y * v.y;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Vec3D v = (Vec3D) obj;
+		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0);
+	}
+
 	/**
 	 * Replaces the vector components with integer values of their current
 	 * values
@@ -418,6 +423,10 @@ public class Vec2D {
 	 */
 	public final Vec2D getConstrained(Rectangle r) {
 		return new Vec2D(this).constrain(r);
+	}
+
+	public int getDimensions() {
+		return 2;
 	}
 
 	/**
@@ -592,8 +601,9 @@ public class Vec2D {
 		float d = circleRadius * circleRadius - (distSquared - v * v);
 
 		// If there was no intersection, return -1
-		if (d < 0.0)
+		if (d < 0.0) {
 			return -1;
+		}
 
 		// Return the distance to the [first] intersecting point
 		return v - (float) Math.sqrt(d);
@@ -634,10 +644,12 @@ public class Vec2D {
 	 * @return true, if point is inside
 	 */
 	public boolean isInRecangle(Rectangle r) {
-		if (x < r.x || x > r.x + r.width)
+		if (x < r.x || x > r.x + r.width) {
 			return false;
-		if (y < r.y || y > r.y + r.height)
+		}
+		if (y < r.y || y > r.y + r.height) {
 			return false;
+		}
 		return true;
 	}
 
@@ -1004,6 +1016,10 @@ public class Vec2D {
 		return new Vec2D(p.x / xr2, p.y / yr2).normalize();
 	}
 
+	public float[] toArray() {
+		return new float[] { x, y };
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1013,9 +1029,5 @@ public class Vec2D {
 		StringBuffer sb = new StringBuffer(32);
 		sb.append("{x:").append(x).append(", y:").append(y).append("}");
 		return sb.toString();
-	}
-
-	public float[] toArray() {
-		return new float[] { x, y };
 	}
 }

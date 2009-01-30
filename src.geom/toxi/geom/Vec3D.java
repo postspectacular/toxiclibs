@@ -32,7 +32,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec3D implements Comparable {
+public class Vec3D implements Comparable, DimensionalVector {
 
 	/**
 	 * Defines positive X axis
@@ -48,6 +48,21 @@ public class Vec3D implements Comparable {
 	 * Defines positive Z axis
 	 */
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
+
+	/**
+	 * X coordinate
+	 */
+	public float x;
+
+	/**
+	 * Y coordinate
+	 */
+	public float y;
+
+	/**
+	 * Z coordinate
+	 */
+	public float z;
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane. The Z
@@ -138,21 +153,6 @@ public class Vec3D implements Comparable {
 				.normalizedRandom(rnd), MathUtils.normalizedRandom(rnd));
 		return v.normalize();
 	}
-
-	/**
-	 * X coordinate
-	 */
-	public float x;
-
-	/**
-	 * Y coordinate
-	 */
-	public float y;
-
-	/**
-	 * Z coordinate
-	 */
-	public float z;
 
 	/**
 	 * Creates a new zero vector
@@ -314,10 +314,12 @@ public class Vec3D implements Comparable {
 		float t = v.dot(c);
 
 		// Check to see if t is beyond the extents of the line segment
-		if (t < 0.0f)
+		if (t < 0.0f) {
 			return a;
-		if (t > d)
+		}
+		if (t > d) {
 			return b;
+		}
 
 		// Return the point between 'a' and 'b'
 		// set length of V to t. V is normalized so this is easy
@@ -336,18 +338,13 @@ public class Vec3D implements Comparable {
 	public int compareTo(Object vec) {
 		Vec3D v = (Vec3D) vec;
 		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0
-				&& Float.compare(z, v.z) == 0)
+				&& Float.compare(z, v.z) == 0) {
 			return 0;
-		if (magSquared() < v.magSquared())
+		}
+		if (magSquared() < v.magSquared()) {
 			return -1;
+		}
 		return 1;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Vec3D v = (Vec3D) obj;
-		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0 && Float
-				.compare(z, v.z) == 0);
 	}
 
 	/**
@@ -469,6 +466,13 @@ public class Vec3D implements Comparable {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Vec3D v = (Vec3D) obj;
+		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0 && Float
+				.compare(z, v.z) == 0);
+	}
+
 	/**
 	 * Replaces the vector components with integer values of their current
 	 * values
@@ -507,6 +511,10 @@ public class Vec3D implements Comparable {
 	 */
 	public final Vec3D getConstrained(AABB box) {
 		return new Vec3D(this).constrain(box);
+	}
+
+	public int getDimensions() {
+		return 3;
 	}
 
 	/**
@@ -724,6 +732,7 @@ public class Vec3D implements Comparable {
 	 */
 	// FIXME this is kind of obsolete since the arrival of the Plane class, but
 	// needs amends to reflector code
+	@Deprecated
 	public float intersectRayPlane(Vec3D rayDir, Vec3D planeOrigin,
 			Vec3D planeNormal) {
 		float d = -planeNormal.dot(planeOrigin);
@@ -731,8 +740,9 @@ public class Vec3D implements Comparable {
 		float denom = planeNormal.dot(rayDir);
 
 		// normal is orthogonal to vector, cant intersect
-		if (MathUtils.abs(denom) < MathUtils.EPS)
+		if (MathUtils.abs(denom) < MathUtils.EPS) {
 			return -1;
+		}
 
 		return -(numer / denom);
 	}
@@ -820,12 +830,15 @@ public class Vec3D implements Comparable {
 	public boolean isInAABB(AABB box) {
 		Vec3D min = box.getMin();
 		Vec3D max = box.getMax();
-		if (x < min.x || x > max.x)
+		if (x < min.x || x > max.x) {
 			return false;
-		if (y < min.y || y > max.y)
+		}
+		if (y < min.y || y > max.y) {
 			return false;
-		if (z < min.z || z > max.z)
+		}
+		if (z < min.z || z > max.z) {
 			return false;
+		}
 		return true;
 	}
 
@@ -841,14 +854,17 @@ public class Vec3D implements Comparable {
 
 	public boolean isInAABB(Vec3D bO, Vec3D bDim) {
 		float w = bDim.x;
-		if (x < bO.x - w || x > bO.x + w)
+		if (x < bO.x - w || x > bO.x + w) {
 			return false;
+		}
 		w = bDim.y;
-		if (y < bO.y - w || y > bO.y + w)
+		if (y < bO.y - w || y > bO.y + w) {
 			return false;
+		}
 		w = bDim.z;
-		if (z < bO.z - w || z > bO.z + w)
+		if (z < bO.z - w || z > bO.z + w) {
 			return false;
+		}
 		return true;
 	}
 
@@ -1210,6 +1226,19 @@ public class Vec3D implements Comparable {
 	}
 
 	/**
+	 * Overrides XY coordinates with the ones of the given 2D vector
+	 * 
+	 * @param v
+	 *            2D vector
+	 * @return itself
+	 */
+	public Vec3D setXY(Vec2D v) {
+		x = v.x;
+		y = v.y;
+		return this;
+	}
+
+	/**
 	 * Replaces all vector components with the signum of their original values.
 	 * In other words if a components value was negative its new value will be
 	 * -1, if zero => 0, if positive => +1
@@ -1303,6 +1332,10 @@ public class Vec3D implements Comparable {
 		return new Vec3D(p.x / xr2, p.y / yr2, p.z / zr2).normalize();
 	}
 
+	public float[] toArray() {
+		return new float[] { x, y, z };
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1313,9 +1346,5 @@ public class Vec3D implements Comparable {
 		sb.append("{x:").append(x).append(", y:").append(y).append(", z:")
 				.append(z).append("}");
 		return sb.toString();
-	}
-
-	public float[] toArray() {
-		return new float[] { x, y, z };
 	}
 }
