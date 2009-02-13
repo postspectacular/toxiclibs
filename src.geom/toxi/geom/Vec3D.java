@@ -1074,9 +1074,9 @@ public class Vec3D implements Comparable, DimensionalVector {
 	public final Vec3D rotateX(float theta) {
 		float co = (float) Math.cos(theta);
 		float si = (float) Math.sin(theta);
-		float yy = co * z - si * y;
-		z = si * z + co * y;
-		y = yy;
+		float zz = co * z - si * y;
+		y = si * z + co * y;
+		z = zz;
 		return this;
 	}
 
