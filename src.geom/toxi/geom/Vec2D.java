@@ -21,6 +21,7 @@
 package toxi.geom;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Random;
 
 import toxi.math.InterpolateStrategy;
@@ -1030,4 +1031,28 @@ public class Vec2D implements DimensionalVector {
 		sb.append("{x:").append(x).append(", y:").append(y).append("}");
 		return sb.toString();
 	}
+
+	/**
+	 * Checks if the point is within the convex polygon defined by the points in
+	 * the given list
+	 * 
+	 * @param vertices
+	 * @return true, if inside polygon
+	 */
+	public boolean pointInPolygon(ArrayList<Vec2D> vertices) {
+		int i, j = vertices.size() - 1;
+		boolean oddNodes = false;
+		for (i = 0; i < vertices.size(); i++) {
+			Vec2D vi = vertices.get(i);
+			Vec2D vj = vertices.get(j);
+			if (vi.y < y && vj.y >= y || vj.y < y && vi.y >= y) {
+				if (vi.x + (y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x) {
+					oddNodes = !oddNodes;
+				}
+			}
+			j = i;
+		}
+		return oddNodes;
+	}
+
 }

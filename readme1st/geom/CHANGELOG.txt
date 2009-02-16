@@ -1,3 +1,8 @@
+0013 - 2009-02-13
+--------------------------------------------------------------------------------
+! fixed issue 7, Y/Z coords were swapped in Vec3D.rotateX() & getRotatedX()
++ added pointInPolygon() to Vec2D
+
 0012 - 2008-12-18
 --------------------------------------------------------------------------------
 ! switched to Java 1.5 syntax
