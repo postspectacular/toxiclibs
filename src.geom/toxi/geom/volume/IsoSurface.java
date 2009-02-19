@@ -27,6 +27,7 @@ public class IsoSurface {
 	public int[] faces;
 	public int numFaces;
 
+	// TODO make volume not strictly cubic, but allow different sizes for XYZ
 	public IsoSurface(int res, float iso, float[] data) {
 		this.res = res;
 		this.res2 = res * res;
@@ -57,6 +58,9 @@ public class IsoSurface {
 		}
 	}
 
+	/**
+	 * Computes the surface mesh for the given volumetric data and iso value.
+	 */
 	public void computeSurface() {
 		float vx, vy, vz;
 		int r1 = res - 1;
@@ -81,18 +85,19 @@ public class IsoSurface {
 					int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
 					if (edgeFlags > 0) {
 						int edgeOffsetIndex = offset * 3;
+						float isoDiff = isovalue - volumeData[offset];
 						if ((edgeFlags & 1) > 0) {
-							float t = (isovalue - volumeData[offset])
+							float t = isoDiff
 									/ (volumeData[offset + 1] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex].x = vx + t * step;
 						}
 						if ((edgeFlags & 2) > 0) {
-							float t = (isovalue - volumeData[offset])
+							float t = isoDiff
 									/ (volumeData[offset + res] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex + 1].y = vy + t * step;
 						}
 						if ((edgeFlags & 4) > 0) {
-							float t = (isovalue - volumeData[offset])
+							float t = isoDiff
 									/ (volumeData[offset + res2] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex + 2].z = vz + t * step;
 						}
@@ -172,6 +177,10 @@ public class IsoSurface {
 		return -1;
 	}
 
+	/**
+	 * Resets mesh vertices to default positions and clears face index. Needs to
+	 * be called inbetween successive calls to {@link #computeSurface()}.
+	 */
 	public void resetVertices() {
 		for (int z = 0, index = 0; z < res; z++) {
 			for (int y = 0; y < res; y++) {
@@ -188,6 +197,13 @@ public class IsoSurface {
 		numVertices = 0;
 	}
 
+	/**
+	 * Saves the surface mesh as Wavefront OBJ format and automatically merges
+	 * shared vertices.
+	 * 
+	 * @param fn
+	 *            absolute path/filename to write mesh to
+	 */
 	public void saveAsOBJ(String fn) {
 		logger.info("saving surface as OBJ to: " + fn);
 		OBJWriter obj = new OBJWriter();
@@ -223,6 +239,12 @@ public class IsoSurface {
 		obj.endSave();
 	}
 
+	/**
+	 * Saves surface mesh as binary STL file.
+	 * 
+	 * @param fn
+	 *            absolute path/filename to save to
+	 */
 	public void saveAsSTL(String fn) {
 		logger.info("saving surface as STL to: " + fn);
 		STLWriter stl = new STLWriter();
@@ -239,6 +261,12 @@ public class IsoSurface {
 		stl.endSave();
 	}
 
+	/**
+	 * Saves volume data float array in raw binary format.
+	 * 
+	 * @param fn
+	 *            absolute path/filename to save to
+	 */
 	public void saveVolumeData(String fn) {
 		logger.info("saving volume data...");
 		try {
