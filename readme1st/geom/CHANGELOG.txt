@@ -3,6 +3,7 @@
 ! fixed issue 7, Y/Z coords were swapped in Vec3D.rotateX() & getRotatedX()
 + added pointInPolygon() to Vec2D
 + added toxi.geom.volume package with IsoSurface class
+! fixed little endian encoding bug in STLWriter
 
 0012 - 2008-12-18
 --------------------------------------------------------------------------------

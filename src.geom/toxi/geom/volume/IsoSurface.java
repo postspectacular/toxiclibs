@@ -57,45 +57,6 @@ public class IsoSurface {
 		}
 	}
 
-	public void resetVertices() {
-		for (int z = 0, index = 0; z < res; z++) {
-			for (int y = 0; y < res; y++) {
-				for (int x = 0; x < res; x++) {
-					edgeVertices[index].set(x * step - 0.5f, y * step - 0.5f, z
-							* step - 0.5f);
-					edgeVertices[index + 1].set(edgeVertices[index]);
-					edgeVertices[index + 2].set(edgeVertices[index]);
-					index += 3;
-				}
-			}
-		}
-	}
-
-	protected int getCellIndex(int x, int y, int z) {
-		int cellIndex = 0;
-		int rz = res2 * z;
-		int rz1 = res2 * (z + 1);
-		int ry = res * y;
-		int ry1 = res * (y + 1);
-		if (volumeData[x + ry + rz] < isovalue)
-			cellIndex |= 0x01;
-		if (volumeData[x + 1 + ry + rz] < isovalue)
-			cellIndex |= 0x02;
-		if (volumeData[x + 1 + ry + rz1] < isovalue)
-			cellIndex |= 0x04;
-		if (volumeData[x + ry + rz1] < isovalue)
-			cellIndex |= 0x08;
-		if (volumeData[x + ry1 + rz] < isovalue)
-			cellIndex |= 0x10;
-		if (volumeData[x + 1 + ry1 + rz] < isovalue)
-			cellIndex |= 0x20;
-		if (volumeData[x + 1 + ry1 + rz1] < isovalue)
-			cellIndex |= 0x40;
-		if (volumeData[x + ry1 + rz1] < isovalue)
-			cellIndex |= 0x80;
-		return cellIndex;
-	}
-
 	public void computeSurface() {
 		float vx, vy, vz;
 		int r1 = res - 1;
@@ -146,14 +107,85 @@ public class IsoSurface {
 		numFaces /= 3;
 	}
 
+	protected int getCellIndex(int x, int y, int z) {
+		int cellIndex = 0;
+		int rz = res2 * z;
+		int rz1 = res2 * (z + 1);
+		int ry = res * y;
+		int ry1 = res * (y + 1);
+		if (volumeData[x + ry + rz] < isovalue) {
+			cellIndex |= 0x01;
+		}
+		if (volumeData[x + 1 + ry + rz] < isovalue) {
+			cellIndex |= 0x02;
+		}
+		if (volumeData[x + 1 + ry + rz1] < isovalue) {
+			cellIndex |= 0x04;
+		}
+		if (volumeData[x + ry + rz1] < isovalue) {
+			cellIndex |= 0x08;
+		}
+		if (volumeData[x + ry1 + rz] < isovalue) {
+			cellIndex |= 0x10;
+		}
+		if (volumeData[x + 1 + ry1 + rz] < isovalue) {
+			cellIndex |= 0x20;
+		}
+		if (volumeData[x + 1 + ry1 + rz1] < isovalue) {
+			cellIndex |= 0x40;
+		}
+		if (volumeData[x + ry1 + rz1] < isovalue) {
+			cellIndex |= 0x80;
+		}
+		return cellIndex;
+	}
+
+	/**
+	 * Retrieves vertices for the requested mesh face/triangle.
+	 * 
+	 * @param faceID
+	 *            face index
+	 * @param vertices
+	 *            Vec3D array to place vertices in or null to create a new array
+	 *            automatically
+	 * @return vertices as Vec3D array
+	 */
 	public Vec3D[] getVerticesForFace(int faceID, Vec3D[] vertices) {
+		if (faceID > faces.length - 3) {
+			return null;
+		}
 		if (vertices == null) {
 			vertices = new Vec3D[3];
 		}
-		vertices[0] = edgeVertices[faces[faceID++]];
-		vertices[1] = edgeVertices[faces[faceID++]];
-		vertices[2] = edgeVertices[faces[faceID++]];
+		vertices[0] = edgeVertices[faces[faceID]];
+		vertices[1] = edgeVertices[faces[faceID + 1]];
+		vertices[2] = edgeVertices[faces[faceID + 2]];
 		return vertices;
+	}
+
+	protected int indexInArray(int needle, int[] stack, int maxLen) {
+		for (int i = 0; i < maxLen; i++) {
+			if (stack[i] == needle) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public void resetVertices() {
+		for (int z = 0, index = 0; z < res; z++) {
+			for (int y = 0; y < res; y++) {
+				for (int x = 0; x < res; x++) {
+					edgeVertices[index].set(x * step - 0.5f, y * step - 0.5f, z
+							* step - 0.5f);
+					edgeVertices[index + 1].set(edgeVertices[index]);
+					edgeVertices[index + 2].set(edgeVertices[index]);
+					index += 3;
+				}
+			}
+		}
+		numFaces = 0;
+		numVertices = 0;
 	}
 
 	public void saveAsOBJ(String fn) {
@@ -164,26 +196,29 @@ public class IsoSurface {
 		// figure out unique used vertices
 		int[] faceIndex = new int[numFaces];
 		int numUniqueVertices = 0;
-		for (int i = 0; i < numFaces; i++) {
+		for (int i = 0; i < numVertices; i++) {
 			int idx = indexInArray(faces[i], faceIndex, numUniqueVertices);
-			if (idx == -1)
+			if (idx == -1) {
 				faceIndex[numUniqueVertices++] = faces[i];
-			if ((i % 10000) == 0)
+			}
+			if ((i % 10000) == 0) {
 				logger.fine((i * 100.0 / numFaces) + "% unique:"
 						+ numUniqueVertices);
+			}
 		}
 		for (int i = 0; i < numUniqueVertices; i++) {
 			obj.vertex(edgeVertices[faceIndex[i]]);
 		}
-		obj.faceList();
 		logger.info("creating facelist...");
-		for (int i = 0; i < numFaces; i += 3) {
+		obj.faceList();
+		for (int i = 0; i < numVertices; i += 3) {
 			int a = indexInArray(faces[i], faceIndex, numUniqueVertices);
 			int b = indexInArray(faces[i + 1], faceIndex, numUniqueVertices);
 			int c = indexInArray(faces[i + 2], faceIndex, numUniqueVertices);
-			obj.face(a, b, c);
-			if ((i % 10000) == 0)
+			obj.face(a + 1, b + 1, c + 1);
+			if ((i % 10000) == 0) {
 				logger.fine((i * 100.0 / numFaces) + "%");
+			}
 		}
 		obj.endSave();
 	}
@@ -197,27 +232,20 @@ public class IsoSurface {
 			Vec3D b = edgeVertices[faces[off++]];
 			Vec3D c = edgeVertices[faces[off++]];
 			stl.face(a, b, c);
-			if ((i % 10000) == 0)
+			if ((i % 10000) == 0) {
 				logger.fine((i * 100.0 / numFaces) + "%");
+			}
 		}
 		stl.endSave();
-	}
-
-	int indexInArray(int needle, int[] stack, int maxLen) {
-		for (int i = 0; i < maxLen; i++) {
-			if (stack[i] == needle)
-				return i;
-		}
-		return -1;
 	}
 
 	public void saveVolumeData(String fn) {
 		logger.info("saving volume data...");
 		try {
 			DataOutputStream ds = new DataOutputStream(new FileOutputStream(fn));
-			ds.writeInt(volumeData.length);
-			for (int i = 0; i < volumeData.length; i++) {
-				ds.writeFloat(volumeData[i]);
+			// ds.writeInt(volumeData.length);
+			for (float element : volumeData) {
+				ds.writeFloat(element);
 			}
 			ds.flush();
 			ds.close();
