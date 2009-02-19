@@ -1,4 +1,4 @@
-package toxi.geom;
+package toxi.geom.volume;
 
 public class MarchingCubesIndex {
 	static int edgeOffsets[][] = { { 0, 0, 0, 0 }, { 1, 0, 0, 2 },

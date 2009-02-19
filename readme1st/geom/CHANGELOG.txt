@@ -1,7 +1,8 @@
-0013 - 2009-02-13
+0013 - 2009-02-19
 --------------------------------------------------------------------------------
 ! fixed issue 7, Y/Z coords were swapped in Vec3D.rotateX() & getRotatedX()
 + added pointInPolygon() to Vec2D
++ added toxi.geom.volume package with IsoSurface class
 
 0012 - 2008-12-18
 --------------------------------------------------------------------------------

@@ -1,13 +1,19 @@
-package toxi.geom;
+package toxi.geom.volume;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
+import toxi.geom.Vec3D;
 import toxi.geom.util.OBJWriter;
 import toxi.geom.util.STLWriter;
 
-public class IsoVolume {
+public class IsoSurface {
+
+	private static final Logger logger = Logger.getLogger(IsoSurface.class
+			.getName());
+
 	public float isovalue;
 
 	protected int res, res2;
@@ -21,7 +27,7 @@ public class IsoVolume {
 	protected int[] faces;
 	protected int numFaces;
 
-	public IsoVolume(int res, float iso, float[] grid) {
+	public IsoSurface(int res, float iso, float[] data) {
 		this.res = res;
 		this.res2 = res * res;
 		this.isovalue = iso;
@@ -29,7 +35,7 @@ public class IsoVolume {
 		step = 1.0f / (res - 1);
 
 		numCells = res * res * res;
-		volumeData = grid;
+		volumeData = data;
 
 		edgeVertices = new Vec3D[3 * numCells];
 		numVertices = 0;
@@ -99,20 +105,20 @@ public class IsoVolume {
 								* (z + edgeOffsetInfo[2]))
 								* 3 + edgeOffsetInfo[3];
 					}
-					int toCompute = MarchingCubesIndex.edgesToCompute[cellIndex];
-					if (toCompute > 0) {
+					int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
+					if (edgeFlags > 0) {
 						int edgeOffsetIndex = offset * 3;
-						if ((toCompute & 1) > 0) {
+						if ((edgeFlags & 1) > 0) {
 							float t = (isovalue - volumeData[offset])
 									/ (volumeData[offset + 1] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex].x = vx + t * step;
 						}
-						if ((toCompute & 2) > 0) {
+						if ((edgeFlags & 2) > 0) {
 							float t = (isovalue - volumeData[offset])
 									/ (volumeData[offset + res] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex + 1].y = vy + t * step;
 						}
-						if ((toCompute & 4) > 0) {
+						if ((edgeFlags & 4) > 0) {
 							float t = (isovalue - volumeData[offset])
 									/ (volumeData[offset + res2] - volumeData[offset]);
 							edgeVertices[edgeOffsetIndex + 2].z = vz + t * step;
@@ -140,7 +146,7 @@ public class IsoVolume {
 			if (idx == -1)
 				faceIndex[numUniqueVertices++] = faces[i];
 			if ((i % 10000) == 0)
-				System.out.println((i * 100.0 / numFaces) + "% unique:"
+				logger.info((i * 100.0 / numFaces) + "% unique:"
 						+ numUniqueVertices);
 		}
 		for (int i = 0; i < numUniqueVertices; i++) {
@@ -154,7 +160,7 @@ public class IsoVolume {
 			int c = indexInArray(faces[i + 2], faceIndex, numUniqueVertices);
 			obj.face(a, b, c);
 			if ((i % 10000) == 0)
-				System.out.println((i * 100.0 / numFaces) + "%");
+				logger.fine((i * 100.0 / numFaces) + "%");
 		}
 		obj.endSave();
 	}
@@ -168,7 +174,7 @@ public class IsoVolume {
 			Vec3D c = edgeVertices[faces[off++]];
 			stl.face(a, b, c);
 			if ((i % 10000) == 0)
-				System.out.println((i * 100.0 / numFaces) + "%");
+				logger.fine((i * 100.0 / numFaces) + "%");
 		}
 		stl.endSave();
 	}
@@ -181,8 +187,8 @@ public class IsoVolume {
 		return -1;
 	}
 
-	void saveCloud(String fn) {
-		System.out.println("saving cloud...");
+	void saveVolumeData(String fn) {
+		logger.info("saving volume data...");
 		try {
 			DataOutputStream ds = new DataOutputStream(new FileOutputStream(fn));
 			ds.writeInt(volumeData.length);
