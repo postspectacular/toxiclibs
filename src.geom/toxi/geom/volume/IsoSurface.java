@@ -11,7 +11,7 @@ import toxi.geom.util.STLWriter;
 
 public class IsoSurface {
 
-	private static final Logger logger = Logger.getLogger(IsoSurface.class
+	protected static final Logger logger = Logger.getLogger(IsoSurface.class
 			.getName());
 
 	public float isovalue;
@@ -19,13 +19,13 @@ public class IsoSurface {
 	protected int res, res2;
 	protected float step;
 	public float[] volumeData;
-	protected int numCells;
+	public int numCells;
 
-	protected Vec3D[] edgeVertices;
-	protected int numVertices;
+	public Vec3D[] edgeVertices;
+	public int numVertices;
 
-	protected int[] faces;
-	protected int numFaces;
+	public int[] faces;
+	public int numFaces;
 
 	public IsoSurface(int res, float iso, float[] data) {
 		this.res = res;
@@ -43,11 +43,9 @@ public class IsoSurface {
 		faces = new int[3 * numCells];
 		numFaces = 0;
 
-		int x, y, z, index;
-		index = 0;
-		for (z = 0; z < res; z++) {
-			for (y = 0; y < res; y++) {
-				for (x = 0; x < res; x++) {
+		for (int z = 0, index = 0; z < res; z++) {
+			for (int y = 0; y < res; y++) {
+				for (int x = 0; x < res; x++) {
 					Vec3D v = new Vec3D(x * step - 0.5f, y * step - 0.5f, z
 							* step - 0.5f);
 					edgeVertices[index] = v;
@@ -59,7 +57,21 @@ public class IsoSurface {
 		}
 	}
 
-	int getCellIndex(int x, int y, int z) {
+	public void resetVertices() {
+		for (int z = 0, index = 0; z < res; z++) {
+			for (int y = 0; y < res; y++) {
+				for (int x = 0; x < res; x++) {
+					edgeVertices[index].set(x * step - 0.5f, y * step - 0.5f, z
+							* step - 0.5f);
+					edgeVertices[index + 1].set(edgeVertices[index]);
+					edgeVertices[index + 2].set(edgeVertices[index]);
+					index += 3;
+				}
+			}
+		}
+	}
+
+	protected int getCellIndex(int x, int y, int z) {
 		int cellIndex = 0;
 		int rz = res2 * z;
 		int rz1 = res2 * (z + 1);
@@ -134,10 +146,21 @@ public class IsoSurface {
 		numFaces /= 3;
 	}
 
-	void saveAsOBJ(String fn) {
+	public Vec3D[] getVerticesForFace(int faceID, Vec3D[] vertices) {
+		if (vertices == null) {
+			vertices = new Vec3D[3];
+		}
+		vertices[0] = edgeVertices[faces[faceID++]];
+		vertices[1] = edgeVertices[faces[faceID++]];
+		vertices[2] = edgeVertices[faces[faceID++]];
+		return vertices;
+	}
+
+	public void saveAsOBJ(String fn) {
+		logger.info("saving surface as OBJ to: " + fn);
 		OBJWriter obj = new OBJWriter();
 		obj.beginSave(fn);
-		obj.newObject("catype");
+		obj.newObject("isosurface");
 		// figure out unique used vertices
 		int[] faceIndex = new int[numFaces];
 		int numUniqueVertices = 0;
@@ -146,14 +169,14 @@ public class IsoSurface {
 			if (idx == -1)
 				faceIndex[numUniqueVertices++] = faces[i];
 			if ((i % 10000) == 0)
-				logger.info((i * 100.0 / numFaces) + "% unique:"
+				logger.fine((i * 100.0 / numFaces) + "% unique:"
 						+ numUniqueVertices);
 		}
 		for (int i = 0; i < numUniqueVertices; i++) {
 			obj.vertex(edgeVertices[faceIndex[i]]);
 		}
 		obj.faceList();
-		System.out.println("creating facelist...");
+		logger.info("creating facelist...");
 		for (int i = 0; i < numFaces; i += 3) {
 			int a = indexInArray(faces[i], faceIndex, numUniqueVertices);
 			int b = indexInArray(faces[i + 1], faceIndex, numUniqueVertices);
@@ -165,7 +188,8 @@ public class IsoSurface {
 		obj.endSave();
 	}
 
-	void saveAsSTL(String fn) {
+	public void saveAsSTL(String fn) {
+		logger.info("saving surface as STL to: " + fn);
 		STLWriter stl = new STLWriter();
 		stl.beginSave(fn, numFaces);
 		for (int i = 0, off = 0; i < numFaces; i++) {
@@ -187,7 +211,7 @@ public class IsoSurface {
 		return -1;
 	}
 
-	void saveVolumeData(String fn) {
+	public void saveVolumeData(String fn) {
 		logger.info("saving volume data...");
 		try {
 			DataOutputStream ds = new DataOutputStream(new FileOutputStream(fn));

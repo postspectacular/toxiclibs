@@ -91,10 +91,10 @@ public class STLWriter {
 	}
 
 	private final void prepareBuffer(int a) {
-		buf[0] = (byte) (a >>> 24);
-		buf[1] = (byte) (a >> 16 & 0xff);
-		buf[2] = (byte) (a >> 8 & 0xff);
-		buf[3] = (byte) (a & 0xff);
+		buf[3] = (byte) (a >>> 24);
+		buf[2] = (byte) (a >> 16 & 0xff);
+		buf[1] = (byte) (a >> 8 & 0xff);
+		buf[0] = (byte) (a & 0xff);
 	}
 
 	public void setScale(float s) {
@@ -140,5 +140,4 @@ public class STLWriter {
 			e.printStackTrace();
 		}
 	}
-
 }
