@@ -66,15 +66,18 @@ public class ColorList implements Iterable<TColor> {
 	 *            unique colors though)
 	 * @return new color list
 	 */
+	// FIXME see issue #9 on googlecode
 	public static final ColorList createFromARGBArray(int[] pixels, int num,
 			boolean uniqueOnly) {
 		num = MathUtils.min(num, pixels.length);
 		int[] colors = new int[num];
 		int[] index = new int[num];
+		int numColsFound = 0;
 		for (int i = 0; i < num; i++) {
 			int idx;
 			if (uniqueOnly) {
 				boolean isUnique = true;
+				int numTries = 0;
 				do {
 					idx = MathUtils.random(pixels.length);
 					for (int j = 0; j < i; j++) {
@@ -83,14 +86,20 @@ public class ColorList implements Iterable<TColor> {
 							break;
 						}
 					}
-				} while (!isUnique);
+				} while (!isUnique && ++numTries < 100);
+				if (numTries >= 100) {
+					break;
+				}
 			} else {
 				idx = MathUtils.random(pixels.length);
 			}
-			index[i] = idx;
-			colors[i] = pixels[idx];
+			index[numColsFound] = idx;
+			colors[numColsFound] = pixels[idx];
+			numColsFound++;
 		}
-		return new ColorList(colors);
+		int[] cols = new int[numColsFound];
+		System.arraycopy(colors, 0, cols, 0, numColsFound);
+		return new ColorList(cols);
 	}
 
 	/**
