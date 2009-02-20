@@ -156,6 +156,7 @@ public class IsoSurface {
 	 * @return vertices as Vec3D array
 	 */
 	public Vec3D[] getVerticesForFace(int faceID, Vec3D[] vertices) {
+		faceID *= 3;
 		if (faceID > faces.length - 3) {
 			return null;
 		}
