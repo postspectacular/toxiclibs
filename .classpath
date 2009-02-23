@@ -33,5 +33,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/jogl"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl/opengl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
