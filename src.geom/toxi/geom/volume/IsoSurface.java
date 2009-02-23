@@ -1,54 +1,65 @@
 package toxi.geom.volume;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
 import toxi.geom.util.OBJWriter;
 import toxi.geom.util.STLWriter;
 
+/**
+ * IsoSurface class based on C version by Paul Bourke and Lingo version by
+ * myself.
+ */
 public class IsoSurface {
 
 	protected static final Logger logger = Logger.getLogger(IsoSurface.class
 			.getName());
 
-	public float isovalue;
+	protected Vec3D cellSize;
+	protected Vec3D centreOffset;
+	protected VolumetricSpace volume;
 
-	protected int res, res2;
-	protected float step;
-	public float[] volumeData;
-	public int numCells;
+	public float isoValue;
 
-	public Vec3D[] edgeVertices;
-	public int numVertices;
+	protected int resX, resY, resZ;
+	protected int resX1, resY1, resZ1;
 
-	public int[] faces;
-	public int numFaces;
+	protected float[] data;
+	protected int sliceRes;
 
-	// TODO make volume not strictly cubic, but allow different sizes for XYZ
-	public IsoSurface(int res, float iso, float[] data) {
-		this.res = res;
-		this.res2 = res * res;
-		this.isovalue = iso;
+	protected Vec3D[] edgeVertices;
+	protected int numVertices;
 
-		step = 1.0f / (res - 1);
+	protected int[] faces;
+	protected int numFaces;
 
-		numCells = res * res * res;
-		volumeData = data;
+	public IsoSurface(VolumetricSpace volume) {
+		this.volume = volume;
+		cellSize = new Vec3D(volume.scale.x / volume.resX1, volume.scale.y
+				/ volume.resY1, volume.scale.z / volume.resZ1);
 
-		edgeVertices = new Vec3D[3 * numCells];
+		resX = volume.resX;
+		resY = volume.resY;
+		resZ = volume.resZ;
+		resX1 = volume.resX1;
+		resY1 = volume.resY1;
+		resZ1 = volume.resZ1;
+
+		sliceRes = volume.sliceRes;
+		data = volume.data;
+		centreOffset = volume.halfScale.getInverted();
+
+		faces = new int[3 * volume.numCells];
+		edgeVertices = new Vec3D[3 * volume.numCells];
+
 		numVertices = 0;
-
-		faces = new int[3 * numCells];
 		numFaces = 0;
 
-		for (int z = 0, index = 0; z < res; z++) {
-			for (int y = 0; y < res; y++) {
-				for (int x = 0; x < res; x++) {
-					Vec3D v = new Vec3D(x * step - 0.5f, y * step - 0.5f, z
-							* step - 0.5f);
+		for (int z = 0, index = 0; z < resZ; z++) {
+			for (int y = 0; y < resY; y++) {
+				for (int x = 0; x < resX; x++) {
+					Vec3D v = new Vec3D(x * cellSize.x, y * cellSize.y, z
+							* cellSize.z).addSelf(centreOffset);
 					edgeVertices[index] = v;
 					edgeVertices[index + 1] = v.copy();
 					edgeVertices[index + 2] = v.copy();
@@ -61,88 +72,108 @@ public class IsoSurface {
 	/**
 	 * Computes the surface mesh for the given volumetric data and iso value.
 	 */
-	public void computeSurface() {
-		float vx, vy, vz;
-		int r1 = res - 1;
-		vz = -0.5f;
-		for (int z = 0; z < r1; z++) {
-			vy = -0.5f;
-			for (int y = 0; y < r1; y++) {
-				vx = -0.5f;
-				int sliceOffset = res * y + res2 * z;
-				for (int x = 0; x < r1; x++) {
-					int offset = x + sliceOffset;
+	public void computeSurface(float iso) {
+		isoValue = iso;
+		float offsetX, offsetY, offsetZ;
+		offsetZ = centreOffset.z;
+		for (int z = 0; z < resZ1; z++) {
+			int sliceOffset = sliceRes * z;
+			offsetY = centreOffset.y;
+			for (int y = 0; y < resY1; y++) {
+				offsetX = centreOffset.x;
+				int rowOffset = resX * y + sliceOffset;
+				for (int x = 0; x < resX1; x++) {
+					int offset = x + rowOffset;
 					int cellIndex = getCellIndex(x, y, z);
 					int n = 0;
 					int edgeIndex;
 					while ((edgeIndex = MarchingCubesIndex.cellTriangles[cellIndex][n++]) != -1) {
 						int[] edgeOffsetInfo = MarchingCubesIndex.edgeOffsets[edgeIndex];
-						faces[numFaces++] = ((x + edgeOffsetInfo[0]) + res
-								* (y + edgeOffsetInfo[1]) + res2
+						faces[numVertices++] = ((x + edgeOffsetInfo[0]) + resX
+								* (y + edgeOffsetInfo[1]) + sliceRes
 								* (z + edgeOffsetInfo[2]))
 								* 3 + edgeOffsetInfo[3];
 					}
 					int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
 					if (edgeFlags > 0) {
 						int edgeOffsetIndex = offset * 3;
-						float isoDiff = isovalue - volumeData[offset];
+						float isoDiff = isoValue - data[offset];
 						if ((edgeFlags & 1) > 0) {
 							float t = isoDiff
-									/ (volumeData[offset + 1] - volumeData[offset]);
-							edgeVertices[edgeOffsetIndex].x = vx + t * step;
+									/ (data[offset + 1] - data[offset]);
+							edgeVertices[edgeOffsetIndex].x = offsetX + t
+									* cellSize.x;
 						}
 						if ((edgeFlags & 2) > 0) {
 							float t = isoDiff
-									/ (volumeData[offset + res] - volumeData[offset]);
-							edgeVertices[edgeOffsetIndex + 1].y = vy + t * step;
+									/ (data[offset + resX] - data[offset]);
+							edgeVertices[edgeOffsetIndex + 1].y = offsetY + t
+									* cellSize.y;
 						}
 						if ((edgeFlags & 4) > 0) {
 							float t = isoDiff
-									/ (volumeData[offset + res2] - volumeData[offset]);
-							edgeVertices[edgeOffsetIndex + 2].z = vz + t * step;
+									/ (data[offset + sliceRes] - data[offset]);
+							edgeVertices[edgeOffsetIndex + 2].z = offsetZ + t
+									* cellSize.z;
 						}
 					}
-					vx += step;
+					offsetX += cellSize.x;
 				}
-				vy += step;
+				offsetY += cellSize.y;
 			}
-			vz += step;
+			offsetZ += cellSize.z;
 		}
-		numVertices = numFaces;
-		numFaces /= 3;
+		numFaces = numVertices / 3;
 	}
 
-	protected int getCellIndex(int x, int y, int z) {
+	protected int findIndexInArray(int needle, int[] stack, int maxLen) {
+		for (int i = 0; i < maxLen; i++) {
+			if (stack[i] == needle) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	protected final int getCellIndex(int x, int y, int z) {
 		int cellIndex = 0;
-		int rz = res2 * z;
-		int rz1 = res2 * (z + 1);
-		int ry = res * y;
-		int ry1 = res * (y + 1);
-		if (volumeData[x + ry + rz] < isovalue) {
+		int rz = sliceRes * z;
+		int rz1 = rz + sliceRes;
+		int ry = resX * y;
+		int ry1 = ry + resX;
+		if (data[x + ry + rz] < isoValue) {
 			cellIndex |= 0x01;
 		}
-		if (volumeData[x + 1 + ry + rz] < isovalue) {
+		if (data[x + 1 + ry + rz] < isoValue) {
 			cellIndex |= 0x02;
 		}
-		if (volumeData[x + 1 + ry + rz1] < isovalue) {
+		if (data[x + 1 + ry + rz1] < isoValue) {
 			cellIndex |= 0x04;
 		}
-		if (volumeData[x + ry + rz1] < isovalue) {
+		if (data[x + ry + rz1] < isoValue) {
 			cellIndex |= 0x08;
 		}
-		if (volumeData[x + ry1 + rz] < isovalue) {
+		if (data[x + ry1 + rz] < isoValue) {
 			cellIndex |= 0x10;
 		}
-		if (volumeData[x + 1 + ry1 + rz] < isovalue) {
+		if (data[x + 1 + ry1 + rz] < isoValue) {
 			cellIndex |= 0x20;
 		}
-		if (volumeData[x + 1 + ry1 + rz1] < isovalue) {
+		if (data[x + 1 + ry1 + rz1] < isoValue) {
 			cellIndex |= 0x40;
 		}
-		if (volumeData[x + ry1 + rz1] < isovalue) {
+		if (data[x + ry1 + rz1] < isoValue) {
 			cellIndex |= 0x80;
 		}
 		return cellIndex;
+	}
+
+	public int getNumFaces() {
+		return numFaces;
+	}
+
+	public int getNumVertices() {
+		return numVertices;
 	}
 
 	/**
@@ -157,9 +188,6 @@ public class IsoSurface {
 	 */
 	public Vec3D[] getVerticesForFace(int faceID, Vec3D[] vertices) {
 		faceID *= 3;
-		if (faceID > faces.length - 3) {
-			return null;
-		}
 		if (vertices == null) {
 			vertices = new Vec3D[3];
 		}
@@ -169,25 +197,16 @@ public class IsoSurface {
 		return vertices;
 	}
 
-	protected int indexInArray(int needle, int[] stack, int maxLen) {
-		for (int i = 0; i < maxLen; i++) {
-			if (stack[i] == needle) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	/**
 	 * Resets mesh vertices to default positions and clears face index. Needs to
-	 * be called inbetween successive calls to {@link #computeSurface()}.
+	 * be called inbetween successive calls to {@link #computeSurface(float)}.
 	 */
-	public void resetVertices() {
-		for (int z = 0, index = 0; z < res; z++) {
-			for (int y = 0; y < res; y++) {
-				for (int x = 0; x < res; x++) {
-					edgeVertices[index].set(x * step - 0.5f, y * step - 0.5f, z
-							* step - 0.5f);
+	public void reset() {
+		for (int z = 0, index = 0; z < resZ; z++) {
+			for (int y = 0; y < resY; y++) {
+				for (int x = 0; x < resX && index < numVertices; x++) {
+					edgeVertices[index].set(x * cellSize.x, y * cellSize.y,
+							z * cellSize.z).addSelf(centreOffset);
 					edgeVertices[index + 1].set(edgeVertices[index]);
 					edgeVertices[index + 2].set(edgeVertices[index]);
 					index += 3;
@@ -214,7 +233,7 @@ public class IsoSurface {
 		int[] faceIndex = new int[numFaces];
 		int numUniqueVertices = 0;
 		for (int i = 0; i < numVertices; i++) {
-			int idx = indexInArray(faces[i], faceIndex, numUniqueVertices);
+			int idx = findIndexInArray(faces[i], faceIndex, numUniqueVertices);
 			if (idx == -1) {
 				faceIndex[numUniqueVertices++] = faces[i];
 			}
@@ -229,10 +248,10 @@ public class IsoSurface {
 		logger.info("creating facelist...");
 		obj.faceList();
 		for (int i = 0; i < numVertices; i += 3) {
-			int a = indexInArray(faces[i], faceIndex, numUniqueVertices);
-			int b = indexInArray(faces[i + 1], faceIndex, numUniqueVertices);
-			int c = indexInArray(faces[i + 2], faceIndex, numUniqueVertices);
-			obj.face(a + 1, b + 1, c + 1);
+			int a = findIndexInArray(faces[i], faceIndex, numUniqueVertices);
+			int b = findIndexInArray(faces[i + 1], faceIndex, numUniqueVertices);
+			int c = findIndexInArray(faces[i + 2], faceIndex, numUniqueVertices);
+			obj.face(c + 1, b + 1, a + 1);
 			if ((i % 10000) == 0) {
 				logger.fine((i * 100.0 / numFaces) + "%");
 			}
@@ -254,32 +273,11 @@ public class IsoSurface {
 			Vec3D a = edgeVertices[faces[off++]];
 			Vec3D b = edgeVertices[faces[off++]];
 			Vec3D c = edgeVertices[faces[off++]];
-			stl.face(a, b, c);
+			stl.face(c, b, a);
 			if ((i % 10000) == 0) {
 				logger.fine((i * 100.0 / numFaces) + "%");
 			}
 		}
 		stl.endSave();
-	}
-
-	/**
-	 * Saves volume data float array in raw binary format.
-	 * 
-	 * @param fn
-	 *            absolute path/filename to save to
-	 */
-	public void saveVolumeData(String fn) {
-		logger.info("saving volume data...");
-		try {
-			DataOutputStream ds = new DataOutputStream(new FileOutputStream(fn));
-			// ds.writeInt(volumeData.length);
-			for (float element : volumeData) {
-				ds.writeFloat(element);
-			}
-			ds.flush();
-			ds.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
