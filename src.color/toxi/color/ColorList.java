@@ -50,8 +50,6 @@ import toxi.math.MathUtils;
  */
 public class ColorList implements Iterable<TColor> {
 
-	protected ArrayList<TColor> colors = new ArrayList<TColor>();
-
 	/**
 	 * Factory method. Creates a new ColorList of colors sampled from the given
 	 * ARGB image array.
@@ -133,6 +131,8 @@ public class ColorList implements Iterable<TColor> {
 		}
 		return list;
 	}
+
+	protected ArrayList<TColor> colors = new ArrayList<TColor>();
 
 	/**
 	 * Creates an empty list.
@@ -479,7 +479,7 @@ public class ColorList implements Iterable<TColor> {
 	/**
 	 * @return the number of colors in the list
 	 */
-	public float size() {
+	public int size() {
 		return colors.size();
 	}
 
