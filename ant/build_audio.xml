@@ -42,7 +42,7 @@
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
-				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${release.dir}/toxiclibscore.jar" />
 			</classpath>
 		</javac>
 	</target>
@@ -83,7 +83,7 @@
 		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
-				<pathelement location="${release.dir}/geomutils.jar" />
+				<pathelement location="${release.dir}/toxiclibscore.jar" />
 			</classpath>
 			<packageset dir="${src.dir}" defaultexcludes="yes">
 				<include name="**" />
