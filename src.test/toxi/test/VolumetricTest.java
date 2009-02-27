@@ -2,8 +2,8 @@ package toxi.test;
 
 import junit.framework.TestCase;
 import toxi.geom.Vec3D;
-import toxi.geom.volume.RoundBrush;
-import toxi.geom.volume.VolumetricSpace;
+import toxi.volume.RoundBrush;
+import toxi.volume.VolumetricSpace;
 
 public class VolumetricTest extends TestCase {
 

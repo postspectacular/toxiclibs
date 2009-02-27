@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src.prefs"/>
-	<classpathentry kind="src" path="src.geom"/>
-	<classpathentry including="../src.geom/toxi/math/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
+	<classpathentry kind="src" path="src.core"/>
+	<classpathentry including="../src.core/toxi/math/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
 	<classpathentry kind="src" path="src.video"/>
-	<classpathentry including="../src.color/**/*.java|../src.geom/toxi/geom/*.java|../src.image/toxi/image/*.java|toxi/**/*.java" kind="src" path="src.test"/>
-	<classpathentry including="../lib/core.jar|../src.geom/toxi/geom/*.java|toxi/**/*.java" kind="src" path="src.image"/>
+	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.image/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
+	<classpathentry including="../lib/core.jar|../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.image"/>
 	<classpathentry kind="src" path="src.net"/>
-	<classpathentry including="../src.geom/toxi/geom/*.java|toxi/**/*.java" kind="src" path="src.physics"/>
+	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.physics"/>
 	<classpathentry kind="src" path="src.color"/>
+	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
