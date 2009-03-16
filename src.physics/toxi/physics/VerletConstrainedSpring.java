@@ -55,13 +55,13 @@ public class VerletConstrainedSpring extends VerletSpring {
 		if (!a.isLocked && !isALocked) {
 			a.addSelf(delta.scale(normDistStrength * invWeightA).limit(limit));
 			if (applyConstraints) {
-				a.applyConstraint();
+				a.applyConstraints();
 			}
 		}
 		if (!b.isLocked && !isBLocked) {
 			b.subSelf(delta.scale(normDistStrength * invWeightB).limit(limit));
 			if (applyConstraints) {
-				b.applyConstraint();
+				b.applyConstraints();
 			}
 		}
 	}

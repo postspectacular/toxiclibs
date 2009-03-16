@@ -8,7 +8,7 @@ import toxi.physics.VerletParticle;
 /**
  * Defines an interface used to constrain VerletParticles based on a custom
  * criteria (e.g. only allowed to move along an axis or shape etc.). The
- * constraint will be applied directly after each spring update.
+ * constraints will be applied directly after each spring update.
  * 
  * @author toxi
  */
