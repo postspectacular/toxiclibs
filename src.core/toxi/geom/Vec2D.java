@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2006-2008 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 package toxi.geom;
@@ -45,16 +45,6 @@ public class Vec2D implements DimensionalVector {
 	 * Defines positive Y axis
 	 */
 	public static final Vec2D Y_AXIS = new Vec2D(0, 1);
-
-	/**
-	 * X coordinate
-	 */
-	public float x;
-
-	/**
-	 * Y coordinate
-	 */
-	public float y;
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane.
@@ -92,6 +82,16 @@ public class Vec2D implements DimensionalVector {
 		Vec2D v = new Vec2D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1);
 		return v.normalize();
 	}
+
+	/**
+	 * X coordinate
+	 */
+	public float x;
+
+	/**
+	 * Y coordinate
+	 */
+	public float y;
 
 	/**
 	 * Creates a new zero vector
@@ -207,7 +207,8 @@ public class Vec2D implements DimensionalVector {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		} else {
+		}
+		else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -345,7 +346,8 @@ public class Vec2D implements DimensionalVector {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return (float) Math.sqrt(dx * dx + dy * dy);
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -363,7 +365,8 @@ public class Vec2D implements DimensionalVector {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return dx * dx + dy * dy;
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -812,6 +815,29 @@ public class Vec2D implements DimensionalVector {
 	}
 
 	/**
+	 * Checks if the point is within the convex polygon defined by the points in
+	 * the given list
+	 * 
+	 * @param vertices
+	 * @return true, if inside polygon
+	 */
+	public boolean pointInPolygon(ArrayList<Vec2D> vertices) {
+		int i, j = vertices.size() - 1;
+		boolean oddNodes = false;
+		for (i = 0; i < vertices.size(); i++) {
+			Vec2D vi = vertices.get(i);
+			Vec2D vj = vertices.get(j);
+			if (vi.y < y && vj.y >= y || vj.y < y && vi.y >= y) {
+				if (vi.x + (y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x) {
+					oddNodes = !oddNodes;
+				}
+			}
+			j = i;
+		}
+		return oddNodes;
+	}
+
+	/**
 	 * Rotates the vector by the given angle around the Z axis.
 	 * 
 	 * @param theta
@@ -1030,29 +1056,6 @@ public class Vec2D implements DimensionalVector {
 		StringBuffer sb = new StringBuffer(32);
 		sb.append("{x:").append(x).append(", y:").append(y).append("}");
 		return sb.toString();
-	}
-
-	/**
-	 * Checks if the point is within the convex polygon defined by the points in
-	 * the given list
-	 * 
-	 * @param vertices
-	 * @return true, if inside polygon
-	 */
-	public boolean pointInPolygon(ArrayList<Vec2D> vertices) {
-		int i, j = vertices.size() - 1;
-		boolean oddNodes = false;
-		for (i = 0; i < vertices.size(); i++) {
-			Vec2D vi = vertices.get(i);
-			Vec2D vj = vertices.get(j);
-			if (vi.y < y && vj.y >= y || vj.y < y && vi.y >= y) {
-				if (vi.x + (y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x) {
-					oddNodes = !oddNodes;
-				}
-			}
-			j = i;
-		}
-		return oddNodes;
 	}
 
 }

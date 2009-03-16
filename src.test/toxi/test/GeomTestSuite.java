@@ -13,20 +13,27 @@ import toxi.math.MathUtils;
 
 public class GeomTestSuite extends TestCase {
 
-	public void testReflectRay() {
-		SphereIntersectorReflector si = new SphereIntersectorReflector(
-				new Vec3D(0, 0, 0), 10);
-		Ray3D r = si.reflectRay(new Ray3D(new Vec3D(0, 100, 0), new Vec3D(0,
-				-1, 0)));
-		assertEquals(MathUtils.abs(r.getDirection().y - 1) < 0.002, true);
+	public void testAABB2AABB() {
+		AABB box = new AABB(new Vec3D(100, 0, 0), new Vec3D(20, 20, 20));
+		AABB b2 = new AABB(new Vec3D(100, 30.1f, 0), new Vec3D(10, 10, 10));
+		assertEquals(box.intersectsBox(b2), false);
 	}
 
-	public void testIsInSphere() {
-		Vec3D p = new Vec3D(0, -10, 0);
-		Sphere s = new Sphere(new Vec3D(), 10);
-		assertEquals(p.isInSphere(s), true);
-		p.set(0, 10.1f, 0);
-		assertEquals(p.isInSphere(s), false);
+	public void testAABBSphere() {
+		AABB box = new AABB(new Vec3D(100, 0, 0), new Vec3D(20, 20, 20));
+		Sphere s = new Sphere(new Vec3D(100, 0, 0), 50);
+		assertEquals(box.intersectsSphere(s), true);
+	}
+
+	public void testClosestPoint() {
+		Vec3D a = new Vec3D();
+		Vec3D b = new Vec3D(100, 0, 0);
+		Vec3D c = new Vec3D(50, 50, 0);
+		Vec3D isec = c.closestPointOnLine(a, b);
+		assertEquals(MathUtils.abs(isec.x - c.x) < 0.5, true);
+		c = new Vec3D(-50, -50, 0);
+		isec = c.closestPointOnLine(a, b);
+		assertEquals(isec.equals(a), true);
 	}
 
 	public void testIsInAABB() {
@@ -36,16 +43,12 @@ public class GeomTestSuite extends TestCase {
 		assertEquals(new Vec3D(120.01f, 19.99f, 0).isInAABB(box), false);
 	}
 
-	public void testAABBSphere() {
-		AABB box = new AABB(new Vec3D(100, 0, 0), new Vec3D(20, 20, 20));
-		Sphere s = new Sphere(new Vec3D(100, 0, 0), 50);
-		assertEquals(box.intersectsSphere(s), true);
-	}
-
-	public void testAABB2AABB() {
-		AABB box = new AABB(new Vec3D(100, 0, 0), new Vec3D(20, 20, 20));
-		AABB b2 = new AABB(new Vec3D(100, 30.1f, 0), new Vec3D(10, 10, 10));
-		assertEquals(box.intersectsBox(b2), false);
+	public void testIsInSphere() {
+		Vec3D p = new Vec3D(0, -10, 0);
+		Sphere s = new Sphere(new Vec3D(), 10);
+		assertEquals(s.containsPoint(p), true);
+		p.set(0, 10.1f, 0);
+		assertEquals(s.containsPoint(p), false);
 	}
 
 	public void testOctree() {
@@ -61,15 +64,12 @@ public class GeomTestSuite extends TestCase {
 		assertEquals(points.size() == 2, true);
 	}
 
-	public void testClosestPoint() {
-		Vec3D a = new Vec3D();
-		Vec3D b = new Vec3D(100, 0, 0);
-		Vec3D c = new Vec3D(50, 50, 0);
-		Vec3D isec = c.closestPointOnLine(a, b);
-		assertEquals(MathUtils.abs(isec.x - c.x) < 0.5, true);
-		c = new Vec3D(-50, -50, 0);
-		isec = c.closestPointOnLine(a, b);
-		assertEquals(isec.equals(a), true);
+	public void testReflectRay() {
+		SphereIntersectorReflector si = new SphereIntersectorReflector(
+				new Vec3D(0, 0, 0), 10);
+		Ray3D r = si.reflectRay(new Ray3D(new Vec3D(0, 100, 0), new Vec3D(-1,
+				-1, 0)));
+		assertEquals(MathUtils.abs(r.getDirection().y - 1) < 0.002, true);
 	}
 
 	/*

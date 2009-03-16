@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2006, 2007 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 package toxi.geom;
@@ -48,21 +48,6 @@ public class Vec3D implements Comparable, DimensionalVector {
 	 * Defines positive Z axis
 	 */
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
-
-	/**
-	 * X coordinate
-	 */
-	public float x;
-
-	/**
-	 * Y coordinate
-	 */
-	public float y;
-
-	/**
-	 * Z coordinate
-	 */
-	public float z;
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane. The Z
@@ -153,6 +138,21 @@ public class Vec3D implements Comparable, DimensionalVector {
 				.normalizedRandom(rnd), MathUtils.normalizedRandom(rnd));
 		return v.normalize();
 	}
+
+	/**
+	 * X coordinate
+	 */
+	public float x;
+
+	/**
+	 * Y coordinate
+	 */
+	public float y;
+
+	/**
+	 * Z coordinate
+	 */
+	public float z;
 
 	/**
 	 * Creates a new zero vector
@@ -277,7 +277,8 @@ public class Vec3D implements Comparable, DimensionalVector {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		} else {
+		}
+		else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -429,7 +430,8 @@ public class Vec3D implements Comparable, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -448,7 +450,8 @@ public class Vec3D implements Comparable, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return dx * dx + dy * dy + dz * dz;
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -718,96 +721,6 @@ public class Vec3D implements Comparable, DimensionalVector {
 	}
 
 	/**
-	 * Calculates the distance of the vector to the given plane in the specified
-	 * direction. A plane is specified by a 3D point and a normal vector
-	 * perpendicular to the plane. Normalized directional vectors expected (for
-	 * rayDir and planeNormal).
-	 * 
-	 * @param rayDir
-	 *            intersection direction
-	 * @param planeOrigin
-	 * @param planeNormal
-	 * @return distance to plane in world units, -1 if no intersection.
-	 * @deprecated
-	 */
-	// FIXME this is kind of obsolete since the arrival of the Plane class, but
-	// needs amends to reflector code
-	@Deprecated
-	public float intersectRayPlane(Vec3D rayDir, Vec3D planeOrigin,
-			Vec3D planeNormal) {
-		float d = -planeNormal.dot(planeOrigin);
-		float numer = planeNormal.dot(this) + d;
-		float denom = planeNormal.dot(rayDir);
-
-		// normal is orthogonal to vector, cant intersect
-		if (MathUtils.abs(denom) < MathUtils.EPS) {
-			return -1;
-		}
-
-		return -(numer / denom);
-	}
-
-	/**
-	 * Calculates the distance of the vector to the given sphere in the
-	 * specified direction. A sphere is defined by a 3D point and a radius.
-	 * Normalized directional vectors expected.
-	 * 
-	 * @param rayDir
-	 *            intersection direction
-	 * @param sphereOrigin
-	 * @param sphereRadius
-	 * @return distance to sphere in world units, -1 if no intersection.
-	 */
-
-	// FIXME this really should be part of either Sphere or
-	// SphereIntersectorReflector
-	public float intersectRaySphere(Vec3D rayDir, Vec3D sphereOrigin,
-			float sphereRadius) {
-		Vec3D q = sphereOrigin.sub(this);
-		float distSquared = q.magSquared();
-		float v = q.dot(rayDir);
-		float d = sphereRadius * sphereRadius - (distSquared - v * v);
-
-		// If there was no intersection, return -1
-		if (d < 0.0) {
-			return -1;
-		}
-
-		// Return the distance to the [first] intersecting point
-		return v - (float) Math.sqrt(d);
-	}
-
-	/**
-	 * Considers the current vector as centre of a collision sphere with radius
-	 * r and checks if the triangle abc intersects with this sphere. The Vec3D p
-	 * The point on abc closest to the sphere center is returned via the
-	 * supplied result vector argument.
-	 * 
-	 * @param r
-	 *            collision sphere radius
-	 * @param a
-	 *            triangle vertex
-	 * @param b
-	 *            triangle vertex
-	 * @param c
-	 *            triangle vertex
-	 * @param result
-	 *            a non-null vector for storing the result
-	 * @return true, if sphere intersects triangle ABC
-	 */
-	// FIXME this needs to be moved out from Vec3D in either
-	public boolean intersectSphereTriangle(float r, Vec3D a, Vec3D b, Vec3D c,
-			Vec3D result) {
-		// Find Vec3D P on triangle ABC closest to sphere center
-		result.set(new Triangle(a, b, c).closestPointOnSurface(this));
-
-		// Sphere and triangle intersect if the (squared) distance from sphere
-		// center to Vec3D p is less than the (squared) sphere radius
-		Vec3D v = result.sub(this);
-		return v.magSquared() <= r * r;
-	}
-
-	/**
 	 * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
 	 * with result
 	 * 
@@ -866,34 +779,6 @@ public class Vec3D implements Comparable, DimensionalVector {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Checks if the point is inside the given sphere.
-	 * 
-	 * @param s
-	 *            bounding sphere to check
-	 * @return true, if point is inside
-	 */
-	// FIXME move to Sphere
-	public boolean isInSphere(Sphere s) {
-		float d = this.sub(s).magSquared();
-		return (d <= s.radius * s.radius);
-	}
-
-	/**
-	 * Checks if the point is inside the given sphere.
-	 * 
-	 * @param sO
-	 *            sphere origin/centre
-	 * @param sR
-	 *            sphere radius
-	 * @return true, if point is in sphere
-	 */
-	// FIXME move to Sphere
-	public boolean isInSphere(Vec3D sO, float sR) {
-		float d = this.sub(sO).magSquared();
-		return (d <= sR * sR);
 	}
 
 	/**
@@ -1308,28 +1193,6 @@ public class Vec3D implements Comparable, DimensionalVector {
 		y -= v.y;
 		z -= v.z;
 		return this;
-	}
-
-	/**
-	 * Calculates the normal vector on the given ellipsoid in the direction of
-	 * the current point.
-	 * 
-	 * @param eO
-	 *            ellipsoid origin/centre
-	 * @param eR
-	 *            ellipsoid radius
-	 * @return a unit normal vector to the tangent plane of the ellipsoid in the
-	 *         point.
-	 */
-
-	public Vec3D tangentPlaneNormalOfEllipsoid(Vec3D eO, Vec3D eR) {
-		Vec3D p = this.sub(eO);
-
-		float xr2 = eR.x * eR.x;
-		float yr2 = eR.y * eR.y;
-		float zr2 = eR.z * eR.z;
-
-		return new Vec3D(p.x / xr2, p.y / yr2, p.z / zr2).normalize();
 	}
 
 	public float[] toArray() {

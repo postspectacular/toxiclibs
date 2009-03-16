@@ -40,6 +40,21 @@ public class Plane extends Vec3D {
 	// TODO add constructor for creating a plane from a Triangle or 3 Vec3D's
 
 	/**
+	 * Classifies the relative position of the given point to the plane.
+	 * 
+	 * @return One of the 3 integer classification codes: PLANE_FRONT,
+	 *         PLANE_BACK, ON_PLANE
+	 */
+	public int classifyPoint(Vec3D p) {
+		float d = this.sub(p).dot(normal);
+		if (d < -MathUtils.EPS)
+			return PLANE_FRONT;
+		else if (d > MathUtils.EPS)
+			return PLANE_BACK;
+		return ON_PLANE;
+	}
+
+	/**
 	 * Calculates distance from the plane to point P.
 	 * 
 	 * @param p
@@ -63,23 +78,32 @@ public class Plane extends Vec3D {
 		if (denom > MathUtils.EPS) {
 			float u = normal.dot(this.sub(r)) / denom;
 			return r.getPointAtDistance(u);
-		} else
+		}
+		else
 			return null;
 	}
 
 	/**
-	 * Classifies the relative position of the given point to the plane.
+	 * Calculates the distance of the vector to the given plane in the specified
+	 * direction. A plane is specified by a 3D point and a normal vector
+	 * perpendicular to the plane. Normalized directional vectors expected (for
+	 * rayDir and planeNormal).
 	 * 
-	 * @return One of the 3 integer classification codes: PLANE_FRONT,
-	 *         PLANE_BACK, ON_PLANE
+	 * @param ray
+	 *            intersection ray
+	 * @return distance to plane in world units, -1 if no intersection.
 	 */
-	public int classifyPoint(Vec3D p) {
-		float d = this.sub(p).dot(normal);
-		if (d < -MathUtils.EPS)
-			return PLANE_FRONT;
-		else if (d > MathUtils.EPS)
-			return PLANE_BACK;
-		return ON_PLANE;
+	public float intersectRayDistance(Ray3D ray) {
+		float d = -normal.dot(this);
+		float numer = normal.dot(ray) + d;
+		float denom = normal.dot(ray.dir);
+
+		// normal is orthogonal to vector, cant intersect
+		if (MathUtils.abs(denom) < MathUtils.EPS) {
+			return -1;
+		}
+
+		return -(numer / denom);
 	}
 
 	public String toString() {

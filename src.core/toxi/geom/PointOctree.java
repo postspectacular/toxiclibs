@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2006, 2007 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 package toxi.geom;
 
@@ -62,19 +62,6 @@ public class PointOctree extends AABB {
 	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
 	 * o.z} ... {o.x+size, o.y+size, o.z+size}
 	 * 
-	 * @param o
-	 *            tree origin
-	 * @param size
-	 *            size of the tree volume along a single axis
-	 */
-	public PointOctree(Vec3D o, float size) {
-		this(null, o, size / 2);
-	}
-
-	/**
-	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
-	 * o.z} ... {o.x+size, o.y+size, o.z+size}
-	 * 
 	 * @param p
 	 *            parent node
 	 * @param o
@@ -95,15 +82,33 @@ public class PointOctree extends AABB {
 	}
 
 	/**
-	 * Computes the local child octant/cube index for the given point
+	 * Constructs a new PointOctree node within the AABB cube volume: {o.x, o.y,
+	 * o.z} ... {o.x+size, o.y+size, o.z+size}
 	 * 
-	 * @param plocal
-	 *            point in the node-local coordinate system
-	 * @return octant index
+	 * @param o
+	 *            tree origin
+	 * @param size
+	 *            size of the tree volume along a single axis
 	 */
-	protected final int getOctantID(Vec3D plocal) {
-		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
-				+ (plocal.z >= dim2 ? 4 : 0);
+	public PointOctree(Vec3D o, float size) {
+		this(null, o, size / 2);
+	}
+
+	/**
+	 * Adds all points of the collection to the octree. IMPORTANT: Points need
+	 * be of type Vec3D or have subclassed it.
+	 * 
+	 * @param points
+	 *            point collection
+	 * @return true, if all points have been added successfully.
+	 */
+	public boolean addAll(Collection<Vec3D> points) {
+		Iterator<Vec3D> i = points.iterator();
+		boolean addedAll = true;
+		while (i.hasNext()) {
+			addedAll &= addPoint(i.next());
+		}
+		return addedAll;
 	}
 
 	/**
@@ -124,7 +129,8 @@ public class PointOctree extends AABB {
 				}
 				data.add(p);
 				return true;
-			} else {
+			}
+			else {
 				Vec3D plocal = p.sub(offset);
 				if (children == null) {
 					children = new PointOctree[8];
@@ -144,31 +150,173 @@ public class PointOctree extends AABB {
 	}
 
 	/**
-	 * Adds all points of the collection to the octree. IMPORTANT: Points need
-	 * be of type Vec3D or have subclassed it.
-	 * 
-	 * @param points
-	 *            point collection
-	 * @return true, if all points have been added successfully.
+	 * @return a copy of the child nodes array
 	 */
-	public boolean addAll(Collection<Vec3D> points) {
-		Iterator<Vec3D> i = points.iterator();
-		boolean addedAll = true;
-		while (i.hasNext()) {
-			addedAll &= addPoint((Vec3D) i.next());
-		}
-		return addedAll;
+	public PointOctree[] getChildren() {
+		PointOctree[] clones = new PointOctree[8];
+		System.arraycopy(children, 0, clones, 0, 8);
+		return clones;
 	}
 
 	/**
-	 * Enables/disables auto reduction of branches after points have been
-	 * deleted from the tree. Turned off by default.
+	 * Finds the leaf node which spatially relates to the given point
 	 * 
-	 * @param state
-	 *            true, to enable feature
+	 * @param p
+	 *            point to check
+	 * @return leaf node or null if point is outside the tree dimensions
 	 */
-	public void setTreeAutoReduction(boolean state) {
-		isAutoReducing = state;
+	protected PointOctree getLeafForPoint(Vec3D p) {
+		// if not a leaf node...
+		if (p.isInAABB(this)) {
+			if (numChildren > 0) {
+				int octant = getOctantID(p.sub(offset));
+				if (children[octant] != null) {
+					return children[octant].getLeafForPoint(p);
+				}
+			}
+			else if (data != null) {
+				return this;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the minimum size of nodes (in world units). This value acts as
+	 * tree recursion limit since nodes smaller than this size are not
+	 * subdivided further. Leaf node are always smaller or equal to this size.
+	 * 
+	 * @return the minimum size of tree nodes
+	 */
+	public float getMinNodeSize() {
+		return minNodeSize;
+	}
+
+	public float getNodeSize() {
+		return dim;
+	}
+
+	/**
+	 * @return the number of child nodes (max. 8)
+	 */
+	public int getNumChildren() {
+		return numChildren;
+	}
+
+	/**
+	 * Computes the local child octant/cube index for the given point
+	 * 
+	 * @param plocal
+	 *            point in the node-local coordinate system
+	 * @return octant index
+	 */
+	protected final int getOctantID(Vec3D plocal) {
+		return (plocal.x >= dim2 ? 1 : 0) + (plocal.y >= dim2 ? 2 : 0)
+				+ (plocal.z >= dim2 ? 4 : 0);
+	}
+
+	/**
+	 * Selects all stored points within the given axis-aligned bounding box.
+	 * 
+	 * @param b
+	 *            AABB
+	 * @return all points with the box volume
+	 */
+	public ArrayList<Vec3D> getPointsWithinBox(AABB b) {
+		ArrayList<Vec3D> results = null;
+		if (this.intersectsBox(b)) {
+			if (data != null) {
+				for (int i = data.size() - 1; i >= 0; i--) {
+					Vec3D q = data.get(i);
+					if (q.isInAABB(b)) {
+						if (results == null) {
+							results = new ArrayList<Vec3D>();
+						}
+						results.add(q);
+					}
+				}
+			}
+			else if (numChildren > 0) {
+				for (int i = 0; i < 8; i++) {
+					if (children[i] != null) {
+						ArrayList<Vec3D> points = children[i]
+								.getPointsWithinBox(b);
+						if (points != null) {
+							if (results == null) {
+								results = new ArrayList<Vec3D>();
+							}
+							results.addAll(points);
+						}
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Selects all stored points within the given sphere volume
+	 * 
+	 * @param s
+	 *            sphere
+	 * @return selected points
+	 */
+	public ArrayList<Vec3D> getPointsWithinSphere(Sphere s) {
+		ArrayList<Vec3D> results = null;
+		if (this.intersectsSphere(s)) {
+			if (data != null) {
+				for (int i = data.size() - 1; i >= 0; i--) {
+					Vec3D q = data.get(i);
+					if (s.containsPoint(q)) {
+						if (results == null) {
+							results = new ArrayList<Vec3D>();
+						}
+						results.add(q);
+					}
+				}
+			}
+			else if (numChildren > 0) {
+				for (int i = 0; i < 8; i++) {
+					if (children[i] != null) {
+						ArrayList<Vec3D> points = children[i]
+								.getPointsWithinSphere(s);
+						if (points != null) {
+							if (results == null) {
+								results = new ArrayList<Vec3D>();
+							}
+							results.addAll(points);
+						}
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	/**
+	 * Selects all stored points within the given sphere volume
+	 * 
+	 * @param sphereOrigin
+	 * @param clipRadius
+	 * @return selected points
+	 */
+	public ArrayList<Vec3D> getPointsWithinSphere(Vec3D sphereOrigin,
+			float clipRadius) {
+		return getPointsWithinSphere(new Sphere(sphereOrigin, clipRadius));
+	}
+
+	private void reduceBranch() {
+		if (data != null && data.size() == 0)
+			data = null;
+		if (numChildren > 0) {
+			for (int i = 0; i < 8; i++) {
+				if (children[i] != null && children[i].data == null)
+					children[i] = null;
+			}
+		}
+		if (parent != null) {
+			parent.reduceBranch();
+		}
 	}
 
 	/**
@@ -196,152 +344,8 @@ public class PointOctree extends AABB {
 	public void removeAll(Collection<Vec3D> points) {
 		Iterator<Vec3D> i = points.iterator();
 		while (i.hasNext()) {
-			remove((Vec3D) i.next());
+			remove(i.next());
 		}
-	}
-
-	private void reduceBranch() {
-		if (data != null && data.size() == 0)
-			data = null;
-		if (numChildren > 0) {
-			for (int i = 0; i < 8; i++) {
-				if (children[i] != null && children[i].data == null)
-					children[i] = null;
-			}
-		}
-		if (parent != null) {
-			parent.reduceBranch();
-		}
-	}
-
-	/**
-	 * Finds the leaf node which spatially relates to the given point
-	 * 
-	 * @param p
-	 *            point to check
-	 * @return leaf node or null if point is outside the tree dimensions
-	 */
-	protected PointOctree getLeafForPoint(Vec3D p) {
-		// if not a leaf node...
-		if (p.isInAABB(this)) {
-			if (numChildren > 0) {
-				int octant = getOctantID(p.sub(offset));
-				if (children[octant] != null) {
-					return children[octant].getLeafForPoint(p);
-				}
-			} else if (data != null) {
-				return this;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Selects all stored points within the given sphere volume
-	 * 
-	 * @param sphereOrigin
-	 * @param clipRadius
-	 * @return selected points
-	 */
-	public ArrayList<Vec3D> getPointsWithinSphere(Vec3D sphereOrigin,
-			float clipRadius) {
-		return getPointsWithinSphere(new Sphere(sphereOrigin, clipRadius));
-	}
-
-	/**
-	 * Selects all stored points within the given sphere volume
-	 * 
-	 * @param s
-	 *            sphere
-	 * @return selected points
-	 */
-	public ArrayList<Vec3D> getPointsWithinSphere(Sphere s) {
-		ArrayList<Vec3D> results = null;
-		if (this.intersectsSphere(s)) {
-			if (data != null) {
-				for (int i = data.size() - 1; i >= 0; i--) {
-					Vec3D q = (Vec3D) data.get(i);
-					if (q.isInSphere(s)) {
-						if (results == null) {
-							results = new ArrayList<Vec3D>();
-						}
-						results.add(q);
-					}
-				}
-			} else if (numChildren > 0) {
-				for (int i = 0; i < 8; i++) {
-					if (children[i] != null) {
-						ArrayList<Vec3D> points = children[i]
-								.getPointsWithinSphere(s);
-						if (points != null) {
-							if (results == null) {
-								results = new ArrayList<Vec3D>();
-							}
-							results.addAll(points);
-						}
-					}
-				}
-			}
-		}
-		return results;
-	}
-
-	/**
-	 * Selects all stored points within the given axis-aligned bounding box.
-	 * 
-	 * @param b
-	 *            AABB
-	 * @return all points with the box volume
-	 */
-	public ArrayList<Vec3D> getPointsWithinBox(AABB b) {
-		ArrayList<Vec3D> results = null;
-		if (this.intersectsBox(b)) {
-			if (data != null) {
-				for (int i = data.size() - 1; i >= 0; i--) {
-					Vec3D q = (Vec3D) data.get(i);
-					if (q.isInAABB(b)) {
-						if (results == null) {
-							results = new ArrayList<Vec3D>();
-						}
-						results.add(q);
-					}
-				}
-			} else if (numChildren > 0) {
-				for (int i = 0; i < 8; i++) {
-					if (children[i] != null) {
-						ArrayList<Vec3D> points = children[i]
-								.getPointsWithinBox(b);
-						if (points != null) {
-							if (results == null) {
-								results = new ArrayList<Vec3D>();
-							}
-							results.addAll(points);
-						}
-					}
-				}
-			}
-		}
-		return results;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see toxi.geom.AABB#toString()
-	 */
-	public String toString() {
-		return "<octree> offset: " + super.toString() + " size: " + dim;
-	}
-
-	/**
-	 * Returns the minimum size of nodes (in world units). This value acts as
-	 * tree recursion limit since nodes smaller than this size are not
-	 * subdivided further. Leaf node are always smaller or equal to this size.
-	 * 
-	 * @return the minimum size of tree nodes
-	 */
-	public float getMinNodeSize() {
-		return minNodeSize;
 	}
 
 	/**
@@ -351,23 +355,23 @@ public class PointOctree extends AABB {
 		this.minNodeSize = minNodeSize;
 	}
 
-	public float getNodeSize() {
-		return dim;
+	/**
+	 * Enables/disables auto reduction of branches after points have been
+	 * deleted from the tree. Turned off by default.
+	 * 
+	 * @param state
+	 *            true, to enable feature
+	 */
+	public void setTreeAutoReduction(boolean state) {
+		isAutoReducing = state;
 	}
 
-	/**
-	 * @return the number of child nodes (max. 8)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.geom.AABB#toString()
 	 */
-	public int getNumChildren() {
-		return numChildren;
-	}
-
-	/**
-	 * @return a copy of the child nodes array
-	 */
-	public PointOctree[] getChildren() {
-		PointOctree[] clones = new PointOctree[8];
-		System.arraycopy(children, 0, clones, 0, 8);
-		return clones;
+	public String toString() {
+		return "<octree> offset: " + super.toString() + " size: " + dim;
 	}
 }

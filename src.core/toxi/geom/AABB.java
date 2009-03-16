@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2007 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 package toxi.geom;
@@ -28,10 +28,6 @@ import toxi.math.MathUtils;
  */
 
 public class AABB extends Vec3D {
-
-	private Vec3D extent;
-
-	private Vec3D min, max;
 
 	/**
 	 * Creates a new instance from two vectors specifying opposite corners of
@@ -50,6 +46,19 @@ public class AABB extends Vec3D {
 		return new AABB(a.interpolateTo(b, 0.5f), b.sub(a).scaleSelf(0.5f));
 	}
 
+	private Vec3D extent;
+
+	private Vec3D min, max;
+
+	/**
+	 * Creates an independent copy of the passed in box
+	 * 
+	 * @param box
+	 */
+	public AABB(AABB box) {
+		this(box, box.getExtent());
+	}
+
 	/**
 	 * Creates a new instance from centre point and extent
 	 * 
@@ -64,55 +73,6 @@ public class AABB extends Vec3D {
 	}
 
 	/**
-	 * Creates an independent copy of the passed in box
-	 * 
-	 * @param box
-	 */
-	public AABB(AABB box) {
-		this(box, box.getExtent());
-	}
-
-	/**
-	 * Updates the position of the box in space and calls
-	 * {@link #updateBounds()} immediately
-	 * 
-	 * @see toxi.geom.Vec3D#set(float, float, float)
-	 */
-	public Vec3D set(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		updateBounds();
-		return this;
-	}
-
-	/**
-	 * Updates the position of the box in space and calls
-	 * {@link #updateBounds()} immediately
-	 * 
-	 * @see toxi.geom.Vec3D#set(toxi.geom.Vec3D)
-	 */
-	public Vec3D set(Vec3D v) {
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		updateBounds();
-		return this;
-	}
-
-	/**
-	 * Updates the size of the box and calls {@link #updateBounds()} immediately
-	 * 
-	 * @param extent
-	 *            new box size
-	 * @return itself, for method chaining
-	 */
-	public AABB setExtent(Vec3D extent) {
-		this.extent = new Vec3D(extent);
-		return updateBounds();
-	}
-
-	/**
 	 * Returns the current box size as new Vec3D instance (updating this vector
 	 * will NOT update the box size! Use {@link #setExtent(Vec3D)} for those
 	 * purposes)
@@ -123,93 +83,12 @@ public class AABB extends Vec3D {
 		return new Vec3D(extent);
 	}
 
-	/**
-	 * Updates the min/max corner points of the box. MUST be called after moving
-	 * the box in space by manipulating the public x,y,z coordinates directly.
-	 * 
-	 * @return itself
-	 */
-	public final AABB updateBounds() {
-		// this is check is necessary for the constructor
-		if (extent != null) {
-			this.min = this.sub(extent);
-			this.max = this.add(extent);
-		}
-		return this;
-	}
-
-	public final float minX() {
-		return x - extent.x;
-	}
-
-	public final float maxX() {
-		return x + extent.x;
-	}
-
-	public final float minY() {
-		return y - extent.y;
-	}
-
-	public final float maxY() {
-		return y + extent.y;
-	}
-
-	public final float minZ() {
-		return z - extent.z;
-	}
-
-	public final float maxZ() {
-		return z + extent.z;
-	}
-
-	public final Vec3D getMin() {
-		return this.sub(extent);
-	}
-
 	public final Vec3D getMax() {
 		return this.add(extent);
 	}
 
-	/**
-	 * @param c
-	 *            sphere centre
-	 * @param r
-	 *            sphere radius
-	 * @return true, if AABB intersects with sphere
-	 */
-	public boolean intersectsSphere(Vec3D c, float r) {
-		float s, d = 0;
-		// find the square of the distance
-		// from the sphere to the box
-		if (c.x < min.x) {
-			s = c.x - min.x;
-			d += s * s;
-		} else if (c.x > max.x) {
-			s = c.x - max.x;
-			d += s * s;
-		}
-
-		if (c.y < min.y) {
-			s = c.y - min.y;
-			d += s * s;
-		} else if (c.y > max.y) {
-			s = c.y - max.y;
-			d += s * s;
-		}
-
-		if (c.z < min.z) {
-			s = c.z - min.z;
-			d += s * s;
-		} else if (c.z > max.z) {
-			s = c.z - max.z;
-			d += s * s;
-		}
-
-		return d <= r * r;
-	}
-
-	public boolean intersectsSphere(Sphere s) {
-		return intersectsSphere(s, s.radius);
+	public final Vec3D getMin() {
+		return this.sub(extent);
 	}
 
 	/**
@@ -284,6 +163,115 @@ public class AABB extends Vec3D {
 		return null;
 	}
 
+	public boolean intersectsSphere(Sphere s) {
+		return intersectsSphere(s, s.radius);
+	}
+
+	/**
+	 * @param c
+	 *            sphere centre
+	 * @param r
+	 *            sphere radius
+	 * @return true, if AABB intersects with sphere
+	 */
+	public boolean intersectsSphere(Vec3D c, float r) {
+		float s, d = 0;
+		// find the square of the distance
+		// from the sphere to the box
+		if (c.x < min.x) {
+			s = c.x - min.x;
+			d = s * s;
+		}
+		else if (c.x > max.x) {
+			s = c.x - max.x;
+			d += s * s;
+		}
+
+		if (c.y < min.y) {
+			s = c.y - min.y;
+			d += s * s;
+		}
+		else if (c.y > max.y) {
+			s = c.y - max.y;
+			d += s * s;
+		}
+
+		if (c.z < min.z) {
+			s = c.z - min.z;
+			d += s * s;
+		}
+		else if (c.z > max.z) {
+			s = c.z - max.z;
+			d += s * s;
+		}
+
+		return d <= r * r;
+	}
+
+	public final float maxX() {
+		return x + extent.x;
+	}
+
+	public final float maxY() {
+		return y + extent.y;
+	}
+
+	public final float maxZ() {
+		return z + extent.z;
+	}
+
+	public final float minX() {
+		return x - extent.x;
+	}
+
+	public final float minY() {
+		return y - extent.y;
+	}
+
+	public final float minZ() {
+		return z - extent.z;
+	}
+
+	/**
+	 * Updates the position of the box in space and calls
+	 * {@link #updateBounds()} immediately
+	 * 
+	 * @see toxi.geom.Vec3D#set(float, float, float)
+	 */
+	public Vec3D set(float x, float y, float z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		updateBounds();
+		return this;
+	}
+
+	/**
+	 * Updates the position of the box in space and calls
+	 * {@link #updateBounds()} immediately
+	 * 
+	 * @see toxi.geom.Vec3D#set(toxi.geom.Vec3D)
+	 */
+	public Vec3D set(Vec3D v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		updateBounds();
+		return this;
+	}
+
+	/**
+	 * Updates the size of the box and calls {@link #updateBounds()} immediately
+	 * 
+	 * @param extent
+	 *            new box size
+	 * @return itself, for method chaining
+	 */
+	public AABB setExtent(Vec3D extent) {
+		this.extent = new Vec3D(extent);
+		return updateBounds();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -294,5 +282,20 @@ public class AABB extends Vec3D {
 		sb.append("<aabb> pos: ").append(super.toString()).append(" ext: ")
 				.append(extent);
 		return sb.toString();
+	}
+
+	/**
+	 * Updates the min/max corner points of the box. MUST be called after moving
+	 * the box in space by manipulating the public x,y,z coordinates directly.
+	 * 
+	 * @return itself
+	 */
+	public final AABB updateBounds() {
+		// this is check is necessary for the constructor
+		if (extent != null) {
+			this.min = this.sub(extent);
+			this.max = this.add(extent);
+		}
+		return this;
 	}
 }

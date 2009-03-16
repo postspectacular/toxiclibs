@@ -3,11 +3,9 @@
 * massive refactoring of library package structure (last one for a while, hopefully!)
 * renamed geomutils into toxiclibscore, deprecated & merged prefutils into core libs
 ! fixed issue 7, Y/Z coords were swapped in Vec3D.rotateX() & getRotatedX()
-! fixed little endian encoding bug in STLWriter
-+ added toxi.geom.volume package with IsoSurface class
-+ added NoiseSurface demo to showcase IsoSurface volumetric demo & STL file export
-+ added MRISurface demo to visualise MRI scan data using IsoSurface (and STL export)
+! fixed little endian encoding bug in toxi.geom.util.STLWriter
 + added pointInPolygon() to Vec2D
++ replaced Vec3D isInSphere() with Sphere.containsPoint()
 
 0012 - 2008-12-18
 --------------------------------------------------------------------------------
