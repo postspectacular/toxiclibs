@@ -647,7 +647,7 @@ public class Vec2D implements DimensionalVector {
 	 *            bounding rectangle
 	 * @return true, if point is inside
 	 */
-	public boolean isInRecangle(Rectangle r) {
+	public boolean isInRectangle(Rectangle r) {
 		if (x < r.x || x > r.x + r.width) {
 			return false;
 		}
