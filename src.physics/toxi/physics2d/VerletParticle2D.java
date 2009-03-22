@@ -121,11 +121,14 @@ public class VerletParticle2D extends Vec2D {
 	 * @return itself
 	 */
 	public VerletParticle2D addConstraint(Particle2DConstraint c) {
+		if (constraints == null) {
+			constraints = new ArrayList<Particle2DConstraint>(2);
+		}
 		constraints.add(c);
 		return this;
 	}
 
-	protected void applyConstraints() {
+	public void applyConstraints() {
 		if (constraints != null) {
 			for (Particle2DConstraint pc : constraints) {
 				pc.apply(this);

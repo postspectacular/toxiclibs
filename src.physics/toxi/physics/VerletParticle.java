@@ -122,11 +122,14 @@ public class VerletParticle extends Vec3D {
 	 * @return itself
 	 */
 	public VerletParticle addConstraint(ParticleConstraint c) {
+		if (constraints == null) {
+			constraints = new ArrayList<ParticleConstraint>(2);
+		}
 		constraints.add(c);
 		return this;
 	}
 
-	protected void applyConstraints() {
+	public void applyConstraints() {
 		if (constraints != null) {
 			for (ParticleConstraint pc : constraints) {
 				pc.apply(this);
