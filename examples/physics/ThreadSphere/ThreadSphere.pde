@@ -28,7 +28,7 @@ void setup() {
   size(1024,768,OPENGL);
   smooth();
   // create collision sphere at origin
-  ParticleConstraint sphere=new SphereAvoider(SPHERE_RADIUS);
+  ParticleConstraint sphere=new SphereConstraint(new Vec3D(),SPHERE_RADIUS,SphereConstraint.INSIDE);
   physics=new VerletPhysics();
   // weak gravity along Y axis
   physics.gravity=Vec3D.Y_AXIS.scale(0.01);
@@ -39,7 +39,7 @@ void setup() {
     // create particles at random positions outside sphere
     VerletParticle p=new VerletParticle(Vec3D.randomVector().scaleSelf(SPHERE_RADIUS*2));
     // set sphere as particle constraint
-    p.constraint=sphere;
+    p.addConstraint(sphere);
     physics.addParticle(p);
     if (prev!=null) {
       physics.addSpring(new VerletSpring(prev,p,REST_LENGTH, 0.5));
@@ -67,7 +67,7 @@ void draw() {
   // also apply sphere constraint to head
   // this needs to be done manually because if this particle is locked
   // it won't be updated automatically
-  head.constraint.apply(head);
+  head.applyConstraints();
   // update sim
   physics.update();
   // draw all springs
@@ -89,23 +89,5 @@ void draw() {
       stroke(255,0,0);
     }
     point(p.x,p.y,p.z);
-  }
-}
-
-// every time step this constraint is applied to all particles it's been attached to
-class SphereAvoider implements ParticleConstraint {
-  float radius, radSquared;
-
-  SphereAvoider(float r) {
-    radius=r;
-    radSquared=r*r;
-  }
-
-  // don't allow particle inside sphere
-  // (to keep them inside and not allow outside, just flip the "<" into ">")
-  public void apply(VerletParticle p) {
-    if (p.magSquared() < radSquared) {
-      p.normalize().scaleSelf(radius);
-    }
   }
 }
