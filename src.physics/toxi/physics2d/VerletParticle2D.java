@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import toxi.geom.Vec2D;
+import toxi.physics.constraints.ParticleConstraint;
 import toxi.physics2d.constraints.Particle2DConstraint;
 
 /**
@@ -111,15 +112,34 @@ public class VerletParticle2D extends Vec2D {
 		isLocked = p.isLocked;
 	}
 
-	protected void update(float force) {
-		if (!isLocked) {
-			temp.set(this);
-			addSelf(sub(prev).scaleSelf(force));
-			prev.set(temp);
-			if (constraints != null) {
-				applyConstraints();
+	/**
+	 * Adds the given constraint implementation to the list of constraints
+	 * applied to this particle at each time step.
+	 * 
+	 * @param c
+	 *            constraint instance
+	 * @return itself
+	 */
+	public VerletParticle2D addConstraint(Particle2DConstraint c) {
+		constraints.add(c);
+		return this;
+	}
+
+	protected void applyConstraints() {
+		if (constraints != null) {
+			for (Particle2DConstraint pc : constraints) {
+				pc.apply(this);
 			}
 		}
+	}
+
+	/**
+	 * Returns the particle's position at the most recent time step.
+	 * 
+	 * @return previous position
+	 */
+	public Vec2D getPreviousPosition() {
+		return prev;
 	}
 
 	/**
@@ -133,6 +153,28 @@ public class VerletParticle2D extends Vec2D {
 	}
 
 	/**
+	 * Removes any currently applied constraints from this particle.
+	 * 
+	 * @return itself
+	 */
+	public VerletParticle2D removeAllConstraints() {
+		constraints.clear();
+		return this;
+	}
+
+	/**
+	 * Attempts to remove the given constraint instance from the list of active
+	 * constraints.
+	 * 
+	 * @param c
+	 *            constraint to remove
+	 * @return true, if successfully removed
+	 */
+	public boolean removeConstraint(ParticleConstraint c) {
+		return constraints.remove(c);
+	}
+
+	/**
 	 * Unlocks particle again
 	 * 
 	 * @return itself
@@ -143,15 +185,14 @@ public class VerletParticle2D extends Vec2D {
 		return this;
 	}
 
-	protected void applyConstraints() {
-		if (constraints != null) {
-			for (Particle2DConstraint pc : constraints) {
-				pc.apply(this);
+	protected void update(float force) {
+		if (!isLocked) {
+			temp.set(this);
+			addSelf(sub(prev).scaleSelf(force));
+			prev.set(temp);
+			if (constraints != null) {
+				applyConstraints();
 			}
 		}
-	}
-
-	public Vec2D getPreviousPosition() {
-		return prev;
 	}
 }

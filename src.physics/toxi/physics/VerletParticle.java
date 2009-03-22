@@ -113,15 +113,34 @@ public class VerletParticle extends Vec3D {
 		isLocked = p.isLocked;
 	}
 
-	protected void update(float force) {
-		if (!isLocked) {
-			temp.set(this);
-			addSelf(sub(prev).scaleSelf(force));
-			prev.set(temp);
-			if (constraints != null) {
-				applyConstraints();
+	/**
+	 * Adds the given constraint implementation to the list of constraints
+	 * applied to this particle at each time step.
+	 * 
+	 * @param c
+	 *            constraint instance
+	 * @return itself
+	 */
+	public VerletParticle addConstraint(ParticleConstraint c) {
+		constraints.add(c);
+		return this;
+	}
+
+	protected void applyConstraints() {
+		if (constraints != null) {
+			for (ParticleConstraint pc : constraints) {
+				pc.apply(this);
 			}
 		}
+	}
+
+	/**
+	 * Returns the particle's position at the most recent time step.
+	 * 
+	 * @return previous position
+	 */
+	public Vec3D getPreviousPosition() {
+		return prev;
 	}
 
 	/**
@@ -135,6 +154,28 @@ public class VerletParticle extends Vec3D {
 	}
 
 	/**
+	 * Removes any currently applied constraints from this particle.
+	 * 
+	 * @return itself
+	 */
+	public VerletParticle removeAllConstraints() {
+		constraints.clear();
+		return this;
+	}
+
+	/**
+	 * Attempts to remove the given constraint instance from the list of active
+	 * constraints.
+	 * 
+	 * @param c
+	 *            constraint to remove
+	 * @return true, if successfully removed
+	 */
+	public boolean removeConstraint(ParticleConstraint c) {
+		return constraints.remove(c);
+	}
+
+	/**
 	 * Unlocks particle again
 	 * 
 	 * @return itself
@@ -145,15 +186,15 @@ public class VerletParticle extends Vec3D {
 		return this;
 	}
 
-	protected void applyConstraints() {
-		if (constraints != null) {
-			for (ParticleConstraint pc : constraints) {
-				pc.apply(this);
+	protected void update(float force) {
+		if (!isLocked) {
+			temp.set(this);
+			addSelf(sub(prev).scaleSelf(force));
+			prev.set(temp);
+			if (constraints != null) {
+				applyConstraints();
 			}
 		}
 	}
 
-	public Vec3D getPreviousPosition() {
-		return prev;
-	}
 }
