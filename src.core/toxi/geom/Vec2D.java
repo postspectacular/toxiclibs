@@ -20,7 +20,6 @@
 
 package toxi.geom;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -321,7 +320,7 @@ public class Vec2D implements DimensionalVector {
 	 * @return itself
 	 */
 
-	public final Vec2D constrain(Rectangle r) {
+	public final Vec2D constrain(Rect r) {
 		x = MathUtils.clip(x, r.x, r.x + r.width);
 		y = MathUtils.clip(y, r.y, r.y + r.height);
 		return this;
@@ -425,7 +424,7 @@ public class Vec2D implements DimensionalVector {
 	 * @param r
 	 * @return fitted vector
 	 */
-	public final Vec2D getConstrained(Rectangle r) {
+	public final Vec2D getConstrained(Rect r) {
 		return new Vec2D(this).constrain(r);
 	}
 
@@ -647,7 +646,7 @@ public class Vec2D implements DimensionalVector {
 	 *            bounding rectangle
 	 * @return true, if point is inside
 	 */
-	public boolean isInRectangle(Rectangle r) {
+	public boolean isInRectangle(Rect r) {
 		if (x < r.x || x > r.x + r.width) {
 			return false;
 		}
