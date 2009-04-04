@@ -1,26 +1,27 @@
-/* 
+/*
  * Copyright (c) 2008 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 package toxi.physics;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
@@ -121,6 +122,74 @@ public class VerletPhysics {
 	}
 
 	/**
+	 * Applies gravity force to all particles
+	 */
+	protected void applyGravity() {
+		if (!gravity.isZeroVector()) {
+			for (VerletParticle p : particles) {
+				if (!p.isLocked)
+					p.addSelf(gravity.scale(p.weight));
+			}
+		}
+	}
+
+	/**
+	 * Constrains all particle positions to the world bounding box set
+	 */
+	protected void constrainToBounds() {
+		for (VerletParticle p : particles) {
+			if (p.bounds != null) {
+				p.constrain(p.bounds);
+			}
+		}
+		if (worldBounds != null) {
+			for (VerletParticle p : particles) {
+				p.constrain(worldBounds);
+			}
+		}
+	}
+
+	public AABB getCurrentBounds() {
+		Vec3D min = new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
+		Vec3D max = new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
+		for (Iterator<VerletParticle> i = particles.iterator(); i.hasNext();) {
+			VerletParticle p = i.next();
+			min.minSelf(p);
+			max.maxSelf(p);
+		}
+		return AABB.fromMinMax(min, max);
+	}
+
+	/**
+	 * Attempts to find the spring element between the 2 particles supplied
+	 * 
+	 * @param a
+	 *            particle 1
+	 * @param b
+	 *            particle 2
+	 * @return spring instance, or null if not found
+	 */
+	public VerletSpring getSpring(Vec3D a, Vec3D b) {
+		for (VerletSpring s : springs) {
+			if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Removes a particle from the simulation.
+	 * 
+	 * @param p
+	 *            particle to remove
+	 * @return true, if removed successfully
+	 */
+	public boolean removeParticle(VerletParticle p) {
+		return particles.remove(p);
+	}
+
+	/**
 	 * Removes a spring connector from the simulation instance.
 	 * 
 	 * @param s
@@ -144,17 +213,6 @@ public class VerletPhysics {
 			return (removeParticle(s.a) && removeParticle(s.b));
 		}
 		return false;
-	}
-
-	/**
-	 * Removes a particle from the simulation.
-	 * 
-	 * @param p
-	 *            particle to remove
-	 * @return true, if removed successfully
-	 */
-	public boolean removeParticle(VerletParticle p) {
-		return particles.remove(p);
 	}
 
 	/**
@@ -183,18 +241,6 @@ public class VerletPhysics {
 	}
 
 	/**
-	 * Applies gravity force to all particles
-	 */
-	protected void applyGravity() {
-		if (!gravity.isZeroVector()) {
-			for (VerletParticle p : particles) {
-				if (!p.isLocked)
-					p.addSelf(gravity.scale(p.weight));
-			}
-		}
-	}
-
-	/**
 	 * Updates all particle positions
 	 */
 	protected void updateParticles() {
@@ -213,39 +259,5 @@ public class VerletPhysics {
 				s.update(i == 1);
 			}
 		}
-	}
-
-	/**
-	 * Constrains all particle positions to the world bounding box set
-	 */
-	protected void constrainToBounds() {
-		for (VerletParticle p : particles) {
-			if (p.bounds != null) {
-				p.constrain(p.bounds);
-			}
-		}
-		if (worldBounds != null) {
-			for (VerletParticle p : particles) {
-				p.constrain(worldBounds);
-			}
-		}
-	}
-
-	/**
-	 * Attempts to find the spring element between the 2 particles supplied
-	 * 
-	 * @param a
-	 *            particle 1
-	 * @param b
-	 *            particle 2
-	 * @return spring instance, or null if not found
-	 */
-	public VerletSpring getSpring(Vec3D a, Vec3D b) {
-		for (VerletSpring s : springs) {
-			if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
-				return s;
-			}
-		}
-		return null;
 	}
 }

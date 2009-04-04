@@ -20,9 +20,9 @@ package toxi.physics2d;
  * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.physics.constraints.ParticleConstraint;
 import toxi.physics2d.constraints.Particle2DConstraint;
@@ -41,7 +41,7 @@ public class VerletParticle2D extends Vec2D {
 	/**
 	 * Bounding box, by default set to null to disable
 	 */
-	public Rectangle bounds;
+	public Rect bounds;
 
 	/**
 	 * An optional particle constraints, called immediately after a particle is
