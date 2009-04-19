@@ -1,21 +1,21 @@
-/* 
+/*
  * Copyright (c) 2006, 2007 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 package toxi.math;
 
@@ -119,7 +119,8 @@ public class MathUtils {
 	public static final float clipNormalized(float a) {
 		if (a < 0) {
 			return 0;
-		} else if (a > 1) {
+		}
+		else if (a > 1) {
 			return 1;
 		}
 		return a;
@@ -308,6 +309,14 @@ public class MathUtils {
 		return (int) (Math.random() * (max - min)) + min;
 	}
 
+	public static final double random(Random rnd, double max) {
+		return rnd.nextDouble() * max;
+	}
+
+	public static final double random(Random rnd, double min, double max) {
+		return rnd.nextDouble() * (max - min) + min;
+	}
+
 	public static final float random(Random rnd, float max) {
 		return rnd.nextFloat() * max;
 	}
@@ -332,7 +341,8 @@ public class MathUtils {
 		x = fastInverseSqrt(x);
 		if (x > 0) {
 			return 1.0f / x;
-		} else {
+		}
+		else {
 			return 0;
 		}
 	}

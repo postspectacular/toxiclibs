@@ -758,24 +758,24 @@ public class Vec3D implements Comparable, DimensionalVector {
 	/**
 	 * Checks if the point is inside the given axis-aligned bounding box.
 	 * 
-	 * @param bO
+	 * @param boxOrigin
 	 *            bounding box origin/center
-	 * @param bDim
+	 * @param boxExtent
 	 *            bounding box extends (half measure)
 	 * @return true, if point is inside the box
 	 */
 
-	public boolean isInAABB(Vec3D bO, Vec3D bDim) {
-		float w = bDim.x;
-		if (x < bO.x - w || x > bO.x + w) {
+	public boolean isInAABB(Vec3D boxOrigin, Vec3D boxExtent) {
+		float w = boxExtent.x;
+		if (x < boxOrigin.x - w || x > boxOrigin.x + w) {
 			return false;
 		}
-		w = bDim.y;
-		if (y < bO.y - w || y > bO.y + w) {
+		w = boxExtent.y;
+		if (y < boxOrigin.y - w || y > boxOrigin.y + w) {
 			return false;
 		}
-		w = bDim.z;
-		if (z < bO.z - w || z > bO.z + w) {
+		w = boxExtent.z;
+		if (z < boxOrigin.z - w || z > boxOrigin.z + w) {
 			return false;
 		}
 		return true;

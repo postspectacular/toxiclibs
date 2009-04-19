@@ -1042,8 +1042,32 @@ public class Vec2D implements DimensionalVector {
 		return new Vec2D(p.x / xr2, p.y / yr2).normalize();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.geom.DimensionalVector#toArray()
+	 */
 	public float[] toArray() {
 		return new float[] { x, y };
+	}
+
+	/**
+	 * Converts the vector from polar to cartesian space. Assumes this order:
+	 * 
+	 * @return
+	 */
+	public Vec2D toCartesian() {
+		float xx = (float) (x * Math.cos(y));
+		y = (float) (x * Math.sin(y));
+		x = xx;
+		return this;
+	}
+
+	public Vec2D toPolar() {
+		float r = (float) Math.sqrt(x * x + y * y);
+		y = (float) Math.atan2(y, x);
+		x = r;
+		return this;
 	}
 
 	/*
