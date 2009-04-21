@@ -1,12 +1,33 @@
 /**
- * ThreadSphere demo showing the following:
+ * Thread demo showing the following:
  * - construction of a 2D string made from particles and springs/sticks
- * - usage of ParticleConstraint interface for collision detection
+ * - dynamic locking & unlocking of particles
+ * - usage of the SphereConstraint class to keep particles in/outside the sphere
  *
  * Click the mouse to lock/unlock the end of the string at its current position.
  * The head of the string is always linked to the current mouse position
  *
  * @author Karsten Schmidt <info at postspectacular dot com>
+ */
+
+/* 
+ * Copyright (c) 2009 Karsten Schmidt
+ * 
+ * This demo & library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 import processing.opengl.*;
@@ -27,8 +48,8 @@ VerletParticle head;
 void setup() {
   size(1024,768,OPENGL);
   smooth();
-  // create collision sphere at origin
-  ParticleConstraint sphere=new SphereConstraint(new Vec3D(),SPHERE_RADIUS,SphereConstraint.INSIDE);
+  // create collision sphere at origin, replace OUTSIDE with INSIDE to keep particles inside the sphere
+  ParticleConstraint sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);
   physics=new VerletPhysics();
   // weak gravity along Y axis
   physics.gravity=Vec3D.Y_AXIS.scale(0.01);
@@ -46,7 +67,6 @@ void setup() {
     }
     prev=p;
   }
-  // make the 1st particle immovable (for the simulation)
   head=physics.particles.get(0);
   head.lock();
 }
@@ -56,8 +76,8 @@ void draw() {
   translate(width/2,height/2,0);
   rotateY(frameCount*0.01);
   noFill();
-  stroke(255,50);
-  strokeWeight(0.5);
+  stroke(255,100);
+  strokeWeight(1);
   // draw visual reference for collision sphere
   sphere(SPHERE_RADIUS);
   // and world bounds
@@ -91,3 +111,4 @@ void draw() {
     point(p.x,p.y,p.z);
   }
 }
+
