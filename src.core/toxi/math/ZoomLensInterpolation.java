@@ -40,7 +40,7 @@ public class ZoomLensInterpolation implements InterpolateStrategy {
 	}
 
 	public void setLensStrength(float str, float smooth) {
-		lensStrength += (MathUtils.clipNormalized(str) - lensStrength) * smooth;
+		lensStrength += (MathUtils.clip(str, -1, 1) - lensStrength) * smooth;
 		absStrength = MathUtils.abs(lensStrength);
 		leftImpl.setFlipped(lensStrength > 0);
 		rightImpl.setFlipped(lensStrength < 0);
