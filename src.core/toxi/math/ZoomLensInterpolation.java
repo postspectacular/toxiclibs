@@ -1,5 +1,13 @@
 package toxi.math;
 
+/**
+ * This class provides an adjustable zoom lens to either bundle or dilate values
+ * around a focal point within a given interval. For a example use cases, please
+ * have a look at the provided ScaleMapDataViz and ZoomLens examples.
+ * 
+ * @author toxi 21 Apr 2009
+ * 
+ */
 public class ZoomLensInterpolation implements InterpolateStrategy {
 
 	protected CircularInterpolation leftImpl = new CircularInterpolation();

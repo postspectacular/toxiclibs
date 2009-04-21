@@ -5,7 +5,8 @@ import toxi.util.datatypes.DoubleRange;
 /**
  * This class maps values from one interval into another. By default the mapping
  * is using linear projection, but can be changed by using alternative
- * {@link toxi.math.InterpolateStrategy} implementations.
+ * {@link toxi.math.InterpolateStrategy} implementations to achieve a
+ * non-regular mapping.
  */
 public class ScaleMap {
 
