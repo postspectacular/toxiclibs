@@ -1,3 +1,17 @@
+/**
+ * <p>SplineBlob demo showing how to use the Spline2D class to create generative
+ * character outlines as used in http://postspectacular.com/work/nokia/friends/
+ * Once the outline is generated is horizontally deformed by another spline
+ * constituting the character's "spine".</p>
+ * 
+ * <p>Key controls:</p>
+ * <ul>
+ * <li>1 : draw blob outline</li>
+ * <li>2 : draw blob deformed by spine</li>
+ * <li>3 : draw blob both (1) and (2) overlaid</li>
+ * </ul>
+ */
+
 /* 
  * Copyright (c) 2008 Karsten Schmidt
  * 
@@ -17,7 +31,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 import processing.opengl.*;
 import toxi.geom.*;
 
@@ -50,3 +64,4 @@ void keyPressed() {
   if (key>='1' && key<='3') drawMode=key-'0';
   else newBlob=true;
 }
+

@@ -1,13 +1,17 @@
+/**
+ * Extends the default octree class in order to visualize currently
+ * occupied cells in the tree.
+ */
 class VisibleOctree extends PointOctree {
 
   VisibleOctree(Vec3D o, float d) {
     super(o,d);
   }
-  
+
   void draw() {
     drawNode(this);
   }
-  
+
   void drawNode(PointOctree n) {
     if (n.getNumChildren() > 0) {
       noFill();
@@ -23,3 +27,4 @@ class VisibleOctree extends PointOctree {
     }
   }
 }
+

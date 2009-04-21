@@ -1,15 +1,15 @@
 /**
-PointOctree demo showing how to use the structure to efficiently retrieve
-and isolate particle like objects within a defined neighbourhood from a much
-larger set of objects.
-
-Key controls:
-
-SPACE : add 100 more particles
-S : choose between sphere and bounding box culling.
-O : toggle display of the octree structure
-- / + : adjust the size of the culling radius
-*/
+ * PointOctree demo showing how to use the structure to efficiently retrieve
+ * and isolate particle like objects within a defined neighbourhood from a much
+ * larger set of objects.
+ * 
+ * Key controls:
+ * 
+ * SPACE : add 100 more particles
+ * S : choose between sphere and bounding box culling.
+ * O : toggle display of the octree structure
+ * - / + : adjust the size of the culling radius
+ */
 
 /* 
  * Copyright (c) 2006-2008 Karsten Schmidt
@@ -152,3 +152,4 @@ void keyPressed() {
     RADIUS=min(RADIUS+1,DIM);
   }
 }
+

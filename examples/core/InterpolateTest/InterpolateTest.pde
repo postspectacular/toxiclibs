@@ -1,5 +1,10 @@
+/**
+ * This demo shows the effect of various InterpolateStrategy implementations available.
+ * For the more interactive ZoomLensInterpolation please see the ZoomLens demo.
+ */
+
 /* 
- * Copyright (c) 2006-2008 Karsten Schmidt
+ * Copyright (c) 2006-2009 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,24 +22,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
-import toxi.geom.*;
+
 import toxi.math.*;
 
 void setup() {
   size(200,200);
-
 }
 
 void draw() {
   background(0);
-  
+
   InterpolateStrategy linear=new LinearInterpolation();
   InterpolateStrategy circular=new CircularInterpolation();
   InterpolateStrategy invCircular=new CircularInterpolation(true);
   InterpolateStrategy sigmoid=new SigmoidInterpolation((float)mouseX/width*4);
   InterpolateStrategy cosine=new CosineInterpolation();
-  
+
   for(float x=0; x<width; x++) {
     float t=x/width;
     //linear
@@ -59,3 +62,4 @@ void draw() {
     point(x,y);
   }
 }
+
