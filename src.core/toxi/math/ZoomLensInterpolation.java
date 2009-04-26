@@ -31,7 +31,7 @@ public class ZoomLensInterpolation implements InterpolateStrategy {
 	public float interpolate(float min, float max, float t) {
 		float val = min + (max - min) * t;
 		if (t < lensPos) {
-			val += (leftImpl.interpolate(0, min + (max - min) * lensPos, t
+			val += (leftImpl.interpolate(min, min + (max - min) * lensPos, t
 					/ lensPos) - val)
 					* absStrength;
 		}
