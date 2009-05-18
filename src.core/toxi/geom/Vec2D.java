@@ -206,8 +206,7 @@ public class Vec2D implements DimensionalVector {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		}
-		else {
+		} else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -345,8 +344,7 @@ public class Vec2D implements DimensionalVector {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return (float) Math.sqrt(dx * dx + dy * dy);
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
@@ -364,8 +362,7 @@ public class Vec2D implements DimensionalVector {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return dx * dx + dy * dy;
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
@@ -1052,9 +1049,10 @@ public class Vec2D implements DimensionalVector {
 	}
 
 	/**
-	 * Converts the vector from polar to cartesian space. Assumes this order:
+	 * Converts the vector from polar to Cartesian space. Assumes this order:
+	 * x=radius, y=theta
 	 * 
-	 * @return
+	 * @return itself as Cartesian vector
 	 */
 	public Vec2D toCartesian() {
 		float xx = (float) (x * Math.cos(y));
@@ -1063,6 +1061,13 @@ public class Vec2D implements DimensionalVector {
 		return this;
 	}
 
+	/**
+	 * Converts the current vector into polar coordinates. After the conversion
+	 * the x component of the vector contains the radius and y the rotation
+	 * angle.
+	 * 
+	 * @return itself as polar vector
+	 */
 	public Vec2D toPolar() {
 		float r = (float) Math.sqrt(x * x + y * y);
 		y = (float) Math.atan2(y, x);
