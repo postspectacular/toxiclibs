@@ -6,27 +6,30 @@ import java.util.ArrayList;
  * This is a generic 2D B-Spline class for curves of arbitrary length, control
  * handles and patches are created and joined automatically as described here:
  * http://www.ibiblio.org/e-notes/Splines/Bint.htm
+ * 
+ * @version 0014 Added user adjustable curve tightness control
  */
 public class Spline2D {
 
 	public Vec2D[] points;
-
 	public Vec2D[] delta;
-	protected Vec2D[] coeffA;
-
-	protected float[] bi;
-	private final int numP;
 
 	public ArrayList<Vec2D> vertices;
-
 	public BernsteinPolynomial bernstein;
+
+	protected Vec2D[] coeffA;
+	protected float[] bi;
+
+	protected float tightness, invTightness;
+
+	private final int numP;
 
 	/**
 	 * @param p
 	 *            array of control point vectors
 	 */
 	public Spline2D(Vec2D[] p) {
-		this(p, null);
+		this(p, null, 0.25f);
 	}
 
 	/**
@@ -34,8 +37,11 @@ public class Spline2D {
 	 *            array of control point vectors
 	 * @param b
 	 *            predefined Bernstein polynomial (good for reusing)
+	 * @param tightness
+	 *            default curve tightness used for the interpolated vertices (
+	 *            {@linkplain #setTightness(float)}
 	 */
-	public Spline2D(Vec2D[] p, BernsteinPolynomial b) {
+	public Spline2D(Vec2D[] p, BernsteinPolynomial b, float tightness) {
 		points = p;
 		numP = points.length;
 		coeffA = new Vec2D[numP];
@@ -47,6 +53,7 @@ public class Spline2D {
 			bi[i] = 0;
 		}
 		bernstein = b;
+		setTightness(tightness);
 	}
 
 	/**
@@ -87,11 +94,11 @@ public class Spline2D {
 	}
 
 	protected void findCPoints() {
-		bi[1] = -.25f;
-		coeffA[1].set((points[2].x - points[0].x - delta[0].x) * 0.25f,
-				(points[2].y - points[0].y - delta[0].y) * 0.25f);
+		bi[1] = -tightness;
+		coeffA[1].set((points[2].x - points[0].x - delta[0].x) * tightness,
+				(points[2].y - points[0].y - delta[0].y) * tightness);
 		for (int i = 2; i < numP - 1; i++) {
-			bi[i] = -1 / (4 + bi[i - 1]);
+			bi[i] = -1 / (invTightness + bi[i - 1]);
 			coeffA[i].set(
 					-(points[i + 1].x - points[i - 1].x - coeffA[i - 1].x)
 							* bi[i],
@@ -102,5 +109,32 @@ public class Spline2D {
 			delta[i].set(coeffA[i].x + delta[i + 1].x * bi[i], coeffA[i].y
 					+ delta[i + 1].y * bi[i]);
 		}
+	}
+
+	/**
+	 * @see #setTightness(float)
+	 * @return the spline tightness
+	 * @since 0014 (rev.216)
+	 */
+	public float getTightness() {
+		return tightness;
+	}
+
+	/**
+	 * Sets the tightness for future curve interpolation calls. Default value is
+	 * 0.25. A value of 0.0 equals linear interpolation between the given curve
+	 * input points. Curve behaviour for values outside the 0.0 .. 0.5 interval
+	 * is unspecified and becomes increasingly less intuitive. Negative values
+	 * are possible too and create interesting results (in some cases).
+	 * 
+	 * @param tightness
+	 *            the tightness value used for the next call to
+	 *            {@link #computeVertices(int)}
+	 * @since 0014 (rev. 216)
+	 */
+	public Spline2D setTightness(float tightness) {
+		this.tightness = tightness;
+		this.invTightness = 1f / tightness;
+		return this;
 	}
 }

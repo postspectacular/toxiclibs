@@ -8,8 +8,8 @@ package toxi.geom;
  * 
  */
 public class BernsteinPolynomial {
-	float[] b0, b1, b2, b3;
-	int resolution;
+	public float[] b0, b1, b2, b3;
+	public int resolution;
 
 	/**
 	 * @param res
@@ -26,7 +26,8 @@ public class BernsteinPolynomial {
 		float dt = 1.0f / (resolution - 1);
 		for (int i = 0; i < resolution; i++) {
 			float t1 = 1 - t;
-			float t12 = t1 * t1, t2 = t * t;
+			float t12 = t1 * t1;
+			float t2 = t * t;
 			b0[i] = t1 * t12;
 			b1[i] = 3 * t * t12;
 			b2[i] = 3 * t2 * t1;
