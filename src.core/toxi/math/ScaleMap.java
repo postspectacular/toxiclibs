@@ -41,7 +41,7 @@ public class ScaleMap {
 	 * is clipped to source interval.
 	 * 
 	 * @param val
-	 * @return
+	 * @return mapped value
 	 */
 	public double getClippedValueFor(double val) {
 		float t = MathUtils.clipNormalized((float) ((val - in.min) / interval));
@@ -53,7 +53,7 @@ public class ScaleMap {
 	 * is outside the input range.
 	 * 
 	 * @param val
-	 * @return
+	 * @return mapped value
 	 */
 	public double getMappedValueFor(double val) {
 		float t = (float) ((val - in.min) / interval);
@@ -72,10 +72,10 @@ public class ScaleMap {
 	}
 
 	/**
-	 * Sets new minimum & maximum values for the output/target range
+	 * Overrides the mapping function used for the scale conversion.
 	 * 
-	 * @param min
-	 * @param max
+	 * @param func
+	 *            interpolate strategy implementation
 	 */
 	public void setMapFunction(InterpolateStrategy func) {
 		mapFunction = func;
@@ -85,7 +85,9 @@ public class ScaleMap {
 	 * Sets new minimum & maximum values for the output/target range
 	 * 
 	 * @param min
+	 *            new min output value
 	 * @param max
+	 *            new max output value
 	 */
 	public void setOutputRange(double min, double max) {
 		out = new DoubleRange(min, max);
