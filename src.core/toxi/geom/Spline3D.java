@@ -3,9 +3,28 @@ package toxi.geom;
 import java.util.ArrayList;
 
 /**
+ * <p>
  * This is a generic 3D B-Spline class for curves of arbitrary length, control
  * handles and patches are created and joined automatically as described here:
- * http://www.ibiblio.org/e-notes/Splines/Bint.htm
+ * <a
+ * href="http://www.ibiblio.org/e-notes/Splines/Bint.htm">ibiblio.org/e-notes/
+ * Splines/Bint.htm</a>
+ * </p>
+ * 
+ * <p>
+ * Thanks to a bug report by Aaron Meyers (http://universaloscillation.com) the
+ * {@linkplain #computeVertices(int)} method has a slightly changed behaviour
+ * from version 0014 onwards. In earlier versions erroneous duplicate points
+ * would be added near each given control point, which lead to various weird
+ * results.
+ * </p>
+ * 
+ * <p>
+ * The new behaviour of the curve interpolation/computation is described in the
+ * docs for the {@linkplain #computeVertices(int)} method below.
+ * </p>
+ * 
+ * @version 0014 Added user adjustable curve tightness control
  */
 public class Spline3D {
 
@@ -55,15 +74,26 @@ public class Spline3D {
 	}
 
 	/**
+	 * <p>
 	 * Computes all curve vertices based on the resolution/number of
 	 * subdivisions requested. The higher, the more vertices are computed:
-	 * (number of control points - 1) * resolution
+	 * </p>
+	 * <p>
+	 * <strong>(number of control points - 1) * resolution + 1</strong>
+	 * </p>
+	 * <p>
+	 * Since version 0014 the automatic placement of the curve handles can also
+	 * be manipulated via the {@linkplain #setTightness(float)} method.
+	 * </p>
 	 * 
 	 * @param res
-	 *            resolution
+	 *            the number of vertices to be computed per segment between
+	 *            original control points (incl. control point always at the
+	 *            start of each segment)
 	 * @return list of Vec3D vertices along the curve
 	 */
 	public ArrayList<Vec3D> computeVertices(int res) {
+		res++;
 		if (bernstein == null || bernstein.resolution != res) {
 			bernstein = new BernsteinPolynomial(res);
 		}
@@ -75,12 +105,13 @@ public class Spline3D {
 		findCPoints();
 		Vec3D deltaP = new Vec3D();
 		Vec3D deltaQ = new Vec3D();
+		res--;
 		for (int i = 0; i < numP - 1; i++) {
 			Vec3D p = points[i];
 			Vec3D q = points[i + 1];
 			deltaP.set(delta[i]).addSelf(p);
 			deltaQ.set(q).subSelf(delta[i + 1]);
-			for (int k = 0; k < bernstein.resolution; k++) {
+			for (int k = 0; k < res; k++) {
 				float x = p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
 						+ deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
 				float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
@@ -90,14 +121,8 @@ public class Spline3D {
 				vertices.add(new Vec3D(x, y, z));
 			}
 		}
+		vertices.add(points[points.length - 1]);
 		return vertices;
-	}
-
-	@Deprecated
-	public void createSymmetricEnds() {
-		delta[0] = points[1].scale(0.75f);
-		int lastIdx = numP - 2;
-		delta[lastIdx] = points[lastIdx].scale(-0.75f);
 	}
 
 	protected void findCPoints() {
