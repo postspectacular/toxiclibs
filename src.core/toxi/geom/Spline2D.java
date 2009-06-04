@@ -106,7 +106,6 @@ public class Spline2D {
 		Vec2D deltaP = new Vec2D();
 		Vec2D deltaQ = new Vec2D();
 		res--;
-		System.out.println("res:" + res + " bres: " + bernstein.resolution);
 		for (int i = 0; i < numP - 1; i++) {
 			Vec2D p = points[i];
 			Vec2D q = points[i + 1];
