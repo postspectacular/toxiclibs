@@ -1,11 +1,180 @@
-0013 - 2009-02-20
+0014 - 2009-06-05
 --------------------------------------------------------------------------------
-* massive refactoring of library package structure (last one for a while, hopefully!)
-* renamed geomutils into toxiclibscore, deprecated & merged prefutils into core libs
-! fixed issue 7, Y/Z coords were swapped in Vec3D.rotateX() & getRotatedX()
-! fixed little endian encoding bug in toxi.geom.util.STLWriter
-+ added pointInPolygon() to Vec2D
-+ replaced Vec3D isInSphere() with Sphere.containsPoint()
+
+2009-06-04 23:45  toxmeister
+	* toxiclibs/ant/build_core.xml,
+	  toxiclibs/readme1st/core/CHANGELOG.txt: updated build version
+	  to 0014 and introduced new changelog format using svn2cl
+
+2009-05-27 03:23  toxmeister
+	* toxiclibs/examples/core/SplineDebug,
+	  toxiclibs/examples/core/SplineDebug/SplineDebug.pde,
+	  toxiclibs/examples/core/SplineTightness,
+	  toxiclibs/examples/core/SplineTightness/SplineTightness.pde:
+	  adding new spline demos related to computeVertices() bug fix and
+	  the new tightness control parameter
+	* toxiclibs/src.core/toxi/geom/Spline2D.java,
+	  toxiclibs/src.core/toxi/geom/Spline3D.java: intermittent bugfix
+	  for computeVertices() methods in Spline2D/3D. see
+	  http://groups.google.com/group/toxiclibs-users/browse_thread/thread/518f7980a56fdf01
+	  for discussion
+
+2009-05-18 00:39  toxmeister
+
+	* toxiclibs/src.core/toxi/math/ScaleMap.java: fixing javadocs for
+	  ScaleMap methods
+	* toxiclibs/src.core/toxi/geom/Vec2D.java: fixing javadocs for
+	  Vec2D.toCartesian()/toPolar() methods
+	* toxiclibs/src.core/toxi/geom/BernsteinPolynomial.java,
+	  toxiclibs/src.core/toxi/geom/Spline2D.java,
+	  toxiclibs/src.core/toxi/geom/Spline3D.java: adding manual curve
+	  tightness control to Spline2D/3D classes and making
+	  BernsteinPolynomial fields public
+
+2009-04-26 16:21  toxmeister
+
+	* toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: bug fix
+	  for intervals with non-zero minimum values
+
+0013 - 2009-04-21
+--------------------------------------------------------------------------------
+
+2009-04-21 22:32  toxmeister
+
+	* toxiclibs/src.core/toxi/math/ScaleMap.java,
+	  toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: adding
+	  minimal javadocs to ScaleMap & ZoomLens
+
+2009-04-21 22:06  toxmeister
+
+	* toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: bug fix
+	  in setLensStrength to also allow bundling lens types (strength
+	  now correctly clipped to -1 ... +1)
+
+2009-04-21 21:47  toxmeister
+
+	* toxiclibs/examples/core/InterpolateTest/InterpolateTest.pde,
+	  toxiclibs/examples/core/OctreeDemo/OctreeDemo.pde,
+	  toxiclibs/examples/core/OctreeDemo/VisibleOctree.pde,
+	  toxiclibs/examples/core/RayReflectSphere/RayReflectSphere.pde,
+	  toxiclibs/examples/core/ScaleMapDataViz,
+	  toxiclibs/examples/core/ScaleMapDataViz/ScaleMapDataViz.pde,
+	  toxiclibs/examples/core/SimplexNoiseTest/SimplexNoiseTest,
+	  toxiclibs/examples/core/SimplexNoiseTest/SimplexNoiseTest.pde,
+	  toxiclibs/examples/core/SplineBlobTest/SplineBlobTest.pde,
+	  toxiclibs/examples/core/ZoomLens,
+	  toxiclibs/examples/core/ZoomLens/ZoomLens.pde: adding new demos
+	  (ScaleMapDataViz & ZoomLens), adding/updating comments to
+	  existing demos for toxiclib core
+
+2009-04-19 09:21  toxmeister
+
+	* toxiclibs/src.core/toxi/geom/DimensionalVector.java,
+	  toxiclibs/src.core/toxi/geom/Vec2D.java,
+	  toxiclibs/src.core/toxi/geom/Vec3D.java,
+	  toxiclibs/src.core/toxi/math/CircularInterpolation.java,
+	  toxiclibs/src.core/toxi/math/MathUtils.java,
+	  toxiclibs/src.core/toxi/math/ScaleMap.java,
+	  toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java,
+	  toxiclibs/src.core/toxi/util/datatypes/DoubleRange.java: adding
+	  ScaleMap, ZoomLens, DoubleRange, adding javadocs and minor tweaks
+	  to CircularInterpolation, adding toPolar/toCartesian conversion
+	  to Vec2D
+
+2009-04-04 08:25  toxmeister
+
+	* toxiclibs/src.core/toxi/geom/Rect.java,
+	  toxiclibs/src.core/toxi/geom/Vec2D.java: added float based Rect
+	  class to replace int based java.awt.Rectangle use in Vec2D
+
+2009-03-26 18:32  toxmeister
+
+	* toxiclibs/src.core/toxi/math/conversion/UnitTranslator.java:
+	  fixed visibility and made all methods static, added javadocs
+
+2009-03-21 12:17  toxmeister
+
+	* toxiclibs/src.core/toxi/geom/Vec2D.java: fixed typo in
+	  Vec2D.isInRectangle() - thanks lenny! :)
+
+2009-03-16 20:24  toxmeister
+
+	* toxiclibs/.settings/org.eclipse.jdt.ui.prefs,
+	  toxiclibs/readme1st/core/CHANGELOG.txt,
+	  toxiclibs/src.core/toxi/geom/AABB.java,
+	  toxiclibs/src.core/toxi/geom/DimensionalVector.java,
+	  toxiclibs/src.core/toxi/geom/Plane.java,
+	  toxiclibs/src.core/toxi/geom/PointList.java,
+	  toxiclibs/src.core/toxi/geom/PointOctree.java,
+	  toxiclibs/src.core/toxi/geom/Quaternion.java,
+	  toxiclibs/src.core/toxi/geom/Sphere.java,
+	  toxiclibs/src.core/toxi/geom/SphereIntersectorReflector.java,
+	  toxiclibs/src.core/toxi/geom/Vec2D.java,
+	  toxiclibs/src.core/toxi/geom/Vec3D.java,
+	  toxiclibs/src.test/toxi/test/GeomTestSuite.java: enabled sort
+	  members option in eclipse editor save actions. plus the long
+	  overdue extraction/redistribution of intersection methods from
+	  Vec3D into their new (better suited) parent types... updated
+	  GeomTestSuite to refactored state
+
+2009-02-27 22:03  toxmeister
+
+	* toxiclibs/src.core, toxiclibs/src.core/toxi/geom/volume,
+	  toxiclibs/src.core/toxi/util,
+	  toxiclibs/src.core/toxi/util/datatypes,
+	  toxiclibs/src.core/toxi/util/datatypes/ArrayUtil.java,
+	  toxiclibs/src.core/toxi/util/datatypes/BiasedFloatRange.java,
+	  toxiclibs/src.core/toxi/util/datatypes/BiasedIntegerRange.java,
+	  toxiclibs/src.core/toxi/util/datatypes/FloatRange.java,
+	  toxiclibs/src.core/toxi/util/datatypes/GenericSet.java,
+	  toxiclibs/src.core/toxi/util/datatypes/IntegerRange.java,
+	  toxiclibs/src.core/toxi/util/datatypes/IntegerSet.java,
+	  toxiclibs/src.core/toxi/util/datatypes/SingletonRegistry.java,
+	  toxiclibs/src.core/toxi/util/datatypes/TypedProperties.java:
+	  renaming src.geom folder into src.core WRT the replacement of
+	  geomutils with toxiclibscore packages, which now also include the
+	  formerly separate prefutils classes. also removing
+	  toxi.geom.volume package from this source folder
+
+2009-02-19 22:15  toxmeister
+
+	* toxiclibs/readme1st/prefs/CHANGELOG.txt,
+	  toxiclibs/src.prefs/toxi/util/datatypes/ArrayUtil.java: added
+	  indexInArray methods to ArrayUtil, updated changelog
+
+2009-02-16 02:06  toxmeister
+
+	* toxiclibs/readme1st/geom/CHANGELOG.txt,
+	  toxiclibs/src.geom/toxi/geom/Vec2D.java: Incomplete - task 8:
+	  SIAD additions todo
+	  http://code.google.com/p/toxiclibs/issues/detail?id=8
+	  added Vec2D poly test
+
+2009-02-13 13:09  toxmeister
+
+	* toxiclibs/src.geom/toxi/geom/Vec3D.java: issue 7 resolved: fixed
+	  flipped Y/Z coords in Vec3D.rotateX()
+
+2009-01-30 11:26  toxmeister
+
+	* toxiclibs/ant/build_core.xml, toxiclibs/ant/build_geom.xml,
+	  toxiclibs/src.geom/toxi/geom/BernsteinPolynomial.java,
+	  toxiclibs/src.geom/toxi/geom/DimensionalVector.java,
+	  toxiclibs/src.geom/toxi/geom/Spline2D.java,
+	  toxiclibs/src.geom/toxi/geom/Spline3D.java,
+	  toxiclibs/src.geom/toxi/geom/Vec2D.java,
+	  toxiclibs/src.geom/toxi/geom/Vec3D.java: adding Spline2D and
+	  separating Bernstein, added setXY() to Vec3D and introduced
+	  DimensionalVector interface
+
+2009-01-28 10:29  toxmeister
+
+	* toxiclibs/src.geom/toxi/math/MathUtils.java: undeprecating &
+	  improving fastPow after discussion with WBlut
+
+--------------------------------------------------------------------------------
+Old changelog format for previous versions:
+--------------------------------------------------------------------------------
 
 0012 - 2008-12-18
 --------------------------------------------------------------------------------
