@@ -302,14 +302,11 @@ public class Vec2D implements DimensionalVector {
 	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
 	public int compareTo(Object vec) {
-		Vec3D v = (Vec3D) vec;
+		Vec2D v = (Vec2D) vec;
 		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0) {
 			return 0;
 		}
-		if (magSquared() < v.magSquared()) {
-			return -1;
-		}
-		return 1;
+		return (int) (magSquared() - v.magSquared());
 	}
 
 	/**
@@ -330,6 +327,24 @@ public class Vec2D implements DimensionalVector {
 	 */
 	public final Vec2D copy() {
 		return new Vec2D(this);
+	}
+
+	/**
+	 * Calculates the cross-product with the given vector.
+	 * 
+	 * @param v
+	 *            vector
+	 * @return the magnitude of the vector that would result from a regular 3D
+	 *         cross product of the input vectors, taking their Z values
+	 *         implicitly as 0 (i.e. treating the 2D space as a plane in the 3D
+	 *         space). The 3D cross product will be perpendicular to that plane,
+	 *         and thus have 0 X & Y components (thus the scalar returned is the
+	 *         Z value of the 3D cross product vector).
+	 * @see <a href="http://stackoverflow.com/questions/243945/">Stackoverflow
+	 *      entry</a>
+	 */
+	public float cross(Vec2D v) {
+		return (x * v.y) - (y * v.x);
 	}
 
 	/**
@@ -382,7 +397,7 @@ public class Vec2D implements DimensionalVector {
 
 	@Override
 	public boolean equals(Object obj) {
-		Vec3D v = (Vec3D) obj;
+		Vec2D v = (Vec2D) obj;
 		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0);
 	}
 
@@ -1037,6 +1052,35 @@ public class Vec2D implements DimensionalVector {
 		float yr2 = eR.y * eR.y;
 
 		return new Vec2D(p.x / xr2, p.y / yr2).normalize();
+	}
+
+	/**
+	 * Creates a 3D version of this vector in the XY plane.
+	 * 
+	 * @return 3D vector
+	 */
+	public Vec3D to3DXY() {
+		return new Vec3D(x, y, 0);
+	}
+
+	/**
+	 * Creates a 3D version of this vector in the XZ plane. (The 2D Y coordinate
+	 * interpreted as Z)
+	 * 
+	 * @return 3D vector
+	 */
+	public Vec3D to3DXZ() {
+		return new Vec3D(x, 0, y);
+	}
+
+	/**
+	 * Creates a 3D version of this vector in the YZ plane. (The 2D X coordinate
+	 * interpreted as Y &amp; 2D Y as Z)
+	 * 
+	 * @return 3D vector
+	 */
+	public Vec3D to3DYZ() {
+		return new Vec3D(0, x, y);
 	}
 
 	/*

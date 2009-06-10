@@ -277,8 +277,7 @@ public class Vec3D implements Comparable, DimensionalVector {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		}
-		else {
+		} else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -342,10 +341,7 @@ public class Vec3D implements Comparable, DimensionalVector {
 				&& Float.compare(z, v.z) == 0) {
 			return 0;
 		}
-		if (magSquared() < v.magSquared()) {
-			return -1;
-		}
-		return 1;
+		return (int) (magSquared() - v.magSquared());
 	}
 
 	/**
@@ -430,8 +426,7 @@ public class Vec3D implements Comparable, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
@@ -450,8 +445,7 @@ public class Vec3D implements Comparable, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return dx * dx + dy * dy + dz * dz;
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
@@ -459,8 +453,8 @@ public class Vec3D implements Comparable, DimensionalVector {
 	/**
 	 * Computes the scalar product (dot product) with the given vector.
 	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
-	 *      /a>
+	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia
+	 *      entry</a>
 	 * 
 	 * @param v
 	 * @return dot product
