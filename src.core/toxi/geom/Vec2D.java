@@ -697,7 +697,6 @@ public class Vec2D implements DimensionalVector {
 	 */
 	public final boolean isZeroVector() {
 		return x == 0 && y == 0;
-		// return magnitude()<FastMath.EPS;
 	}
 
 	public final Vec2D jitter(float j) {
@@ -750,6 +749,10 @@ public class Vec2D implements DimensionalVector {
 	 * Calculates only the squared magnitude/length of the vector. Useful for
 	 * inverse square law applications and/or for speed reasons or if the real
 	 * eucledian distance is not required (e.g. sorting).
+	 * 
+	 * Please note the vector should contain cartesian (not polar) coordinates
+	 * in order for this function to work. The magnitude of polar vectors is
+	 * stored in the x component.
 	 * 
 	 * @return squared magnitude (x^2 + y^2)
 	 */
@@ -810,10 +813,11 @@ public class Vec2D implements DimensionalVector {
 	 * @return itself
 	 */
 	public final Vec2D normalize() {
-		float mag = (float) Math.sqrt(x * x + y * y);
+		float mag = x * x + y * y;
 		if (mag > 0) {
-			x /= mag;
-			y /= mag;
+			mag = 1f / (float) Math.sqrt(mag);
+			x *= mag;
+			y *= mag;
 		}
 		return this;
 	}
@@ -1107,8 +1111,8 @@ public class Vec2D implements DimensionalVector {
 
 	/**
 	 * Converts the current vector into polar coordinates. After the conversion
-	 * the x component of the vector contains the radius and y the rotation
-	 * angle.
+	 * the x component of the vector contains the radius (magnitude) and y the
+	 * rotation angle.
 	 * 
 	 * @return itself as polar vector
 	 */
