@@ -24,8 +24,26 @@ import toxi.math.MathUtils;
 
 public class Triangle {
 
-	Vec3D a, b, c;
-	Vec3D normal;
+	public static boolean isClockwiseInXY(Vec3D a, Vec3D b, Vec3D c) {
+		float determ = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+		return (determ < 0.0);
+	}
+
+	public static boolean isClockwiseInXZ(Vec3D a, Vec3D b, Vec3D c) {
+		float determ = (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
+		return (determ < 0.0);
+	}
+
+	public static boolean isClockwiseInYZ(Vec3D a, Vec3D b, Vec3D c) {
+		float determ = (b.y - a.y) * (c.z - a.z) - (c.y - a.y) * (b.z - a.z);
+		return (determ < 0.0);
+	}
+
+	public Vec3D a, b, c;
+
+	public Vec3D normal;
+
+	public Vec3D centroid;
 
 	public Triangle(Vec3D a, Vec3D b, Vec3D c) {
 		this.a = a;
@@ -33,66 +51,11 @@ public class Triangle {
 		this.c = c;
 	}
 
-	public void computeNormal() {
-		normal = a.sub(b).cross(a.sub(c)).normalize();
-	}
-
-	/**
-	 * Checks if point vector is inside the triangle created by the points a, b
-	 * and c. These points will create a plane and the point checked will have
-	 * to be on this plane in the region between a,b,c.
-	 * 
-	 * Note: The triangle must be defined in clockwise order a,b,c
-	 * 
-	 * @return true, if point is in triangle.
-	 */
-	public boolean containsPoint(Vec3D p) {
-		Vec3D v1 = p.sub(a).normalize();
-		Vec3D v2 = p.sub(b).normalize();
-		Vec3D v3 = p.sub(c).normalize();
-
-		double total_angles = Math.acos(v1.dot(v2));
-		total_angles += Math.acos(v2.dot(v3));
-		total_angles += Math.acos(v3.dot(v1));
-
-		return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
-	}
-
-	/**
-	 * Finds and returns the closest point on any of the triangle edges to the
-	 * point given.
-	 * 
-	 * @param p
-	 *            point to check
-	 * @return closest point
-	 */
-
-	public Vec3D getClosestVertexTo(Vec3D p) {
-		Vec3D Rab = p.closestPointOnLine(a, b);
-		Vec3D Rbc = p.closestPointOnLine(b, c);
-		Vec3D Rca = p.closestPointOnLine(c, a);
-
-		float dAB = p.sub(Rab).magSquared();
-		float dBC = p.sub(Rbc).magSquared();
-		float dCA = p.sub(Rca).magSquared();
-
-		float min = dAB;
-		Vec3D result = Rab;
-
-		if (dBC < min) {
-			min = dBC;
-			result = Rbc;
-		}
-		if (dCA < min)
-			result = Rca;
-
-		return result;
-	}
-
 	/**
 	 * @see #closestPointOnSurface(Vec3D)
 	 * @deprecated
 	 */
+	@Deprecated
 	public Vec3D closedPoint(Vec3D p) {
 		return closestPointOnSurface(p);
 	}
@@ -180,6 +143,68 @@ public class Triangle {
 		return a.scale(u).addSelf(b.scale(v)).addSelf(c.scale(w));
 	}
 
+	public Vec3D computeCentroid() {
+		centroid = a.add(b).addSelf(c).scaleSelf(1f / 3);
+		return centroid;
+	}
+
+	public Vec3D computeNormal() {
+		normal = a.sub(b).crossSelf(a.sub(c)).normalize();
+		return normal;
+	}
+
+	/**
+	 * Checks if point vector is inside the triangle created by the points a, b
+	 * and c. These points will create a plane and the point checked will have
+	 * to be on this plane in the region between a,b,c.
+	 * 
+	 * Note: The triangle must be defined in clockwise order a,b,c
+	 * 
+	 * @return true, if point is in triangle.
+	 */
+	public boolean containsPoint(Vec3D p) {
+		Vec3D v1 = p.sub(a).normalize();
+		Vec3D v2 = p.sub(b).normalize();
+		Vec3D v3 = p.sub(c).normalize();
+
+		double total_angles = Math.acos(v1.dot(v2));
+		total_angles += Math.acos(v2.dot(v3));
+		total_angles += Math.acos(v3.dot(v1));
+
+		return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
+	}
+
+	/**
+	 * Finds and returns the closest point on any of the triangle edges to the
+	 * point given.
+	 * 
+	 * @param p
+	 *            point to check
+	 * @return closest point
+	 */
+
+	public Vec3D getClosestVertexTo(Vec3D p) {
+		Vec3D Rab = p.closestPointOnLine(a, b);
+		Vec3D Rbc = p.closestPointOnLine(b, c);
+		Vec3D Rca = p.closestPointOnLine(c, a);
+
+		float dAB = p.sub(Rab).magSquared();
+		float dBC = p.sub(Rbc).magSquared();
+		float dCA = p.sub(Rca).magSquared();
+
+		float min = dAB;
+		Vec3D result = Rab;
+
+		if (dBC < min) {
+			min = dBC;
+			result = Rbc;
+		}
+		if (dCA < min)
+			result = Rca;
+
+		return result;
+	}
+
 	public boolean isClockwiseInXY() {
 		return Triangle.isClockwiseInXY(a, b, c);
 	}
@@ -192,18 +217,13 @@ public class Triangle {
 		return Triangle.isClockwiseInXY(a, b, c);
 	}
 
-	public static boolean isClockwiseInXY(Vec3D a, Vec3D b, Vec3D c) {
-		float determ = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
-		return (determ < 0.0);
+	public void set(Vec3D a2, Vec3D b2, Vec3D c2) {
+		a = a2;
+		b = b2;
+		c = c2;
 	}
 
-	public static boolean isClockwiseInXZ(Vec3D a, Vec3D b, Vec3D c) {
-		float determ = (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
-		return (determ < 0.0);
-	}
-
-	public static boolean isClockwiseInYZ(Vec3D a, Vec3D b, Vec3D c) {
-		float determ = (b.y - a.y) * (c.z - a.z) - (c.y - a.y) * (b.z - a.z);
-		return (determ < 0.0);
+	public String toString() {
+		return "Triangle: " + a + "," + b + "," + c;
 	}
 }
