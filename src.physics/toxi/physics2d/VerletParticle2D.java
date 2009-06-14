@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
-import toxi.physics.constraints.ParticleConstraint;
 import toxi.physics2d.constraints.Particle2DConstraint;
 
 /**
@@ -173,7 +172,7 @@ public class VerletParticle2D extends Vec2D {
 	 *            constraint to remove
 	 * @return true, if successfully removed
 	 */
-	public boolean removeConstraint(ParticleConstraint c) {
+	public boolean removeConstraint(Particle2DConstraint c) {
 		return constraints.remove(c);
 	}
 
