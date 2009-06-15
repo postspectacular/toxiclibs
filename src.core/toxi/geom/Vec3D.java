@@ -32,7 +32,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec3D implements Comparable, DimensionalVector {
+public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Defines positive X axis
@@ -335,8 +335,7 @@ public class Vec3D implements Comparable, DimensionalVector {
 	 *            vector to compare with
 	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
-	public int compareTo(Object vec) {
-		Vec3D v = (Vec3D) vec;
+	public int compareTo(Vec3D v) {
 		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0
 				&& Float.compare(z, v.z) == 0) {
 			return 0;
