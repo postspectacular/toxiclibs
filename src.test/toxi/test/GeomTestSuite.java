@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 import toxi.geom.AABB;
 import toxi.geom.PointOctree;
+import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
+import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.SphereIntersectorReflector;
 import toxi.geom.Vec3D;
@@ -64,17 +66,33 @@ public class GeomTestSuite extends TestCase {
 		assertEquals(points.size() == 2, true);
 	}
 
+	public void testRectMerge() {
+		Rect r = new Rect(-10, 2, 3, 3);
+		Rect s = new Rect(-8, 4, 5, 3);
+		r.merge(s);
+		System.out.println(r);
+		assertEquals(r.width == 7, true);
+		assertEquals(r.height == 5, true);
+		r = new Rect(0, 0, 3, 3);
+		s = new Rect(-1, 2, 1, 1);
+		r.merge(s);
+		System.out.println(r);
+	}
+
 	public void testReflectRay() {
 		SphereIntersectorReflector si = new SphereIntersectorReflector(
 				new Vec3D(0, 0, 0), 10);
-		Ray3D r = si.reflectRay(new Ray3D(new Vec3D(0, 100, 0), new Vec3D(-1,
+		Ray3D r = si.reflectRay(new Ray3D(new Vec3D(100, 100, 0), new Vec3D(-1,
 				-1, 0)));
-		assertEquals(MathUtils.abs(r.getDirection().y - 1) < 0.002, true);
+		float absDiff = r.getDirection().angleBetween(new Vec3D(1, 1, 0), true);
+		System.out.println(r + " diff: " + absDiff);
+		assertEquals(absDiff < 0.002, true);
 	}
 
-	/*
-	 * public void testSlerp() { Quaternion a=new Quaternion(Vec3D.X_AXIS,0);
-	 * Quaternion b=new Quaternion(Vec3D.Y_AXIS,0); a.interpolateTo(b, 0.5);
-	 * System.out.println(a); }
-	 */
+	public void testSlerp() {
+		Quaternion a = new Quaternion(0, Vec3D.X_AXIS);
+		Quaternion b = new Quaternion(0, Vec3D.Y_AXIS);
+		a = a.interpolateTo(b, 0.95f);
+		System.out.println(a);
+	}
 }
