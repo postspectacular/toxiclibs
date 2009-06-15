@@ -54,21 +54,6 @@ public class JOALUtil {
 
 	protected static JOALUtil instance;
 
-	protected ArrayList<Integer> buffers;
-	protected ArrayList<Integer> sources;
-
-	protected SoundListener listener;
-
-	protected AL al;
-	protected ALC alc;
-	protected EAX eax;
-
-	protected boolean isInited;
-	protected boolean isEAX;
-
-	protected JOALUtil() {
-	}
-
 	public static JOALUtil getInstance() {
 		if (instance == null) {
 			synchronized (JOALUtil.class) {
@@ -78,6 +63,100 @@ public class JOALUtil {
 			}
 		}
 		return instance;
+	}
+
+	protected ArrayList<AudioBuffer> buffers;
+
+	protected ArrayList<AudioSource> sources;
+
+	protected SoundListener listener;
+	protected AL al;
+	protected ALC alc;
+
+	protected EAX eax;
+	protected boolean isInited;
+
+	protected boolean isEAX;
+
+	protected JOALUtil() {
+	}
+
+	public void deleteBuffer(AudioBuffer b) {
+		for (AudioSource s : sources) {
+			if (s.getBuffer() == b) {
+				s.stop();
+				logger.fine("forced stopping source: " + s);
+			}
+		}
+		b.delete();
+		buffers.remove(b);
+		logger.info("deleted buffer: " + b);
+	}
+
+	public void deleteSource(AudioSource src) {
+		src.delete();
+		sources.remove(src);
+		logger.info("deleted source: " + src);
+	}
+
+	/**
+	 * Creates the specified number of audio sample buffers and returns an array
+	 * of {@link AudioBuffer} wrappers.
+	 * 
+	 * @param numBuffers
+	 *            number of requested buffers
+	 * @return array
+	 */
+	public AudioBuffer[] generateBuffers(int numBuffers) {
+		AudioBuffer[] result = new AudioBuffer[numBuffers];
+		int[] arr = new int[numBuffers];
+		al.alGenBuffers(numBuffers, arr, 0);
+		for (int i = 0; i < numBuffers; i++) {
+			result[i] = new AudioBuffer(al, arr[i]);
+			buffers.add(result[i]);
+		}
+		return result;
+	}
+
+	/**
+	 * Creates the specified number of hardware audio sources required to
+	 * actually play the sample data stored in {@link AudioBuffer}s.
+	 * 
+	 * @param numSources
+	 *            number of sources required
+	 * @return array
+	 */
+	public AudioSource[] generateSources(int numSources) {
+		AudioSource[] result = new AudioSource[numSources];
+		int[] arr = new int[numSources];
+		al.alGenSources(numSources, arr, 0);
+		for (int i = 0; i < numSources; i++) {
+			result[i] = new AudioSource(al, arr[i]);
+			sources.add(result[i]);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns a direct reference to the OpenAL API.
+	 * 
+	 * @return JOAL context
+	 */
+	public AL getAL() {
+		return al;
+	}
+
+	/**
+	 * Returns the {@link SoundListener} instance for the associated OpenAL
+	 * context.
+	 * 
+	 * @return listener object
+	 */
+	public SoundListener getListener() {
+		if (listener == null) {
+			listener = new SoundListener(this);
+		}
+		return listener;
 	}
 
 	/**
@@ -107,8 +186,8 @@ public class JOALUtil {
 				throw new RuntimeException("OpenAL could not be initialized: "
 						+ e.getMessage());
 			}
-			buffers = new ArrayList<Integer>();
-			sources = new ArrayList<Integer>();
+			buffers = new ArrayList<AudioBuffer>();
+			sources = new ArrayList<AudioSource>();
 			listener = new SoundListener(this);
 			isEAX = al.alIsExtensionPresent("EAX2.0");
 			if (isEAX && attemptEAX) {
@@ -128,55 +207,12 @@ public class JOALUtil {
 	}
 
 	/**
-	 * Destroys all objects, sources, buffers, contexts created by
-	 */
-	public void shutdown() {
-		logger.info("shutting down JOAL");
-		int[] tmpbuf = new int[buffers.size()];
-		for (int i = 0; i < tmpbuf.length; i++) {
-			tmpbuf[i] = buffers.get(i);
-		}
-		al.alDeleteBuffers(tmpbuf.length, tmpbuf, 0);
-		logger.info(tmpbuf.length + " buffers released");
-		int[] tmpsrc = new int[sources.size()];
-		for (int i = 0; i < tmpsrc.length; i++) {
-			tmpsrc[i] = sources.get(i);
-		}
-		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
-		logger.info(tmpsrc.length + " sources released");
-
-		ALCcontext curContext = alc.alcGetCurrentContext();
-		ALCdevice curDevice = alc.alcGetContextsDevice(curContext);
-
-		alc.alcMakeContextCurrent(null);
-		alc.alcDestroyContext(curContext);
-		alc.alcCloseDevice(curDevice);
-
-		alc = null;
-		al = null;
-		buffers = null;
-		sources = null;
-
-		isInited = false;
-	}
-
-	/**
-	 * Creates the specified number of audio sample buffers and returns an array
-	 * of {@link AudioBuffer} wrappers.
+	 * Checks if EAX are supported by the underlying hardware.
 	 * 
-	 * @param numBuffers
-	 *            number of requested buffers
-	 * @return array
+	 * @return true, if supported.
 	 */
-	public AudioBuffer[] generateBuffers(int numBuffers) {
-		AudioBuffer[] result = new AudioBuffer[numBuffers];
-		int[] arr = new int[numBuffers];
-		al.alGenBuffers(numBuffers, arr, 0);
-		for (int i = 0; i < numBuffers; i++) {
-			result[i] = new AudioBuffer(al, arr[i]);
-			buffers.add(arr[i]);
-		}
-		return result;
+	public boolean isEAXSupported() {
+		return isEAX;
 	}
 
 	/**
@@ -220,52 +256,35 @@ public class JOALUtil {
 	}
 
 	/**
-	 * Creates the specified number of hardware audio sources required to
-	 * actually play the sample data stored in {@link AudioBuffer}s.
-	 * 
-	 * @param numSources
-	 *            number of sources required
-	 * @return array
+	 * Destroys all objects, sources, buffers, contexts created by
 	 */
-	public AudioSource[] generateSources(int numSources) {
-		AudioSource[] result = new AudioSource[numSources];
-		int[] arr = new int[numSources];
-		al.alGenSources(numSources, arr, 0);
-		for (int i = 0; i < numSources; i++) {
-			result[i] = new AudioSource(al, arr[i]);
-			sources.add(arr[i]);
+	public void shutdown() {
+		logger.info("shutting down JOAL");
+		int[] tmpbuf = new int[buffers.size()];
+		for (int i = 0; i < tmpbuf.length; i++) {
+			tmpbuf[i] = buffers.get(i).getID();
 		}
-		return result;
-	}
-
-	/**
-	 * Returns a direct reference to the OpenAL API.
-	 * 
-	 * @return JOAL context
-	 */
-	public AL getAL() {
-		return al;
-	}
-
-	/**
-	 * Returns the {@link SoundListener} instance for the associated OpenAL
-	 * context.
-	 * 
-	 * @return listener object
-	 */
-	public SoundListener getListener() {
-		if (listener == null) {
-			listener = new SoundListener(this);
+		al.alDeleteBuffers(tmpbuf.length, tmpbuf, 0);
+		logger.info(tmpbuf.length + " buffers released");
+		int[] tmpsrc = new int[sources.size()];
+		for (int i = 0; i < tmpsrc.length; i++) {
+			tmpsrc[i] = sources.get(i).getID();
 		}
-		return listener;
-	}
+		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
+		logger.info(tmpsrc.length + " sources released");
 
-	/**
-	 * Checks if EAX are supported by the underlying hardware.
-	 * 
-	 * @return true, if supported.
-	 */
-	public boolean isEAXSupported() {
-		return isEAX;
+		ALCcontext curContext = alc.alcGetCurrentContext();
+		ALCdevice curDevice = alc.alcGetContextsDevice(curContext);
+
+		alc.alcMakeContextCurrent(null);
+		alc.alcDestroyContext(curContext);
+		alc.alcCloseDevice(curDevice);
+
+		alc = null;
+		al = null;
+		buffers = null;
+		sources = null;
+
+		isInited = false;
 	}
 }

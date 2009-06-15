@@ -68,6 +68,11 @@ public class AudioSource extends Vec3D {
 		setBuffer(buf);
 	}
 
+	public void delete() {
+		stop();
+		al.alDeleteSources(1, new int[] { id }, 0);
+	}
+
 	/**
 	 * Gets the buffer associated with this source.
 	 * 
@@ -89,6 +94,10 @@ public class AudioSource extends Vec3D {
 
 	public float[] getDirection() {
 		return direction;
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	public int getOffset() {
@@ -140,10 +149,6 @@ public class AudioSource extends Vec3D {
 		}
 	}
 
-	public void setDirection(Vec3D dir) {
-		direction = dir.toArray();
-	}
-
 	public void setDirection(float xx, float yy, float zz) {
 		direction[0] = xx;
 		direction[1] = yy;
@@ -158,6 +163,10 @@ public class AudioSource extends Vec3D {
 			direction[2] = dir[2];
 			al.alSourcefv(id, AL.AL_DIRECTION, direction, 0);
 		}
+	}
+
+	public void setDirection(Vec3D dir) {
+		direction = dir.toArray();
 	}
 
 	public void setGain(float gain) {
@@ -197,10 +206,6 @@ public class AudioSource extends Vec3D {
 		setPosition(p.x, p.y, p.z);
 	}
 
-	public final void updatePosition() {
-		setPosition(x, y, z);
-	}
-
 	public void setReferenceDistance(float d) {
 		al.alSourcef(id, AL.AL_REFERENCE_DISTANCE, d);
 	}
@@ -223,5 +228,9 @@ public class AudioSource extends Vec3D {
 
 	public void stop() {
 		al.alSourceStop(id);
+	}
+
+	public final void updatePosition() {
+		setPosition(x, y, z);
 	}
 }
