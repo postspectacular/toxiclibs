@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import toxi.math.MathUtils;
+
 public class Rect {
 	public float x, y, width, height;
 
@@ -21,7 +23,7 @@ public class Rect {
 		if (p.x < x || p.x >= x + width) {
 			return false;
 		}
-		if (p.y < y || p.y > y + height) {
+		if (p.y < y || p.y >= y + height) {
 			return false;
 		}
 		return true;
@@ -37,5 +39,20 @@ public class Rect {
 
 	public Vec2D getTopLeft() {
 		return new Vec2D(x, y);
+	}
+
+	public Rect merge(Rect r) {
+		float tmp = MathUtils.max(x + width, r.x + r.width);
+		x = MathUtils.min(x, r.x);
+		width = tmp - x;
+		tmp = MathUtils.max(y + height, r.y + r.height);
+		y = MathUtils.min(y, r.y);
+		height = tmp - y;
+		return this;
+	}
+
+	public String toString() {
+		return "rect: {x:" + x + ", y:" + y + ", width:" + width + ", height:"
+				+ height + "}";
 	}
 }
