@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import toxi.geom.Vec3D;
 import toxi.geom.util.OBJWriter;
 import toxi.geom.util.STLWriter;
+import toxi.geom.util.TriangleMesh;
 import toxi.util.datatypes.ArrayUtil;
 
 /**
@@ -33,6 +34,8 @@ public class IsoSurface {
 
 	protected int[] faces;
 	protected int numFaces;
+
+	public Vec3D[] faceNormals;
 
 	public IsoSurface(VolumetricSpace volume) {
 		this.volume = volume;
@@ -70,6 +73,19 @@ public class IsoSurface {
 		}
 	}
 
+	public void computeFaceNormals() {
+		if (faceNormals == null || faceNormals.length != numFaces) {
+			faceNormals = new Vec3D[numFaces];
+		}
+		Vec3D[] verts = null;
+		for (int i = 0; i < numFaces; i++) {
+			verts = getVerticesForFace(i, verts);
+			Vec3D n = verts[0].sub(verts[1]).cross(verts[0].sub(verts[2]))
+					.normalize();
+			faceNormals[i] = n;
+		}
+	}
+
 	/**
 	 * Computes the surface mesh for the given volumetric data and iso value.
 	 */
@@ -88,7 +104,8 @@ public class IsoSurface {
 					int cellIndex = getCellIndex(x, y, z);
 					int n = 0;
 					int edgeIndex;
-					while ((edgeIndex = MarchingCubesIndex.cellTriangles[cellIndex][n++]) != -1) {
+					int[] cellTriangles = MarchingCubesIndex.cellTriangles[cellIndex];
+					while ((edgeIndex = cellTriangles[n++]) != -1) {
 						int[] edgeOffsetInfo = MarchingCubesIndex.edgeOffsets[edgeIndex];
 						faces[numVertices++] = ((x + edgeOffsetInfo[0]) + resX
 								* (y + edgeOffsetInfo[1]) + sliceRes
@@ -101,8 +118,71 @@ public class IsoSurface {
 						float offsetData = data[offset];
 						float isoDiff = isoValue - offsetData;
 						if ((edgeFlags & 1) > 0) {
+							float t = isoDiff / (data[offset + 1] - offsetData);
+							edgeVertices[edgeOffsetIndex].x = offsetX + t
+									* cellSize.x;
+						}
+						if ((edgeFlags & 2) > 0) {
 							float t = isoDiff
-									/ (data[offset + 1] - offsetData);
+									/ (data[offset + resX] - offsetData);
+							edgeVertices[edgeOffsetIndex + 1].y = offsetY + t
+									* cellSize.y;
+						}
+						if ((edgeFlags & 4) > 0) {
+							float t = isoDiff
+									/ (data[offset + sliceRes] - offsetData);
+							edgeVertices[edgeOffsetIndex + 2].z = offsetZ + t
+									* cellSize.z;
+						}
+					}
+					offsetX += cellSize.x;
+				}
+				offsetY += cellSize.y;
+			}
+			offsetZ += cellSize.z;
+		}
+		numFaces = numVertices / 3;
+	}
+
+	public void computeSurfaceMesh(TriangleMesh mesh, float iso) {
+		mesh.clear();
+		isoValue = iso;
+		float offsetX, offsetY, offsetZ;
+		offsetZ = centreOffset.z;
+		int[] cellFaceIndices = new int[15];
+		for (int z = 0; z < resZ1; z++) {
+			int sliceOffset = sliceRes * z;
+			offsetY = centreOffset.y;
+			for (int y = 0; y < resY1; y++) {
+				offsetX = centreOffset.x;
+				int rowOffset = resX * y + sliceOffset;
+				for (int x = 0; x < resX1; x++) {
+					int offset = x + rowOffset;
+					int cellIndex = getCellIndex(x, y, z);
+					int n = 0;
+					int edgeIndex;
+					int[] cellTriangles = MarchingCubesIndex.cellTriangles[cellIndex];
+					while ((edgeIndex = cellTriangles[n]) != -1) {
+						int[] edgeOffsetInfo = MarchingCubesIndex.edgeOffsets[edgeIndex];
+						cellFaceIndices[n] = ((x + edgeOffsetInfo[0]) + resX
+								* (y + edgeOffsetInfo[1]) + sliceRes
+								* (z + edgeOffsetInfo[2]))
+								* 3 + edgeOffsetInfo[3];
+						n++;
+					}
+					for (int i = 0; i < n; i += 3) {
+						Vec3D a = edgeVertices[cellFaceIndices[i]];
+						Vec3D b = edgeVertices[cellFaceIndices[i + 1]];
+						Vec3D c = edgeVertices[cellFaceIndices[i + 2]];
+						mesh.addFace(a, b, c);
+					}
+					int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
+					if (edgeFlags > 0) {
+						int edgeOffsetIndex = offset * 3;
+						float offsetData = data[offset];
+						float isoDiff = isoValue - offsetData;
+						if ((edgeFlags & 1) > 0) {
+							float t = isoDiff / (data[offset + 1] - offsetData);
 							edgeVertices[edgeOffsetIndex].x = offsetX + t
 									* cellSize.x;
 						}
@@ -161,6 +241,10 @@ public class IsoSurface {
 		return cellIndex;
 	}
 
+	public Vec3D getNormalForFace(int faceID) {
+		return faceNormals[faceID];
+	}
+
 	public int getNumFaces() {
 		return numFaces;
 	}
@@ -198,10 +282,11 @@ public class IsoSurface {
 		for (int z = 0, index = 0; z < resZ; z++) {
 			for (int y = 0; y < resY; y++) {
 				for (int x = 0; x < resX && index < numVertices; x++) {
-					edgeVertices[index].set(x * cellSize.x, y * cellSize.y,
-							z * cellSize.z).addSelf(centreOffset);
-					edgeVertices[index + 1].set(edgeVertices[index]);
-					edgeVertices[index + 2].set(edgeVertices[index]);
+					Vec3D v = edgeVertices[index].set(x * cellSize.x
+							+ centreOffset.x, y * cellSize.y + centreOffset.y,
+							z * cellSize.z + centreOffset.z);
+					edgeVertices[index + 1].set(v);
+					edgeVertices[index + 2].set(v);
 					index += 3;
 				}
 			}
