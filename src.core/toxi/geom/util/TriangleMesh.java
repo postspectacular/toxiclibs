@@ -1,7 +1,6 @@
 package toxi.geom.util;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
@@ -92,11 +91,6 @@ public class TriangleMesh {
 	}
 
 	public TriangleMesh(String name, int numV, int numF) {
-		this(name, numV, numF, new XYZComparator());
-	}
-
-	public TriangleMesh(String name, int numV, int numF,
-			Comparator<Vec3D> comparator) {
 		this.name = name;
 		vertices = new ArrayList<Vertex>(numV);
 		faces = new ArrayList<Face>(numF);
