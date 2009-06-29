@@ -48,7 +48,8 @@ public class OBJMesh {
 		}
 		if (aID == bID || aID == cID || bID == cID) {
 			logger.warning("ignorning invalid face: " + a + "," + b + "," + c);
-		} else {
+		}
+		else {
 			faces.add(new int[] { aID, bID, cID });
 		}
 	}
@@ -116,10 +117,12 @@ public class OBJMesh {
 			}
 			for (Iterator<int[]> i = faces.iterator(); i.hasNext();) {
 				int[] f = i.next();
-				obj.faceWithNormal(f[0] + vOffset, f[1] + vOffset, f[2]
-						+ vOffset, nOffset++);
+				obj.faceWithNormals(f[0] + vOffset, f[1] + vOffset, f[2]
+						+ vOffset, nOffset, nOffset, nOffset);
+				nOffset++;
 			}
-		} else {
+		}
+		else {
 			// faces only
 			for (Iterator<int[]> i = faces.iterator(); i.hasNext();) {
 				int[] f = i.next();
