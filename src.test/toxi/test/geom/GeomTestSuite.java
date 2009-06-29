@@ -1,4 +1,4 @@
-package toxi.test;
+package toxi.test.geom;
 
 import java.util.ArrayList;
 
@@ -36,6 +36,11 @@ public class GeomTestSuite extends TestCase {
 		c = new Vec3D(-50, -50, 0);
 		isec = c.closestPointOnLine(a, b);
 		assertEquals(isec.equals(a), true);
+	}
+
+	public void testEuler() {
+		Quaternion a = new Quaternion(MathUtils.HALF_PI, Vec3D.Z_AXIS);
+		System.out.println(a.getEulerAngles());
 	}
 
 	public void testIsInAABB() {
@@ -91,8 +96,8 @@ public class GeomTestSuite extends TestCase {
 
 	public void testSlerp() {
 		Quaternion a = new Quaternion(0, Vec3D.X_AXIS);
-		Quaternion b = new Quaternion(0, Vec3D.Y_AXIS);
-		a = a.interpolateTo(b, 0.95f);
+		Quaternion b = new Quaternion(0, Vec3D.X_AXIS.getInverted());
+		a = a.interpolateTo(b, 0.5f);
 		System.out.println(a);
 	}
 }
