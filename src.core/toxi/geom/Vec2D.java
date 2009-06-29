@@ -23,6 +23,8 @@ package toxi.geom;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
 
@@ -44,6 +46,19 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	 * Defines positive Y axis
 	 */
 	public static final Vec2D Y_AXIS = new Vec2D(0, 1);
+
+	/**
+	 * Defines vector with both coords set to {@link Float.MIN_VALUE}. Useful
+	 * for bounding box operations.
+	 */
+	public static final Vec2D MIN_VALUE = new Vec2D(Float.MIN_VALUE,
+			Float.MIN_VALUE);
+	/**
+	 * Defines vector with both coords set to {@link Float.MAX_VALUE}. Useful
+	 * for bounding box operations.
+	 */
+	public static final Vec2D MAX_VALUE = new Vec2D(Float.MAX_VALUE,
+			Float.MAX_VALUE);
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane.
@@ -85,11 +100,13 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	/**
 	 * X coordinate
 	 */
+	@XmlAttribute
 	public float x;
 
 	/**
 	 * Y coordinate
 	 */
+	@XmlAttribute
 	public float y;
 
 	/**
@@ -206,7 +223,8 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		} else {
+		}
+		else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -297,12 +315,12 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	/**
 	 * Compares the length of the vector with another one.
 	 * 
-	 * @param vec
+	 * @param v
 	 *            vector to compare with
 	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
 	public int compareTo(Vec2D v) {
-		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0) {
+		if (x == v.x && y == v.y) {
 			return 0;
 		}
 		return (int) (magSquared() - v.magSquared());
@@ -358,7 +376,8 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return (float) Math.sqrt(dx * dx + dy * dy);
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -376,7 +395,8 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 			float dx = x - v.x;
 			float dy = y - v.y;
 			return dx * dx + dy * dy;
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -397,7 +417,7 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	@Override
 	public boolean equals(Object obj) {
 		Vec2D v = (Vec2D) obj;
-		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0);
+		return x == v.x && y == v.y;
 	}
 
 	/**

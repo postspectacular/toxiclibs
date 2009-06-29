@@ -22,6 +22,8 @@ package toxi.geom;
 
 import java.util.Random;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
 
@@ -48,6 +50,20 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Defines positive Z axis
 	 */
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
+
+	/**
+	 * Defines vector with all coords set to {@link Float.MIN_VALUE}. Useful for
+	 * bounding box operations.
+	 */
+	public static final Vec3D MIN_VALUE = new Vec3D(Float.MIN_VALUE,
+			Float.MIN_VALUE, Float.MIN_VALUE);
+
+	/**
+	 * Defines vector with all coords set to {@link Float.MAX_VALUE}. Useful for
+	 * bounding box operations.
+	 */
+	public static final Vec3D MAX_VALUE = new Vec3D(Float.MAX_VALUE,
+			Float.MAX_VALUE, Float.MAX_VALUE);
 
 	/**
 	 * Creates a new vector from the given angle in the XY plane. The Z
@@ -142,16 +158,19 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	/**
 	 * X coordinate
 	 */
+	@XmlAttribute
 	public float x;
 
 	/**
 	 * Y coordinate
 	 */
+	@XmlAttribute
 	public float y;
 
 	/**
 	 * Z coordinate
 	 */
+	@XmlAttribute
 	public float z;
 
 	/**
@@ -277,7 +296,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		} else {
+		}
+		else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -331,13 +351,12 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	/**
 	 * Compares the length of the vector with another one.
 	 * 
-	 * @param vec
+	 * @param v
 	 *            vector to compare with
 	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
 	public int compareTo(Vec3D v) {
-		if (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0
-				&& Float.compare(z, v.z) == 0) {
+		if (x == v.x && y == v.y && z == v.z) {
 			return 0;
 		}
 		return (int) (magSquared() - v.magSquared());
@@ -425,7 +444,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -444,7 +464,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 			float dy = y - v.y;
 			float dz = z - v.z;
 			return dx * dx + dy * dy + dz * dz;
-		} else {
+		}
+		else {
 			return Float.NaN;
 		}
 	}
@@ -465,8 +486,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	@Override
 	public boolean equals(Object obj) {
 		Vec3D v = (Vec3D) obj;
-		return (Float.compare(x, v.x) == 0 && Float.compare(y, v.y) == 0 && Float
-				.compare(z, v.z) == 0);
+		return x == v.x && y == v.y && z == v.z;
 	}
 
 	/**
