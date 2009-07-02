@@ -100,13 +100,13 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	/**
 	 * X coordinate
 	 */
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float x;
 
 	/**
 	 * Y coordinate
 	 */
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float y;
 
 	/**

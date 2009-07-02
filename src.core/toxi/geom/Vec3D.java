@@ -489,6 +489,17 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return x == v.x && y == v.y && z == v.z;
 	}
 
+	public boolean equalsWithTolerance(Vec3D v, float tolerance) {
+		if (MathUtils.abs(x - v.x) < tolerance) {
+			if (MathUtils.abs(x - v.x) < tolerance) {
+				if (MathUtils.abs(x - v.x) < tolerance) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Replaces the vector components with integer values of their current
 	 * values
@@ -1210,6 +1221,23 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	public float[] toArray() {
 		return new float[] { x, y, z };
+	}
+
+	public Vec3D toCartesian() {
+		double sinPhi = Math.sin(z);
+		float xx = (float) (x * Math.cos(y) * sinPhi);
+		y = (float) (x * Math.sin(y) * sinPhi);
+		z = (float) (x * Math.cos(z));
+		x = xx;
+		return this;
+	}
+
+	public Vec3D toSpherical() {
+		float radius = magnitude();
+		y = (float) Math.atan2(y, x);
+		z = (float) Math.acos(z / radius);
+		x = radius;
+		return this;
 	}
 
 	/*
