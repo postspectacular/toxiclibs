@@ -40,7 +40,6 @@ public class GeomTestSuite extends TestCase {
 
 	public void testEuler() {
 		Quaternion a = new Quaternion(MathUtils.HALF_PI, Vec3D.Z_AXIS);
-		System.out.println(a.getEulerAngles());
 	}
 
 	public void testIsInAABB() {

@@ -20,6 +20,7 @@
 
 package toxi.geom;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,28 +28,22 @@ import javax.xml.bind.annotation.XmlAttribute;
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Comprehensive 3D vector class with additional basic intersection and
  * collision detection features.
  * 
  * @author Karsten Schmidt
- * 
  */
 public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
-	/**
-	 * Defines positive X axis
-	 */
+	/** Defines positive X axis. */
 	public static final Vec3D X_AXIS = new Vec3D(1, 0, 0);
 
-	/**
-	 * Defines positive Y axis
-	 */
+	/** Defines positive Y axis. */
 	public static final Vec3D Y_AXIS = new Vec3D(0, 1, 0);
 
-	/**
-	 * Defines positive Z axis
-	 */
+	/** Defines positive Z axis. */
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
 
 	/**
@@ -72,6 +67,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * The resulting vector for theta=0 is equal to the positive X axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return new vector in the XY plane
 	 */
 	public static final Vec3D fromXYTheta(float theta) {
@@ -85,6 +82,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * The resulting vector for theta=0 is equal to the positive X axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return new vector in the XZ plane
 	 */
 	public static final Vec3D fromXZTheta(float theta) {
@@ -98,6 +97,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * The resulting vector for theta=0 is equal to the positive Y axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return new vector in the YZ plane
 	 */
 	public static final Vec3D fromYZTheta(float theta) {
@@ -109,6 +110,10 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * vectors.
 	 * 
 	 * @param b
+	 *            the b
+	 * @param a
+	 *            the a
+	 * 
 	 * @return result as new vector
 	 */
 	public static final Vec3D max(Vec3D a, Vec3D b) {
@@ -122,6 +127,9 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param b
 	 *            comparing vector
+	 * @param a
+	 *            the a
+	 * 
 	 * @return result as new vector
 	 */
 	public static final Vec3D min(Vec3D a, Vec3D b) {
@@ -147,6 +155,9 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * https://uncommons-maths.dev.java.net library for a good choice of
 	 * reliable and high quality random number generators.
 	 * 
+	 * @param rnd
+	 *            the rnd
+	 * 
 	 * @return a new random normalized unit vector.
 	 */
 	public static final Vec3D randomVector(Random rnd) {
@@ -155,37 +166,56 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return v.normalize();
 	}
 
-	/**
-	 * X coordinate
-	 */
+	public static final ArrayList<Vec3D> splitIntoSegments(Vec3D a, Vec3D b,
+			float stepLength, ArrayList<Vec3D> segments, boolean addFirst) {
+		if (segments == null) {
+			segments = new ArrayList<Vec3D>();
+		}
+		if (addFirst) {
+			segments.add(a.copy());
+		}
+		float dist = a.distanceTo(b);
+		if (dist > stepLength) {
+			Vec3D pos = a.copy();
+			Vec3D step = b.sub(a).limit(stepLength);
+			while (dist > stepLength) {
+				pos.addSelf(step);
+				segments.add(pos.copy());
+				dist -= stepLength;
+			}
+		}
+		segments.add(b.copy());
+		return segments;
+	}
+
+	/** X coordinate. */
 	@XmlAttribute
 	public float x;
 
-	/**
-	 * Y coordinate
-	 */
+	/** Y coordinate. */
 	@XmlAttribute
 	public float y;
 
-	/**
-	 * Z coordinate
-	 */
+	/** Z coordinate. */
 	@XmlAttribute
 	public float z;
 
 	/**
-	 * Creates a new zero vector
+	 * Creates a new zero vector.
 	 */
 	public Vec3D() {
 		x = y = z = 0;
 	}
 
 	/**
-	 * Creates a new vector with the given coordinates
+	 * Creates a new vector with the given coordinates.
 	 * 
 	 * @param x
+	 *            the x
 	 * @param y
+	 *            the y
 	 * @param z
+	 *            the z
 	 */
 	public Vec3D(float x, float y, float z) {
 		this.x = x;
@@ -194,7 +224,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Creates a new vector with the coordinates of the given vector
+	 * Creates a new vector with the coordinates of the given vector.
 	 * 
 	 * @param v
 	 *            vector to be copied
@@ -203,6 +233,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		set(v);
 	}
 
+	/**
+	 * Abs.
+	 * 
+	 * @return the vec3 d
+	 */
 	public final Vec3D abs() {
 		x = MathUtils.abs(x);
 		y = MathUtils.abs(y);
@@ -219,6 +254,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            Y coordinate
 	 * @param c
 	 *            Z coordinate
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D add(float a, float b, float c) {
@@ -230,6 +266,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to add
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D add(Vec3D v) {
@@ -245,6 +282,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            Y coordinate
 	 * @param c
 	 *            Z coordinate
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D addSelf(float a, float b, float c) {
@@ -259,6 +297,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to add
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D addSelf(Vec3D v) {
@@ -275,6 +314,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector
+	 * 
 	 * @return angle in radians, or NaN if vectors are parallel
 	 */
 	public final float angleBetween(Vec3D v) {
@@ -282,7 +322,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Computes the angle between this vector and vector V
+	 * Computes the angle between this vector and vector V.
 	 * 
 	 * @param v
 	 *            vector
@@ -290,14 +330,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            true, if normalized versions of the vectors are to be used
 	 *            (Note: only copies will be used, original vectors will not be
 	 *            altered by this method)
+	 * 
 	 * @return angle in radians, or NaN if vectors are parallel
 	 */
 	public final float angleBetween(Vec3D v, boolean forceNormalize) {
 		float theta;
 		if (forceNormalize) {
 			theta = getNormalized().dot(v.getNormalized());
-		}
-		else {
+		} else {
 			theta = dot(v);
 		}
 		return (float) Math.acos(theta);
@@ -314,21 +354,21 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * 
 	 * Helper function for {@link toxi.geom.Triangle#closedPoint(Vec3D)}
 	 * 
 	 * @param a
 	 *            start point of line segment
 	 * @param b
 	 *            end point of line segment
+	 * 
 	 * @return closest point on the line segment a -> b
 	 */
 
 	public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
-		Vec3D c = sub(a);
-		Vec3D v = b.sub(a);
+		final Vec3D c = sub(a);
+		final Vec3D v = b.sub(a);
 
-		float d = v.magnitude();
+		final float d = v.magnitude();
 		v.normalize();
 
 		float t = v.dot(c);
@@ -353,6 +393,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to compare with
+	 * 
 	 * @return -1 if other vector is longer, 0 if both are equal or else +1
 	 */
 	public int compareTo(Vec3D v) {
@@ -366,6 +407,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Forcefully fits the vector in the given AABB.
 	 * 
 	 * @param box
+	 *            the box
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D constrain(AABB box) {
@@ -376,6 +419,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
+	 * Copy.
+	 * 
 	 * @return a new independent instance/copy of a given vector
 	 */
 	public final Vec3D copy() {
@@ -388,6 +433,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to cross
+	 * 
 	 * @return cross-product as new vector
 	 */
 	public final Vec3D cross(Vec3D v) {
@@ -404,12 +450,13 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            vector to cross
 	 * @param result
 	 *            result vector
+	 * 
 	 * @return result vector
 	 */
 	public final Vec3D crossInto(Vec3D v, Vec3D result) {
-		float rx = y * v.z - v.y * z;
-		float ry = z * v.x - v.z * x;
-		float rz = x * v.y - v.x * y;
+		final float rx = y * v.z - v.y * z;
+		final float ry = z * v.x - v.z * x;
+		final float rz = x * v.y - v.x * y;
 		result.set(rx, ry, rz);
 		return result;
 	}
@@ -420,11 +467,13 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * current.
 	 * 
 	 * @param v
+	 *            the v
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D crossSelf(Vec3D v) {
-		float cx = y * v.z - v.y * z;
-		float cy = z * v.x - v.z * x;
+		final float cx = y * v.z - v.y * z;
+		final float cy = z * v.x - v.z * x;
 		z = x * v.y - v.x * y;
 		y = cy;
 		x = cx;
@@ -432,40 +481,41 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Calculates distance to another vector
+	 * Calculates distance to another vector.
 	 * 
 	 * @param v
 	 *            non-null vector
+	 * 
 	 * @return distance or Float.NaN if v=null
 	 */
 	public final float distanceTo(Vec3D v) {
 		if (v != null) {
-			float dx = x - v.x;
-			float dy = y - v.y;
-			float dz = z - v.z;
+			final float dx = x - v.x;
+			final float dy = y - v.y;
+			final float dz = z - v.z;
 			return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
 
 	/**
-	 * Calculates the squared distance to another vector
+	 * Calculates the squared distance to another vector.
 	 * 
-	 * @see #magSquared()
 	 * @param v
 	 *            non-null vector
+	 * 
 	 * @return distance or NaN if v=null
+	 * 
+	 * @see #magSquared()
 	 */
 	public final float distanceToSquared(Vec3D v) {
 		if (v != null) {
-			float dx = x - v.x;
-			float dy = y - v.y;
-			float dz = z - v.z;
+			final float dx = x - v.x;
+			final float dy = y - v.y;
+			final float dz = z - v.z;
 			return dx * dx + dy * dy + dz * dz;
-		}
-		else {
+		} else {
 			return Float.NaN;
 		}
 	}
@@ -473,22 +523,44 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	/**
 	 * Computes the scalar product (dot product) with the given vector.
 	 * 
+	 * @param v
+	 *            the v
+	 * 
+	 * @return dot product
+	 * 
 	 * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia
 	 *      entry</a>
-	 * 
-	 * @param v
-	 * @return dot product
 	 */
 	public final float dot(Vec3D v) {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		Vec3D v = (Vec3D) obj;
-		return x == v.x && y == v.y && z == v.z;
+		if (obj instanceof Vec3D) {
+			final Vec3D v = (Vec3D) obj;
+			return x == v.x && y == v.y && z == v.z;
+		}
+		return false;
 	}
 
+	/**
+	 * Compares this vector with the one given. The vectors are deemed equal if
+	 * the individual differences of all component values are within the given
+	 * tolerance.
+	 * 
+	 * @param v
+	 *            the v
+	 * @param tolerance
+	 *            the tolerance
+	 * 
+	 * @return true, if equal
+	 */
 	public boolean equalsWithTolerance(Vec3D v, float tolerance) {
 		if (MathUtils.abs(x - v.x) < tolerance) {
 			if (MathUtils.abs(x - v.x) < tolerance) {
@@ -502,7 +574,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Replaces the vector components with integer values of their current
-	 * values
+	 * values.
 	 * 
 	 * @return itself
 	 */
@@ -515,7 +587,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Replaces the vector components with the fractional part of their current
-	 * values
+	 * values.
 	 * 
 	 * @return itself
 	 */
@@ -526,6 +598,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return this;
 	}
 
+	/**
+	 * Gets the abs.
+	 * 
+	 * @return the abs
+	 */
 	public final Vec3D getAbs() {
 		return new Vec3D(this).abs();
 	}
@@ -534,19 +611,26 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Creates a copy of the vector which forcefully fits in the given AABB.
 	 * 
 	 * @param box
+	 *            the box
+	 * 
 	 * @return fitted vector
 	 */
 	public final Vec3D getConstrained(AABB box) {
 		return new Vec3D(this).constrain(box);
 	}
 
-	public int getDimensions() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.geom.DimensionalVector#getDimensions()
+	 */
+	public final int getDimensions() {
 		return 3;
 	}
 
 	/**
 	 * Creates a new vector whose components are the integer value of their
-	 * current values
+	 * current values.
 	 * 
 	 * @return result as new vector
 	 */
@@ -556,7 +640,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Creates a new vector whose components are the fractional part of their
-	 * current values
+	 * current values.
 	 * 
 	 * @return result as new vector
 	 */
@@ -565,7 +649,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Scales vector uniformly by factor -1 ( v = -v )
+	 * Scales vector uniformly by factor -1 ( v = -v ).
 	 * 
 	 * @return result as new vector
 	 */
@@ -575,10 +659,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Creates a copy of the vector with its magnitude limited to the length
-	 * given
+	 * given.
 	 * 
 	 * @param lim
 	 *            new maximum magnitude
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D getLimited(float lim) {
@@ -589,7 +674,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Produces the normalized version as a new vector
+	 * Produces the normalized version as a new vector.
 	 * 
 	 * @return new vector
 	 */
@@ -598,8 +683,16 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * @see #rotateAroundAxis(Vec3D, float)
+	 * Gets the rotated around axis.
+	 * 
+	 * @param axis
+	 *            the axis
+	 * @param theta
+	 *            the theta
+	 * 
 	 * @return new result vector
+	 * 
+	 * @see #rotateAroundAxis(Vec3D, float)
 	 */
 	public final Vec3D getRotatedAroundAxis(Vec3D axis, float theta) {
 		return new Vec3D(this).rotateAroundAxis(axis, theta);
@@ -609,6 +702,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Creates a new vector rotated by the given angle around the X axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return rotated vector
 	 */
 	public final Vec3D getRotatedX(float theta) {
@@ -619,6 +714,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Creates a new vector rotated by the given angle around the Y axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return rotated vector
 	 */
 	public final Vec3D getRotatedY(float theta) {
@@ -629,6 +726,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Creates a new vector rotated by the given angle around the Z axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return rotated vector
 	 */
 	public final Vec3D getRotatedZ(float theta) {
@@ -642,7 +741,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @return result vector
 	 */
-	public Vec3D getSignum() {
+	public final Vec3D getSignum() {
 		return new Vec3D(this).signum();
 	}
 
@@ -678,12 +777,13 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Interpolates the vector towards the given target vector, using linear
-	 * interpolation
+	 * interpolation.
 	 * 
 	 * @param v
 	 *            target vector
 	 * @param f
 	 *            interpolation factor (should be in the range 0..1)
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D interpolateTo(Vec3D v, float f) {
@@ -693,7 +793,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Interpolates the vector towards the given target vector, using the given
-	 * {@link InterpolateStrategy}
+	 * {@link InterpolateStrategy}.
 	 * 
 	 * @param v
 	 *            target vector
@@ -701,6 +801,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            interpolation factor (should be in the range 0..1)
 	 * @param s
 	 *            InterpolateStrategy instance
+	 * 
 	 * @return result as new vector
 	 */
 	public Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
@@ -710,12 +811,13 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Interpolates the vector towards the given target vector, using linear
-	 * interpolation
+	 * interpolation.
 	 * 
 	 * @param v
 	 *            target vector
 	 * @param f
 	 *            interpolation factor (should be in the range 0..1)
+	 * 
 	 * @return itself, result overrides current vector
 	 */
 	public final Vec3D interpolateToSelf(Vec3D v, float f) {
@@ -727,7 +829,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Interpolates the vector towards the given target vector, using the given
-	 * {@link InterpolateStrategy}
+	 * {@link InterpolateStrategy}.
 	 * 
 	 * @param v
 	 *            target vector
@@ -735,6 +837,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            interpolation factor (should be in the range 0..1)
 	 * @param s
 	 *            InterpolateStrategy instance
+	 * 
 	 * @return itself, result overrides current vector
 	 */
 	public Vec3D interpolateToSelf(Vec3D v, float f, InterpolateStrategy s) {
@@ -746,7 +849,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
-	 * with result
+	 * with result.
 	 * 
 	 * @return itself
 	 */
@@ -762,11 +865,12 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param box
 	 *            bounding box to check
+	 * 
 	 * @return true, if point is inside
 	 */
 	public boolean isInAABB(AABB box) {
-		Vec3D min = box.getMin();
-		Vec3D max = box.getMax();
+		final Vec3D min = box.getMin();
+		final Vec3D max = box.getMax();
 		if (x < min.x || x > max.x) {
 			return false;
 		}
@@ -786,6 +890,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            bounding box origin/center
 	 * @param boxExtent
 	 *            bounding box extends (half measure)
+	 * 
 	 * @return true, if point is inside the box
 	 */
 
@@ -806,15 +911,22 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Checks if vector has a magnitude of 0
+	 * Checks if vector has a magnitude of 0.
 	 * 
 	 * @return true, if vector = {0,0,0}
 	 */
 	public final boolean isZeroVector() {
 		return x == 0 && y == 0 && z == 0;
-		// return magnitude()<FastMath.EPS;
 	}
 
+	/**
+	 * Jitter.
+	 * 
+	 * @param j
+	 *            the j
+	 * 
+	 * @return the vec3 d
+	 */
 	public final Vec3D jitter(float j) {
 		return jitter(j, j, j);
 	}
@@ -828,6 +940,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            maximum y jitter
 	 * @param jz
 	 *            maximum z jitter
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D jitter(float jx, float jy, float jz) {
@@ -837,15 +950,24 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return this;
 	}
 
+	/**
+	 * Jitter.
+	 * 
+	 * @param jitterVec
+	 *            the jitter vec
+	 * 
+	 * @return the vec3 d
+	 */
 	public final Vec3D jitter(Vec3D jitterVec) {
 		return jitter(jitterVec.x, jitterVec.y, jitterVec.z);
 	}
 
 	/**
-	 * Limits the vector's magnitude to the length given
+	 * Limits the vector's magnitude to the length given.
 	 * 
 	 * @param lim
 	 *            new maximum magnitude
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D limit(float lim) {
@@ -856,7 +978,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Calculates the magnitude/eucledian length of the vector
+	 * Calculates the magnitude/eucledian length of the vector.
 	 * 
 	 * @return vector length
 	 */
@@ -875,6 +997,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return x * x + y * y + z * z;
 	}
 
+	/**
+	 * Max self.
+	 * 
+	 * @param b
+	 *            the b
+	 * 
+	 * @return the vec3 d
+	 */
 	public final Vec3D maxSelf(Vec3D b) {
 		x = MathUtils.max(x, b.x);
 		y = MathUtils.max(y, b.y);
@@ -882,6 +1012,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return this;
 	}
 
+	/**
+	 * Min self.
+	 * 
+	 * @param b
+	 *            the b
+	 * 
+	 * @return the vec3 d
+	 */
 	public final Vec3D minSelf(Vec3D b) {
 		x = MathUtils.min(x, b.x);
 		y = MathUtils.min(y, b.y);
@@ -894,6 +1032,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * all components.
 	 * 
 	 * @param base
+	 *            the base
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D modSelf(float base) {
@@ -907,8 +1047,12 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Calculates modulo operation for each vector component separately.
 	 * 
 	 * @param bx
+	 *            the bx
 	 * @param by
+	 *            the by
 	 * @param bz
+	 *            the bz
+	 * 
 	 * @return itself
 	 */
 
@@ -920,7 +1064,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Normalizes the vector so that its magnitude = 1
+	 * Normalizes the vector so that its magnitude = 1.
 	 * 
 	 * @return itself
 	 */
@@ -936,26 +1080,27 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Rotates the vector around the giving axis
+	 * Rotates the vector around the giving axis.
 	 * 
 	 * @param axis
 	 *            rotation axis vector
 	 * @param theta
 	 *            rotation angle (in radians)
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D rotateAroundAxis(Vec3D axis, float theta) {
-		float ux = axis.x * x;
-		float uy = axis.x * y;
-		float uz = axis.x * z;
-		float vx = axis.y * x;
-		float vy = axis.y * y;
-		float vz = axis.y * z;
-		float wx = axis.z * x;
-		float wy = axis.z * y;
-		float wz = axis.z * z;
-		double si = Math.sin(theta);
-		double co = Math.cos(theta);
+		final float ux = axis.x * x;
+		final float uy = axis.x * y;
+		final float uz = axis.x * z;
+		final float vx = axis.y * x;
+		final float vy = axis.y * y;
+		final float vz = axis.y * z;
+		final float wx = axis.z * x;
+		final float wy = axis.z * y;
+		final float wz = axis.z * z;
+		final double si = Math.sin(theta);
+		final double co = Math.cos(theta);
 		float xx = (float) (axis.x
 				* (ux + vy + wz)
 				+ (x * (axis.y * axis.y + axis.z * axis.z) - axis.x * (vy + wz))
@@ -978,12 +1123,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Rotates the vector by the given angle around the X axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D rotateX(float theta) {
-		float co = (float) Math.cos(theta);
-		float si = (float) Math.sin(theta);
-		float zz = co * z - si * y;
+		final float co = (float) Math.cos(theta);
+		final float si = (float) Math.sin(theta);
+		final float zz = co * z - si * y;
 		y = si * z + co * y;
 		z = zz;
 		return this;
@@ -993,12 +1140,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Rotates the vector by the given angle around the Y axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D rotateY(float theta) {
-		float co = (float) Math.cos(theta);
-		float si = (float) Math.sin(theta);
-		float xx = co * x - si * z;
+		final float co = (float) Math.cos(theta);
+		final float si = (float) Math.sin(theta);
+		final float xx = co * x - si * z;
 		z = si * x + co * z;
 		x = xx;
 		return this;
@@ -1008,12 +1157,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * Rotates the vector by the given angle around the Z axis.
 	 * 
 	 * @param theta
+	 *            the theta
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D rotateZ(float theta) {
-		float co = (float) Math.cos(theta);
-		float si = (float) Math.sin(theta);
-		float xx = co * x - si * y;
+		final float co = (float) Math.cos(theta);
+		final float si = (float) Math.sin(theta);
+		final float xx = co * x - si * y;
 		y = si * x + co * y;
 		x = xx;
 		return this;
@@ -1024,6 +1175,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param s
 	 *            scale factor
+	 * 
 	 * @return new vector
 	 */
 	public Vec3D scale(float s) {
@@ -1039,6 +1191,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            scale factor for Y coordinate
 	 * @param c
 	 *            scale factor for Z coordinate
+	 * 
 	 * @return new vector
 	 */
 	public Vec3D scale(float a, float b, float c) {
@@ -1046,10 +1199,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Scales vector non-uniformly by vector v and returns result as new vector
+	 * Scales vector non-uniformly by vector v and returns result as new vector.
 	 * 
 	 * @param s
 	 *            scale vector
+	 * 
 	 * @return new vector
 	 */
 	public Vec3D scale(Vec3D s) {
@@ -1057,10 +1211,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Scales vector uniformly and overrides coordinates with result
+	 * Scales vector uniformly and overrides coordinates with result.
 	 * 
 	 * @param s
 	 *            scale factor
+	 * 
 	 * @return itself
 	 */
 	public Vec3D scaleSelf(float s) {
@@ -1072,7 +1227,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Scales vector non-uniformly by vector {a,b,c} and overrides coordinates
-	 * with result
+	 * with result.
 	 * 
 	 * @param a
 	 *            scale factor for X coordinate
@@ -1080,6 +1235,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            scale factor for Y coordinate
 	 * @param c
 	 *            scale factor for Z coordinate
+	 * 
 	 * @return itself
 	 */
 	public Vec3D scaleSelf(float a, float b, float c) {
@@ -1091,10 +1247,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 
 	/**
 	 * Scales vector non-uniformly by vector v and overrides coordinates with
-	 * result
+	 * result.
 	 * 
 	 * @param s
 	 *            scale vector
+	 * 
 	 * @return itself
 	 */
 
@@ -1106,11 +1263,15 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Overrides coordinates with the given values
+	 * Overrides coordinates with the given values.
 	 * 
 	 * @param x
+	 *            the x
 	 * @param y
+	 *            the y
 	 * @param z
+	 *            the z
+	 * 
 	 * @return itself
 	 */
 	public Vec3D set(float x, float y, float z) {
@@ -1121,10 +1282,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Overrides coordinates with the ones of the given vector
+	 * Overrides coordinates with the ones of the given vector.
 	 * 
 	 * @param v
 	 *            vector to be copied
+	 * 
 	 * @return itself
 	 */
 	public Vec3D set(Vec3D v) {
@@ -1135,10 +1297,11 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Overrides XY coordinates with the ones of the given 2D vector
+	 * Overrides XY coordinates with the ones of the given 2D vector.
 	 * 
 	 * @param v
 	 *            2D vector
+	 * 
 	 * @return itself
 	 */
 	public Vec3D setXY(Vec2D v) {
@@ -1170,6 +1333,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            Y coordinate
 	 * @param c
 	 *            Z coordinate
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D sub(float a, float b, float c) {
@@ -1181,6 +1345,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to be subtracted
+	 * 
 	 * @return result as new vector
 	 */
 	public final Vec3D sub(Vec3D v) {
@@ -1196,6 +1361,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 *            Y coordinate
 	 * @param c
 	 *            Z coordinate
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D subSelf(float a, float b, float c) {
@@ -1210,6 +1376,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param v
 	 *            vector to be subtracted
+	 * 
 	 * @return itself
 	 */
 	public final Vec3D subSelf(Vec3D v) {
@@ -1219,23 +1386,43 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.geom.DimensionalVector#toArray()
+	 */
 	public float[] toArray() {
 		return new float[] { x, y, z };
 	}
 
+	/**
+	 * Converts the spherical vector back into cartesian coordinates.
+	 * 
+	 * @return itself
+	 */
 	public Vec3D toCartesian() {
-		double sinPhi = Math.sin(z);
-		float xx = (float) (x * Math.cos(y) * sinPhi);
-		y = (float) (x * Math.sin(y) * sinPhi);
-		z = (float) (x * Math.cos(z));
+		final float a = (float) (x * Math.cos(z));
+		final float xx = (float) (a * Math.cos(y));
+		final float yy = (float) (x * Math.sin(z));
+		final float zz = (float) (a * Math.sin(y));
 		x = xx;
+		y = yy;
+		z = zz;
 		return this;
 	}
 
+	/**
+	 * Converts the vector into spherical coordinates.
+	 * 
+	 * @return itself
+	 */
 	public Vec3D toSpherical() {
-		float radius = magnitude();
-		y = (float) Math.atan2(y, x);
-		z = (float) Math.acos(z / radius);
+		final float xx = Math.abs(x) <= MathUtils.EPS ? MathUtils.EPS : x;
+		final float zz = z;
+
+		final float radius = (float) Math.sqrt((xx * xx) + (y * y) + (zz * zz));
+		z = (float) Math.asin(y / radius);
+		y = (float) Math.atan(zz / xx) + (xx < 0.0 ? MathUtils.PI : 0);
 		x = radius;
 		return this;
 	}
@@ -1246,7 +1433,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb = new StringBuffer(48);
+		final StringBuffer sb = new StringBuffer(48);
 		sb.append("{x:").append(x).append(", y:").append(y).append(", z:")
 				.append(z).append("}");
 		return sb.toString();
