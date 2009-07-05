@@ -166,6 +166,26 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return v.normalize();
 	}
 
+	/**
+	 * Splits the line between A and B into segments of the given length,
+	 * starting at point A. The tweened points are added to the given result
+	 * list. The last point added is B itself and hence it is likely that the
+	 * last segment has a shorter length than the step length requested. The
+	 * first point (A) can be omitted and not be added to the list if so
+	 * desired.
+	 * 
+	 * @param a
+	 *            start point
+	 * @param b
+	 *            end point (always added to results)
+	 * @param stepLength
+	 *            desired distance between points
+	 * @param segments
+	 *            existing array list for results (or a new list, if null)
+	 * @param addFirst
+	 *            false, if A is NOT to be added to results
+	 * @return list of result vectors
+	 */
 	public static final ArrayList<Vec3D> splitIntoSegments(Vec3D a, Vec3D b,
 			float stepLength, ArrayList<Vec3D> segments, boolean addFirst) {
 		if (segments == null) {
