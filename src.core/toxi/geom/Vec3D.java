@@ -1406,6 +1406,33 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return this;
 	}
 
+	/**
+	 * Creates a new 2D vector of the XY components.
+	 * 
+	 * @return new vector
+	 */
+	public final Vec2D to2DXY() {
+		return new Vec2D(x, y);
+	}
+
+	/**
+	 * Creates a new 2D vector of the XZ components.
+	 * 
+	 * @return new vector
+	 */
+	public final Vec2D to2DXZ() {
+		return new Vec2D(x, z);
+	}
+
+	/**
+	 * Creates a new 2D vector of the YZ components.
+	 * 
+	 * @return new vector
+	 */
+	public final Vec2D to2DYZ() {
+		return new Vec2D(y, z);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
