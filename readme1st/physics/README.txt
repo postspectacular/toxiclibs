@@ -6,8 +6,8 @@ toxi.physics.*
 
 This library also depends on the following other packages:
 
-toxi.geom (geomutils-0012 release or later)
-toxi.math (geomutils-0012 release or later)
+toxi.geom (toxiclibscore-0013 release or later)
+toxi.math (toxiclibscore-0013 release or later)
 
 If you're going to use these classes for Processing projects,
 first drop the "verletphysics" folder into the "libraries" folder of your
@@ -25,7 +25,7 @@ http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

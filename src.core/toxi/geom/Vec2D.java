@@ -293,7 +293,6 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	 */
 
 	public Vec2D closestPointOnLine(Vec2D a, Vec2D b) {
-		// Determine t (the length of the vector from �a� to 'this')
 		Vec2D c = sub(a);
 		Vec2D v = b.sub(a);
 

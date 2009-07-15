@@ -1,18 +1,15 @@
 This is a separate release of a subset of the available classes in the toxiclibs library.
 
-Only the following packages are included:
+Only the following package is included:
 
-toxi.color
-toxi.color.theory
+toxi.data
 
 This library also depends on the following other packages:
 
-toxi.geom (toxiclibscore-0013 release or later)
-toxi.math (toxiclibscore-0013 release or later)
-toxi.util.datatypes (toxiclibscore-0013 release or later)
+<none>
 
 If you're going to use these classes for Processing projects,
-first drop the "colorutils" folder into the "libraries" folder of your
+first drop the "datautils" folder into the "libraries" folder of your
 Processing sketchbook and ensure the above listed dependent libraries
 are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
@@ -27,7 +24,7 @@ http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

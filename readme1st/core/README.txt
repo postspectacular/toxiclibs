@@ -8,6 +8,7 @@ toxi.math
 toxi.math.conversion
 toxi.math.noise
 toxi.math.waves
+toxi.util.datatypes
 
 If you're going to use these classes for Processing projects,
 first drop the "geomutils" folder into the "libraries" folder of your
@@ -25,7 +26,7 @@ http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
