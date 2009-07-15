@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src.core"/>
 	<classpathentry including="../src.core/toxi/math/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
 	<classpathentry kind="src" path="src.video"/>
-	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.image/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
+	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
 	<classpathentry including="../lib/core.jar|../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.image"/>
 	<classpathentry kind="src" path="src.net"/>
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.physics"/>
