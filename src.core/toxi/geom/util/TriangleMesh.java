@@ -30,8 +30,7 @@ public class TriangleMesh {
 				verts[0] = a;
 				verts[1] = b;
 				verts[2] = c;
-			}
-			else {
+			} else {
 				verts = new Vertex[] { a, b, c };
 			}
 			return verts;
@@ -43,7 +42,7 @@ public class TriangleMesh {
 	}
 
 	public class Vertex extends Vec3D {
-		int id;
+		private int id;
 
 		ArrayList<Face> faces = new ArrayList<Face>(2);
 		public Vec3D normal = new Vec3D();
@@ -101,37 +100,38 @@ public class TriangleMesh {
 	public void addFace(Vec3D a, Vec3D b, Vec3D c) {
 		int aID = vertices.indexOf(a);
 		if (aID == -1) {
-			aID = vertices.size();
+			aID = numVertices;
 			vertices.add(new Vertex(a, aID));
 			minBounds.minSelf(a);
 			maxBounds.maxSelf(a);
+			numVertices++;
 		}
 		int bID = vertices.indexOf(b);
 		if (bID == -1) {
-			bID = vertices.size();
+			bID = numVertices;
 			vertices.add(new Vertex(b, bID));
 			minBounds.minSelf(b);
 			maxBounds.maxSelf(b);
+			numVertices++;
 		}
 		int cID = vertices.indexOf(c);
 		if (cID == -1) {
-			cID = vertices.size();
+			cID = numVertices;
 			vertices.add(new Vertex(c, cID));
 			minBounds.minSelf(c);
 			maxBounds.maxSelf(c);
+			numVertices++;
 		}
 		if (aID == bID || aID == cID || bID == cID) {
 			if (isLoggerEnabled) {
 				logger.warning("ignorning invalid face: " + a + "," + b + ","
 						+ c);
 			}
-		}
-		else {
+		} else {
 			Face t = new Face(aID, bID, cID);
 			faces.add(t);
-			numFaces = faces.size();
+			numFaces++;
 		}
-		numVertices = vertices.size();
 	}
 
 	public void clear() {
