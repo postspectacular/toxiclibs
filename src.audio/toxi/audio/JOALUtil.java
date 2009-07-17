@@ -243,15 +243,18 @@ public class JOALUtil {
 	 * @throws IOException
 	 * @throws UnsupportedAudioFileException
 	 */
-	public AudioBuffer loadBuffer(String fileName) throws IOException,
-			UnsupportedAudioFileException {
-		AudioBuffer result;
-		AudioBuffer[] tmp = generateBuffers(1);
-		result = tmp[0];
-
-		WAVData wd = WAVLoader.loadFromFile(fileName);
-		result.configure(wd.data, wd.format, wd.freq);
-
+	public AudioBuffer loadBuffer(String fileName) {
+		AudioBuffer result = null;
+		try {
+			WAVData wd = WAVLoader.loadFromFile(fileName);
+			AudioBuffer[] tmp = generateBuffers(1);
+			result = tmp[0];
+			result.configure(wd.data, wd.format, wd.freq);
+		} catch (IOException e) {
+			logger.severe(e.getMessage());
+		} catch (UnsupportedAudioFileException e) {
+			logger.severe(e.getMessage());
+		}
 		return result;
 	}
 
