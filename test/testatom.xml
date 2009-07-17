@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:google="http://base.google.com/ns/1.0" xml:lang="en-US" xmlns:openSearch="http://a9.com/-/spec/opensearch/1.1/" xmlns="http://www.w3.org/2005/Atom" xmlns:twitter="http://api.twitter.com/">
+  <id>tag:search.twitter.com,2005:search/toxi</id>
+  <link type="text/html" rel="alternate" href="http://search.twitter.com/search?q=toxi"/>
+  <link type="application/atom+xml" rel="self" href="http://search.twitter.com/search.atom?q=toxi"/>
+  <title>toxi - Twitter Search</title>
+  <link type="application/opensearchdescription+xml" rel="search" href="http://search.twitter.com/opensearch.xml"/>
+  <link type="application/atom+xml" rel="refresh" href="http://search.twitter.com/search.atom?q=toxi&amp;since_id=2672340381"/>
+  <twitter:warning>since_id removed for pagination.</twitter:warning>
+  <updated>2009-07-16T15:45:07Z</updated>
+  <openSearch:itemsPerPage>15</openSearch:itemsPerPage>
+  <link type="application/atom+xml" rel="next" href="http://search.twitter.com/search.atom?max_id=2672340381&amp;page=2&amp;q=toxi"/>
+  <entry>
+    <id>tag:search.twitter.com,2005:2671265363</id>
+    <published>2009-07-16T15:45:07Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/theobserver/statuses/2671265363"/>
+    <title>by @rickrothacker Rep. Turner to Paulson: "I absolutely believe you misled Congress" by making capital injections instead of buying toxi ...</title>
+    <content type="html">by &lt;a href="http://twitter.com/rickrothacker"&gt;@rickrothacker&lt;/a&gt; Rep. Turner to Paulson: &amp;quot;I absolutely believe you misled Congress&amp;quot; by making capital injections instead of buying &lt;b&gt;toxi&lt;/b&gt; ...</content>
+    <updated>2009-07-16T15:45:07Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/52380676/Picture_2a_normal.png"/>
+    <twitter:source>&lt;a href="http://apiwiki.twitter.com/"&gt;API&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>theobserver (Charlotte Observer)</name>
+      <uri>http://twitter.com/theobserver</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2667526060</id>
+    <published>2009-07-16T10:11:10Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/toxi/statuses/2667526060"/>
+    <title>Output: Ben McLaughlin: more documentation from the digital fabrication workshop @ SIA: CNC + vacuum forming http://bit.ly/qodh0</title>
+    <content type="html">Output: Ben McLaughlin: more documentation from the digital fabrication workshop @ SIA: CNC + vacuum forming &lt;a href="http://bit.ly/qodh0"&gt;http://bit.ly/qodh0&lt;/a&gt;</content>
+    <updated>2009-07-16T10:11:10Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/259831681/toxi_128x128_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitterfeed.com"&gt;twitterfeed&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>toxi (Karsten Schmidt)</name>
+      <uri>http://twitter.com/toxi</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2657063232</id>
+    <published>2009-07-15T20:15:46Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/blprnt/statuses/2657063232"/>
+    <title>@toxi This thing is being built with an assortment of your libraries - http://www.flickr.com/photos/blprnt/3694704325/</title>
+    <content type="html">&lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt; This thing is being built with an assortment of your libraries - &lt;a href="http://www.flickr.com/photos/blprnt/3694704325/"&gt;http://www.flickr.com/photos/blprnt/3694704325/&lt;/a&gt;</content>
+    <updated>2009-07-15T20:15:46Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/62995272/3_normal.jpg"/>
+    <twitter:source>&lt;a href="http://thecosmicmachine.com/eventbox/"&gt;EventBox&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>blprnt (blprnt)</name>
+      <uri>http://twitter.com/blprnt</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2655628612</id>
+    <published>2009-07-15T18:44:47Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/pamela_dust/statuses/2655628612"/>
+    <title>@toxi We are now SIA, Sheffield Institute of Arts, at Sheffield Hallam University. Now includes more disciplines and crossover potential.</title>
+    <content type="html">&lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt; We are now SIA, Sheffield Institute of Arts, at Sheffield Hallam University. Now includes more disciplines and crossover potential.</content>
+    <updated>2009-07-15T18:44:47Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/290379334/n699640175_6054067_6307115_normal.jpg"/>
+    <twitter:source>&lt;a href="http://www.tweetdeck.com/"&gt;TweetDeck&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>pamela_dust (pamela_dust)</name>
+      <uri>http://twitter.com/pamela_dust</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2649749017</id>
+    <published>2009-07-15T11:51:45Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/toxi/statuses/2649749017"/>
+    <title>@pamela_dust I &lt;3 SIAD and missing the CNC lab too, how about next semester? ;)</title>
+    <content type="html">&lt;a href="http://twitter.com/pamela_dust"&gt;@pamela_dust&lt;/a&gt; I &amp;lt;3 SIAD and missing the CNC lab too, how about next semester? ;)</content>
+    <updated>2009-07-15T11:51:45Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/259831681/toxi_128x128_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitter.com/"&gt;web&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>toxi (Karsten Schmidt)</name>
+      <uri>http://twitter.com/toxi</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2649729355</id>
+    <published>2009-07-15T11:49:38Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/toxi/statuses/2649729355"/>
+    <title>@KR3M8 i can't see why not? what's your project about? and always remember: credit where it's due... *wink* #socialcollider</title>
+    <content type="html">&lt;a href="http://twitter.com/KR3M8"&gt;@KR3M8&lt;/a&gt; i can't see why not? what's your project about? and always remember: credit where it's due... *wink* &lt;a href="http://search.twitter.com/search?q=%23socialcollider"&gt;#socialcollider&lt;/a&gt;</content>
+    <updated>2009-07-15T11:49:38Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/259831681/toxi_128x128_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitter.com/"&gt;web&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>toxi (Karsten Schmidt)</name>
+      <uri>http://twitter.com/toxi</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2649688799</id>
+    <published>2009-07-15T11:45:06Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/toxi/statuses/2649688799"/>
+    <title>@CedricKiefer &amp; @blprnt thank you dears! any pics to share for my tired eyes to look at? btw. next core release is in ze pipes...</title>
+    <content type="html">&lt;a href="http://twitter.com/CedricKiefer"&gt;@CedricKiefer&lt;/a&gt; &amp;amp; &lt;a href="http://twitter.com/blprnt"&gt;@blprnt&lt;/a&gt; thank you dears! any pics to share for my tired eyes to look at? btw. next core release is in ze pipes...</content>
+    <updated>2009-07-15T11:45:06Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/259831681/toxi_128x128_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitter.com/"&gt;web&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>toxi (Karsten Schmidt)</name>
+      <uri>http://twitter.com/toxi</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2640005534</id>
+    <published>2009-07-14T22:12:26Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/openp2pdesign/statuses/2640005534"/>
+    <title>RT @blprnt: can't remember  a #processing project that didn't involve @toxi's very  helpful classes- http://is.gd/1ySr3</title>
+    <content type="html">RT &lt;a href="http://twitter.com/blprnt"&gt;@blprnt&lt;/a&gt;: can't remember  a &lt;a href="http://search.twitter.com/search?q=%23processing"&gt;#processing&lt;/a&gt; project that didn't involve &lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt;'s very  helpful classes- &lt;a href="http://is.gd/1ySr3"&gt;http://is.gd/1ySr3&lt;/a&gt;</content>
+    <updated>2009-07-14T22:12:26Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/275169296/green_5537_massi_grigio_piccolo_normal.jpg"/>
+    <twitter:source>&lt;a href="http://www.tweetdeck.com/"&gt;TweetDeck&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>openp2pdesign (Massimo Menichinelli)</name>
+      <uri>http://twitter.com/openp2pdesign</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2639586354</id>
+    <published>2009-07-14T21:46:16Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/blprnt/statuses/2639586354"/>
+    <title>I can't remember the last time I worked on a #processing project that didn't involve @toxi's very very helpful classes- http://is.gd/1ySr3</title>
+    <content type="html">I can't remember the last time I worked on a &lt;a href="http://search.twitter.com/search?q=%23processing"&gt;#processing&lt;/a&gt; project that didn't involve &lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt;'s very very helpful classes- &lt;a href="http://is.gd/1ySr3"&gt;http://is.gd/1ySr3&lt;/a&gt;</content>
+    <updated>2009-07-14T21:46:16Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/62995272/3_normal.jpg"/>
+    <twitter:source>&lt;a href="http://thecosmicmachine.com/eventbox/"&gt;EventBox&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>blprnt (blprnt)</name>
+      <uri>http://twitter.com/blprnt</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2638853612</id>
+    <published>2009-07-14T21:00:23Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/Stillwell74/statuses/2638853612"/>
+    <title>Natural Cellular Defense to the Rescue: Natural Cellular Defense(NCD) removes heavy metals, pesticides, and toxi.. http://bit.ly/TtCwo</title>
+    <content type="html">Natural Cellular Defense to the Rescue: Natural Cellular Defense(NCD) removes heavy metals, pesticides, and &lt;b&gt;toxi&lt;/b&gt;.. &lt;a href="http://bit.ly/TtCwo"&gt;http://bit.ly/TtCwo&lt;/a&gt;</content>
+    <updated>2009-07-14T21:00:23Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/257153772/DSC08983_normal.JPG"/>
+    <twitter:source>&lt;a href="http://twitterfeed.com"&gt;twitterfeed&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>Stillwell74 (Jay Stillwell)</name>
+      <uri>http://twitter.com/Stillwell74</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2630502143</id>
+    <published>2009-07-14T10:55:54Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/cdotcoment/statuses/2630502143"/>
+    <title>Michael Jackson toxicology reports expected soon: LOS ANGELES (AP) -- A Los Angeles coroner's official says toxi.. http://tinyurl.com/n3ezwf</title>
+    <content type="html">Michael Jackson toxicology reports expected soon: LOS ANGELES (AP) -- A Los Angeles coroner's official says &lt;b&gt;toxi&lt;/b&gt;.. &lt;a href="http://tinyurl.com/n3ezwf"&gt;http://tinyurl.com/n3ezwf&lt;/a&gt;</content>
+    <updated>2009-07-14T10:55:54Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/66856529/killers_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitterfeed.com"&gt;twitterfeed&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>cdotcoment (cdotcoment)</name>
+      <uri>http://twitter.com/cdotcoment</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2630051748</id>
+    <published>2009-07-14T09:55:43Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/CedricKiefer/statuses/2630051748"/>
+    <title>Big thanks to @toxi and his ZoomLensInterpolation. http://is.gd/1yidZ Helped a lot to tweak my Network Traffic Log Visualisation.</title>
+    <content type="html">Big thanks to &lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt; and his ZoomLensInterpolation. &lt;a href="http://is.gd/1yidZ"&gt;http://is.gd/1yidZ&lt;/a&gt; Helped a lot to tweak my Network Traffic Log Visualisation.</content>
+    <updated>2009-07-14T09:55:43Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/60303970/foto_normal.gif"/>
+    <twitter:source>&lt;a href="http://www.twhirl.org/"&gt;twhirl&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>CedricKiefer (CedricKiefer)</name>
+      <uri>http://twitter.com/CedricKiefer</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2629447354</id>
+    <published>2009-07-14T08:33:26Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/hornergraphic/statuses/2629447354"/>
+    <title>PostSpectacular's (@toxi's studio) creation #process, http://tinyurl.com/cbknr9. Hope we get a speaker as good at #SemiPermanent this year!</title>
+    <content type="html">PostSpectacular's (&lt;a href="http://twitter.com/toxi"&gt;@&lt;b&gt;toxi&lt;/b&gt;&lt;/a&gt;'s studio) creation &lt;a href="http://search.twitter.com/search?q=%23process"&gt;#process&lt;/a&gt;, &lt;a href="http://tinyurl.com/cbknr9"&gt;http://tinyurl.com/cbknr9&lt;/a&gt;. Hope we get a speaker as good at &lt;a href="http://search.twitter.com/search?q=%23SemiPermanent"&gt;#SemiPermanent&lt;/a&gt; this year!</content>
+    <updated>2009-07-14T08:33:26Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/87767243/hg_normal.jpg"/>
+    <twitter:source>&lt;a href="http://www.tweetdeck.com/"&gt;TweetDeck&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>hornergraphic (Stephen Horner)</name>
+      <uri>http://twitter.com/hornergraphic</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2622682553</id>
+    <published>2009-07-13T23:32:13Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/growyourhealth/statuses/2622682553"/>
+    <title>Dr. Linda Page's Weblog: Do you need a gland cleanse?: A fresh foods cleansing diet clears your body of toxi.. http://bit.ly/5IPfB</title>
+    <content type="html">Dr. Linda Page's Weblog: Do you need a gland cleanse?: A fresh foods cleansing diet clears your body of &lt;b&gt;toxi&lt;/b&gt;.. &lt;a href="http://bit.ly/5IPfB"&gt;http://bit.ly/5IPfB&lt;/a&gt;</content>
+    <updated>2009-07-13T23:32:13Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/286980843/me-01-50px_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitterfeed.com"&gt;twitterfeed&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>growyourhealth (Grow Your Health)</name>
+      <uri>http://twitter.com/growyourhealth</uri>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:search.twitter.com,2005:2615109106</id>
+    <published>2009-07-13T15:02:01Z</published>
+    <link type="text/html" rel="alternate" href="http://twitter.com/Bededobedado/statuses/2615109106"/>
+    <title>Prefixes toxi- mali-, bs-, arseni-, dopi- are also available. How about Toxikonacide or Malithion Pro? #triathlon</title>
+    <content type="html">Prefixes &lt;b&gt;toxi&lt;/b&gt;- mali-, bs-, arseni-, dopi- are also available. How about Toxikonacide or Malithion Pro? &lt;a href="http://search.twitter.com/search?q=%23triathlon"&gt;#triathlon&lt;/a&gt;</content>
+    <updated>2009-07-13T15:02:01Z</updated>
+    <link type="image/png" rel="image" href="http://s3.amazonaws.com/twitter_production/profile_images/128839012/t2b1_normal.jpg"/>
+    <twitter:source>&lt;a href="http://twitter.com/"&gt;web&lt;/a&gt;</twitter:source>
+    <twitter:lang>en</twitter:lang>
+    <author>
+      <name>Bededobedado (Tom Benson)</name>
+      <uri>http://twitter.com/Bededobedado</uri>
+    </author>
+  </entry>
+</feed>
