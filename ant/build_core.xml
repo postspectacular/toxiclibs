@@ -88,6 +88,41 @@
 		</javadoc>
 	</target>
 
-	<target name="release" depends="init, clean, compile, javadoc, zips" />
+	<target name="umldoc" depends="init" description="Generate documentation">
+		<mkdir dir="${release.javadoc.dir}" />
+		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
+			<classpath>
+				<pathelement location="${lib.libs.path}" />
+			</classpath>
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="**" />
+			</packageset>
+			<doclet name="org.umlgraph.doclet.UmlGraphDoc" path="${lib.libs.path}/umlgraph5.2.jar">
+				<param name="-attributes" />
+				<param name="-operations" />
+				<param name="-qualify" />
+				<param name="-types" />
+				<param name="-visibility" />
+				<param name="-inferrel" />
+				<param name="-inferdep" />
+				<param name="-hide" value="java.*" />
+				<param name="-collpackages" value="java.util.*" />
+				<param name="-postfixpackage" />
+				<param name="-nodefontsize" value="9" />
+				<param name="-nodefontpackagesize" value="7" />
+				<param name="-link" value="http://java.sun.com/javase/6/docs/guide/javadoc/doclet/spec" />
+				<param name="-link" value="http://java.sun.com/javase/6/docs/api/" />
+			</doclet>
+		</javadoc>
+		<apply executable="/usr/local/bin/dot" dest="${release.javadoc.dir}" parallel="false">
+			<arg value="-Tpng" />
+			<arg value="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${release.javadoc.dir}" includes="*.dot" />
+			<mapper type="glob" from="*.dot" to="*.png" />
+		</apply>
+	</target>
 
+	<target name="release" depends="init, clean, compile, javadoc, zips" />
 </project>
