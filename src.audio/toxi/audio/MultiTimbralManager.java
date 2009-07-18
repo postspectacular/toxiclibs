@@ -32,11 +32,32 @@ import java.util.logging.Logger;
  */
 public class MultiTimbralManager {
 
+	class SourceState {
+		AudioSource src;
+		boolean isActive;
+		long startTime;
+
+		SourceState(AudioSource src) {
+			this.src = src;
+		}
+
+		void activate() {
+			isActive = true;
+			startTime = System.currentTimeMillis();
+		}
+
+		boolean updateStatus() {
+			isActive = isActive
+					&& (src.isLooping() || src.getBuffersProcessed() == 0);
+			return isActive;
+		}
+	}
+
 	private static final Logger logger = Logger
 			.getLogger(MultiTimbralManager.class.getName());
-
 	protected SourceState[] pool;
 	protected int maxSources;
+
 	protected int currIndex;
 
 	public MultiTimbralManager(JOALUtil liboal, int num) {
@@ -51,6 +72,24 @@ public class MultiTimbralManager {
 			pool[i] = new SourceState(src);
 		}
 		logger.info("done. all sources created.");
+	}
+
+	/**
+	 * Uses the class' logger to print out status information about the current
+	 * usage of the managed audio sources.
+	 */
+	public void debug() {
+		String sources = "";
+		int numActive = 0;
+		for (int i = 0; i < maxSources; i++) {
+			if (pool[i].isActive) {
+				sources += i + ",";
+				numActive++;
+			}
+		}
+		String info = "active sources: " + numActive;
+		logger.info(info);
+		logger.info(sources);
 	}
 
 	/**
@@ -71,8 +110,9 @@ public class MultiTimbralManager {
 			id = currIndex;
 			currIndex = (currIndex + 1) % maxSources;
 			if (pool[id].isActive) {
-				if (!pool[id].updateStatus())
+				if (!pool[id].updateStatus()) {
 					hasFreeSource = true;
+				}
 			} else {
 				hasFreeSource = true;
 			}
@@ -97,41 +137,16 @@ public class MultiTimbralManager {
 	}
 
 	/**
-	 * Uses the class' logger to print out status information about the current
-	 * usage of the managed audio sources.
+	 * Produces an array of status flags of used voices. Elements set to true
+	 * indicate the voice is currently active/playing.
+	 * 
+	 * @return boolean array
 	 */
-	public void debug() {
-		String sources = "";
-		int numActive = 0;
+	public boolean[] getUsage() {
+		boolean[] usage = new boolean[maxSources];
 		for (int i = 0; i < maxSources; i++) {
-			if (pool[i].isActive) {
-				sources += i + ",";
-				numActive++;
-			}
+			usage[i] = pool[i].isActive;
 		}
-		String info = "active sources: " + numActive;
-		logger.info(info);
-		logger.info(sources);
-	}
-
-	class SourceState {
-		AudioSource src;
-		boolean isActive;
-		long startTime;
-
-		SourceState(AudioSource src) {
-			this.src = src;
-		}
-
-		void activate() {
-			isActive = true;
-			startTime = System.currentTimeMillis();
-		}
-
-		boolean updateStatus() {
-			isActive = isActive
-					&& (src.isLooping() || src.getBuffersProcessed() == 0);
-			return isActive;
-		}
+		return usage;
 	}
 }

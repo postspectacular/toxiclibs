@@ -119,6 +119,36 @@ public class JOALUtil {
 	}
 
 	/**
+	 * Convenience wrapper for {@link #generateSources(int)} to create a single
+	 * {@link AudioSource}.
+	 * 
+	 * @return audio source instance
+	 */
+	public AudioSource generateSource() {
+		return generateSources(1)[0];
+	}
+
+	/**
+	 * Convenience wrapper bundling {@link #loadBuffer(String)} &
+	 * {@link #generateSource()} in a single method call. Generates a new
+	 * {@link AudioSource} and assigns the sample buffer created from the given
+	 * WAV file.
+	 * 
+	 * @param file
+	 *            absolute path to WAV file
+	 * @return configured audio source instance
+	 */
+	public AudioSource generateSourceFromFile(String file) {
+		AudioSource source = null;
+		AudioBuffer buffer = loadBuffer(file);
+		if (buffer != null) {
+			source = generateSource();
+			source.setBuffer(buffer);
+		}
+		return source;
+	}
+
+	/**
 	 * Creates the specified number of hardware audio sources required to
 	 * actually play the sample data stored in {@link AudioBuffer}s.
 	 * 
@@ -171,7 +201,8 @@ public class JOALUtil {
 
 	/**
 	 * Initializes the OpenAL context and if parameter is true, will attempt to
-	 * also setup an EAX environment.
+	 * also setup an EAX environment. The method does nothing if it had been
+	 * called previously and not been {@link #shutdown()} meanwhile.
 	 * 
 	 * @param attemptEAX
 	 * @return true, if successful (does not care if EAX is supported).
@@ -259,7 +290,7 @@ public class JOALUtil {
 	}
 
 	/**
-	 * Destroys all objects, sources, buffers, contexts created by
+	 * Destroys all objects, sources, buffers, contexts created by this class.
 	 */
 	public void shutdown() {
 		logger.info("shutting down JOAL");

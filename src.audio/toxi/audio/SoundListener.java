@@ -40,84 +40,110 @@ import toxi.geom.Vec3D;
  */
 public class SoundListener extends Vec3D {
 
-	// TODO add fluid interface and add getters with Vec3D return type
 	protected JOALUtil liboal;
 
-	protected float[] pos = { 0.0f, 0.0f, 0.0f };
-	protected float[] vel = { 0.0f, 0.0f, 0.0f };
-	protected float[] orient = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
+	protected final float[] position = { 0.0f, 0.0f, 0.0f };
+	protected final float[] velocity = { 0.0f, 0.0f, 0.0f };
+	protected final float[] orient = { 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 
 	protected SoundListener(JOALUtil lib) {
 		super();
 		liboal = lib;
 		setGain(1f);
-		setPosition(pos);
-		setVelocity(vel);
-	}
-
-	public void setGain(float gain) {
-		liboal.getAL().alListenerf(AL.AL_GAIN, gain);
-	}
-
-	public void updatePosition() {
-		pos[0] = x;
-		pos[1] = y;
-		pos[2] = z;
-		liboal.getAL().alListenerfv(AL.AL_POSITION, pos, 0);
-	}
-
-	public void setPosition(float xx, float yy, float zz) {
-		pos[0] = xx;
-		pos[1] = yy;
-		pos[2] = zz;
-		setPosition(pos);
-	}
-
-	public final void setPosition(float[] pos) {
-		x = pos[0];
-		y = pos[1];
-		z = pos[2];
-		liboal.getAL().alListenerfv(AL.AL_POSITION, pos, 0);
-	}
-
-	public float[] getPosition() {
-		return pos;
-	}
-
-	public void setVelocity(float xx, float yy, float zz) {
-		vel[0] = xx;
-		vel[1] = yy;
-		vel[2] = zz;
-		setVelocity(vel);
-	}
-
-	public final void setVelocity(float[] vel) {
-		liboal.getAL().alListenerfv(AL.AL_VELOCITY, vel, 0);
-	}
-
-	public float[] getVelocity() {
-		return vel;
-	}
-
-	public void setOrientation(float forwardX, float forwardY, float forwardZ,
-			float upX, float upY, float upZ) {
-		orient[0] = forwardX;
-		orient[1] = forwardY;
-		orient[2] = forwardZ;
-		orient[3] = upX;
-		orient[4] = upY;
-		orient[5] = upZ;
+		setPosition(position);
+		setVelocity(velocity);
 		setOrientation(orient);
 	}
 
-	public final void setOrientation(float[] o) {
-		if (o.length == 6) {
-			orient = o;
-			liboal.getAL().alListenerfv(AL.AL_ORIENTATION, vel, 0);
-		}
+	public final float[] getOrientation() {
+		return orient;
 	}
 
-	public float[] getOrientation() {
-		return orient;
+	public final float[] getPosition() {
+		return position;
+	}
+
+	public final float[] getVelocity() {
+		return velocity;
+	}
+
+	public SoundListener setGain(float gain) {
+		liboal.getAL().alListenerf(AL.AL_GAIN, gain);
+		return this;
+	}
+
+	public SoundListener setOrientation(float upX, float upY, float upZ,
+			float forwardX, float forwardY, float forwardZ) {
+		orient[0] = upX;
+		orient[1] = upY;
+		orient[2] = upZ;
+		orient[3] = forwardX;
+		orient[4] = forwardY;
+		orient[5] = forwardZ;
+		liboal.getAL().alListenerfv(AL.AL_ORIENTATION, orient, 0);
+		return this;
+	}
+
+	public SoundListener setOrientation(float[] o) {
+		if (o.length == 6) {
+			orient[0] = o[0];
+			orient[1] = o[1];
+			orient[2] = o[2];
+			orient[3] = o[3];
+			orient[4] = o[4];
+			orient[5] = o[5];
+			liboal.getAL().alListenerfv(AL.AL_ORIENTATION, orient, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of array elements");
+		}
+		return this;
+	}
+
+	public SoundListener setPosition(float xx, float yy, float zz) {
+		x = position[0] = xx;
+		y = position[1] = yy;
+		z = position[2] = zz;
+		liboal.getAL().alListenerfv(AL.AL_POSITION, position, 0);
+		return this;
+	}
+
+	public SoundListener setPosition(float[] p) {
+		if (p.length == 3) {
+			x = position[0] = p[0];
+			y = position[1] = p[1];
+			z = position[2] = p[2];
+			liboal.getAL().alListenerfv(AL.AL_POSITION, position, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of elements");
+		}
+		return this;
+	}
+
+	public SoundListener setVelocity(float xx, float yy, float zz) {
+		velocity[0] = xx;
+		velocity[1] = yy;
+		velocity[2] = zz;
+		liboal.getAL().alListenerfv(AL.AL_VELOCITY, velocity, 0);
+		return this;
+	}
+
+	public SoundListener setVelocity(float[] v) {
+		if (v.length == 3) {
+			velocity[0] = v[0];
+			velocity[1] = v[1];
+			velocity[2] = v[2];
+			liboal.getAL().alListenerfv(AL.AL_VELOCITY, velocity, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of elements");
+		}
+		return this;
+	}
+
+	public SoundListener updatePosition() {
+		position[0] = x;
+		position[1] = y;
+		position[2] = z;
+		liboal.getAL().alListenerfv(AL.AL_POSITION, position, 0);
+		return this;
 	}
 }

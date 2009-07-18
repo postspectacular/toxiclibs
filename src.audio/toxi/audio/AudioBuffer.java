@@ -33,9 +33,21 @@ import net.java.games.joal.AL;
  */
 public class AudioBuffer {
 
+	/**
+	 * Format descriptor for 8bit mono samples
+	 */
 	public final static int FORMAT_MONO8 = AL.AL_FORMAT_MONO8;
+	/**
+	 * Format descriptor for 16bit mono samples
+	 */
 	public final static int FORMAT_MONO16 = AL.AL_FORMAT_MONO16;
+	/**
+	 * Format descriptor for 8bit stereo samples
+	 */
 	public final static int FORMAT_STEREO8 = AL.AL_FORMAT_STEREO8;
+	/**
+	 * Format descriptor for 16bit stereo samples
+	 */
 	public final static int FORMAT_STEREO16 = AL.AL_FORMAT_STEREO16;
 
 	protected final AL al;
@@ -43,7 +55,7 @@ public class AudioBuffer {
 
 	protected final int bufferID;
 
-	protected int[] alResult = new int[1];
+	protected final int[] alResult = new int[1];
 
 	public AudioBuffer(AL al, int bufferID) {
 		this.bufferID = bufferID;
@@ -61,9 +73,10 @@ public class AudioBuffer {
 	 * @param freq
 	 *            the frequency of the data
 	 */
-	public void configure(ByteBuffer data, int format, int freq) {
+	public AudioBuffer configure(ByteBuffer data, int format, int freq) {
 		this.data = data;
 		al.alBufferData(bufferID, format, data, data.capacity(), freq);
+		return this;
 	}
 
 	/**
@@ -79,38 +92,8 @@ public class AudioBuffer {
 	 * 
 	 * @return the bit-depth of the data
 	 */
-	public int getBitDepth() {
+	public final int getBitDepth() {
 		al.alGetBufferi(bufferID, AL.AL_BITS, alResult, 0);
-		return alResult[0];
-	}
-
-	/**
-	 * Get the number of channels of the data (1-Mono, 2-Stereo)
-	 * 
-	 * @return the number of audio channels.
-	 */
-	public int getNumChannels() {
-		al.alGetBufferi(bufferID, AL.AL_CHANNELS, alResult, 0);
-
-		return alResult[0];
-	}
-
-	/**
-	 * Gets the raw data contained in this buffer.
-	 * 
-	 * @return the raw buffer data.
-	 */
-	public ByteBuffer getData() {
-		return data;
-	}
-
-	/**
-	 * Gets the audio frequency of the data contained in this buffer.
-	 * 
-	 * @return the frequency of the data
-	 */
-	public int getFrequency() {
-		al.alGetBufferi(bufferID, AL.AL_FREQUENCY, alResult, 0);
 		return alResult[0];
 	}
 
@@ -119,8 +102,47 @@ public class AudioBuffer {
 	 * 
 	 * @return the size of the data.
 	 */
-	public int getByteSize() {
+	public final int getByteSize() {
 		al.alGetBufferi(bufferID, AL.AL_SIZE, alResult, 0);
+		return alResult[0];
+	}
+
+	/**
+	 * Gets the raw data contained in this buffer.
+	 * 
+	 * @return the raw buffer data.
+	 */
+	public final ByteBuffer getData() {
+		return data;
+	}
+
+	/**
+	 * Gets the audio frequency of the data contained in this buffer.
+	 * 
+	 * @return the frequency of the data
+	 */
+	public final int getFrequency() {
+		al.alGetBufferi(bufferID, AL.AL_FREQUENCY, alResult, 0);
+		return alResult[0];
+	}
+
+	/**
+	 * Returns the OpenAL reference ID for this buffer.
+	 * 
+	 * @return buffer id
+	 */
+	public final int getID() {
+		return bufferID;
+	}
+
+	/**
+	 * Get the number of channels of the data (1-Mono, 2-Stereo)
+	 * 
+	 * @return the number of audio channels.
+	 */
+	public final int getNumChannels() {
+		al.alGetBufferi(bufferID, AL.AL_CHANNELS, alResult, 0);
+
 		return alResult[0];
 	}
 
@@ -129,16 +151,7 @@ public class AudioBuffer {
 	 * 
 	 * @return sample size.
 	 */
-	public int getSampleSize() {
-		return getByteSize() * 8 / getBitDepth();
-	}
-
-	/**
-	 * Returns the OpenAL reference ID for this buffer.
-	 * 
-	 * @return id
-	 */
-	public int getID() {
-		return bufferID;
+	public final int getSampleSize() {
+		return getByteSize() * 8 / getBitDepth() / getNumChannels();
 	}
 }

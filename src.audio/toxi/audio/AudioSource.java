@@ -46,12 +46,12 @@ public class AudioSource extends Vec3D {
 
 	protected AudioBuffer buffer;
 
-	protected int id;
+	protected final int id;
 	protected int size;
 
-	protected float[] position = { 0.0f, 0.0f, 0.0f };
-	protected float[] velocity = { 0.0f, 0.0f, 0.0f };
-	protected float[] direction = { 0.0f, 0.0f, 0.0f };
+	protected final float[] position = { 0.0f, 0.0f, 0.0f };
+	protected final float[] velocity = { 0.0f, 0.0f, 0.0f };
+	protected final float[] direction = { 0.0f, 0.0f, 0.0f };
 
 	protected int[] alResult = new int[1];
 
@@ -92,45 +92,47 @@ public class AudioSource extends Vec3D {
 		return alResult[0];
 	}
 
-	public float[] getDirection() {
+	public final float[] getDirection() {
 		return direction;
 	}
 
-	public int getID() {
+	public final int getID() {
 		return id;
 	}
 
-	public int getOffset() {
+	public final int getOffset() {
 		al.alGetSourcei(id, AL.AL_SAMPLE_OFFSET, alResult, 0);
 		return alResult[0];
 	}
 
-	public float[] getPosition() {
+	public final float[] getPosition() {
 		return position;
 	}
 
-	public float[] getVelocity() {
+	public final float[] getVelocity() {
 		return velocity;
 	}
 
-	public boolean isLooping() {
+	public final boolean isLooping() {
 		return isLooping;
 	}
 
-	public int length() {
+	public final int length() {
 		return size;
 	}
 
-	public void play() {
+	public AudioSource play() {
 		if (buffer != null) {
 			al.alSourcePlay(id);
 		}
+		return this;
 	}
 
-	public void rewind() {
+	public AudioSource rewind() {
 		if (buffer != null) {
 			al.alSourceRewind(id);
 		}
+		return this;
 	}
 
 	/**
@@ -139,98 +141,126 @@ public class AudioSource extends Vec3D {
 	 * @param buffer
 	 *            the buffer associated with this source
 	 */
-	public void setBuffer(AudioBuffer buffer) {
+	public AudioSource setBuffer(AudioBuffer buffer) {
 		this.buffer = buffer;
 		if (buffer != null) {
 			al.alSourcei(id, AL.AL_BUFFER, buffer.getID());
-			this.size = buffer.getSampleSize();
+			size = buffer.getSampleSize();
 		} else {
 			size = 0;
 		}
+		return this;
 	}
 
-	public void setDirection(float xx, float yy, float zz) {
+	public AudioSource setDirection(float xx, float yy, float zz) {
 		direction[0] = xx;
 		direction[1] = yy;
 		direction[2] = zz;
-		setDirection(direction);
+		al.alSourcefv(id, AL.AL_DIRECTION, direction, 0);
+		return this;
 	}
 
-	private final void setDirection(float[] dir) {
-		if (dir.length >= 3) {
-			direction[0] = dir[0];
-			direction[1] = dir[1];
-			direction[2] = dir[2];
+	public AudioSource setDirection(float[] d) {
+		if (d.length == 3) {
+			direction[0] = d[0];
+			direction[1] = d[1];
+			direction[2] = d[2];
 			al.alSourcefv(id, AL.AL_DIRECTION, direction, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of array elements");
 		}
+		return this;
 	}
 
-	public void setDirection(Vec3D dir) {
-		direction = dir.toArray();
+	public AudioSource setDirection(Vec3D dir) {
+		return setDirection(dir.x, dir.y, dir.z);
 	}
 
-	public void setGain(float gain) {
+	public AudioSource setGain(float gain) {
 		al.alSourcef(id, AL.AL_GAIN, gain);
+		return this;
 	}
 
-	public void setLooping(boolean state) {
+	public AudioSource setLooping(boolean state) {
 		isLooping = state;
 		al.alSourcei(id, AL.AL_LOOPING, (state ? AL.AL_TRUE : AL.AL_FALSE));
+		return this;
 	}
 
-	public void setOffset(int off) {
+	public AudioSource setOffset(int off) {
 		off = MathUtils.clip(off, 0, size - 1);
 		al.alSourcei(id, AL.AL_SAMPLE_OFFSET, off);
+		return this;
 	}
 
-	public void setPitch(float pitch) {
+	public AudioSource setPitch(float pitch) {
 		al.alSourcef(id, AL.AL_PITCH, pitch);
+		return this;
 	}
 
-	public void setPosition(float xx, float yy, float zz) {
+	public AudioSource setPosition(float xx, float yy, float zz) {
 		position[0] = xx;
 		position[1] = yy;
 		position[2] = zz;
-		setPosition(position);
-	}
-
-	private final void setPosition(float[] p) {
-		position = p;
-		x = position[0];
-		y = position[1];
-		z = position[2];
 		al.alSourcefv(id, AL.AL_POSITION, position, 0);
+		return this;
 	}
 
-	public final void setPosition(Vec3D p) {
-		setPosition(p.x, p.y, p.z);
+	public AudioSource setPosition(float[] p) {
+		if (p.length == 3) {
+			x = position[0] = p[0];
+			y = position[1] = p[1];
+			z = position[2] = p[2];
+			al.alSourcefv(id, AL.AL_POSITION, position, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of array elements");
+		}
+		return this;
 	}
 
-	public void setReferenceDistance(float d) {
+	public AudioSource setPosition(Vec3D p) {
+		return setPosition(p.x, p.y, p.z);
+	}
+
+	public AudioSource setReferenceDistance(float d) {
 		al.alSourcef(id, AL.AL_REFERENCE_DISTANCE, d);
+		return this;
 	}
 
-	public void setVelocity(float xx, float yy, float zz) {
+	public AudioSource setVelocity(float xx, float yy, float zz) {
 		velocity[0] = xx;
 		velocity[1] = yy;
 		velocity[2] = zz;
-		setVelocity(velocity);
-	}
-
-	private final void setVelocity(float[] v) {
-		velocity = v;
 		al.alSourcefv(id, AL.AL_VELOCITY, velocity, 0);
+		return this;
 	}
 
-	public final void setVelocity(Vec3D p) {
-		setVelocity(p.x, p.y, p.z);
+	public AudioSource setVelocity(float[] v) {
+		if (v.length == 3) {
+			velocity[0] = v[0];
+			velocity[1] = v[1];
+			velocity[2] = v[2];
+			al.alSourcefv(id, AL.AL_VELOCITY, velocity, 0);
+		} else {
+			throw new IllegalArgumentException("wrong number of array elements");
+		}
+		return this;
 	}
 
-	public void stop() {
+	public AudioSource setVelocity(Vec3D p) {
+		return setVelocity(p.x, p.y, p.z);
+	}
+
+	public AudioSource stop() {
 		al.alSourceStop(id);
+		return this;
 	}
 
-	public final void updatePosition() {
-		setPosition(x, y, z);
+	public AudioSource updatePosition() {
+		position[0] = x;
+		position[1] = y;
+		position[2] = z;
+		al.alSourcefv(id, AL.AL_POSITION, position, 0);
+		return this;
 	}
 }
