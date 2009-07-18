@@ -7,7 +7,7 @@
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - JOAL convenience wrapper &amp; audio utils v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/joal/joal.jar" />
-	<property name="lib.joal.path" value="../lib/joal/" />	
+	<property name="lib.joal.path" value="../lib/joal/" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
 
 	<!-- Basic targets -->
@@ -24,7 +24,9 @@
 		<property name="release.jar" value="${release.dir}/${lib.jar.filename}" />
 		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
 		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
+		<property name="release.examples.zip" value="${release.dir}/${project.name}-${lib.version}-examples.zip" />
 		<property name="release.examples.dir" value="../examples/${srcfolder.id}" />
+		<property name="release.examples-ext.dir" value="../examples/${srcfolder.id}-external" />
 		<property name="readme.dir" value="../readme1st/${srcfolder.id}" />
 		<property name="export.txt" value="${release.dir}/export.txt" />
 	</target>
@@ -75,6 +77,9 @@
 			<zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
 			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="*.txt" prefix="${project.name}" />
+		</zip>
+		<zip destfile="${release.examples.zip}" comment="${lib.zip.comment} - examples">
+			<zipfileset dir="${release.examples-ext.dir}" prefix="${project.name}/examples" />
 		</zip>
 	</target>
 

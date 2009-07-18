@@ -15,7 +15,6 @@ javax.sound.sampled
 toxiclibscore-0013 or later:
 toxi.geom.*;
 toxi.math.*;
-toxi.math.waves.*;
 
 If you're going to use these classes for Processing projects,
 first drop the "audioutils" folder into the "libraries" folder of your
