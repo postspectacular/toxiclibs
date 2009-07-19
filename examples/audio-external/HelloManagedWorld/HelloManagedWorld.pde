@@ -39,7 +39,7 @@ void setup() {
   // JOALUtil is implemented as singleton, so get an instance like this & initialize it
   audioSys = JOALUtil.getInstance();
   audioSys.init();
-  // create a pool of 4 managed voices to play our samples
+  // create a pool of 8 managed voices to play our samples
   // using more than one voice ensures that new sounds don't truncate
   // already playing ones. The manager also takes care of respecting
   // looping sounds and handles other resource & memory management
