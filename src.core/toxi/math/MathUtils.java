@@ -24,6 +24,10 @@ import java.util.Random;
 /**
  * Miscellaneous math utilities.
  */
+/**
+ * @author toxi
+ * 
+ */
 public class MathUtils {
 
 	/**
@@ -57,6 +61,16 @@ public class MathUtils {
 	public static final float TWO_PI = PI * 2;
 
 	/**
+	 * PI*1.5
+	 */
+	public static final float THREE_HALVES_PI = TWO_PI - HALF_PI;
+
+	/**
+	 * PI*PI
+	 */
+	public static final float PI_SQUARED = PI * PI;
+
+	/**
 	 * Epsilon value, approx. 1.19E-7
 	 */
 	public static final float EPS = 1.1920928955078125E-7f;
@@ -73,6 +87,10 @@ public class MathUtils {
 
 	private static final float SHIFT23 = 1 << 23;
 	private static final float INV_SHIFT23 = 1.0f / SHIFT23;
+
+	private final static float SIN_A = -4 / PI_SQUARED;
+	private final static float SIN_B = 4 / PI;
+	private final static float SIN_P = 9f / 40;
 
 	/**
 	 * @param x
@@ -119,15 +137,38 @@ public class MathUtils {
 	public static final float clipNormalized(float a) {
 		if (a < 0) {
 			return 0;
-		}
-		else if (a > 1) {
+		} else if (a > 1) {
 			return 1;
 		}
 		return a;
 	}
 
+	/**
+	 * Returns fast cosine approximation of a value. Note: code from <a
+	 * href="http://wiki.java.net/bin/view/Games/JeffGems">wiki posting on
+	 * java.net by jeffpk</a>
+	 * 
+	 * @param theta
+	 *            angle in radians.
+	 * @return cosine of theta.
+	 */
+	public static final double cos(final float theta) {
+		return sin(theta + HALF_PI);
+	}
+
 	public static final float degrees(float radians) {
 		return radians * RAD2DEG;
+	}
+
+	/**
+	 * Fast cosine approximation.
+	 * 
+	 * @param x
+	 *            angle in -PI/2 .. +PI/2 interval
+	 * @return cosine
+	 */
+	public static final float fastCos(final float x) {
+		return fastSin(x + ((x > HALF_PI) ? -THREE_HALVES_PI : HALF_PI));
 	}
 
 	/**
@@ -170,6 +211,18 @@ public class MathUtils {
 		y = b - (b >= 0 ? (int) b : (int) b - 1);
 		y = (y - y * y) * 0.33971f;
 		return Float.intBitsToFloat((int) ((b + 127 - y) * SHIFT23));
+	}
+
+	/**
+	 * Fast sine approximation.
+	 * 
+	 * @param x
+	 *            angle in -PI/2 .. +PI/2 interval
+	 * @return sine
+	 */
+	public static final float fastSin(float x) {
+		x = SIN_A * x * abs(x) + SIN_B * x;
+		return SIN_P * (x * abs(x) - x) + x;
 	}
 
 	public static final boolean flipCoin() {
@@ -334,6 +387,44 @@ public class MathUtils {
 	}
 
 	/**
+	 * Reduces the given angle into the -PI/4 ... PI/4 interval. This method is
+	 * use by {@link #sin(float)} & {@link #cos(float)}.
+	 * 
+	 * @param theta
+	 *            angle in radians
+	 * @return reduced angle
+	 * @see #sin(float)
+	 * @see #cos(float)
+	 */
+	private static float reduceAngle(float theta) {
+		theta %= TWO_PI;
+		if (abs(theta) > PI) {
+			theta = theta - TWO_PI;
+		}
+		if (abs(theta) > HALF_PI) {
+			theta = PI - theta;
+		}
+		return theta;
+	}
+
+	/**
+	 * Returns a fast sine approximation of a value. Note: code from <a
+	 * href="http://wiki.java.net/bin/view/Games/JeffGems">wiki posting on
+	 * java.net by jeffpk</a>
+	 * 
+	 * @param theta
+	 *            angle in radians.
+	 * @return sine of theta.
+	 */
+	public static float sin(float theta) {
+		theta = reduceAngle(theta);
+		if (abs(theta) <= QUARTER_PI) {
+			return fastSin(theta);
+		}
+		return fastCos(HALF_PI - theta);
+	}
+
+	/**
 	 * @deprecated
 	 */
 	@Deprecated
@@ -341,8 +432,7 @@ public class MathUtils {
 		x = fastInverseSqrt(x);
 		if (x > 0) {
 			return 1.0f / x;
-		}
-		else {
+		} else {
 			return 0;
 		}
 	}
