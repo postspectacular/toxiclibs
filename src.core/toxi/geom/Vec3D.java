@@ -47,14 +47,14 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
 
 	/**
-	 * Defines vector with all coords set to {@link Float.MIN_VALUE}. Useful for
+	 * Defines vector with all coords set to Float.MIN_VALUE. Useful for
 	 * bounding box operations.
 	 */
 	public static final Vec3D MIN_VALUE = new Vec3D(Float.MIN_VALUE,
 			Float.MIN_VALUE, Float.MIN_VALUE);
 
 	/**
-	 * Defines vector with all coords set to {@link Float.MAX_VALUE}. Useful for
+	 * Defines vector with all coords set to Float.MAX_VALUE. Useful for
 	 * bounding box operations.
 	 */
 	public static final Vec3D MAX_VALUE = new Vec3D(Float.MAX_VALUE,

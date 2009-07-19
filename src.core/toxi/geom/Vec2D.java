@@ -48,14 +48,14 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	public static final Vec2D Y_AXIS = new Vec2D(0, 1);
 
 	/**
-	 * Defines vector with both coords set to {@link Float.MIN_VALUE}. Useful
-	 * for bounding box operations.
+	 * Defines vector with both coords set to Float.MIN_VALUE. Useful for
+	 * bounding box operations.
 	 */
 	public static final Vec2D MIN_VALUE = new Vec2D(Float.MIN_VALUE,
 			Float.MIN_VALUE);
 	/**
-	 * Defines vector with both coords set to {@link Float.MAX_VALUE}. Useful
-	 * for bounding box operations.
+	 * Defines vector with both coords set to Float.MAX_VALUE. Useful for
+	 * bounding box operations.
 	 */
 	public static final Vec2D MAX_VALUE = new Vec2D(Float.MAX_VALUE,
 			Float.MAX_VALUE);
