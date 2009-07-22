@@ -21,7 +21,6 @@ package toxi.geom;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Implements a spatial subdivision tree to work efficiently with large numbers
@@ -73,8 +72,9 @@ public class PointOctree extends AABB {
 		super(o.add(halfSize, halfSize, halfSize), new Vec3D(halfSize,
 				halfSize, halfSize));
 		parent = p;
-		if (parent != null)
+		if (parent != null) {
 			depth = parent.depth + 1;
+		}
 		dim = halfSize * 2;
 		dim2 = halfSize;
 		offset = o;
@@ -103,10 +103,9 @@ public class PointOctree extends AABB {
 	 * @return true, if all points have been added successfully.
 	 */
 	public boolean addAll(Collection<Vec3D> points) {
-		Iterator<Vec3D> i = points.iterator();
 		boolean addedAll = true;
-		while (i.hasNext()) {
-			addedAll &= addPoint(i.next());
+		for (Vec3D p : points) {
+			addedAll &= addPoint(p);
 		}
 		return addedAll;
 	}
@@ -129,8 +128,7 @@ public class PointOctree extends AABB {
 				}
 				data.add(p);
 				return true;
-			}
-			else {
+			} else {
 				Vec3D plocal = p.sub(offset);
 				if (children == null) {
 					children = new PointOctree[8];
@@ -140,13 +138,19 @@ public class PointOctree extends AABB {
 					Vec3D off = offset.add(new Vec3D((octant & 1) != 0 ? dim2
 							: 0, (octant & 2) != 0 ? dim2 : 0,
 							(octant & 4) != 0 ? dim2 : 0));
-					children[octant] = new PointOctree(this, off, dim2 / 2);
+					children[octant] = new PointOctree(this, off, dim2 * 0.5f);
 					numChildren++;
 				}
 				return children[octant].addPoint(p);
 			}
 		}
 		return false;
+	}
+
+	public void empty() {
+		numChildren = 0;
+		children = null;
+		data = null;
 	}
 
 	/**
@@ -173,8 +177,7 @@ public class PointOctree extends AABB {
 				if (children[octant] != null) {
 					return children[octant].getLeafForPoint(p);
 				}
-			}
-			else if (data != null) {
+			} else if (data != null) {
 				return this;
 			}
 		}
@@ -226,8 +229,7 @@ public class PointOctree extends AABB {
 		ArrayList<Vec3D> results = null;
 		if (this.intersectsBox(b)) {
 			if (data != null) {
-				for (int i = data.size() - 1; i >= 0; i--) {
-					Vec3D q = data.get(i);
+				for (Vec3D q : data) {
 					if (q.isInAABB(b)) {
 						if (results == null) {
 							results = new ArrayList<Vec3D>();
@@ -235,8 +237,7 @@ public class PointOctree extends AABB {
 						results.add(q);
 					}
 				}
-			}
-			else if (numChildren > 0) {
+			} else if (numChildren > 0) {
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
 						ArrayList<Vec3D> points = children[i]
@@ -265,8 +266,7 @@ public class PointOctree extends AABB {
 		ArrayList<Vec3D> results = null;
 		if (this.intersectsSphere(s)) {
 			if (data != null) {
-				for (int i = data.size() - 1; i >= 0; i--) {
-					Vec3D q = data.get(i);
+				for (Vec3D q : data) {
 					if (s.containsPoint(q)) {
 						if (results == null) {
 							results = new ArrayList<Vec3D>();
@@ -274,8 +274,7 @@ public class PointOctree extends AABB {
 						results.add(q);
 					}
 				}
-			}
-			else if (numChildren > 0) {
+			} else if (numChildren > 0) {
 				for (int i = 0; i < 8; i++) {
 					if (children[i] != null) {
 						ArrayList<Vec3D> points = children[i]
@@ -306,12 +305,14 @@ public class PointOctree extends AABB {
 	}
 
 	private void reduceBranch() {
-		if (data != null && data.size() == 0)
+		if (data != null && data.size() == 0) {
 			data = null;
+		}
 		if (numChildren > 0) {
 			for (int i = 0; i < 8; i++) {
-				if (children[i] != null && children[i].data == null)
+				if (children[i] != null && children[i].data == null) {
 					children[i] = null;
+				}
 			}
 		}
 		if (parent != null) {
@@ -342,9 +343,8 @@ public class PointOctree extends AABB {
 	}
 
 	public void removeAll(Collection<Vec3D> points) {
-		Iterator<Vec3D> i = points.iterator();
-		while (i.hasNext()) {
-			remove(i.next());
+		for (Vec3D p : points) {
+			remove(p);
 		}
 	}
 
