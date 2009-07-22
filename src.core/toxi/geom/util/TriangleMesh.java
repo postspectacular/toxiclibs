@@ -7,9 +7,9 @@ import toxi.geom.Vec3D;
 
 public class TriangleMesh {
 
-	public class Face {
-		public Vertex a, b, c;
-		public Vec3D normal = new Vec3D();
+	public final class Face {
+		public final Vertex a, b, c;
+		public Vec3D normal;
 
 		Face(int aID, int bID, int cID) {
 			a = vertices.get(aID);
@@ -20,12 +20,12 @@ public class TriangleMesh {
 			c.addFace(this);
 		}
 
-		public Vec3D computeNormal() {
+		public final Vec3D computeNormal() {
 			normal = a.sub(c).crossSelf(a.sub(b)).normalize();
 			return normal;
 		}
 
-		public Vertex[] getVertices(Vertex[] verts) {
+		public final Vertex[] getVertices(Vertex[] verts) {
 			if (verts != null) {
 				verts[0] = a;
 				verts[1] = b;
@@ -41,22 +41,22 @@ public class TriangleMesh {
 		}
 	}
 
-	public class Vertex extends Vec3D {
-		private int id;
+	public final class Vertex extends Vec3D {
+		private final int id;
 
-		ArrayList<Face> faces = new ArrayList<Face>(2);
-		public Vec3D normal = new Vec3D();
+		final ArrayList<Face> faces = new ArrayList<Face>(3);
+		public final Vec3D normal = new Vec3D();
 
 		Vertex(Vec3D v, int id) {
 			super(v);
 			this.id = id;
 		}
 
-		void addFace(Face f) {
+		final void addFace(Face f) {
 			faces.add(f);
 		}
 
-		void computeNormal() {
+		final void computeNormal() {
 			normal.clear();
 			for (Face f : faces) {
 				normal.addSelf(f.normal);
@@ -72,11 +72,11 @@ public class TriangleMesh {
 	protected static final Logger logger = Logger.getLogger(TriangleMesh.class
 			.getName());
 
-	public ArrayList<Vertex> vertices;
-	public ArrayList<Face> faces;
+	public final ArrayList<Vertex> vertices;
+	public final ArrayList<Face> faces;
 	public String name;
 
-	public Vec3D minBounds, maxBounds;
+	public final Vec3D minBounds, maxBounds;
 
 	protected Vec3D centroid;
 
@@ -97,7 +97,7 @@ public class TriangleMesh {
 		maxBounds = Vec3D.MIN_VALUE.copy();
 	}
 
-	public void addFace(Vec3D a, Vec3D b, Vec3D c) {
+	public final void addFace(Vec3D a, Vec3D b, Vec3D c) {
 		int aID = vertices.indexOf(a);
 		if (aID == -1) {
 			aID = numVertices;
@@ -128,28 +128,27 @@ public class TriangleMesh {
 						+ c);
 			}
 		} else {
-			Face t = new Face(aID, bID, cID);
-			faces.add(t);
+			faces.add(new Face(aID, bID, cID));
 			numFaces++;
 		}
 	}
 
-	public void clear() {
+	public final void clear() {
 		vertices.clear();
 		faces.clear();
 		numVertices = 0;
 		numFaces = 0;
-		minBounds = Vec3D.MAX_VALUE.copy();
-		maxBounds = Vec3D.MIN_VALUE.copy();
+		minBounds.set(Vec3D.MAX_VALUE);
+		maxBounds.set(Vec3D.MIN_VALUE);
 	}
 
-	public void computeFaceNormals() {
+	public final void computeFaceNormals() {
 		for (Face t : faces) {
 			t.computeNormal();
 		}
 	}
 
-	public void computeVertexNormals() {
+	public final void computeVertexNormals() {
 		computeFaceNormals();
 		for (Vertex v : vertices) {
 			v.computeNormal();
@@ -160,7 +159,7 @@ public class TriangleMesh {
 		this.isLoggerEnabled = state;
 	}
 
-	public Vec3D getCentroid() {
+	public final Vec3D getCentroid() {
 		centroid = new Vec3D();
 		for (Vec3D v : vertices) {
 			centroid.addSelf(v);
@@ -168,11 +167,11 @@ public class TriangleMesh {
 		return centroid.scaleSelf(1f / numVertices);
 	}
 
-	public int getNumFaces() {
+	public final int getNumFaces() {
 		return numFaces;
 	}
 
-	public int getNumVertices() {
+	public final int getNumVertices() {
 		return numVertices;
 	}
 }
