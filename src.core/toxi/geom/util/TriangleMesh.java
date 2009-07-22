@@ -3,26 +3,23 @@ package toxi.geom.util;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import toxi.geom.AABB;
 import toxi.geom.Vec3D;
 
 public class TriangleMesh {
 
 	public final class Face {
 		public final Vertex a, b, c;
-		public Vec3D normal;
+		public final Vec3D normal;
 
 		Face(int aID, int bID, int cID) {
 			a = vertices.get(aID);
 			b = vertices.get(bID);
 			c = vertices.get(cID);
-			a.addFace(this);
-			b.addFace(this);
-			c.addFace(this);
-		}
-
-		public final Vec3D computeNormal() {
 			normal = a.sub(c).crossSelf(a.sub(b)).normalize();
-			return normal;
+			a.addFaceNormal(normal);
+			b.addFaceNormal(normal);
+			c.addFaceNormal(normal);
 		}
 
 		public final Vertex[] getVertices(Vertex[] verts) {
@@ -42,26 +39,23 @@ public class TriangleMesh {
 	}
 
 	public final class Vertex extends Vec3D {
-		private final int id;
-
-		final ArrayList<Face> faces = new ArrayList<Face>(3);
 		public final Vec3D normal = new Vec3D();
+
+		private final int id;
+		private int numFaces = 0;
 
 		Vertex(Vec3D v, int id) {
 			super(v);
 			this.id = id;
 		}
 
-		final void addFace(Face f) {
-			faces.add(f);
+		final void addFaceNormal(Vec3D n) {
+			normal.addSelf(n);
+			numFaces++;
 		}
 
 		final void computeNormal() {
-			normal.clear();
-			for (Face f : faces) {
-				normal.addSelf(f.normal);
-			}
-			normal.scaleSelf(1f / faces.size());
+			normal.scaleSelf(1f / numFaces);
 		}
 
 		public String toString() {
@@ -76,9 +70,9 @@ public class TriangleMesh {
 	public final ArrayList<Face> faces;
 	public String name;
 
-	public final Vec3D minBounds, maxBounds;
+	public AABB bounds;
 
-	protected Vec3D centroid;
+	protected final Vec3D centroid = new Vec3D();
 
 	protected int numVertices;
 	protected int numFaces;
@@ -93,8 +87,6 @@ public class TriangleMesh {
 		this.name = name;
 		vertices = new ArrayList<Vertex>(numV);
 		faces = new ArrayList<Face>(numF);
-		minBounds = Vec3D.MAX_VALUE.copy();
-		maxBounds = Vec3D.MIN_VALUE.copy();
 	}
 
 	public final void addFace(Vec3D a, Vec3D b, Vec3D c) {
@@ -102,24 +94,18 @@ public class TriangleMesh {
 		if (aID == -1) {
 			aID = numVertices;
 			vertices.add(new Vertex(a, aID));
-			minBounds.minSelf(a);
-			maxBounds.maxSelf(a);
 			numVertices++;
 		}
 		int bID = vertices.indexOf(b);
 		if (bID == -1) {
 			bID = numVertices;
 			vertices.add(new Vertex(b, bID));
-			minBounds.minSelf(b);
-			maxBounds.maxSelf(b);
 			numVertices++;
 		}
 		int cID = vertices.indexOf(c);
 		if (cID == -1) {
 			cID = numVertices;
 			vertices.add(new Vertex(c, cID));
-			minBounds.minSelf(c);
-			maxBounds.maxSelf(c);
 			numVertices++;
 		}
 		if (aID == bID || aID == cID || bID == cID) {
@@ -136,20 +122,13 @@ public class TriangleMesh {
 	public final void clear() {
 		vertices.clear();
 		faces.clear();
+		bounds.setExtent(new Vec3D());
+		bounds.set(new Vec3D());
 		numVertices = 0;
 		numFaces = 0;
-		minBounds.set(Vec3D.MAX_VALUE);
-		maxBounds.set(Vec3D.MIN_VALUE);
-	}
-
-	public final void computeFaceNormals() {
-		for (Face t : faces) {
-			t.computeNormal();
-		}
 	}
 
 	public final void computeVertexNormals() {
-		computeFaceNormals();
 		for (Vertex v : vertices) {
 			v.computeNormal();
 		}
@@ -159,8 +138,19 @@ public class TriangleMesh {
 		this.isLoggerEnabled = state;
 	}
 
+	public AABB getBoundingBox() {
+		final Vec3D minBounds = Vec3D.MAX_VALUE.copy();
+		final Vec3D maxBounds = Vec3D.MIN_VALUE.copy();
+		for (Vertex v : vertices) {
+			minBounds.minSelf(v);
+			maxBounds.maxSelf(v);
+		}
+		bounds = AABB.fromMinMax(minBounds, maxBounds);
+		return bounds;
+	}
+
 	public final Vec3D getCentroid() {
-		centroid = new Vec3D();
+		centroid.clear();
 		for (Vec3D v : vertices) {
 			centroid.addSelf(v);
 		}
