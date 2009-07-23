@@ -20,7 +20,6 @@ public class TriangleMeshTest extends TestCase {
 	}
 
 	public void testFaceNormals() {
-		mesh.computeFaceNormals();
 		assertEquals(new Vec3D(0, 0, 1), mesh.faces.get(0).normal);
 		assertEquals(new Vec3D(1, 0, 0), mesh.faces.get(1).normal);
 		assertEquals(new Vec3D(0, 0, -1), mesh.faces.get(2).normal);
