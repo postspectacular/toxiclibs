@@ -32,8 +32,8 @@ import toxi.math.MathUtils;
 
 /**
  * Floating point color class with implicit RGB, HSV, CMYK access modes,
- * conversion and color theory utils. Based on the <a href="">Colors
- * library</a> for <a href="http:/Nodebox.net/">NodeBox</a>
+ * conversion and color theory utils. Based on the <a href="">Colors library</a>
+ * for <a href="http:/Nodebox.net/">NodeBox</a>
  * 
  */
 public class TColor {
@@ -86,6 +86,647 @@ public class TColor {
 	protected float[] cmyk;
 	protected float[] hsv;
 	public float alpha;
+
+	protected TColor() {
+		rgb = new float[3];
+		hsv = new float[3];
+		cmyk = new float[4];
+	}
+
+	/**
+	 * Creates a deep copy of the given color.
+	 * 
+	 * @param c
+	 */
+	public TColor(TColor c) {
+		this();
+		System.arraycopy(c.rgb, 0, rgb, 0, 3);
+		System.arraycopy(c.hsv, 0, hsv, 0, 3);
+		System.arraycopy(c.cmyk, 0, cmyk, 0, 4);
+		this.alpha = c.alpha;
+	}
+
+	/**
+	 * Changes the brightness of the color by the given amount in the direction
+	 * towards either the black or white point (depending on if current
+	 * brightness >= 50%)
+	 * 
+	 * @param amount
+	 * @return itself
+	 */
+	public TColor adjustConstrast(float amount) {
+		return hsv[2] < 0.5 ? darken(amount) : lighten(amount);
+	}
+
+	/**
+	 * Adds the given HSV values as offsets to the current color. Hue will
+	 * automatically wrap.
+	 * 
+	 * @param h
+	 * @param s
+	 * @param v
+	 * @return itself
+	 */
+	public TColor adjustHSV(float h, float s, float v) {
+		return setHSV(new float[] { hsv[0] + h, hsv[1] + s, hsv[2] + v });
+	}
+
+	/**
+	 * Adds the given RGB values as offsets to the current color. TColor will
+	 * clip at black or white.
+	 * 
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @return itself
+	 */
+	public TColor adjustRGB(float r, float g, float b) {
+		return setRGB(new float[] { rgb[0] + r, rgb[1] + g, rgb[2] + b });
+	}
+
+	/**
+	 * @return the color's alpha component
+	 */
+	public float alpha() {
+		return alpha;
+	}
+
+	/**
+	 * Rotates this color by a random amount (not exceeding the one specified)
+	 * and creates variations in saturation and brightness based on the 2nd
+	 * parameter.
+	 * 
+	 * @param theta
+	 *            max. rotation angle (in radians)
+	 * @param delta
+	 *            max. sat/bri variance
+	 * @return itself
+	 */
+	public TColor analog(float theta, float delta) {
+		return analog(MathUtils.degrees(theta), delta);
+	}
+
+	public TColor analog(int angle, float delta) {
+		rotateRYB((int) (angle * MathUtils.normalizedRandom()));
+		hsv[1] += delta * MathUtils.normalizedRandom();
+		hsv[2] += delta * MathUtils.normalizedRandom();
+		return setHSV(hsv);
+	}
+
+	/**
+	 * @return the color's black component
+	 */
+
+	public float black() {
+		return cmyk[0];
+	}
+
+	/**
+	 * Blends the color with the given one by the stated amount
+	 * 
+	 * @param c
+	 *            target color
+	 * @param t
+	 *            interpolation factor
+	 * @return itself
+	 */
+	public TColor blend(TColor c, float t) {
+		rgb[0] += (c.rgb[0] - rgb[0]) * t;
+		rgb[1] += (c.rgb[1] - rgb[1]) * t;
+		rgb[2] += (c.rgb[2] - rgb[2]) * t;
+		alpha += (c.alpha - alpha) * t;
+		return setRGB(rgb);
+	}
+
+	/**
+	 * @return the color's blue component
+	 */
+
+	public float blue() {
+		return rgb[2];
+	}
+
+	/**
+	 * @return color HSV brightness (not luminance!)
+	 */
+	public float brightness() {
+		return hsv[2];
+	}
+
+	/**
+	 * @return ifself, as complementary color
+	 */
+	public TColor complement() {
+		return rotateRYB(180);
+	}
+
+	public TColor copy() {
+		return new TColor(this);
+	}
+
+	/**
+	 * @return the color's cyan component
+	 */
+
+	public float cyan() {
+		return cmyk[0];
+	}
+
+	public TColor darken(float step) {
+		hsv[2] = MathUtils.clip(hsv[2] - step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public TColor desaturate(float step) {
+		hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	/**
+	 * Calculates the CMYK distance to the given color.
+	 * 
+	 * @param c
+	 *            target color
+	 * @return distance
+	 */
+	public float distanceToCMYK(TColor c) {
+		float dc = cmyk[0] - c.cmyk[0];
+		float dm = cmyk[1] - c.cmyk[1];
+		float dy = cmyk[2] - c.cmyk[2];
+		float dk = cmyk[3] - c.cmyk[3];
+		return (float) Math.sqrt(dc * dc + dm * dm + dy * dy + dk * dk);
+	}
+
+	/**
+	 * Calculates the HSV distance to the given color.
+	 * 
+	 * @param c
+	 *            target color
+	 * @return distance
+	 */
+	public float distanceToHSV(TColor c) {
+		float hue = hsv[0] * MathUtils.TWO_PI;
+		float hue2 = c.hsv[0] * MathUtils.TWO_PI;
+		Vec3D v1 = new Vec3D((float) (Math.cos(hue) * hsv[1]), (float) (Math
+				.sin(hue) * hsv[1]), hsv[2]);
+		Vec3D v2 = new Vec3D((float) (Math.cos(hue2) * c.hsv[1]), (float) (Math
+				.sin(hue2) * c.hsv[1]), c.hsv[2]);
+		return v1.distanceTo(v2);
+	}
+
+	/**
+	 * Calculates the RGB distance to the given color.
+	 * 
+	 * @param c
+	 *            target color
+	 * @return distance
+	 */
+	public float distanceToRGB(TColor c) {
+		float dr = rgb[0] - c.rgb[0];
+		float dg = rgb[1] - c.rgb[1];
+		float db = rgb[2] - c.rgb[2];
+		return (float) Math.sqrt(dr * dr + dg * dg + db * db);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o != null && o instanceof TColor) {
+			TColor c = (TColor) o;
+			float dr = c.rgb[0] - rgb[0];
+			float dg = c.rgb[1] - rgb[1];
+			float db = c.rgb[2] - rgb[2];
+			float da = c.alpha - alpha;
+			double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+			return d < EPS;
+		}
+		return false;
+	}
+
+	public TColor getAnalog(float theta, float delta) {
+		return new TColor(this).analog(theta, delta);
+	}
+
+	public TColor getAnalog(int angle, float delta) {
+		return new TColor(this).analog(angle, delta);
+	}
+
+	public TColor getBlended(TColor c, float t) {
+		return new TColor(this).blend(c, t);
+	}
+
+	/**
+	 * @return an instance of the closest named hue to this color.
+	 */
+	public Hue getClosestHue() {
+		return Hue.getClosest(hsv[0], false);
+	}
+
+	/**
+	 * @param primaryOnly
+	 *            if true, only primary color hues are considered
+	 * @return an instance of the closest named (primary) hue to this color.
+	 */
+	public Hue getClosestHue(boolean primaryOnly) {
+		return Hue.getClosest(hsv[0], primaryOnly);
+	}
+
+	public TColor getComplement() {
+		return new TColor(this).complement();
+	}
+
+	public float getComponentValue(AccessCriteria criteria) {
+		switch (criteria.getMode()) {
+		case HSV:
+			return hsv[criteria.getComponent()];
+		case RGB:
+			return rgb[criteria.getComponent()];
+		case CMYK:
+			return cmyk[criteria.getComponent()];
+		case ALPHA:
+			return alpha;
+		}
+		return 0;
+	}
+
+	/**
+	 * @param step
+	 * @return a darkened copy
+	 */
+	public TColor getDarkened(float step) {
+		return new TColor(this).darken(step);
+	}
+
+	/**
+	 * @param step
+	 * @return a desaturated copy
+	 */
+	public TColor getDesaturated(float step) {
+		return new TColor(this).desaturate(step);
+	}
+
+	/**
+	 * @param step
+	 * @return a lightened copy
+	 */
+	public TColor getLightened(float step) {
+		return new TColor(this).lighten(step);
+	}
+
+	/**
+	 * @param theta
+	 *            rotation angle in radians
+	 * @return a RYB rotated copy
+	 */
+	public TColor getRotatedRYB(float theta) {
+		return new TColor(this).rotateRYB(theta);
+	}
+
+	/**
+	 * @param angle
+	 *            rotation angle in degrees
+	 * @return a RYB rotated copy
+	 */
+	public TColor getRotatedRYB(int angle) {
+		return new TColor(this).rotateRYB(angle);
+	}
+
+	/**
+	 * @param step
+	 * @return a saturated copy
+	 */
+	public TColor getSaturated(float step) {
+		return new TColor(this).saturate(step);
+	}
+
+	/**
+	 * @return the color's green component
+	 */
+
+	public float green() {
+		return rgb[1];
+	}
+
+	@Override
+	public int hashCode() {
+		return (int) (rgb[0] * 1000000 + rgb[1] * 100000 + rgb[2] * 10000 + alpha * 1000);
+	}
+
+	/**
+	 * @return the color's hue
+	 */
+	public float hue() {
+		return hsv[0];
+	}
+
+	/**
+	 * Inverts the color.
+	 * 
+	 * @return itself
+	 */
+	public TColor invert() {
+		rgb[0] = 1 - rgb[0];
+		rgb[1] = 1 - rgb[1];
+		rgb[2] = 1 - rgb[2];
+		return setRGB(rgb);
+	}
+
+	/**
+	 * @return true, if all rgb component values are equal and less than
+	 *         {@link #BLACK_POINT}
+	 */
+	public boolean isBlack() {
+		return (rgb[0] <= BLACK_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
+				.compare(rgb[0], rgb[2]) == 0);
+	}
+
+	/**
+	 * @return true, if the saturation component value is less than
+	 *         {@link #GREY_THRESHOLD}
+	 */
+	public boolean isGrey() {
+		return hsv[1] < GREY_THRESHOLD;
+	}
+
+	/**
+	 * @return true, if this colors hue is matching one of the 7 defined primary
+	 *         hues.
+	 */
+	public boolean isPrimary() {
+		return Hue.isPrimary(hsv[0]);
+	}
+
+	/**
+	 * @return true, if all rgb component values are equal and greater than
+	 *         {@link #WHITE_POINT}
+	 */
+	public boolean isWhite() {
+		return (rgb[0] >= WHITE_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
+				.compare(rgb[0], rgb[2]) == 0);
+	}
+
+	/**
+	 * Lightens the color by stated amount.
+	 * 
+	 * @param step
+	 *            lighten amount
+	 * @return itself
+	 */
+	public TColor lighten(float step) {
+		hsv[2] = MathUtils.clip(hsv[2] + step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	/**
+	 * Computes the color's luminance using this formula: lum=0.299*red +
+	 * 0.587*green + 0.114 *blue
+	 * 
+	 * @return luminance
+	 */
+	public float luminance() {
+		return rgb[0] * 0.299f + rgb[1] * 0.587f + rgb[2] * 0.114f;
+	}
+
+	/**
+	 * @return the color's magenta component
+	 */
+
+	public float magenta() {
+		return cmyk[0];
+	}
+
+	/**
+	 * @return the color's red component
+	 */
+
+	public float red() {
+		return rgb[0];
+	}
+
+	public TColor rotateRYB(float theta) {
+		return rotateRYB((int) MathUtils.degrees(theta));
+	}
+
+	public TColor rotateRYB(int theta) {
+		float h = hsv[0] * 360;
+		theta %= 360;
+
+		float resultHue = 0;
+		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
+			Vec2D p = RYB_WHEEL[i];
+			Vec2D q = RYB_WHEEL[i + 1];
+			if (q.y < p.y) {
+				q.y += 360;
+			}
+			if (p.y <= h && h <= q.y) {
+				resultHue = p.x + (q.x - p.x) * (h - p.y) / (q.y - p.y);
+				break;
+			}
+		}
+
+		// And the user-given angle (e.g. complement).
+		resultHue = (resultHue + theta) % 360;
+
+		// For the given angle, find out what hue is
+		// located there on the artistic color wheel.
+		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
+			Vec2D p = RYB_WHEEL[i];
+			Vec2D q = RYB_WHEEL[i + 1];
+			if (q.y < p.y) {
+				q.y += 360;
+			}
+			if (p.x <= resultHue && resultHue <= q.x) {
+				h = p.y + (q.y - p.y) * (resultHue - p.x) / (q.x - p.x);
+				break;
+			}
+		}
+
+		hsv[0] = (h % 360) / 360.0f;
+		return setHSV(hsv);
+	}
+
+	public TColor saturate(float step) {
+		hsv[1] = MathUtils.clip(hsv[1] + step, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public float saturation() {
+		return hsv[1];
+	}
+
+	public TColor setAlpha(float alpha) {
+		this.alpha = alpha;
+		return this;
+	}
+
+	public TColor setBlack(float val) {
+		cmyk[3] = val;
+		return setCMYK(cmyk);
+	}
+
+	public TColor setBlue(float blue) {
+		rgb[2] = blue;
+		return setRGB(rgb);
+	}
+
+	public TColor setBrightness(float brightness) {
+		hsv[2] = MathUtils.clip(brightness, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public TColor setCMYK(float c, float m, float y, float k) {
+		cmyk[0] = c;
+		cmyk[1] = m;
+		cmyk[2] = y;
+		cmyk[3] = k;
+		return setCMYK(cmyk);
+	}
+
+	public TColor setCMYK(float[] newCMYK) {
+		cmyk[0] = MathUtils.clip(newCMYK[0], 0, 1);
+		cmyk[1] = MathUtils.clip(newCMYK[1], 0, 1);
+		cmyk[2] = MathUtils.clip(newCMYK[2], 0, 1);
+		cmyk[3] = MathUtils.clip(newCMYK[3], 0, 1);
+		cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
+		rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+		return this;
+	}
+
+	public TColor setComponent(AccessCriteria criteria, float val) {
+		switch (criteria.getMode()) {
+		case RGB:
+			rgb[criteria.getComponent()] = val;
+			return setRGB(rgb);
+		case HSV:
+			hsv[criteria.getComponent()] = val;
+			return setHSV(hsv);
+		case ALPHA:
+			return setAlpha(val);
+		case CMYK:
+			cmyk[criteria.getComponent()] = val;
+			return setCMYK(cmyk);
+		default:
+			throw new IllegalArgumentException(
+					"Invalid ColorAccessCriteria mode used");
+		}
+	}
+
+	public TColor setCyan(float val) {
+		cmyk[0] = val;
+		return setCMYK(cmyk);
+	}
+
+	public TColor setGreen(float green) {
+		rgb[1] = green;
+		return setRGB(rgb);
+	}
+
+	public TColor setHSV(float h, float s, float v) {
+		hsv[0] = h;
+		hsv[1] = s;
+		hsv[2] = v;
+		return setHSV(hsv);
+	}
+
+	public TColor setHSV(float[] newHSV) {
+		hsv[0] = newHSV[0] % 1;
+		if (hsv[0] < 0) {
+			hsv[0]++;
+		}
+		hsv[1] = MathUtils.clip(newHSV[1], 0, 1);
+		hsv[2] = MathUtils.clip(newHSV[2], 0, 1);
+		hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
+		rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+		return this;
+	}
+
+	public void setHue(float hue) {
+		hue %= 1.0;
+		if (hue < 0.0) {
+			hue++;
+		}
+		hsv[0] = hue;
+		setHSV(hsv);
+	}
+
+	public TColor setMagenta(float val) {
+		cmyk[1] = val;
+		return setCMYK(cmyk);
+	}
+
+	public TColor setRed(float red) {
+		rgb[0] = red;
+		return setRGB(rgb);
+	}
+
+	public TColor setRGB(float r, float g, float b) {
+		rgb[0] = r;
+		rgb[1] = g;
+		rgb[2] = b;
+		return setRGB(rgb);
+	}
+
+	public TColor setRGB(float[] newRGB) {
+		rgb[0] = MathUtils.clip(newRGB[0], 0, 1);
+		rgb[1] = MathUtils.clip(newRGB[1], 0, 1);
+		rgb[2] = MathUtils.clip(newRGB[2], 0, 1);
+		rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+		rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+		return this;
+	}
+
+	public TColor setSaturation(float saturation) {
+		hsv[1] = MathUtils.clip(saturation, 0, 1);
+		return setHSV(hsv);
+	}
+
+	public TColor setYellow(float val) {
+		cmyk[2] = val;
+		return setCMYK(cmyk);
+	}
+
+	/**
+	 * Converts the color into a packed ARGB int.
+	 * 
+	 * @return color as int
+	 */
+	public int toARGB() {
+		return (int) (rgb[0] * 255) << 16 | (int) (rgb[1] * 255) << 8
+				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;
+	}
+
+	/**
+	 * Copies the current RGBA value into the given array (or constucts a new
+	 * one with these values).
+	 * 
+	 * @param rgba
+	 *            result array (or null)
+	 * @return array in this order: r,g,b,a
+	 */
+	public float[] toRGBAArray(float[] rgba) {
+		if (rgba == null) {
+			rgba = new float[4];
+		}
+		rgba[0] = rgb[0];
+		rgba[1] = rgb[1];
+		rgba[2] = rgb[2];
+		rgba[3] = alpha;
+		return rgba;
+	}
+
+	@Override
+	public String toString() {
+		return "TColor: rgb: " + rgb[0] + "," + rgb[1] + "," + rgb[2]
+				+ " hsv: " + hsv[0] + "," + hsv[1] + "," + hsv[2] + " cmyk: "
+				+ cmyk[0] + "," + cmyk[1] + "," + cmyk[2] + "," + cmyk[3]
+				+ " alpha: " + alpha;
+	}
+
+	/**
+	 * @return the color's yellow component
+	 */
+	public float yellow() {
+		return cmyk[0];
+	}
 
 	/**
 	 * Converts CMYK floats into an RGB array.
@@ -449,605 +1090,6 @@ public class TColor {
 		hsv[1] = s;
 		hsv[2] = v;
 		return hsv;
-	}
-
-	protected TColor() {
-		rgb = new float[3];
-		hsv = new float[3];
-		cmyk = new float[4];
-	}
-
-	/**
-	 * Creates a deep copy of the given color.
-	 * 
-	 * @param c
-	 */
-	public TColor(TColor c) {
-		this();
-		System.arraycopy(c.rgb, 0, rgb, 0, 3);
-		System.arraycopy(c.hsv, 0, hsv, 0, 3);
-		System.arraycopy(c.cmyk, 0, cmyk, 0, 4);
-		this.alpha = c.alpha;
-	}
-
-	/**
-	 * Changes the brightness of the color by the given amount in the direction
-	 * towards either the black or white point (depending on if current
-	 * brightness >= 50%)
-	 * 
-	 * @param amount
-	 * @return itself
-	 */
-	public TColor adjustConstrast(float amount) {
-		return hsv[2] < 0.5 ? darken(amount) : lighten(amount);
-	}
-
-	/**
-	 * Adds the given HSV values as offsets to the current color. Hue will
-	 * automatically wrap.
-	 * 
-	 * @param h
-	 * @param s
-	 * @param v
-	 * @return itself
-	 */
-	public TColor adjustHSV(float h, float s, float v) {
-		return setHSV(new float[] { hsv[0] + h, hsv[1] + s, hsv[2] + v });
-	}
-
-	/**
-	 * Adds the given RGB values as offsets to the current color. TColor will
-	 * clip at black or white.
-	 * 
-	 * @param r
-	 * @param g
-	 * @param b
-	 * @return itself
-	 */
-	public TColor adjustRGB(float r, float g, float b) {
-		return setRGB(new float[] { rgb[0] + r, rgb[1] + g, rgb[2] + b });
-	}
-
-	/**
-	 * @return the color's alpha component
-	 */
-	public float alpha() {
-		return alpha;
-	}
-
-	/**
-	 * Rotates this color by a random amount (not exceeding the one specified)
-	 * and creates variations in saturation and brightness based on the 2nd
-	 * parameter.
-	 * 
-	 * @param theta
-	 *            max. rotation angle (in radians)
-	 * @param delta
-	 *            max. sat/bri variance
-	 * @return itself
-	 */
-	public TColor analog(float theta, float delta) {
-		return analog(MathUtils.degrees(theta), delta);
-	}
-
-	public TColor analog(int angle, float delta) {
-		rotateRYB((int) (angle * MathUtils.normalizedRandom()));
-		hsv[1] += delta * MathUtils.normalizedRandom();
-		hsv[2] += delta * MathUtils.normalizedRandom();
-		return setHSV(hsv);
-	}
-
-	/**
-	 * @return the color's black component
-	 */
-
-	public float black() {
-		return cmyk[0];
-	}
-
-	/**
-	 * Blends the color with the given one by the stated amount
-	 * 
-	 * @param c
-	 *            target color
-	 * @param t
-	 *            interpolation factor
-	 * @return itself
-	 */
-	public TColor blend(TColor c, float t) {
-		rgb[0] += (c.rgb[0] - rgb[0]) * t;
-		rgb[1] += (c.rgb[1] - rgb[1]) * t;
-		rgb[2] += (c.rgb[2] - rgb[2]) * t;
-		alpha += (c.alpha - alpha) * t;
-		return setRGB(rgb);
-	}
-
-	/**
-	 * @return the color's blue component
-	 */
-
-	public float blue() {
-		return rgb[2];
-	}
-
-	/**
-	 * @return color HSV brightness (not luminance!)
-	 */
-	public float brightness() {
-		return hsv[2];
-	}
-
-	/**
-	 * @return ifself, as complementary color
-	 */
-	public TColor complement() {
-		return rotateRYB(180);
-	}
-
-	public TColor copy() {
-		return new TColor(this);
-	}
-
-	/**
-	 * @return the color's cyan component
-	 */
-
-	public float cyan() {
-		return cmyk[0];
-	}
-
-	public TColor darken(float step) {
-		hsv[2] = MathUtils.clip(hsv[2] - step, 0, 1);
-		return setHSV(hsv);
-	}
-
-	public TColor desaturate(float step) {
-		hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
-		return setHSV(hsv);
-	}
-
-	/**
-	 * Calculates the CMYK distance to the given color.
-	 * 
-	 * @param c
-	 *            target color
-	 * @return distance
-	 */
-	public float distanceToCMYK(TColor c) {
-		float dc = cmyk[0] - c.cmyk[0];
-		float dm = cmyk[1] - c.cmyk[1];
-		float dy = cmyk[2] - c.cmyk[2];
-		float dk = cmyk[3] - c.cmyk[3];
-		return (float) Math.sqrt(dc * dc + dm * dm + dy * dy + dk * dk);
-	}
-
-	/**
-	 * Calculates the HSV distance to the given color.
-	 * 
-	 * @param c
-	 *            target color
-	 * @return distance
-	 */
-	public float distanceToHSV(TColor c) {
-		float hue = hsv[0] * MathUtils.TWO_PI;
-		float hue2 = c.hsv[0] * MathUtils.TWO_PI;
-		Vec3D v1 = new Vec3D((float) (Math.cos(hue) * hsv[1]), (float) (Math
-				.sin(hue) * hsv[1]), hsv[2]);
-		Vec3D v2 = new Vec3D((float) (Math.cos(hue2) * c.hsv[1]), (float) (Math
-				.sin(hue2) * c.hsv[1]), c.hsv[2]);
-		return v1.distanceTo(v2);
-	}
-
-	/**
-	 * Calculates the RGB distance to the given color.
-	 * 
-	 * @param c
-	 *            target color
-	 * @return distance
-	 */
-	public float distanceToRGB(TColor c) {
-		float dr = rgb[0] - c.rgb[0];
-		float dg = rgb[1] - c.rgb[1];
-		float db = rgb[2] - c.rgb[2];
-		return (float) Math.sqrt(dr * dr + dg * dg + db * db);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o != null && o instanceof TColor) {
-			TColor c = (TColor) o;
-			float dr = c.rgb[0] - rgb[0];
-			float dg = c.rgb[1] - rgb[1];
-			float db = c.rgb[2] - rgb[2];
-			float da = c.alpha - alpha;
-			double d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
-			return d < EPS;
-		}
-		return false;
-	}
-
-	public TColor getAnalog(float theta, float delta) {
-		return new TColor(this).analog(theta, delta);
-	}
-
-	public TColor getAnalog(int angle, float delta) {
-		return new TColor(this).analog(angle, delta);
-	}
-
-	public TColor getBlended(TColor c, float t) {
-		return new TColor(this).blend(c, t);
-	}
-
-	/**
-	 * @return an instance of the closest named hue to this color.
-	 */
-	public Hue getClosestHue() {
-		return Hue.getClosest(hsv[0], false);
-	}
-
-	/**
-	 * @param primaryOnly
-	 *            if true, only primary color hues are considered
-	 * @return an instance of the closest named (primary) hue to this color.
-	 */
-	public Hue getClosestHue(boolean primaryOnly) {
-		return Hue.getClosest(hsv[0], primaryOnly);
-	}
-
-	public TColor getComplement() {
-		return new TColor(this).complement();
-	}
-
-	public float getComponentValue(AccessCriteria criteria) {
-		switch (criteria.getMode()) {
-		case HSV:
-			return hsv[criteria.getComponent()];
-		case RGB:
-			return rgb[criteria.getComponent()];
-		case CMYK:
-			return cmyk[criteria.getComponent()];
-		case ALPHA:
-			return alpha;
-		}
-		return 0;
-	}
-
-	/**
-	 * @param step
-	 * @return a darkened copy
-	 */
-	public TColor getDarkened(float step) {
-		return new TColor(this).darken(step);
-	}
-
-	/**
-	 * @param step
-	 * @return a desaturated copy
-	 */
-	public TColor getDesaturated(float step) {
-		return new TColor(this).desaturate(step);
-	}
-
-	/**
-	 * @param step
-	 * @return a lightened copy
-	 */
-	public TColor getLightened(float step) {
-		return new TColor(this).lighten(step);
-	}
-
-	/**
-	 * @param theta
-	 *            rotation angle in radians
-	 * @return a RYB rotated copy
-	 */
-	public TColor getRotatedRYB(float theta) {
-		return new TColor(this).rotateRYB(theta);
-	}
-
-	/**
-	 * @param angle
-	 *            rotation angle in degrees
-	 * @return a RYB rotated copy
-	 */
-	public TColor getRotatedRYB(int angle) {
-		return new TColor(this).rotateRYB(angle);
-	}
-
-	/**
-	 * @param step
-	 * @return a saturated copy
-	 */
-	public TColor getSaturated(float step) {
-		return new TColor(this).saturate(step);
-	}
-
-	/**
-	 * @return the color's green component
-	 */
-
-	public float green() {
-		return rgb[1];
-	}
-
-	@Override
-	public int hashCode() {
-		return (int) (rgb[0] * 1000000 + rgb[1] * 100000 + rgb[2] * 10000 + alpha * 1000);
-	}
-
-	/**
-	 * @return the color's hue
-	 */
-	public float hue() {
-		return hsv[0];
-	}
-
-	/**
-	 * Inverts the color.
-	 * 
-	 * @return itself
-	 */
-	public TColor invert() {
-		rgb[0] = 1 - rgb[0];
-		rgb[1] = 1 - rgb[1];
-		rgb[2] = 1 - rgb[2];
-		return setRGB(rgb);
-	}
-
-	/**
-	 * @return true, if all rgb component values are equal and less than
-	 *         {@link #BLACK_POINT}
-	 */
-	public boolean isBlack() {
-		return (rgb[0] <= BLACK_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
-				.compare(rgb[0], rgb[2]) == 0);
-	}
-
-	/**
-	 * @return true, if the saturation component value is less than
-	 *         {@link #GREY_THRESHOLD}
-	 */
-	public boolean isGrey() {
-		return hsv[1] < GREY_THRESHOLD;
-	}
-
-	/**
-	 * @return true, if this colors hue is matching one of the 7 defined
-	 *         primary hues.
-	 */
-	public boolean isPrimary() {
-		return Hue.isPrimary(hsv[0]);
-	}
-
-	/**
-	 * @return true, if all rgb component values are equal and greater than
-	 *         {@link #WHITE_POINT}
-	 */
-	public boolean isWhite() {
-		return (rgb[0] >= WHITE_POINT && Float.compare(rgb[0], rgb[1]) == 0 && Float
-				.compare(rgb[0], rgb[2]) == 0);
-	}
-
-	/**
-	 * Lightens the color by stated amount.
-	 * 
-	 * @param step
-	 *            lighten amount
-	 * @return itself
-	 */
-	public TColor lighten(float step) {
-		hsv[2] = MathUtils.clip(hsv[2] + step, 0, 1);
-		return setHSV(hsv);
-	}
-
-	/**
-	 * Computes the color's luminance using this formula: lum=0.299*red +
-	 * 0.587*green + 0.114 *blue
-	 * 
-	 * @return luminance
-	 */
-	public float luminance() {
-		return rgb[0] * 0.299f + rgb[1] * 0.587f + rgb[2] * 0.114f;
-	}
-
-	/**
-	 * @return the color's magenta component
-	 */
-
-	public float magenta() {
-		return cmyk[0];
-	}
-
-	/**
-	 * @return the color's red component
-	 */
-
-	public float red() {
-		return rgb[0];
-	}
-
-	public TColor rotateRYB(float theta) {
-		return rotateRYB((int) MathUtils.degrees(theta));
-	}
-
-	public TColor rotateRYB(int theta) {
-		float h = hsv[0] * 360;
-		theta %= 360;
-
-		float resultHue = 0;
-		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
-			Vec2D p = RYB_WHEEL[i];
-			Vec2D q = RYB_WHEEL[i + 1];
-			if (q.y < p.y) {
-				q.y += 360;
-			}
-			if (p.y <= h && h <= q.y) {
-				resultHue = p.x + (q.x - p.x) * (h - p.y) / (q.y - p.y);
-				break;
-			}
-		}
-
-		// And the user-given angle (e.g. complement).
-		resultHue = (resultHue + theta) % 360;
-
-		// For the given angle, find out what hue is
-		// located there on the artistic color wheel.
-		for (int i = 0; i < RYB_WHEEL.length - 1; i++) {
-			Vec2D p = RYB_WHEEL[i];
-			Vec2D q = RYB_WHEEL[i + 1];
-			if (q.y < p.y) {
-				q.y += 360;
-			}
-			if (p.x <= resultHue && resultHue <= q.x) {
-				h = p.y + (q.y - p.y) * (resultHue - p.x) / (q.x - p.x);
-				break;
-			}
-		}
-
-		hsv[0] = (h % 360) / 360.0f;
-		return setHSV(hsv);
-	}
-
-	public TColor saturate(float step) {
-		hsv[1] = MathUtils.clip(hsv[1] + step, 0, 1);
-		return setHSV(hsv);
-	}
-
-	public float saturation() {
-		return hsv[1];
-	}
-
-	public TColor setAlpha(float alpha) {
-		this.alpha = alpha;
-		return this;
-	}
-
-	public TColor setBlack(float val) {
-		cmyk[3] = val;
-		return setCMYK(cmyk);
-	}
-
-	public TColor setBlue(float blue) {
-		rgb[2] = blue;
-		return setRGB(rgb);
-	}
-
-	public TColor setBrightness(float brightness) {
-		hsv[2] = MathUtils.clip(brightness, 0, 1);
-		return setHSV(hsv);
-	}
-
-	public TColor setCMYK(float[] newCMYK) {
-		cmyk[0] = MathUtils.clip(newCMYK[0], 0, 1);
-		cmyk[1] = MathUtils.clip(newCMYK[1], 0, 1);
-		cmyk[2] = MathUtils.clip(newCMYK[2], 0, 1);
-		cmyk[3] = MathUtils.clip(newCMYK[3], 0, 1);
-		cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
-		rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
-		return this;
-	}
-
-	public TColor setComponent(AccessCriteria criteria, float val) {
-		switch (criteria.getMode()) {
-		case RGB:
-			rgb[criteria.getComponent()] = val;
-			return setRGB(rgb);
-		case HSV:
-			hsv[criteria.getComponent()] = val;
-			return setHSV(hsv);
-		case ALPHA:
-			return setAlpha(val);
-		case CMYK:
-			cmyk[criteria.getComponent()] = val;
-			return setCMYK(cmyk);
-		default:
-			throw new IllegalArgumentException(
-					"Invalid ColorAccessCriteria mode used");
-		}
-	}
-
-	public TColor setCyan(float val) {
-		cmyk[0] = val;
-		return setCMYK(cmyk);
-	}
-
-	public TColor setGreen(float green) {
-		rgb[1] = green;
-		return setRGB(rgb);
-	}
-
-	public TColor setHSV(float[] newHSV) {
-		hsv[0] = newHSV[0] % 1;
-		if (hsv[0] < 0)
-			hsv[0]++;
-		hsv[1] = MathUtils.clip(newHSV[1], 0, 1);
-		hsv[2] = MathUtils.clip(newHSV[2], 0, 1);
-		hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
-		rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
-		return this;
-	}
-
-	public void setHue(float hue) {
-		hue %= 1.0;
-		if (hue < 0.0) {
-			hue++;
-		}
-		hsv[0] = hue;
-		setHSV(hsv);
-	}
-
-	public TColor setMagenta(float val) {
-		cmyk[1] = val;
-		return setCMYK(cmyk);
-	}
-
-	public TColor setRed(float red) {
-		rgb[0] = red;
-		return setRGB(rgb);
-	}
-
-	public TColor setRGB(float[] newRGB) {
-		rgb[0] = MathUtils.clip(newRGB[0], 0, 1);
-		rgb[1] = MathUtils.clip(newRGB[1], 0, 1);
-		rgb[2] = MathUtils.clip(newRGB[2], 0, 1);
-		rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
-		rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
-		return this;
-	}
-
-	public TColor setSaturation(float saturation) {
-		hsv[1] = MathUtils.clip(saturation, 0, 1);
-		return setHSV(hsv);
-	}
-
-	public TColor setYellow(float val) {
-		cmyk[2] = val;
-		return setCMYK(cmyk);
-	}
-
-	/**
-	 * Converts the color into a packed ARGB int.
-	 * 
-	 * @return color as int
-	 */
-	public int toARGB() {
-		return (int) (rgb[0] * 255) << 16 | (int) (rgb[1] * 255) << 8
-				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;
-	}
-
-	@Override
-	public String toString() {
-		return "TColor: rgb: " + rgb[0] + "," + rgb[1] + "," + rgb[2]
-				+ " hsv: " + hsv[0] + "," + hsv[1] + "," + hsv[2] + " cmyk: "
-				+ cmyk[0] + "," + cmyk[1] + "," + cmyk[2] + "," + cmyk[3]
-				+ " alpha: " + alpha;
-	}
-
-	/**
-	 * @return the color's yellow component
-	 */
-	public float yellow() {
-		return cmyk[0];
 	}
 
 }
