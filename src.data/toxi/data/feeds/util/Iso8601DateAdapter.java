@@ -11,28 +11,23 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
 
-public class Rfc822DateAdapter extends XmlAdapter<String, XMLGregorianCalendar> {
+public class Iso8601DateAdapter extends
+		XmlAdapter<String, XMLGregorianCalendar> {
 
-	public static final SimpleDateFormat[] RFC822_FORMATS = new SimpleDateFormat[] {
-			new SimpleDateFormat("EEE, d MMM yy HH:mm:ss z"),
-			new SimpleDateFormat("EEE, d MMM yy HH:mm z"),
-			new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z"),
-			new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"),
-			new SimpleDateFormat("d MMM yy HH:mm z"),
-			new SimpleDateFormat("d MMM yy HH:mm:ss z"),
-			new SimpleDateFormat("d MMM yyyy HH:mm z"),
-			new SimpleDateFormat("d MMM yyyy HH:mm:ss z"), };
+	public static final SimpleDateFormat[] ISO8601_FORMATS = new SimpleDateFormat[] {
+			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
+			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'") };
 
 	@Override
 	public String marshal(XMLGregorianCalendar date) throws Exception {
-		return RFC822_FORMATS[0].format(date);
+		return ISO8601_FORMATS[0].format(date);
 	}
 
 	@Override
 	public XMLGregorianCalendar unmarshal(String dateString) throws Exception {
 		XMLGregorianCalendar calendar = null;
 		GregorianCalendar cal = new GregorianCalendar();
-		for (SimpleDateFormat f : RFC822_FORMATS) {
+		for (SimpleDateFormat f : ISO8601_FORMATS) {
 			try {
 				Date d = f.parse(dateString);
 				cal.setTime(d);

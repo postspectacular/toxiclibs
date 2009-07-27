@@ -4,8 +4,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import toxi.data.feeds.util.Rfc822DateAdapter;
 import toxi.data.feeds.util.EntityStripper;
+import toxi.data.feeds.util.Rfc822DateAdapter;
 
 public class RSSItem {
 
