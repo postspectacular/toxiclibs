@@ -161,17 +161,9 @@ public class Matrix4x4 {
 	// http://www.intel.com/design/pentiumiii/sml/24504301.pdf
 	public Matrix4x4 inverse() {
 		final double[] tmp = new double[12];
-		final double[] mat = new double[16];
 		final double[] src = new double[16];
 		final double[] dst = new double[16];
-
-		// Copy all of the elements into the linear array
-		for (int i = 0, k = 0; i < 4; i++) {
-			double[] m = matrix[i];
-			for (int j = 0; j < 4; j++) {
-				mat[k++] = m[j];
-			}
-		}
+		final double[] mat = toArray(null);
 
 		for (int i = 0; i < 4; i++) {
 			int i4 = i << 2;
@@ -390,6 +382,37 @@ public class Matrix4x4 {
 			resm[1] = mi[1] - rhsm[1];
 			resm[2] = mi[2] - rhsm[2];
 			resm[3] = mi[3] - rhsm[3];
+		}
+		return result;
+	}
+
+	/**
+	 * Copies all matrix elements into an linear array.
+	 * 
+	 * @param target
+	 *            array (or null to create a new one)
+	 * @return serialized matrix
+	 */
+	public double[] toArray(double[] result) {
+		if (result == null) {
+			result = new double[16];
+		}
+		for (int i = 0, k = 0; i < 4; i++) {
+			double[] m = matrix[i];
+			for (int j = 0; j < 4; j++) {
+				result[k++] = m[j];
+			}
+		}
+		return result;
+	}
+
+	public float[] toFloatArray(float[] result) {
+		if (result == null) {
+			result = new float[16];
+		}
+		double[] tmp = toArray(null);
+		for (int i = 0; i < 16; i++) {
+			result[i] = (float) tmp[i];
 		}
 		return result;
 	}
