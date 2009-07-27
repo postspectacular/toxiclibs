@@ -1,5 +1,9 @@
 package toxi.geom.util;
 
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -122,8 +126,7 @@ public class TriangleMesh {
 	public final void clear() {
 		vertices.clear();
 		faces.clear();
-		bounds.setExtent(new Vec3D());
-		bounds.set(new Vec3D());
+		bounds = null;
 		numVertices = 0;
 		numFaces = 0;
 	}
@@ -157,11 +160,99 @@ public class TriangleMesh {
 		return centroid.scaleSelf(1f / numVertices);
 	}
 
+	public final int[] getFacesAsArray() {
+		int[] faceList = new int[faces.size() * 3];
+		int i = 0;
+		for (Face f : faces) {
+			faceList[i++] = f.a.id;
+			faceList[i++] = f.b.id;
+			faceList[i++] = f.c.id;
+		}
+		return faceList;
+	}
+
+	public final float[] getMeshAsVertexArray() {
+		float[] verts = new float[faces.size() * 9];
+		int i = 0;
+		for (Face f : faces) {
+			verts[i++] = f.a.x;
+			verts[i++] = f.a.y;
+			verts[i++] = f.a.z;
+			verts[i++] = f.b.x;
+			verts[i++] = f.b.y;
+			verts[i++] = f.b.z;
+			verts[i++] = f.c.x;
+			verts[i++] = f.c.y;
+			verts[i++] = f.c.z;
+		}
+		return verts;
+	}
+
+	public final float[] getMeshNormalsAsArray() {
+		float[] normals = new float[faces.size() * 9];
+		int i = 0;
+		for (Face f : faces) {
+			normals[i++] = f.a.normal.x;
+			normals[i++] = f.a.normal.y;
+			normals[i++] = f.a.normal.z;
+			normals[i++] = f.b.normal.x;
+			normals[i++] = f.b.normal.y;
+			normals[i++] = f.b.normal.z;
+			normals[i++] = f.c.normal.x;
+			normals[i++] = f.c.normal.y;
+			normals[i++] = f.c.normal.z;
+		}
+		return normals;
+	}
+
 	public final int getNumFaces() {
 		return numFaces;
 	}
 
 	public final int getNumVertices() {
 		return numVertices;
+	}
+
+	public final float[] getUniqueVerticesAsArray() {
+		float[] verts = new float[vertices.size() * 3];
+		int i = 0;
+		for (Vertex v : vertices) {
+			verts[i++] = v.x;
+			verts[i++] = v.y;
+			verts[i++] = v.z;
+		}
+		return verts;
+	}
+
+	public final void saveAsRaw(String fileName) {
+		try {
+			DataOutputStream ds = new DataOutputStream(new FileOutputStream(
+					fileName));
+			float[] verts = getMeshAsVertexArray();
+			ds.writeInt(verts.length);
+			for (float f : verts) {
+				ds.writeFloat(f);
+			}
+			verts = getMeshNormalsAsArray();
+			for (float f : verts) {
+				ds.writeFloat(f);
+			}
+			ds.flush();
+			ds.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "TriangleMesh: " + name + " vertices: " + getNumVertices()
+				+ " faces: " + getNumFaces();
+	}
+
+	public static final TriangleMesh fromBinarySTL(String fileName) {
+		return new STLReader().loadBinary(fileName);
 	}
 }

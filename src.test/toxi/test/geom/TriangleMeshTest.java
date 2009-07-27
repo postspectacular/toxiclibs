@@ -25,6 +25,14 @@ public class TriangleMeshTest extends TestCase {
 		assertEquals(new Vec3D(0, 0, -1), mesh.faces.get(2).normal);
 	}
 
+	public void testSTLImport() {
+		mesh = TriangleMesh.fromBinarySTL("test/test.stl");
+		assertNotNull(mesh);
+		assertEquals(714, mesh.getNumVertices());
+		assertEquals(1424, mesh.getNumFaces());
+		System.out.println(mesh);
+	}
+
 	public void testUniqueVertices() {
 		assertEquals(6, mesh.vertices.size());
 	}
