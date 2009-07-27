@@ -583,8 +583,8 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 */
 	public boolean equalsWithTolerance(Vec3D v, float tolerance) {
 		if (MathUtils.abs(x - v.x) < tolerance) {
-			if (MathUtils.abs(x - v.x) < tolerance) {
-				if (MathUtils.abs(x - v.x) < tolerance) {
+			if (MathUtils.abs(y - v.y) < tolerance) {
+				if (MathUtils.abs(z - v.z) < tolerance) {
 					return true;
 				}
 			}
@@ -1459,7 +1459,13 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
-	 * Converts the vector into spherical coordinates.
+	 * Converts the vector into spherical coordinates. After the conversion the
+	 * vector components are to be interpreted as:
+	 * <ul>
+	 * <li>x = radius</li>
+	 * <li>y = azimuth</li>
+	 * <li>z = theta</li>
+	 * </ul>
 	 * 
 	 * @return itself
 	 */

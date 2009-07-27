@@ -459,6 +459,27 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	}
 
 	/**
+	 * Compares this vector with the one given. The vectors are deemed equal if
+	 * the individual differences of all component values are within the given
+	 * tolerance.
+	 * 
+	 * @param v
+	 *            the v
+	 * @param tolerance
+	 *            the tolerance
+	 * 
+	 * @return true, if equal
+	 */
+	public boolean equalsWithTolerance(Vec2D v, float tolerance) {
+		if (MathUtils.abs(x - v.x) < tolerance) {
+			if (MathUtils.abs(y - v.y) < tolerance) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Replaces the vector components with integer values of their current
 	 * values
 	 * 
