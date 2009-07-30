@@ -8,38 +8,47 @@
 	<property name="lib.zip.comment" value="${project.name} - toxiclibs core classes for Java &amp; Processing v${lib.version}" />
 	<property name="lib.libs.path" value="../lib" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
+	<property name="src.dir" value="../src.${srcfolder.id}" />
+	<property name="build.dir" value="../bin" />
+	<property name="release.dir" value="../dist" />
+	<!-- build folder contains temporary files needed to create release level files -->
+	<property name="build.classes.dir" value="${build.dir}" />
+	<property name="build.manifest" value="${build.dir}/${project.name}.mf" />
+	<property name="build.jar" value="${build.dir}/${lib.jar.filename}" />
+	<!-- release folder contains files which may be distributed in some way or another -->
+	<property name="release.javadoc.dir" value="../docs" />
+	<property name="release.jar" value="${release.dir}/${lib.jar.filename}" />
+	<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
+	<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
+	<property name="release.examples.dir" value="../examples/${srcfolder.id}" />
+	<property name="readme.dir" value="../readme1st/${srcfolder.id}" />
+	<property name="doap.lib" value="${lib.libs.path}/doapamine.jar" />
+	<property name="doap.src.dir" value="../src.doap" />
+	<property name="doap.file" value="doap.rdf" />
 
-	<!-- Basic targets -->
-	<target name="init">
-		<property name="src.dir" value="../src.${srcfolder.id}" />
-		<property name="build.dir" value="../bin" />
-		<property name="release.dir" value="../dist" />
-		<!-- build folder contains temporary files needed to create release level files -->
-		<property name="build.classes.dir" value="${build.dir}" />
-		<property name="build.manifest" value="${build.dir}/${project.name}.mf" />
-		<property name="build.jar" value="${build.dir}/${lib.jar.filename}" />
-		<!-- release folder contains files which may be distributed in some way or another -->
-		<property name="release.javadoc.dir" value="../docs" />
-		<property name="release.jar" value="${release.dir}/${lib.jar.filename}" />
-		<property name="release.src.zip" value="${release.dir}/${project.name}-${lib.version}-src.zip" />
-		<property name="release.bin.zip" value="${release.dir}/${project.name}-${lib.version}.zip" />
-		<property name="release.examples.dir" value="../examples/${srcfolder.id}" />
-		<property name="readme.dir" value="../readme1st/${srcfolder.id}" />
-	</target>
+	<taskdef name="doap" classname="com.triplescape.doapamine.DOAPTask">
+		<classpath>
+			<pathelement location="${doap.lib}" />
+			<pathelement location="${build.dir}" />
+		</classpath>
+	</taskdef>
 
-	<target name="clean" depends="init" description="Remove build files created this scripts">
+	<target name="clean" description="Remove build files created this scripts">
 		<delete dir="${build.dir}" />
 		<delete dir="${release.javadoc.dir}" />
 		<delete file="${release.bin.zip}/" />
 		<delete file="${release.src.zip}/" />
 	</target>
 
-	<target name="compile" depends="init" description="Compile source">
+	<target name="compile" depends="clean" description="Compile source">
 		<mkdir dir="${build.classes.dir}" />
-		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
+		<javac destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
+			<src path="${src.dir}"/>
+			<src path="${doap.src.dir}"/>
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
+				<pathelement location="${lib.libs.path}/doapamine.jar" />
 			</classpath>
 		</javac>
 	</target>
@@ -65,6 +74,7 @@
 			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
+			<zipfileset dir="${release.dir}" includes="${doap.file}" prefix="${project.name}" />
 		</zip>
 		<zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
 			<zipfileset dir="${src.dir}" prefix="${project.name}/src" />
@@ -73,10 +83,11 @@
 			<zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
 			<zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
+			<zipfileset dir="${release.dir}" includes="${doap.file}" prefix="${project.name}" />
 		</zip>
 	</target>
 
-	<target name="javadoc" depends="init" description="Generate documentation">
+	<target name="javadoc" depends="compile" description="Generate documentation">
 		<mkdir dir="${release.javadoc.dir}" />
 		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
@@ -88,7 +99,7 @@
 		</javadoc>
 	</target>
 
-	<target name="umldoc" depends="init" description="Generate documentation">
+	<target name="umldoc" depends="compile" description="Generate documentation">
 		<mkdir dir="${release.javadoc.dir}" />
 		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
 			<classpath>
@@ -124,5 +135,9 @@
 		</apply>
 	</target>
 
-	<target name="release" depends="init, clean, compile, javadoc, zips" />
+	<target name="generate_doap" description="Generates RDF DOAP file">
+		<doap class="toxi.doap.DOAPInfo" output="${release.dir}/${doap.file}" />
+	</target>
+
+	<target name="release" depends="clean, compile, generate_doap, javadoc, zips" />
 </project>
