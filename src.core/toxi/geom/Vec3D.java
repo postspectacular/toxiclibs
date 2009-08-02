@@ -766,6 +766,21 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	}
 
 	/**
+	 * Returns a unique code for this vector object based on it's values. If two
+	 * vectors are logically equivalent, they will return the same hash code
+	 * value.
+	 * 
+	 * @return the hash code value of this vector.
+	 */
+	public int hashCode() {
+		int hash = 37;
+		hash += 37 * hash + Float.floatToIntBits(x);
+		hash += 37 * hash + Float.floatToIntBits(y);
+		hash += 37 * hash + Float.floatToIntBits(z);
+		return hash;
+	}
+
+	/**
 	 * Computes the vector's direction in the XY plane (for example for 2D
 	 * points). The positive X axis equals 0 degrees.
 	 * 
