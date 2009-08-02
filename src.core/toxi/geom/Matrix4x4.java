@@ -6,10 +6,12 @@ package toxi.geom;
  * column-major formats...
  */
 
-// FIXME considere OpenGL is using column-major ordering
+// FIXME consider OpenGL is using column-major ordering
 // TODO add methods to apply to current instance only
 // TODO still needs lots of refactoring
 public class Matrix4x4 {
+
+	private static final Matrix4x4 TEMP = new Matrix4x4();
 
 	public double[][] matrix;
 
@@ -112,27 +114,54 @@ public class Matrix4x4 {
 	}
 
 	public Matrix4x4 add(Matrix4x4 rhs) {
-		Matrix4x4 result = new Matrix4x4();
+		Matrix4x4 result = new Matrix4x4(this);
+		return result.addSelf(rhs);
+	}
+
+	public Matrix4x4 addSelf(Matrix4x4 m) {
 		for (int i = 0; i < 4; i++) {
 			double[] mi = matrix[i];
-			double[] resm = result.matrix[i];
-			double[] rhsm = rhs.matrix[i];
-			resm[0] = mi[0] + rhsm[0];
-			resm[1] = mi[1] + rhsm[1];
-			resm[2] = mi[2] + rhsm[2];
-			resm[3] = mi[3] + rhsm[3];
+			double[] rhsm = m.matrix[i];
+			mi[0] += rhsm[0];
+			mi[1] += rhsm[1];
+			mi[2] += rhsm[2];
+			mi[3] += rhsm[3];
 		}
-		return result;
+		return this;
 	}
 
 	// Matrix-Vector Multiplication (Application)
-	public Vec3D apply(Vec3D v) {
+	public Vec3D applyTo(Vec3D v) {
 		for (int i = 0; i < 4; i++) {
 			double[] m = matrix[i];
 			temp[i] = v.x * m[0] + v.y * m[1] + v.z * m[2] + m[3];
 		}
 		return new Vec3D((float) temp[0], (float) temp[1], (float) temp[2])
 				.scaleSelf((float) (1 / temp[3]));
+	}
+
+	public Matrix4x4 getInverted() {
+		return new Matrix4x4(this).invert();
+	}
+
+	public Matrix4x4 getRotatedAroundAxis(Vec3D axis, double theta) {
+		return new Matrix4x4(this).rotateAroundAxis(axis, theta);
+	}
+
+	public Matrix4x4 getRotatedX(double theta) {
+		return new Matrix4x4(this).rotateX(theta);
+	}
+
+	public Matrix4x4 getRotatedY(double theta) {
+		return new Matrix4x4(this).rotateY(theta);
+	}
+
+	public Matrix4x4 getRotatedZ(double theta) {
+		return new Matrix4x4(this).rotateZ(theta);
+	}
+
+	public Matrix4x4 getTransposed() {
+		return new Matrix4x4(this).transpose();
 	}
 
 	public Matrix4x4 identity() {
@@ -148,18 +177,18 @@ public class Matrix4x4 {
 	}
 
 	private final void init() {
-		matrix = new double[4][];
-		matrix[0] = new double[4];
-		matrix[1] = new double[4];
-		matrix[2] = new double[4];
-		matrix[3] = new double[4];
+		matrix = new double[][] { new double[4], new double[4], new double[4],
+				new double[4] };
 	}
 
-	// Matrix Inversion using Cramer's Method
-	// Computes Adjoint matrix divided by determinant
-	// Code modified from
-	// http://www.intel.com/design/pentiumiii/sml/24504301.pdf
-	public Matrix4x4 inverse() {
+	/**
+	 * Matrix Inversion using Cramer's Method Computes Adjoint matrix divided by
+	 * determinant Code modified from
+	 * http://www.intel.com/design/pentiumiii/sml/24504301.pdf
+	 * 
+	 * @return
+	 */
+	public Matrix4x4 invert() {
 		final double[] tmp = new double[12];
 		final double[] src = new double[16];
 		final double[] dst = new double[16];
@@ -256,43 +285,17 @@ public class Matrix4x4 {
 		double det = 1 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3]
 				* dst[3]);
 
-		Matrix4x4 result = new Matrix4x4();
 		for (int i = 0, k = 0; i < 4; i++) {
-			double[] rm = result.matrix[i];
+			double[] m = matrix[i];
 			for (int j = 0; j < 4; j++) {
-				rm[j] = dst[k++] * det;
+				m[j] = dst[k++] * det;
 			}
 		}
-		return result;
+		return this;
 	}
 
-	/**
-	 * Matrix-Matrix Left-multiplication: matrix * this
-	 * 
-	 * @param mat
-	 * @return product as new matrix
-	 */
-	public Matrix4x4 leftMultiply(Matrix4x4 mat) {
-		return mat.multiply(this);
-	}
-
-	/**
-	 * Matrix-Scalar Multiplication.
-	 * 
-	 * @param c
-	 * @return product as new matrix
-	 */
-	public Matrix4x4 multiply(double c) {
-		Matrix4x4 result = new Matrix4x4();
-		for (int i = 0; i < 4; i++) {
-			double[] m = matrix[i];
-			double[] rm = result.matrix[i];
-			rm[0] = c * m[0];
-			rm[1] = c * m[1];
-			rm[2] = c * m[2];
-			rm[3] = c * m[3];
-		}
-		return result;
+	public Matrix4x4 multiply(double factor) {
+		return new Matrix4x4(this).multiply(factor);
 	}
 
 	/**
@@ -302,96 +305,188 @@ public class Matrix4x4 {
 	 * @return product as new matrix
 	 */
 	public Matrix4x4 multiply(Matrix4x4 mat) {
-		Matrix4x4 result = new Matrix4x4();
-		for (int i = 0; i < 4; i++) {
-			double[] m = matrix[i];
-			double[] rm = result.matrix[i];
-			for (int j = 0; j < 4; j++) {
-				rm[j] = m[0] * mat.matrix[0][j] + m[1] * mat.matrix[1][j]
-						+ m[2] * mat.matrix[2][j] + m[3] * mat.matrix[3][j];
-			}
-		}
-		return result;
+		return new Matrix4x4(this).multiplySelf(mat);
 	}
 
-	// Apply Rotation about arbitrary axis to Matrix
-	public Matrix4x4 rotate(Vec3D axis, double theta) {
-		double x, y, z, s, c, t;
+	/**
+	 * In-place matrix-scalar multiplication.
+	 * 
+	 * @param factor
+	 * @return product applied to this matrix.
+	 */
+	public Matrix4x4 multiplySelf(double factor) {
+		for (int i = 0; i < 4; i++) {
+			double[] m = matrix[i];
+			m[0] *= factor;
+			m[1] *= factor;
+			m[2] *= factor;
+			m[3] *= factor;
+		}
+		return this;
+	}
+
+	public Matrix4x4 multiplySelf(Matrix4x4 mat) {
+		double[] col = new double[4];
+		double[] mm0 = mat.matrix[0];
+		double[] mm1 = mat.matrix[1];
+		double[] mm2 = mat.matrix[2];
+		double[] mm3 = mat.matrix[3];
+		for (int i = 0; i < 4; i++) {
+			double[] m = matrix[i];
+			for (int j = 0; j < 4; j++) {
+				col[j] = m[0] * mm0[j] + m[1] * mm1[j] + m[2] * mm2[j] + m[3]
+						* mm3[j];
+			}
+			m[0] = col[0];
+			m[1] = col[1];
+			m[2] = col[2];
+			m[3] = col[3];
+		}
+		return this;
+	}
+
+	/**
+	 * Applies rotation about arbitrary axis to matrix
+	 * 
+	 * @param axis
+	 * @param theta
+	 * @return rotation applied to this matrix
+	 */
+	public Matrix4x4 rotateAroundAxis(Vec3D axis, double theta) {
+		double x, y, z, s, c, t, tx, ty;
 		x = axis.x;
 		y = axis.y;
 		z = axis.z;
 		s = Math.sin(theta);
 		c = Math.cos(theta);
-		// c = Math.sqrt(1 - s * s);
-		// this may be faster than the previous line
 		t = 1 - c;
-
-		double tx = t * x;
-		double ty = t * y;
-
-		return (new Matrix4x4(tx * x + c, tx * y + s * z, tx * z - s * y, 0, tx
-				* y - s * z, ty * y + c, ty * z + s * x, 0, tx * z + s * y, ty
-				* z - s * x, t * z * z + c, 0, 0, 0, 0, 1)).leftMultiply(this);
+		tx = t * x;
+		ty = t * y;
+		TEMP.set(tx * x + c, tx * y + s * z, tx * z - s * y, 0, tx * y - s * z,
+				ty * y + c, ty * z + s * x, 0, tx * z + s * y, ty * z - s * x,
+				t * z * z + c, 0, 0, 0, 0, 1);
+		return this.multiplySelf(TEMP);
 	}
 
-	// Apply Rotation about X to Matrix
+	/**
+	 * Applies rotation about X to this matrix.
+	 * 
+	 * @param theta
+	 *            rotation angle in radians
+	 * @return
+	 */
 	public Matrix4x4 rotateX(double theta) {
-		Matrix4x4 rot = new Matrix4x4();
-		rot.matrix[1][1] = rot.matrix[2][2] = Math.cos(theta);
-		rot.matrix[2][1] = Math.sin(theta);
-		rot.matrix[1][2] = -rot.matrix[2][1];
-		return rot.leftMultiply(this);
+		TEMP.identity();
+		TEMP.matrix[1][1] = TEMP.matrix[2][2] = Math.cos(theta);
+		TEMP.matrix[2][1] = Math.sin(theta);
+		TEMP.matrix[1][2] = -TEMP.matrix[2][1];
+		return this.multiplySelf(TEMP);
 	}
 
-	// Apply Rotation about Y to Matrix
+	/**
+	 * Applies rotation about Y to this matrix.
+	 * 
+	 * @param theta
+	 *            rotation angle in radians
+	 * @return
+	 */
 	public Matrix4x4 rotateY(double theta) {
-		Matrix4x4 rot = new Matrix4x4();
-		rot.matrix[0][0] = rot.matrix[2][2] = Math.cos(theta);
-		rot.matrix[0][2] = Math.sin(theta);
-		rot.matrix[2][0] = -rot.matrix[0][2];
-		return rot.leftMultiply(this);
+		TEMP.identity();
+		TEMP.matrix[0][0] = TEMP.matrix[2][2] = Math.cos(theta);
+		TEMP.matrix[0][2] = Math.sin(theta);
+		TEMP.matrix[2][0] = -TEMP.matrix[0][2];
+		return this.multiplySelf(TEMP);
 	}
 
 	// Apply Rotation about Z to Matrix
 	public Matrix4x4 rotateZ(double theta) {
-		Matrix4x4 rot = new Matrix4x4();
-		rot.matrix[0][0] = rot.matrix[1][1] = Math.cos(theta);
-		rot.matrix[1][0] = Math.sin(theta);
-		rot.matrix[0][1] = -rot.matrix[1][0];
-		return rot.leftMultiply(this);
+		TEMP.identity();
+		TEMP.matrix[0][0] = TEMP.matrix[1][1] = Math.cos(theta);
+		TEMP.matrix[1][0] = Math.sin(theta);
+		TEMP.matrix[0][1] = -TEMP.matrix[1][0];
+		return this.multiplySelf(TEMP);
 	}
 
-	// Apply Scale to Matrix
+	public Matrix4x4 scale(double scale) {
+		return new Matrix4x4(this).scaleSelf(scale);
+	}
+
 	public Matrix4x4 scale(double scaleX, double scaleY, double scaleZ) {
-		Matrix4x4 scl = new Matrix4x4();
-		scl.matrix[0][0] = scaleX;
-		scl.matrix[1][1] = scaleY;
-		scl.matrix[2][2] = scaleZ;
-		// return scl.mul(this);
-		return scl.leftMultiply(this);
+		return new Matrix4x4(this).scaleSelf(scaleX, scaleY, scaleZ);
 	}
 
-	// Matrix-Matrix Subtraction
-	public Matrix4x4 sub(Matrix4x4 rhs) {
-		Matrix4x4 result = new Matrix4x4();
+	public Matrix4x4 scaleSelf(double scale) {
+		return scaleSelf(scale, scale, scale);
+	}
+
+	public Matrix4x4 scaleSelf(double scaleX, double scaleY, double scaleZ) {
+		TEMP.identity();
+		TEMP.matrix[0][0] = scaleX;
+		TEMP.matrix[1][1] = scaleY;
+		TEMP.matrix[2][2] = scaleZ;
+		return this.multiplySelf(TEMP);
+	}
+
+	public Matrix4x4 set(double a, double b, double c, int d, double e,
+			double f, double g, int h, double i, double j, double k, int l,
+			int m, int n, int o, int p) {
+		double[] mat = matrix[0];
+		mat[0] = a;
+		mat[1] = b;
+		mat[2] = c;
+		mat[3] = d;
+		mat = matrix[1];
+		mat[0] = e;
+		mat[1] = f;
+		mat[2] = g;
+		mat[3] = h;
+		mat = matrix[2];
+		mat[0] = i;
+		mat[1] = j;
+		mat[2] = k;
+		mat[3] = l;
+		mat = matrix[3];
+		mat[0] = m;
+		mat[1] = n;
+		mat[2] = o;
+		mat[3] = p;
+		return this;
+	}
+
+	public Matrix4x4 set(Matrix4x4 mat) {
 		for (int i = 0; i < 4; i++) {
-			double[] mi = matrix[i];
-			double[] resm = result.matrix[i];
-			double[] rhsm = rhs.matrix[i];
-			resm[0] = mi[0] - rhsm[0];
-			resm[1] = mi[1] - rhsm[1];
-			resm[2] = mi[2] - rhsm[2];
-			resm[3] = mi[3] - rhsm[3];
+			double[] m = matrix[i];
+			double[] n = mat.matrix[i];
+			m[0] = n[0];
+			m[1] = n[1];
+			m[2] = n[2];
+			m[3] = n[3];
 		}
-		return result;
+		return this;
+	}
+
+	public Matrix4x4 sub(Matrix4x4 m) {
+		return new Matrix4x4(this).subSelf(m);
+	}
+
+	public Matrix4x4 subSelf(Matrix4x4 mat) {
+		for (int i = 0; i < 4; i++) {
+			double[] m = matrix[i];
+			double[] n = mat.matrix[i];
+			m[0] -= n[0];
+			m[1] -= n[1];
+			m[2] -= n[2];
+			m[3] -= n[3];
+		}
+		return this;
 	}
 
 	/**
 	 * Copies all matrix elements into an linear array.
 	 * 
-	 * @param target
+	 * @param result
 	 *            array (or null to create a new one)
-	 * @return serialized matrix
+	 * @return matrix as 16 element array
 	 */
 	public double[] toArray(double[] result) {
 		if (result == null) {
@@ -432,17 +527,24 @@ public class Matrix4x4 {
 				+ matrix[3][3] + " |";
 	}
 
-	// Apply Translation to Matrix
 	public Matrix4x4 translate(double dx, double dy, double dz) {
-		Matrix4x4 trn = new Matrix4x4();
-		trn.matrix[0][3] = dx;
-		trn.matrix[1][3] = dy;
-		trn.matrix[2][3] = dz;
-		// return trn.mul(this);
-		return trn.leftMultiply(this);
+		return new Matrix4x4(this).translateSelf(dx, dy, dz);
 	}
 
-	// Matrix Transpose
+	public Matrix4x4 translateSelf(double dx, double dy, double dz) {
+		TEMP.identity();
+		TEMP.matrix[0][3] = dx;
+		TEMP.matrix[1][3] = dy;
+		TEMP.matrix[2][3] = dz;
+		return this.multiplySelf(TEMP);
+	}
+
+	/**
+	 * Converts the matrix (in-place) between column-major to row-major order
+	 * (and vice versa).
+	 * 
+	 * @return transposed version of matrix
+	 */
 	public Matrix4x4 transpose() {
 		return new Matrix4x4(matrix[0][0], matrix[1][0], matrix[2][0],
 				matrix[3][0], matrix[0][1], matrix[1][1], matrix[2][1],

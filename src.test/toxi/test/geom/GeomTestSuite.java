@@ -62,8 +62,8 @@ public class GeomTestSuite extends TestCase {
 		assertEquals(t.addPoint(new Vec3D(0, 0, 0)), true);
 		assertEquals(t.addPoint(new Vec3D(0, 100, 0)), true);
 		assertEquals(t.addPoint(new Vec3D(101, 0, 0)), false);
-		ArrayList points = t.getPointsWithinSphere(new Sphere(new Vec3D(50, 0,
-				0), 50));
+		ArrayList<Vec3D> points = t.getPointsWithinSphere(new Sphere(new Vec3D(
+				50, 0, 0), 50));
 		assertEquals(points.size() == 1, true);
 		points = t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50),
 				new Vec3D(50, 50, 50)));
@@ -73,13 +73,13 @@ public class GeomTestSuite extends TestCase {
 	public void testRectMerge() {
 		Rect r = new Rect(-10, 2, 3, 3);
 		Rect s = new Rect(-8, 4, 5, 3);
-		r.merge(s);
+		r.union(s);
 		System.out.println(r);
 		assertEquals(r.width == 7, true);
 		assertEquals(r.height == 5, true);
 		r = new Rect(0, 0, 3, 3);
 		s = new Rect(-1, 2, 1, 1);
-		r.merge(s);
+		r.union(s);
 		System.out.println(r);
 	}
 
@@ -94,9 +94,9 @@ public class GeomTestSuite extends TestCase {
 	}
 
 	public void testSlerp() {
-		Quaternion a = new Quaternion(0, Vec3D.X_AXIS);
-		Quaternion b = new Quaternion(0, Vec3D.X_AXIS.getInverted());
-		a = a.interpolateTo(b, 0.5f);
-		System.out.println(a);
+		Quaternion a = new Quaternion(0, new Vec3D(0, 0, -1));
+		Quaternion b = new Quaternion(0, new Vec3D(0, 0, 1));
+		Quaternion c = a.interpolateTo(b, 0.05f);
+		System.out.println(c);
 	}
 }
