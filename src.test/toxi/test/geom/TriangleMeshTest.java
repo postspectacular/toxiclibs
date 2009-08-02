@@ -1,8 +1,12 @@
 package toxi.test.geom;
 
+import java.util.ArrayList;
+
 import junit.framework.TestCase;
 import toxi.geom.Vec3D;
 import toxi.geom.util.TriangleMesh;
+import toxi.geom.util.TriangleMesh.Face;
+import toxi.geom.util.TriangleMesh.Vertex;
 
 public class TriangleMeshTest extends TestCase {
 
@@ -26,7 +30,15 @@ public class TriangleMeshTest extends TestCase {
 	}
 
 	public void testSTLImport() {
-		mesh = TriangleMesh.fromBinarySTL("test/test.stl");
+		double total = 0;
+		int numIter = 100;
+		for (int i = 0; i < numIter; i++) {
+			long t = System.nanoTime();
+			mesh = TriangleMesh.fromBinarySTL("test/test.stl");
+			total += (System.nanoTime() - t);
+		}
+		System.out.println("avg. mesh construction time: " + total * 1e-6
+				/ numIter);
 		assertNotNull(mesh);
 		assertEquals(714, mesh.getNumVertices());
 		assertEquals(1424, mesh.getNumFaces());
@@ -34,7 +46,13 @@ public class TriangleMeshTest extends TestCase {
 	}
 
 	public void testUniqueVertices() {
+		ArrayList<Vertex> verts = new ArrayList<Vertex>(mesh.vertices.values());
 		assertEquals(6, mesh.vertices.size());
+		for (Face f : mesh.faces) {
+			assertEquals(verts.get(f.a.getID()), f.a);
+			assertEquals(verts.get(f.b.getID()), f.b);
+			assertEquals(verts.get(f.c.getID()), f.c);
+		}
 	}
 
 	public void testVertexNormals() {

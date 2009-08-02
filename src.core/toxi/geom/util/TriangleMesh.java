@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
@@ -16,10 +17,10 @@ public class TriangleMesh {
 		public final Vertex a, b, c;
 		public final Vec3D normal;
 
-		Face(int aID, int bID, int cID) {
-			a = vertices.get(aID);
-			b = vertices.get(bID);
-			c = vertices.get(cID);
+		Face(Vertex a, Vertex b, Vertex c) {
+			this.a = a;
+			this.b = b;
+			this.c = c;
 			normal = a.sub(c).crossSelf(a.sub(b)).normalize();
 			a.addFaceNormal(normal);
 			b.addFaceNormal(normal);
@@ -46,7 +47,7 @@ public class TriangleMesh {
 		public final Vec3D normal = new Vec3D();
 
 		private final int id;
-		private int numFaces = 0;
+		private int valence = 0;
 
 		Vertex(Vec3D v, int id) {
 			super(v);
@@ -55,11 +56,19 @@ public class TriangleMesh {
 
 		final void addFaceNormal(Vec3D n) {
 			normal.addSelf(n);
-			numFaces++;
+			valence++;
 		}
 
 		final void computeNormal() {
-			normal.scaleSelf(1f / numFaces);
+			normal.scaleSelf(1f / valence);
+		}
+
+		final public int getID() {
+			return id;
+		}
+
+		final public int getValence() {
+			return valence;
 		}
 
 		public String toString() {
@@ -70,7 +79,6 @@ public class TriangleMesh {
 	protected static final Logger logger = Logger.getLogger(TriangleMesh.class
 			.getName());
 
-	public final ArrayList<Vertex> vertices;
 	public final ArrayList<Face> faces;
 	public String name;
 
@@ -83,33 +91,46 @@ public class TriangleMesh {
 
 	protected boolean isLoggerEnabled = false;
 
+	public LinkedHashMap<Vec3D, Vertex> vertices;
+
 	public TriangleMesh(String name) {
 		this(name, 1000, 3000);
 	}
 
+	@SuppressWarnings("serial")
 	public TriangleMesh(String name, int numV, int numF) {
 		this.name = name;
-		vertices = new ArrayList<Vertex>(numV);
 		faces = new ArrayList<Face>(numF);
+		vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.75f, false);
 	}
 
 	public final void addFace(Vec3D a, Vec3D b, Vec3D c) {
-		int aID = vertices.indexOf(a);
-		if (aID == -1) {
+		int aID, bID, cID;
+		Vertex va = vertices.get(a);
+		if (va != null) {
+			aID = va.id;
+		} else {
 			aID = numVertices;
-			vertices.add(new Vertex(a, aID));
+			va = new Vertex(a, aID);
+			vertices.put(va, va);
 			numVertices++;
 		}
-		int bID = vertices.indexOf(b);
-		if (bID == -1) {
+		Vertex vb = vertices.get(b);
+		if (vb != null) {
+			bID = vb.id;
+		} else {
 			bID = numVertices;
-			vertices.add(new Vertex(b, bID));
+			vb = new Vertex(b, bID);
+			vertices.put(vb, vb);
 			numVertices++;
 		}
-		int cID = vertices.indexOf(c);
-		if (cID == -1) {
+		Vertex vc = vertices.get(c);
+		if (vc != null) {
+			cID = vc.id;
+		} else {
 			cID = numVertices;
-			vertices.add(new Vertex(c, cID));
+			vc = new Vertex(c, cID);
+			vertices.put(vc, vc);
 			numVertices++;
 		}
 		if (aID == bID || aID == cID || bID == cID) {
@@ -118,7 +139,8 @@ public class TriangleMesh {
 						+ c);
 			}
 		} else {
-			faces.add(new Face(aID, bID, cID));
+			Face f = new Face(va, vb, vc);
+			faces.add(f);
 			numFaces++;
 		}
 	}
@@ -132,7 +154,7 @@ public class TriangleMesh {
 	}
 
 	public final void computeVertexNormals() {
-		for (Vertex v : vertices) {
+		for (Vertex v : vertices.values()) {
 			v.computeNormal();
 		}
 	}
@@ -144,7 +166,7 @@ public class TriangleMesh {
 	public AABB getBoundingBox() {
 		final Vec3D minBounds = Vec3D.MAX_VALUE.copy();
 		final Vec3D maxBounds = Vec3D.MIN_VALUE.copy();
-		for (Vertex v : vertices) {
+		for (Vertex v : vertices.values()) {
 			minBounds.minSelf(v);
 			maxBounds.maxSelf(v);
 		}
@@ -154,7 +176,7 @@ public class TriangleMesh {
 
 	public final Vec3D getCentroid() {
 		centroid.clear();
-		for (Vec3D v : vertices) {
+		for (Vec3D v : vertices.values()) {
 			centroid.addSelf(v);
 		}
 		return centroid.scaleSelf(1f / numVertices);
@@ -216,7 +238,7 @@ public class TriangleMesh {
 	public final float[] getUniqueVerticesAsArray() {
 		float[] verts = new float[vertices.size() * 3];
 		int i = 0;
-		for (Vertex v : vertices) {
+		for (Vertex v : vertices.values()) {
 			verts[i++] = v.x;
 			verts[i++] = v.y;
 			verts[i++] = v.z;
