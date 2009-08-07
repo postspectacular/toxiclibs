@@ -26,6 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.math.MathUtils;
 
@@ -37,8 +38,6 @@ public class CompoundTheoryStrategy implements ColorTheoryStrategy {
 
 	public static final String NAME = "compound";
 
-	private boolean isFlipped = false;
-
 	private static final float wrap(float x, float min, float threshold,
 			float plus) {
 		if (x - min < threshold) {
@@ -47,6 +46,8 @@ public class CompoundTheoryStrategy implements ColorTheoryStrategy {
 			return x - min;
 		}
 	}
+
+	private boolean isFlipped = false;
 
 	public CompoundTheoryStrategy() {
 
@@ -62,8 +63,8 @@ public class CompoundTheoryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromColor(TColor src) {
-		ColorList colors = new ColorList(src.copy());
+	public ColorList createListFromColor(ReadonlyTColor src) {
+		ColorList colors = new ColorList(src);
 		int direction = isFlipped ? -1 : 1;
 
 		TColor c = src.getRotatedRYB(30 * direction);

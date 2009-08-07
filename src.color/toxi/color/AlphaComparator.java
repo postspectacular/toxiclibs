@@ -33,9 +33,11 @@ import java.util.Comparator;
  * @author toxi
  * 
  */
-public class AlphaComparator implements Comparator<TColor> {
+public class AlphaComparator implements Comparator<ReadonlyTColor> {
 
-	public int compare(TColor a, TColor b) {
-		return a.alpha < b.alpha ? -1 : a.alpha > b.alpha ? 1 : 0;
+	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
+		float aa = a.alpha();
+		float ba = b.alpha();
+		return aa < ba ? -1 : aa > ba ? 1 : 0;
 	}
 }

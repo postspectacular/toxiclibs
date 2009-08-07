@@ -33,7 +33,7 @@ import java.util.Comparator;
  * @author toxi
  * 
  */
-public class HSVComparator implements Comparator<TColor> {
+public class HSVComparator implements Comparator<ReadonlyTColor> {
 
 	private final int component;
 
@@ -41,8 +41,23 @@ public class HSVComparator implements Comparator<TColor> {
 		component = comp;
 	}
 
-	public int compare(TColor a, TColor b) {
-		return Float.compare(a.hsv[component], b.hsv[component]);
+	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
+		float ca, cb;
+		switch (component) {
+		case 0:
+			ca = a.hue();
+			cb = b.hue();
+			break;
+		case 1:
+			ca = a.saturation();
+			cb = b.saturation();
+			break;
+		case 2:
+		default:
+			ca = a.brightness();
+			cb = b.brightness();
+		}
+		return Float.compare(ca, cb);
 	}
 
 }

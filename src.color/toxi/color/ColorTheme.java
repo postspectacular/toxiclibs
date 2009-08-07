@@ -48,10 +48,10 @@ public class ColorTheme {
 
 	class ThemePart {
 		ColorRange range;
-		TColor col;
+		ReadonlyTColor col;
 		float weight;
 
-		ThemePart(ColorRange range, TColor col, float weight) {
+		ThemePart(ColorRange range, ReadonlyTColor col, float weight) {
 			this.range = range;
 			this.col = col;
 			this.weight = weight;
@@ -71,7 +71,7 @@ public class ColorTheme {
 		this.name = name;
 	}
 
-	public ColorTheme addRange(ColorRange range, TColor col, float weight) {
+	public ColorTheme addRange(ColorRange range, ReadonlyTColor col, float weight) {
 		parts.add(new ThemePart(range, col, weight));
 		weightedSum += weight;
 		return this;
@@ -79,7 +79,7 @@ public class ColorTheme {
 
 	public ColorTheme addRange(String descriptor, float weight) {
 		StringTokenizer st = new StringTokenizer(descriptor, " ,");
-		TColor col = null;
+		ReadonlyTColor col = null;
 		ColorRange range = null;
 		while (st.hasMoreTokens()) {
 			String item = st.nextToken();

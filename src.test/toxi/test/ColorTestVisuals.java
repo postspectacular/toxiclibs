@@ -8,6 +8,7 @@ import toxi.color.ColorRange;
 import toxi.color.NamedColor;
 import toxi.color.ProximityComparator;
 import toxi.color.RGBDistanceProxy;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.color.theory.ColorTheoryRegistry;
 import toxi.color.theory.ColorTheoryStrategy;
@@ -95,14 +96,14 @@ public class ColorTestVisuals extends PApplet {
 		textFont(createFont("arial", 12));
 	}
 
-	private void swatch(TColor c, int x, int y) {
+	private void swatch(ReadonlyTColor c, int x, int y) {
 		fill(c.toARGB());
 		rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
 	}
 
 	private void swatches(ColorList sorted, int x, int y) {
 		noStroke();
-		for (TColor c : sorted) {
+		for (ReadonlyTColor c : sorted) {
 			swatch(c, x, y);
 			x += SWATCH_WIDTH + SWATCH_GAP;
 		}

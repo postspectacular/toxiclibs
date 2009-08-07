@@ -33,7 +33,7 @@ import java.util.Comparator;
  * @author toxi
  * 
  */
-public class RGBComparator implements Comparator<TColor> {
+public class RGBComparator implements Comparator<ReadonlyTColor> {
 
 	private final int component;
 
@@ -41,8 +41,23 @@ public class RGBComparator implements Comparator<TColor> {
 		component = comp;
 	}
 
-	public int compare(TColor a, TColor b) {
-		return Float.compare(a.rgb[component], b.rgb[component]);
+	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
+		float ca, cb;
+		switch (component) {
+		case 0:
+			ca = a.red();
+			cb = b.red();
+			break;
+		case 1:
+			ca = a.green();
+			cb = b.green();
+			break;
+		case 2:
+		default:
+			ca = a.blue();
+			cb = b.blue();
+		}
+		return Float.compare(ca, cb);
 	}
 
 }

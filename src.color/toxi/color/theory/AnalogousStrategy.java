@@ -26,6 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.geom.Vec2D;
 import toxi.math.MathUtils;
@@ -76,17 +77,16 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromColor(TColor src) {
+	public ColorList createListFromColor(ReadonlyTColor src) {
 		contrast = MathUtils.clipNormalized(contrast);
-		TColor clr = src.copy();
-		ColorList colors = new ColorList(clr);
+		ColorList colors = new ColorList(src);
 		for (Vec2D currTone : tones) {
-			TColor c = clr.getRotatedRYB((int) (theta * currTone.x));
+			TColor c = src.getRotatedRYB((int) (theta * currTone.x));
 			float t = 0.44f - currTone.y * 0.1f;
-			if (clr.brightness() - contrast * currTone.y < t) {
+			if (src.brightness() - contrast * currTone.y < t) {
 				c.setBrightness(t);
 			} else {
-				c.setBrightness(clr.brightness() - contrast * currTone.y);
+				c.setBrightness(src.brightness() - contrast * currTone.y);
 			}
 			c.desaturate(0.05f);
 			colors.add(c);

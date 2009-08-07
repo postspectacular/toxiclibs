@@ -35,7 +35,7 @@ package toxi.color;
  */
 public class CMYKDistanceProxy implements DistanceProxy {
 
-	public float distanceBetween(TColor a, TColor b) {
+	public float distanceBetween(ReadonlyTColor a, ReadonlyTColor b) {
 		return a.distanceToCMYK(b);
 	}
 

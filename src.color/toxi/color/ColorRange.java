@@ -43,8 +43,8 @@ import toxi.util.datatypes.GenericSet;
  * variations within the constraints. Please see the examples for further
  * details.
  * 
- * {@link ColorRange}s are a key ingredient for defining {@link ColorTheme}s
- * but can also be used individually.
+ * {@link ColorRange}s are a key ingredient for defining {@link ColorTheme}s but
+ * can also be used individually.
  * 
  * @author toxi
  */
@@ -58,16 +58,16 @@ public class ColorRange {
 	/**
 	 * Shade definition: saturation 30-70%, brightness: 90-100%
 	 */
-	public static final ColorRange LIGHT = new ColorRange(null,
-			new FloatRange(0.3f, 0.7f), new FloatRange(0.9f, 1.0f), null,
-			new FloatRange(0.15f, 0.30f), null, "light");
+	public static final ColorRange LIGHT = new ColorRange(null, new FloatRange(
+			0.3f, 0.7f), new FloatRange(0.9f, 1.0f), null, new FloatRange(
+			0.15f, 0.30f), null, "light");
 
 	/**
 	 * Shade definition: saturation 70-100%, brightness: 15-40%
 	 */
-	public static final ColorRange DARK = new ColorRange(null,
-			new FloatRange(0.7f, 1.0f), new FloatRange(0.15f, 0.4f), null,
-			null, new FloatRange(0.5f, 0.75f), "dark");
+	public static final ColorRange DARK = new ColorRange(null, new FloatRange(
+			0.7f, 1.0f), new FloatRange(0.15f, 0.4f), null, null,
+			new FloatRange(0.5f, 0.75f), "dark");
 
 	/**
 	 * Shade definition: saturation 80-100%, brightness: 80-100%
@@ -78,9 +78,9 @@ public class ColorRange {
 	/**
 	 * Shade definition: saturation 15-30%, brightness: 70-100%
 	 */
-	public static final ColorRange WEAK = new ColorRange(null,
-			new FloatRange(0.15f, 0.3f), new FloatRange(0.7f, 1.0f), null,
-			new FloatRange(0.2f, 0.2f), null, "weak");
+	public static final ColorRange WEAK = new ColorRange(null, new FloatRange(
+			0.15f, 0.3f), new FloatRange(0.7f, 1.0f), null, new FloatRange(
+			0.2f, 0.2f), null, "weak");
 
 	/**
 	 * Shade definition: saturation 25-35%, brightness: 30-70%
@@ -92,36 +92,36 @@ public class ColorRange {
 	/**
 	 * Shade definition: saturation 40-80%, brightness: 80-100%
 	 */
-	public static final ColorRange FRESH = new ColorRange(null,
-			new FloatRange(0.4f, 0.8f), new FloatRange(0.8f, 1.0f), null,
-			new FloatRange(0.05f, 0.3f), new FloatRange(0.8f, 1.0f), "fresh");
+	public static final ColorRange FRESH = new ColorRange(null, new FloatRange(
+			0.4f, 0.8f), new FloatRange(0.8f, 1.0f), null, new FloatRange(
+			0.05f, 0.3f), new FloatRange(0.8f, 1.0f), "fresh");
 
 	/**
 	 * Shade definition: saturation 20-30%, brightness: 60-90%
 	 */
-	public static final ColorRange SOFT = new ColorRange(null,
-			new FloatRange(0.2f, 0.3f), new FloatRange(0.6f, 0.9f), null,
-			new FloatRange(0.05f, 0.15f), new FloatRange(0.6f, 0.9f), "soft");
+	public static final ColorRange SOFT = new ColorRange(null, new FloatRange(
+			0.2f, 0.3f), new FloatRange(0.6f, 0.9f), null, new FloatRange(
+			0.05f, 0.15f), new FloatRange(0.6f, 0.9f), "soft");
 
 	/**
 	 * Shade definition: saturation 90-100%, brightness: 40-100%
 	 */
-	public static final ColorRange HARD = new ColorRange(null,
-			new FloatRange(0.9f, 1.0f), new FloatRange(0.4f, 1.0f), "hard");
+	public static final ColorRange HARD = new ColorRange(null, new FloatRange(
+			0.9f, 1.0f), new FloatRange(0.4f, 1.0f), "hard");
 
 	/**
 	 * Shade definition: saturation 60-90%, brightness: 40-90%
 	 */
-	public static final ColorRange WARM = new ColorRange(null,
-			new FloatRange(0.6f, 0.9f), new FloatRange(0.4f, 0.9f), null,
-			new FloatRange(0.2f, 0.2f), new FloatRange(0.8f, 1.0f), "warm");
+	public static final ColorRange WARM = new ColorRange(null, new FloatRange(
+			0.6f, 0.9f), new FloatRange(0.4f, 0.9f), null, new FloatRange(0.2f,
+			0.2f), new FloatRange(0.8f, 1.0f), "warm");
 
 	/**
 	 * Shade definition: saturation 5-20%, brightness: 90-100%
 	 */
-	public static final ColorRange COOL = new ColorRange(null,
-			new FloatRange(0.05f, 0.2f), new FloatRange(0.9f, 1.0f), null,
-			null, new FloatRange(0.95f, 1.0f), "cool");
+	public static final ColorRange COOL = new ColorRange(null, new FloatRange(
+			0.05f, 0.2f), new FloatRange(0.9f, 1.0f), null, null,
+			new FloatRange(0.95f, 1.0f), "cool");
 
 	/**
 	 * Shade definition: saturation 90-100%, brightness: 20-35% or 80-100%
@@ -181,19 +181,6 @@ public class ColorRange {
 	}
 
 	/**
-	 * Constructs a new range using the hue of the given color as hue
-	 * constraint, but saturation and brightness are fully flexible. The
-	 * resulting range will produce any shade of the given color.
-	 * 
-	 * @param c
-	 *            base color
-	 */
-	public ColorRange(TColor c) {
-		this(new FloatRange(c.hue(), c.hue()), null, null, null, null, null,
-				null);
-	}
-
-	/**
 	 * Constructs a new range using the given colors as HSV constraints.
 	 * 
 	 * @param list
@@ -212,8 +199,8 @@ public class ColorRange {
 	 * is null, a range of 0.0 ... 1.0 is created automatically for that
 	 * constraint). If alpha is left undefined, it'll be initialized to fully
 	 * opaque only. You can also specify ranges for possible black and white
-	 * points which are used if the range is later applied to a grayscale
-	 * color. The default black point is at 0.0 and white at 1.0.
+	 * points which are used if the range is later applied to a grayscale color.
+	 * The default black point is at 0.0 and white at 1.0.
 	 * 
 	 * @param hue
 	 * @param sat
@@ -299,20 +286,16 @@ public class ColorRange {
 	}
 
 	/**
-	 * Adds the HSV color components as constraints.
+	 * Constructs a new range using the hue of the given color as hue
+	 * constraint, but saturation and brightness are fully flexible. The
+	 * resulting range will produce any shade of the given color.
 	 * 
 	 * @param c
-	 *            color to use as constraint
-	 * @return itself
+	 *            base color
 	 */
-	public ColorRange add(TColor c) {
-		hueConstraint.add(new FloatRange(c.hue(), c.hue()));
-		saturationConstraint
-				.add(new FloatRange(c.saturation(), c.saturation()));
-		brightnessConstraint
-				.add(new FloatRange(c.brightness(), c.brightness()));
-		alphaConstraint.add(new FloatRange(c.alpha, c.alpha));
-		return this;
+	public ColorRange(ReadonlyTColor c) {
+		this(new FloatRange(c.hue(), c.hue()), null, null, null, null, null,
+				null);
 	}
 
 	/**
@@ -332,6 +315,23 @@ public class ColorRange {
 		black.max = MathUtils.max(black.max, range.black.max);
 		white.min = MathUtils.min(white.min, range.white.min);
 		white.max = MathUtils.max(white.max, range.white.max);
+		return this;
+	}
+
+	/**
+	 * Adds the HSV color components as constraints.
+	 * 
+	 * @param c
+	 *            color to use as constraint
+	 * @return itself
+	 */
+	public ColorRange add(ReadonlyTColor c) {
+		hueConstraint.add(new FloatRange(c.hue(), c.hue()));
+		saturationConstraint
+				.add(new FloatRange(c.saturation(), c.saturation()));
+		brightnessConstraint
+				.add(new FloatRange(c.brightness(), c.brightness()));
+		alphaConstraint.add(new FloatRange(c.alpha(), c.alpha()));
 		return this;
 	}
 
@@ -455,7 +455,7 @@ public class ColorRange {
 	 *            color to check
 	 * @return true, if color is contained
 	 */
-	public boolean contains(TColor c) {
+	public boolean contains(ReadonlyTColor c) {
 		boolean isInRange = isValueInConstraint(c.hue(), hueConstraint);
 		isInRange &= isValueInConstraint(c.saturation(), saturationConstraint);
 		isInRange &= isValueInConstraint(c.brightness(), brightnessConstraint);
@@ -483,7 +483,7 @@ public class ColorRange {
 	 *            hue variance (use {@link #DEFAULT_VARIANCE} for default)
 	 * @return copy
 	 */
-	public ColorRange copy(TColor c, float variance) {
+	public ColorRange copy(ReadonlyTColor c, float variance) {
 		ColorRange range = new ColorRange();
 		range.name = name;
 
@@ -491,8 +491,8 @@ public class ColorRange {
 			float hue = c.hue() + variance * MathUtils.normalizedRandom();
 			range.hueConstraint = new GenericSet<FloatRange>(new FloatRange(
 					hue, hue));
-			range.alphaConstraint = new GenericSet<FloatRange>(new FloatRange(
-					c.alpha, c.alpha));
+			range.alphaConstraint = new GenericSet<FloatRange>(new FloatRange(c
+					.alpha(), c.alpha()));
 		} else {
 			range.hueConstraint = hueConstraint.copy();
 			range.alphaConstraint = alphaConstraint.copy();
@@ -510,8 +510,21 @@ public class ColorRange {
 	 * 
 	 * @return color
 	 */
-	public TColor getColor() {
+	public ReadonlyTColor getColor() {
 		return getColor(null, 0);
+	}
+
+	/**
+	 * Creates a new shade of the given hue based on the other constraints of
+	 * the range.
+	 * 
+	 * @param hue
+	 * @return color
+	 */
+	public ReadonlyTColor getColor(Hue hue) {
+		return TColor.newHSVA(hue.getHue(), saturationConstraint.pickRandom()
+				.pickRandom(), brightnessConstraint.pickRandom().pickRandom(),
+				alphaConstraint.pickRandom().pickRandom());
 	}
 
 	/**
@@ -523,7 +536,7 @@ public class ColorRange {
 	 * @param variance
 	 * @return color
 	 */
-	public TColor getColor(TColor c, float variance) {
+	public TColor getColor(ReadonlyTColor c, float variance) {
 		float h, s, b, a;
 		if (c != null) {
 			if (c.isBlack()) {
@@ -549,16 +562,16 @@ public class ColorRange {
 	}
 
 	/**
-	 * Creates a new shade of the given hue based on the other constraints of
-	 * the range.
+	 * Creates a new {@link ColorList} of colors based on the constraints of
+	 * this range.
 	 * 
-	 * @param hue
-	 * @return color
+	 * @see #getColor()
+	 * @param num
+	 *            number of colors to create
+	 * @return color list
 	 */
-	public TColor getColor(Hue hue) {
-		return TColor.newHSVA(hue.getHue(), saturationConstraint.pickRandom()
-				.pickRandom(), brightnessConstraint.pickRandom().pickRandom(),
-				alphaConstraint.pickRandom().pickRandom());
+	public ColorList getColors(int num) {
+		return getColors(null, num, DEFAULT_VARIANCE);
 	}
 
 	/**
@@ -574,25 +587,12 @@ public class ColorRange {
 	 *            hue variance
 	 * @return color list
 	 */
-	public ColorList getColors(TColor c, int num, float variance) {
+	public ColorList getColors(ReadonlyTColor c, int num, float variance) {
 		ColorList list = new ColorList();
 		for (int i = 0; i < num; i++) {
 			list.add(getColor(c, variance));
 		}
 		return list;
-	}
-
-	/**
-	 * Creates a new {@link ColorList} of colors based on the constraints of
-	 * this range.
-	 * 
-	 * @see #getColor()
-	 * @param num
-	 *            number of colors to create
-	 * @return color list
-	 */
-	public ColorList getColors(int num) {
-		return getColors(null, num, DEFAULT_VARIANCE);
 	}
 
 	/**
@@ -606,7 +606,7 @@ public class ColorRange {
 	 *            important if the created color is being saturated later on)
 	 * @return color/shade of gray
 	 */
-	public TColor getGrayscale(float brightness, float variance) {
+	public ReadonlyTColor getGrayscale(float brightness, float variance) {
 		return getColor(TColor.newGray(brightness), variance);
 	}
 

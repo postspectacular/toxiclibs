@@ -26,15 +26,15 @@
 package toxi.color;
 
 /**
- * Implements the {@link DistanceProxy} interface to sort colors by HSV
- * distance (used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}).
+ * Implements the {@link DistanceProxy} interface to sort colors by HSV distance
+ * (used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}).
  * 
  * @author toxi
  * 
  */
 public class HSVDistanceProxy implements DistanceProxy {
 
-	public float distanceBetween(TColor a, TColor b) {
+	public float distanceBetween(ReadonlyTColor a, ReadonlyTColor b) {
 		return a.distanceToHSV(b);
 	}
 }

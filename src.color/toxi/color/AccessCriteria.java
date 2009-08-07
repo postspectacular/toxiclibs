@@ -66,14 +66,14 @@ public class AccessCriteria {
 
 	protected final AccessMode mode;
 	protected final int component;
-	protected Comparator<TColor> comparator;
+	protected Comparator<ReadonlyTColor> comparator;
 
 	protected AccessCriteria(AccessMode mode, int compID) {
 		this(mode, compID, null);
 	}
 
 	protected AccessCriteria(AccessMode mode, int compID,
-			Comparator<TColor> comparator) {
+			Comparator<ReadonlyTColor> comparator) {
 		this.mode = mode;
 		this.component = compID;
 		this.comparator = comparator;
@@ -82,7 +82,7 @@ public class AccessCriteria {
 	/**
 	 * @return the comparator associated with the criteria.
 	 */
-	public Comparator<TColor> getComparator() {
+	public Comparator<ReadonlyTColor> getComparator() {
 		if (comparator == null) {
 			switch (mode) {
 			case HSV:

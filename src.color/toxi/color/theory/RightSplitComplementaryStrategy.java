@@ -26,6 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 
 /**
@@ -42,8 +43,8 @@ public class RightSplitComplementaryStrategy implements ColorTheoryStrategy {
 	 */
 	public static final String NAME = "rightSplitComplementary";
 
-	public ColorList createListFromColor(TColor src) {
-		TColor left = src.getComplement().rotateRYB(30).lighten(0.1f);
+	public ColorList createListFromColor(ReadonlyTColor src) {
+		ReadonlyTColor left = src.getComplement().rotateRYB(30).lighten(0.1f);
 		ColorList colors = ColorTheoryRegistry.COMPLEMENTARY
 				.createListFromColor(src);
 		for (int i = 3; i < 6; i++) {

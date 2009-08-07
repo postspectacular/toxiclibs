@@ -9,6 +9,7 @@ import toxi.color.ColorRange;
 import toxi.color.ColorTheme;
 import toxi.color.Hue;
 import toxi.color.NamedColor;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.color.theory.ColorTheoryRegistry;
 import toxi.color.theory.ColorTheoryStrategy;
@@ -17,7 +18,7 @@ import toxi.math.MathUtils;
 public class ColorTest extends TestCase {
 
 	public void testColor() {
-		TColor c = TColor.newHex("00ffff");
+		ReadonlyTColor c = TColor.newHex("00ffff");
 		System.out.println(c);
 		assertEquals(0.5, c.hue(), 0.001);
 		assertEquals(1.0, c.brightness(), 0.001);
@@ -34,8 +35,8 @@ public class ColorTest extends TestCase {
 					MathUtils.random(1f)));
 		AccessCriteria criteria = AccessCriteria.RED;
 		ColorList sorted = list.sortByCriteria(criteria, false);
-		TColor prev = null;
-		for (TColor c : sorted) {
+		ReadonlyTColor prev = null;
+		for (ReadonlyTColor c : sorted) {
 			System.out.println(c);
 			if (prev != null) {
 				assertTrue(prev.getComponentValue(criteria) <= c
@@ -46,7 +47,7 @@ public class ColorTest extends TestCase {
 		System.out.println("cluster sort...");
 		sorted = list.clusterSort(AccessCriteria.HUE,
 				AccessCriteria.BRIGHTNESS, 3, false);
-		for (TColor c : sorted) {
+		for (ReadonlyTColor c : sorted) {
 			System.out.println(c);
 		}
 	}
@@ -62,7 +63,7 @@ public class ColorTest extends TestCase {
 	public void testHues() {
 		assertTrue(Hue.GREEN.isPrimary());
 		assertFalse(Hue.LIME.isPrimary());
-		TColor hue = TColor.newHSV(Hue.CYAN, 0.5f, 0.2f);
+		ReadonlyTColor hue = TColor.newHSV(Hue.CYAN, 0.5f, 0.2f);
 		assertFalse(hue.isPrimary());
 		String hueName = "pink";
 		Hue h = Hue.getForName(hueName);
@@ -74,7 +75,7 @@ public class ColorTest extends TestCase {
 	}
 
 	public void testNamedColors() {
-		TColor c = NamedColor.getForName("cyan");
+		ReadonlyTColor c = NamedColor.getForName("cyan");
 		assertEquals(NamedColor.CYAN, c);
 	}
 
@@ -99,7 +100,7 @@ public class ColorTest extends TestCase {
 		t.addRange("dark blue", 0.5f);
 		t.addRange("soft orange", 0.5f);
 		ColorList cols = t.getColors(1000);
-		for (TColor c : cols) {
+		for (ReadonlyTColor c : cols) {
 			assertNotNull(c);
 		}
 	}

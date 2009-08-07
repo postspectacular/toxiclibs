@@ -26,8 +26,8 @@
 package toxi.color;
 
 /**
- * A proxy interface to support the sorting of colors in different color
- * spaces. Used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}.
+ * A proxy interface to support the sorting of colors in different color spaces.
+ * Used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}.
  * 
  * @author toxi
  * 
@@ -40,5 +40,5 @@ public interface DistanceProxy {
 	 * @param b
 	 * @return distance
 	 */
-	float distanceBetween(TColor a, TColor b);
+	float distanceBetween(ReadonlyTColor a, ReadonlyTColor b);
 }

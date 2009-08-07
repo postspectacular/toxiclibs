@@ -27,15 +27,15 @@
 package toxi.color;
 
 /**
- * Implements the {@link DistanceProxy} interface to sort colors by RGB
- * distance (used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}).
+ * Implements the {@link DistanceProxy} interface to sort colors by RGB distance
+ * (used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}).
  * 
  * @author toxi
  * 
  */
 public class RGBDistanceProxy implements DistanceProxy {
 
-	public float distanceBetween(TColor a, TColor b) {
+	public float distanceBetween(ReadonlyTColor a, ReadonlyTColor b) {
 		return a.distanceToRGB(b);
 	}
 

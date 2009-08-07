@@ -39,188 +39,300 @@ import java.util.HashMap;
  */
 public class NamedColor {
 
-	public static final TColor ALICEBLUE = TColor.newRGB(0.94f, 0.97f, 1.00f);
-	public static final TColor ANTIQUEWHITE = TColor
-			.newRGB(0.98f, 0.92f, 0.84f);
-	public static final TColor AQUA = TColor.newRGB(0.00f, 1.00f, 1.00f);
-	public static final TColor AQUAMARINE = TColor.newRGB(0.50f, 1.00f, 0.83f);
-	public static final TColor AZURE = TColor.newRGB(0.94f, 1.00f, 1.00f);
-	public static final TColor BARK = TColor.newRGB(0.25f, 0.19f, 0.13f);
-	public static final TColor BEIGE = TColor.newRGB(0.96f, 0.96f, 0.86f);
-	public static final TColor BISQUE = TColor.newRGB(1.00f, 0.89f, 0.77f);
-	public static final TColor BLACK = TColor.newRGB(0.00f, 0.00f, 0.00f);
-	public static final TColor BLANCHEDALMOND = TColor.newRGB(1.00f, 0.92f,
-			0.80f);
-	public static final TColor BLUE = TColor.newRGB(0.00f, 0.00f, 1.00f);
-	public static final TColor BLUEVIOLET = TColor.newRGB(0.54f, 0.17f, 0.89f);
-	public static final TColor BROWN = TColor.newRGB(0.65f, 0.16f, 0.16f);
-	public static final TColor BURLYWOOD = TColor.newRGB(0.87f, 0.72f, 0.53f);
-	public static final TColor CADETBLUE = TColor.newRGB(0.37f, 0.62f, 0.63f);
-	public static final TColor CHARTREUSE = TColor.newRGB(0.50f, 1.00f, 0.00f);
-	public static final TColor CHOCOLATE = TColor.newRGB(0.82f, 0.41f, 0.12f);
-	public static final TColor CORAL = TColor.newRGB(1.00f, 0.50f, 0.31f);
-	public static final TColor CORNFLOWERBLUE = TColor.newRGB(0.39f, 0.58f,
-			0.93f);
-	public static final TColor CORNSILK = TColor.newRGB(1.00f, 0.97f, 0.86f);
-	public static final TColor CRIMSON = TColor.newRGB(0.86f, 0.08f, 0.24f);
-	public static final TColor CYAN = TColor.newRGB(0.00f, 0.68f, 0.94f);
-	public static final TColor DARKBLUE = TColor.newRGB(0.00f, 0.00f, 0.55f);
-	public static final TColor DARKCYAN = TColor.newRGB(0.00f, 0.55f, 0.55f);
-	public static final TColor DARKGOLDENROD = TColor.newRGB(0.72f, 0.53f,
-			0.04f);
-	public static final TColor DARKGRAY = TColor.newRGB(0.66f, 0.66f, 0.66f);
-	public static final TColor DARKGREEN = TColor.newRGB(0.00f, 0.39f, 0.00f);
-	public static final TColor DARKKHAKI = TColor.newRGB(0.74f, 0.72f, 0.42f);
-	public static final TColor DARKMAGENTA = TColor.newRGB(0.55f, 0.00f, 0.55f);
-	public static final TColor DARKOLIVEGREEN = TColor.newRGB(0.33f, 0.42f,
-			0.18f);
-	public static final TColor DARKORANGE = TColor.newRGB(1.00f, 0.55f, 0.00f);
-	public static final TColor DARKORCHID = TColor.newRGB(0.60f, 0.20f, 0.80f);
-	public static final TColor DARKRED = TColor.newRGB(0.55f, 0.00f, 0.00f);
-	public static final TColor DARKSALMON = TColor.newRGB(0.91f, 0.59f, 0.48f);
-	public static final TColor DARKSEAGREEN = TColor
-			.newRGB(0.56f, 0.74f, 0.56f);
-	public static final TColor DARKSLATEBLUE = TColor.newRGB(0.28f, 0.24f,
-			0.55f);
-	public static final TColor DARKSLATEGRAY = TColor.newRGB(0.18f, 0.31f,
+	public static final ReadonlyTColor ALICEBLUE = TColor.newRGB(0.94f, 0.97f,
+			1.00f);
+	public static final ReadonlyTColor ANTIQUEWHITE = TColor.newRGB(0.98f,
+			0.92f, 0.84f);
+	public static final ReadonlyTColor AQUA = TColor
+			.newRGB(0.00f, 1.00f, 1.00f);
+	public static final ReadonlyTColor AQUAMARINE = TColor.newRGB(0.50f, 1.00f,
+			0.83f);
+	public static final ReadonlyTColor AZURE = TColor.newRGB(0.94f, 1.00f,
+			1.00f);
+	public static final ReadonlyTColor BARK = TColor
+			.newRGB(0.25f, 0.19f, 0.13f);
+	public static final ReadonlyTColor BEIGE = TColor.newRGB(0.96f, 0.96f,
+			0.86f);
+	public static final ReadonlyTColor BISQUE = TColor.newRGB(1.00f, 0.89f,
+			0.77f);
+	public static final ReadonlyTColor BLACK = TColor.newRGB(0.00f, 0.00f,
+			0.00f);
+	public static final ReadonlyTColor BLANCHEDALMOND = TColor.newRGB(1.00f,
+			0.92f, 0.80f);
+	public static final ReadonlyTColor BLUE = TColor
+			.newRGB(0.00f, 0.00f, 1.00f);
+	public static final ReadonlyTColor BLUEVIOLET = TColor.newRGB(0.54f, 0.17f,
+			0.89f);
+	public static final ReadonlyTColor BROWN = TColor.newRGB(0.65f, 0.16f,
+			0.16f);
+	public static final ReadonlyTColor BURLYWOOD = TColor.newRGB(0.87f, 0.72f,
+			0.53f);
+	public static final ReadonlyTColor CADETBLUE = TColor.newRGB(0.37f, 0.62f,
+			0.63f);
+	public static final ReadonlyTColor CHARTREUSE = TColor.newRGB(0.50f, 1.00f,
+			0.00f);
+	public static final ReadonlyTColor CHOCOLATE = TColor.newRGB(0.82f, 0.41f,
+			0.12f);
+	public static final ReadonlyTColor CORAL = TColor.newRGB(1.00f, 0.50f,
 			0.31f);
-	public static final TColor DARKTURQUOISE = TColor.newRGB(0.00f, 0.81f,
-			0.82f);
-	public static final TColor DARKVIOLET = TColor.newRGB(0.58f, 0.00f, 0.83f);
-	public static final TColor DEEPPINK = TColor.newRGB(1.00f, 0.08f, 0.58f);
-	public static final TColor DEEPSKYBLUE = TColor.newRGB(0.00f, 0.75f, 1.00f);
-	public static final TColor DIMGRAY = TColor.newRGB(0.41f, 0.41f, 0.41f);
-	public static final TColor DIMGREY = TColor.newRGB(0.41f, 0.41f, 0.41f);
-	public static final TColor DODGERBLUE = TColor.newRGB(0.12f, 0.56f, 1.00f);
-	public static final TColor FIREBRICK = TColor.newRGB(0.70f, 0.13f, 0.13f);
-	public static final TColor FLORALWHITE = TColor.newRGB(1.00f, 0.98f, 0.94f);
-	public static final TColor FORESTGREEN = TColor.newRGB(0.13f, 0.55f, 0.13f);
-	public static final TColor FUCHSIA = TColor.newRGB(1.00f, 0.00f, 1.00f);
-	public static final TColor GAINSBORO = TColor.newRGB(0.86f, 0.86f, 0.86f);
-	public static final TColor GHOSTWHITE = TColor.newRGB(0.97f, 0.97f, 1.00f);
-	public static final TColor GOLD = TColor.newRGB(1.00f, 0.84f, 0.00f);
-	public static final TColor GOLDENROD = TColor.newRGB(0.85f, 0.65f, 0.13f);
-	public static final TColor GRAY = TColor.newRGB(0.50f, 0.50f, 0.50f);
-	public static final TColor GREEN = TColor.newRGB(0.00f, 0.50f, 0.00f);
-	public static final TColor GREENYELLOW = TColor.newRGB(0.68f, 1.00f, 0.18f);
-	public static final TColor GREY = TColor.newRGB(0.50f, 0.50f, 0.50f);
-	public static final TColor HONEYDEW = TColor.newRGB(0.94f, 1.00f, 0.94f);
-	public static final TColor HOTPINK = TColor.newRGB(1.00f, 0.41f, 0.71f);
-	public static final TColor INDIANRED = TColor.newRGB(0.80f, 0.36f, 0.36f);
-	public static final TColor INDIGO = TColor.newRGB(0.29f, 0.00f, 0.51f);
-	public static final TColor IVORY = TColor.newRGB(1.00f, 1.00f, 0.94f);
-	public static final TColor KHAKI = TColor.newRGB(0.94f, 0.90f, 0.55f);
-	public static final TColor LAVENDER = TColor.newRGB(0.90f, 0.90f, 0.98f);
-	public static final TColor LAVENDERBLUSH = TColor.newRGB(1.00f, 0.94f,
-			0.96f);
-	public static final TColor LAWNGREEN = TColor.newRGB(0.49f, 0.99f, 0.00f);
-	public static final TColor LEMONCHIFFON = TColor
-			.newRGB(1.00f, 0.98f, 0.80f);
-	public static final TColor LIGHTBLUE = TColor.newRGB(0.68f, 0.85f, 0.90f);
-	public static final TColor LIGHTCORAL = TColor.newRGB(0.94f, 0.50f, 0.50f);
-	public static final TColor LIGHTCYAN = TColor.newRGB(0.88f, 1.00f, 1.00f);
-	public static final TColor LIGHTGOLDENRODYELLOW = TColor.newRGB(0.98f,
-			0.98f, 0.82f);
-	public static final TColor LIGHTGREEN = TColor.newRGB(0.56f, 0.93f, 0.56f);
-	public static final TColor LIGHTGREY = TColor.newRGB(0.83f, 0.83f, 0.83f);
-	public static final TColor LIGHTPINK = TColor.newRGB(1.00f, 0.71f, 0.76f);
-	public static final TColor LIGHTSALMON = TColor.newRGB(1.00f, 0.63f, 0.48f);
-	public static final TColor LIGHTSEAGREEN = TColor.newRGB(0.13f, 0.70f,
-			0.67f);
-	public static final TColor LIGHTSKYBLUE = TColor
-			.newRGB(0.53f, 0.81f, 0.98f);
-	public static final TColor LIGHTSLATEGRAY = TColor.newRGB(0.47f, 0.53f,
-			0.60f);
-	public static final TColor LIGHTSTEELBLUE = TColor.newRGB(0.69f, 0.77f,
-			0.87f);
-	public static final TColor LIGHTYELLOW = TColor.newRGB(1.00f, 1.00f, 0.88f);
-	public static final TColor LIME = TColor.newRGB(0.00f, 1.00f, 0.00f);
-	public static final TColor LIMEGREEN = TColor.newRGB(0.20f, 0.80f, 0.20f);
-	public static final TColor LINEN = TColor.newRGB(0.98f, 0.94f, 0.90f);
-	public static final TColor MAROON = TColor.newRGB(0.50f, 0.00f, 0.00f);
-	public static final TColor MEDIUMAQUAMARINE = TColor.newRGB(0.40f, 0.80f,
-			0.67f);
-	public static final TColor MEDIUMBLUE = TColor.newRGB(0.00f, 0.00f, 0.80f);
-	public static final TColor MEDIUMORCHID = TColor
-			.newRGB(0.73f, 0.33f, 0.83f);
-	public static final TColor MEDIUMPURPLE = TColor
-			.newRGB(0.58f, 0.44f, 0.86f);
-	public static final TColor MEDIUMSEAGREEN = TColor.newRGB(0.24f, 0.70f,
-			0.44f);
-	public static final TColor MEDIUMSLATEBLUE = TColor.newRGB(0.48f, 0.41f,
-			0.93f);
-	public static final TColor MEDIUMSPRINGGREEN = TColor.newRGB(0.00f, 0.98f,
-			0.60f);
-	public static final TColor MEDIUMTURQUOISE = TColor.newRGB(0.28f, 0.82f,
+	public static final ReadonlyTColor CORNFLOWERBLUE = TColor.newRGB(0.39f,
+			0.58f, 0.93f);
+	public static final ReadonlyTColor CORNSILK = TColor.newRGB(1.00f, 0.97f,
+			0.86f);
+	public static final ReadonlyTColor CRIMSON = TColor.newRGB(0.86f, 0.08f,
+			0.24f);
+	public static final ReadonlyTColor CYAN = TColor
+			.newRGB(0.00f, 0.68f, 0.94f);
+	public static final ReadonlyTColor DARKBLUE = TColor.newRGB(0.00f, 0.00f,
+			0.55f);
+	public static final ReadonlyTColor DARKCYAN = TColor.newRGB(0.00f, 0.55f,
+			0.55f);
+	public static final ReadonlyTColor DARKGOLDENROD = TColor.newRGB(0.72f,
+			0.53f, 0.04f);
+	public static final ReadonlyTColor DARKGRAY = TColor.newRGB(0.66f, 0.66f,
+			0.66f);
+	public static final ReadonlyTColor DARKGREEN = TColor.newRGB(0.00f, 0.39f,
+			0.00f);
+	public static final ReadonlyTColor DARKKHAKI = TColor.newRGB(0.74f, 0.72f,
+			0.42f);
+	public static final ReadonlyTColor DARKMAGENTA = TColor.newRGB(0.55f,
+			0.00f, 0.55f);
+	public static final ReadonlyTColor DARKOLIVEGREEN = TColor.newRGB(0.33f,
+			0.42f, 0.18f);
+	public static final ReadonlyTColor DARKORANGE = TColor.newRGB(1.00f, 0.55f,
+			0.00f);
+	public static final ReadonlyTColor DARKORCHID = TColor.newRGB(0.60f, 0.20f,
 			0.80f);
-	public static final TColor MEDIUMVIOLETRED = TColor.newRGB(0.78f, 0.08f,
-			0.52f);
-	public static final TColor MIDNIGHTBLUE = TColor
-			.newRGB(0.10f, 0.10f, 0.44f);
-	public static final TColor MINTCREAM = TColor.newRGB(0.96f, 1.00f, 0.98f);
-	public static final TColor MISTYROSE = TColor.newRGB(1.00f, 0.89f, 0.88f);
-	public static final TColor MOCCASIN = TColor.newRGB(1.00f, 0.89f, 0.71f);
-	public static final TColor NAVAJOWHITE = TColor.newRGB(1.00f, 0.87f, 0.68f);
-	public static final TColor NAVY = TColor.newRGB(0.00f, 0.00f, 0.50f);
-	public static final TColor OLDLACE = TColor.newRGB(0.99f, 0.96f, 0.90f);
-	public static final TColor OLIVE = TColor.newRGB(0.50f, 0.50f, 0.00f);
-	public static final TColor OLIVEDRAB = TColor.newRGB(0.42f, 0.56f, 0.14f);
-	public static final TColor ORANGE = TColor.newRGB(1.00f, 0.65f, 0.00f);
-	public static final TColor ORANGERED = TColor.newRGB(1.00f, 0.27f, 0.00f);
-	public static final TColor ORCHID = TColor.newRGB(0.85f, 0.44f, 0.84f);
-	public static final TColor PALEGOLDENROD = TColor.newRGB(0.93f, 0.91f,
-			0.67f);
-	public static final TColor PALEGREEN = TColor.newRGB(0.60f, 0.98f, 0.60f);
-	public static final TColor PALETURQUOISE = TColor.newRGB(0.69f, 0.93f,
-			0.93f);
-	public static final TColor PALEVIOLETRED = TColor.newRGB(0.86f, 0.44f,
+	public static final ReadonlyTColor DARKRED = TColor.newRGB(0.55f, 0.00f,
+			0.00f);
+	public static final ReadonlyTColor DARKSALMON = TColor.newRGB(0.91f, 0.59f,
+			0.48f);
+	public static final ReadonlyTColor DARKSEAGREEN = TColor.newRGB(0.56f,
+			0.74f, 0.56f);
+	public static final ReadonlyTColor DARKSLATEBLUE = TColor.newRGB(0.28f,
+			0.24f, 0.55f);
+	public static final ReadonlyTColor DARKSLATEGRAY = TColor.newRGB(0.18f,
+			0.31f, 0.31f);
+	public static final ReadonlyTColor DARKTURQUOISE = TColor.newRGB(0.00f,
+			0.81f, 0.82f);
+	public static final ReadonlyTColor DARKVIOLET = TColor.newRGB(0.58f, 0.00f,
+			0.83f);
+	public static final ReadonlyTColor DEEPPINK = TColor.newRGB(1.00f, 0.08f,
 			0.58f);
-	public static final TColor PAPAYAWHIP = TColor.newRGB(1.00f, 0.94f, 0.84f);
-	public static final TColor PEACHPUFF = TColor.newRGB(1.00f, 0.85f, 0.73f);
-	public static final TColor PERU = TColor.newRGB(0.80f, 0.52f, 0.25f);
-	public static final TColor PINK = TColor.newRGB(1.00f, 0.75f, 0.80f);
-	public static final TColor PLUM = TColor.newRGB(0.87f, 0.63f, 0.87f);
-	public static final TColor POWDERBLUE = TColor.newRGB(0.69f, 0.88f, 0.90f);
-	public static final TColor PURPLE = TColor.newRGB(0.50f, 0.00f, 0.50f);
-	public static final TColor RED = TColor.newRGB(1.00f, 0.00f, 0.00f);
-	public static final TColor ROSYBROWN = TColor.newRGB(0.74f, 0.56f, 0.56f);
-	public static final TColor ROYALBLUE = TColor.newRGB(0.25f, 0.41f, 0.88f);
-	public static final TColor SADDLEBROWN = TColor.newRGB(0.55f, 0.27f, 0.07f);
-	public static final TColor SALMON = TColor.newRGB(0.98f, 0.50f, 0.45f);
-	public static final TColor SANDYBROWN = TColor.newRGB(0.96f, 0.64f, 0.38f);
-	public static final TColor SEAGREEN = TColor.newRGB(0.18f, 0.55f, 0.34f);
-	public static final TColor SEASHELL = TColor.newRGB(1.00f, 0.96f, 0.93f);
-	public static final TColor SIENNA = TColor.newRGB(0.63f, 0.32f, 0.18f);
-	public static final TColor SILVER = TColor.newRGB(0.75f, 0.75f, 0.75f);
-	public static final TColor SKYBLUE = TColor.newRGB(0.53f, 0.81f, 0.92f);
-	public static final TColor SLATEBLUE = TColor.newRGB(0.42f, 0.35f, 0.80f);
-	public static final TColor SLATEGRAY = TColor.newRGB(0.44f, 0.50f, 0.56f);
-	public static final TColor SNOW = TColor.newRGB(1.00f, 0.98f, 0.98f);
-	public static final TColor SPRINGGREEN = TColor.newRGB(0.00f, 1.00f, 0.50f);
-	public static final TColor STEELBLUE = TColor.newRGB(0.27f, 0.51f, 0.71f);
-	public static final TColor TAN = TColor.newRGB(0.82f, 0.71f, 0.55f);
-	public static final TColor TEAL = TColor.newRGB(0.00f, 0.50f, 0.50f);
-	public static final TColor THISTLE = TColor.newRGB(0.85f, 0.75f, 0.85f);
-	public static final TColor TOMATO = TColor.newRGB(1.00f, 0.39f, 0.28f);
-	public static final TColor TRANSPARENT = TColor.newRGBA(0.00f, 0.00f,
-			0.00f, 0.00f);
-	public static final TColor TURQUOISE = TColor.newRGB(0.25f, 0.88f, 0.82f);
-	public static final TColor VIOLET = TColor.newRGB(0.93f, 0.51f, 0.93f);
-	public static final TColor WHEAT = TColor.newRGB(0.96f, 0.87f, 0.07f);
-	public static final TColor WHITE = TColor.newRGB(1.00f, 1.00f, 1.00f);
-	public static final TColor WHITESMOKE = TColor.newRGB(0.96f, 0.96f, 0.96f);
-	public static final TColor YELLOW = TColor.newRGB(1.00f, 1.00f, 0.00f);
-	public static final TColor YELLOWGREEN = TColor.newRGB(0.60f, 0.80f, 0.20f);
+	public static final ReadonlyTColor DEEPSKYBLUE = TColor.newRGB(0.00f,
+			0.75f, 1.00f);
+	public static final ReadonlyTColor DIMGRAY = TColor.newRGB(0.41f, 0.41f,
+			0.41f);
+	public static final ReadonlyTColor DIMGREY = TColor.newRGB(0.41f, 0.41f,
+			0.41f);
+	public static final ReadonlyTColor DODGERBLUE = TColor.newRGB(0.12f, 0.56f,
+			1.00f);
+	public static final ReadonlyTColor FIREBRICK = TColor.newRGB(0.70f, 0.13f,
+			0.13f);
+	public static final ReadonlyTColor FLORALWHITE = TColor.newRGB(1.00f,
+			0.98f, 0.94f);
+	public static final ReadonlyTColor FORESTGREEN = TColor.newRGB(0.13f,
+			0.55f, 0.13f);
+	public static final ReadonlyTColor FUCHSIA = TColor.newRGB(1.00f, 0.00f,
+			1.00f);
+	public static final ReadonlyTColor GAINSBORO = TColor.newRGB(0.86f, 0.86f,
+			0.86f);
+	public static final ReadonlyTColor GHOSTWHITE = TColor.newRGB(0.97f, 0.97f,
+			1.00f);
+	public static final ReadonlyTColor GOLD = TColor
+			.newRGB(1.00f, 0.84f, 0.00f);
+	public static final ReadonlyTColor GOLDENROD = TColor.newRGB(0.85f, 0.65f,
+			0.13f);
+	public static final ReadonlyTColor GRAY = TColor
+			.newRGB(0.50f, 0.50f, 0.50f);
+	public static final ReadonlyTColor GREEN = TColor.newRGB(0.00f, 0.50f,
+			0.00f);
+	public static final ReadonlyTColor GREENYELLOW = TColor.newRGB(0.68f,
+			1.00f, 0.18f);
+	public static final ReadonlyTColor GREY = TColor
+			.newRGB(0.50f, 0.50f, 0.50f);
+	public static final ReadonlyTColor HONEYDEW = TColor.newRGB(0.94f, 1.00f,
+			0.94f);
+	public static final ReadonlyTColor HOTPINK = TColor.newRGB(1.00f, 0.41f,
+			0.71f);
+	public static final ReadonlyTColor INDIANRED = TColor.newRGB(0.80f, 0.36f,
+			0.36f);
+	public static final ReadonlyTColor INDIGO = TColor.newRGB(0.29f, 0.00f,
+			0.51f);
+	public static final ReadonlyTColor IVORY = TColor.newRGB(1.00f, 1.00f,
+			0.94f);
+	public static final ReadonlyTColor KHAKI = TColor.newRGB(0.94f, 0.90f,
+			0.55f);
+	public static final ReadonlyTColor LAVENDER = TColor.newRGB(0.90f, 0.90f,
+			0.98f);
+	public static final ReadonlyTColor LAVENDERBLUSH = TColor.newRGB(1.00f,
+			0.94f, 0.96f);
+	public static final ReadonlyTColor LAWNGREEN = TColor.newRGB(0.49f, 0.99f,
+			0.00f);
+	public static final ReadonlyTColor LEMONCHIFFON = TColor.newRGB(1.00f,
+			0.98f, 0.80f);
+	public static final ReadonlyTColor LIGHTBLUE = TColor.newRGB(0.68f, 0.85f,
+			0.90f);
+	public static final ReadonlyTColor LIGHTCORAL = TColor.newRGB(0.94f, 0.50f,
+			0.50f);
+	public static final ReadonlyTColor LIGHTCYAN = TColor.newRGB(0.88f, 1.00f,
+			1.00f);
+	public static final ReadonlyTColor LIGHTGOLDENRODYELLOW = TColor.newRGB(
+			0.98f, 0.98f, 0.82f);
+	public static final ReadonlyTColor LIGHTGREEN = TColor.newRGB(0.56f, 0.93f,
+			0.56f);
+	public static final ReadonlyTColor LIGHTGREY = TColor.newRGB(0.83f, 0.83f,
+			0.83f);
+	public static final ReadonlyTColor LIGHTPINK = TColor.newRGB(1.00f, 0.71f,
+			0.76f);
+	public static final ReadonlyTColor LIGHTSALMON = TColor.newRGB(1.00f,
+			0.63f, 0.48f);
+	public static final ReadonlyTColor LIGHTSEAGREEN = TColor.newRGB(0.13f,
+			0.70f, 0.67f);
+	public static final ReadonlyTColor LIGHTSKYBLUE = TColor.newRGB(0.53f,
+			0.81f, 0.98f);
+	public static final ReadonlyTColor LIGHTSLATEGRAY = TColor.newRGB(0.47f,
+			0.53f, 0.60f);
+	public static final ReadonlyTColor LIGHTSTEELBLUE = TColor.newRGB(0.69f,
+			0.77f, 0.87f);
+	public static final ReadonlyTColor LIGHTYELLOW = TColor.newRGB(1.00f,
+			1.00f, 0.88f);
+	public static final ReadonlyTColor LIME = TColor
+			.newRGB(0.00f, 1.00f, 0.00f);
+	public static final ReadonlyTColor LIMEGREEN = TColor.newRGB(0.20f, 0.80f,
+			0.20f);
+	public static final ReadonlyTColor LINEN = TColor.newRGB(0.98f, 0.94f,
+			0.90f);
+	public static final ReadonlyTColor MAROON = TColor.newRGB(0.50f, 0.00f,
+			0.00f);
+	public static final ReadonlyTColor MEDIUMAQUAMARINE = TColor.newRGB(0.40f,
+			0.80f, 0.67f);
+	public static final ReadonlyTColor MEDIUMBLUE = TColor.newRGB(0.00f, 0.00f,
+			0.80f);
+	public static final ReadonlyTColor MEDIUMORCHID = TColor.newRGB(0.73f,
+			0.33f, 0.83f);
+	public static final ReadonlyTColor MEDIUMPURPLE = TColor.newRGB(0.58f,
+			0.44f, 0.86f);
+	public static final ReadonlyTColor MEDIUMSEAGREEN = TColor.newRGB(0.24f,
+			0.70f, 0.44f);
+	public static final ReadonlyTColor MEDIUMSLATEBLUE = TColor.newRGB(0.48f,
+			0.41f, 0.93f);
+	public static final ReadonlyTColor MEDIUMSPRINGGREEN = TColor.newRGB(0.00f,
+			0.98f, 0.60f);
+	public static final ReadonlyTColor MEDIUMTURQUOISE = TColor.newRGB(0.28f,
+			0.82f, 0.80f);
+	public static final ReadonlyTColor MEDIUMVIOLETRED = TColor.newRGB(0.78f,
+			0.08f, 0.52f);
+	public static final ReadonlyTColor MIDNIGHTBLUE = TColor.newRGB(0.10f,
+			0.10f, 0.44f);
+	public static final ReadonlyTColor MINTCREAM = TColor.newRGB(0.96f, 1.00f,
+			0.98f);
+	public static final ReadonlyTColor MISTYROSE = TColor.newRGB(1.00f, 0.89f,
+			0.88f);
+	public static final ReadonlyTColor MOCCASIN = TColor.newRGB(1.00f, 0.89f,
+			0.71f);
+	public static final ReadonlyTColor NAVAJOWHITE = TColor.newRGB(1.00f,
+			0.87f, 0.68f);
+	public static final ReadonlyTColor NAVY = TColor
+			.newRGB(0.00f, 0.00f, 0.50f);
+	public static final ReadonlyTColor OLDLACE = TColor.newRGB(0.99f, 0.96f,
+			0.90f);
+	public static final ReadonlyTColor OLIVE = TColor.newRGB(0.50f, 0.50f,
+			0.00f);
+	public static final ReadonlyTColor OLIVEDRAB = TColor.newRGB(0.42f, 0.56f,
+			0.14f);
+	public static final ReadonlyTColor ORANGE = TColor.newRGB(1.00f, 0.65f,
+			0.00f);
+	public static final ReadonlyTColor ORANGERED = TColor.newRGB(1.00f, 0.27f,
+			0.00f);
+	public static final ReadonlyTColor ORCHID = TColor.newRGB(0.85f, 0.44f,
+			0.84f);
+	public static final ReadonlyTColor PALEGOLDENROD = TColor.newRGB(0.93f,
+			0.91f, 0.67f);
+	public static final ReadonlyTColor PALEGREEN = TColor.newRGB(0.60f, 0.98f,
+			0.60f);
+	public static final ReadonlyTColor PALETURQUOISE = TColor.newRGB(0.69f,
+			0.93f, 0.93f);
+	public static final ReadonlyTColor PALEVIOLETRED = TColor.newRGB(0.86f,
+			0.44f, 0.58f);
+	public static final ReadonlyTColor PAPAYAWHIP = TColor.newRGB(1.00f, 0.94f,
+			0.84f);
+	public static final ReadonlyTColor PEACHPUFF = TColor.newRGB(1.00f, 0.85f,
+			0.73f);
+	public static final ReadonlyTColor PERU = TColor
+			.newRGB(0.80f, 0.52f, 0.25f);
+	public static final ReadonlyTColor PINK = TColor
+			.newRGB(1.00f, 0.75f, 0.80f);
+	public static final ReadonlyTColor PLUM = TColor
+			.newRGB(0.87f, 0.63f, 0.87f);
+	public static final ReadonlyTColor POWDERBLUE = TColor.newRGB(0.69f, 0.88f,
+			0.90f);
+	public static final ReadonlyTColor PURPLE = TColor.newRGB(0.50f, 0.00f,
+			0.50f);
+	public static final ReadonlyTColor RED = TColor.newRGB(1.00f, 0.00f, 0.00f);
+	public static final ReadonlyTColor ROSYBROWN = TColor.newRGB(0.74f, 0.56f,
+			0.56f);
+	public static final ReadonlyTColor ROYALBLUE = TColor.newRGB(0.25f, 0.41f,
+			0.88f);
+	public static final ReadonlyTColor SADDLEBROWN = TColor.newRGB(0.55f,
+			0.27f, 0.07f);
+	public static final ReadonlyTColor SALMON = TColor.newRGB(0.98f, 0.50f,
+			0.45f);
+	public static final ReadonlyTColor SANDYBROWN = TColor.newRGB(0.96f, 0.64f,
+			0.38f);
+	public static final ReadonlyTColor SEAGREEN = TColor.newRGB(0.18f, 0.55f,
+			0.34f);
+	public static final ReadonlyTColor SEASHELL = TColor.newRGB(1.00f, 0.96f,
+			0.93f);
+	public static final ReadonlyTColor SIENNA = TColor.newRGB(0.63f, 0.32f,
+			0.18f);
+	public static final ReadonlyTColor SILVER = TColor.newRGB(0.75f, 0.75f,
+			0.75f);
+	public static final ReadonlyTColor SKYBLUE = TColor.newRGB(0.53f, 0.81f,
+			0.92f);
+	public static final ReadonlyTColor SLATEBLUE = TColor.newRGB(0.42f, 0.35f,
+			0.80f);
+	public static final ReadonlyTColor SLATEGRAY = TColor.newRGB(0.44f, 0.50f,
+			0.56f);
+	public static final ReadonlyTColor SNOW = TColor
+			.newRGB(1.00f, 0.98f, 0.98f);
+	public static final ReadonlyTColor SPRINGGREEN = TColor.newRGB(0.00f,
+			1.00f, 0.50f);
+	public static final ReadonlyTColor STEELBLUE = TColor.newRGB(0.27f, 0.51f,
+			0.71f);
+	public static final ReadonlyTColor TAN = TColor.newRGB(0.82f, 0.71f, 0.55f);
+	public static final ReadonlyTColor TEAL = TColor
+			.newRGB(0.00f, 0.50f, 0.50f);
+	public static final ReadonlyTColor THISTLE = TColor.newRGB(0.85f, 0.75f,
+			0.85f);
+	public static final ReadonlyTColor TOMATO = TColor.newRGB(1.00f, 0.39f,
+			0.28f);
+	public static final ReadonlyTColor TRANSPARENT = TColor.newRGBA(0.00f,
+			0.00f, 0.00f, 0.00f);
+	public static final ReadonlyTColor TURQUOISE = TColor.newRGB(0.25f, 0.88f,
+			0.82f);
+	public static final ReadonlyTColor VIOLET = TColor.newRGB(0.93f, 0.51f,
+			0.93f);
+	public static final ReadonlyTColor WHEAT = TColor.newRGB(0.96f, 0.87f,
+			0.07f);
+	public static final ReadonlyTColor WHITE = TColor.newRGB(1.00f, 1.00f,
+			1.00f);
+	public static final ReadonlyTColor WHITESMOKE = TColor.newRGB(0.96f, 0.96f,
+			0.96f);
+	public static final ReadonlyTColor YELLOW = TColor.newRGB(1.00f, 1.00f,
+			0.00f);
+	public static final ReadonlyTColor YELLOWGREEN = TColor.newRGB(0.60f,
+			0.80f, 0.20f);
 
-	protected static final HashMap<String, TColor> namedColorMap = new HashMap<String, TColor>();
+	protected static final HashMap<String, ReadonlyTColor> namedColorMap = new HashMap<String, ReadonlyTColor>();
 
 	static {
 		Field[] fields = NamedColor.class.getDeclaredFields();
 		try {
 			for (Field f : fields) {
-				if (f.getType() == TColor.class) {
+				if (f.getType() == ReadonlyTColor.class) {
 					String id = f.getName();
-					namedColorMap.put(id, (TColor) f.get(null));
+					namedColorMap.put(id, (ReadonlyTColor) f.get(null));
 				}
 			}
 		} catch (IllegalArgumentException e) {
@@ -236,7 +348,7 @@ public class NamedColor {
 	 * @param name
 	 * @return color or null, if name not found.
 	 */
-	public static final TColor getForName(String name) {
+	public static final ReadonlyTColor getForName(String name) {
 		return namedColorMap.get(name.toUpperCase());
 	}
 

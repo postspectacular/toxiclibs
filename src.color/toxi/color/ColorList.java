@@ -181,7 +181,7 @@ public class ColorList implements Iterable<TColor> {
 	 * @param c
 	 *            color
 	 */
-	public ColorList(TColor c) {
+	public ColorList(ReadonlyTColor c) {
 		this.colors.add(c.copy());
 	}
 
@@ -191,9 +191,9 @@ public class ColorList implements Iterable<TColor> {
 	 * 
 	 * @param colorArray
 	 */
-	public ColorList(TColor[] colorArray) {
-		for (TColor c : colorArray) {
-			colors.add(c);
+	public ColorList(ReadonlyTColor[] colorArray) {
+		for (ReadonlyTColor c : colorArray) {
+			colors.add(c.copy());
 		}
 	}
 
@@ -203,8 +203,8 @@ public class ColorList implements Iterable<TColor> {
 	 * @param c
 	 * @return itself
 	 */
-	public ColorList add(TColor c) {
-		colors.add(c);
+	public ColorList add(ReadonlyTColor c) {
+		colors.add(c.copy());
 		return this;
 	}
 
@@ -274,7 +274,7 @@ public class ColorList implements Iterable<TColor> {
 		int i = 0;
 		int num = sorted.size();
 		for (int j = 0; j < num; j++) {
-			TColor c = sorted.get(j);
+			ReadonlyTColor c = sorted.get(j);
 			if (c.getComponentValue(clusterCriteria) < d) {
 				ArrayList<TColor> slice = new ArrayList<TColor>();
 				slice.addAll(sorted.subList(i, j));
@@ -314,8 +314,8 @@ public class ColorList implements Iterable<TColor> {
 	 * @param color
 	 * @return true, if the color is present.
 	 */
-	public boolean contains(TColor color) {
-		for (TColor c : colors) {
+	public boolean contains(ReadonlyTColor color) {
+		for (ReadonlyTColor c : colors) {
 			if (c.equals(color)) {
 				return true;
 			}
@@ -338,7 +338,7 @@ public class ColorList implements Iterable<TColor> {
 	 * 
 	 * @return average color or null, if there're no entries yet.
 	 */
-	public TColor getAverage() {
+	public ReadonlyTColor getAverage() {
 		float r = 0;
 		float g = 0;
 		float b = 0;
@@ -397,10 +397,10 @@ public class ColorList implements Iterable<TColor> {
 	 * 
 	 * @return lightest color or null, if there're no entries yet.
 	 */
-	public TColor getLightest() {
-		TColor lightest = null;
+	public ReadonlyTColor getLightest() {
+		ReadonlyTColor lightest = null;
 		float maxBrightness = Float.MIN_VALUE;
-		for (TColor c : colors) {
+		for (ReadonlyTColor c : colors) {
 			float luma = c.luminance();
 			if (luma > maxBrightness) {
 				lightest = c;
@@ -501,7 +501,7 @@ public class ColorList implements Iterable<TColor> {
 	 *            true, if reversed sort
 	 * @return itself
 	 */
-	public ColorList sortByComparator(Comparator<TColor> comp,
+	public ColorList sortByComparator(Comparator<ReadonlyTColor> comp,
 			boolean isReversed) {
 		Collections.sort(colors, comp);
 		if (isReversed) {
@@ -520,7 +520,7 @@ public class ColorList implements Iterable<TColor> {
 	 * @return itself
 	 */
 	public ColorList sortByCriteria(AccessCriteria criteria, boolean isReversed) {
-		Comparator<TColor> comparator = criteria.getComparator();
+		Comparator<ReadonlyTColor> comparator = criteria.getComparator();
 		if (comparator != null) {
 			return sortByComparator(comparator, isReversed);
 		} else {
@@ -601,7 +601,7 @@ public class ColorList implements Iterable<TColor> {
 	 *            true, if reverse sorted
 	 * @return sorted list
 	 */
-	public ColorList sortByProximityTo(TColor target, boolean isReversed) {
+	public ColorList sortByProximityTo(ReadonlyTColor target, boolean isReversed) {
 		return sortByProximityTo(target, new RGBDistanceProxy(), isReversed);
 	}
 
@@ -617,8 +617,8 @@ public class ColorList implements Iterable<TColor> {
 	 *            true, if reverse sorted
 	 * @return sorted list
 	 */
-	public ColorList sortByProximityTo(TColor target, DistanceProxy proxy,
-			boolean isReversed) {
+	public ColorList sortByProximityTo(ReadonlyTColor target,
+			DistanceProxy proxy, boolean isReversed) {
 		return sortByComparator(new ProximityComparator(target, proxy),
 				isReversed);
 	}

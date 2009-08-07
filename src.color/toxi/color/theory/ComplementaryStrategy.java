@@ -26,6 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 
 /**
@@ -51,8 +52,8 @@ public class ComplementaryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromColor(TColor src) {
-		ColorList colors = new ColorList(src.copy());
+	public ColorList createListFromColor(ReadonlyTColor src) {
+		ColorList colors = new ColorList(src);
 		// # A contrasting color: much darker or lighter than the original.
 		TColor c = src.copy();
 		if (c.brightness() > 0.4) {

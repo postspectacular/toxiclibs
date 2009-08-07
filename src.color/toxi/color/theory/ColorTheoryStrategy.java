@@ -26,7 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
-import toxi.color.TColor;
+import toxi.color.ReadonlyTColor;
 
 /**
  * A simple interface for implementing rules used to create color palettes. The
@@ -47,7 +47,7 @@ public interface ColorTheoryStrategy {
 	 *            source color
 	 * @return list of matching colors created by the strategy.
 	 */
-	ColorList createListFromColor(TColor src);
+	ColorList createListFromColor(ReadonlyTColor src);
 
 	/**
 	 * Returns the unique name of the strategy.

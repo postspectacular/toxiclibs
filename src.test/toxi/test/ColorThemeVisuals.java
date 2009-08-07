@@ -5,6 +5,7 @@ import toxi.color.AccessCriteria;
 import toxi.color.ColorList;
 import toxi.color.ColorRange;
 import toxi.color.ColorTheme;
+import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.math.MathUtils;
 
@@ -65,7 +66,7 @@ public class ColorThemeVisuals extends PApplet {
 	private void swatches(ColorList sorted, int x, int y) {
 		noStroke();
 		for (Object element : sorted) {
-			TColor c = (TColor) element;
+			ReadonlyTColor c = (ReadonlyTColor) element;
 			fill(c.toARGB());
 			rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
 			x += SWATCH_WIDTH + SWATCH_GAP;

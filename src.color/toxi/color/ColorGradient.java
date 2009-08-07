@@ -33,7 +33,7 @@ import toxi.math.MathUtils;
 
 /**
  * This class can be used to calculate multi-color gradients with colors
- * positioned along an imaginary line.
+ * positioned along an imaginary axis.
  * 
  * @author toxi
  * 
@@ -42,9 +42,9 @@ public class ColorGradient {
 
 	protected class GradPoint implements Comparable<GradPoint> {
 		float pos;
-		TColor color;
+		ReadonlyTColor color;
 
-		GradPoint(float p, TColor c) {
+		GradPoint(float p, ReadonlyTColor c) {
 			pos = p;
 			color = c;
 		}
@@ -75,7 +75,7 @@ public class ColorGradient {
 	 * @param p
 	 * @param c
 	 */
-	public void addColorAt(float p, TColor c) {
+	public void addColorAt(float p, ReadonlyTColor c) {
 		gradient.add(new GradPoint(p, c));
 	}
 

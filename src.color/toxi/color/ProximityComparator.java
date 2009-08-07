@@ -33,17 +33,17 @@ import java.util.Comparator;
  * @author toxi
  * 
  */
-public class ProximityComparator implements Comparator<TColor> {
+public class ProximityComparator implements Comparator<ReadonlyTColor> {
 
-	protected TColor col;
+	protected ReadonlyTColor col;
 	protected DistanceProxy proxy;
 
-	public ProximityComparator(TColor col, DistanceProxy proxy) {
+	public ProximityComparator(ReadonlyTColor col, DistanceProxy proxy) {
 		this.col = col;
 		this.proxy = proxy;
 	}
 
-	public int compare(TColor a, TColor b) {
+	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
 		float da = proxy.distanceBetween(col, a);
 		float db = proxy.distanceBetween(col, b);
 		return da < db ? -1 : da > db ? 1 : 0;

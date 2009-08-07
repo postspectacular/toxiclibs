@@ -26,7 +26,7 @@
 package toxi.color.theory;
 
 import toxi.color.ColorList;
-import toxi.color.TColor;
+import toxi.color.ReadonlyTColor;
 
 /**
  * Implements the <a href="http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#split-complementary"
@@ -46,12 +46,10 @@ public class SplitComplementaryStrategy implements ColorTheoryStrategy {
 	 * @see
 	 * toxi.color.ColorTheoryStrategy#createListFromcolor(toxi.color.TColor)
 	 */
-	public ColorList createListFromColor(TColor src) {
-		TColor clr = src.copy();
-		ColorList colors = new ColorList(clr);
-		clr = clr.getComplement();
-		colors.add(clr.getRotatedRYB(-30).lighten(0.1f));
-		colors.add(clr.getRotatedRYB(30).lighten(0.1f));
+	public ColorList createListFromColor(ReadonlyTColor src) {
+		ColorList colors = new ColorList(src);
+		colors.add(src.getRotatedRYB(150).lighten(0.1f));
+		colors.add(src.getRotatedRYB(210).lighten(0.1f));
 		return colors;
 	}
 

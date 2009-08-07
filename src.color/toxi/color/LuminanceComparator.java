@@ -33,17 +33,19 @@ import java.util.Comparator;
  * @author toxi
  * 
  */
-public class LuminanceComparator implements Comparator<TColor> {
+public class LuminanceComparator implements Comparator<ReadonlyTColor> {
 
-	public int compare(TColor a, TColor b) {
+	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
 		float lumA = a.luminance();
 		float lumB = b.luminance();
-		if (lumA < lumB)
+		if (lumA < lumB) {
 			return -1;
-		if (lumA > lumB)
+		}
+		if (lumA > lumB) {
 			return 1;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 }
