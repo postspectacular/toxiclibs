@@ -427,9 +427,9 @@ public class Matrix4x4 {
 		return this.multiplySelf(TEMP);
 	}
 
-	public Matrix4x4 set(double a, double b, double c, int d, double e,
-			double f, double g, int h, double i, double j, double k, int l,
-			int m, int n, int o, int p) {
+	public Matrix4x4 set(double a, double b, double c, double d, double e,
+			double f, double g, double h, double i, double j, double k,
+			double l, double m, double n, double o, double p) {
 		double[] mat = matrix[0];
 		mat[0] = a;
 		mat[1] = b;
@@ -525,6 +525,18 @@ public class Matrix4x4 {
 				+ matrix[2][2] + " " + matrix[2][3] + " |\n" + "| "
 				+ matrix[3][0] + " " + matrix[3][1] + " " + matrix[3][2] + " "
 				+ matrix[3][3] + " |";
+	}
+
+	public float[] toTransposedFloatArray(float[] result) {
+		if (result == null) {
+			result = new float[16];
+		}
+		for (int i = 0, k = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				result[k++] = (float) matrix[j][i];
+			}
+		}
+		return result;
 	}
 
 	public Matrix4x4 translate(double dx, double dy, double dz) {

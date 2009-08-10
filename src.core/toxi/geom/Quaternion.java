@@ -10,6 +10,101 @@ public class Quaternion implements DimensionalVector {
 
 	public static final float DOT_THRESHOLD = 0.9995f;
 
+	/**
+	 * Creates a Quaternion from a axis and a angle.
+	 * 
+	 * @param axis
+	 *            axis vector
+	 * @param angle
+	 *            angle in radians.
+	 * 
+	 * @return
+	 */
+	public static Quaternion createFromAxisAngle(Vec3D axis, float angle) {
+		float sin = (float) Math.sin(angle / 2);
+		float cos = (float) Math.cos(angle / 2);
+		Quaternion q = new Quaternion(cos, axis.x * sin, axis.y * sin, axis.z
+				* sin);
+		q.normalize();
+		return q;
+	}
+
+	/**
+	 * Creates a Quaternion from Euler angles.
+	 * 
+	 * @param ax
+	 *            X-angle in radians.
+	 * @param ay
+	 *            Y-angle in radians.
+	 * @param az
+	 *            Z-angle in radians.
+	 * 
+	 * @return
+	 */
+	public static Quaternion createFromEuler(float ax, float ay, float az) {
+		float sinPitch = (float) Math.sin(ax * 0.5);
+		float cosPitch = (float) Math.cos(ax * 0.5);
+		float sinYaw = (float) Math.sin(ay * 0.5);
+		float cosYaw = (float) Math.cos(ay * 0.5);
+		float sinRoll = (float) Math.sin(az * 0.5);
+		float cosRoll = (float) Math.cos(az * 0.5);
+		float cosPitchCosYaw = cosPitch * cosYaw;
+		float sinPitchSinYaw = sinPitch * sinYaw;
+
+		Quaternion q = new Quaternion();
+
+		q.x = sinRoll * cosPitchCosYaw - cosRoll * sinPitchSinYaw;
+		q.y = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
+		q.z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
+		q.w = cosRoll * cosPitchCosYaw + sinRoll * sinPitchSinYaw;
+
+		return q;
+	}
+
+	public static Quaternion createFromMatrix(Matrix4x4 m) {
+		// Creates a quaternion from a rotation matrix.
+		// The algorithm used is from Allan and Mark Watt's "Advanced
+		// Animation and Rendering Techniques" (ACM Press 1992).
+
+		double s = 0.0f;
+		double[] q = new double[4];
+		double trace = m.matrix[0][0] + m.matrix[1][1] + m.matrix[2][2];
+
+		if (trace > 0.0f) {
+			s = Math.sqrt(trace + 1.0f);
+			q[3] = s * 0.5f;
+			s = 0.5f / s;
+			q[0] = (m.matrix[1][2] - m.matrix[2][1]) * s;
+			q[1] = (m.matrix[2][0] - m.matrix[0][2]) * s;
+			q[2] = (m.matrix[0][1] - m.matrix[1][0]) * s;
+		} else {
+			int[] nxt = new int[] { 1, 2, 0 };
+			int i = 0, j = 0, k = 0;
+
+			if (m.matrix[1][1] > m.matrix[0][0]) {
+				i = 1;
+			}
+
+			if (m.matrix[2][2] > m.matrix[i][i]) {
+				i = 2;
+			}
+
+			j = nxt[i];
+			k = nxt[j];
+			s = Math
+					.sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
+
+			q[i] = s * 0.5f;
+			s = 0.5f / s;
+			q[3] = (m.matrix[j][k] - m.matrix[k][j]) * s;
+			q[j] = (m.matrix[i][j] + m.matrix[j][i]) * s;
+			q[k] = (m.matrix[i][k] + m.matrix[k][i]) * s;
+		}
+
+		return new Quaternion((float) q[3], (float) q[0], (float) q[1],
+				(float) q[2]);
+	}
+
 	public float x, y, z, w;
 
 	public Quaternion() {
@@ -49,17 +144,17 @@ public class Quaternion implements DimensionalVector {
 		return this;
 	}
 
-	public Quaternion conjugate() {
+	public float dot(Quaternion b) {
+		return (x * b.x) + (y * b.y) + (z * b.z) + (w * b.w);
+	}
+
+	public Quaternion getConjugate() {
 		Quaternion q = new Quaternion();
 		q.x = -x;
 		q.y = -y;
 		q.z = -z;
 		q.w = w;
 		return q;
-	}
-
-	public float dot(Quaternion b) {
-		return (x * b.x) + (y * b.y) + (z * b.z) + (w * b.w);
 	}
 
 	public int getDimensions() {
@@ -226,65 +321,36 @@ public class Quaternion implements DimensionalVector {
 		return new float[] { w, x, y, z };
 	}
 
+	public Matrix4x4 toMatrix4x4() {
+		// Converts this quaternion to a rotation matrix.
+		//
+		// | 1 - 2(y^2 + z^2) 2(xy + wz) 2(xz - wy) 0 |
+		// | 2(xy - wz) 1 - 2(x^2 + z^2) 2(yz + wx) 0 |
+		// | 2(xz + wy) 2(yz - wx) 1 - 2(x^2 + y^2) 0 |
+		// | 0 0 0 1 |
+
+		float x2 = x + x;
+		float y2 = y + y;
+		float z2 = z + z;
+		float xx = x * x2;
+		float xy = x * y2;
+		float xz = x * z2;
+		float yy = y * y2;
+		float yz = y * z2;
+		float zz = z * z2;
+		float wx = w * x2;
+		float wy = w * y2;
+		float wz = w * z2;
+
+		return new Matrix4x4(1 - (yy + zz), xy + wz, xz - wy, 0, xy - wz,
+				1 - (xx + zz), yz + wx, 0, xz + wy, yz - wx, 1 - (xx + yy), 0,
+				0, 0, 0, 1);
+	}
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer(48);
 		sb.append("{axis: [").append(x).append(",").append(y).append(",")
 				.append(z).append("], w: ").append(w).append("}");
 		return sb.toString();
-	}
-
-	/**
-	 * Creates a Quaternion from a axis and a angle.
-	 * 
-	 * @param x
-	 *            X-axis
-	 * @param y
-	 *            Y-axis
-	 * @param z
-	 *            Z-axis
-	 * @param angle
-	 *            angle in radians.
-	 * 
-	 * @return
-	 */
-	public static Quaternion createFromAxisAngle(float angle, float x, float y,
-			float z) {
-		float sin = (float) Math.sin(angle / 2);
-		float cos = (float) Math.cos(angle / 2);
-		Quaternion q = new Quaternion(cos, x * sin, y * sin, z * sin);
-		q.normalize();
-		return q;
-	}
-
-	/**
-	 * Creates a Quaternion from Euler angles.
-	 * 
-	 * @param ax
-	 *            X-angle in radians.
-	 * @param ay
-	 *            Y-angle in radians.
-	 * @param az
-	 *            Z-angle in radians.
-	 * 
-	 * @return
-	 */
-	public static Quaternion createFromEuler(float ax, float ay, float az) {
-		float sinPitch = (float) Math.sin(ax * 0.5);
-		float cosPitch = (float) Math.cos(ax * 0.5);
-		float sinYaw = (float) Math.sin(ay * 0.5);
-		float cosYaw = (float) Math.cos(ay * 0.5);
-		float sinRoll = (float) Math.sin(az * 0.5);
-		float cosRoll = (float) Math.cos(az * 0.5);
-		float cosPitchCosYaw = cosPitch * cosYaw;
-		float sinPitchSinYaw = sinPitch * sinYaw;
-
-		Quaternion q = new Quaternion();
-
-		q.x = sinRoll * cosPitchCosYaw - cosRoll * sinPitchSinYaw;
-		q.y = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
-		q.z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
-		q.w = cosRoll * cosPitchCosYaw + sinRoll * sinPitchSinYaw;
-
-		return q;
 	}
 }
