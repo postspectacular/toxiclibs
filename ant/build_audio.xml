@@ -3,7 +3,7 @@
 	<!-- This needs to change with every release -->
 	<property name="project.name" value="audioutils" />
 	<property name="srcfolder.id" value="audio" />
-	<property name="lib.version" value="0003" />
+	<property name="lib.version" value="0004" />
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - JOAL convenience wrapper &amp; audio utils v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/joal/joal.jar" />

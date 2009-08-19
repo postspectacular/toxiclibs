@@ -36,7 +36,6 @@ import net.java.games.joal.ALFactory;
 import net.java.games.joal.eax.EAX;
 import net.java.games.joal.eax.EAXConstants;
 import net.java.games.joal.eax.EAXFactory;
-import net.java.games.joal.util.ALut;
 import net.java.games.joal.util.WAVData;
 import net.java.games.joal.util.WAVLoader;
 
@@ -48,6 +47,9 @@ import net.java.games.joal.util.WAVLoader;
  * @author toxi
  */
 public class JOALUtil {
+
+	public static String HARDWARE = "Generic Hardware";
+	public static String SOFTWARE = "Generic Software";
 
 	protected static final Logger logger = Logger.getLogger(JOALUtil.class
 			.getName());
@@ -66,16 +68,17 @@ public class JOALUtil {
 	}
 
 	protected ArrayList<AudioBuffer> buffers;
-
 	protected ArrayList<AudioSource> sources;
 
 	protected SoundListener listener;
+
 	protected AL al;
 	protected ALC alc;
+	protected ALCcontext context;
+	protected ALCdevice device;
 
 	protected EAX eax;
 	protected boolean isInited;
-
 	protected boolean isEAX;
 
 	protected JOALUtil() {
@@ -196,7 +199,7 @@ public class JOALUtil {
 	 * @return true, if successful
 	 */
 	public boolean init() {
-		return init(false);
+		return init(null, false);
 	}
 
 	/**
@@ -205,26 +208,44 @@ public class JOALUtil {
 	 * called previously and not been {@link #shutdown()} meanwhile.
 	 * 
 	 * @param attemptEAX
-	 * @return true, if successful (does not care if EAX is supported).
+	 * @return true, if successful (does not care if EAX is supported & has
+	 *         succeeded).
 	 */
-	public boolean init(boolean attemptEAX) {
-		if (!isInited) {
-			try {
-				ALut.alutInit();
-				al = ALFactory.getAL();
-				alc = ALFactory.getALC();
-			} catch (ALException e) {
-				throw new RuntimeException("OpenAL could not be initialized: "
-						+ e.getMessage());
-			}
-			buffers = new ArrayList<AudioBuffer>();
-			sources = new ArrayList<AudioSource>();
-			listener = new SoundListener(this);
-			isEAX = al.alIsExtensionPresent("EAX2.0");
-			if (isEAX && attemptEAX) {
-				initEAX();
-			}
-			isInited = (al.alGetError() == AL.AL_NO_ERROR);
+	public boolean init(String deviceName, boolean attemptEAX) {
+		if (context != null) {
+			throw new ALException("OpenAL already initialized");
+		}
+		if (al == null) {
+			al = ALFactory.getAL();
+		}
+		if (alc == null) {
+			alc = ALFactory.getALC();
+		}
+		ALCdevice d = alc.alcOpenDevice(deviceName);
+		if (d == null) {
+			throw new ALException("Error opening default OpenAL device");
+		}
+		ALCcontext c = alc.alcCreateContext(d, null);
+		if (c == null) {
+			alc.alcCloseDevice(d);
+			throw new ALException("Error creating OpenAL context");
+		}
+		alc.alcMakeContextCurrent(c);
+		if (alc.alcGetError(d) != 0) {
+			alc.alcDestroyContext(c);
+			alc.alcCloseDevice(d);
+			throw new ALException("Error making OpenAL context current");
+		}
+		// Fully initialized; finish setup
+		device = d;
+		context = c;
+		buffers = new ArrayList<AudioBuffer>();
+		sources = new ArrayList<AudioSource>();
+		listener = new SoundListener(this);
+		isInited = (al.alGetError() == AL.AL_NO_ERROR);
+		isEAX = al.alIsExtensionPresent("EAX2.0");
+		if (isEAX && attemptEAX) {
+			initEAX();
 		}
 		return isInited;
 	}
@@ -307,13 +328,12 @@ public class JOALUtil {
 		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
 		logger.info(tmpsrc.length + " sources released");
 
-		ALCcontext curContext = alc.alcGetCurrentContext();
-		ALCdevice curDevice = alc.alcGetContextsDevice(curContext);
-
 		alc.alcMakeContextCurrent(null);
-		alc.alcDestroyContext(curContext);
-		alc.alcCloseDevice(curDevice);
+		alc.alcDestroyContext(context);
+		alc.alcCloseDevice(device);
 
+		context = null;
+		device = null;
 		alc = null;
 		al = null;
 		buffers = null;
