@@ -56,28 +56,18 @@ public class JOALUtil {
 
 	protected static JOALUtil instance;
 
-	public static JOALUtil getInstance() {
-		if (instance == null) {
-			synchronized (JOALUtil.class) {
-				if (instance == null) {
-					instance = new JOALUtil();
-				}
-			}
-		}
-		return instance;
-	}
-
 	protected ArrayList<AudioBuffer> buffers;
-	protected ArrayList<AudioSource> sources;
 
+	protected ArrayList<AudioSource> sources;
 	protected SoundListener listener;
 
 	protected AL al;
+
 	protected ALC alc;
 	protected ALCcontext context;
 	protected ALCdevice device;
-
 	protected EAX eax;
+
 	protected boolean isInited;
 	protected boolean isEAX;
 
@@ -315,19 +305,22 @@ public class JOALUtil {
 	 */
 	public void shutdown() {
 		logger.info("shutting down JOAL");
-		int[] tmpbuf = new int[buffers.size()];
-		for (int i = 0; i < tmpbuf.length; i++) {
-			tmpbuf[i] = buffers.get(i).getID();
+		int[] tmp = new int[buffers.size()];
+		if (tmp.length > 0) {
+			for (int i = 0; i < tmp.length; i++) {
+				tmp[i] = buffers.get(i).getID();
+			}
+			al.alDeleteBuffers(tmp.length, tmp, 0);
+			logger.info(tmp.length + " buffers released");
 		}
-		al.alDeleteBuffers(tmpbuf.length, tmpbuf, 0);
-		logger.info(tmpbuf.length + " buffers released");
-		int[] tmpsrc = new int[sources.size()];
-		for (int i = 0; i < tmpsrc.length; i++) {
-			tmpsrc[i] = sources.get(i).getID();
+		tmp = new int[sources.size()];
+		if (tmp.length > 0) {
+			for (int i = 0; i < tmp.length; i++) {
+				tmp[i] = sources.get(i).getID();
+			}
+			al.alDeleteSources(tmp.length, tmp, 0);
+			logger.info(tmp.length + " sources released");
 		}
-		al.alDeleteSources(tmpsrc.length, tmpsrc, 0);
-		logger.info(tmpsrc.length + " sources released");
-
 		alc.alcMakeContextCurrent(null);
 		alc.alcDestroyContext(context);
 		alc.alcCloseDevice(device);
@@ -340,5 +333,16 @@ public class JOALUtil {
 		sources = null;
 
 		isInited = false;
+	}
+
+	public static JOALUtil getInstance() {
+		if (instance == null) {
+			synchronized (JOALUtil.class) {
+				if (instance == null) {
+					instance = new JOALUtil();
+				}
+			}
+		}
+		return instance;
 	}
 }
