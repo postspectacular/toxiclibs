@@ -57,12 +57,10 @@ public class JOALUtil {
 	protected static JOALUtil instance;
 
 	protected ArrayList<AudioBuffer> buffers;
-
 	protected ArrayList<AudioSource> sources;
 	protected SoundListener listener;
 
 	protected AL al;
-
 	protected ALC alc;
 	protected ALCcontext context;
 	protected ALCdevice device;
@@ -101,6 +99,9 @@ public class JOALUtil {
 	 * @return array
 	 */
 	public AudioBuffer[] generateBuffers(int numBuffers) {
+		if (!isInited) {
+			init();
+		}
 		AudioBuffer[] result = new AudioBuffer[numBuffers];
 		int[] arr = new int[numBuffers];
 		al.alGenBuffers(numBuffers, arr, 0);
@@ -132,6 +133,9 @@ public class JOALUtil {
 	 * @return configured audio source instance
 	 */
 	public AudioSource generateSourceFromFile(String file) {
+		if (!isInited) {
+			init();
+		}
 		AudioSource source = null;
 		AudioBuffer buffer = loadBuffer(file);
 		if (buffer != null) {
@@ -150,6 +154,9 @@ public class JOALUtil {
 	 * @return array
 	 */
 	public AudioSource[] generateSources(int numSources) {
+		if (!isInited) {
+			init();
+		}
 		AudioSource[] result = new AudioSource[numSources];
 		int[] arr = new int[numSources];
 		al.alGenSources(numSources, arr, 0);
@@ -166,7 +173,23 @@ public class JOALUtil {
 	 * @return JOAL context
 	 */
 	public AL getAL() {
+		if (!isInited) {
+			init();
+		}
 		return al;
+	}
+
+	/**
+	 * Retrieves a list of available OpenAL compatible audio devices. This
+	 * method can be called before a call to {@link #init()}.
+	 * 
+	 * @return array of device names
+	 */
+	public String[] getDeviceList() {
+		if (alc == null) {
+			alc = ALFactory.getALC();
+		}
+		return alc.alcGetDeviceSpecifiers();
 	}
 
 	/**
@@ -176,6 +199,9 @@ public class JOALUtil {
 	 * @return listener object
 	 */
 	public SoundListener getListener() {
+		if (!isInited) {
+			init();
+		}
 		if (listener == null) {
 			listener = new SoundListener(this);
 		}
@@ -240,7 +266,7 @@ public class JOALUtil {
 		return isInited;
 	}
 
-	private void initEAX() {
+	protected void initEAX() {
 		eax = EAXFactory.getEAX();
 		IntBuffer b = IntBuffer.allocate(1);
 		b.put(EAXConstants.EAX_ENVIRONMENT_HANGAR);
@@ -304,35 +330,37 @@ public class JOALUtil {
 	 * Destroys all objects, sources, buffers, contexts created by this class.
 	 */
 	public void shutdown() {
-		logger.info("shutting down JOAL");
-		int[] tmp = new int[buffers.size()];
-		if (tmp.length > 0) {
-			for (int i = 0; i < tmp.length; i++) {
-				tmp[i] = buffers.get(i).getID();
+		if (isInited) {
+			logger.info("shutting down JOAL");
+			int[] tmp = new int[buffers.size()];
+			if (tmp.length > 0) {
+				for (int i = 0; i < tmp.length; i++) {
+					tmp[i] = buffers.get(i).getID();
+				}
+				al.alDeleteBuffers(tmp.length, tmp, 0);
+				logger.info(tmp.length + " buffers released");
 			}
-			al.alDeleteBuffers(tmp.length, tmp, 0);
-			logger.info(tmp.length + " buffers released");
-		}
-		tmp = new int[sources.size()];
-		if (tmp.length > 0) {
-			for (int i = 0; i < tmp.length; i++) {
-				tmp[i] = sources.get(i).getID();
+			tmp = new int[sources.size()];
+			if (tmp.length > 0) {
+				for (int i = 0; i < tmp.length; i++) {
+					tmp[i] = sources.get(i).getID();
+				}
+				al.alDeleteSources(tmp.length, tmp, 0);
+				logger.info(tmp.length + " sources released");
 			}
-			al.alDeleteSources(tmp.length, tmp, 0);
-			logger.info(tmp.length + " sources released");
+			alc.alcMakeContextCurrent(null);
+			alc.alcDestroyContext(context);
+			alc.alcCloseDevice(device);
+
+			context = null;
+			device = null;
+			alc = null;
+			al = null;
+			buffers = null;
+			sources = null;
+
+			isInited = false;
 		}
-		alc.alcMakeContextCurrent(null);
-		alc.alcDestroyContext(context);
-		alc.alcCloseDevice(device);
-
-		context = null;
-		device = null;
-		alc = null;
-		al = null;
-		buffers = null;
-		sources = null;
-
-		isInited = false;
 	}
 
 	public static JOALUtil getInstance() {

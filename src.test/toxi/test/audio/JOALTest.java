@@ -7,8 +7,14 @@ import toxi.geom.Vec3D;
 
 public class JOALTest {
 
+	Vec3D pos;
+
 	public static void main(String[] args) {
 		JOALUtil audioUtil = JOALUtil.getInstance();
+		String[] devices = audioUtil.getDeviceList();
+		for (String d : devices) {
+			System.out.println(d);
+		}
 		audioUtil.init(JOALUtil.SOFTWARE, false);
 		SoundListener l = audioUtil.getListener();
 		l.setGain(1);
@@ -18,10 +24,8 @@ public class JOALTest {
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		audioUtil.shutdown();
 	}
-
-	Vec3D pos;
 }
