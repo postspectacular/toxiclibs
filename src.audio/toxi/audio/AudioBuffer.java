@@ -53,12 +53,13 @@ public class AudioBuffer {
 	protected final AL al;
 	protected ByteBuffer data;
 
-	protected final int bufferID;
+	protected final int id;
 
 	protected final int[] alResult = new int[1];
+	private int format;
 
 	public AudioBuffer(AL al, int bufferID) {
-		this.bufferID = bufferID;
+		this.id = bufferID;
 		this.al = al;
 	}
 
@@ -75,16 +76,20 @@ public class AudioBuffer {
 	 */
 	public AudioBuffer configure(ByteBuffer data, int format, int freq) {
 		this.data = data;
-		al.alBufferData(bufferID, format, data, data.capacity(), freq);
+		this.format = format;
+		al.alBufferData(id, format, data, data.capacity(), freq);
 		return this;
 	}
 
 	/**
-	 * Delete this buffer, and free its resources.
+	 * Deletes this buffer, and frees its resources.
+	 * 
+	 * @return true, if removed successfully
 	 */
-	public void delete() {
+	public boolean delete() {
 		data = null;
-		al.alDeleteBuffers(1, new int[] { bufferID }, 0);
+		al.alDeleteBuffers(1, new int[] { id }, 0);
+		return al.alGetError() == AL.AL_NO_ERROR;
 	}
 
 	/**
@@ -93,7 +98,7 @@ public class AudioBuffer {
 	 * @return the bit-depth of the data
 	 */
 	public final int getBitDepth() {
-		al.alGetBufferi(bufferID, AL.AL_BITS, alResult, 0);
+		al.alGetBufferi(id, AL.AL_BITS, alResult, 0);
 		return alResult[0];
 	}
 
@@ -103,7 +108,7 @@ public class AudioBuffer {
 	 * @return the size of the data.
 	 */
 	public final int getByteSize() {
-		al.alGetBufferi(bufferID, AL.AL_SIZE, alResult, 0);
+		al.alGetBufferi(id, AL.AL_SIZE, alResult, 0);
 		return alResult[0];
 	}
 
@@ -122,7 +127,7 @@ public class AudioBuffer {
 	 * @return the frequency of the data
 	 */
 	public final int getFrequency() {
-		al.alGetBufferi(bufferID, AL.AL_FREQUENCY, alResult, 0);
+		al.alGetBufferi(id, AL.AL_FREQUENCY, alResult, 0);
 		return alResult[0];
 	}
 
@@ -132,7 +137,7 @@ public class AudioBuffer {
 	 * @return buffer id
 	 */
 	public final int getID() {
-		return bufferID;
+		return id;
 	}
 
 	/**
@@ -141,7 +146,7 @@ public class AudioBuffer {
 	 * @return the number of audio channels.
 	 */
 	public final int getNumChannels() {
-		al.alGetBufferi(bufferID, AL.AL_CHANNELS, alResult, 0);
+		al.alGetBufferi(id, AL.AL_CHANNELS, alResult, 0);
 
 		return alResult[0];
 	}
@@ -153,5 +158,9 @@ public class AudioBuffer {
 	 */
 	public final int getSampleSize() {
 		return getByteSize() * 8 / getBitDepth() / getNumChannels();
+	}
+
+	public String toString() {
+		return "AudioBuffer: id=" + id + " format=" + format;
 	}
 }

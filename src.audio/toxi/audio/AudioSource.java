@@ -68,9 +68,19 @@ public class AudioSource extends Vec3D {
 		setBuffer(buf);
 	}
 
-	public void delete() {
+	/**
+	 * Deletes this source, and free its resources. Note, this method does NOT
+	 * release the associated audio buffer. If you want to remove a source
+	 * including its wave data use
+	 * {@link JOALUtil#deleteSource(AudioSource, boolean)} instead.
+	 * 
+	 * @return true, if source was removed successfully
+	 */
+	public boolean delete() {
 		stop();
+		setBuffer(null);
 		al.alDeleteSources(1, new int[] { id }, 0);
+		return al.alGetError() == AL.AL_NO_ERROR;
 	}
 
 	/**
@@ -147,6 +157,7 @@ public class AudioSource extends Vec3D {
 			al.alSourcei(id, AL.AL_BUFFER, buffer.getID());
 			size = buffer.getSampleSize();
 		} else {
+			al.alSourcei(id, AL.AL_BUFFER, AL.AL_NONE);
 			size = 0;
 		}
 		return this;
@@ -254,6 +265,11 @@ public class AudioSource extends Vec3D {
 	public AudioSource stop() {
 		al.alSourceStop(id);
 		return this;
+	}
+
+	public String toString() {
+		return "AudioSource: id=" + id
+				+ (buffer != null ? " buffer=" + buffer.toString() : "");
 	}
 
 	public AudioSource updatePosition() {

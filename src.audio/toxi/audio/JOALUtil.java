@@ -51,7 +51,7 @@ public class JOALUtil {
 	public static String HARDWARE = "Generic Hardware";
 	public static String SOFTWARE = "Generic Software";
 
-	protected static final Logger logger = Logger.getLogger(JOALUtil.class
+	public static final Logger logger = Logger.getLogger(JOALUtil.class
 			.getName());
 
 	protected static JOALUtil instance;
@@ -72,22 +72,48 @@ public class JOALUtil {
 	protected JOALUtil() {
 	}
 
-	public void deleteBuffer(AudioBuffer b) {
+	/**
+	 * Deletes & releases all sources and buffers created via this class.
+	 */
+	public void deleteAll() {
+		logger.info("deleting all sources & buffers...");
+		while (sources.size() > 0) {
+			deleteSource(sources.get(0), true);
+		}
+		sources.clear();
+		buffers.clear();
+	}
+
+	public boolean deleteBuffer(AudioBuffer b) {
 		for (AudioSource s : sources) {
 			if (s.getBuffer() == b) {
 				s.stop();
 				logger.fine("forced stopping source: " + s);
 			}
 		}
-		b.delete();
-		buffers.remove(b);
-		logger.info("deleted buffer: " + b);
+		boolean result = b.delete();
+		if (buffers.remove(b)) {
+			logger.info("deleted buffer: " + b);
+		}
+		return result;
 	}
 
-	public void deleteSource(AudioSource src) {
-		src.delete();
-		sources.remove(src);
-		logger.info("deleted source: " + src);
+	public boolean deleteSource(AudioSource src) {
+		return deleteSource(src, false);
+	}
+
+	public boolean deleteSource(AudioSource src, boolean killBuffer) {
+		AudioBuffer buffer = src.getBuffer();
+		boolean result = src.delete();
+		if (sources.remove(src)) {
+			logger.info("deleted source: " + src);
+		} else {
+			logger.warning("deleted unmanaged source: " + src);
+		}
+		if (killBuffer) {
+			result = result && deleteBuffer(buffer);
+		}
+		return result;
 	}
 
 	/**
@@ -255,10 +281,10 @@ public class JOALUtil {
 		// Fully initialized; finish setup
 		device = d;
 		context = c;
+		isInited = (al.alGetError() == AL.AL_NO_ERROR);
 		buffers = new ArrayList<AudioBuffer>();
 		sources = new ArrayList<AudioSource>();
 		listener = new SoundListener(this);
-		isInited = (al.alGetError() == AL.AL_NO_ERROR);
 		isEAX = al.alIsExtensionPresent("EAX2.0");
 		if (isEAX && attemptEAX) {
 			initEAX();
@@ -332,22 +358,7 @@ public class JOALUtil {
 	public void shutdown() {
 		if (isInited) {
 			logger.info("shutting down JOAL");
-			int[] tmp = new int[buffers.size()];
-			if (tmp.length > 0) {
-				for (int i = 0; i < tmp.length; i++) {
-					tmp[i] = buffers.get(i).getID();
-				}
-				al.alDeleteBuffers(tmp.length, tmp, 0);
-				logger.info(tmp.length + " buffers released");
-			}
-			tmp = new int[sources.size()];
-			if (tmp.length > 0) {
-				for (int i = 0; i < tmp.length; i++) {
-					tmp[i] = sources.get(i).getID();
-				}
-				al.alDeleteSources(tmp.length, tmp, 0);
-				logger.info(tmp.length + " sources released");
-			}
+			deleteAll();
 			alc.alcMakeContextCurrent(null);
 			alc.alcDestroyContext(context);
 			alc.alcCloseDevice(device);
