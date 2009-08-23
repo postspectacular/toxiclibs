@@ -85,17 +85,22 @@ public class JOALUtil {
 	}
 
 	public boolean deleteBuffer(AudioBuffer b) {
-		for (AudioSource s : sources) {
-			if (s.getBuffer() == b) {
-				s.stop();
-				logger.fine("forced stopping source: " + s);
+		if (b != null) {
+			for (AudioSource s : sources) {
+				if (s.getBuffer() == b) {
+					s.stop();
+					logger.fine("forced stopping source: " + s);
+				}
 			}
+			boolean result = b.delete();
+			if (buffers.remove(b)) {
+				logger.info("deleted buffer: " + b);
+			}
+			return result;
+		} else {
+			logger.warning("attempted to delete null buffer");
+			return true;
 		}
-		boolean result = b.delete();
-		if (buffers.remove(b)) {
-			logger.info("deleted buffer: " + b);
-		}
-		return result;
 	}
 
 	public boolean deleteSource(AudioSource src) {
@@ -110,7 +115,7 @@ public class JOALUtil {
 		} else {
 			logger.warning("deleted unmanaged source: " + src);
 		}
-		if (killBuffer) {
+		if (killBuffer && buffer != null) {
 			result = result && deleteBuffer(buffer);
 		}
 		return result;
