@@ -6,7 +6,7 @@ import toxi.math.MathUtils;
  * Quaternion implementation with SLERP based on http://is.gd/2n9s
  * 
  */
-public class Quaternion implements DimensionalVector {
+public class Quaternion {
 
 	public static final float DOT_THRESHOLD = 0.9995f;
 
@@ -144,10 +144,26 @@ public class Quaternion implements DimensionalVector {
 		return this;
 	}
 
-	public float dot(Quaternion b) {
-		return (x * b.x) + (y * b.y) + (z * b.z) + (w * b.w);
+	public Quaternion copy() {
+		return new Quaternion(w, x, y, z);
 	}
 
+	/**
+	 * Computes the dot product with the given quaternion.
+	 * 
+	 * @param q
+	 * @return dot product
+	 */
+	public float dot(Quaternion q) {
+		return (x * q.x) + (y * q.y) + (z * q.z) + (w * q.w);
+	}
+
+	/**
+	 * Computes this quaternion's conjugate, defined as the same w around the
+	 * inverted axis.
+	 * 
+	 * @return new conjugate quaternion
+	 */
 	public Quaternion getConjugate() {
 		Quaternion q = new Quaternion();
 		q.x = -x;
@@ -155,10 +171,6 @@ public class Quaternion implements DimensionalVector {
 		q.z = -z;
 		q.w = w;
 		return q;
-	}
-
-	public int getDimensions() {
-		return 4;
 	}
 
 	/**
@@ -188,6 +200,11 @@ public class Quaternion implements DimensionalVector {
 				0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
+	/**
+	 * Computes normalized version of this quaternion.
+	 * 
+	 * @return new normalized quaternion
+	 */
 	public Quaternion getNormalized() {
 		return new Quaternion(this).normalize();
 	}
@@ -208,7 +225,7 @@ public class Quaternion implements DimensionalVector {
 	}
 
 	/**
-	 * Spherical interpolation to target quat (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
+	 * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
 	 * >GamaSutra</a>)
 	 * 
 	 * @param target
@@ -218,10 +235,24 @@ public class Quaternion implements DimensionalVector {
 	 * @return new interpolated quat
 	 */
 	public Quaternion interpolateTo(Quaternion target, float t) {
+		return copy().interpolateToSelf(target, t);
+	}
+
+	/**
+	 * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
+	 * >GamaSutra</a>)
+	 * 
+	 * @param target
+	 *            quaternion
+	 * @param t
+	 *            interpolation factor (0..1)
+	 * @return new interpolated quat
+	 */
+	public Quaternion interpolateToSelf(Quaternion target, float t) {
 		Quaternion result;
 		float scale;
 		float invscale;
-		float dot = dot(target);
+		float dot = MathUtils.clip(dot(target), -1, 1);
 		if ((1.0 - dot) >= MathUtils.EPS) {
 			double theta = Math.acos(dot);
 			double invsintheta = 1.0 / Math.sin(theta);
@@ -232,15 +263,17 @@ public class Quaternion implements DimensionalVector {
 			invscale = t;
 		}
 		if (dot < 0.0) {
-			result = new Quaternion(scale * w - invscale * target.w, scale * x
-					- invscale * target.x, scale * y - invscale * target.y,
-					scale * z - invscale * target.z);
+			w = scale * w - invscale * target.w;
+			x = scale * x - invscale * target.x;
+			y = scale * y - invscale * target.y;
+			z = scale * z - invscale * target.z;
 		} else {
-			result = new Quaternion(scale * w + invscale * target.w, scale * x
-					+ invscale * target.x, scale * y + invscale * target.y,
-					scale * z + invscale * target.z);
+			w = scale * w + invscale * target.w;
+			x = scale * x + invscale * target.x;
+			y = scale * y + invscale * target.y;
+			z = scale * z + invscale * target.z;
 		}
-		return result;
+		return this;
 	}
 
 	public float magnitude() {
