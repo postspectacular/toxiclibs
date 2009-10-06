@@ -398,9 +398,10 @@ public class TColor implements ReadonlyTColor {
 	 * @return hex string
 	 */
 	public static final String rgbToHex(float r, float g, float b) {
-		String hex = Integer.toHexString((int) (r * 0xff))
-				+ Integer.toHexString((int) (g * 0xff))
-				+ Integer.toHexString((int) (b * 0xff));
+		String hex = Integer
+				.toHexString((int) (MathUtils.clip(r, 0, 1) * 0xff))
+				+ Integer.toHexString((int) (MathUtils.clip(g, 0, 1) * 0xff))
+				+ Integer.toHexString((int) (MathUtils.clip(b, 0, 1) * 0xff));
 		return hex;
 	}
 
@@ -1144,6 +1145,19 @@ public class TColor implements ReadonlyTColor {
 		return cmyka;
 	}
 
+	/**
+	 * Converts the color into a 6 digit hex string.
+	 * 
+	 * @return color as hex
+	 */
+	public String toHex() {
+		String hex = Integer.toHexString(toARGB());
+		if (hex.length() > 6) {
+			hex = hex.substring(2);
+		}
+		return hex;
+	}
+
 	public float[] toHSVAArray(float[] hsva) {
 		if (hsva == null) {
 			hsva = new float[4];
@@ -1187,5 +1201,4 @@ public class TColor implements ReadonlyTColor {
 	public float yellow() {
 		return cmyk[0];
 	}
-
 }
