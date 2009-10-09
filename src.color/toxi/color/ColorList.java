@@ -608,7 +608,7 @@ public class ColorList implements Iterable<TColor> {
 	 * Sorts the list by proximity to the given target color (using RGB distance
 	 * metrics).
 	 * 
-	 * @see #sortByProximityTo(TColor, DistanceProxy, boolean)
+	 * @see #sortByProximityTo(ReadonlyTColor, DistanceProxy, boolean)
 	 * @param target
 	 *            color
 	 * @param isReversed

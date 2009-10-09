@@ -51,7 +51,7 @@ import toxi.util.datatypes.GenericSet;
 public class ColorRange {
 
 	/**
-	 * Default hue variance for {@link #getColor(TColor, float)}.
+	 * Default hue variance for {@link #getColor(ReadonlyTColor, float)}
 	 */
 	public static final float DEFAULT_VARIANCE = 0.035f;
 
@@ -578,7 +578,7 @@ public class ColorRange {
 	 * Creates a new {@link ColorList} of shades of the given {@link TColor}
 	 * based on the other constraints of the range.
 	 * 
-	 * @see #getColor(TColor, float)
+	 * @see #getColor(ReadonlyTColor, float)
 	 * @param c
 	 *            base color
 	 * @param num

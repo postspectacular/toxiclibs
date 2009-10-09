@@ -137,13 +137,13 @@ public interface ReadonlyTColor {
 
 	/**
 	 * @return true, if all rgb component values are equal and less than
-	 *         {@link #BLACK_POINT}
+	 *         {@link TColor#BLACK_POINT}
 	 */
 	public boolean isBlack();
 
 	/**
 	 * @return true, if the saturation component value is less than
-	 *         {@link #GREY_THRESHOLD}
+	 *         {@link TColor#GREY_THRESHOLD}
 	 */
 	public boolean isGrey();
 
@@ -155,7 +155,7 @@ public interface ReadonlyTColor {
 
 	/**
 	 * @return true, if all rgb component values are equal and greater than
-	 *         {@link #WHITE_POINT}
+	 *         {@link TColor#WHITE_POINT}
 	 */
 	public boolean isWhite();
 
