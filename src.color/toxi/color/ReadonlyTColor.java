@@ -10,13 +10,11 @@ public interface ReadonlyTColor {
 	/**
 	 * @return the color's black component
 	 */
-
 	public float black();
 
 	/**
 	 * @return the color's blue component
 	 */
-
 	public float blue();
 
 	/**
@@ -24,12 +22,14 @@ public interface ReadonlyTColor {
 	 */
 	public float brightness();
 
+	/**
+	 * @return a mutable copy of the current color
+	 */
 	public TColor copy();
 
 	/**
 	 * @return the color's cyan component
 	 */
-
 	public float cyan();
 
 	/**
@@ -176,9 +176,11 @@ public interface ReadonlyTColor {
 	/**
 	 * @return the color's red component
 	 */
-
 	public float red();
 
+	/**
+	 * @return the color's saturation
+	 */
 	public float saturation();
 
 	/**
@@ -213,7 +215,7 @@ public interface ReadonlyTColor {
 	 * 
 	 * @param rgba
 	 *            result array (or null)
-	 * @return array in this order: r,g,b,a
+	 * @return array in this order: r,g,b,a (OpenGL format)
 	 */
 	public float[] toRGBAArray(float[] rgba);
 

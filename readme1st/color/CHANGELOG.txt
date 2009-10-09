@@ -1,3 +1,12 @@
+0003 - 2009-10-09
+--------------------------------------------------------------------------------
+! fixed issue #9: ColorList.createFromARGBArray() now correctly returns unique colors if requested
++ extracted ReadonlyTColor interface for creating immutable colors,
+  this is now implemented by TColor, NamedColor and various other classes
++ added setARGB() & toHex() methods to TColor
++ added toRGBAArray(), toHSVArray(), toCMYKArray() to TColor
+* changed a ColorList constructor to use any type of collection instead of just ArrayList
+
 0002 - 2009-02-27
 --------------------------------------------------------------------------------
 ! fixed ColorList.size() now returns the size as int
