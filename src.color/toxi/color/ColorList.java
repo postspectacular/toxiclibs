@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import toxi.color.theory.ColorTheoryRegistry;
 import toxi.color.theory.ColorTheoryStrategy;
@@ -64,13 +65,32 @@ public class ColorList implements Iterable<TColor> {
 	 *            unique colors though)
 	 * @return new color list
 	 */
-	// FIXME see issue #9 on googlecode
 	public static final ColorList createFromARGBArray(int[] pixels, int num,
 			boolean uniqueOnly) {
+		return createFromARGBArray(pixels, num, uniqueOnly, 100);
+	}
+
+	/**
+	 * Factory method. Creates a new ColorList of colors sampled from the given
+	 * ARGB image array.
+	 * 
+	 * @param pixels
+	 *            int array of ARGB pixels
+	 * @param num
+	 *            number of colors samples (clipped automatically to number of
+	 *            pixels in the image)
+	 * @param uniqueOnly
+	 *            flag if only unique samples are to be taken (doesn't guarantee
+	 *            unique colors though)
+	 * @param maxIterations
+	 *            max number of attempts to find a unique color
+	 * @return new color list
+	 */
+	public static final ColorList createFromARGBArray(int[] pixels, int num,
+			boolean uniqueOnly, int maxIterations) {
 		num = MathUtils.min(num, pixels.length);
-		int[] colors = new int[num];
-		int[] index = new int[num];
-		int numColsFound = 0;
+		List<TColor> colors = new ArrayList<TColor>();
+		TColor temp = TColor.BLACK.copy();
 		for (int i = 0; i < num; i++) {
 			int idx;
 			if (uniqueOnly) {
@@ -78,26 +98,20 @@ public class ColorList implements Iterable<TColor> {
 				int numTries = 0;
 				do {
 					idx = MathUtils.random(pixels.length);
-					for (int j = 0; j < i; j++) {
-						if (index[j] == idx) {
-							isUnique = false;
-							break;
-						}
-					}
-				} while (!isUnique && ++numTries < 100);
-				if (numTries >= 100) {
+					temp.setARGB(pixels[idx]);
+					isUnique = !colors.contains(temp);
+				} while (!isUnique && ++numTries < maxIterations);
+				if (numTries < 100) {
+					colors.add(temp.copy());
+				} else {
 					break;
 				}
 			} else {
 				idx = MathUtils.random(pixels.length);
+				colors.add(TColor.newARGB(pixels[idx]));
 			}
-			index[numColsFound] = idx;
-			colors[numColsFound] = pixels[idx];
-			numColsFound++;
 		}
-		int[] cols = new int[numColsFound];
-		System.arraycopy(colors, 0, cols, 0, numColsFound);
-		return new ColorList(cols);
+		return new ColorList(colors);
 	}
 
 	/**
@@ -147,7 +161,7 @@ public class ColorList implements Iterable<TColor> {
 	 * 
 	 * @param colors
 	 */
-	public ColorList(ArrayList<TColor> colors) {
+	public ColorList(Collection<TColor> colors) {
 		this.colors.addAll(colors);
 	}
 

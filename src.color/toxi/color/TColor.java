@@ -998,6 +998,13 @@ public class TColor implements ReadonlyTColor {
 		return this;
 	}
 
+	public TColor setARGB(int argb) {
+		setRGB(((argb >> 16) & 0xff) * INV8BIT, ((argb >> 8) & 0xff) * INV8BIT,
+				(argb & 0xff) * INV8BIT);
+		alpha = (argb >>> 24) * INV8BIT;
+		return this;
+	}
+
 	public TColor setBlack(float val) {
 		cmyk[3] = val;
 		return setCMYK(cmyk);
