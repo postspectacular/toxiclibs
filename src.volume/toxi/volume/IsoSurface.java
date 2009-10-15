@@ -28,6 +28,7 @@ public class IsoSurface {
 
 	protected float[] data;
 	protected int sliceRes;
+	protected int nextXY;
 
 	protected Vec3D[] edgeVertices;
 	protected int numVertices;
@@ -50,6 +51,8 @@ public class IsoSurface {
 		resZ1 = volume.resZ1;
 
 		sliceRes = volume.sliceRes;
+		nextXY = resX + sliceRes;
+
 		data = volume.data;
 		centreOffset = volume.halfScale.getInverted();
 
@@ -100,7 +103,7 @@ public class IsoSurface {
 				float offsetX = centreOffset.x;
 				int offset = resX * y + sliceOffset;
 				for (int x = 0; x < resX1; x++) {
-					int cellIndex = getCellIndex(offset);
+					final int cellIndex = getCellIndex(offset);
 					if (cellIndex > 0) {
 						int n = 0;
 						int edgeIndex;
@@ -112,7 +115,7 @@ public class IsoSurface {
 									* (z + edgeOffsetInfo[2]))
 									* 3 + edgeOffsetInfo[3];
 						}
-						int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
+						final int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
 						if (edgeFlags > 0) {
 							int edgeOffsetIndex = offset * 3;
 							float offsetData = data[offset];
@@ -147,8 +150,12 @@ public class IsoSurface {
 		numFaces = numVertices / 3;
 	}
 
-	public void computeSurfaceMesh(final TriangleMesh mesh, final float iso) {
-		mesh.clear();
+	public void computeSurfaceMesh(TriangleMesh mesh, final float iso) {
+		if (mesh == null) {
+			mesh = new TriangleMesh("isosurface-" + iso);
+		} else {
+			mesh.clear();
+		}
 		isoValue = iso;
 		float offsetZ = centreOffset.z;
 		final int[] cellFaceIndices = new int[15];
@@ -159,7 +166,7 @@ public class IsoSurface {
 				float offsetX = centreOffset.x;
 				int offset = resX * y + sliceOffset;
 				for (int x = 0; x < resX1; x++) {
-					int cellIndex = getCellIndex(offset);
+					final int cellIndex = getCellIndex(offset);
 					if (cellIndex > 0) {
 						int n = 0;
 						int edgeIndex;
@@ -172,12 +179,12 @@ public class IsoSurface {
 									* 3 + edgeOffsetInfo[3];
 							n++;
 						}
-						for (int i = 0; i < n; i += 3) {
-							mesh.addFace(edgeVertices[cellFaceIndices[i]],
-									edgeVertices[cellFaceIndices[i + 1]],
-									edgeVertices[cellFaceIndices[i + 2]]);
+						for (int i = 0; i < n;) {
+							mesh.addFace(edgeVertices[cellFaceIndices[i++]],
+									edgeVertices[cellFaceIndices[i++]],
+									edgeVertices[cellFaceIndices[i++]]);
 						}
-						int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
+						final int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
 						if (edgeFlags > 0) {
 							int edgeOffsetIndex = offset * 3;
 							float offsetData = data[offset];
@@ -223,7 +230,7 @@ public class IsoSurface {
 		if (data[idx + resX] < isoValue) {
 			cellIndex |= 0x10;
 		}
-		if (data[idx + resX + sliceRes] < isoValue) {
+		if (data[idx + nextXY] < isoValue) {
 			cellIndex |= 0x80;
 		}
 		idx++;
@@ -236,7 +243,7 @@ public class IsoSurface {
 		if (data[idx + resX] < isoValue) {
 			cellIndex |= 0x20;
 		}
-		if (data[idx + resX + sliceRes] < isoValue) {
+		if (data[idx + nextXY] < isoValue) {
 			cellIndex |= 0x40;
 		}
 		return cellIndex;

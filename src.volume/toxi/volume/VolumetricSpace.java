@@ -24,8 +24,7 @@ public class VolumetricSpace {
 	protected int numCells;
 
 	public VolumetricSpace(Vec3D scale, int resX, int resY, int resZ) {
-		this.scale = scale.copy();
-		this.halfScale = scale.scale(0.5f);
+		setScale(scale);
 		this.resX = resX;
 		this.resY = resY;
 		this.resZ = resZ;
@@ -38,6 +37,12 @@ public class VolumetricSpace {
 		numCells = data.length;
 		logger.info("new space of " + resX + "x" + resY + "x" + resZ
 				+ " cells: " + numCells);
+	}
+
+	public void clear() {
+		for (int i = 0; i < data.length; i++) {
+			data[i] = 0;
+		}
 	}
 
 	public void closeSides() {
@@ -53,6 +58,17 @@ public class VolumetricSpace {
 		y = MathUtils.clip(y, 0, resY1);
 		z = MathUtils.clip(z, 0, resZ1);
 		return x + y * resX + z * sliceRes;
+	}
+
+	public Vec3D getResolution() {
+		return new Vec3D(resX, resY, resZ);
+	}
+
+	/**
+	 * @return the scale
+	 */
+	public Vec3D getScale() {
+		return scale.copy();
 	}
 
 	public float getVoxelAt(int x, int y, int z) {
@@ -78,6 +94,15 @@ public class VolumetricSpace {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @param scale
+	 *            the scale to set
+	 */
+	public void setScale(Vec3D scale) {
+		this.scale = scale;
+		this.halfScale = scale.scale(0.5f);
 	}
 
 	public void setVolumeSidesTo(float density) {

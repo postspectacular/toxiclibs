@@ -1,3 +1,11 @@
+0002 - 2009-10-15
+--------------------------------------------------------------------------------
+! changed BoxBrush.setSize() to be compatible with RoundBrush.setSize() (was twice as large before)
++ added IsoSurface.computeSurfaceMesh() to store surface directly in a TriangleMesh instance
++ added clear(), setScale(), getScale(), getResolution() to VolumetricSpace
++ added new Processing demo BoxFluid (requires verletphysics library too)
+* minor optimizations in RoundBrush.drawAtGridPos() & IsoSurface.getCellIndex()
+
 0001 - 2009-02-27
 --------------------------------------------------------------------------------
 * initial release

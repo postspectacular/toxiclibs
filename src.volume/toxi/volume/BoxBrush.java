@@ -52,9 +52,9 @@ public class BoxBrush extends VolumetricBrush {
 	}
 
 	public void setSize(float sizeX, float sizeY, float sizeZ) {
-		this.cellRadiusX = (int) (sizeX / volume.scale.x * volume.resX + 1);
-		this.cellRadiusY = (int) (sizeX / volume.scale.y * volume.resY + 1);
-		this.cellRadiusZ = (int) (sizeX / volume.scale.z * volume.resZ + 1);
+		this.cellRadiusX = (int) (sizeX * 0.5f / volume.scale.x * volume.resX + 1);
+		this.cellRadiusY = (int) (sizeY * 0.5f / volume.scale.y * volume.resY + 1);
+		this.cellRadiusZ = (int) (sizeZ * 0.5f / volume.scale.z * volume.resZ + 1);
 		stretchY = (float) cellRadiusX / cellRadiusY;
 		stretchZ = (float) cellRadiusX / cellRadiusZ;
 		logger.fine("new brush size: " + cellRadiusX + "x" + cellRadiusY + "x"

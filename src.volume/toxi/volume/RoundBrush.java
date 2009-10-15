@@ -33,12 +33,14 @@ public class RoundBrush extends VolumetricBrush {
 		int maxY = MathUtils.min((int) (cy + cellRadiusY), volume.resY);
 		int maxZ = MathUtils.min((int) (cz + cellRadiusZ), volume.resZ);
 		for (int z = minZ; z < maxZ; z++) {
+			float dz = (z - cz) * stretchZ;
+			dz *= dz;
 			for (int y = minY; y < maxY; y++) {
+				float dyz = (y - cy) * stretchY;
+				dyz = dyz * dyz + dz;
 				for (int x = minX; x < maxX; x++) {
 					float dx = x - cx;
-					float dy = (y - cy) * stretchY;
-					float dz = (z - cz) * stretchZ;
-					float d = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+					float d = (float) Math.sqrt(dx * dx + dyz);
 					if (d <= cellRadiusX) {
 						float cellVal = (1 - d / cellRadiusX) * density;
 						int idx = volume.getIndexFor(x, y, z);
