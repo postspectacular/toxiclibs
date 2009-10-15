@@ -71,9 +71,9 @@ public class MathUtils {
 	public static final float PI_SQUARED = PI * PI;
 
 	/**
-	 * Epsilon value, approx. 1.19E-7
+	 * Epsilon value
 	 */
-	public static final float EPS = 1.1920928955078125E-7f;
+	public static final float EPS = 1.2e-7f; // was 1.1920928955078125E-7f;
 
 	/**
 	 * Degrees to radians conversion factor

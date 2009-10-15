@@ -79,14 +79,19 @@ public class TriangleMesh {
 	protected static final Logger logger = Logger.getLogger(TriangleMesh.class
 			.getName());
 
+	public static final TriangleMesh fromBinarySTL(String fileName) {
+		return new STLReader().loadBinary(fileName);
+	}
+
 	public final ArrayList<Face> faces;
+
 	public String name;
 
 	public AABB bounds;
 
 	protected final Vec3D centroid = new Vec3D();
-
 	protected int numVertices;
+
 	protected int numFaces;
 
 	protected boolean isLoggerEnabled = false;
@@ -97,7 +102,6 @@ public class TriangleMesh {
 		this(name, 1000, 3000);
 	}
 
-	@SuppressWarnings("serial")
 	public TriangleMesh(String name, int numV, int numF) {
 		this.name = name;
 		faces = new ArrayList<Face>(numF);
@@ -145,6 +149,24 @@ public class TriangleMesh {
 		}
 	}
 
+	/**
+	 * Centers the mesh around the given pivot point (the centroid of its AABB).
+	 * Method also updates & returns the new bounding box.
+	 * 
+	 * @param origin
+	 *            new centroid or null (defaults to {0,0,0})
+	 */
+	public AABB center(Vec3D origin) {
+		getCentroid();
+		Vec3D delta = origin != null ? origin.sub(centroid) : centroid
+				.getInverted();
+		for (Vertex v : vertices.values()) {
+			v.addSelf(delta);
+		}
+		getBoundingBox();
+		return bounds;
+	}
+
 	public final void clear() {
 		vertices.clear();
 		faces.clear();
@@ -157,6 +179,14 @@ public class TriangleMesh {
 		for (Vertex v : vertices.values()) {
 			v.computeNormal();
 		}
+	}
+
+	public TriangleMesh copy() {
+		TriangleMesh m = new TriangleMesh(name + "-copy", numVertices, numFaces);
+		for (Face f : faces) {
+			m.addFace(f.a, f.b, f.c);
+		}
+		return m;
 	}
 
 	public void enableLogger(boolean state) {
@@ -268,13 +298,20 @@ public class TriangleMesh {
 		}
 	}
 
+	public final void saveAsSTL(String fileName) {
+		logger.info("saving mesh to: " + fileName);
+		STLWriter stl = new STLWriter();
+		stl.beginSave(fileName, numFaces);
+		for (Face f : faces) {
+			stl.face(f.a, f.b, f.c);
+		}
+		stl.endSave();
+		logger.info(numFaces + " written");
+	}
+
 	@Override
 	public String toString() {
 		return "TriangleMesh: " + name + " vertices: " + getNumVertices()
 				+ " faces: " + getNumFaces();
-	}
-
-	public static final TriangleMesh fromBinarySTL(String fileName) {
-		return new STLReader().loadBinary(fileName);
 	}
 }

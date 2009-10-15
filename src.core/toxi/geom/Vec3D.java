@@ -644,6 +644,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @see toxi.geom.DimensionalVector#getDimensions()
 	 */
+	@Deprecated
 	public final int getDimensions() {
 		return 3;
 	}
@@ -700,6 +701,18 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 */
 	public Vec3D getNormalized() {
 		return new Vec3D(this).normalize();
+	}
+
+	/**
+	 * Produces a new vector normalized to the given length.
+	 * 
+	 * @param len
+	 *            new desired length
+	 * 
+	 * @return new vector
+	 */
+	public Vec3D getNormalizedTo(float len) {
+		return getNormalized().scaleSelf(len);
 	}
 
 	/**
@@ -1112,6 +1125,17 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 			z *= mag;
 		}
 		return this;
+	}
+
+	/**
+	 * Normalizes the vector to the given length.
+	 * 
+	 * @param len
+	 *            desired length
+	 * @return
+	 */
+	public Vec3D normalizeTo(float len) {
+		return normalize().scaleSelf(len);
 	}
 
 	/**

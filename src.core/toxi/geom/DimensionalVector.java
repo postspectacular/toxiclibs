@@ -1,5 +1,6 @@
 package toxi.geom;
 
+@Deprecated
 public interface DimensionalVector {
 	/**
 	 * Returns the number of dimensions of this vector.

@@ -518,6 +518,7 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 		return new Vec2D(this).constrain(r);
 	}
 
+	@Deprecated
 	public int getDimensions() {
 		return 2;
 	}

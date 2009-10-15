@@ -209,21 +209,6 @@ public class Quaternion {
 		return new Quaternion(this).normalize();
 	}
 
-	public float[] getValue() {
-		float[] res = new float[4];
-		float sa = (float) Math.sqrt(1.0f - w * w);
-		if (sa < MathUtils.EPS) {
-			sa = 1.0f;
-		} else {
-			sa = 1.0f / sa;
-		}
-		res[0] = (float) Math.acos(w) * 2.0f;
-		res[1] = x * sa;
-		res[2] = y * sa;
-		res[3] = z * sa;
-		return res;
-	}
-
 	/**
 	 * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
 	 * >GamaSutra</a>)
@@ -352,6 +337,27 @@ public class Quaternion {
 
 	public float[] toArray() {
 		return new float[] { w, x, y, z };
+	}
+
+	/**
+	 * Converts the quaternion into a float array consisting of: rotation angle
+	 * in radians, rotation axis x,y,z
+	 * 
+	 * @return 4-element float array
+	 */
+	public float[] toAxisAngle() {
+		float[] res = new float[4];
+		float sa = (float) Math.sqrt(1.0f - w * w);
+		if (sa < MathUtils.EPS) {
+			sa = 1.0f;
+		} else {
+			sa = 1.0f / sa;
+		}
+		res[0] = (float) Math.acos(w) * 2.0f;
+		res[1] = x * sa;
+		res[2] = y * sa;
+		res[3] = z * sa;
+		return res;
 	}
 
 	public Matrix4x4 toMatrix4x4() {

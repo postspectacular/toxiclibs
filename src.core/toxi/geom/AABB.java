@@ -139,24 +139,30 @@ public class AABB extends Vec3D {
 		bbox = signDirY ? min : max;
 		float tymax = (bbox.y - ray.y) * invDir.y;
 
-		if ((tmin > tymax) || (tymin > tmax))
+		if ((tmin > tymax) || (tymin > tmax)) {
 			return null;
-		if (tymin > tmin)
+		}
+		if (tymin > tmin) {
 			tmin = tymin;
-		if (tymax < tmax)
+		}
+		if (tymax < tmax) {
 			tmax = tymax;
+		}
 
 		bbox = signDirZ ? max : min;
 		float tzmin = (bbox.z - ray.z) * invDir.z;
 		bbox = signDirZ ? min : max;
 		float tzmax = (bbox.z - ray.z) * invDir.z;
 
-		if ((tmin > tzmax) || (tzmin > tmax))
+		if ((tmin > tzmax) || (tzmin > tmax)) {
 			return null;
-		if (tzmin > tmin)
+		}
+		if (tzmin > tmin) {
 			tmin = tzmin;
-		if (tzmax < tmax)
+		}
+		if (tzmax < tmax) {
 			tmax = tzmax;
+		}
 		if ((tmin < maxDir) && (tmax > minDir)) {
 			return ray.getPointAtDistance(tmin);
 		}
@@ -181,8 +187,7 @@ public class AABB extends Vec3D {
 		if (c.x < min.x) {
 			s = c.x - min.x;
 			d = s * s;
-		}
-		else if (c.x > max.x) {
+		} else if (c.x > max.x) {
 			s = c.x - max.x;
 			d += s * s;
 		}
@@ -190,8 +195,7 @@ public class AABB extends Vec3D {
 		if (c.y < min.y) {
 			s = c.y - min.y;
 			d += s * s;
-		}
-		else if (c.y > max.y) {
+		} else if (c.y > max.y) {
 			s = c.y - max.y;
 			d += s * s;
 		}
@@ -199,8 +203,7 @@ public class AABB extends Vec3D {
 		if (c.z < min.z) {
 			s = c.z - min.z;
 			d += s * s;
-		}
-		else if (c.z > max.z) {
+		} else if (c.z > max.z) {
 			s = c.z - max.z;
 			d += s * s;
 		}
