@@ -56,17 +56,29 @@ public class JOALUtil {
 
 	protected static JOALUtil instance;
 
+	public static JOALUtil getInstance() {
+		if (instance == null) {
+			synchronized (JOALUtil.class) {
+				if (instance == null) {
+					instance = new JOALUtil();
+				}
+			}
+		}
+		return instance;
+	}
+
 	protected ArrayList<AudioBuffer> buffers;
 	protected ArrayList<AudioSource> sources;
-	protected SoundListener listener;
 
+	protected SoundListener listener;
 	protected AL al;
 	protected ALC alc;
 	protected ALCcontext context;
 	protected ALCdevice device;
-	protected EAX eax;
 
+	protected EAX eax;
 	protected boolean isInited;
+
 	protected boolean isEAX;
 
 	protected JOALUtil() {
@@ -377,16 +389,5 @@ public class JOALUtil {
 
 			isInited = false;
 		}
-	}
-
-	public static JOALUtil getInstance() {
-		if (instance == null) {
-			synchronized (JOALUtil.class) {
-				if (instance == null) {
-					instance = new JOALUtil();
-				}
-			}
-		}
-		return instance;
 	}
 }
