@@ -108,7 +108,7 @@ public class Quaternion {
 	public float x, y, z, w;
 
 	public Quaternion() {
-		reset();
+		identity();
 	}
 
 	public Quaternion(float w, float x, float y, float z) {
@@ -209,6 +209,14 @@ public class Quaternion {
 		return new Quaternion(this).normalize();
 	}
 
+	public Quaternion identity() {
+		w = 1.0f;
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+		return this;
+	}
+
 	/**
 	 * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
 	 * >GamaSutra</a>)
@@ -287,14 +295,6 @@ public class Quaternion {
 		return this;
 	}
 
-	public Quaternion reset() {
-		w = 1.0f;
-		x = 0.0f;
-		y = 0.0f;
-		z = 0.0f;
-		return this;
-	}
-
 	public Quaternion scale(float t) {
 		return new Quaternion(x * t, y * t, z * t, w * t);
 	}
@@ -304,6 +304,14 @@ public class Quaternion {
 		y *= t;
 		z *= t;
 		w *= t;
+		return this;
+	}
+
+	public Quaternion set(float w, float x, float y, float z) {
+		this.w = w;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 		return this;
 	}
 

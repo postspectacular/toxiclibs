@@ -116,7 +116,11 @@ public class MathUtils {
 	 * @return power^2 value
 	 */
 	public static final int ceilPowerOf2(int x) {
-		return (int) Math.pow(2, (int) (Math.log(x) / LOG2 + 0.5));
+		int pow2 = 1;
+		while (pow2 < x) {
+			pow2 <<= 1;
+		}
+		return pow2;
 	}
 
 	public static final float clip(float a, float min, float max) {
