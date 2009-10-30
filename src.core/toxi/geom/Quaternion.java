@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import toxi.math.MathUtils;
 
 /**
@@ -105,6 +107,7 @@ public class Quaternion {
 				(float) q[2]);
 	}
 
+	@XmlAttribute
 	public float x, y, z, w;
 
 	public Quaternion() {

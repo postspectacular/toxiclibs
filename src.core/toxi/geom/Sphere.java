@@ -20,8 +20,11 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 public class Sphere extends Vec3D {
 
+	@XmlAttribute
 	public float radius;
 
 	public Sphere() {

@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import toxi.math.MathUtils;
 
 /**
@@ -30,6 +32,7 @@ public class Plane extends Vec3D {
 	 */
 	public static final int ON_PLANE = 0;
 
+	@XmlElement
 	public Vec3D normal;
 
 	public Plane(Vec3D origin, Vec3D norm) {
@@ -47,10 +50,11 @@ public class Plane extends Vec3D {
 	 */
 	public int classifyPoint(Vec3D p) {
 		float d = this.sub(p).dot(normal);
-		if (d < -MathUtils.EPS)
+		if (d < -MathUtils.EPS) {
 			return PLANE_FRONT;
-		else if (d > MathUtils.EPS)
+		} else if (d > MathUtils.EPS) {
 			return PLANE_BACK;
+		}
 		return ON_PLANE;
 	}
 
@@ -78,9 +82,9 @@ public class Plane extends Vec3D {
 		if (denom > MathUtils.EPS) {
 			float u = normal.dot(this.sub(r)) / denom;
 			return r.getPointAtDistance(u);
-		}
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/**

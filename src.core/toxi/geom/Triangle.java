@@ -20,6 +20,8 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import toxi.math.MathUtils;
 
 public class Triangle {
@@ -39,8 +41,10 @@ public class Triangle {
 		return (determ < 0.0);
 	}
 
+	@XmlElement
 	public Vec3D a, b, c;
 
+	@XmlElement
 	public Vec3D normal;
 
 	public Vec3D centroid;
@@ -90,8 +94,9 @@ public class Triangle {
 		// P' = A + t*AC, s = tnom/(tnom+tdenom)
 		float tnom = pa.dot(ac);
 
-		if (snom <= 0.0f && tnom <= 0.0f)
+		if (snom <= 0.0f && tnom <= 0.0f) {
 			return a; // Vertex region early out
+		}
 
 		float sdenom = pb.dot(a.sub(b));
 		float tdenom = pc.dot(a.sub(c));
@@ -101,10 +106,12 @@ public class Triangle {
 		float unom = pb.dot(bc);
 		float udenom = pc.dot(b.sub(c));
 
-		if (sdenom <= 0.0f && unom <= 0.0f)
+		if (sdenom <= 0.0f && unom <= 0.0f) {
 			return b; // Vertex region early out
-		if (tdenom <= 0.0f && udenom <= 0.0f)
+		}
+		if (tdenom <= 0.0f && udenom <= 0.0f) {
 			return c; // Vertex region early out
+		}
 
 		// P is outside (or on) AB if the triple scalar product [N PA PB] <= 0
 		Vec3D n = ab.cross(ac);
@@ -200,8 +207,9 @@ public class Triangle {
 			min = dBC;
 			result = Rbc;
 		}
-		if (dCA < min)
+		if (dCA < min) {
 			result = Rca;
+		}
 
 		return result;
 	}

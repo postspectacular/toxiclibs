@@ -20,6 +20,8 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import toxi.math.MathUtils;
 
 /**
@@ -46,6 +48,7 @@ public class AABB extends Vec3D {
 		return new AABB(a.interpolateTo(b, 0.5f), b.sub(a).scaleSelf(0.5f));
 	}
 
+	@XmlElement
 	private Vec3D extent;
 
 	private Vec3D min, max;

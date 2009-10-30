@@ -24,29 +24,28 @@ package toxi.geom;
  * A simple 3D ray datatype
  */
 public class Ray3D extends Vec3D {
+
 	protected Vec3D dir;
-	
+
 	public Ray3D(float x, float y, float z, Vec3D d) {
-		super(x,y,z);
-		dir=d.getNormalized();
+		super(x, y, z);
+		dir = d.getNormalized();
 	}
-	
+
 	public Ray3D(Vec3D o, Vec3D d) {
 		super(o);
-		dir=d.getNormalized();
+		dir = d.getNormalized();
 	}
 
 	public Vec3D getDirection() {
-		return dir;
+		return dir.copy();
 	}
-	
+
 	public Vec3D getPointAtDistance(float dist) {
 		return add(dir.scale(dist));
 	}
-	
+
 	public String toString() {
-		StringBuffer sb=new StringBuffer();
-		sb.append("origin: ").append(super.toString()).append(" dir: ").append(dir);
-		return sb.toString();
+		return "origin: " + super.toString() + " dir: " + dir;
 	}
 }

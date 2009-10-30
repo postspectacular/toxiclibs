@@ -35,7 +35,7 @@ import toxi.math.MathUtils;
  * 
  * @author Karsten Schmidt
  */
-public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
+public class Vec3D implements Comparable<Vec3D> {
 
 	/** Defines positive X axis. */
 	public static final Vec3D X_AXIS = new Vec3D(1, 0, 0);
@@ -639,16 +639,6 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 		return new Vec3D(this).constrain(box);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see toxi.geom.DimensionalVector#getDimensions()
-	 */
-	@Deprecated
-	public final int getDimensions() {
-		return 3;
-	}
-
 	/**
 	 * Creates a new vector whose components are the integer value of their
 	 * current values.
@@ -712,7 +702,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * @return new vector
 	 */
 	public Vec3D getNormalizedTo(float len) {
-		return getNormalized().scaleSelf(len);
+		return copy().normalizeTo(len);
 	}
 
 	/**
@@ -786,8 +776,7 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * @return the hash code value of this vector.
 	 */
 	public int hashCode() {
-		int hash = 37;
-		hash += 37 * hash + Float.floatToIntBits(x);
+		int hash = Float.floatToIntBits(x);
 		hash += 37 * hash + Float.floatToIntBits(y);
 		hash += 37 * hash + Float.floatToIntBits(z);
 		return hash;
@@ -1132,10 +1121,17 @@ public class Vec3D implements Comparable<Vec3D>, DimensionalVector {
 	 * 
 	 * @param len
 	 *            desired length
-	 * @return
+	 * @return itself
 	 */
 	public Vec3D normalizeTo(float len) {
-		return normalize().scaleSelf(len);
+		float mag = (float) Math.sqrt(x * x + y * y + z * z);
+		if (mag > 0) {
+			mag = len / mag;
+			x *= mag;
+			y *= mag;
+			z *= mag;
+		}
+		return this;
 	}
 
 	/**

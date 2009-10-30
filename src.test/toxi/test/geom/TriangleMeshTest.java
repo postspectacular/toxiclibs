@@ -49,9 +49,9 @@ public class TriangleMeshTest extends TestCase {
 		ArrayList<Vertex> verts = new ArrayList<Vertex>(mesh.vertices.values());
 		assertEquals(6, mesh.vertices.size());
 		for (Face f : mesh.faces) {
-			assertEquals(verts.get(f.a.getID()), f.a);
-			assertEquals(verts.get(f.b.getID()), f.b);
-			assertEquals(verts.get(f.c.getID()), f.c);
+			assertEquals(verts.get(f.a.id), f.a);
+			assertEquals(verts.get(f.b.id), f.b);
+			assertEquals(verts.get(f.c.id), f.c);
 		}
 	}
 

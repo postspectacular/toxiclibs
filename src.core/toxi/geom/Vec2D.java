@@ -35,7 +35,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
+public class Vec2D implements Comparable<Vec2D> {
 
 	/**
 	 * Defines positive X axis
@@ -518,11 +518,6 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 		return new Vec2D(this).constrain(r);
 	}
 
-	@Deprecated
-	public int getDimensions() {
-		return 2;
-	}
-
 	/**
 	 * Creates a new vector whose components are the integer value of their
 	 * current values
@@ -576,6 +571,18 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 		return new Vec2D(this).normalize();
 	}
 
+	/**
+	 * Produces a new vector normalized to the given length.
+	 * 
+	 * @param len
+	 *            new desired length
+	 * 
+	 * @return new vector
+	 */
+	public Vec2D getNormalizedTo(float len) {
+		return getNormalized().scaleSelf(len);
+	}
+
 	public final Vec2D getPerpendicular() {
 		return new Vec2D(this).perpendicular();
 	}
@@ -599,6 +606,17 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 	 */
 	public Vec2D getSignum() {
 		return new Vec2D(this).signum();
+	}
+
+	/**
+	 * Returns a unique code for this vector object based on it's values. If two
+	 * vectors are logically equivalent, they will return the same hash code
+	 * value.
+	 * 
+	 * @return the hash code value of this vector.
+	 */
+	public int hashCode() {
+		return 37 * Float.floatToIntBits(x) + Float.floatToIntBits(y);
 	}
 
 	/**
@@ -899,6 +917,17 @@ public class Vec2D implements DimensionalVector, Comparable<Vec2D> {
 			y *= mag;
 		}
 		return this;
+	}
+
+	/**
+	 * Normalizes the vector to the given length.
+	 * 
+	 * @param len
+	 *            desired length
+	 * @return itself
+	 */
+	public Vec2D normalizeTo(float len) {
+		return normalize().scaleSelf(len);
 	}
 
 	public final Vec2D perpendicular() {

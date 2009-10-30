@@ -46,7 +46,7 @@ public class TriangleMesh {
 	public final class Vertex extends Vec3D {
 		public final Vec3D normal = new Vec3D();
 
-		private final int id;
+		public final int id;
 		private int valence = 0;
 
 		Vertex(Vec3D v, int id) {
@@ -60,11 +60,7 @@ public class TriangleMesh {
 		}
 
 		final void computeNormal() {
-			normal.scaleSelf(1f / valence);
-		}
-
-		final public int getID() {
-			return id;
+			normal.scaleSelf(1f / valence).normalize();
 		}
 
 		final public int getValence() {

@@ -1,8 +1,12 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import toxi.math.MathUtils;
 
 public class Rect {
+
+	@XmlAttribute
 	public float x, y, width, height;
 
 	/**
