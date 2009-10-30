@@ -40,7 +40,7 @@ import toxi.math.MathUtils;
  */
 public class ColorGradient {
 
-	protected class GradPoint implements Comparable<GradPoint> {
+	protected static class GradPoint implements Comparable<GradPoint> {
 		float pos;
 		ReadonlyTColor color;
 

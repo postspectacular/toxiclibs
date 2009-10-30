@@ -46,7 +46,7 @@ import toxi.math.MathUtils;
  */
 public class ColorTheme {
 
-	class ThemePart {
+	static class ThemePart {
 		ColorRange range;
 		ReadonlyTColor col;
 		float weight;
@@ -71,7 +71,8 @@ public class ColorTheme {
 		this.name = name;
 	}
 
-	public ColorTheme addRange(ColorRange range, ReadonlyTColor col, float weight) {
+	public ColorTheme addRange(ColorRange range, ReadonlyTColor col,
+			float weight) {
 		parts.add(new ThemePart(range, col, weight));
 		weightedSum += weight;
 		return this;

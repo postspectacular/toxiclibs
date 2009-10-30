@@ -1182,13 +1182,17 @@ public class TColor implements ReadonlyTColor {
 	 * @see toxi.color.ReadonlyTColor#toRGBAArray(float[])
 	 */
 	public float[] toRGBAArray(float[] rgba) {
+		return toRGBAArray(rgba, 0);
+	}
+
+	public float[] toRGBAArray(float[] rgba, int offset) {
 		if (rgba == null) {
 			rgba = new float[4];
 		}
-		rgba[0] = rgb[0];
-		rgba[1] = rgb[1];
-		rgba[2] = rgb[2];
-		rgba[3] = alpha;
+		rgba[offset++] = rgb[0];
+		rgba[offset++] = rgb[1];
+		rgba[offset++] = rgb[2];
+		rgba[offset] = alpha;
 		return rgba;
 	}
 

@@ -40,7 +40,20 @@ public class TetradTheoryStrategy implements ColorTheoryStrategy {
 
 	public static final String NAME = "tetrad";
 
-	private final int theta = 90;
+	protected int theta = 90;
+
+	public TetradTheoryStrategy() {
+	}
+
+	/**
+	 * Constructs a new instance with the given color offset angle.
+	 * 
+	 * @param theta
+	 *            hue rotation angle in degrees
+	 */
+	public TetradTheoryStrategy(int theta) {
+		this.theta = theta;
+	}
 
 	/*
 	 * (non-Javadoc)
