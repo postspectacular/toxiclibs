@@ -33,6 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * </p>
  * 
  * @version 0014 Added user adjustable curve tightness control
+ * @version 0015 Added JAXB annotations and List support for dynamic building of
+ *          spline
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Spline3D {
@@ -69,14 +71,31 @@ public class Spline3D {
 	@XmlTransient
 	protected int numP;
 
+	/**
+	 * Constructs an empty spline container with default curve tightness. You
+	 * need to populate the spline manually by using {@link #add(Vec2D)}.
+	 */
 	public Spline3D() {
 		setTightness(DEFAULT_TIGHTNESS);
 	}
 
+	/**
+	 * @param rawPoints
+	 *            list of control point vectors
+	 */
 	public Spline3D(List<Vec3D> rawPoints) {
 		this(rawPoints, null, DEFAULT_TIGHTNESS);
 	}
 
+	/**
+	 * @param rawPoints
+	 *            list of control point vectors
+	 * @param b
+	 *            predefined Bernstein polynomial (good for reusing)
+	 * @param tightness
+	 *            default curve tightness used for the interpolated vertices
+	 *            {@linkplain #setTightness(float)}
+	 */
 	public Spline3D(List<Vec3D> rawPoints, BernsteinPolynomial b,
 			float tightness) {
 		pointList.addAll(rawPoints);
@@ -103,6 +122,17 @@ public class Spline3D {
 	 */
 	public Spline3D(Vec3D[] pointArray, BernsteinPolynomial b, float tightness) {
 		this(Arrays.asList(pointArray), b, tightness);
+	}
+
+	/**
+	 * Adds the given point to the list of control points.
+	 * 
+	 * @param p
+	 * @return itself
+	 */
+	public Spline3D add(Vec3D p) {
+		pointList.add(p);
+		return this;
 	}
 
 	/**
