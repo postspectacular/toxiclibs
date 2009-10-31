@@ -20,12 +20,23 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * A simple 3D ray datatype
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Ray3D extends Vec3D {
 
-	protected Vec3D dir;
+	@XmlElement(required = true)
+	public Vec3D dir;
+
+	public Ray3D() {
+		super();
+		dir = Vec3D.Y_AXIS.copy();
+	}
 
 	public Ray3D(float x, float y, float z, Vec3D d) {
 		super(x, y, z);

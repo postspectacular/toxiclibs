@@ -20,30 +20,73 @@
 
 package toxi.math.waves;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * Abstract wave oscillator type which needs to be subclassed to implement
  * different waveforms. Please note that the frequency unit is radians, but
  * conversion methods to & from Hertz ({@link #hertzToRadians(float, float)})
  * are included in this base class.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractWave {
 
 	public static final float PI = 3.14159265358979323846f;
 	public static final float TWO_PI = 2 * PI;
 
 	/**
+	 * Converts a frequency in Hertz into radians.
+	 * 
+	 * @param hz
+	 *            frequency to convert (in Hz)
+	 * @param sampleRate
+	 *            sampling rate in Hz (equals period length @ 1 Hz)
+	 * @return frequency in radians
+	 */
+	public static final float hertzToRadians(float hz, float sampleRate) {
+		return hz / sampleRate * TWO_PI;
+	}
+
+	/**
+	 * Converts a frequency from radians to Hertz.
+	 * 
+	 * @param f
+	 *            frequency in radians
+	 * @param sampleRate
+	 *            sampling rate in Hz (equals period length @ 1 Hz)
+	 * @return freq in Hz
+	 */
+	public static final float radiansToHertz(float f, float sampleRate) {
+		return f / TWO_PI * sampleRate;
+	}
+
+	/**
 	 * Current wave phase
 	 */
+	@XmlAttribute
 	public float phase;
+
+	@XmlAttribute(name = "ophase")
 	protected float origPhase;
 
+	@XmlAttribute(name = "freq")
 	public float frequency;
 
+	@XmlAttribute
 	public float amp;
 
+	@XmlAttribute
 	public float offset;
 
+	@XmlTransient
 	public float value = 0;
+
+	public AbstractWave() {
+
+	}
 
 	/**
 	 * @param phase
@@ -75,23 +118,15 @@ public abstract class AbstractWave {
 	}
 
 	/**
-	 * Updates the wave and returns new value. Implementing classes should
-	 * manually ensure the phase remains in the 0...TWO_PI interval or by
-	 * calling {@link #cyclePhase()}.
-	 * 
-	 * @return current (newly calculated) wave value
-	 */
-	public abstract float update();
-
-	/**
 	 * Ensures phase remains in the 0...TWO_PI interval.
 	 * 
 	 * @return current phase
 	 */
 	protected final float cyclePhase() {
 		phase %= TWO_PI;
-		if (phase < 0)
+		if (phase < 0) {
 			phase += TWO_PI;
+		}
 		return phase;
 	}
 
@@ -104,42 +139,17 @@ public abstract class AbstractWave {
 	 */
 	protected final float cyclePhase(float freq) {
 		phase = (phase + freq) % TWO_PI;
-		if (phase < 0)
+		if (phase < 0) {
 			phase += TWO_PI;
+		}
 		return phase;
 	}
 
 	/**
-	 * @deprecated
-	 * @param amp
+	 * Resets the wave phase to the original start value
 	 */
-	// @Deprecated
-	public void setAmp(float amp) {
-		this.amp = amp;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	// @Deprecated
-	public float getAmp() {
-		return amp;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	// @Deprecated
-	public float getValue() {
-		return value;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	// @Deprecated
-	public float getPhase() {
-		return phase;
+	public void reset() {
+		phase = origPhase;
 	}
 
 	/**
@@ -153,30 +163,6 @@ public abstract class AbstractWave {
 		this.phase = this.origPhase = phase;
 	}
 
-	/**
-	 * Resets the wave phase to the original start value
-	 */
-	public void reset() {
-		phase = origPhase;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	// @Deprecated
-	public float getFrequency() {
-		return frequency;
-	}
-
-	/**
-	 * @deprecated
-	 * @param freq
-	 */
-	// @Deprecated
-	public void setFrequency(float freq) {
-		this.frequency = freq;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -187,32 +173,16 @@ public abstract class AbstractWave {
 		sb.append(this.getClass().getName()).append(" phase: ").append(phase);
 		sb.append(" frequency: ").append(frequency);
 		sb.append(" amp: ").append(amp);
+		sb.append(" offset: ").append(offset);
 		return sb.toString();
 	}
 
 	/**
-	 * Converts a frequency in Hertz into radians.
+	 * Updates the wave and returns new value. Implementing classes should
+	 * manually ensure the phase remains in the 0...TWO_PI interval or by
+	 * calling {@link #cyclePhase()}.
 	 * 
-	 * @param hz
-	 *            frequency to convert (in Hz)
-	 * @param sampleRate
-	 *            sampling rate in Hz (equals period length @ 1 Hz)
-	 * @return frequency in radians
+	 * @return current (newly calculated) wave value
 	 */
-	public static final float hertzToRadians(float hz, float sampleRate) {
-		return hz / sampleRate * TWO_PI;
-	}
-
-	/**
-	 * Converts a frequency from radians to Hertz.
-	 * 
-	 * @param f
-	 *            frequency in radians
-	 * @param sampleRate
-	 *            sampling rate in Hz (equals period length @ 1 Hz)
-	 * @return freq in Hz
-	 */
-	public static final float radiansToHertz(float f, float sampleRate) {
-		return f / TWO_PI * sampleRate;
-	}
+	public abstract float update();
 }

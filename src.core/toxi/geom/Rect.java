@@ -1,12 +1,15 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.MathUtils;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Rect {
 
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float x, y, width, height;
 
 	/**

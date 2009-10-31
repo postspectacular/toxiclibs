@@ -20,11 +20,18 @@
 
 package toxi.math.waves;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Standard Sine wave at fixed frequency and values normalized to the given
  * amplitude.
  */
+@XmlRootElement
 public class SineWave extends AbstractWave {
+
+	public SineWave() {
+		super();
+	}
 
 	/**
 	 * @param phase

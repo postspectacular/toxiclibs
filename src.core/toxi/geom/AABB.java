@@ -20,7 +20,10 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import toxi.math.MathUtils;
 
@@ -28,7 +31,7 @@ import toxi.math.MathUtils;
  * Axis-aligned bounding box with basic intersection features for Ray, AABB and
  * Sphere classes.
  */
-
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AABB extends Vec3D {
 
 	/**
@@ -48,10 +51,16 @@ public class AABB extends Vec3D {
 		return new AABB(a.interpolateTo(b, 0.5f), b.sub(a).scaleSelf(0.5f));
 	}
 
-	@XmlElement
+	@XmlElement(required = true)
 	private Vec3D extent;
 
+	@XmlTransient
 	private Vec3D min, max;
+
+	public AABB() {
+		super();
+		setExtent(new Vec3D());
+	}
 
 	/**
 	 * Creates an independent copy of the passed in box

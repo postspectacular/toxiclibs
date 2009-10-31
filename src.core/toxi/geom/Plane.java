@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 import toxi.math.MathUtils;
@@ -11,6 +13,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Plane extends Vec3D {
 
 	public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
@@ -32,15 +35,22 @@ public class Plane extends Vec3D {
 	 */
 	public static final int ON_PLANE = 0;
 
-	@XmlElement
+	@XmlElement(required = true)
 	public Vec3D normal;
+
+	public Plane() {
+		super();
+		normal = Vec3D.Y_AXIS.copy();
+	}
+
+	public Plane(Triangle t) {
+		this(t.computeCentroid(), t.computeNormal());
+	}
 
 	public Plane(Vec3D origin, Vec3D norm) {
 		super(origin);
 		normal = norm.getNormalized();
 	}
-
-	// TODO add constructor for creating a plane from a Triangle or 3 Vec3D's
 
 	/**
 	 * Classifies the relative position of the given point to the plane.

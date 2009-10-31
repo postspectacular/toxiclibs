@@ -1,10 +1,18 @@
 package toxi.geom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * <p>
- * This is a generic 2D B-Spline class for curves of arbitrary length, control
+ * This is a generic 3D B-Spline class for curves of arbitrary length, control
  * handles and patches are created and joined automatically as described here:
  * <a
  * href="http://www.ibiblio.org/e-notes/Splines/Bint.htm">ibiblio.org/e-notes/
@@ -26,51 +34,75 @@ import java.util.ArrayList;
  * 
  * @version 0014 Added user adjustable curve tightness control
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Spline2D {
 
-	public Vec2D[] points;
-	public Vec2D[] delta;
+	public static final float DEFAULT_TIGHTNESS = 0.25f;
 
-	public ArrayList<Vec2D> vertices;
+	@XmlElement
+	protected Vec2D[] points;
+
+	@XmlElement(name = "p")
+	public List<Vec2D> pointList = new ArrayList<Vec2D>();
+
+	@XmlTransient
+	public List<Vec2D> vertices;
+
+	@XmlTransient
 	public BernsteinPolynomial bernstein;
 
+	@XmlTransient
+	protected Vec2D[] delta;
+
+	@XmlTransient
 	protected Vec2D[] coeffA;
+
+	@XmlTransient
 	protected float[] bi;
 
-	protected float tightness, invTightness;
+	@XmlAttribute
+	protected float tightness;
 
-	private final int numP;
+	@XmlTransient
+	protected float invTightness;
 
-	/**
-	 * @param p
-	 *            array of control point vectors
-	 */
-	public Spline2D(Vec2D[] p) {
-		this(p, null, 0.25f);
+	@XmlTransient
+	protected int numP;
+
+	public Spline2D() {
+		setTightness(DEFAULT_TIGHTNESS);
+	}
+
+	public Spline2D(List<Vec2D> rawPoints) {
+		this(rawPoints, null, DEFAULT_TIGHTNESS);
+	}
+
+	public Spline2D(List<Vec2D> rawPoints, BernsteinPolynomial b,
+			float tightness) {
+		pointList.addAll(rawPoints);
+		bernstein = b;
+		setTightness(tightness);
 	}
 
 	/**
-	 * @param p
+	 * @param pointArray
+	 *            array of control point vectors
+	 */
+	public Spline2D(Vec2D[] pointArray) {
+		this(pointArray, null, DEFAULT_TIGHTNESS);
+	}
+
+	/**
+	 * @param pointArray
 	 *            array of control point vectors
 	 * @param b
 	 *            predefined Bernstein polynomial (good for reusing)
 	 * @param tightness
-	 *            default curve tightness used for the interpolated vertices (
+	 *            default curve tightness used for the interpolated vertices
 	 *            {@linkplain #setTightness(float)}
 	 */
-	public Spline2D(Vec2D[] p, BernsteinPolynomial b, float tightness) {
-		points = p;
-		numP = points.length;
-		coeffA = new Vec2D[numP];
-		delta = new Vec2D[numP];
-		bi = new float[numP];
-		for (int i = 0; i < numP; i++) {
-			coeffA[i] = new Vec2D();
-			delta[i] = new Vec2D();
-			bi[i] = 0;
-		}
-		bernstein = b;
-		setTightness(tightness);
+	public Spline2D(Vec2D[] pointArray, BernsteinPolynomial b, float tightness) {
+		this(Arrays.asList(pointArray), b, tightness);
 	}
 
 	/**
@@ -92,7 +124,8 @@ public class Spline2D {
 	 *            start of each segment)
 	 * @return list of Vec2D vertices along the curve
 	 */
-	public ArrayList<Vec2D> computeVertices(int res) {
+	public List<Vec2D> computeVertices(int res) {
+		updateCoefficients();
 		res++;
 		if (bernstein == null || bernstein.resolution != res) {
 			bernstein = new BernsteinPolynomial(res);
@@ -143,7 +176,7 @@ public class Spline2D {
 
 	/**
 	 * @see #setTightness(float)
-	 * @return the spline tightness
+	 * @return the spline3d tightness
 	 * @since 0014 (rev.216)
 	 */
 	public float getTightness() {
@@ -166,5 +199,20 @@ public class Spline2D {
 		this.tightness = tightness;
 		this.invTightness = 1f / tightness;
 		return this;
+	}
+
+	public void updateCoefficients() {
+		numP = pointList.size();
+		if (points == null || (points != null && points.length != numP)) {
+			coeffA = new Vec2D[numP];
+			delta = new Vec2D[numP];
+			bi = new float[numP];
+			for (int i = 0; i < numP; i++) {
+				coeffA[i] = new Vec2D();
+				delta[i] = new Vec2D();
+			}
+			setTightness(tightness);
+		}
+		points = pointList.toArray(new Vec2D[0]);
 	}
 }

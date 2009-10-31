@@ -23,6 +23,8 @@ package toxi.geom;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.InterpolateStrategy;
@@ -35,6 +37,7 @@ import toxi.math.MathUtils;
  * 
  * @author Karsten Schmidt
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Vec3D implements Comparable<Vec3D> {
 
 	/** Defines positive X axis. */
@@ -209,15 +212,15 @@ public class Vec3D implements Comparable<Vec3D> {
 	}
 
 	/** X coordinate. */
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float x;
 
 	/** Y coordinate. */
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float y;
 
 	/** Z coordinate. */
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float z;
 
 	/**

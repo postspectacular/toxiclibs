@@ -20,10 +20,14 @@
 
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import toxi.math.MathUtils;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Triangle {
 
 	public static boolean isClockwiseInXY(Vec3D a, Vec3D b, Vec3D c) {
@@ -41,13 +45,17 @@ public class Triangle {
 		return (determ < 0.0);
 	}
 
-	@XmlElement
+	@XmlElement(required = true)
 	public Vec3D a, b, c;
 
-	@XmlElement
+	@XmlElement(required = true)
 	public Vec3D normal;
 
+	@XmlTransient
 	public Vec3D centroid;
+
+	public Triangle() {
+	}
 
 	public Triangle(Vec3D a, Vec3D b, Vec3D c) {
 		this.a = a;

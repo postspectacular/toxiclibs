@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.MathUtils;
@@ -8,6 +10,7 @@ import toxi.math.MathUtils;
  * Quaternion implementation with SLERP based on http://is.gd/2n9s
  * 
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Quaternion {
 
 	public static final float DOT_THRESHOLD = 0.9995f;
@@ -107,7 +110,7 @@ public class Quaternion {
 				(float) q[2]);
 	}
 
-	@XmlAttribute
+	@XmlAttribute(required = true)
 	public float x, y, z, w;
 
 	public Quaternion() {

@@ -1,6 +1,14 @@
 package toxi.geom;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * <p>
@@ -26,31 +34,66 @@ import java.util.ArrayList;
  * 
  * @version 0014 Added user adjustable curve tightness control
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Spline3D {
 
-	public Vec3D[] points;
-	public Vec3D[] delta;
+	public static final float DEFAULT_TIGHTNESS = 0.25f;
 
-	public ArrayList<Vec3D> vertices;
+	@XmlElement
+	protected Vec3D[] points;
+
+	@XmlElement(name = "p")
+	public List<Vec3D> pointList = new ArrayList<Vec3D>();
+
+	@XmlTransient
+	public List<Vec3D> vertices;
+
+	@XmlTransient
 	public BernsteinPolynomial bernstein;
 
+	@XmlTransient
+	protected Vec3D[] delta;
+
+	@XmlTransient
 	protected Vec3D[] coeffA;
+
+	@XmlTransient
 	protected float[] bi;
 
-	protected float tightness, invTightness;
+	@XmlAttribute
+	protected float tightness;
 
-	private final int numP;
+	@XmlTransient
+	protected float invTightness;
 
-	/**
-	 * @param p
-	 *            array of control point vectors
-	 */
-	public Spline3D(Vec3D[] p) {
-		this(p, null, 0.25f);
+	@XmlTransient
+	protected int numP;
+
+	public Spline3D() {
+		setTightness(DEFAULT_TIGHTNESS);
+	}
+
+	public Spline3D(List<Vec3D> rawPoints) {
+		this(rawPoints, null, DEFAULT_TIGHTNESS);
+	}
+
+	public Spline3D(List<Vec3D> rawPoints, BernsteinPolynomial b,
+			float tightness) {
+		pointList.addAll(rawPoints);
+		bernstein = b;
+		setTightness(tightness);
 	}
 
 	/**
-	 * @param p
+	 * @param pointArray
+	 *            array of control point vectors
+	 */
+	public Spline3D(Vec3D[] pointArray) {
+		this(pointArray, null, DEFAULT_TIGHTNESS);
+	}
+
+	/**
+	 * @param pointArray
 	 *            array of control point vectors
 	 * @param b
 	 *            predefined Bernstein polynomial (good for reusing)
@@ -58,19 +101,8 @@ public class Spline3D {
 	 *            default curve tightness used for the interpolated vertices
 	 *            {@linkplain #setTightness(float)}
 	 */
-	public Spline3D(Vec3D[] p, BernsteinPolynomial b, float tightness) {
-		points = p;
-		numP = points.length;
-		coeffA = new Vec3D[numP];
-		delta = new Vec3D[numP];
-		bi = new float[numP];
-		for (int i = 0; i < numP; i++) {
-			coeffA[i] = new Vec3D();
-			delta[i] = new Vec3D();
-			bi[i] = 0;
-		}
-		bernstein = b;
-		setTightness(tightness);
+	public Spline3D(Vec3D[] pointArray, BernsteinPolynomial b, float tightness) {
+		this(Arrays.asList(pointArray), b, tightness);
 	}
 
 	/**
@@ -92,7 +124,8 @@ public class Spline3D {
 	 *            start of each segment)
 	 * @return list of Vec3D vertices along the curve
 	 */
-	public ArrayList<Vec3D> computeVertices(int res) {
+	public List<Vec3D> computeVertices(int res) {
+		updateCoefficients();
 		res++;
 		if (bernstein == null || bernstein.resolution != res) {
 			bernstein = new BernsteinPolynomial(res);
@@ -149,7 +182,7 @@ public class Spline3D {
 
 	/**
 	 * @see #setTightness(float)
-	 * @return the spline tightness
+	 * @return the spline3d tightness
 	 * @since 0014 (rev.216)
 	 */
 	public float getTightness() {
@@ -172,5 +205,20 @@ public class Spline3D {
 		this.tightness = tightness;
 		this.invTightness = 1f / tightness;
 		return this;
+	}
+
+	public void updateCoefficients() {
+		numP = pointList.size();
+		if (points == null || (points != null && points.length != numP)) {
+			coeffA = new Vec3D[numP];
+			delta = new Vec3D[numP];
+			bi = new float[numP];
+			for (int i = 0; i < numP; i++) {
+				coeffA[i] = new Vec3D();
+				delta[i] = new Vec3D();
+			}
+			setTightness(tightness);
+		}
+		points = pointList.toArray(new Vec3D[0]);
 	}
 }

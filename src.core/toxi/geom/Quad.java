@@ -19,26 +19,41 @@
  */
 package toxi.geom;
 
-import toxi.geom.Vec3D;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Quad {
-	public Vec3D[] vertices;
 
-	public Quad(Vec3D[] vertices, int vertOffset) {
-		this.vertices = new Vec3D[4];
-		System.arraycopy(vertices, vertOffset, this.vertices, 0, 4);
+	@XmlElement(name = "point")
+	public Vec3D[] vertices = new Vec3D[4];
+
+	public Quad() {
+	}
+
+	public Quad(float x1, float y1, float x2, float y2, float x3, float y3,
+			float x4, float y4) {
+		vertices[0] = new Vec3D(x1, y1, 0);
+		vertices[1] = new Vec3D(x2, y2, 0);
+		vertices[2] = new Vec3D(x3, y3, 0);
+		vertices[3] = new Vec3D(x4, y4, 0);
 	}
 
 	public Quad(Quad q) {
-		vertices = new Vec3D[4];
 		for (int i = 0; i < 4; i++) {
 			vertices[i] = new Vec3D(q.vertices[i]);
 		}
 	}
 
-	public Quad(float x1, float y1, float x2, float y2, float x3, float y3,
-			float x4, float y4) {
-		vertices = new Vec3D[] { new Vec3D(x1, y1, 0), new Vec3D(x2, y2, 0),
-				new Vec3D(x3, y3, 0), new Vec3D(x4, y4, 0) };
+	public Quad(Vec3D a, Vec3D b, Vec3D c, Vec3D d) {
+		vertices[0] = a;
+		vertices[1] = b;
+		vertices[2] = c;
+		vertices[3] = d;
+	}
+
+	public Quad(Vec3D[] vertices, int vertOffset) {
+		System.arraycopy(vertices, vertOffset, this.vertices, 0, 4);
 	}
 }

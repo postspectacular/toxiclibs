@@ -1,7 +1,7 @@
 package toxi.geom;
 
 /**
- * Helper class for the spline classes in this package. Used to compute
+ * Helper class for the spline3d classes in this package. Used to compute
  * subdivision points of the curve.
  * 
  * @author toxi
@@ -14,7 +14,7 @@ public class BernsteinPolynomial {
 	/**
 	 * @param res
 	 *            number of subdivision steps between each control point of the
-	 *            spline
+	 *            spline3d
 	 */
 	public BernsteinPolynomial(int res) {
 		resolution = res;
