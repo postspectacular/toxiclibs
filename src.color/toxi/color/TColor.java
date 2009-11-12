@@ -448,11 +448,8 @@ public class TColor implements ReadonlyTColor {
 	}
 
 	protected float[] rgb;
-
 	protected float[] cmyk;
-
 	protected float[] hsv;
-
 	public float alpha;
 
 	protected TColor() {
@@ -549,7 +546,6 @@ public class TColor implements ReadonlyTColor {
 	 * 
 	 * @see toxi.color.ReadonlyTColor#black()
 	 */
-
 	public float black() {
 		return cmyk[0];
 	}
@@ -577,7 +573,6 @@ public class TColor implements ReadonlyTColor {
 	 * 
 	 * @see toxi.color.ReadonlyTColor#blue()
 	 */
-
 	public float blue() {
 		return rgb[2];
 	}
@@ -612,16 +607,28 @@ public class TColor implements ReadonlyTColor {
 	 * 
 	 * @see toxi.color.ReadonlyTColor#cyan()
 	 */
-
 	public float cyan() {
 		return cmyk[0];
 	}
 
+	/**
+	 * Reduces the color's brightness by the given amount (e.g 0.1 = 10%
+	 * darker).
+	 * 
+	 * @param step
+	 * @return itself
+	 */
 	public TColor darken(float step) {
 		hsv[2] = MathUtils.clip(hsv[2] - step, 0, 1);
 		return setHSV(hsv);
 	}
 
+	/**
+	 * Reduced the color's saturation by the given amount.
+	 * 
+	 * @param step
+	 * @return
+	 */
 	public TColor desaturate(float step) {
 		hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
 		return setHSV(hsv);
@@ -777,6 +784,11 @@ public class TColor implements ReadonlyTColor {
 		return new TColor(this).desaturate(step);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#getInverted()
+	 */
 	public TColor getInverted() {
 		return new TColor(this).invert();
 	}
@@ -802,12 +814,6 @@ public class TColor implements ReadonlyTColor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see toxi.color.ReadonlyTColor#green()
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see toxi.color.ReadonlyTColor#getRotatedRYB(int)
 	 */
 	public TColor getRotatedRYB(int angle) {
@@ -823,6 +829,11 @@ public class TColor implements ReadonlyTColor {
 		return new TColor(this).saturate(step);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#green()
+	 */
 	public float green() {
 		return rgb[1];
 	}
@@ -896,12 +907,6 @@ public class TColor implements ReadonlyTColor {
 				.compare(rgb[0], rgb[2]) == 0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see toxi.color.ReadonlyTColor#magenta()
-	 */
-
 	/**
 	 * Lightens the color by stated amount.
 	 * 
@@ -917,22 +922,26 @@ public class TColor implements ReadonlyTColor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see toxi.color.ReadonlyTColor#red()
-	 */
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see toxi.color.ReadonlyTColor#luminance()
 	 */
 	public float luminance() {
 		return rgb[0] * 0.299f + rgb[1] * 0.587f + rgb[2] * 0.114f;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#magenta()
+	 */
 	public float magenta() {
 		return cmyk[0];
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#red()
+	 */
 	public float red() {
 		return rgb[0];
 	}
@@ -941,6 +950,13 @@ public class TColor implements ReadonlyTColor {
 		return rotateRYB((int) MathUtils.degrees(theta));
 	}
 
+	/**
+	 * Rotates the color by x degrees along the RYB color wheel.
+	 * 
+	 * @see http://en.wikipedia.org/wiki/RYB_color_model
+	 * @param theta
+	 * @return
+	 */
 	public TColor rotateRYB(int theta) {
 		float h = hsv[0] * 360;
 		theta %= 360;
@@ -979,6 +995,12 @@ public class TColor implements ReadonlyTColor {
 		return setHSV(hsv);
 	}
 
+	/**
+	 * Adds the given value to the current saturation component.
+	 * 
+	 * @param step
+	 * @return
+	 */
 	public TColor saturate(float step) {
 		hsv[1] = MathUtils.clip(hsv[1] + step, 0, 1);
 		return setHSV(hsv);
@@ -998,6 +1020,13 @@ public class TColor implements ReadonlyTColor {
 		return this;
 	}
 
+	/**
+	 * Sets all color components to new values interpreted from the given packed
+	 * ARGB 32bit color value.
+	 * 
+	 * @param argb
+	 * @return
+	 */
 	public TColor setARGB(int argb) {
 		setRGB(((argb >> 16) & 0xff) * INV8BIT, ((argb >> 8) & 0xff) * INV8BIT,
 				(argb & 0xff) * INV8BIT);
@@ -1038,6 +1067,15 @@ public class TColor implements ReadonlyTColor {
 		return this;
 	}
 
+	/**
+	 * Sets a color component by name.
+	 * 
+	 * @param criteria
+	 * @param val
+	 * @return
+	 * 
+	 * @see AccessCriteria
+	 */
 	public TColor setComponent(AccessCriteria criteria, float val) {
 		switch (criteria.getMode()) {
 		case RGB:
@@ -1141,6 +1179,11 @@ public class TColor implements ReadonlyTColor {
 				| (int) (rgb[2] * 255) | (int) (alpha * 255) << 24;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#toCMYKAArray(float[])
+	 */
 	public float[] toCMYKAArray(float[] cmyka) {
 		if (cmyka == null) {
 			cmyka = new float[4];
@@ -1165,6 +1208,11 @@ public class TColor implements ReadonlyTColor {
 		return hex;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#toHSVAArray(float[])
+	 */
 	public float[] toHSVAArray(float[] hsva) {
 		if (hsva == null) {
 			hsva = new float[4];
@@ -1185,9 +1233,15 @@ public class TColor implements ReadonlyTColor {
 		return toRGBAArray(rgba, 0);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toxi.color.ReadonlyTColor#toRGBAArray(float[], int)
+	 */
 	public float[] toRGBAArray(float[] rgba, int offset) {
 		if (rgba == null) {
 			rgba = new float[4];
+			offset = 0;
 		}
 		rgba[offset++] = rgb[0];
 		rgba[offset++] = rgb[1];

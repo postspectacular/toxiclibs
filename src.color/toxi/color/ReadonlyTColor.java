@@ -220,6 +220,17 @@ public interface ReadonlyTColor {
 	public float[] toRGBAArray(float[] rgba);
 
 	/**
+	 * Copies the current RGBA value into the given array starting the given
+	 * offset. If the array is null, the method constucts a new one with these
+	 * values and the offset value is ignored (set to zero).
+	 * 
+	 * @param rgba
+	 * @param offset
+	 * @return
+	 */
+	public float[] toRGBAArray(float[] rgba, int offset);
+
+	/**
 	 * @return the color's yellow component
 	 */
 	public float yellow();
