@@ -147,6 +147,13 @@ public class VerletParticle extends Vec3D {
 	}
 
 	/**
+	 * @return true, if particle is locked
+	 */
+	public boolean isLocked() {
+		return isLocked;
+	}
+
+	/**
 	 * Locks/immobilizes particle in space
 	 * 
 	 * @return itself
@@ -199,5 +206,4 @@ public class VerletParticle extends Vec3D {
 			}
 		}
 	}
-
 }

@@ -145,6 +145,13 @@ public class VerletParticle2D extends Vec2D {
 	}
 
 	/**
+	 * @return true, if particle is locked
+	 */
+	public boolean isLocked() {
+		return isLocked;
+	}
+
+	/**
 	 * Locks/immobilizes particle in space
 	 * 
 	 * @return itself
