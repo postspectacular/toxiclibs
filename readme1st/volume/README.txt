@@ -4,9 +4,10 @@ Only the following package is included:
 
 toxi.volume
 
-This library also depends on the following other packages:
+This library also depends on the following other packages,
+get them via: http://toxiclibs.googlecode.com/downloads/list
 
-toxi.geom (all part of toxiclibscore-0013 release or later)
+toxi.geom (both part of toxiclibscore-0013 release or later)
 toxi.math
 
 If you're going to use these classes for Processing projects,
@@ -25,7 +26,7 @@ http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2009 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

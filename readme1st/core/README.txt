@@ -1,6 +1,7 @@
 This is a separate release of a subset of the available classes in the toxiclibs library.
 
-Only the following packages are included:
+Only the following packages are included. These form the core functionality of the libraries
+and are required for all other downloadable packages:
 
 toxi.geom
 toxi.geom.util
@@ -11,10 +12,9 @@ toxi.math.waves
 toxi.util.datatypes
 
 If you're going to use these classes for Processing projects,
-first drop the "geomutils" folder into the "libraries" folder of your
-Processing sketchbook and ensure the above listed dependent libraries
-are installed there too. You'll then need to restart Processing in order
-for it to find this new library.
+first drop the entire "toxiclibscore" folder into the "libraries" folder
+of your Processing sketchbook. You'll then need to restart Processing
+in order for it to find this new library.
 
 Source code is available via SVN, instructions over here:
 http://code.google.com/p/toxiclibs/source
@@ -26,7 +26,7 @@ http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2009 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

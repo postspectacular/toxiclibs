@@ -5,7 +5,8 @@ Only the following packages are included:
 toxi.color
 toxi.color.theory
 
-This library also depends on the following other packages:
+This library also depends on the following other packages,
+get them via: http://toxiclibs.googlecode.com/downloads/list
 
 toxi.geom (toxiclibscore-0013 release or later)
 toxi.math (toxiclibscore-0013 release or later)

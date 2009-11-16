@@ -6,13 +6,15 @@ toxi.audio
 
 This library also depends on the following other packages:
 
-JOAL (bundled with binary distribution):
+JOAL (these are bundled with binary distribution):
 net.java.games.joal
 net.java.games.joal.eax
 net.java.games.joal.util
 javax.sound.sampled
 
-toxiclibscore-0013 or later:
+toxiclibscore-0014 or later,
+get it via: http://toxiclibs.googlecode.com/downloads/list
+
 toxi.geom.*;
 toxi.math.*;
 
