@@ -20,10 +20,7 @@
 
 package toxi.math.waves;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import java.util.Stack;
 
 /**
  * Abstract wave oscillator type which needs to be subclassed to implement
@@ -31,158 +28,167 @@ import javax.xml.bind.annotation.XmlTransient;
  * conversion methods to & from Hertz ({@link #hertzToRadians(float, float)})
  * are included in this base class.
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractWave {
 
-	public static final float PI = 3.14159265358979323846f;
-	public static final float TWO_PI = 2 * PI;
+    public static final float PI = 3.14159265358979323846f;
+    public static final float TWO_PI = 2 * PI;
 
-	/**
-	 * Converts a frequency in Hertz into radians.
-	 * 
-	 * @param hz
-	 *            frequency to convert (in Hz)
-	 * @param sampleRate
-	 *            sampling rate in Hz (equals period length @ 1 Hz)
-	 * @return frequency in radians
-	 */
-	public static final float hertzToRadians(float hz, float sampleRate) {
-		return hz / sampleRate * TWO_PI;
-	}
+    /**
+     * Converts a frequency in Hertz into radians.
+     * 
+     * @param hz
+     *            frequency to convert (in Hz)
+     * @param sampleRate
+     *            sampling rate in Hz (equals period length @ 1 Hz)
+     * @return frequency in radians
+     */
+    public static final float hertzToRadians(float hz, float sampleRate) {
+        return hz / sampleRate * TWO_PI;
+    }
 
-	/**
-	 * Converts a frequency from radians to Hertz.
-	 * 
-	 * @param f
-	 *            frequency in radians
-	 * @param sampleRate
-	 *            sampling rate in Hz (equals period length @ 1 Hz)
-	 * @return freq in Hz
-	 */
-	public static final float radiansToHertz(float f, float sampleRate) {
-		return f / TWO_PI * sampleRate;
-	}
+    /**
+     * Converts a frequency from radians to Hertz.
+     * 
+     * @param f
+     *            frequency in radians
+     * @param sampleRate
+     *            sampling rate in Hz (equals period length @ 1 Hz)
+     * @return freq in Hz
+     */
+    public static final float radiansToHertz(float f, float sampleRate) {
+        return f / TWO_PI * sampleRate;
+    }
 
-	/**
-	 * Current wave phase
-	 */
-	@XmlAttribute
-	public float phase;
+    /**
+     * Current wave phase
+     */
+    public float phase;
+    public float frequency;
+    public float amp;
+    public float offset;
+    public float value;
 
-	@XmlAttribute(name = "ophase")
-	protected float origPhase;
+    protected float origPhase;
+    protected Stack<WaveState> stateStack;
 
-	@XmlAttribute(name = "freq")
-	public float frequency;
+    public AbstractWave() {
+    }
 
-	@XmlAttribute
-	public float amp;
+    /**
+     * @param phase
+     */
+    public AbstractWave(float phase) {
+        this(phase, 0, 1, 0);
+    }
 
-	@XmlAttribute
-	public float offset;
+    /**
+     * 
+     * @param phase
+     * @param freq
+     */
+    public AbstractWave(float phase, float freq) {
+        this(phase, freq, 1, 0);
+    }
 
-	@XmlTransient
-	public float value = 0;
+    /**
+     * @param phase
+     * @param freq
+     * @param amp
+     * @param offset
+     */
+    public AbstractWave(float phase, float freq, float amp, float offset) {
+        setPhase(phase);
+        this.frequency = freq;
+        this.amp = amp;
+        this.offset = offset;
+    }
 
-	public AbstractWave() {
+    /**
+     * Ensures phase remains in the 0...TWO_PI interval.
+     * 
+     * @return current phase
+     */
+    public final float cyclePhase() {
+        phase %= TWO_PI;
+        if (phase < 0) {
+            phase += TWO_PI;
+        }
+        return phase;
+    }
 
-	}
+    /**
+     * Progresses phase and ensures it remains in the 0...TWO_PI interval.
+     * 
+     * @param freq
+     *            normalized progress frequency
+     * @return update phase value
+     */
+    public final float cyclePhase(float freq) {
+        phase = (phase + freq) % TWO_PI;
+        if (phase < 0) {
+            phase += TWO_PI;
+        }
+        return phase;
+    }
 
-	/**
-	 * @param phase
-	 */
-	public AbstractWave(float phase) {
-		this(phase, 1, 1, 0);
-	}
+    public void pop() {
+        if (stateStack == null || (stateStack != null && stateStack.empty())) {
+            throw new IllegalStateException("no wave states on stack");
+        }
+        WaveState s = stateStack.pop();
+        phase = s.phase;
+        frequency = s.frequency;
+        amp = s.amp;
+        offset = s.offset;
+    }
 
-	/**
-	 * 
-	 * @param phase
-	 * @param freq
-	 */
-	public AbstractWave(float phase, float freq) {
-		this(phase, freq, 1, 0);
-	}
+    public void push() {
+        if (stateStack == null) {
+            stateStack = new Stack<WaveState>();
+        }
+        stateStack.push(new WaveState(phase, frequency, amp, offset));
+    }
 
-	/**
-	 * @param phase
-	 * @param freq
-	 * @param amp
-	 * @param offset
-	 */
-	public AbstractWave(float phase, float freq, float amp, float offset) {
-		this.phase = this.origPhase = phase;
-		this.frequency = freq;
-		this.amp = amp;
-		this.offset = offset;
-	}
+    /**
+     * Resets the wave phase to the original start value
+     */
+    public void reset() {
+        phase = origPhase;
+    }
 
-	/**
-	 * Ensures phase remains in the 0...TWO_PI interval.
-	 * 
-	 * @return current phase
-	 */
-	protected final float cyclePhase() {
-		phase %= TWO_PI;
-		if (phase < 0) {
-			phase += TWO_PI;
-		}
-		return phase;
-	}
+    /**
+     * Starts the wave from a new phase. The new phase position will also be
+     * used for any later call to {{@link #reset()}
+     * 
+     * @param phase
+     *            new phase
+     */
+    public void setPhase(float phase) {
+        this.phase = phase;
+        cyclePhase();
+        this.origPhase = phase;
+    }
 
-	/**
-	 * Progresses phase and ensures it remains in the 0...TWO_PI interval.
-	 * 
-	 * @param freq
-	 *            normalized progress frequency
-	 * @return update phase value
-	 */
-	protected final float cyclePhase(float freq) {
-		phase = (phase + freq) % TWO_PI;
-		if (phase < 0) {
-			phase += TWO_PI;
-		}
-		return phase;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.getClass().getName()).append(" phase: ").append(phase);
+        sb.append(" frequency: ").append(frequency);
+        sb.append(" amp: ").append(amp);
+        sb.append(" offset: ").append(offset);
+        return sb.toString();
+    }
 
-	/**
-	 * Resets the wave phase to the original start value
-	 */
-	public void reset() {
-		phase = origPhase;
-	}
-
-	/**
-	 * Starts the wave from a new phase. The new phase position will also be
-	 * used for any later call to {{@link #reset()}
-	 * 
-	 * @param phase
-	 *            new phase
-	 */
-	public void setPhase(float phase) {
-		this.phase = this.origPhase = phase;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(this.getClass().getName()).append(" phase: ").append(phase);
-		sb.append(" frequency: ").append(frequency);
-		sb.append(" amp: ").append(amp);
-		sb.append(" offset: ").append(offset);
-		return sb.toString();
-	}
-
-	/**
-	 * Updates the wave and returns new value. Implementing classes should
-	 * manually ensure the phase remains in the 0...TWO_PI interval or by
-	 * calling {@link #cyclePhase()}.
-	 * 
-	 * @return current (newly calculated) wave value
-	 */
-	public abstract float update();
+    /**
+     * Updates the wave and returns new value. Implementing classes should
+     * manually ensure the phase remains in the 0...TWO_PI interval or by
+     * calling {@link #cyclePhase()}.
+     * 
+     * @return current (newly calculated) wave value
+     */
+    public abstract float update();
 }

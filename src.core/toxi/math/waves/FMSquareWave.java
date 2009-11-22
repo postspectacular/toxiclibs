@@ -32,42 +32,74 @@ package toxi.math.waves;
  */
 public class FMSquareWave extends AbstractWave {
 
-	public AbstractWave fmod;
+    public AbstractWave fmod;
 
-	/**
-	 * Convenience constructor to create a non frequency modulated square wave
-	 * 
-	 * @param phase
-	 * @param freq
-	 *            base frequency (in radians)
-	 * @param amp
-	 * @param offset
-	 */
-	public FMSquareWave(float phase, float freq, float amp, float offset) {
-		this(phase, freq, amp, offset, new ConstantWave(0));
-	}
+    public FMSquareWave(float phase, float freq, AbstractWave fmod) {
+        super(phase, freq);
+        this.fmod = fmod;
+    }
 
-	public FMSquareWave(float phase, float freq, AbstractWave fmod) {
-		super(phase, freq);
-		this.fmod = fmod;
-	}
+    /**
+     * Convenience constructor to create a non frequency modulated square wave
+     * 
+     * @param phase
+     * @param freq
+     *            base frequency (in radians)
+     * @param amp
+     * @param offset
+     */
+    public FMSquareWave(float phase, float freq, float amp, float offset) {
+        this(phase, freq, amp, offset, new ConstantWave(0));
+    }
 
-	public FMSquareWave(float phase, float freq, float amp, float offset,
-			AbstractWave fmod) {
-		super(phase, freq, amp, offset);
-		this.fmod = fmod;
-	}
+    public FMSquareWave(float phase, float freq, float amp, float offset,
+            AbstractWave fmod) {
+        super(phase, freq, amp, offset);
+        this.fmod = fmod;
+    }
 
-	/**
-	 * Progresses the wave and updates the result value. You must NEVER call the
-	 * update() method on the modulating wave since this is handled
-	 * automatically by this method.
-	 * 
-	 * @see toxi.math.waves.AbstractWave#update()
-	 */
-	public float update() {
-		value = (phase / TWO_PI < 0.5 ? 1 : -1) * amp + offset;
-		cyclePhase(frequency + fmod.update());
-		return value;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.math.waves.AbstractWave#pop()
+     */
+    @Override
+    public void pop() {
+        super.pop();
+        fmod.pop();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.math.waves.AbstractWave#push()
+     */
+    @Override
+    public void push() {
+        super.push();
+        fmod.push();
+    }
+
+    /**
+     * Resets this wave and its modulating wave as well.
+     * 
+     * @see toxi.math.waves.AbstractWave#reset()
+     */
+    public void reset() {
+        super.reset();
+        fmod.reset();
+    }
+
+    /**
+     * Progresses the wave and updates the result value. You must NEVER call the
+     * update() method on the modulating wave since this is handled
+     * automatically by this method.
+     * 
+     * @see toxi.math.waves.AbstractWave#update()
+     */
+    public float update() {
+        value = (phase / TWO_PI < 0.5 ? 1 : -1) * amp + offset;
+        cyclePhase(frequency + fmod.update());
+        return value;
+    }
 }

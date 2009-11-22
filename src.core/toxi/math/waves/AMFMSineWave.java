@@ -33,90 +33,84 @@ package toxi.math.waves;
  */
 public class AMFMSineWave extends AbstractWave {
 
-	public AbstractWave fmod;
-	public AbstractWave amod;
+    public AbstractWave fmod;
+    public AbstractWave amod;
 
-	/**
-	 * Creates a new instance from
-	 * 
-	 * @param phase
-	 * @param freq
-	 * @param fmod
-	 * @param amod
-	 */
-	public AMFMSineWave(float phase, float freq, AbstractWave fmod,
-			AbstractWave amod) {
-		super(phase, freq);
-		this.amod = amod;
-		this.fmod = fmod;
-	}
+    /**
+     * Creates a new instance from
+     * 
+     * @param phase
+     * @param freq
+     * @param fmod
+     * @param amod
+     */
+    public AMFMSineWave(float phase, float freq, AbstractWave fmod,
+            AbstractWave amod) {
+        super(phase, freq);
+        this.amod = amod;
+        this.fmod = fmod;
+    }
 
-	/**
-	 * @param phase
-	 * @param freq
-	 * @param offset
-	 * @param fmod
-	 * @param amod
-	 */
-	public AMFMSineWave(float phase, float freq, float offset,
-			AbstractWave fmod, AbstractWave amod) {
-		super(phase, freq, 1, offset);
-		this.amod = amod;
-		this.fmod = fmod;
-	}
+    /**
+     * @param phase
+     * @param freq
+     * @param offset
+     * @param fmod
+     * @param amod
+     */
+    public AMFMSineWave(float phase, float freq, float offset,
+            AbstractWave fmod, AbstractWave amod) {
+        super(phase, freq, 1, offset);
+        this.amod = amod;
+        this.fmod = fmod;
+    }
 
-	/**
-	 * Progresses the wave and updates the result value. You must NEVER call the
-	 * update() method on the 2 modulating wave since this is handled
-	 * automatically by this method.
-	 * 
-	 * @see toxi.math.waves.AbstractWave#update()
-	 */
-	public float update() {
-		amp = amod.update();
-		value = amp * (float) Math.sin(phase) + offset;
-		cyclePhase(frequency + fmod.update());
-		return value;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.math.waves.AbstractWave#pop()
+     */
+    @Override
+    public void pop() {
+        super.pop();
+        amod.pop();
+        fmod.pop();
+    }
 
-	/**
-	 * @deprecated
-	 * @param fmod
-	 */
-	public void setFMod(AbstractWave fmod) {
-		this.fmod = fmod;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.math.waves.AbstractWave#push()
+     */
+    @Override
+    public void push() {
+        super.push();
+        amod.push();
+        fmod.push();
+    }
 
-	/**
-	 * @deprecated
-	 * @param amod
-	 */
-	public void setAMod(AbstractWave amod) {
-		this.amod = amod;
-	}
+    /**
+     * Resets this wave and its modulating waves as well.
+     * 
+     * @see toxi.math.waves.AbstractWave#reset()
+     */
+    public void reset() {
+        super.reset();
+        fmod.reset();
+        amod.reset();
+    }
 
-	/**
-	 * @deprecated
-	 */
-	public AbstractWave getFMod() {
-		return fmod;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public AbstractWave getAMod() {
-		return amod;
-	}
-
-	/**
-	 * Resets this wave and its modulating waves as well.
-	 * 
-	 * @see toxi.math.waves.AbstractWave#reset()
-	 */
-	public void reset() {
-		super.reset();
-		fmod.reset();
-		amod.reset();
-	}
+    /**
+     * Progresses the wave and updates the result value. You must NEVER call the
+     * update() method on the 2 modulating wave since this is handled
+     * automatically by this method.
+     * 
+     * @see toxi.math.waves.AbstractWave#update()
+     */
+    public float update() {
+        amp = amod.update();
+        value = amp * (float) Math.sin(phase) + offset;
+        cyclePhase(frequency + fmod.update());
+        return value;
+    }
 }
