@@ -1,7 +1,7 @@
 /**
  * <p>BoxFLuid demo combining 3D physics particles with the IsoSurface class to
- * create an animated mesh with a fluid behaviour. The mesh is created within a
- * boundary sphere, but other forms can be created using a custom
+ * create an animated mesh with a fluid behaviour. The mesh is optionally created
+ * within a boundary sphere, but other forms can be created using a custom
  * ParticleConstraint class.</p>
  * 
  * <p>Dependencies:</p>
@@ -19,6 +19,7 @@
  * <li>p : show particles only on/off</li>
  * <li>b : turn bounding sphere on/off</li>
  * <li>r : reset particles</li>
+ * <li>s : save current mesh as OBJ & STL format</li>
  * <li>- / = : decrease/increase surface threshold/tightness</li>
  * </ul>
  */
@@ -155,9 +156,14 @@ void keyPressed() {
   if (key=='=' || key=='+') {
     isoThreshold+=0.001;
   }
+  if (key=='s') {
+    mesh.saveAsOBJ(sketchPath(mesh.name+".obj"));
+    mesh.saveAsSTL(sketchPath(mesh.name+".stl"));
+  }
 }
 
 void toggleBoundary() {
   useBoundary=!useBoundary;
   initPhysics();
 }
+

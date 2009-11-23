@@ -28,7 +28,7 @@ import toxi.geom.*;
 import toxi.color.*;
 
 void setup() {
-  size(1000,100);
+  size(1000,200);
 }
 
 void draw() {
@@ -46,5 +46,4 @@ void draw() {
     x++;
   }
 }
-
 

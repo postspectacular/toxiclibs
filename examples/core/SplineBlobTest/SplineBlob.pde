@@ -29,6 +29,7 @@ class SplineBlob {
     points[idx++]=new Vec3D(points[idx-2].x*random(1.02,1.1),0.9*h,0);
     points[idx++]=new Vec3D(0,h,0);
     spline=new Spline3D(points);
+    spline.updateCoefficients();
     spline.delta[0].set(points[1].x*0.75,0,0);
     spline.delta[numP-1].set(-points[numP-2].x,0,0);
     spline.computeVertices(subDiv);
@@ -53,7 +54,7 @@ class SplineBlob {
     }
     endShape();
     for (int k = 0; k < numP; k++) {
-      ellipse(spline.points[k].x,spline.points[k].y,5,5);
+      ellipse(spline.pointList.get(k).x,spline.pointList.get(k).y,5,5);
     }
   }
 }

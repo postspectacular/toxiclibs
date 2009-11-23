@@ -62,7 +62,7 @@ int numParticles = 1;
 
 void setup() {
   size(1024,768,OPENGL);
-  textFont(loadFont("AudimatMonoLight-18.vlw"));
+  textFont(createFont("SansSerif",18));
   // setup empty octree so that it's centered around the world origin
   octree=new VisibleOctree(new Vec3D(-1,-1,-1).scaleSelf(DIM2),DIM);
   // add an initial particle at the origin
@@ -152,4 +152,3 @@ void keyPressed() {
     RADIUS=min(RADIUS+1,DIM);
   }
 }
-

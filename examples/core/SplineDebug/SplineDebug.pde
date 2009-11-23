@@ -8,23 +8,22 @@ noFill();
 smooth();
 
 translate(50,100);
-Spline2D s=new Spline2D(
-new Vec2D[]{
-  new Vec2D(0,100),
-  new Vec2D(50,0),
-  new Vec2D(100,0),
-  new Vec2D(100,100),
-  new Vec2D(200,0),
-  new Vec2D(200,100)
-}
-);
+
+Spline2D s=new Spline2D();
+s.add(new Vec2D(0,100));
+s.add(new Vec2D(50,0));
+s.add(new Vec2D(100,0));
+s.add(new Vec2D(100,100));
+s.add(new Vec2D(200,0));
+s.add(new Vec2D(200,100));
+
 stroke(255,0,0);
 beginShape();
-for(int i=0; i<s.points.length; i++) {
-  vertex(s.points[i].x,s.points[i].y);
+for(int i=0; i<s.pointList.size(); i++) {
+  vertex(s.pointList.get(i).x,s.pointList.get(i).y);
 }
 endShape();
-ArrayList v=s.computeVertices(8);
+java.util.List v=s.computeVertices(8);
 println("num verts: "+v.size());
 
 int c=0;

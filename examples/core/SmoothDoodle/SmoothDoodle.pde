@@ -88,7 +88,7 @@ void draw() {
     Spline2D spline=new Spline2D(handles);
     // sample the curve at a higher resolution
     // so that we get extra 8 points between each original pair of points
-    ArrayList vertices=spline.computeVertices(8);
+    java.util.List vertices=spline.computeVertices(8);
     // draw the smoothened curve
     beginShape();
     for(Iterator i=vertices.iterator(); i.hasNext(); ) {

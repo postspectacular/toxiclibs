@@ -1,15 +1,13 @@
-import toxi.math.*;
-
 /**
- * Demonstration & visualization of space deformation, showing both displacement
+ * <p>Demonstration and visualization of space deformation, showing both displacement
  * curve and result applied to a regular arrangement of lines. The lens logic is
  * encapsulated in a re-usable class of its own and additionally features
  * value smoothing and displacement strength. Using the strength value we can
  * specify a concave or convex lens type, either bundling or dilating the space
- * around the focal point.
+ * around the focal point.</p>
  * 
- * @author toxi
- * 
+ * <p>Usage: Move mouse horizontally to change focal point, move vertically to adjust
+ * lens behaviour between bundling/dilating.
  */
 
 /* 
@@ -31,6 +29,8 @@ import toxi.math.*;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+import toxi.math.*;
 
 ZoomLensInterpolation zoomLens = new ZoomLensInterpolation();
 
@@ -55,4 +55,5 @@ void draw() {
     point(y + 400, x);
   }
 }
+
 

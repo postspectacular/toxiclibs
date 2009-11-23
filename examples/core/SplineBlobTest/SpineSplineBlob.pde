@@ -8,6 +8,7 @@ class SpineSplineBlob extends SplineBlob {
   SpineSplineBlob(SplineBlob b) {
     super(b.width,b.height,b.subDiv);
     spline=new Spline3D(b.points);
+    spline.updateCoefficients();
     spline.delta[0].set(b.points[1].x*0.75,0,0);
     spline.delta[b.numP-1].set(-b.points[numP-2].x,0,0);
     spline.computeVertices(b.subDiv);

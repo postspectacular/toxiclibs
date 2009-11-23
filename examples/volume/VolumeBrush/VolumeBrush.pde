@@ -112,7 +112,7 @@ void draw() {
   translate(mousePos.x,mousePos.y,mousePos.z);
   noFill();
   stroke(255,0,0);
-  sphere(brushSize.getValue());
+  sphere(brushSize.value);
   popMatrix();
 }
 

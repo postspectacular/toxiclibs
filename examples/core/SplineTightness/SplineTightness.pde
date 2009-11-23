@@ -57,7 +57,7 @@ void draw() {
 
   // sample the curve at a higher resolution
   // so that we get extra points between each original pair of points
-  ArrayList vertices=spline.computeVertices(32);
+  java.util.List vertices=spline.computeVertices(32);
 
   // draw the smoothened curve
   beginShape();

@@ -79,7 +79,7 @@ void drawSpline(ColorList list) {
     points[i]=new Vec3D(random(-1,1)*50+(float)i/points.length*width,random(0.25,0.75)*height,random(-1,1)*300);
   }
   points[points.length-1]=new Vec3D(width+XRAD,random(height),0);
-  ArrayList vertices=new Spline3D(points).computeVertices(width/RES);
+  java.util.List vertices=new Spline3D(points).computeVertices(width/RES);
   for(Iterator i=vertices.iterator(); i.hasNext(); ) {
     Vec3D v=(Vec3D)i.next();
     fill(list.get((int) random(numCols)).toARGB());
