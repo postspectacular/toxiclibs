@@ -150,7 +150,8 @@ public abstract class AbstractWave {
     }
 
     /**
-     * Resets the wave phase to the original start value
+     * Resets the wave phase to the last set phase value (via
+     * {@link #setPhase(float)}.
      */
     public void reset() {
         phase = origPhase;

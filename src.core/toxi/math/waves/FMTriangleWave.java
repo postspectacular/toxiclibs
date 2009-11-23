@@ -2,6 +2,9 @@ package toxi.math.waves;
 
 import toxi.math.MathUtils;
 
+/**
+ * Implements a frequency modulated triangular wave with its peak at PI: "/\"
+ */
 public class FMTriangleWave extends AbstractWave {
 
     public AbstractWave fmod;

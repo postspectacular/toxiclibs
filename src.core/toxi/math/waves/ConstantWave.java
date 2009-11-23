@@ -2,8 +2,6 @@ package toxi.math.waves;
 
 /**
  * Implements a constant value as waveform.
- * 
- * @author toxi
  */
 public class ConstantWave extends AbstractWave {
 
