@@ -24,7 +24,7 @@ public class Quaternion {
      * @param angle
      *            angle in radians.
      * 
-     * @return
+     * @return new quaternion
      */
     public static Quaternion createFromAxisAngle(Vec3D axis, float angle) {
         float sin = (float) Math.sin(angle / 2);
@@ -45,7 +45,7 @@ public class Quaternion {
      * @param az
      *            Z-angle in radians.
      * 
-     * @return
+     * @return new quaternion
      */
     public static Quaternion createFromEuler(float ax, float ay, float az) {
         float sinPitch = (float) Math.sin(ax * 0.5);
@@ -243,7 +243,7 @@ public class Quaternion {
      * @param target
      * @param t
      * @param is
-     * @return
+     * @return interpolated quaternion as new instance
      */
     public Quaternion interpolateTo(Quaternion target, float t,
             InterpolateStrategy is) {
@@ -288,10 +288,14 @@ public class Quaternion {
     }
 
     /**
+     * Uses spherical interpolation to approach the target quaternion. The
+     * interpolation factor is manipulated by the chosen
+     * {@link InterpolateStrategy} first.
+     * 
      * @param target
      * @param t
      * @param is
-     * @return
+     * @return itself
      */
     public Quaternion interpolateToSelf(Quaternion target, float t,
             InterpolateStrategy is) {
