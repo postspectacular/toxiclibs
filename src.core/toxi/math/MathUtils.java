@@ -93,9 +93,17 @@ public class MathUtils {
     private static final float SHIFT23 = 1 << 23;
     private static final float INV_SHIFT23 = 1.0f / SHIFT23;
 
-    private final static float SIN_A = -4 / PI_SQUARED;
-    private final static float SIN_B = 4 / PI;
-    private final static float SIN_P = 9f / 40;
+    private final static double SIN_A = -4d / (PI * PI);
+    private final static double SIN_B = 4d / PI;
+    private final static double SIN_P = 9d / 40;
+
+    /**
+     * @param x
+     * @return absolute value of x
+     */
+    public static final double abs(double x) {
+        return x < 0 ? -x : x;
+    }
 
     /**
      * @param x
@@ -161,7 +169,7 @@ public class MathUtils {
      *            angle in radians.
      * @return cosine of theta.
      */
-    public static final double cos(final float theta) {
+    public static final float cos(final float theta) {
         return sin(theta + HALF_PI);
     }
 
@@ -176,7 +184,7 @@ public class MathUtils {
      *            angle in -PI/2 .. +PI/2 interval
      * @return cosine
      */
-    public static final float fastCos(final float x) {
+    public static final double fastCos(final double x) {
         return fastSin(x + ((x > HALF_PI) ? -THREE_HALVES_PI : HALF_PI));
     }
 
@@ -229,7 +237,7 @@ public class MathUtils {
      *            angle in -PI/2 .. +PI/2 interval
      * @return sine
      */
-    public static final float fastSin(float x) {
+    public static final double fastSin(double x) {
         x = SIN_A * x * abs(x) + SIN_B * x;
         return SIN_P * (x * abs(x) - x) + x;
     }
@@ -405,7 +413,7 @@ public class MathUtils {
      * @see #sin(float)
      * @see #cos(float)
      */
-    private static float reduceAngle(float theta) {
+    public static final float reduceAngle(float theta) {
         theta %= TWO_PI;
         if (abs(theta) > PI) {
             theta = theta - TWO_PI;
@@ -425,12 +433,12 @@ public class MathUtils {
      *            angle in radians.
      * @return sine of theta.
      */
-    public static float sin(float theta) {
+    public static final float sin(float theta) {
         theta = reduceAngle(theta);
         if (abs(theta) <= QUARTER_PI) {
-            return fastSin(theta);
+            return (float) fastSin(theta);
         }
-        return fastCos(HALF_PI - theta);
+        return (float) fastCos(HALF_PI - theta);
     }
 
     /**
