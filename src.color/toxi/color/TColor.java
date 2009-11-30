@@ -333,13 +333,13 @@ public class TColor implements ReadonlyTColor {
 
     public static final TColor newHSVA(float h, float s, float v, float a) {
         TColor c = new TColor();
-        c.setHSV(new float[] { h, s, v });
+        c.setHSV(h, s, v);
         c.alpha = MathUtils.clip(a, 0, 1);
         return c;
     }
 
     /**
-     * Factory method. Creates new random color.
+     * Factory method. Creates new random color. Alpha is always 1.0.
      * 
      * @return random color
      */
@@ -349,7 +349,7 @@ public class TColor implements ReadonlyTColor {
     }
 
     /**
-     * Factory method. Creates new color from RGB values.
+     * Factory method. Creates new color from RGB values. Alpha is set to 1.0.
      * 
      * @param r
      * @param g
@@ -659,15 +659,14 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#distanceToHSV(toxi.color.TColor)
      */
     public float distanceToHSV(ReadonlyTColor c) {
-        float[] chsv = c.toHSVAArray(null);
         float hue = hsv[0] * MathUtils.TWO_PI;
-        float hue2 = chsv[0] * MathUtils.TWO_PI;
+        float hue2 = c.hue() * MathUtils.TWO_PI;
         Vec3D v1 =
-                new Vec3D((float) (Math.cos(hue) * hsv[1]), (float) (Math
-                        .sin(hue) * hsv[1]), hsv[2]);
+                new Vec3D((MathUtils.cos(hue) * hsv[1]),
+                        (MathUtils.sin(hue) * hsv[1]), hsv[2]);
         Vec3D v2 =
-                new Vec3D((float) (Math.cos(hue2) * chsv[1]), (float) (Math
-                        .sin(hue2) * chsv[1]), chsv[2]);
+                new Vec3D((MathUtils.cos(hue2) * c.saturation()), (MathUtils
+                        .sin(hue2) * c.saturation()), c.brightness());
         return v1.distanceTo(v2);
     }
 
