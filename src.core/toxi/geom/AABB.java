@@ -130,12 +130,12 @@ public class AABB extends Vec3D {
 	 * 
 	 * @param ray
 	 *            incident ray
-	 * @param minDir
-	 * @param maxDir
+	 * @param minDist
+	 * @param maxDist
 	 * @return intersection point on the bounding box (only the first is
 	 *         returned) or null if no intersection
 	 */
-	public Vec3D intersectsRay(Ray3D ray, float minDir, float maxDir) {
+	public Vec3D intersectsRay(Ray3D ray, float minDist, float maxDist) {
 		Vec3D invDir = new Vec3D(1f / ray.dir.x, 1f / ray.dir.y, 1f / ray.dir.z);
 		boolean signDirX = invDir.x < 0;
 		boolean signDirY = invDir.y < 0;
@@ -175,7 +175,7 @@ public class AABB extends Vec3D {
 		if (tzmax < tmax) {
 			tmax = tzmax;
 		}
-		if ((tmin < maxDir) && (tmax > minDir)) {
+		if ((tmin < maxDist) && (tmax > minDist)) {
 			return ray.getPointAtDistance(tmin);
 		}
 		return null;

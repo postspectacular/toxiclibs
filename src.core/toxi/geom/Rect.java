@@ -103,6 +103,70 @@ public class Rect {
     }
 
     /**
+     * Checks if the rectangle intersects with the given ray and if so computes
+     * the first intersection point. The method takes a min/max distance
+     * interval along the ray in which the intersection must occur.
+     * 
+     * @param ray
+     *            intersection ray
+     * @param minDist
+     *            minimum distance
+     * @param maxDist
+     *            max distance
+     * @return intersection point or null if no intersection in the given
+     *         interval
+     */
+    public Vec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
+        Vec2D invDir = new Vec2D(1f / ray.dir.x, 1f / ray.dir.y);
+        boolean signDirX = invDir.x < 0;
+        boolean signDirY = invDir.y < 0;
+        Vec2D min = getTopLeft();
+        Vec2D max = getBottomRight();
+        Vec2D bbox = signDirX ? max : min;
+        float tmin = (bbox.x - ray.x) * invDir.x;
+        bbox = signDirX ? min : max;
+        float tmax = (bbox.x - ray.x) * invDir.x;
+        bbox = signDirY ? max : min;
+        float tymin = (bbox.y - ray.y) * invDir.y;
+        bbox = signDirY ? min : max;
+        float tymax = (bbox.y - ray.y) * invDir.y;
+        if ((tmin > tymax) || (tymin > tmax)) {
+            return null;
+        }
+        if (tymin > tmin) {
+            tmin = tymin;
+        }
+        if (tymax < tmax) {
+            tmax = tymax;
+        }
+        if ((tmin < maxDist) && (tmax > minDist)) {
+            return ray.getPointAtDistance(tmin);
+        }
+        return null;
+    }
+
+    /**
+     * Checks if this rectangle intersects/overlaps the given one.
+     * 
+     * @param r
+     *            another rect
+     * @return true, if intersecting
+     */
+    public boolean intersectsRect(Rect r) {
+        Vec2D tl = r.getTopLeft();
+        if (!containsPoint(tl)) {
+            Vec2D br = r.getBottomRight();
+            if (!containsPoint(br)) {
+                Vec2D v = new Vec2D(tl.x, br.y);
+                if (!containsPoint(v)) {
+                    return containsPoint(v.set(br.x, tl.y));
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * @deprecated use {@link #union(Rect)} instead.
      * @param r
      * @return itself
@@ -138,6 +202,12 @@ public class Rect {
         y = r.y;
         width = r.width;
         height = r.height;
+        return this;
+    }
+
+    public final Rect setPosition(Vec2D pos) {
+        x = pos.x;
+        y = pos.y;
         return this;
     }
 
