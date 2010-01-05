@@ -30,33 +30,56 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Ray3D extends Vec3D {
 
-	@XmlElement(required = true)
-	public Vec3D dir;
+    @XmlElement(required = true)
+    protected Vec3D dir;
 
-	public Ray3D() {
-		super();
-		dir = Vec3D.Y_AXIS.copy();
-	}
+    public Ray3D() {
+        super();
+        dir = Vec3D.Y_AXIS.copy();
+    }
 
-	public Ray3D(float x, float y, float z, Vec3D d) {
-		super(x, y, z);
-		dir = d.getNormalized();
-	}
+    public Ray3D(float x, float y, float z, Vec3D d) {
+        super(x, y, z);
+        dir = d.getNormalized();
+    }
 
-	public Ray3D(Vec3D o, Vec3D d) {
-		super(o);
-		dir = d.getNormalized();
-	}
+    public Ray3D(Vec3D o, Vec3D d) {
+        this(o.x, o.y, o.z, d);
+    }
 
-	public Vec3D getDirection() {
-		return dir.copy();
-	}
+    /**
+     * Returns a copy of the ray's direction vector.
+     * 
+     * @return vector
+     */
+    public Vec3D getDirection() {
+        return dir.copy();
+    }
 
-	public Vec3D getPointAtDistance(float dist) {
-		return add(dir.scale(dist));
-	}
+    /**
+     * Returns the point at the given distance on the ray. The distance can be
+     * any real number.
+     * 
+     * @param dist
+     * @return
+     */
+    public Vec3D getPointAtDistance(float dist) {
+        return add(dir.scale(dist));
+    }
 
-	public String toString() {
-		return "origin: " + super.toString() + " dir: " + dir;
-	}
+    /**
+     * Uses a normalized copy of the given vector as the ray direction.
+     * 
+     * @param d
+     *            new direction
+     * @return itself
+     */
+    public Ray3D setDirection(Vec3D d) {
+        dir.set(d).normalize();
+        return this;
+    }
+
+    public String toString() {
+        return "origin: " + super.toString() + " dir: " + dir;
+    }
 }

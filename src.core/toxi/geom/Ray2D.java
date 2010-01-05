@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class Ray2D extends Vec2D {
 
     @XmlElement(required = true)
-    public Vec2D dir;
+    protected Vec2D dir;
 
     public Ray2D() {
         super();
@@ -40,20 +40,36 @@ public class Ray2D extends Vec2D {
 
     public Ray2D(float x, float y, Vec2D d) {
         super(x, y);
-        dir = d.getNormalized();
+        setDirection(d);
     }
 
     public Ray2D(Vec2D o, Vec2D d) {
-        super(o);
-        dir = d.getNormalized();
+        this(o.x, o.y, d);
     }
 
+    /**
+     * Returns a copy of the ray's direction vector.
+     * 
+     * @return vector
+     */
     public Vec2D getDirection() {
         return dir.copy();
     }
 
     public Vec2D getPointAtDistance(float dist) {
         return add(dir.scale(dist));
+    }
+
+    /**
+     * Uses a normalized copy of the given vector as the ray direction.
+     * 
+     * @param d
+     *            new direction
+     * @return itself
+     */
+    public Ray2D setDirection(Vec2D d) {
+        dir.set(d).normalize();
+        return this;
     }
 
     public String toString() {
