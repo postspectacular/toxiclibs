@@ -9,6 +9,10 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Rect {
 
+    public static final Rect fromMinMax(Vec2D min, Vec2D max) {
+        return new Rect(min, max.sub(min));
+    }
+
     @XmlAttribute(required = true)
     public float x, y, width, height;
 
@@ -117,7 +121,7 @@ public class Rect {
      *         interval
      */
     public Vec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
-        Vec2D invDir = new Vec2D(1f / ray.dir.x, 1f / ray.dir.y);
+        Vec2D invDir = ray.getDirection().reciprocal();
         boolean signDirX = invDir.x < 0;
         boolean signDirY = invDir.y < 0;
         Vec2D min = getTopLeft();
