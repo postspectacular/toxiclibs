@@ -23,21 +23,17 @@ package toxi.geom;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * Comprehensive 3D vector class with additional basic intersection and
  * collision detection features.
  * 
  * @author Karsten Schmidt
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Vec3D implements Comparable<Vec3D> {
 
     public static enum Axis {
