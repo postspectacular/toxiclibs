@@ -40,6 +40,10 @@ public class YAxisCylinder implements AxisAlignedCylinder {
         return length;
     }
 
+    public Vec3D.Axis getMajorAxis() {
+        return Vec3D.Axis.Y;
+    }
+
     /*
      * (non-Javadoc)
      * 

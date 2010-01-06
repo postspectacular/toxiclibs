@@ -15,6 +15,8 @@ public interface AxisAlignedCylinder {
      */
     public float getLength();
 
+    public Vec3D.Axis getMajorAxis();
+
     /**
      * Returns the cylinder's position (centroid).
      * 
@@ -37,5 +39,4 @@ public interface AxisAlignedCylinder {
     public void setPosition(Vec3D pos);
 
     public void setRadius(float radius);
-
 }
