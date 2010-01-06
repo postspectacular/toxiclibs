@@ -37,6 +37,10 @@ import toxi.math.MathUtils;
  */
 public class Vec2D implements Comparable<Vec2D> {
 
+    public static enum Axis {
+        X, Y
+    };
+
     /**
      * Defines positive X axis
      */
@@ -495,6 +499,16 @@ public class Vec2D implements Comparable<Vec2D> {
 
     public final Vec2D getAbs() {
         return new Vec2D(this).abs();
+    }
+
+    public float getComponent(Axis id) {
+        switch (id) {
+            case X:
+                return x;
+            case Y:
+                return y;
+        }
+        return 0;
     }
 
     /**
@@ -1077,6 +1091,18 @@ public class Vec2D implements Comparable<Vec2D> {
     public final Vec2D set(Vec2D v) {
         x = v.x;
         y = v.y;
+        return this;
+    }
+
+    public Vec2D setComponent(Axis id, float val) {
+        switch (id) {
+            case X:
+                x = val;
+                break;
+            case Y:
+                y = val;
+                break;
+        }
         return this;
     }
 
