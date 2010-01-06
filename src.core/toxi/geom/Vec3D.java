@@ -40,6 +40,10 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Vec3D implements Comparable<Vec3D> {
 
+    public static enum Axis {
+        X, Y, Z
+    };
+
     /** Defines positive X axis. */
     public static final Vec3D X_AXIS = new Vec3D(1, 0, 0);
 
@@ -622,6 +626,18 @@ public class Vec3D implements Comparable<Vec3D> {
      */
     public final Vec3D getAbs() {
         return new Vec3D(this).abs();
+    }
+
+    public float getComponent(Axis id) {
+        switch (id) {
+            case X:
+                return x;
+            case Y:
+                return y;
+            case Z:
+                return z;
+        }
+        return 0;
     }
 
     /**
@@ -1369,6 +1385,21 @@ public class Vec3D implements Comparable<Vec3D> {
         x = v.x;
         y = v.y;
         z = v.z;
+        return this;
+    }
+
+    public Vec3D setComponent(Axis id, float val) {
+        switch (id) {
+            case X:
+                x = val;
+                break;
+            case Y:
+                y = val;
+                break;
+            case Z:
+                z = val;
+                break;
+        }
         return this;
     }
 
