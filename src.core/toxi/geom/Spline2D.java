@@ -208,6 +208,31 @@ public class Spline2D {
         }
     }
 
+    public List<Vec2D> getDecimatedVertices(float step) {
+        List<Vec2D> steps = new ArrayList<Vec2D>();
+        int num = vertices.size();
+        int i = 0;
+        float segLen;
+        Vec2D a = null;
+        Vec2D b = vertices.get(0);
+        Vec2D curr = b.copy();
+        Vec2D dir, stepDir;
+        while (i < num - 1) {
+            a = b;
+            b = vertices.get(i + 1);
+            dir = b.sub(a);
+            segLen = 1f / dir.magSquared();
+            stepDir = dir.getNormalizedTo(step);
+            curr.set(a.interpolateTo(b, curr.sub(a).dot(dir) * segLen));
+            while (curr.sub(a).dot(dir) / segLen <= 1) {
+                steps.add(curr.copy());
+                curr.addSelf(stepDir);
+            }
+            i++;
+        }
+        return steps;
+    }
+
     /**
      * Returns the number of key points.
      * 
