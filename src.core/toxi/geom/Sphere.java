@@ -49,6 +49,49 @@ public class Sphere extends Vec3D {
     }
 
     /**
+     * Alternative to {@link SphereIntersectorReflector}. Computes primary &
+     * secondary intersection points of this sphere with the given ray. If no
+     * intersection is found the method returns null. In all other cases, the
+     * returned array will have the primary intersection point (i.e. the closest
+     * in the direction of the ray) as its first index and the other one as its
+     * second.
+     * 
+     * @param ray
+     * @return
+     */
+    public Vec3D[] intersectRay(Ray3D ray) {
+        Vec3D[] result = null;
+        Vec3D q = ray.sub(this);
+        float distSquared = q.magSquared();
+        float v = -q.dot(ray.getDirection());
+        float d = radius * radius - (distSquared - v * v);
+        if (d >= 0.0) {
+            d = (float) Math.sqrt(d);
+            float a = v + d;
+            float b = v - d;
+            if (!(a < 0 && b < 0)) {
+                if (a > 0 && b > 0) {
+                    if (a > b) {
+                        float t = a;
+                        a = b;
+                        b = t;
+                    }
+                } else {
+                    if (b > 0) {
+                        float t = a;
+                        a = b;
+                        b = t;
+                    }
+                }
+            }
+            result =
+                    new Vec3D[] { ray.getPointAtDistance(a),
+                            ray.getPointAtDistance(b) };
+        }
+        return result;
+    }
+
+    /**
      * Considers the current vector as centre of a collision sphere with radius
      * r and checks if the triangle abc intersects with this sphere. The Vec3D p
      * The point on abc closest to the sphere center is returned via the
