@@ -21,13 +21,14 @@ public class ParticlePath extends Spline3D {
         super();
     }
 
-    public ParticlePath(List<Vec3D> arg0) {
-        super(arg0);
+    public ParticlePath(List<Vec3D> points) {
+        super(points);
     }
 
     public List<VerletParticle> createParticles(VerletPhysics physics,
-            float step, float mass) {
+            int subDiv, float step, float mass) {
         particles.clear();
+        computeVertices(subDiv);
         int num = vertices.size();
         int i = 0;
         while (i < num - 1) {
