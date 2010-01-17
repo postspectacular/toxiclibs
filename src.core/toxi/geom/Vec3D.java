@@ -427,8 +427,18 @@ public class Vec3D implements Comparable<Vec3D> {
      * @return itself
      */
     public final Vec3D constrain(AABB box) {
-        Vec3D min = box.getMin();
-        Vec3D max = box.getMax();
+        return constrain(box.getMin(), box.getMax());
+    }
+
+    /**
+     * Forcefully fits the vector in the given AABB specified by the 2 given
+     * points.
+     * 
+     * @param min
+     * @param max
+     * @return itself
+     */
+    public final Vec3D constrain(Vec3D min, Vec3D max) {
         x = MathUtils.clip(x, min.x, max.x);
         y = MathUtils.clip(y, min.y, max.y);
         z = MathUtils.clip(z, min.z, max.z);

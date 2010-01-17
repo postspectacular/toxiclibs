@@ -366,10 +366,22 @@ public class Vec2D implements Comparable<Vec2D> {
      * @param r
      * @return itself
      */
-
     public final Vec2D constrain(Rect r) {
         x = MathUtils.clip(x, r.x, r.x + r.width);
         y = MathUtils.clip(y, r.y, r.y + r.height);
+        return this;
+    }
+
+    /**
+     * Forcefully fits the vector in the given rectangle defined by the points.
+     * 
+     * @param min
+     * @param max
+     * @return itself
+     */
+    public final Vec2D constrain(Vec2D min, Vec2D max) {
+        x = MathUtils.clip(x, min.x, max.x);
+        y = MathUtils.clip(y, min.y, max.y);
         return this;
     }
 
