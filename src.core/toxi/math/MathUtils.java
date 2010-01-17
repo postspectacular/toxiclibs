@@ -251,7 +251,11 @@ public class MathUtils {
     }
 
     public static final int floor(double x) {
-        return x >= 0 ? (int) x : (int) x - 1;
+        int y = (int) x;
+        if (x < 0 && x != y) {
+            y--;
+        }
+        return y;
     }
 
     /**
@@ -263,7 +267,11 @@ public class MathUtils {
      * @since 0012
      */
     public static final int floor(float x) {
-        return x >= 0 ? (int) x : (int) x - 1;
+        int y = (int) x;
+        if (x < 0 && x != y) {
+            y--;
+        }
+        return y;
     }
 
     /**
