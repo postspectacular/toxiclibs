@@ -25,32 +25,35 @@ package toxi.geom;
  */
 public interface Intersector {
 
-	/**
-	 * Check if entity intersects with the given ray
-	 * @param ray ray to check
-	 * @return true, if ray hits the entity
-	 */
-	public abstract boolean intersectsRay(Ray3D ray);
+    /**
+     * @param normalized
+     *            true, if a normalized version should be returned
+     * @return direction vector from ray origin to intersection point
+     */
+    public Vec3D getIntersectionDir(boolean normalized);
 
-	/**
-	 * @return point of intersection on the entity surface
-	 */
-	public abstract Vec3D getIntersectionPoint();
+    /**
+     * @return distance from ray origin to intersection point
+     */
+    public float getIntersectionDistance();
 
-	/**
-	 * @return distance from ray origin to intersection point
-	 */
-	public abstract float getIntersectionDistance();
+    /**
+     * @return point of intersection on the entity surface
+     */
+    public Vec3D getIntersectionPoint();
 
-	/**
-	 * @return entity's surface normal vector at intersection point
-	 */
-	public Vec3D getNormalAtIntersection();
-	
-	/**
-	 * @param normalized true, if a normalized version should be returned
-	 * @return direction vector from ray origin to intersection point
-	 */
-	public abstract Vec3D getIntersectionDir(boolean normalized);
+    /**
+     * @return entity's surface normal vector at intersection point
+     */
+    public Vec3D getNormalAtIntersection();
+
+    /**
+     * Check if entity intersects with the given ray
+     * 
+     * @param ray
+     *            ray to check
+     * @return true, if ray hits the entity
+     */
+    public boolean intersectsRay(Ray3D ray);
 
 }
