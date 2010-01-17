@@ -9,10 +9,6 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Rect {
 
-    public static final Rect fromMinMax(Vec2D min, Vec2D max) {
-        return new Rect(min, max.sub(min));
-    }
-
     @XmlAttribute(required = true)
     public float x, y, width, height;
 
