@@ -22,9 +22,11 @@ package toxi.physics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
+import toxi.physics.constraints.ParticleConstraint;
 
 /**
  * 3D particle physics engine using Verlet integration based on:
@@ -34,11 +36,24 @@ import toxi.geom.Vec3D;
  */
 public class VerletPhysics {
 
+    public static void addConstraintToAll(ParticleConstraint c,
+            List<VerletParticle> list) {
+        for (VerletParticle p : list) {
+            p.addConstraint(c);
+        }
+    }
+
+    public static void removeConstraintFromAll(ParticleConstraint c,
+            List<VerletParticle> list) {
+        for (VerletParticle p : list) {
+            p.removeConstraint(c);
+        }
+    }
+
     /**
      * List of particles (Vec3D subclassed)
      */
     public ArrayList<VerletParticle> particles;
-
     /**
      * List of spring/sticks connectors
      */
@@ -124,17 +139,10 @@ public class VerletPhysics {
         return this;
     }
 
-    /**
-     * Applies gravity force to all particles
-     */
-    protected void applyGravity() {
-        if (!gravity.isZeroVector()) {
-            for (VerletParticle p : particles) {
-                if (!p.isLocked) {
-                    p.addSelf(gravity.scale(p.weight));
-                }
-            }
-        }
+    public VerletPhysics clear() {
+        particles.clear();
+        springs.clear();
+        return this;
     }
 
     /**
@@ -239,7 +247,6 @@ public class VerletPhysics {
      * @return itself
      */
     public VerletPhysics update() {
-        applyGravity();
         updateParticles();
         updateSprings();
         constrainToBounds();
@@ -250,7 +257,7 @@ public class VerletPhysics {
      * Updates all particle positions
      */
     protected void updateParticles() {
-        float force = 1.0f - friction * timeStep * timeStep;
+        Vec3D force = gravity.scale((1.0f - friction) * timeStep * timeStep);
         for (VerletParticle p : particles) {
             p.update(force);
         }

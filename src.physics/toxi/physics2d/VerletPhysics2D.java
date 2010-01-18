@@ -22,9 +22,11 @@ package toxi.physics2d;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import toxi.physics2d.constraints.Particle2DConstraint;
 
 /**
  * 3D particle physics engine using Verlet integration based on:
@@ -33,231 +35,241 @@ import toxi.geom.Vec2D;
  * 
  */
 public class VerletPhysics2D {
-	/**
-	 * List of particles (Vec2D subclassed)
-	 */
-	public ArrayList<VerletParticle2D> particles;
 
-	/**
-	 * List of spring/sticks connectors
-	 */
-	public ArrayList<VerletSpring2D> springs;
+    public static void addConstraintToAll(Particle2DConstraint c,
+            List<VerletParticle2D> list) {
+        for (VerletParticle2D p : list) {
+            p.addConstraint(c);
+        }
+    }
 
-	/**
-	 * Default friction value = 0.15
-	 */
-	public float friction = 0.15f;
+    public static void removeConstraintFromAll(Particle2DConstraint c,
+            List<VerletParticle2D> list) {
+        for (VerletParticle2D p : list) {
+            p.removeConstraint(c);
+        }
+    }
 
-	/**
-	 * Default time step = 0.02
-	 */
-	public float timeStep = 0.01f;
+    /**
+     * List of particles (Vec2D subclassed)
+     */
+    public ArrayList<VerletParticle2D> particles;
 
-	/**
-	 * Default iterations for verlet solver = 50
-	 */
-	public int numIterations = 50;
+    /**
+     * List of spring/sticks connectors
+     */
+    public ArrayList<VerletSpring2D> springs;
 
-	/**
-	 * Gravity vector (by default inactive)
-	 */
-	public Vec2D gravity = new Vec2D();
+    /**
+     * Default friction value = 0.15
+     */
+    public float friction = 0.15f;
 
-	/**
-	 * Optional 3D bounding box to constrain particles too
-	 */
-	public Rect worldBounds;
+    /**
+     * Default time step = 0.02
+     */
+    public float timeStep = 0.01f;
 
-	/**
-	 * Initializes a Verlet engine instance using the default values.
-	 */
-	public VerletPhysics2D() {
-		particles = new ArrayList<VerletParticle2D>();
-		springs = new ArrayList<VerletSpring2D>();
-	}
+    /**
+     * Default iterations for verlet solver = 50
+     */
+    public int numIterations = 50;
 
-	/**
-	 * Initializes an Verlet engine instance with the passed in configuration.
-	 * 
-	 * @param gravity
-	 *            3D gravity vector
-	 * @param numIterations
-	 *            iterations per time step for verlet solver
-	 * @param friction
-	 *            friction value 0...1
-	 * @param timeStep
-	 *            time step for calculating forces
-	 */
-	public VerletPhysics2D(Vec2D gravity, int numIterations, float friction,
-			float timeStep) {
-		this();
-		if (gravity != null)
-			this.gravity.set(gravity);
-		this.numIterations = numIterations;
-		this.friction = friction;
-		this.timeStep = timeStep;
-	}
+    /**
+     * Gravity vector (by default inactive)
+     */
+    public Vec2D gravity = new Vec2D();
 
-	/**
-	 * Adds a particle to the list
-	 * 
-	 * @param p
-	 * @return itself
-	 */
-	public VerletPhysics2D addParticle(VerletParticle2D p) {
-		particles.add(p);
-		return this;
-	}
+    /**
+     * Optional 3D bounding box to constrain particles too
+     */
+    public Rect worldBounds;
 
-	/**
-	 * Adds a spring connector
-	 * 
-	 * @param s
-	 * @return itself
-	 */
-	public VerletPhysics2D addSpring(VerletSpring2D s) {
-		if (getSpring(s.a, s.b) == null)
-			springs.add(s);
-		return this;
-	}
+    /**
+     * Initializes a Verlet engine instance using the default values.
+     */
+    public VerletPhysics2D() {
+        particles = new ArrayList<VerletParticle2D>();
+        springs = new ArrayList<VerletSpring2D>();
+    }
 
-	/**
-	 * Applies gravity force to all particles
-	 */
-	protected void applyGravity() {
-		if (!gravity.isZeroVector()) {
-			for (VerletParticle2D p : particles) {
-				if (!p.isLocked)
-					p.addSelf(gravity.scale(p.weight));
-			}
-		}
-	}
+    /**
+     * Initializes an Verlet engine instance with the passed in configuration.
+     * 
+     * @param gravity
+     *            3D gravity vector
+     * @param numIterations
+     *            iterations per time step for verlet solver
+     * @param friction
+     *            friction value 0...1
+     * @param timeStep
+     *            time step for calculating forces
+     */
+    public VerletPhysics2D(Vec2D gravity, int numIterations, float friction,
+            float timeStep) {
+        this();
+        if (gravity != null) {
+            this.gravity.set(gravity);
+        }
+        this.numIterations = numIterations;
+        this.friction = friction;
+        this.timeStep = timeStep;
+    }
 
-	/**
-	 * Constrains all particle positions to the world bounding box set
-	 */
-	protected void constrainToBounds() {
-		for (VerletParticle2D p : particles) {
-			if (p.bounds != null) {
-				p.constrain(p.bounds);
-			}
-		}
-		if (worldBounds != null) {
-			for (VerletParticle2D p : particles) {
-				p.constrain(worldBounds);
-			}
-		}
-	}
+    /**
+     * Adds a particle to the list
+     * 
+     * @param p
+     * @return itself
+     */
+    public VerletPhysics2D addParticle(VerletParticle2D p) {
+        particles.add(p);
+        return this;
+    }
 
-	public Rect getCurrentBounds() {
-		Vec2D min = new Vec2D(Float.MAX_VALUE, Float.MAX_VALUE);
-		Vec2D max = new Vec2D(Float.MIN_VALUE, Float.MIN_VALUE);
-		for (Iterator<VerletParticle2D> i = particles.iterator(); i.hasNext();) {
-			VerletParticle2D p = i.next();
-			min.minSelf(p);
-			max.maxSelf(p);
-		}
-		return new Rect(min, max);
-	}
+    /**
+     * Adds a spring connector
+     * 
+     * @param s
+     * @return itself
+     */
+    public VerletPhysics2D addSpring(VerletSpring2D s) {
+        if (getSpring(s.a, s.b) == null) {
+            springs.add(s);
+        }
+        return this;
+    }
 
-	/**
-	 * Attempts to find the spring element between the 2 particles supplied
-	 * 
-	 * @param a
-	 *            particle 1
-	 * @param b
-	 *            particle 2
-	 * @return spring instance, or null if not found
-	 */
-	public VerletSpring2D getSpring(Vec2D a, Vec2D b) {
-		for (VerletSpring2D s : springs) {
-			if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
-				return s;
-			}
-		}
-		return null;
-	}
+    public VerletPhysics2D clear() {
+        particles.clear();
+        springs.clear();
+        return this;
+    }
 
-	/**
-	 * Removes a particle from the simulation.
-	 * 
-	 * @param p
-	 *            particle to remove
-	 * @return true, if removed successfully
-	 */
-	public boolean removeParticle(VerletParticle2D p) {
-		return particles.remove(p);
-	}
+    /**
+     * Constrains all particle positions to the world bounding box set
+     */
+    protected void constrainToBounds() {
+        for (VerletParticle2D p : particles) {
+            if (p.bounds != null) {
+                p.constrain(p.bounds);
+            }
+        }
+        if (worldBounds != null) {
+            for (VerletParticle2D p : particles) {
+                p.constrain(worldBounds);
+            }
+        }
+    }
 
-	/**
-	 * Removes a spring connector from the simulation instance.
-	 * 
-	 * @param s
-	 *            spring to remove
-	 * @return true, if the spring has been removed
-	 */
-	public boolean removeSpring(VerletSpring2D s) {
-		return springs.remove(s);
-	}
+    public Rect getCurrentBounds() {
+        Vec2D min = new Vec2D(Float.MAX_VALUE, Float.MAX_VALUE);
+        Vec2D max = new Vec2D(Float.MIN_VALUE, Float.MIN_VALUE);
+        for (Iterator<VerletParticle2D> i = particles.iterator(); i.hasNext();) {
+            VerletParticle2D p = i.next();
+            min.minSelf(p);
+            max.maxSelf(p);
+        }
+        return new Rect(min, max);
+    }
 
-	/**
-	 * Removes a spring connector and its both end point particles from the
-	 * simulation
-	 * 
-	 * @param s
-	 *            spring to remove
-	 * @return true, only if spring AND particles have been removed successfully
-	 */
-	public boolean removeSpringElements(VerletSpring2D s) {
-		if (removeSpring(s)) {
-			return (removeParticle(s.a) && removeParticle(s.b));
-		}
-		return false;
-	}
+    /**
+     * Attempts to find the spring element between the 2 particles supplied
+     * 
+     * @param a
+     *            particle 1
+     * @param b
+     *            particle 2
+     * @return spring instance, or null if not found
+     */
+    public VerletSpring2D getSpring(Vec2D a, Vec2D b) {
+        for (VerletSpring2D s : springs) {
+            if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
+                return s;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Sets bounding box
-	 * 
-	 * @param world
-	 * @return itself
-	 */
-	public VerletPhysics2D setWorldBounds(Rect world) {
-		worldBounds = world;
-		return this;
-	}
+    /**
+     * Removes a particle from the simulation.
+     * 
+     * @param p
+     *            particle to remove
+     * @return true, if removed successfully
+     */
+    public boolean removeParticle(VerletParticle2D p) {
+        return particles.remove(p);
+    }
 
-	/**
-	 * Progresses the physics simulation by 1 time step and updates all forces
-	 * and particle positions accordingly
-	 * 
-	 * @return itself
-	 */
-	public VerletPhysics2D update() {
-		applyGravity();
-		updateParticles();
-		updateSprings();
-		constrainToBounds();
-		return this;
-	}
+    /**
+     * Removes a spring connector from the simulation instance.
+     * 
+     * @param s
+     *            spring to remove
+     * @return true, if the spring has been removed
+     */
+    public boolean removeSpring(VerletSpring2D s) {
+        return springs.remove(s);
+    }
 
-	/**
-	 * Updates all particle positions
-	 */
-	protected void updateParticles() {
-		float force = 1.0f - friction * timeStep * timeStep;
-		for (VerletParticle2D p : particles) {
-			p.update(force);
-		}
-	}
+    /**
+     * Removes a spring connector and its both end point particles from the
+     * simulation
+     * 
+     * @param s
+     *            spring to remove
+     * @return true, only if spring AND particles have been removed successfully
+     */
+    public boolean removeSpringElements(VerletSpring2D s) {
+        if (removeSpring(s)) {
+            return (removeParticle(s.a) && removeParticle(s.b));
+        }
+        return false;
+    }
 
-	/**
-	 * Updates all spring connections based on new particle positions
-	 */
-	protected void updateSprings() {
-		for (int i = numIterations; i > 0; i--) {
-			for (VerletSpring2D s : springs) {
-				s.update(i == 1);
-			}
-		}
-	}
+    /**
+     * Sets bounding box
+     * 
+     * @param world
+     * @return itself
+     */
+    public VerletPhysics2D setWorldBounds(Rect world) {
+        worldBounds = world;
+        return this;
+    }
+
+    /**
+     * Progresses the physics simulation by 1 time step and updates all forces
+     * and particle positions accordingly
+     * 
+     * @return itself
+     */
+    public VerletPhysics2D update() {
+        updateParticles();
+        updateSprings();
+        constrainToBounds();
+        return this;
+    }
+
+    /**
+     * Updates all particle positions
+     */
+    protected void updateParticles() {
+        Vec2D force = gravity.scale((1.0f - friction) * timeStep * timeStep);
+        for (VerletParticle2D p : particles) {
+            p.update(force);
+        }
+    }
+
+    /**
+     * Updates all spring connections based on new particle positions
+     */
+    protected void updateSprings() {
+        for (int i = numIterations; i > 0; i--) {
+            for (VerletSpring2D s : springs) {
+                s.update(i == 1);
+            }
+        }
+    }
 }
