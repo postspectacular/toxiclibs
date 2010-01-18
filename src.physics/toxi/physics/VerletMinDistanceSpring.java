@@ -10,13 +10,14 @@ package toxi.physics;
  */
 public class VerletMinDistanceSpring extends VerletSpring {
 
-	public VerletMinDistanceSpring(VerletParticle a, VerletParticle b,
-			float len, float str) {
-		super(a, b, len, str);
-	}
+    public VerletMinDistanceSpring(VerletParticle a, VerletParticle b,
+            float len, float str) {
+        super(a, b, len, str);
+    }
 
-	public void update(boolean applyConstraints) {
-		if (b.sub(a).magSquared() < restLength * restLength)
-			super.update(applyConstraints);
-	}
+    public void update(boolean applyConstraints) {
+        if (b.distanceToSquared(a) < restLength * restLength) {
+            super.update(applyConstraints);
+        }
+    }
 }

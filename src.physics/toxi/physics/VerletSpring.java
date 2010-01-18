@@ -42,95 +42,94 @@ import toxi.geom.Vec3D;
  */
 public class VerletSpring {
 
-	protected static final float EPS = 1e-6f;
+    protected static final float EPS = 1e-6f;
 
-	/**
-	 * Spring end points / particles
-	 */
-	public VerletParticle a, b;
+    /**
+     * Spring end points / particles
+     */
+    public VerletParticle a, b;
 
-	/**
-	 * Spring rest length to which it always wants to return too
-	 */
-	public float restLength;
+    /**
+     * Spring rest length to which it always wants to return too
+     */
+    public float restLength;
 
-	/**
-	 * Spring strength, possible value range depends on engine configuration
-	 * (time step, friction)
-	 */
-	public float strength;
+    /**
+     * Spring strength, possible value range depends on engine configuration
+     * (time step, friction)
+     */
+    public float strength;
 
-	/**
-	 * Flag, if either particle is locked in space (only within the scope of
-	 * this spring)
-	 */
-	protected boolean isALocked, isBLocked;
+    /**
+     * Flag, if either particle is locked in space (only within the scope of
+     * this spring)
+     */
+    protected boolean isALocked, isBLocked;
 
-	/**
-	 * @param a
-	 *            1st particle
-	 * @param b
-	 *            2nd particle
-	 * @param len
-	 *            desired rest length
-	 * @param str
-	 *            spring strength
-	 */
-	public VerletSpring(VerletParticle a, VerletParticle b, float len, float str) {
-		this.a = a;
-		this.b = b;
-		restLength = len;
-		strength = str;
-	}
+    /**
+     * @param a
+     *            1st particle
+     * @param b
+     *            2nd particle
+     * @param len
+     *            desired rest length
+     * @param str
+     *            spring strength
+     */
+    public VerletSpring(VerletParticle a, VerletParticle b, float len, float str) {
+        this.a = a;
+        this.b = b;
+        restLength = len;
+        strength = str;
+    }
 
-	/**
-	 * Updates both particle positions (if not locked) based on their current
-	 * distance, weight and spring configuration *
-	 */
-	protected void update(boolean applyConstraints) {
-		Vec3D delta = b.sub(a);
-		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + EPS;
-		float invWeightA = 1f / a.weight;
-		float invWeightB = 1f / b.weight;
-		float normDistStrength = (dist - restLength)
-				/ (dist * (invWeightA + invWeightB)) * strength;
-		if (!a.isLocked && !isALocked) {
-			a.addSelf(delta.scale(normDistStrength * invWeightA));
-			if (applyConstraints) {
-				a.applyConstraints();
-			}
-		}
-		if (!b.isLocked && !isBLocked) {
-			b.addSelf(delta.scale(-normDistStrength * invWeightB));
-			if (applyConstraints) {
-				b.applyConstraints();
-			}
-		}
-	}
+    /**
+     * (Un)Locks the 1st end point of the spring. <b>NOTE: this acts purely
+     * within the scope of this spring instance and does NOT call
+     * {@link VerletParticle#lock()}</b>
+     * 
+     * @param s
+     * @return itself
+     */
+    public VerletSpring lockA(boolean s) {
+        isALocked = s;
+        return this;
+    }
 
-	/**
-	 * (Un)Locks the 1st end point of the spring. <b>NOTE: this acts purely
-	 * within the scope of this spring instance and does NOT call
-	 * {@link VerletParticle#lock()}</b>
-	 * 
-	 * @param s
-	 * @return itself
-	 */
-	public VerletSpring lockA(boolean s) {
-		isALocked = s;
-		return this;
-	}
+    /**
+     * (Un)Locks the 2nd end point of the spring
+     * 
+     * @param s
+     * @return itself
+     */
 
-	/**
-	 * (Un)Locks the 2nd end point of the spring
-	 * 
-	 * @param s
-	 * @return itself
-	 */
+    public VerletSpring lockB(boolean s) {
+        isBLocked = s;
+        return this;
+    }
 
-	public VerletSpring lockB(boolean s) {
-		isBLocked = s;
-		return this;
-	}
+    /**
+     * Updates both particle positions (if not locked) based on their current
+     * distance, weight and spring configuration *
+     */
+    protected void update(boolean applyConstraints) {
+        Vec3D delta = b.sub(a);
+        // add minute offset to avoid div-by-zero errors
+        float dist = delta.magnitude() + EPS;
+        float normDistStrength =
+                (dist - restLength) / (dist * (a.invWeight + b.invWeight))
+                        * strength;
+        if (!a.isLocked && !isALocked) {
+            a.addSelf(delta.scale(normDistStrength * a.invWeight));
+            if (applyConstraints) {
+                a.applyConstraints();
+            }
+        }
+        if (!b.isLocked && !isBLocked) {
+            b.addSelf(delta.scale(-normDistStrength * b.invWeight));
+            if (applyConstraints) {
+                b.applyConstraints();
+            }
+        }
+    }
 }

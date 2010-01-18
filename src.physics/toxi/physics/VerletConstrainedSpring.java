@@ -15,54 +15,53 @@ import toxi.geom.Vec3D;
  */
 public class VerletConstrainedSpring extends VerletSpring {
 
-	/**
-	 * Maximum relaxation distance for either end of the spring in world units
-	 */
-	public float limit = Float.MAX_VALUE;
+    /**
+     * Maximum relaxation distance for either end of the spring in world units
+     */
+    public float limit = Float.MAX_VALUE;
 
-	/**
-	 * @param a
-	 * @param b
-	 * @param len
-	 * @param str
-	 */
-	public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
-			float len, float str) {
-		super(a, b, len, str);
-	}
+    /**
+     * @param a
+     * @param b
+     * @param len
+     * @param str
+     */
+    public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
+            float len, float str) {
+        super(a, b, len, str);
+    }
 
-	/**
-	 * @param a
-	 * @param b
-	 * @param len
-	 * @param str
-	 * @param limit
-	 */
-	public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
-			float len, float str, float limit) {
-		super(a, b, len, str);
-		this.limit = limit;
-	}
+    /**
+     * @param a
+     * @param b
+     * @param len
+     * @param str
+     * @param limit
+     */
+    public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
+            float len, float str, float limit) {
+        super(a, b, len, str);
+        this.limit = limit;
+    }
 
-	protected void update(boolean applyConstraints) {
-		Vec3D delta = b.sub(a);
-		// add minute offset to avoid div-by-zero errors
-		float dist = delta.magnitude() + EPS;
-		float invWeightA = 1f / a.weight;
-		float invWeightB = 1f / b.weight;
-		float normDistStrength = (dist - restLength)
-				/ (dist * (invWeightA + invWeightB)) * strength;
-		if (!a.isLocked && !isALocked) {
-			a.addSelf(delta.scale(normDistStrength * invWeightA).limit(limit));
-			if (applyConstraints) {
-				a.applyConstraints();
-			}
-		}
-		if (!b.isLocked && !isBLocked) {
-			b.subSelf(delta.scale(normDistStrength * invWeightB).limit(limit));
-			if (applyConstraints) {
-				b.applyConstraints();
-			}
-		}
-	}
+    protected void update(boolean applyConstraints) {
+        Vec3D delta = b.sub(a);
+        // add minute offset to avoid div-by-zero errors
+        float dist = delta.magnitude() + EPS;
+        float normDistStrength =
+                (dist - restLength) / (dist * (a.invWeight + b.invWeight))
+                        * strength;
+        if (!a.isLocked && !isALocked) {
+            a.addSelf(delta.scale(normDistStrength * a.invWeight).limit(limit));
+            if (applyConstraints) {
+                a.applyConstraints();
+            }
+        }
+        if (!b.isLocked && !isBLocked) {
+            b.subSelf(delta.scale(normDistStrength * b.invWeight).limit(limit));
+            if (applyConstraints) {
+                b.applyConstraints();
+            }
+        }
+    }
 }

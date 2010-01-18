@@ -10,22 +10,23 @@ package toxi.physics2d;
  */
 public class VerletMinDistanceSpring2D extends VerletSpring2D {
 
-	private float restLengthSquared;
+    private float restLengthSquared;
 
-	public VerletMinDistanceSpring2D(VerletParticle2D a, VerletParticle2D b,
-			float len, float str) {
-		super(a, b, len, str);
-		setRestLength(len);
-	}
+    public VerletMinDistanceSpring2D(VerletParticle2D a, VerletParticle2D b,
+            float len, float str) {
+        super(a, b, len, str);
+        setRestLength(len);
+    }
 
-	protected void update(boolean applyConstraints) {
-		if (b.sub(a).magSquared() < restLengthSquared)
-			super.update(applyConstraints);
-	}
+    public VerletSpring2D setRestLength(float len) {
+        restLength = len;
+        restLengthSquared = len * len;
+        return this;
+    }
 
-	public VerletSpring2D setRestLength(float len) {
-		restLength = len;
-		restLengthSquared = len * len;
-		return this;
-	}
+    protected void update(boolean applyConstraints) {
+        if (b.distanceToSquared(a) < restLengthSquared) {
+            super.update(applyConstraints);
+        }
+    }
 }
