@@ -17,6 +17,17 @@ public class ParticleString {
     public List<VerletParticle> particles;
     public List<VerletSpring> links;
 
+    /**
+     * Takes a list of already created particles connects them into a continuous
+     * string using springs.
+     * 
+     * @param physics
+     *            physics engine instance
+     * @param plist
+     *            particle list
+     * @param strength
+     *            spring strength
+     */
     public ParticleString(VerletPhysics physics, List<VerletParticle> plist,
             float strength) {
         this.physics = physics;
@@ -36,6 +47,23 @@ public class ParticleString {
         }
     }
 
+    /**
+     * Creates a number of particles along a line and connects them into a
+     * string using springs.
+     * 
+     * @param physics
+     *            physics engine
+     * @param pos
+     *            start position
+     * @param step
+     *            step direction & distance between successive particles
+     * @param num
+     *            number of particles
+     * @param mass
+     *            particle mass
+     * @param strength
+     *            spring strength
+     */
     public ParticleString(VerletPhysics physics, Vec3D pos, Vec3D step,
             int num, float mass, float strength) {
         this.physics = physics;
@@ -58,9 +86,21 @@ public class ParticleString {
     }
 
     /**
-     * Creates a spring instance connecting 2 consecutive particles of the
-     * spring. Overwrite this method to create a string using custom spring
-     * types (subclassed from {@link VerletSpring}).
+     * Removes the entire string from the physics simulation, incl. all of its
+     * particles & springs.
+     */
+    public void clear() {
+        for (VerletSpring s : links) {
+            physics.removeSpringElements(s);
+        }
+        particles.clear();
+        links.clear();
+    }
+
+    /**
+     * Creates a spring instance connecting 2 successive particles of the
+     * string. Overwrite this method to create a string custom spring types
+     * (subclassed from {@link VerletSpring}).
      * 
      * @param a
      *            1st particle
@@ -76,21 +116,30 @@ public class ParticleString {
         return new VerletSpring(a, b, len, strength);
     }
 
+    /**
+     * Returns the first particle of the string.
+     * 
+     * @return
+     */
     public VerletParticle getHead() {
         return particles.get(0);
     }
 
+    /**
+     * Returns number of particles of the string.
+     * 
+     * @return
+     */
     public int getNumParticles() {
         return particles.size();
     }
 
+    /**
+     * Returns last particle of the string.
+     * 
+     * @return
+     */
     public VerletParticle getTail() {
         return particles.get(particles.size() - 1);
-    }
-
-    public void remove() {
-        for (VerletSpring s : links) {
-            physics.removeSpringElements(s);
-        }
     }
 }
