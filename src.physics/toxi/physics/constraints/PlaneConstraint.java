@@ -17,9 +17,11 @@ public class PlaneConstraint implements ParticleConstraint {
 
     /**
      * @param axis
-     *            axis to lock
+     *            1st axis to lock
+     * @param axis2
+     *            2d axis to lock
      * @param constraint
-     * 
+     *            point on the desired constraint plane
      */
     public PlaneConstraint(Axis axis, Axis axis2, Vec3D constraint) {
         this.axis1 = axis;

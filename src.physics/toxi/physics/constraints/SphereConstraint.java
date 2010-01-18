@@ -13,64 +13,58 @@ import toxi.physics.VerletParticle;
  * @author toxi 16 Mar 2009
  */
 public class SphereConstraint implements ParticleConstraint {
-	public Sphere sphere;
 
-	public boolean isBoundingSphere;
+    public Sphere sphere;
 
-	public final static boolean INSIDE = true;
-	public final static boolean OUTSIDE = false;
+    public boolean isBoundingSphere;
 
-	/**
-	 * Creates a new instance using the sphere definition and constraint mode
-	 * given.
-	 * 
-	 * @param sphere
-	 *            sphere instance
-	 * @param isBoundary
-	 *            constraint mode. Use {@linkplain #INSIDE} or
-	 *            {@linkplain #OUTSIDE} to specify constraint behaviour.
-	 */
-	public SphereConstraint(Sphere sphere, boolean isBoundary) {
-		this.sphere = sphere;
-		this.isBoundingSphere = isBoundary;
-	}
+    public final static boolean INSIDE = true;
+    public final static boolean OUTSIDE = false;
 
-	/**
-	 * Creates a new instance using the sphere definition and constraint mode
-	 * given.
-	 * 
-	 * @param origin
-	 *            sphere origin
-	 * @param radius
-	 *            sphere radius
-	 * @param isBoundary
-	 *            constraint mode. Use {@linkplain #INSIDE} or
-	 *            {@linkplain #OUTSIDE} to specify constraint behaviour.
-	 */
-	public SphereConstraint(Vec3D origin, float radius, boolean isBoundary) {
-		sphere = new Sphere(origin, radius);
-		this.isBoundingSphere = isBoundary;
-	}
+    /**
+     * Creates a new instance using the sphere definition and constraint mode
+     * given.
+     * 
+     * @param sphere
+     *            sphere instance
+     * @param isBoundary
+     *            constraint mode. Use {@linkplain #INSIDE} or
+     *            {@linkplain #OUTSIDE} to specify constraint behaviour.
+     */
+    public SphereConstraint(Sphere sphere, boolean isBoundary) {
+        this.sphere = sphere;
+        this.isBoundingSphere = isBoundary;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * toxi.physics.constraints.ParticleConstraint#apply(toxi.physics.VerletParticle
-	 * )
-	 */
-	public void apply(VerletParticle p) {
-		boolean isInside = sphere.containsPoint(p);
-		if (isBoundingSphere) {
-			if (!isInside) {
-				p.normalize().scaleSelf(sphere.radius);
-			}
-		}
-		else {
-			if (isInside) {
-				p.normalize().scaleSelf(sphere.radius);
-			}
-		}
-	}
+    /**
+     * Creates a new instance using the sphere definition and constraint mode
+     * given.
+     * 
+     * @param origin
+     *            sphere origin
+     * @param radius
+     *            sphere radius
+     * @param isBoundary
+     *            constraint mode. Use {@linkplain #INSIDE} or
+     *            {@linkplain #OUTSIDE} to specify constraint behaviour.
+     */
+    public SphereConstraint(Vec3D origin, float radius, boolean isBoundary) {
+        sphere = new Sphere(origin, radius);
+        this.isBoundingSphere = isBoundary;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * toxi.physics.constraints.ParticleConstraint#apply(toxi.physics.VerletParticle
+     * )
+     */
+    public void apply(VerletParticle p) {
+        boolean isInside = sphere.containsPoint(p);
+        if ((isBoundingSphere && !isInside) || (!isBoundingSphere && isInside)) {
+            p.set(sphere.add(p.subSelf(sphere).normalizeTo(sphere.radius)));
+        }
+    }
 
 }

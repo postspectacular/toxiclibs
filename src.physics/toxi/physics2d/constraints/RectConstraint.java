@@ -16,7 +16,7 @@ public class RectConstraint implements Particle2DConstraint {
     }
 
     public RectConstraint(Vec2D min, Vec2D max) {
-        this(Rect.fromMinMax(min, max));
+        this(new Rect(min, max));
     }
 
     public void apply(VerletParticle2D p) {
