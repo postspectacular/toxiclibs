@@ -34,176 +34,203 @@ import toxi.physics.constraints.ParticleConstraint;
  * @author toxi
  */
 public class VerletParticle extends Vec3D {
-	protected Vec3D prev, temp;
-	protected boolean isLocked;
 
-	/**
-	 * Bounding box, by default set to null to disable
-	 */
-	public AABB bounds;
+    protected Vec3D prev, temp;
+    protected boolean isLocked;
 
-	/**
-	 * An optional particle constraints, called immediately after a particle is
-	 * updated (and only used if particle is unlocked (default)
-	 */
-	protected ArrayList<ParticleConstraint> constraints;
+    /**
+     * Bounding box, by default set to null to disable
+     */
+    public AABB bounds;
 
-	/**
-	 * Particle weight, default = 1
-	 */
-	public float weight = 1.0f;
+    /**
+     * An optional particle constraints, called immediately after a particle is
+     * updated (and only used if particle is unlocked (default)
+     */
+    public ArrayList<ParticleConstraint> constraints;
 
-	/**
-	 * Creates particle at position xyz
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 */
-	public VerletParticle(float x, float y, float z) {
-		super(x, y, z);
-		prev = new Vec3D(this);
-		temp = new Vec3D();
-	}
+    /**
+     * Particle weight, default = 1
+     */
+    protected float weight, invWeight;
 
-	/**
-	 * Creates particle at position xyz with weight w
-	 * 
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param w
-	 */
-	public VerletParticle(float x, float y, float z, float w) {
-		this(x, y, z);
-		weight = w;
-	}
+    /**
+     * Creates particle at position xyz
+     * 
+     * @param x
+     * @param y
+     * @param z
+     */
+    public VerletParticle(float x, float y, float z) {
+        this(x, y, z, 1);
+    }
 
-	/**
-	 * Creates particle at the position of the passed in vector
-	 * 
-	 * @param v
-	 *            position
-	 */
-	public VerletParticle(Vec3D v) {
-		this(v.x, v.y, v.z);
-	}
+    /**
+     * Creates particle at position xyz with weight w
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     */
+    public VerletParticle(float x, float y, float z, float w) {
+        super(x, y, z);
+        prev = new Vec3D(this);
+        temp = new Vec3D();
+        setWeight(w);
+    }
 
-	/**
-	 * Creates particle with weight w at the position of the passed in vector
-	 * 
-	 * @param v
-	 *            position
-	 * @param w
-	 *            weight
-	 */
-	public VerletParticle(Vec3D v, float w) {
-		this(v.x, v.y, v.z);
-		weight = w;
-	}
+    /**
+     * Creates particle at the position of the passed in vector
+     * 
+     * @param v
+     *            position
+     */
+    public VerletParticle(Vec3D v) {
+        this(v.x, v.y, v.z, 1);
+    }
 
-	/**
-	 * Creates a copy of the passed in particle
-	 * 
-	 * @param p
-	 */
-	public VerletParticle(VerletParticle p) {
-		this(p.x, p.y, p.z);
-		weight = p.weight;
-		isLocked = p.isLocked;
-	}
+    /**
+     * Creates particle with weight w at the position of the passed in vector
+     * 
+     * @param v
+     *            position
+     * @param w
+     *            weight
+     */
+    public VerletParticle(Vec3D v, float w) {
+        this(v.x, v.y, v.z, w);
+    }
 
-	/**
-	 * Adds the given constraint implementation to the list of constraints
-	 * applied to this particle at each time step.
-	 * 
-	 * @param c
-	 *            constraint instance
-	 * @return itself
-	 */
-	public VerletParticle addConstraint(ParticleConstraint c) {
-		if (constraints == null) {
-			constraints = new ArrayList<ParticleConstraint>(2);
-		}
-		constraints.add(c);
-		return this;
-	}
+    /**
+     * Creates a copy of the passed in particle
+     * 
+     * @param p
+     */
+    public VerletParticle(VerletParticle p) {
+        this(p.x, p.y, p.z, p.weight);
+        isLocked = p.isLocked;
+    }
 
-	public void applyConstraints() {
-		if (constraints != null) {
-			for (ParticleConstraint pc : constraints) {
-				pc.apply(this);
-			}
-		}
-	}
+    /**
+     * Adds the given constraint implementation to the list of constraints
+     * applied to this particle at each time step.
+     * 
+     * @param c
+     *            constraint instance
+     * @return itself
+     */
+    public VerletParticle addConstraint(ParticleConstraint c) {
+        if (constraints == null) {
+            constraints = new ArrayList<ParticleConstraint>(1);
+        }
+        constraints.add(c);
+        return this;
+    }
 
-	/**
-	 * Returns the particle's position at the most recent time step.
-	 * 
-	 * @return previous position
-	 */
-	public Vec3D getPreviousPosition() {
-		return prev;
-	}
+    public VerletParticle addVelocity(Vec3D v) {
+        prev.subSelf(v);
+        return this;
+    }
 
-	/**
-	 * @return true, if particle is locked
-	 */
-	public boolean isLocked() {
-		return isLocked;
-	}
+    public void applyConstraints() {
+        if (constraints != null) {
+            for (ParticleConstraint pc : constraints) {
+                pc.apply(this);
+            }
+        }
+    }
 
-	/**
-	 * Locks/immobilizes particle in space
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle lock() {
-		isLocked = true;
-		return this;
-	}
+    public VerletParticle clearVelocity() {
+        prev.set(this);
+        return this;
+    }
 
-	/**
-	 * Removes any currently applied constraints from this particle.
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle removeAllConstraints() {
-		constraints.clear();
-		return this;
-	}
+    /**
+     * Returns the particle's position at the most recent time step.
+     * 
+     * @return previous position
+     */
+    public Vec3D getPreviousPosition() {
+        return prev;
+    }
 
-	/**
-	 * Attempts to remove the given constraint instance from the list of active
-	 * constraints.
-	 * 
-	 * @param c
-	 *            constraint to remove
-	 * @return true, if successfully removed
-	 */
-	public boolean removeConstraint(ParticleConstraint c) {
-		return constraints.remove(c);
-	}
+    /**
+     * @return the weight
+     */
+    public float getWeight() {
+        return weight;
+    }
 
-	/**
-	 * Unlocks particle again
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle unlock() {
-		prev.set(this);
-		isLocked = false;
-		return this;
-	}
+    /**
+     * @return true, if particle is locked
+     */
+    public boolean isLocked() {
+        return isLocked;
+    }
 
-	protected void update(float force) {
-		if (!isLocked) {
-			temp.set(this);
-			addSelf(sub(prev).scaleSelf(force));
-			prev.set(temp);
-			if (constraints != null) {
-				applyConstraints();
-			}
-		}
-	}
+    /**
+     * Locks/immobilizes particle in space
+     * 
+     * @return itself
+     */
+    public VerletParticle lock() {
+        isLocked = true;
+        return this;
+    }
+
+    /**
+     * Removes any currently applied constraints from this particle.
+     * 
+     * @return itself
+     */
+    public VerletParticle removeAllConstraints() {
+        constraints.clear();
+        return this;
+    }
+
+    /**
+     * Attempts to remove the given constraint instance from the list of active
+     * constraints.
+     * 
+     * @param c
+     *            constraint to remove
+     * @return true, if successfully removed
+     */
+    public boolean removeConstraint(ParticleConstraint c) {
+        return constraints.remove(c);
+    }
+
+    public VerletParticle scaleVelocity(float scl) {
+        prev.interpolateToSelf(this, 1 - scl);
+        return this;
+    }
+
+    public void setWeight(float w) {
+        weight = w;
+        invWeight = 1f / w;
+    }
+
+    /**
+     * Unlocks particle again
+     * 
+     * @return itself
+     */
+    public VerletParticle unlock() {
+        clearVelocity();
+        isLocked = false;
+        return this;
+    }
+
+    protected void update(Vec3D force) {
+        if (!isLocked) {
+            // TODO pos += (curr-prev) + force * timestep * timestep ?
+            temp.set(this);
+            addSelf(sub(prev).addSelf(force.scale(weight)));
+            prev.set(temp);
+            if (constraints != null) {
+                applyConstraints();
+            }
+        }
+    }
 }

@@ -34,174 +34,201 @@ import toxi.physics2d.constraints.Particle2DConstraint;
  * @author toxi
  */
 public class VerletParticle2D extends Vec2D {
-	protected Vec2D prev, temp;
-	protected boolean isLocked;
 
-	/**
-	 * Bounding box, by default set to null to disable
-	 */
-	public Rect bounds;
+    protected Vec2D prev, temp;
+    protected boolean isLocked;
 
-	/**
-	 * An optional particle constraints, called immediately after a particle is
-	 * updated (and only used if particle is unlocked (default)
-	 */
-	public ArrayList<Particle2DConstraint> constraints;
+    /**
+     * Bounding box, by default set to null to disable
+     */
+    public Rect bounds;
 
-	/**
-	 * Particle weight, default = 1
-	 */
-	public float weight = 1.0f;
+    /**
+     * An optional particle constraints, called immediately after a particle is
+     * updated (and only used if particle is unlocked (default)
+     */
+    public ArrayList<Particle2DConstraint> constraints;
 
-	/**
-	 * Creates particle at position xyz
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public VerletParticle2D(float x, float y) {
-		super(x, y);
-		prev = new Vec2D(this);
-		temp = new Vec2D();
-	}
+    /**
+     * Particle weight, default = 1
+     */
+    protected float weight, invWeight;
 
-	/**
-	 * Creates particle at position xyz with weight w
-	 * 
-	 * @param x
-	 * @param y
-	 * @param w
-	 */
-	public VerletParticle2D(float x, float y, float w) {
-		this(x, y);
-		weight = w;
-	}
+    /**
+     * Creates particle at position xyz
+     * 
+     * @param x
+     * @param y
+     */
+    public VerletParticle2D(float x, float y) {
+        this(x, y, 1);
+    }
 
-	/**
-	 * Creates particle at the position of the passed in vector
-	 * 
-	 * @param v
-	 *            position
-	 */
-	public VerletParticle2D(Vec2D v) {
-		this(v.x, v.y);
-	}
+    /**
+     * Creates particle at position xyz with weight w
+     * 
+     * @param x
+     * @param y
+     * @param w
+     */
+    public VerletParticle2D(float x, float y, float w) {
+        super(x, y);
+        prev = new Vec2D(this);
+        temp = new Vec2D();
+        setWeight(w);
+    }
 
-	/**
-	 * Creates particle with weight w at the position of the passed in vector
-	 * 
-	 * @param v
-	 *            position
-	 * @param w
-	 *            weight
-	 */
-	public VerletParticle2D(Vec2D v, float w) {
-		this(v.x, v.y);
-		weight = w;
-	}
+    /**
+     * Creates particle at the position of the passed in vector
+     * 
+     * @param v
+     *            position
+     */
+    public VerletParticle2D(Vec2D v) {
+        this(v.x, v.y, 1);
+    }
 
-	/**
-	 * Creates a copy of the passed in particle
-	 * 
-	 * @param p
-	 */
-	public VerletParticle2D(VerletParticle2D p) {
-		this(p.x, p.y);
-		weight = p.weight;
-		isLocked = p.isLocked;
-	}
+    /**
+     * Creates particle with weight w at the position of the passed in vector
+     * 
+     * @param v
+     *            position
+     * @param w
+     *            weight
+     */
+    public VerletParticle2D(Vec2D v, float w) {
+        this(v.x, v.y, w);
+    }
 
-	/**
-	 * Adds the given constraint implementation to the list of constraints
-	 * applied to this particle at each time step.
-	 * 
-	 * @param c
-	 *            constraint instance
-	 * @return itself
-	 */
-	public VerletParticle2D addConstraint(Particle2DConstraint c) {
-		if (constraints == null) {
-			constraints = new ArrayList<Particle2DConstraint>(2);
-		}
-		constraints.add(c);
-		return this;
-	}
+    /**
+     * Creates a copy of the passed in particle
+     * 
+     * @param p
+     */
+    public VerletParticle2D(VerletParticle2D p) {
+        this(p.x, p.y, p.weight);
+        isLocked = p.isLocked;
+    }
 
-	public void applyConstraints() {
-		if (constraints != null) {
-			for (Particle2DConstraint pc : constraints) {
-				pc.apply(this);
-			}
-		}
-	}
+    /**
+     * Adds the given constraint implementation to the list of constraints
+     * applied to this particle at each time step.
+     * 
+     * @param c
+     *            constraint instance
+     * @return itself
+     */
+    public VerletParticle2D addConstraint(Particle2DConstraint c) {
+        if (constraints == null) {
+            constraints = new ArrayList<Particle2DConstraint>(1);
+        }
+        constraints.add(c);
+        return this;
+    }
 
-	/**
-	 * Returns the particle's position at the most recent time step.
-	 * 
-	 * @return previous position
-	 */
-	public Vec2D getPreviousPosition() {
-		return prev;
-	}
+    public VerletParticle2D addVelocity(Vec2D v) {
+        prev.subSelf(v);
+        return this;
+    }
 
-	/**
-	 * @return true, if particle is locked
-	 */
-	public boolean isLocked() {
-		return isLocked;
-	}
+    public void applyConstraints() {
+        if (constraints != null) {
+            for (Particle2DConstraint pc : constraints) {
+                pc.apply(this);
+            }
+        }
+    }
 
-	/**
-	 * Locks/immobilizes particle in space
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle2D lock() {
-		isLocked = true;
-		return this;
-	}
+    public VerletParticle2D clearVelocity() {
+        prev.set(this);
+        return this;
+    }
 
-	/**
-	 * Removes any currently applied constraints from this particle.
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle2D removeAllConstraints() {
-		constraints.clear();
-		return this;
-	}
+    /**
+     * Returns the particle's position at the most recent time step.
+     * 
+     * @return previous position
+     */
+    public Vec2D getPreviousPosition() {
+        return prev;
+    }
 
-	/**
-	 * Attempts to remove the given constraint instance from the list of active
-	 * constraints.
-	 * 
-	 * @param c
-	 *            constraint to remove
-	 * @return true, if successfully removed
-	 */
-	public boolean removeConstraint(Particle2DConstraint c) {
-		return constraints.remove(c);
-	}
+    /**
+     * @return the weight
+     */
+    public float getWeight() {
+        return weight;
+    }
 
-	/**
-	 * Unlocks particle again
-	 * 
-	 * @return itself
-	 */
-	public VerletParticle2D unlock() {
-		prev.set(this);
-		isLocked = false;
-		return this;
-	}
+    /**
+     * @return true, if particle is locked
+     */
+    public boolean isLocked() {
+        return isLocked;
+    }
 
-	protected void update(float force) {
-		if (!isLocked) {
-			temp.set(this);
-			addSelf(sub(prev).scaleSelf(force));
-			prev.set(temp);
-			if (constraints != null) {
-				applyConstraints();
-			}
-		}
-	}
+    /**
+     * Locks/immobilizes particle in space
+     * 
+     * @return itself
+     */
+    public VerletParticle2D lock() {
+        isLocked = true;
+        return this;
+    }
+
+    /**
+     * Removes any currently applied constraints from this particle.
+     * 
+     * @return itself
+     */
+    public VerletParticle2D removeAllConstraints() {
+        constraints.clear();
+        return this;
+    }
+
+    /**
+     * Attempts to remove the given constraint instance from the list of active
+     * constraints.
+     * 
+     * @param c
+     *            constraint to remove
+     * @return true, if successfully removed
+     */
+    public boolean removeConstraint(Particle2DConstraint c) {
+        return constraints.remove(c);
+    }
+
+    public VerletParticle2D scaleVelocity(float scl) {
+        prev.interpolateToSelf(this, 1 - scl);
+        return this;
+    }
+
+    public void setWeight(float w) {
+        weight = w;
+        invWeight = 1f / w;
+    }
+
+    /**
+     * Unlocks particle again
+     * 
+     * @return itself
+     */
+    public VerletParticle2D unlock() {
+        clearVelocity();
+        isLocked = false;
+        return this;
+    }
+
+    protected void update(Vec2D force) {
+        if (!isLocked) {
+            // TODO pos += (curr-prev) + force * timestep * timestep ?
+            temp.set(this);
+            addSelf(sub(prev).addSelf(force.scale(weight)));
+            prev.set(temp);
+            if (constraints != null) {
+                applyConstraints();
+            }
+        }
+    }
 }
