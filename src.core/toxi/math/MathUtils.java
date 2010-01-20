@@ -31,6 +31,11 @@ import java.util.Random;
 public class MathUtils {
 
     /**
+     * Square root of 2
+     */
+    public static final float SQRT2 = (float) Math.sqrt(2);
+
+    /**
      * Log(2)
      */
     public static final float LOG2 = (float) Math.log(2);

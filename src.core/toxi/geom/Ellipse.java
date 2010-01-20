@@ -2,6 +2,9 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
+/**
+ * This class defines a 2D ellipse and provides several utility methods for it.
+ */
 public class Ellipse extends Vec2D {
 
     protected Vec2D radius = new Vec2D();
@@ -37,6 +40,33 @@ public class Ellipse extends Vec2D {
     }
 
     /**
+     * Computes the area covered by the ellipse.
+     * 
+     * @return
+     */
+    public float getArea() {
+        return MathUtils.PI * radius.x * radius.y;
+    }
+
+    /**
+     * Computes the approximate circumference of the ellipse, using this
+     * equation: <code>2 * PI * sqrt(1/2 * (rx*rx+ry*ry))</code>.
+     * 
+     * The precise value is an infinite series elliptical integral, but the
+     * approximation comes sufficiently close. See Wikipedia for more details:
+     * 
+     * http://en.wikipedia.org/wiki/Ellipse
+     * 
+     * @return circumference
+     */
+    public float getCircumference() {
+        // wikipedia solution:
+        // return (float) (MathUtils.PI * (3 * (radius.x + radius.y) - Math
+        // .sqrt((3 * radius.x + radius.y) * (radius.x + 3 * radius.y))));
+        return (float) Math.sqrt(0.5 * radius.magSquared()) * MathUtils.TWO_PI;
+    }
+
+    /**
      * @return the focus
      */
     public Vec2D[] getFoci() {
@@ -58,8 +88,9 @@ public class Ellipse extends Vec2D {
         return radius.copy();
     }
 
-    public void setRadius(float rx, float ry) {
+    public Ellipse setRadius(float rx, float ry) {
         radius.set(rx, ry);
         focus = radius.magnitude();
+        return this;
     }
 }
