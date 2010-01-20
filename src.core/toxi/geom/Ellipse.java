@@ -15,6 +15,10 @@ public class Ellipse extends Vec2D {
 
     }
 
+    public Ellipse(float rx, float ry) {
+        this(0, 0, rx, ry);
+    }
+
     public Ellipse(float x, float y, float r) {
         this(x, y, r, r);
 
