@@ -460,8 +460,11 @@ public class Vec2D implements Comparable<Vec2D> {
 
     @Override
     public boolean equals(Object obj) {
-        Vec2D v = (Vec2D) obj;
-        return x == v.x && y == v.y;
+        if (obj instanceof Vec2D) {
+            final Vec2D v = (Vec2D) obj;
+            return x == v.x && y == v.y;
+        }
+        return false;
     }
 
     /**
