@@ -52,15 +52,19 @@ public class Sphere extends Vec3D {
      * Alternative to {@link SphereIntersectorReflector}. Computes primary &
      * secondary intersection points of this sphere with the given ray. If no
      * intersection is found the method returns null. In all other cases, the
-     * returned array will have the primary intersection point (i.e. the closest
-     * in the direction of the ray) as its first index and the other one as its
-     * second.
+     * returned array will contain the distance to the primary intersection
+     * point (i.e. the closest in the direction of the ray) as its first index
+     * and the other one as its second. If any of distance values is negative,
+     * the intersection point lies in the opposite ray direction (might be
+     * useful to know). To get the actual intersection point coordinates, simply
+     * pass the returned values to {@link Ray3D#getPointAtDistance(float)}.
      * 
      * @param ray
-     * @return
+     * @return 2-element float array of intersection points or null if ray
+     *         doesn't intersect sphere at all.
      */
-    public Vec3D[] intersectRay(Ray3D ray) {
-        Vec3D[] result = null;
+    public float[] intersectRay(Ray3D ray) {
+        float[] result = null;
         Vec3D q = ray.sub(this);
         float distSquared = q.magSquared();
         float v = -q.dot(ray.getDirection());
@@ -84,9 +88,7 @@ public class Sphere extends Vec3D {
                     }
                 }
             }
-            result =
-                    new Vec3D[] { ray.getPointAtDistance(a),
-                            ray.getPointAtDistance(b) };
+            result = new float[] { a, b };
         }
         return result;
     }
