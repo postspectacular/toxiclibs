@@ -40,7 +40,7 @@ public class Ray2D extends Vec2D {
 
     public Ray2D(float x, float y, Vec2D d) {
         super(x, y);
-        setDirection(d);
+        dir = d.getNormalized();
     }
 
     public Ray2D(Vec2D o, Vec2D d) {
