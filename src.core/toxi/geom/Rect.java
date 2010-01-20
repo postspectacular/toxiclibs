@@ -70,7 +70,7 @@ public class Rect {
     /**
      * Creates a copy of this rectangle
      * 
-     * @return
+     * @return new instance
      */
     public Rect copy() {
         return new Rect(x, y, width, height);
@@ -83,7 +83,7 @@ public class Rect {
     /**
      * Returns the centroid of the rectangle.
      * 
-     * @return
+     * @return centroid vector
      */
     public final Vec2D getCentroid() {
         return new Vec2D(x + width * 0.5f, y + height * 0.5f);
@@ -92,7 +92,7 @@ public class Rect {
     /**
      * Returns a vector containing the width and height of the rectangle.
      * 
-     * @return
+     * @return dimension vector
      */
     public final Vec2D getDimensions() {
         return new Vec2D(width, height);

@@ -42,7 +42,7 @@ public class Ellipse extends Vec2D {
     /**
      * Computes the area covered by the ellipse.
      * 
-     * @return
+     * @return area
      */
     public float getArea() {
         return MathUtils.PI * radius.x * radius.y;
