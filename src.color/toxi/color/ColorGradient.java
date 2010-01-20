@@ -40,139 +40,141 @@ import toxi.math.MathUtils;
  */
 public class ColorGradient {
 
-	protected static class GradPoint implements Comparable<GradPoint> {
-		float pos;
-		ReadonlyTColor color;
+    protected static final class GradPoint implements Comparable<GradPoint> {
 
-		GradPoint(float p, ReadonlyTColor c) {
-			pos = p;
-			color = c;
-		}
+        float pos;
+        ReadonlyTColor color;
 
-		public int compareTo(GradPoint p) {
-			if (Float.compare(p.pos, pos) == 0) {
-				return 0;
-			} else {
-				return pos < p.pos ? -1 : 1;
-			}
-		}
-	}
+        GradPoint(float p, ReadonlyTColor c) {
+            pos = p;
+            color = c;
+        }
 
-	protected TreeSet<GradPoint> gradient;
+        public int compareTo(GradPoint p) {
+            if (Float.compare(p.pos, pos) == 0) {
+                return 0;
+            } else {
+                return pos < p.pos ? -1 : 1;
+            }
+        }
+    }
 
-	protected float maxDither;
+    protected TreeSet<GradPoint> gradient;
 
-	/**
-	 * Constructs a new empty gradient.
-	 */
-	public ColorGradient() {
-		gradient = new TreeSet<GradPoint>();
-	}
+    protected float maxDither;
 
-	/**
-	 * Adds a new color at specified position.
-	 * 
-	 * @param p
-	 * @param c
-	 */
-	public void addColorAt(float p, ReadonlyTColor c) {
-		gradient.add(new GradPoint(p, c));
-	}
+    /**
+     * Constructs a new empty gradient.
+     */
+    public ColorGradient() {
+        gradient = new TreeSet<GradPoint>();
+    }
 
-	/**
-	 * Calculates the gradient from specified position.
-	 * 
-	 * @param pos
-	 * @param width
-	 * @return list of interpolated gradient colors
-	 */
-	public ColorList calcGradient(float pos, int width) {
-		ColorList result = new ColorList();
+    /**
+     * Adds a new color at specified position.
+     * 
+     * @param p
+     * @param c
+     */
+    public void addColorAt(float p, ReadonlyTColor c) {
+        gradient.add(new GradPoint(p, c));
+    }
 
-		if (gradient.size() == 0) {
-			return result;
-		}
+    /**
+     * Calculates the gradient from specified position.
+     * 
+     * @param pos
+     * @param width
+     * @return list of interpolated gradient colors
+     */
+    public ColorList calcGradient(float pos, int width) {
+        ColorList result = new ColorList();
 
-		float frac = 0;
-		GradPoint currPoint = null;
-		GradPoint nextPoint = null;
-		float endPos = pos + width;
-		// find 1st color needed, clamp start position to positive values only
-		for (GradPoint gp : gradient) {
-			if (gp.pos < pos) {
-				currPoint = gp;
-			}
-		}
-		boolean isPremature = currPoint == null;
-		TreeSet<GradPoint> activeGradient = null;
-		if (!isPremature) {
-			activeGradient = (TreeSet<GradPoint>) gradient.tailSet(currPoint);
-		} else {
-			// start position is before 1st gradient color, so use whole
-			// gradient
-			activeGradient = gradient;
-			currPoint = activeGradient.first();
-		}
-		float currWidth = 0;
-		Iterator<GradPoint> iter = activeGradient.iterator();
-		if (currPoint != activeGradient.last()) {
-			nextPoint = iter.next();
-			if (isPremature) {
-				currWidth = 1f / (currPoint.pos - pos);
-			} else {
-				if (nextPoint.pos - currPoint.pos > 0) {
-					currWidth = 1f / (nextPoint.pos - currPoint.pos);
-				}
-			}
-		}
-		while (pos < endPos) {
-			if (isPremature) {
-				frac = 1 - (currPoint.pos - pos) * currWidth;
-			} else {
-				frac = (pos - currPoint.pos) * currWidth;
-			}
-			// switch to next color?
-			if (frac > 1.0) {
-				currPoint = nextPoint;
-				isPremature = false;
-				if (iter.hasNext()) {
-					nextPoint = iter.next();
-					if (currPoint != activeGradient.last()) {
-						currWidth = 1f / (nextPoint.pos - currPoint.pos);
-					} else {
-						currWidth = 0;
-					}
-					frac = (pos - currPoint.pos) * currWidth;
-				}
-			}
-			if (currPoint != activeGradient.last()) {
-				float ditheredFrac = MathUtils.clip(frac
-						+ MathUtils.normalizedRandom() * maxDither, 0f, 1f);
-				result.add(currPoint.color.getBlended(nextPoint.color,
-						ditheredFrac));
-			} else {
-				result.add(currPoint.color.copy());
-			}
-			pos++;
-		}
-		return result;
-	}
+        if (gradient.size() == 0) {
+            return result;
+        }
 
-	/**
-	 * @return the maximum dither amount.
-	 */
-	public float getMaxDither() {
-		return maxDither;
-	}
+        float frac = 0;
+        GradPoint currPoint = null;
+        GradPoint nextPoint = null;
+        float endPos = pos + width;
+        // find 1st color needed, clamp start position to positive values only
+        for (GradPoint gp : gradient) {
+            if (gp.pos < pos) {
+                currPoint = gp;
+            }
+        }
+        boolean isPremature = currPoint == null;
+        TreeSet<GradPoint> activeGradient = null;
+        if (!isPremature) {
+            activeGradient = (TreeSet<GradPoint>) gradient.tailSet(currPoint);
+        } else {
+            // start position is before 1st gradient color, so use whole
+            // gradient
+            activeGradient = gradient;
+            currPoint = activeGradient.first();
+        }
+        float currWidth = 0;
+        Iterator<GradPoint> iter = activeGradient.iterator();
+        if (currPoint != activeGradient.last()) {
+            nextPoint = iter.next();
+            if (isPremature) {
+                currWidth = 1f / (currPoint.pos - pos);
+            } else {
+                if (nextPoint.pos - currPoint.pos > 0) {
+                    currWidth = 1f / (nextPoint.pos - currPoint.pos);
+                }
+            }
+        }
+        while (pos < endPos) {
+            if (isPremature) {
+                frac = 1 - (currPoint.pos - pos) * currWidth;
+            } else {
+                frac = (pos - currPoint.pos) * currWidth;
+            }
+            // switch to next color?
+            if (frac > 1.0) {
+                currPoint = nextPoint;
+                isPremature = false;
+                if (iter.hasNext()) {
+                    nextPoint = iter.next();
+                    if (currPoint != activeGradient.last()) {
+                        currWidth = 1f / (nextPoint.pos - currPoint.pos);
+                    } else {
+                        currWidth = 0;
+                    }
+                    frac = (pos - currPoint.pos) * currWidth;
+                }
+            }
+            if (currPoint != activeGradient.last()) {
+                float ditheredFrac =
+                        MathUtils.clip(frac + MathUtils.normalizedRandom()
+                                * maxDither, 0f, 1f);
+                result.add(currPoint.color.getBlended(nextPoint.color,
+                        ditheredFrac));
+            } else {
+                result.add(currPoint.color.copy());
+            }
+            pos++;
+        }
+        return result;
+    }
 
-	/**
-	 * Sets the maximum dither amount. Setting this to values >0 will jitter the
-	 * interpolated colors in the calculated gradient. The value range for this
-	 * parameter is 0.0 (off) to 1.0 (100%).
-	 * 
-	 * @param maxDither
-	 */
-	public void setMaxDither(float maxDither) {
-		this.maxDither = MathUtils.clip(maxDither, 0f, 1f);
-	}
+    /**
+     * @return the maximum dither amount.
+     */
+    public float getMaxDither() {
+        return maxDither;
+    }
+
+    /**
+     * Sets the maximum dither amount. Setting this to values >0 will jitter the
+     * interpolated colors in the calculated gradient. The value range for this
+     * parameter is 0.0 (off) to 1.0 (100%).
+     * 
+     * @param maxDither
+     */
+    public void setMaxDither(float maxDither) {
+        this.maxDither = MathUtils.clip(maxDither, 0f, 1f);
+    }
 }

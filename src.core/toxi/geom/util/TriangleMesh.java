@@ -22,7 +22,7 @@ import toxi.math.MathUtils;
  */
 public class TriangleMesh {
 
-    public final class Face {
+    public final static class Face {
 
         public final Vertex a, b, c;
         public final Vec3D normal;
@@ -53,7 +53,7 @@ public class TriangleMesh {
         }
     }
 
-    public final class Vertex extends Vec3D {
+    public final static class Vertex extends Vec3D {
 
         public final Vec3D normal = new Vec3D();
 

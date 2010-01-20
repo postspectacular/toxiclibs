@@ -32,121 +32,123 @@ import java.util.logging.Logger;
  */
 public class MultiTimbralManager {
 
-	class SourceState {
-		AudioSource src;
-		boolean isActive;
-		long startTime;
+    static class SourceState {
 
-		SourceState(AudioSource src) {
-			this.src = src;
-		}
+        AudioSource src;
+        boolean isActive;
+        long startTime;
 
-		void activate() {
-			isActive = true;
-			startTime = System.currentTimeMillis();
-		}
+        SourceState(AudioSource src) {
+            this.src = src;
+        }
 
-		boolean updateStatus() {
-			isActive = isActive
-					&& (src.isLooping() || src.getBuffersProcessed() == 0);
-			return isActive;
-		}
-	}
+        void activate() {
+            isActive = true;
+            startTime = System.currentTimeMillis();
+        }
 
-	private static final Logger logger = Logger
-			.getLogger(MultiTimbralManager.class.getName());
-	protected SourceState[] pool;
-	protected int maxSources;
+        boolean updateStatus() {
+            isActive =
+                    isActive
+                            && (src.isLooping() || src.getBuffersProcessed() == 0);
+            return isActive;
+        }
+    }
 
-	protected int currIndex;
+    private static final Logger logger =
+            Logger.getLogger(MultiTimbralManager.class.getName());
+    protected SourceState[] pool;
+    protected int maxSources;
 
-	public MultiTimbralManager(JOALUtil liboal, int num) {
-		logger.info("attempting to allocate " + num + " audio voices");
-		AudioSource[] tmp = liboal.generateSources(num);
-		maxSources = tmp.length;
-		pool = new SourceState[maxSources];
-		for (int i = 0; i < maxSources; i++) {
-			AudioSource src = tmp[i];
-			src.setReferenceDistance(100);
-			src.setGain(1);
-			pool[i] = new SourceState(src);
-		}
-		logger.info("done. all sources created.");
-	}
+    protected int currIndex;
 
-	/**
-	 * Uses the class' logger to print out status information about the current
-	 * usage of the managed audio sources.
-	 */
-	public void debug() {
-		String sources = "";
-		int numActive = 0;
-		for (int i = 0; i < maxSources; i++) {
-			if (pool[i].isActive) {
-				sources += i + ",";
-				numActive++;
-			}
-		}
-		String info = "active sources: " + numActive;
-		logger.info(info);
-		logger.info(sources);
-	}
+    public MultiTimbralManager(JOALUtil liboal, int num) {
+        logger.info("attempting to allocate " + num + " audio voices");
+        AudioSource[] tmp = liboal.generateSources(num);
+        maxSources = tmp.length;
+        pool = new SourceState[maxSources];
+        for (int i = 0; i < maxSources; i++) {
+            AudioSource src = tmp[i];
+            src.setReferenceDistance(100);
+            src.setGain(1);
+            pool[i] = new SourceState(src);
+        }
+        logger.info("done. all sources created.");
+    }
 
-	/**
-	 * Attempts to find an available, currently unused {@link AudioSource}
-	 * instance which can then be configured and played by the client
-	 * application. If no free source is available the oldest playing one will
-	 * be stopped and returned as free.
-	 * 
-	 * @return a free AudioSource instance
-	 */
-	public AudioSource getNextVoice() {
-		boolean hasFreeSource = false;
-		int numIterations = 0;
-		int origID = currIndex;
-		int id;
-		// find first free slot...
-		do {
-			id = currIndex;
-			currIndex = (currIndex + 1) % maxSources;
-			if (pool[id].isActive) {
-				if (!pool[id].updateStatus()) {
-					hasFreeSource = true;
-				}
-			} else {
-				hasFreeSource = true;
-			}
-			numIterations++;
-		} while (!hasFreeSource && numIterations < maxSources);
-		// use oldest slot if no free one is available
-		if (!hasFreeSource) {
-			long now = System.currentTimeMillis();
-			id = origID;
-			for (int i = 0; i < maxSources; i++) {
-				if (pool[i].startTime < now) {
-					id = i;
-					now = pool[i].startTime;
-				}
-			}
-			pool[id].src.stop();
-			logger.warning("no free src, using oldest slot #" + id);
-			currIndex = (id + 1) % maxSources;
-		}
-		pool[id].activate();
-		return pool[id].src;
-	}
+    /**
+     * Uses the class' logger to print out status information about the current
+     * usage of the managed audio sources.
+     */
+    public void debug() {
+        String sources = "";
+        int numActive = 0;
+        for (int i = 0; i < maxSources; i++) {
+            if (pool[i].isActive) {
+                sources += i + ",";
+                numActive++;
+            }
+        }
+        String info = "active sources: " + numActive;
+        logger.info(info);
+        logger.info(sources);
+    }
 
-	/**
-	 * Produces an array of status flags of used voices. Elements set to true
-	 * indicate the voice is currently active/playing.
-	 * 
-	 * @return boolean array
-	 */
-	public boolean[] getUsage() {
-		boolean[] usage = new boolean[maxSources];
-		for (int i = 0; i < maxSources; i++) {
-			usage[i] = pool[i].isActive;
-		}
-		return usage;
-	}
+    /**
+     * Attempts to find an available, currently unused {@link AudioSource}
+     * instance which can then be configured and played by the client
+     * application. If no free source is available the oldest playing one will
+     * be stopped and returned as free.
+     * 
+     * @return a free AudioSource instance
+     */
+    public AudioSource getNextVoice() {
+        boolean hasFreeSource = false;
+        int numIterations = 0;
+        int origID = currIndex;
+        int id;
+        // find first free slot...
+        do {
+            id = currIndex;
+            currIndex = (currIndex + 1) % maxSources;
+            if (pool[id].isActive) {
+                if (!pool[id].updateStatus()) {
+                    hasFreeSource = true;
+                }
+            } else {
+                hasFreeSource = true;
+            }
+            numIterations++;
+        } while (!hasFreeSource && numIterations < maxSources);
+        // use oldest slot if no free one is available
+        if (!hasFreeSource) {
+            long now = System.currentTimeMillis();
+            id = origID;
+            for (int i = 0; i < maxSources; i++) {
+                if (pool[i].startTime < now) {
+                    id = i;
+                    now = pool[i].startTime;
+                }
+            }
+            pool[id].src.stop();
+            logger.warning("no free src, using oldest slot #" + id);
+            currIndex = (id + 1) % maxSources;
+        }
+        pool[id].activate();
+        return pool[id].src;
+    }
+
+    /**
+     * Produces an array of status flags of used voices. Elements set to true
+     * indicate the voice is currently active/playing.
+     * 
+     * @return boolean array
+     */
+    public boolean[] getUsage() {
+        boolean[] usage = new boolean[maxSources];
+        for (int i = 0; i < maxSources; i++) {
+            usage[i] = pool[i].isActive;
+        }
+        return usage;
+    }
 }
