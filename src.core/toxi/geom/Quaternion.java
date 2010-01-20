@@ -20,40 +20,42 @@ public class Quaternion {
      * Creates a Quaternion from a axis and a angle.
      * 
      * @param axis
-     *            axis vector
+     *            axis vector (will be normalized)
      * @param angle
      *            angle in radians.
      * 
      * @return new quaternion
      */
     public static Quaternion createFromAxisAngle(Vec3D axis, float angle) {
-        float sin = (float) Math.sin(angle / 2);
-        float cos = (float) Math.cos(angle / 2);
-        Quaternion q =
-                new Quaternion(cos, axis.x * sin, axis.y * sin, axis.z * sin);
-        q.normalize();
+        angle *= 0.5;
+        float sin = MathUtils.sin(angle);
+        float cos = MathUtils.cos(angle);
+        Quaternion q = new Quaternion(cos, axis.getNormalizedTo(sin));
         return q;
     }
 
     /**
      * Creates a Quaternion from Euler angles.
      * 
-     * @param ax
+     * @param pitch
      *            X-angle in radians.
-     * @param ay
+     * @param yaw
      *            Y-angle in radians.
-     * @param az
+     * @param roll
      *            Z-angle in radians.
      * 
      * @return new quaternion
      */
-    public static Quaternion createFromEuler(float ax, float ay, float az) {
-        float sinPitch = (float) Math.sin(ax * 0.5);
-        float cosPitch = (float) Math.cos(ax * 0.5);
-        float sinYaw = (float) Math.sin(ay * 0.5);
-        float cosYaw = (float) Math.cos(ay * 0.5);
-        float sinRoll = (float) Math.sin(az * 0.5);
-        float cosRoll = (float) Math.cos(az * 0.5);
+    public static Quaternion createFromEuler(float pitch, float yaw, float roll) {
+        pitch *= 0.5;
+        yaw *= 0.5;
+        roll *= 0.5;
+        float sinPitch = MathUtils.sin(pitch);
+        float cosPitch = MathUtils.cos(pitch);
+        float sinYaw = MathUtils.sin(yaw);
+        float cosYaw = MathUtils.cos(yaw);
+        float sinRoll = MathUtils.sin(roll);
+        float cosRoll = MathUtils.cos(roll);
         float cosPitchCosYaw = cosPitch * cosYaw;
         float sinPitchSinYaw = sinPitch * sinYaw;
 
@@ -63,6 +65,22 @@ public class Quaternion {
         q.y = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
         q.z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
         q.w = cosRoll * cosPitchCosYaw + sinRoll * sinPitchSinYaw;
+
+        // alternative solution from:
+        // http://is.gd/6HdEB
+        //
+        // double c1 = Math.cos(yaw/2);
+        // double s1 = Math.sin(yaw/2);
+        // double c2 = Math.cos(pitch/2);
+        // double s2 = Math.sin(pitch/2);
+        // double c3 = Math.cos(roll/2);
+        // double s3 = Math.sin(roll/2);
+        // double c1c2 = c1*c2;
+        // double s1s2 = s1*s2;
+        // w =c1c2*c3 - s1s2*s3;
+        // x =c1c2*s3 + s1s2*c3;
+        // y =s1*c2*c3 + c1*s2*s3;
+        // z =c1*s2*c3 - s1*c2*s3;
 
         return q;
     }
@@ -318,7 +336,7 @@ public class Quaternion {
 
     public Quaternion normalize() {
         float mag = (float) Math.sqrt(x * x + y * y + z * z + w * w);
-        if (mag > 0) {
+        if (mag > MathUtils.EPS) {
             mag = 1f / mag;
             x *= mag;
             y *= mag;
