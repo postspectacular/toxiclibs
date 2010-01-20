@@ -14,6 +14,10 @@ public class Circle extends Ellipse {
         this(c, c.radius.x);
     }
 
+    public Circle(float x, float y, float radius) {
+        super(x, y, radius, radius);
+    }
+
     public Circle(Vec2D origin, float radius) {
         super(origin, radius);
     }
@@ -38,8 +42,12 @@ public class Circle extends Ellipse {
         return super.getCircumference();
     }
 
+    public float getRadius() {
+        return radius.x;
+    }
+
     public Circle setRadius(float r) {
-        super.setRadius(r, r);
+        super.setRadii(r, r);
         return this;
     }
 }

@@ -22,7 +22,7 @@ public class Ellipse extends Vec2D {
 
     public Ellipse(float x, float y, float rx, float ry) {
         super(x, y);
-        setRadius(rx, ry);
+        setRadii(rx, ry);
     }
 
     public Ellipse(Vec2D v, float r) {
@@ -82,15 +82,32 @@ public class Ellipse extends Vec2D {
     }
 
     /**
-     * @return the radius
+     * @return the 2 radii of the ellipse as a Vec2D
      */
-    public Vec2D getRadius() {
+    public Vec2D getRadii() {
         return radius.copy();
     }
 
-    public Ellipse setRadius(float rx, float ry) {
+    /**
+     * Sets the radii of the ellipse to the new values.
+     * 
+     * @param rx
+     * @param ry
+     * @return itself
+     */
+    public Ellipse setRadii(float rx, float ry) {
         radius.set(rx, ry);
         focus = radius.magnitude();
         return this;
+    }
+
+    /**
+     * Sets the radii of the ellipse to the values given by the vector.
+     * 
+     * @param r
+     * @return itself
+     */
+    public Ellipse setRadii(Vec2D r) {
+        return setRadii(r.x, r.y);
     }
 }
