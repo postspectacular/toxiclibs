@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxbWaveTest>
+	<wave offset="0.0" amp="1.0" freq="0.1" ophase="0.0" phase="0.0" />
+	<box z="0.0" y="0.0" x="0.0">
+	</box>
+</jaxbWaveTest>

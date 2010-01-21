@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxbGeomTest>
+	<spline2d tightness="0.25">
+		<p y="0.0" x="0.0" />
+		<p y="0.0" x="0.0" />
+		<p y="0.0" x="0.0" />
+		<p y="0.0" x="0.0" />
+	</spline2d>
+	<spline3d tightness="0.25">
+		<p z="0.0" y="0.0" x="0.0" />
+		<p z="0.0" y="0.0" x="0.0" />
+		<p z="0.0" y="0.0" x="0.0" />
+		<p z="0.0" y="0.0" x="0.0" />
+	</spline3d>
+	<box z="0.0" y="0.0" x="0.0">
+		<extent z="0.0" y="0.0" x="0.0" />
+	</box>
+	<ray z="0.0" y="0.0" x="0.0">
+		<dir z="0.0" y="1.0" x="0.0" />
+	</ray>
+	<sphere radius="1.0" z="0.0" y="0.0" x="0.0" />
+	<quat w="0.0" z="0.0" y="0.0" x="1.0" />
+	<plane z="0.0" y="0.0" x="0.0">
+		<normal z="0.0" y="1.0" x="0.0" />
+	</plane>
+	<tri>
+		<a z="0.0" y="0.0" x="0.0" />
+		<b z="0.0" y="0.0" x="0.0" />
+		<c z="0.0" y="0.0" x="0.0" />
+	</tri>
+	<rect height="200.0" width="100.0" y="0.0" x="0.0" />
+	<quad>
+		<point z="0.0" y="0.0" x="0.0" />
+		<point z="0.0" y="0.0" x="0.0" />
+		<point z="0.0" y="0.0" x="0.0" />
+		<point z="0.0" y="0.0" x="0.0" />
+	</quad>
+</jaxbGeomTest>
