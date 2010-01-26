@@ -36,6 +36,11 @@ public class MathUtils {
     public static final float SQRT2 = (float) Math.sqrt(2);
 
     /**
+     * Square root of 3
+     */
+    public static final float SQRT3 = (float) Math.sqrt(3);
+
+    /**
      * Log(2)
      */
     public static final float LOG2 = (float) Math.log(2);
