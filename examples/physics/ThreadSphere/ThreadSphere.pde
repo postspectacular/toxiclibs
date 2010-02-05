@@ -52,9 +52,9 @@ void setup() {
   ParticleConstraint sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);
   physics=new VerletPhysics();
   // weak gravity along Y axis
-  physics.gravity=Vec3D.Y_AXIS.scale(0.01);
+  physics.setGravity(Vec3D.Y_AXIS.scale(0.01));
   // set bounding box to 110% of sphere radius
-  physics.worldBounds=new AABB(new Vec3D(),new Vec3D(SPHERE_RADIUS,SPHERE_RADIUS,SPHERE_RADIUS).scaleSelf(1.1));
+  physics.setWorldBounds(new AABB(new Vec3D(),new Vec3D(SPHERE_RADIUS,SPHERE_RADIUS,SPHERE_RADIUS).scaleSelf(1.1)));
   VerletParticle prev=null;
   for(int i=0; i<NUM_PARTICLES; i++) {
     // create particles at random positions outside sphere
@@ -81,7 +81,7 @@ void draw() {
   // draw visual reference for collision sphere
   sphere(SPHERE_RADIUS);
   // and world bounds
-  box(physics.worldBounds.getExtent().x*2);
+  box(physics.getWorldBounds().getExtent().x*2);
   // move head to mouse pos in XY plane
   head.set(mouseX-width/2,mouseY-height/2,0);
   // also apply sphere constraint to head

@@ -46,7 +46,7 @@ void setup() {
   size(1280,720,OPENGL);
   smooth();
   physics=new VerletPhysics2D();
-  physics.gravity=new Vec2D(0,0.1);
+  physics.setGravity(new Vec2D(0,0.1));
   physics.setWorldBounds(new Rect(0,0,width,height));
   for(int y=0,idx=0; y<DIM; y++) {
     for(int x=0; x<DIM; x++) {

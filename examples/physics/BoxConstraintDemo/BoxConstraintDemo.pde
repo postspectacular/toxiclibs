@@ -77,7 +77,7 @@ void draw() {
 void initPhysics() {
   // setup physics engine
   physics=new VerletPhysics();
-  physics.gravity=Vec3D.Y_AXIS.scale(0.05);
+  physics.setGravity(Vec3D.Y_AXIS.scale(0.05));
   VerletParticle prev=null;
   // create particle string
   // and assign boxes as constraints to each particle

@@ -56,7 +56,7 @@ public class VerletSpring2D {
 
     /**
      * Spring strength, possible value range depends on engine configuration
-     * (time step, friction)
+     * (time step, drag)
      */
     protected float strength;
 

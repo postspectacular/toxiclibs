@@ -1,7 +1,7 @@
 void computeVolume() {
   float cellSize=(float)DIM*2/GRID;
   Vec3D pos=new Vec3D();
-  Vec3D offset=physics.worldBounds.getMin();
+  Vec3D offset=physics.getWorldBounds().getMin();
   float[] volumeData=volume.getData();
   for(int z=0,index=0; z<GRID; z++) {
     pos.z=z*cellSize+offset.z;

@@ -1,6 +1,6 @@
 void initPhysics() {
   physics=new VerletPhysics();
-  physics.worldBounds=new AABB(new Vec3D(),new Vec3D(DIM,DIM,DIM));
+  physics.setWorldBounds(new AABB(new Vec3D(),new Vec3D(DIM,DIM,DIM)));
   if (surface!=null) {
     surface.reset();
     mesh.clear();
@@ -12,7 +12,7 @@ void updateParticles() {
   Vec3D grav=Vec3D.Y_AXIS.copy();
   grav.rotateX(mouseY*0.01);
   grav.rotateY(mouseX*0.01);
-  physics.gravity.set(grav.scaleSelf(2));
+  physics.setGravity(grav.scaleSelf(2));
   numP=physics.particles.size();
   if (random(1)<0.8 && numP<NUM_PARTICLES) {
     VerletParticle p=new VerletParticle(new Vec3D(random(-1,1)*10,-DIM,random(-1,1)*10));

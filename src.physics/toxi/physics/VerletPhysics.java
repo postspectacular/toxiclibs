@@ -60,29 +60,29 @@ public class VerletPhysics {
     public ArrayList<VerletSpring> springs;
 
     /**
-     * Default friction value = 0.15
+     * Default drag value = 0.0
      */
-    public float friction = 0.15f;
+    protected float drag = 0.0f;
 
     /**
      * Default time step = 1.0
      */
-    public float timeStep = 1.0f;
+    protected float timeStep = 1.0f;
 
     /**
      * Default iterations for verlet solver = 50
      */
-    public int numIterations = 50;
+    protected int numIterations = 50;
 
     /**
      * Gravity vector (by default inactive)
      */
-    public Vec3D gravity = new Vec3D();
+    protected Vec3D gravity = new Vec3D();
 
     /**
      * Optional 3D bounding box to constrain particles too
      */
-    public AABB worldBounds;
+    protected AABB worldBounds;
 
     /**
      * Initializes a Verlet engine instance using the default values.
@@ -99,19 +99,19 @@ public class VerletPhysics {
      *            3D gravity vector
      * @param numIterations
      *            iterations per time step for verlet solver
-     * @param friction
-     *            friction value 0...1
+     * @param drag
+     *            drag value 0...1
      * @param timeStep
      *            time step for calculating forces
      */
-    public VerletPhysics(Vec3D gravity, int numIterations, float friction,
+    public VerletPhysics(Vec3D gravity, int numIterations, float drag,
             float timeStep) {
         this();
         if (gravity != null) {
             this.gravity.set(gravity);
         }
         this.numIterations = numIterations;
-        this.friction = friction;
+        this.drag = drag;
         this.timeStep = timeStep;
     }
 
@@ -175,6 +175,27 @@ public class VerletPhysics {
     }
 
     /**
+     * @return the drag
+     */
+    public float getDrag() {
+        return drag;
+    }
+
+    /**
+     * @return the gravity
+     */
+    public Vec3D getGravity() {
+        return gravity;
+    }
+
+    /**
+     * @return the numIterations
+     */
+    public int getNumIterations() {
+        return numIterations;
+    }
+
+    /**
      * Attempts to find the spring element between the 2 particles supplied
      * 
      * @param a
@@ -190,6 +211,20 @@ public class VerletPhysics {
             }
         }
         return null;
+    }
+
+    /**
+     * @return the timeStep
+     */
+    public float getTimeStep() {
+        return timeStep;
+    }
+
+    /**
+     * @return the worldBounds
+     */
+    public AABB getWorldBounds() {
+        return worldBounds;
     }
 
     /**
@@ -230,6 +265,38 @@ public class VerletPhysics {
     }
 
     /**
+     * @param drag
+     *            the drag to set
+     */
+    public void setDrag(float drag) {
+        this.drag = drag;
+    }
+
+    /**
+     * @param gravity
+     *            the gravity to set
+     */
+    public void setGravity(Vec3D gravity) {
+        this.gravity = gravity;
+    }
+
+    /**
+     * @param numIterations
+     *            the numIterations to set
+     */
+    public void setNumIterations(int numIterations) {
+        this.numIterations = numIterations;
+    }
+
+    /**
+     * @param timeStep
+     *            the timeStep to set
+     */
+    public void setTimeStep(float timeStep) {
+        this.timeStep = timeStep;
+    }
+
+    /**
      * Sets bounding box
      * 
      * @param world
@@ -257,7 +324,7 @@ public class VerletPhysics {
      * Updates all particle positions
      */
     protected void updateParticles() {
-        Vec3D force = gravity.scale((1.0f - friction) * timeStep * timeStep);
+        Vec3D force = gravity.scale((1.0f - drag) * timeStep * timeStep);
         for (VerletParticle p : particles) {
             p.update(force);
         }

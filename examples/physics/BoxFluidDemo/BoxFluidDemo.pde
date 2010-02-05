@@ -101,7 +101,7 @@ void draw() {
   noFill();
   stroke(255,192);
   strokeWeight(1);
-  box(physics.worldBounds.getExtent().x*2);
+  box(physics.getWorldBounds().getExtent().x*2);
   if (showPhysics) {
     strokeWeight(4);
     stroke(0);
