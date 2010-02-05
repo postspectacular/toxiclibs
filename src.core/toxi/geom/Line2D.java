@@ -10,8 +10,8 @@ public class Line2D {
             COINCIDENT, PARALLEL, NON_INTERSECTING, INTERSECTING
         }
 
-        protected final Type type;
-        protected final Vec2D pos;
+        private final Type type;
+        private final Vec2D pos;
 
         public LineIntersection(Type type, Vec2D pos) {
             this.type = type;
@@ -22,7 +22,7 @@ public class Line2D {
          * @return the pos
          */
         public Vec2D getPos() {
-            return pos;
+            return pos.copy();
         }
 
         /**
@@ -48,6 +48,21 @@ public class Line2D {
         return new Line2D(a.copy(), b.copy());
     }
 
+    public Vec2D getNormal() {
+        return b.sub(a).perpendicular();
+    }
+
+    /**
+     * Computes intersection between this and the given line. The returned value
+     * is a {@link LineIntersection} instance and contains both the type of
+     * intersection as well as the intersection point (if existing).
+     * 
+     * Based on: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+     * 
+     * @param l
+     *            line to intersect with
+     * @return intersection result
+     */
     public LineIntersection intersectLine(Line2D l) {
         LineIntersection isec = null;
         float denom =
