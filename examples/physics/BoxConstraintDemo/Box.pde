@@ -14,7 +14,7 @@ class BoxConstraint implements ParticleConstraint {
 
   public void apply(VerletParticle p) {
     if (p.isInAABB(box)) {
-      intersectRay.dir=box.sub(p).normalize();
+      intersectRay.setDirection(box.sub(p).normalize());
       p.set(box.intersectsRay(intersectRay,0,Float.MAX_VALUE));
     }
   }

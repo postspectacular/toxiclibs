@@ -35,8 +35,8 @@ import toxi.physics.constraints.*;
 
 BoxConstraint[] boxes=new BoxConstraint[2];
 
-int NUM_PARTICLES = 30;
-int REST_LENGTH=20;
+int NUM_PARTICLES = 90;
+int REST_LENGTH=10;
 
 VerletPhysics physics;
 VerletParticle head;
@@ -77,7 +77,7 @@ void draw() {
 void initPhysics() {
   // setup physics engine
   physics=new VerletPhysics();
-  physics.gravity=Vec3D.Y_AXIS.scale(0.02);
+  physics.gravity=Vec3D.Y_AXIS.scale(0.05);
   VerletParticle prev=null;
   // create particle string
   // and assign boxes as constraints to each particle
