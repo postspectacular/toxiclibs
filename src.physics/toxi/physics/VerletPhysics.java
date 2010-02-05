@@ -65,9 +65,9 @@ public class VerletPhysics {
     public float friction = 0.15f;
 
     /**
-     * Default time step = 0.02
+     * Default time step = 1.0
      */
-    public float timeStep = 0.01f;
+    public float timeStep = 1.0f;
 
     /**
      * Default iterations for verlet solver = 50
