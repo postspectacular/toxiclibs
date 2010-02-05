@@ -1,24 +1,9 @@
-class BoxConstraint implements ParticleConstraint {
+class VisibleBoxConstraint extends BoxConstraint {
 
-  public AABB box;
-  protected Ray3D intersectRay;
-
-  public BoxConstraint(Vec3D min, Vec3D max) {
-    this(AABB.fromMinMax(min,max));
+  public VisibleBoxConstraint(Vec3D min, Vec3D max) {
+    super(min,max);
   }
-
-  public BoxConstraint(AABB box) {
-    this.box=box;
-    this.intersectRay=new Ray3D(box,new Vec3D());
-  }
-
-  public void apply(VerletParticle p) {
-    if (p.isInAABB(box)) {
-      intersectRay.setDirection(box.sub(p).normalize());
-      p.set(box.intersectsRay(intersectRay,0,Float.MAX_VALUE));
-    }
-  }
-
+  
   public void draw() {
     Vec3D m=box.getMin();
     Vec3D n=box.getMax();
