@@ -130,6 +130,9 @@ public class GrayScott {
         return isTiling;
     }
 
+    /**
+     * Resets the simulation matrix to an initial, clean state.
+     */
     public void reset() {
         for (int i = 0; i < uu.length; i++) {
             uu[i] = 1.0f;
