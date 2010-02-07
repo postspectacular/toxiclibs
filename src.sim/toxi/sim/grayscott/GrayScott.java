@@ -3,6 +3,15 @@ package toxi.sim.grayscott;
 import toxi.geom.Rect;
 import toxi.math.MathUtils;
 
+/**
+ * Implementation of the Gray-Scott reaction diffusion model described in detail
+ * on the links below:
+ * <ul>
+ * <li>http://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/</li>
+ * <li>http://ix.cs.uoregon.edu/~jlidbeck/java/rd/</li>
+ * <li>http://www.mrob.com/pub/comp/xmorphia/</li>
+ * </ul>
+ */
 public class GrayScott {
 
     public float[] u, v;
@@ -13,18 +22,19 @@ public class GrayScott {
     protected float f, k;
     protected float dU, dV;
 
-    protected boolean isWrapping;
+    protected boolean isTiling;
 
-    public GrayScott(int width, int height, float f, float k, float dU,
-            float dV, boolean wrap) {
+    public GrayScott(int width, int height, boolean wrap) {
         this.width = width;
         this.height = height;
         this.u = new float[width * height];
         this.v = new float[u.length];
         this.uu = new float[u.length];
         this.vv = new float[u.length];
-        this.isWrapping = wrap;
-        setCoefficients(f, k, dU, dV);
+        this.isTiling = wrap;
+        reset();
+        // default config
+        setCoefficients(0.023f, 0.077f, 0.16f, 0.08f);
     }
 
     /**
@@ -79,9 +89,9 @@ public class GrayScott {
     /**
      * Extension point for subclasses to modulate the F coefficient of the
      * reaction diffusion, based on spatial (or other) parameters. This method
-     * is called for every cell/pixel of the simulation space and can be used to
-     * create parameter gradients, animations and other spatial or temporal
-     * modulations.
+     * is called for every cell/pixel of the simulation space from the main
+     * {@link #update(float)} cycle and can be used to create parameter
+     * gradients, animations and other spatial or temporal modulations.
      * 
      * @param x
      * @param y
@@ -113,6 +123,13 @@ public class GrayScott {
         return k;
     }
 
+    /**
+     * @return the isTiling
+     */
+    public boolean isTiling() {
+        return isTiling;
+    }
+
     public void reset() {
         for (int i = 0; i < uu.length; i++) {
             uu[i] = 1.0f;
@@ -121,8 +138,10 @@ public class GrayScott {
     }
 
     public void seedImage(int[] pixels, int imgWidth, int imgHeight) {
-        int xo = (width - imgWidth) / 2;
-        int yo = (height - imgHeight) / 2;
+        int xo = MathUtils.clip((width - imgWidth) / 2, 0, width - 1);
+        int yo = MathUtils.clip((height - imgHeight) / 2, 0, height - 1);
+        imgWidth = MathUtils.min(imgWidth, width);
+        imgHeight = MathUtils.min(imgHeight, height);
         for (int y = 0; y < imgHeight; y++) {
             int i = y * imgWidth;
             for (int x = 0; x < imgWidth; x++) {
@@ -181,9 +200,12 @@ public class GrayScott {
      * @param h
      */
     public void setRect(int x, int y, int w, int h) {
-        reset();
-        for (int yy = y - h / 2; yy < y + h / 2; yy++) {
-            for (int xx = x; xx < x + w; x++) {
+        int mix = MathUtils.clip(x - w / 2, 0, width);
+        int max = MathUtils.clip(x + w / 2, 0, width);
+        int miy = MathUtils.clip(y - h / 2, 0, height);
+        int may = MathUtils.clip(y + h / 2, 0, height);
+        for (int yy = miy; yy < may; yy++) {
+            for (int xx = mix; xx < max; xx++) {
                 int idx = yy * width + xx;
                 uu[idx] = 0.5f;
                 vv[idx] = 0.25f;
@@ -193,6 +215,14 @@ public class GrayScott {
 
     public void setRect(Rect r) {
         setRect((int) r.x, (int) r.y, (int) r.width, (int) r.height);
+    }
+
+    /**
+     * @param isTiling
+     *            the isTiling to set
+     */
+    public void setTiling(boolean isTiling) {
+        this.isTiling = isTiling;
     }
 
     public void update(float t) {
@@ -236,7 +266,7 @@ public class GrayScott {
             }
         }
 
-        if (isWrapping) {
+        if (isTiling) {
             int w2 = w1 - 1;
             int idxH1 = h1 * width;
             int idxH2 = (h1 - 1) * width;
