@@ -7,8 +7,8 @@ toxi.physics.*
 This library also depends on the following other packages,
 get them via: http://toxiclibs.googlecode.com/downloads/list
 
-toxi.geom (toxiclibscore-0013 release or later)
-toxi.math (toxiclibscore-0013 release or later)
+toxi.geom (toxiclibscore-0016 release or later)
+toxi.math (toxiclibscore-0016 release or later)
 
 If you're going to use these classes for Processing projects,
 first drop the "verletphysics" folder into the "libraries" folder of your
@@ -21,12 +21,12 @@ http://code.google.com/p/toxiclibs/source
 
 JavaDocs are available in the "docs" folder of each download.
 
-http://toxiclibs.googlecode.com/
+http://toxiclibs.org/
 http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2009 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2010 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

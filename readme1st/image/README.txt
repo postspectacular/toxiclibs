@@ -19,7 +19,7 @@ http://code.google.com/p/toxiclibs/source
 
 JavaDocs are available in the "docs" folder of each download.
 
-http://toxiclibs.googlecode.com/
+http://toxiclibs.org/
 http://postspectacular.com/
 
 Have fun!

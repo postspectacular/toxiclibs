@@ -8,9 +8,8 @@ toxi.color.theory
 This library also depends on the following other packages,
 get them via: http://toxiclibs.googlecode.com/downloads/list
 
-toxi.geom (toxiclibscore-0013 release or later)
-toxi.math (toxiclibscore-0013 release or later)
-toxi.util.datatypes (toxiclibscore-0013 release or later)
+toxi.geom, toxi.math, toxi.util.datatypes
+(all part of toxiclibscore-0015 release or later)
 
 If you're going to use these classes for Processing projects,
 first drop the "colorutils" folder into the "libraries" folder of your
@@ -23,12 +22,12 @@ http://code.google.com/p/toxiclibs/source
 
 JavaDocs are available in the "docs" folder of each download.
 
-http://toxiclibs.googlecode.com/
+http://toxiclibs.org/
 http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2010 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

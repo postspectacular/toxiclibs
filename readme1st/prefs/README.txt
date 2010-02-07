@@ -19,12 +19,12 @@ http://code.google.com/p/toxiclibs/source
 
 JavaDocs are available in the "docs" folder of each download.
 
-http://toxiclibs.googlecode.com/
+http://toxiclibs.org/
 http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2009 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2010 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
