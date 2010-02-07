@@ -146,6 +146,10 @@ public class MathUtils {
         return pow2;
     }
 
+    public static final double clip(double a, double min, double max) {
+        return a < min ? min : (a > max ? max : a);
+    }
+
     public static final float clip(float a, float min, float max) {
         return a < min ? min : (a > max ? max : a);
     }
@@ -294,6 +298,14 @@ public class MathUtils {
         return (int) Math.pow(2, (int) (Math.log(x) / LOG2));
     }
 
+    public static final double max(double a, double b) {
+        return a > b ? a : b;
+    }
+
+    public static final double max(double a, double b, double c) {
+        return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+    }
+
     public static final float max(float a, float b) {
         return a > b ? a : b;
     }
@@ -324,6 +336,14 @@ public class MathUtils {
      */
     public static final int max(int a, int b, int c) {
         return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+    }
+
+    public static final double min(double a, double b) {
+        return a < b ? a : b;
+    }
+
+    public static final double min(double a, double b, double c) {
+        return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c);
     }
 
     public static final float min(float a, float b) {
