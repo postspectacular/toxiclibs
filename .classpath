@@ -11,6 +11,7 @@
 	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
 	<classpathentry kind="src" path="src.data"/>
 	<classpathentry kind="src" path="src.doap"/>
+	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.sim"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
