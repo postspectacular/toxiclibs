@@ -40,17 +40,17 @@ ToneMap toneMap;
 
 void setup() {
   size(256,256);
-  gs=new GrayScott(width,height,false);
+  gs=new CustomGrayScott(width,height,false);
   gs.setCoefficients(0.021,0.076,0.12,0.06);
   // create a color gradient for 256 values
   ColorGradient grad=new ColorGradient();
   // NamedColors are preset colors, but any TColor can be added
   // see javadocs for list of names:
   // http://toxiclibs.org/docs/colorutils/toxi/color/NamedColor.html
-  grad.addColorAt(0,NamedColor.BLACK);
-  grad.addColorAt(128,NamedColor.RED);
-  grad.addColorAt(192,NamedColor.YELLOW);
-  grad.addColorAt(255,NamedColor.WHITE);
+  grad.addColorAt(0,NamedColor.WHITE);
+  grad.addColorAt(128,NamedColor.PINK);
+  grad.addColorAt(192,NamedColor.PURPLE);
+  grad.addColorAt(255,NamedColor.BLACK);
   // this gradient is used to map simulation values to colors
   // the first 2 parameters define the min/max values of the
   // input range (Gray-Scott produces values in the interval of 0.0 - 0.5)
@@ -78,4 +78,22 @@ void draw() {
 void keyPressed() {
   gs.reset();
 }
+
+class CustomGrayScott extends GrayScott {
+
+  public CustomGrayScott(int w, int h, boolean tiling) {
+    super(w,h,tiling);
+  }
+
+  public float getFCoeffAt(int x, int y) {
+    x/=32;
+    return 0==x%2 ? f : f-0.005;
+  }
+
+  public float getKCoeffAt(int x, int y) {
+    return k-y*0.00004;
+  }
+}
+
+
 
