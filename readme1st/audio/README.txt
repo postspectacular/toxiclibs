@@ -1,10 +1,16 @@
+IMPORTANT
+------------------------------------------------------------------------
+This library requires an OpenAL compatible soundcard & driver
+Get the driver from http://openal.org/
+------------------------------------------------------------------------
+
 This is a separate release of a subset of the available classes in the toxiclibs library.
 
 Only the following package is included:
 
 toxi.audio
 
-This library also depends on the following other packages:
+This library also depends on these following other packages:
 
 JOAL (these are bundled with binary distribution):
 net.java.games.joal
