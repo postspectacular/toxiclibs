@@ -187,6 +187,9 @@ public class Triangle {
      * @return true, if point is in triangle.
      */
     public boolean containsPoint(Vec3D p) {
+        if (p.equals(a) || p.equals(b) || p.equals(c)) {
+            return true;
+        }
         Vec3D v1 = p.sub(a).normalize();
         Vec3D v2 = p.sub(b).normalize();
         Vec3D v3 = p.sub(c).normalize();

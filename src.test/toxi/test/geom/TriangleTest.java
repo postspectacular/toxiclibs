@@ -25,6 +25,18 @@ public class TriangleTest extends TestCase {
         assertTrue("not clockwiseYZ", Triangle.isClockwiseInXY(a, b, c));
     }
 
+    public void testContainment() {
+        Vec3D a = new Vec3D(100, 0, 0);
+        Vec3D b = new Vec3D(0, 100, 0);
+        Vec3D c = new Vec3D(0, 0, 100);
+        Triangle t = new Triangle(a, b, c);
+        assertTrue(t.containsPoint(a));
+        assertTrue(t.containsPoint(b));
+        assertTrue(t.containsPoint(c));
+        assertTrue(t.containsPoint(t.computeCentroid()));
+        assertFalse(t.containsPoint(a.add(0.1f, 0, 0)));
+    }
+
     public void testEquilateral() {
         Triangle t =
                 Triangle.createEquilateralFrom(new Vec3D(-100, 0, 0),
