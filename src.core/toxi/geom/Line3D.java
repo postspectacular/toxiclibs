@@ -15,6 +15,18 @@ public class Line3D {
 		return new Line3D(a.copy(), b.copy());
 	}
 
+	public Vec3D getDirection() {
+		return b.sub(a).normalize();
+	}
+
+	public float getLength() {
+		return a.distanceTo(b);
+	}
+
+	public Vec3D getMidPoint() {
+		return a.add(b).scaleSelf(0.5f);
+	}
+
 	public Vec3D getNormal() {
 		return b.cross(a);
 	}

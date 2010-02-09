@@ -50,6 +50,18 @@ public class Line2D {
 		return new Line2D(a.copy(), b.copy());
 	}
 
+	public Vec2D getDirection() {
+		return b.sub(a).normalize();
+	}
+
+	public float getLength() {
+		return a.distanceTo(b);
+	}
+
+	public Vec2D getMidPoint() {
+		return a.add(b).scaleSelf(0.5f);
+	}
+
 	public Vec2D getNormal() {
 		return b.sub(a).perpendicular();
 	}
