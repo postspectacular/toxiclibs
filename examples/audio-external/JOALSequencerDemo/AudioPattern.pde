@@ -139,7 +139,7 @@ class FadeInOutPattern extends AudioPattern {
 
   void onNoteOn(AudioSource note, int ticks) {
     note.setPosition(Vec3D.randomVector().scaleSelf(100)); //random(-1,1)*100,random(-1,1)*100,random(-1,1)*100);
-    note.setGain(automator!=null ? automator.getValue() : 1);
+    note.setGain(automator!=null ? automator.value : 1);
   }
 }
 
