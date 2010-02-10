@@ -1,11 +1,13 @@
 /**
- * GrayScottToneMap shows how to use the ColorGradient & ToneMap classes of the
- * colorutils package to create a tone map for rendering the results of
- * the Gray-Scott reaction-diffusion.
+ * <p>CustomGrayScott shows how to extend the GrayScott class to create spatial
+ * differences in behaviour (i.e. different patterns) through manipulating the
+ * F and K coefficients of the reaction diffusion. The demo also uses the
+ * ColorGradient & ToneMap classes of the colorutils package to create a
+ * tone map for rendering the results of the Gray-Scott reaction-diffusion.</p>
  *
- * usage:
- * click + drag mouse to draw dots used as simulation seed,
- * press any key to reset
+ * <p><strong>Usage:</strong></p>
+ * <p>click + drag mouse to draw dots used as simulation seed,<br/>
+ * press any key to reset</p>
  */
 
 /* 
@@ -40,7 +42,7 @@ ToneMap toneMap;
 
 void setup() {
   size(256,256);
-  gs=new CustomGrayScott(width,height,false);
+  gs=new PatternedGrayScott(width,height,false);
   gs.setCoefficients(0.021,0.076,0.12,0.06);
   // create a color gradient for 256 values
   ColorGradient grad=new ColorGradient();
@@ -48,6 +50,7 @@ void setup() {
   // see javadocs for list of names:
   // http://toxiclibs.org/docs/colorutils/toxi/color/NamedColor.html
   grad.addColorAt(0,NamedColor.WHITE);
+  grad.addColorAt(16,NamedColor.CORNSILK);
   grad.addColorAt(128,NamedColor.PINK);
   grad.addColorAt(192,NamedColor.PURPLE);
   grad.addColorAt(255,NamedColor.BLACK);
@@ -79,9 +82,8 @@ void keyPressed() {
   gs.reset();
 }
 
-class CustomGrayScott extends GrayScott {
-
-  public CustomGrayScott(int w, int h, boolean tiling) {
+class PatternedGrayScott extends GrayScott {
+  public PatternedGrayScott(int w, int h, boolean tiling) {
     super(w,h,tiling);
   }
 
@@ -92,8 +94,7 @@ class CustomGrayScott extends GrayScott {
 
   public float getKCoeffAt(int x, int y) {
     return k-y*0.00004;
-  }
+  } 
 }
-
 
 
