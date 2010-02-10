@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="toxiclibs" default="release">
+    <property file="versions.properties" />
+    <property name="dist.dir" value="../dist" />
+    <target name="release" description="creates mega bundle of all packages">
+        <ant antfile="build_core.xml" />
+        <ant antfile="build_audio.xml" />
+        <ant antfile="build_color.xml" />
+        <ant antfile="build_data.xml" />
+        <ant antfile="build_physics.xml" />
+        <ant antfile="build_sim.xml" />
+        <ant antfile="build_volume.xml" />
+        <zip destfile="${dist.dir}/toxiclibs-complete-${version.core}.zip">
+            <zipgroupfileset dir="${dist.dir}">
+                <include name="toxiclibscore-${version.core}.zip" />
+                <include name="audioutils-${version.audio}.zip" />
+                <include name="colorutils-${version.color}.zip" />
+                <include name="datautils-${version.data}.zip" />
+                <include name="simutils-${version.sim}.zip" />
+                <include name="verletphysics-${version.physics}.zip" />
+                <include name="volumeutils-${version.volume}.zip"/>
+            </zipgroupfileset>
+        </zip>
+    </target>
+</project>

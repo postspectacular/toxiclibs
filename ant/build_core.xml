@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
-	<!-- This needs to change with every release -->
+    <property file="versions.properties"/>
 	<property name="project.name" value="toxiclibscore" />
 	<property name="srcfolder.id" value="core" />
-	<property name="lib.version" value="0016" />
+	<property name="lib.version" value="${version.core}" />
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - toxiclibs core classes for Java &amp; Processing v${lib.version}" />
 	<property name="lib.libs.path" value="../lib" />

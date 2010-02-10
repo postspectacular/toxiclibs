@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
-	<!-- This needs to change with every release -->
+    <property file="versions.properties"/>
 	<property name="project.name" value="imageutils" />
 	<property name="srcfolder.id" value="image" />
-	<property name="lib.version" value="0003" />
+	<property name="lib.version" value="${version.image}" />
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - image and color utilities v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/core.jar" />

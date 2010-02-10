@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
-	<!-- This needs to change with every release -->
+    <property file="versions.properties"/>
 	<property name="project.name" value="datautils" />
 	<property name="srcfolder.id" value="data" />
-	<property name="lib.version" value="0001" />
+	<property name="lib.version" value="${version.data}" />
 	<property name="lib.jdk.level" value="1.6" />
 	<property name="lib.zip.comment" value="${project.name} - remote data utilities v${lib.version}" />
 	<property name="lib.libs.path" value="../lib" />

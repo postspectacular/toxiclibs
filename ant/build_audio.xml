@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
-	<!-- This needs to change with every release -->
+    <property file="versions.properties"/>
 	<property name="project.name" value="audioutils" />
 	<property name="srcfolder.id" value="audio" />
-	<property name="lib.version" value="0005" />
+	<property name="lib.version" value="${version.audio}" />
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - JOAL convenience wrapper &amp; audio utils v${lib.version}" />
 	<property name="lib.libs.path" value="../lib/joal/joal.jar" />
