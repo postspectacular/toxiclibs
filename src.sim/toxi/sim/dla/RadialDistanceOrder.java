@@ -5,14 +5,14 @@ import java.util.Comparator;
 import toxi.geom.Line3D;
 import toxi.geom.Vec3D;
 
-class CircularComparator implements Comparator<Line3D> {
+class RadialDistanceOrder implements Comparator<Line3D> {
 	public Vec3D origin;
 
-	public CircularComparator() {
+	public RadialDistanceOrder() {
 		this(new Vec3D());
 	}
 
-	public CircularComparator(Vec3D origin) {
+	public RadialDistanceOrder(Vec3D origin) {
 		this.origin = origin;
 	}
 

@@ -23,7 +23,7 @@ public class DLA {
 	protected Vec3D dirCurvePoint;
 	protected Vec3D minBounds, maxBounds;
 
-	protected DLAGuideLines outline;
+	protected DLAGuideLines guidlines;
 	protected ArrayList<DLASegment> activeSegments = new ArrayList<DLASegment>();
 
 	protected List<DLAEventListener> listeners = new ArrayList<DLAEventListener>();
@@ -201,7 +201,7 @@ public class DLA {
 						.getLength()
 						* currT));
 			} else {
-				DLASegment s = outline.updatePoint(curveSpeed);
+				DLASegment s = guidlines.updatePoint(curveSpeed);
 				if (!activeSegments.contains(s)) {
 					activeSegments.add(s);
 					numActiveSegments++;
@@ -211,10 +211,10 @@ public class DLA {
 						}
 					}
 				}
-				currCurvePoint = outline.getPoint();
-				dirCurvePoint = outline.getDirection();
+				currCurvePoint = guidlines.getPoint();
+				dirCurvePoint = guidlines.getDirection();
 			}
-			if (outline.isComplete()) {
+			if (guidlines.isComplete()) {
 				if (listeners != null) {
 					for (DLAEventListener l : listeners) {
 						l.dlaAllSegmentsProcessed(this);
