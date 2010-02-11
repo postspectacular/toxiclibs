@@ -1,15 +1,19 @@
 package toxi.sim.dla;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import toxi.geom.Line3D;
 import toxi.geom.Vec3D;
 
 public class DLAGuideLines {
+
+    protected static final Logger logger =
+            Logger.getLogger(DLAGuideLines.class.getName());
 
     public SortedSet<DLASegment> segments;
 
@@ -31,17 +35,15 @@ public class DLAGuideLines {
         segments = new TreeSet<DLASegment>(comparator);
     }
 
-    public void addLineStrip(ArrayList<Vec3D> points) {
-        Vec3D a = null;
-        Vec3D b = null;
-        for (Vec3D p : points) {
-            if (b != null) {
-                DLASegment l = new DLASegment(a, b, p);
-                segments.add(l);
-            }
-            a = b;
-            b = p;
+    public void addLineStrip(List<Vec3D> points) {
+        int numP = points.size();
+        for (int i = 1; i < numP; i++) {
+            Vec3D p = i < numP - 1 ? points.get(i + 1) : null;
+            DLASegment s = new DLASegment(points.get(i - 1), points.get(i), p);
+            logger.info("adding segment: " + s);
+            segments.add(s);
         }
+        System.out.println(segments.size() + " segments");
     }
 
     public Vec3D getDirection() {
@@ -63,7 +65,7 @@ public class DLAGuideLines {
     }
 
     public boolean isComplete() {
-        return !iterator.hasNext();
+        return !iterator.hasNext() && currT >= 1.0;
     }
 
     public DLAGuideLines reset() {
@@ -77,8 +79,8 @@ public class DLAGuideLines {
     public DLASegment updatePoint(double delta) {
         currT += delta;
         if (currT >= 1.0) {
-            currT -= 1.0;
             if (iterator.hasNext()) {
+                currT -= 1.0;
                 currSegment = iterator.next();
                 currPoint = currSegment.a.copy();
             }
