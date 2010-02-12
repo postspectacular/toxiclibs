@@ -24,7 +24,7 @@ public class DLATest extends PApplet implements DLAEventListener {
         System.out.println("all done.");
     }
 
-    public void dlaNewParticleAdded(DLA dla, DLAParticle p) {
+    public void dlaNewParticleAdded(DLA dla, Vec3D p) {
         System.out.println("new particle: " + p);
     }
 
@@ -34,7 +34,7 @@ public class DLATest extends PApplet implements DLAEventListener {
 
     public void draw() {
         background(255);
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             dla.update();
         }
         translate(width / 2, height / 2, 0);
@@ -42,12 +42,13 @@ public class DLATest extends PApplet implements DLAEventListener {
         rotateY(mouseX * 0.01f);
         scale(currScale);
         drawOctree(dla.octree);
+        // drawOctree(dla.octreeCurve);
     }
 
     void drawOctree(PointOctree oc) {
         if (oc.getNumChildren() > 0) {
             noFill();
-            stroke(oc.getDepth() * 24, 50);
+            stroke(0, oc.getDepth() * 16);
             pushMatrix();
             translate(oc.x, oc.y, oc.z);
             box(oc.getSize());
@@ -64,7 +65,7 @@ public class DLATest extends PApplet implements DLAEventListener {
                 stroke(255, 0, 0);
                 beginShape(POINTS);
                 int numP = points.size();
-                for (int i = 0; i < numP; i += 10) {
+                for (int i = 0; i < numP; i += 5) {
                     Vec3D p = points.get(i);
                     vertex(p.x, p.y, p.z);
                 }
@@ -80,18 +81,23 @@ public class DLATest extends PApplet implements DLAEventListener {
         if (key == '=') {
             currScale += 0.1f;
         }
+        if (key == 'x') {
+            dla.save(sketchPath("test.dla"), false);
+        }
     }
 
     public void setup() {
         size(640, 480, OPENGL);
         ArrayList<Vec3D> points = new ArrayList<Vec3D>();
         points.add(new Vec3D(0, 0, 0));
-        points.add(new Vec3D(100, 50, 100));
-        points.add(new Vec3D(100, 100, 0));
-        points.add(new Vec3D(50, 150, -100));
+        points.add(new Vec3D(30, 20, 30));
+        points.add(new Vec3D(40, -10, 0));
+        points.add(new Vec3D(-30, 20, -30));
+        points.add(new Vec3D(-40, -10, 0));
         DLAGuideLines guides = new DLAGuideLines();
-        guides.addLineStrip(new Spline3D(points).computeVertices(24));
-        dla = new DLA(200, guides);
+        guides.addLineStrip(new Spline3D(points).computeVertices(16));
+        dla = new DLA(128, guides);
+        dla.octree.setMinNodeSize(2);
         // dla.addListener(this);
     }
 }

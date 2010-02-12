@@ -30,7 +30,6 @@ public class DLAParticle extends Vec3D {
             set(opos);
             reorientate();
             d = target.sub(this);
-            System.out.println("escaped");
         }
         Vec3D ndir = d.getNormalizedTo(searchSpeed);
         dir.interpolateToSelf(ndir, particleSpeed);

@@ -83,6 +83,7 @@ public class DLAGuideLines {
                 currT -= 1.0;
                 currSegment = iterator.next();
                 currPoint = currSegment.a.copy();
+                logger.info("next segment: " + currSegment);
             }
         }
         return currSegment;
