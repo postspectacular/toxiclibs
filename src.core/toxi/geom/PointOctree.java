@@ -247,13 +247,19 @@ public class PointOctree extends AABB {
      * @return the points
      */
     public List<Vec3D> getPoints() {
-        List<Vec3D> results = new ArrayList<Vec3D>();
+        List<Vec3D> results = null;
         if (points != null) {
-            results.addAll(points);
+            results = new ArrayList<Vec3D>(points);
         } else if (numChildren > 0) {
             for (int i = 0; i < 8; i++) {
                 if (children[i] != null) {
-                    results.addAll(children[i].getPoints());
+                    List<Vec3D> childPoints = children[i].getPoints();
+                    if (childPoints != null) {
+                        if (results == null) {
+                            results = new ArrayList<Vec3D>();
+                        }
+                        results.addAll(childPoints);
+                    }
                 }
             }
         }
