@@ -13,6 +13,10 @@ public class DLASegment extends Line3D {
         this.nextDir = c != null ? c.sub(b).normalize() : dir.copy();
     }
 
+    public Vec3D getDirectionAt(float currT) {
+        return getDirection().interpolateToSelf(nextDir, currT);
+    }
+
     public Vec3D getNextDirection() {
         return nextDir;
     }

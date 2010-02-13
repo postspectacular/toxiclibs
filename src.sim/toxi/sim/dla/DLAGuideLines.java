@@ -53,7 +53,7 @@ public class DLAGuideLines {
         return this;
     }
 
-    public double getCurrentSweepPos() {
+    public double getCurrentSegmentPos() {
         return currT;
     }
 

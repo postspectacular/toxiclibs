@@ -32,37 +32,24 @@ public class DLA {
 
     protected int numActiveSegments = 0;
 
-    protected float snapDistance = 1.8f;
-    protected float snapDistanceSquared = snapDistance * snapDistance;
-    protected float curveAttachDistance = 2;
-    protected float curveAttachDistanceSquared =
-            curveAttachDistance * curveAttachDistance;
+    protected DLAConfiguration config;
 
-    protected float spawnRadius = 12;
-    protected float escapeRadius = 36;
-    protected float particleRadius = 0.25f;
-
-    protected float stickiness = 0.1f;
-    protected float curveAlign = 0.74f;
-
-    protected float curveSpeed = 0.00045f;
-    protected float searchSpeed = snapDistance * 0.66f;
-    protected float particleSpeed = 0.001f;
-
-    protected double guideLineDensity = 0.01;
-    protected float continousGrowthRatio = 0.1f;
-
-    protected boolean isComplete;
-
-    public DLA(float size, DLAGuideLines guides) {
+    public DLA(float size) {
         octree = createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size), size);
         octreeGuides =
                 createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size), size);
         minBounds = Vec3D.MAX_VALUE.copy();
         maxBounds = Vec3D.MIN_VALUE.copy();
-        guidelines = guides;
-        parseGuidelines();
-        updateCurvePoint();
+    }
+
+    public DLA(float size, DLAConfiguration config, DLAGuideLines guides) {
+        this(size);
+        this.config = config;
+        if (guides != null) {
+            this.guidelines = guides;
+            parseGuidelines();
+            updateCurvePoint();
+        }
     }
 
     public DLA addListener(DLAEventListener l) {
@@ -84,6 +71,13 @@ public class DLA {
         }
     }
 
+    protected void alignAttachedParticle(DLAParticle p, Vec3D target) {
+        Vec3D d = p.sub(target).normalize();
+        d.interpolateToSelf(dirCurvePoint, config.getCurveAlign());
+        d.normalizeTo(config.getParticleRadius());
+        p.set(target).addSelf(d);
+    }
+
     /**
      * Checks if the given particle is close to an existing one or a curve. If
      * so, the particle is attached based on the current DLA parameters and the
@@ -93,7 +87,9 @@ public class DLA {
      * @return true, if particle attached.
      */
     protected boolean checkParticle(DLAParticle p) {
-        ArrayList<Vec3D> parts = octree.getPointsWithinSphere(p, snapDistance);
+        ArrayList<Vec3D> parts =
+                octree.getPointsWithinSphere(p, config.snapDistance);
+        float stickiness = config.getStickiness();
         if (parts != null) {
             float minDist = Integer.MAX_VALUE;
             Vec3D found = null;
@@ -104,18 +100,21 @@ public class DLA {
                     found = pp;
                 }
             }
-            if (minDist < snapDistanceSquared
-                    && MathUtils.random(1f) < stickiness) {
+            if (minDist < config.getSnapDistanceSquared()
+                    && Math.random() < stickiness) {
                 alignAttachedParticle(p, found);
                 addParticle(p);
                 return true;
             }
         }
-        if (p.sub(currCurvePoint).magSquared() < curveAttachDistanceSquared) {
-            parts = octreeGuides.getPointsWithinSphere(p, curveAttachDistance);
+        if (p.sub(currCurvePoint).magSquared() < config
+                .getCurveAttachDistanceSquared()) {
+            parts =
+                    octreeGuides.getPointsWithinSphere(p, config
+                            .getCurveAttachDistance());
             if (parts != null) {
                 for (int i = parts.size(); i > 0; i--) {
-                    if (MathUtils.random(1f) < stickiness) {
+                    if (Math.random() < stickiness) {
                         addParticle(p);
                         return true;
                     }
@@ -125,16 +124,10 @@ public class DLA {
         return false;
     }
 
-    private void alignAttachedParticle(DLAParticle p, Vec3D target) {
-        Vec3D d = p.sub(target).normalize();
-        d.interpolateToSelf(dirCurvePoint, curveAlign);
-        d.normalizeTo(particleRadius);
-        p.set(target).addSelf(d);
-    }
-
     public void clear() {
         octree.empty();
         octreeGuides.empty();
+        reset();
     }
 
     protected PointOctree createOctree(Vec3D origin, float size) {
@@ -142,10 +135,10 @@ public class DLA {
     }
 
     /**
-     * @return the continousGrowthRatio
+     * @return the config
      */
-    public float getContinousGrowthRatio() {
-        return continousGrowthRatio;
+    public DLAConfiguration getConfig() {
+        return config;
     }
 
     /**
@@ -160,41 +153,6 @@ public class DLA {
      */
     public DLAParticle getCurrentParticle() {
         return currParticle;
-    }
-
-    /**
-     * @return the curveAlign
-     */
-    public float getCurveAlign() {
-        return curveAlign;
-    }
-
-    /**
-     * @return the curveAttachDistance
-     */
-    public float getCurveAttachDistance() {
-        return curveAttachDistance;
-    }
-
-    /**
-     * @return the curveSpeed
-     */
-    public float getCurveProgressSpeed() {
-        return curveSpeed;
-    }
-
-    /**
-     * @return the escapeRadius
-     */
-    public float getEscapeRadius() {
-        return escapeRadius;
-    }
-
-    /**
-     * @return the guideLineDensity
-     */
-    public double getGuideLineDensity() {
-        return guideLineDensity;
     }
 
     /**
@@ -225,70 +183,25 @@ public class DLA {
         return numParticles;
     }
 
-    /**
-     * @return the particleRadius
-     */
-    public float getParticleRadius() {
-        return particleRadius;
-    }
-
-    /**
-     * @return the particleSpeed
-     */
-    public float getParticleSpeed() {
-        return particleSpeed;
+    public PointOctree getParticleOctree() {
+        return octree;
     }
 
     /**
      * @return the octree
      */
-    public List<Vec3D> getPoints() {
+    public List<Vec3D> getParticles() {
         return octree.getPoints();
     }
 
-    /**
-     * @return the searchSpeed
-     */
-    public float getSearchSpeed() {
-        return searchSpeed;
-    }
-
-    /**
-     * @return the snapDistance
-     */
-    public float getSnapDistance() {
-        return snapDistance;
-    }
-
-    /**
-     * @return the spawnRadius
-     */
-    public float getSpawnRadius() {
-        return spawnRadius;
-    }
-
-    /**
-     * @return the stickiness
-     */
-    public float getStickiness() {
-        return stickiness;
-    }
-
-    /**
-     * @return the isComplete
-     */
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-    public void parseGuidelines() {
+    protected void parseGuidelines() {
         guidelines.reset();
         octreeGuides.empty();
         while (!guidelines.isComplete()) {
-            guidelines.updatePoint(guideLineDensity);
+            double density = config.getGuideLineDensity();
+            guidelines.updatePoint(density);
             Vec3D p = guidelines.getPoint();
             octreeGuides.addPoint(p);
-            System.out.println("added to octree: " + p);
         }
         guidelines.reset();
     }
@@ -297,6 +210,11 @@ public class DLA {
         listeners.remove(l);
         logger.info("removing listener: " + l);
         return this;
+    }
+
+    public void reset() {
+        guidelines.reset();
+        updateCurvePoint();
     }
 
     public void save(String fname, boolean isCentered) {
@@ -332,54 +250,11 @@ public class DLA {
     }
 
     /**
-     * @param continousGrowthRatio
-     *            the continousGrowthRatio to set
+     * @param config
+     *            the config to set
      */
-    public void setContinousGrowthRatio(float continousGrowthRatio) {
-        this.continousGrowthRatio = continousGrowthRatio;
-    }
-
-    /**
-     * @param curveAlign
-     *            the curveAlign to set
-     */
-    public void setCurveAlign(float curveAlign) {
-        this.curveAlign = curveAlign;
-    }
-
-    /**
-     * @param curveAttachDistance
-     *            the curveAttachDistance to set
-     */
-    public void setCurveAttachDistance(float curveAttachDistance) {
-        this.curveAttachDistance = curveAttachDistance;
-        this.curveAttachDistanceSquared =
-                curveAttachDistance * curveAttachDistance;
-    }
-
-    /**
-     * @param curveSpeed
-     *            the curveSpeed to set
-     */
-    public void setCurveProgressSpeed(float curveSpeed) {
-        this.curveSpeed = curveSpeed;
-    }
-
-    /**
-     * @param escapeRadius
-     *            the escapeRadius to set
-     */
-    public void setEscapeRadius(float escapeRadius) {
-        this.escapeRadius = escapeRadius;
-    }
-
-    /**
-     * @param guideLineDensity
-     *            the guideLineDensity to set
-     */
-    public void setGuideLineDensity(double guideLineDensity) {
-        this.guideLineDensity = guideLineDensity;
-        parseGuidelines();
+    public void setConfig(DLAConfiguration config) {
+        this.config = config;
     }
 
     /**
@@ -389,112 +264,61 @@ public class DLA {
     public void setGuidelines(DLAGuideLines guidelines) {
         this.guidelines = guidelines;
         parseGuidelines();
+        updateCurvePoint();
     }
 
-    /**
-     * @param particleRadius
-     *            the particleRadius to set
-     */
-    public void setParticleRadius(float particleRadius) {
-        this.particleRadius = particleRadius;
-    }
-
-    /**
-     * @param particleSpeed
-     *            the particleSpeed to set
-     */
-    public void setParticleSpeed(float particleSpeed) {
-        this.particleSpeed = particleSpeed;
-    }
-
-    /**
-     * @param searchSpeed
-     *            the searchSpeed to set
-     */
-    public void setSearchSpeed(float searchSpeed) {
-        this.searchSpeed = searchSpeed;
-    }
-
-    /**
-     * @param snapDistance
-     *            the snapDistance to set
-     */
-    public void setSnapDistance(float snapDistance) {
-        this.snapDistance = snapDistance;
-        this.snapDistanceSquared = snapDistance * snapDistance;
-    }
-
-    /**
-     * @param spawnRadius
-     *            the spawnRadius to set
-     */
-    public void setSpawnRadius(float spawnRadius) {
-        this.spawnRadius = spawnRadius;
-    }
-
-    /**
-     * @param stickiness
-     *            the stickiness to set
-     */
-    public void setStickiness(float stickiness) {
-        this.stickiness = stickiness;
-    }
-
-    public boolean update() {
+    public void update() {
         if (currParticle == null) {
             Vec3D spawnPos = Vec3D.randomVector();
             spawnPos =
-                    currCurvePoint.add(spawnPos.scale(MathUtils
-                            .random(spawnRadius)));
+                    currCurvePoint.add(spawnPos.scale(MathUtils.random(config
+                            .getSpawnRadius())));
             currParticle =
-                    new DLAParticle(spawnPos, escapeRadius, particleSpeed,
-                            searchSpeed);
+                    new DLAParticle(spawnPos, config.getEscapeRadius(), config
+                            .getParticleSpeed(), config.getSearchSpeed());
         }
         currParticle.update(currCurvePoint);
         if (checkParticle(currParticle)) {
             currParticle = null;
             updateCurvePoint();
         }
-        return currParticle == null;
+    }
+
+    public void update(int numIterations) {
+        for (int i = 0; i < numIterations; i++) {
+            update();
+        }
     }
 
     protected void updateCurvePoint() {
-        if (!isComplete) {
-            // FIXME this logic should be separated out
-            // FIXME need to provide hook for user logic here (listeners or
-            // FIXME abstract class w/ extension points)
-            if (MathUtils.random(1f) < continousGrowthRatio
-                    && numActiveSegments > 0) {
-                DLASegment segment =
-                        activeSegments.get(MathUtils.random(numActiveSegments));
-                float currT = MathUtils.random(1f);
-                dirCurvePoint =
-                        segment.getDirection().interpolateToSelf(
-                                segment.getNextDirection(), currT);
-                dirCurvePoint.normalize();
-                currCurvePoint =
-                        segment.a.add(dirCurvePoint.scale(segment.getLength()
-                                * currT));
-            } else {
-                DLASegment s = guidelines.updatePoint(curveSpeed);
-                if (!activeSegments.contains(s)) {
-                    activeSegments.add(s);
-                    numActiveSegments++;
-                    if (listeners != null) {
-                        for (DLAEventListener l : listeners) {
-                            l.dlaSegmentSwitched(this, s);
-                        }
-                    }
-                }
-                currCurvePoint = guidelines.getPoint();
-                dirCurvePoint = guidelines.getDirection();
-            }
-            if (guidelines.isComplete()) {
-                guidelines.reset();
+        if (Math.random() < config.getContinousGrowthRatio()
+                && numActiveSegments > 0) {
+            DLASegment segment =
+                    activeSegments.get(MathUtils.random(numActiveSegments));
+            float currT = MathUtils.random(1f);
+            dirCurvePoint = segment.getDirectionAt(currT);
+            currCurvePoint =
+                    segment.a.add(dirCurvePoint.scale(segment.getLength()
+                            * currT));
+        } else {
+            DLASegment s = guidelines.updatePoint(config.getCurveSpeed());
+            if (!activeSegments.contains(s)) {
+                activeSegments.add(s);
+                numActiveSegments++;
                 if (listeners != null) {
                     for (DLAEventListener l : listeners) {
-                        l.dlaAllSegmentsProcessed(this);
+                        l.dlaSegmentSwitched(this, s);
                     }
+                }
+            }
+            currCurvePoint = guidelines.getPoint();
+            dirCurvePoint = guidelines.getDirection();
+        }
+        if (guidelines.isComplete()) {
+            guidelines.reset();
+            if (listeners != null) {
+                for (DLAEventListener l : listeners) {
+                    l.dlaAllSegmentsProcessed(this);
                 }
             }
         }
