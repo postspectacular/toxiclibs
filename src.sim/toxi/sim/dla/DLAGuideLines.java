@@ -35,15 +35,26 @@ public class DLAGuideLines {
         segments = new TreeSet<DLASegment>(comparator);
     }
 
-    public void addLineStrip(List<Vec3D> points) {
+    public DLAGuideLines addCurveStrip(List<Vec3D> points) {
         int numP = points.size();
         for (int i = 1; i < numP; i++) {
             Vec3D p = i < numP - 1 ? points.get(i + 1) : null;
             DLASegment s = new DLASegment(points.get(i - 1), points.get(i), p);
-            logger.info("adding segment: " + s);
+            logger.info("adding curve segment: " + s);
             segments.add(s);
         }
-        System.out.println(segments.size() + " segments");
+        return this;
+    }
+
+    public DLAGuideLines addLine(Vec3D a, Vec3D b) {
+        DLASegment s = new DLASegment(a, b, null);
+        logger.info("adding line segment: " + s);
+        segments.add(s);
+        return this;
+    }
+
+    public double getCurrentSweepPos() {
+        return currT;
     }
 
     public Vec3D getDirection() {

@@ -106,10 +106,7 @@ public class DLA {
             }
             if (minDist < snapDistanceSquared
                     && MathUtils.random(1f) < stickiness) {
-                Vec3D d = p.sub(found).normalize();
-                d.interpolateToSelf(dirCurvePoint, curveAlign);
-                d.normalizeTo(particleRadius);
-                p.set(found).addSelf(d);
+                alignAttachedParticle(p, found);
                 addParticle(p);
                 return true;
             }
@@ -126,6 +123,13 @@ public class DLA {
             }
         }
         return false;
+    }
+
+    private void alignAttachedParticle(DLAParticle p, Vec3D target) {
+        Vec3D d = p.sub(target).normalize();
+        d.interpolateToSelf(dirCurvePoint, curveAlign);
+        d.normalizeTo(particleRadius);
+        p.set(target).addSelf(d);
     }
 
     public void clear() {
@@ -147,14 +151,14 @@ public class DLA {
     /**
      * @return the currCurvePoint
      */
-    public Vec3D getCurrCurvePoint() {
+    public Vec3D getCurrentCurvePoint() {
         return currCurvePoint;
     }
 
     /**
      * @return the currParticle
      */
-    public DLAParticle getCurrParticle() {
+    public DLAParticle getCurrentParticle() {
         return currParticle;
     }
 
@@ -175,7 +179,7 @@ public class DLA {
     /**
      * @return the curveSpeed
      */
-    public float getCurveSpeed() {
+    public float getCurveProgressSpeed() {
         return curveSpeed;
     }
 
@@ -222,13 +226,6 @@ public class DLA {
     }
 
     /**
-     * @return the octree
-     */
-    public PointOctree getOctree() {
-        return octree;
-    }
-
-    /**
      * @return the particleRadius
      */
     public float getParticleRadius() {
@@ -240,6 +237,13 @@ public class DLA {
      */
     public float getParticleSpeed() {
         return particleSpeed;
+    }
+
+    /**
+     * @return the octree
+     */
+    public List<Vec3D> getPoints() {
+        return octree.getPoints();
     }
 
     /**
@@ -357,7 +361,7 @@ public class DLA {
      * @param curveSpeed
      *            the curveSpeed to set
      */
-    public void setCurveSpeed(float curveSpeed) {
+    public void setCurveProgressSpeed(float curveSpeed) {
         this.curveSpeed = curveSpeed;
     }
 
