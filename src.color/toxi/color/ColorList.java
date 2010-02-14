@@ -190,22 +190,12 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Creates a color list with the supplied color as first entry.
-     * 
-     * @param c
-     *            color
-     */
-    public ColorList(ReadonlyTColor c) {
-        this.colors.add(c.copy());
-    }
-
-    /**
      * Creates new ColorList from the given array of colors No copies of the
      * given colors are created (shallow copy only).
      * 
      * @param colorArray
      */
-    public ColorList(ReadonlyTColor[] colorArray) {
+    public ColorList(ReadonlyTColor... colorArray) {
         for (ReadonlyTColor c : colorArray) {
             colors.add(c.copy());
         }
