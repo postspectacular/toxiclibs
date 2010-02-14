@@ -1,38 +1,53 @@
 package toxi.sim.automata;
 
-public class CARule2D extends AbstractCARule {
+public class CARule2D implements CARule {
 
-    public CARule2D(byte[] s, byte[] b, int st) {
-        surviveRules = new boolean[9];
+    protected boolean[] survivalRules;
+    protected boolean[] birthRules;
+    protected int stateCount;
+    private boolean isTiling;
+
+    public CARule2D(byte[] s, byte[] b, int st, boolean tiled) {
+        survivalRules = new boolean[9];
         birthRules = new boolean[9];
-        for (int i = 0; i < s.length; i++) {
-            surviveRules[s[i]] = true;
-        }
-        for (int i = 0; i < b.length; i++) {
-            birthRules[b[i]] = true;
-        }
+        setSurvivalRules(s);
+        setBirthRules(b);
         stateCount = st;
+        setTiling(tiled);
     }
 
     public void apply(CAMatrix m) {
         int width = m.getWidth();
         int height = m.getHeight();
         int[] matrix = m.getMatrix();
-        int[] temp = m.getTempBuffer();
-        for (int y = 0; y < height; y++) {
-            // determine up and down cells
-            int up = ((y > 0) ? y - 1 : height - 1) * width;
-            int down = ((y < height - 1) ? y + 1 : 0) * width;
+        int[] temp = m.getSwapBuffer();
+        int maxState = stateCount - 1;
+        int x1, x2, y1, y2;
+        if (isTiling) {
+            x1 = 0;
+            x2 = width;
+            y1 = 0;
+            y2 = height;
+        } else {
+            x1 = 1;
+            x2 = width - 1;
+            y1 = 1;
+            y2 = height - 1;
+        }
+        for (int y = y1; y < y2; y++) {
+            // determine up and down cell indices
+            int up = (y > 0 ? y - 1 : height - 1) * width;
+            int down = (y < height - 1 ? y + 1 : 0) * width;
             int centre = y * width;
-            for (int x = 0; x < width; x++) {
-                // determine left and right cells
-                int left = (x > 0) ? x - 1 : width - 1;
-                int right = (x < width - 1) ? x + 1 : 0;
+            for (int x = x1; x < x2; x++) {
+                // determine left and right cell offsets
+                int left = x > 0 ? x - 1 : width - 1;
+                int right = x < width - 1 ? x + 1 : 0;
                 int currVal = matrix[centre + x];
                 int newVal = currVal;
                 int sum = 0;
                 if (currVal > 1) {
-                    if (currVal < stateCount - 1) {
+                    if (currVal < maxState) {
                         newVal++;
                     } else {
                         newVal = 0;
@@ -51,7 +66,7 @@ public class CARule2D extends AbstractCARule {
                         sum++; // left
                     }
                     if (matrix[centre + right] == 1) {
-                        ++sum; // right
+                        sum++; // right
                     }
                     if (matrix[down + left] == 1) {
                         sum++; // bottom left
@@ -63,9 +78,9 @@ public class CARule2D extends AbstractCARule {
                         sum++; // bottom right
                     }
                     if (currVal != 0) { // centre
-                        if (surviveRules[sum]) {
+                        if (survivalRules[sum]) {
                             newVal = 1;
-                        } else if (currVal < stateCount - 1) {
+                        } else if (currVal < maxState) {
                             newVal++;
                         } else {
                             newVal = 0;
@@ -79,5 +94,41 @@ public class CARule2D extends AbstractCARule {
                 temp[centre + x] = newVal;
             }
         }
+    }
+
+    public int getStateCount() {
+        return stateCount;
+    }
+
+    public boolean isTiling() {
+        return isTiling;
+    }
+
+    public void setBirthRules(byte[] b) {
+        setRuleArray(b, birthRules);
+    }
+
+    protected void setRuleArray(byte[] seed, boolean[] kernel) {
+        for (int i = 0; i < seed.length; i++) {
+            byte id = seed[i];
+            if (id >= 0 && id < kernel.length) {
+                kernel[id] = true;
+            } else {
+                throw new ArrayIndexOutOfBoundsException("invalid rule index: "
+                        + id + " (needs to be less than 9 for a 3x3 kernel");
+            }
+        }
+    }
+
+    public void setStateCount(int num) {
+        stateCount = num;
+    }
+
+    public void setSurvivalRules(byte[] s) {
+        setRuleArray(s, survivalRules);
+    }
+
+    public void setTiling(boolean state) {
+        isTiling = state;
     }
 }
