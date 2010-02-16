@@ -2,7 +2,12 @@
  * MultiColorGradient demonstrates the basic functionality of the ColorGradient
  * class of the toxi.color package.
  *
- * <p>Usage: mouse mouse horizontally to position red & yellow gradient points.</p>
+ * <p><strong>Usage:</strong>
+ * <ul>
+ * <li>mouse mouse horizontally to position red & yellow gradient points.</li>
+ * <li>click mouse button to switch to alternative interpolation function</li>
+ * </ul>
+ * </p>
  */
 /* 
  * Copyright (c) 2008-2009 Karsten Schmidt
@@ -33,6 +38,10 @@ void setup() {
 
 void draw() {
   ColorGradient grad=new ColorGradient();
+  // use alternative interpolation function when mouse is pressed
+  if (mousePressed) {
+    grad.setInterpolator(new CosineInterpolation());
+  }
   grad.addColorAt(0,TColor.BLACK);
   grad.addColorAt(width,TColor.BLUE);
   grad.addColorAt(mouseX,TColor.RED);
