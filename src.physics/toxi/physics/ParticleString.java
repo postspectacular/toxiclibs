@@ -119,7 +119,7 @@ public class ParticleString {
     /**
      * Returns the first particle of the string.
      * 
-     * @return
+     * @return first particle
      */
     public VerletParticle getHead() {
         return particles.get(0);
@@ -128,7 +128,7 @@ public class ParticleString {
     /**
      * Returns number of particles of the string.
      * 
-     * @return
+     * @return particle count
      */
     public int getNumParticles() {
         return particles.size();
@@ -137,7 +137,7 @@ public class ParticleString {
     /**
      * Returns last particle of the string.
      * 
-     * @return
+     * @return last particle
      */
     public VerletParticle getTail() {
         return particles.get(particles.size() - 1);
