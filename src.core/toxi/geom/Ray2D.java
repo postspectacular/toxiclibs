@@ -72,6 +72,19 @@ public class Ray2D extends Vec2D {
         return this;
     }
 
+    /**
+     * Converts the ray into a 2D Line segment with its start point coinciding
+     * with the ray origin and its other end point at the given distance along
+     * the ray.
+     * 
+     * @param dist
+     *            end point distance
+     * @return line segment
+     */
+    public Line2D toLine2DWithPointAtDistance(float dist) {
+        return new Line2D(this, getPointAtDistance(dist));
+    }
+
     public String toString() {
         return "origin: " + super.toString() + " dir: " + dir;
     }

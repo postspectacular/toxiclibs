@@ -79,6 +79,19 @@ public class Ray3D extends Vec3D {
         return this;
     }
 
+    /**
+     * Converts the ray into a 3D Line segment with its start point coinciding
+     * with the ray origin and its other end point at the given distance along
+     * the ray.
+     * 
+     * @param dist
+     *            end point distance
+     * @return line segment
+     */
+    public Line3D toLine3DWithPointAtDistance(float dist) {
+        return new Line3D(this, getPointAtDistance(dist));
+    }
+
     public String toString() {
         return "origin: " + super.toString() + " dir: " + dir;
     }
