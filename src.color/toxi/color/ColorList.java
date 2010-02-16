@@ -630,7 +630,7 @@ public class ColorList implements Iterable<TColor> {
     /**
      * Creates an ARGB integer array of the list items.
      * 
-     * @return
+     * @return all list colors as ARGB values
      */
     public int[] toARGBArray() {
         int[] array = new int[colors.size()];
