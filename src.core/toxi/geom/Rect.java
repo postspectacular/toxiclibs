@@ -9,6 +9,18 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Rect {
 
+    /**
+     * Factory method, constructs a new rectangle from a center point and extent
+     * vector.
+     * 
+     * @param center
+     * @param extent
+     * @return new rect
+     */
+    public static final Rect fromCenterExtent(Vec2D center, Vec2D extent) {
+        return new Rect(center.sub(extent), center.add(extent));
+    }
+
     @XmlAttribute(required = true)
     public float x, y, width, height;
 
@@ -202,6 +214,12 @@ public class Rect {
         y = r.y;
         width = r.width;
         height = r.height;
+        return this;
+    }
+
+    public final Rect setDimension(Vec2D dim) {
+        width = dim.x;
+        height = dim.y;
         return this;
     }
 
