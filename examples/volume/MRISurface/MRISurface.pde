@@ -37,6 +37,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import toxi.geom.*;
+import toxi.geom.util.*;
 import toxi.volume.*;
 import toxi.math.noise.*;
 
@@ -47,6 +48,7 @@ float ISO_THRESHOLD = 0.2;
 Vec3D SCALE=new Vec3D(DIM,DIM,DIM).scaleSelf(8);
 
 IsoSurface surface;
+TriangleMesh mesh;
 
 boolean isWireframe=false;
 
@@ -69,14 +71,13 @@ void setup() {
       for(int x=0; x<256; x+=stride) {
         byte b=mriData[x+sliceIdx];
         cloud[idx++]=(int)(b<0 ? 256+b : b)*mriNormalize;
-        ;
       }
     }
   }
   long t0=System.nanoTime();
   // store in IsoSurface and compute surface mesh for the given threshold value
   surface=new IsoSurface(volume);
-  surface.computeSurface(ISO_THRESHOLD);
+  mesh=surface.computeSurfaceMesh(null,ISO_THRESHOLD);
   float timeTaken=(System.nanoTime()-t0)*1e-6;
   println(timeTaken+"ms to compute "+surface.getNumFaces()+" faces");
 }
@@ -100,15 +101,23 @@ void draw() {
     noStroke();
     fill(255);
   }
-  // draw all faces of the computed mesh 
-  Vec3D[] verts=null;
-  for(int i=0; i<surface.getNumFaces(); i++) {
-    verts=surface.getVerticesForFace(i,verts);
-    vertex(verts[0].x,verts[0].y,verts[0].z);
-    vertex(verts[1].x,verts[1].y,verts[1].z);
-    vertex(verts[2].x,verts[2].y,verts[2].z);
+  // draw all faces of the computed mesh
+  int num=mesh.getNumFaces();
+  for(int i=0; i<num; i++) {
+    TriangleMesh.Face f=mesh.faces.get(i);
+    vertex(f.a);
+    vertex(f.b);
+    vertex(f.c);
   }
   endShape();
+}
+
+void normal(Vec3D v) {
+  normal(v.x,v.y,v.z);
+}
+
+void vertex(Vec3D v) {
+  vertex(v.x,v.y,v.z);
 }
 
 void mousePressed() {
