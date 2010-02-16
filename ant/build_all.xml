@@ -6,7 +6,7 @@
         <ant antfile="build_core.xml" />
         <ant antfile="build_audio.xml" />
         <ant antfile="build_color.xml" />
-        <ant antfile="build_data.xml" />
+        <!-- <ant antfile="build_data.xml" /> -->
         <ant antfile="build_physics.xml" />
         <ant antfile="build_sim.xml" />
         <ant antfile="build_volume.xml" />
@@ -15,7 +15,7 @@
                 <include name="toxiclibscore-${version.core}.zip" />
                 <include name="audioutils-${version.audio}.zip" />
                 <include name="colorutils-${version.color}.zip" />
-                <include name="datautils-${version.data}.zip" />
+                <!-- <include name="datautils-${version.data}.zip" /> -->
                 <include name="simutils-${version.sim}.zip" />
                 <include name="verletphysics-${version.physics}.zip" />
                 <include name="volumeutils-${version.volume}.zip"/>
