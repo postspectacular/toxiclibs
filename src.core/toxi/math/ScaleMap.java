@@ -10,87 +10,124 @@ import toxi.util.datatypes.DoubleRange;
  */
 public class ScaleMap {
 
-	/**
-	 * The actual mapping behaviour function.
-	 * 
-	 * @see toxi.math.InterpolateStrategy
-	 */
-	protected InterpolateStrategy mapFunction = new LinearInterpolation();
+    /**
+     * The actual mapping behaviour function.
+     * 
+     * @see toxi.math.InterpolateStrategy
+     */
+    protected InterpolateStrategy mapFunction = new LinearInterpolation();
 
-	protected double interval;
-	protected double mapRange;
+    protected double interval;
+    protected double mapRange;
 
-	protected DoubleRange in, out;
+    protected DoubleRange in, out;
 
-	/**
-	 * Creates a new instance to map values between the 2 number ranges
-	 * specified. By default linear projection is used.
-	 * 
-	 * @param minIn
-	 * @param maxIn
-	 * @param minOut
-	 * @param maxOut
-	 */
-	public ScaleMap(double minIn, double maxIn, double minOut, double maxOut) {
-		setInputRange(minIn, maxIn);
-		setOutputRange(minOut, maxOut);
-	}
+    /**
+     * Creates a new instance to map values between the 2 number ranges
+     * specified. By default linear projection is used.
+     * 
+     * @param minIn
+     * @param maxIn
+     * @param minOut
+     * @param maxOut
+     */
+    public ScaleMap(double minIn, double maxIn, double minOut, double maxOut) {
+        setInputRange(minIn, maxIn);
+        setOutputRange(minOut, maxOut);
+    }
 
-	/**
-	 * Computes mapped value in the target interval and ensures the input value
-	 * is clipped to source interval.
-	 * 
-	 * @param val
-	 * @return mapped value
-	 */
-	public double getClippedValueFor(double val) {
-		float t = MathUtils.clipNormalized((float) ((val - in.min) / interval));
-		return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
-	}
+    /**
+     * Computes mapped value in the target interval and ensures the input value
+     * is clipped to source interval.
+     * 
+     * @param val
+     * @return mapped value
+     */
+    public double getClippedValueFor(double val) {
+        float t = MathUtils.clipNormalized((float) ((val - in.min) / interval));
+        return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
+    }
 
-	/**
-	 * Computes mapped value in the target interval. Does check if input value
-	 * is outside the input range.
-	 * 
-	 * @param val
-	 * @return mapped value
-	 */
-	public double getMappedValueFor(double val) {
-		float t = (float) ((val - in.min) / interval);
-		return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
-	}
+    /**
+     * @return the middle value of the input range.
+     */
+    public double getInputMedian() {
+        return (in.min + in.max) * 0.5;
+    }
 
-	/**
-	 * Sets new minimum & maximum values for the input range
-	 * 
-	 * @param min
-	 * @param max
-	 */
-	public void setInputRange(double min, double max) {
-		in = new DoubleRange(min, max);
-		interval = max - min;
-	}
+    /**
+     * @return the in
+     */
+    public DoubleRange getInputRange() {
+        return in;
+    }
 
-	/**
-	 * Overrides the mapping function used for the scale conversion.
-	 * 
-	 * @param func
-	 *            interpolate strategy implementation
-	 */
-	public void setMapFunction(InterpolateStrategy func) {
-		mapFunction = func;
-	}
+    /**
+     * @return the mapped middle value of the output range. Depending on the
+     *         mapping function used, this value might be different to the one
+     *         returned by {@link #getOutputMedian()}.
+     */
+    public double getMappedMedian() {
+        return getMappedValueFor(0.5);
+    }
 
-	/**
-	 * Sets new minimum & maximum values for the output/target range
-	 * 
-	 * @param min
-	 *            new min output value
-	 * @param max
-	 *            new max output value
-	 */
-	public void setOutputRange(double min, double max) {
-		out = new DoubleRange(min, max);
-		mapRange = max - min;
-	}
+    /**
+     * Computes mapped value in the target interval. Does check if input value
+     * is outside the input range.
+     * 
+     * @param val
+     * @return mapped value
+     */
+    public double getMappedValueFor(double val) {
+        float t = (float) ((val - in.min) / interval);
+        return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
+    }
+
+    /**
+     * @return the middle value of the output range
+     */
+    public double getOutputMedian() {
+        return (out.min + out.max) * 0.5;
+    }
+
+    /**
+     * @return the output range
+     */
+    public DoubleRange getOutputRange() {
+        return out;
+    }
+
+    /**
+     * Sets new minimum & maximum values for the input range
+     * 
+     * @param min
+     * @param max
+     */
+    public void setInputRange(double min, double max) {
+        in = new DoubleRange(min, max);
+        interval = max - min;
+    }
+
+    /**
+     * Overrides the mapping function used for the scale conversion.
+     * 
+     * @param func
+     *            interpolate strategy implementation
+     */
+    public void setMapFunction(InterpolateStrategy func) {
+        mapFunction = func;
+    }
+
+    /**
+     * Sets new minimum & maximum values for the output/target range
+     * 
+     * @param min
+     *            new min output value
+     * @param max
+     *            new max output value
+     */
+    public void setOutputRange(double min, double max) {
+        out = new DoubleRange(min, max);
+        mapRange = max - min;
+    }
 }
