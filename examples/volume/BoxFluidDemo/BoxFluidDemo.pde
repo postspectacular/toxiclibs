@@ -101,13 +101,14 @@ void draw() {
   noFill();
   stroke(255,192);
   strokeWeight(1);
-  box(physics.worldBounds.getExtent().x*2);
+  box(physics.getWorldBounds().getExtent().x*2);
   if (showPhysics) {
     strokeWeight(4);
     stroke(0);
     for(Iterator i=physics.particles.iterator(); i.hasNext();) {
       VerletParticle p=(VerletParticle)i.next();
-      stroke((p.x + colAmp.x) * 0.5f, (p.y + colAmp.y) * 0.5f, (p.z + colAmp.z) * 0.5f);
+      Vec3D col=p.add(colAmp).scaleSelf(0.5);
+      stroke(col.x,col.y,col.z);
       point(p.x,p.y,p.z);
     }
   } 
