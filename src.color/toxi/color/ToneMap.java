@@ -8,26 +8,36 @@ public class ToneMap {
     public ScaleMap map;
     public ColorList colors;
 
-    public ToneMap(float a, float b, ColorGradient gradient) {
-        this(a, b, gradient.calcGradient());
+    public ToneMap(float min, float max, ColorGradient gradient) {
+        this(min, max, gradient.calcGradient());
     }
 
-    public ToneMap(float a, float b, ColorList c) {
-        map = new ScaleMap(a, b, 0, c.size() - 1);
+    public ToneMap(float min, float max, ColorList c) {
+        map = new ScaleMap(min, max, 0, c.size() - 1);
         colors = c;
     }
 
-    public ToneMap(float a, float b, float c, float d, ReadonlyTColor colA,
-            ReadonlyTColor colB) {
+    public ToneMap(float a, float b, ReadonlyTColor colA, ReadonlyTColor colB) {
+        this(a, b, new ColorList(colA, colB));
+    }
+
+    public ToneMap(float min, float max, ReadonlyTColor colA,
+            ReadonlyTColor colB, int res) {
         ColorGradient g = new ColorGradient();
-        g.addColorAt(c, colA);
-        g.addColorAt(d, colB);
-        colors = g.calcGradient();
-        map = new ScaleMap(a, b, 0, colors.size() - 1);
+        g.addColorAt(0, colA);
+        g.addColorAt(res - 1, colB);
+        colors = g.calcGradient(0, res);
+        map = new ScaleMap(min, max, 0, colors.size() - 1);
     }
 
     public int getARGBToneFor(float t) {
-        return colors.get((int) map.getClippedValueFor(t)).toARGB();
+        int idx;
+        if (colors.size() > 2) {
+            idx = (int) (map.getClippedValueFor(t) + 0.5);
+        } else {
+            idx = (t >= map.getInputMedian() ? 1 : 0);
+        }
+        return colors.get(idx).toARGB();
     }
 
     public ReadonlyTColor getToneFor(float t) {
