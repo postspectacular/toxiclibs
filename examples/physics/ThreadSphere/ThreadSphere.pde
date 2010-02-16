@@ -1,6 +1,6 @@
 /**
  * Thread demo showing the following:
- * - construction of a 2D string made from particles and springs/sticks
+ * - construction of a 3D string made from particles and springs/sticks
  * - dynamic locking & unlocking of particles
  * - usage of the SphereConstraint class to keep particles in/outside the sphere
  *

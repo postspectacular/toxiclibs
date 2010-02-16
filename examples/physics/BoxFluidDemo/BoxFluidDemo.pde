@@ -107,7 +107,8 @@ void draw() {
     stroke(0);
     for(Iterator i=physics.particles.iterator(); i.hasNext();) {
       VerletParticle p=(VerletParticle)i.next();
-      stroke((p.x + colAmp.x) * 0.5f, (p.y + colAmp.y) * 0.5f, (p.z + colAmp.z) * 0.5f);
+      Vec3D col=p.add(colAmp).scaleSelf(0.5);
+      stroke(col.x,col.y,col.z);
       point(p.x,p.y,p.z);
     }
   } 

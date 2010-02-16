@@ -12,7 +12,7 @@ void computeVolume() {
         float val=0;
         for(int i=0; i<numP; i++) {
           Vec3D p=(Vec3D)physics.particles.get(i);
-          float mag=pos.sub(p).magSquared()+0.00001;
+          float mag=pos.distanceToSquared(p)+0.00001;
           val+=1/mag;
         }
         volumeData[index++]=val;
@@ -31,18 +31,18 @@ void drawFilledMesh() {
   mesh.computeVertexNormals();
   for(int i=0; i<num; i++) {
     TriangleMesh.Face f=mesh.faces.get(i);
-    Vec3D n=f.a.normal;
-    fill((f.a.x + colAmp.x) * 0.5f, (f.a.y + colAmp.y) * 0.5f, (f.a.z + colAmp.z) * 0.5f);
-    normal(n.x,n.y,n.z);
-    vertex(f.a.x,f.a.y,f.a.z);
-    n=f.b.normal;
-    fill((f.b.x + colAmp.x) * 0.5f, (f.b.y + colAmp.y) * 0.5f, (f.b.z + colAmp.z) * 0.5f);
-    normal(n.x,n.y,n.z);
-    vertex(f.b.x,f.b.y,f.b.z);
-    n=f.c.normal;
-    fill((f.c.x + colAmp.x) * 0.5f, (f.c.y + colAmp.y) * 0.5f, (f.c.z + colAmp.z) * 0.5f);
-    normal(n.x,n.y,n.z);
-    vertex(f.c.x,f.c.y,f.c.z);
+    Vec3D col=f.a.add(colAmp).scaleSelf(0.5);
+    fill(col.x,col.y,col.z);
+    normal(f.a.normal);
+    vertex(f.a);
+    col=f.b.add(colAmp).scaleSelf(0.5);
+    fill(col.x,col.y,col.z);
+    normal(f.b.normal);
+    vertex(f.b);
+    col=f.c.add(colAmp).scaleSelf(0.5);
+    fill(col.x,col.y,col.z);
+    normal(f.c.normal);
+    vertex(f.c);
   }
 }
 
@@ -51,12 +51,22 @@ void drawWireMesh() {
   int num=mesh.getNumFaces();
   for(int i=0; i<num; i++) {
     TriangleMesh.Face f=mesh.faces.get(i);
-    stroke((f.a.x + colAmp.x) * 0.5f, (f.a.y + colAmp.y) * 0.5f, (f.a.z + colAmp.z) * 0.5f);
-    vertex(f.a.x,f.a.y,f.a.z);
-    stroke((f.b.x + colAmp.x) * 0.5f, (f.b.y + colAmp.y) * 0.5f, (f.b.z + colAmp.z) * 0.5f);
-    vertex(f.b.x,f.b.y,f.b.z);
-    stroke((f.c.x + colAmp.x) * 0.5f, (f.c.y + colAmp.y) * 0.5f, (f.c.z + colAmp.z) * 0.5f);
-    vertex(f.c.x,f.c.y,f.c.z);
+    Vec3D col=f.a.add(colAmp).scaleSelf(0.5);
+    stroke(col.x,col.y,col.z);
+    vertex(f.a);
+    col=f.b.add(colAmp).scaleSelf(0.5);
+    stroke(col.x,col.y,col.z);
+    vertex(f.b);
+    col=f.c.add(colAmp).scaleSelf(0.5);
+    stroke(col.x,col.y,col.z);
+    vertex(f.c);
   }
 }
 
+void normal(Vec3D v) {
+  normal(v.x,v.y,v.z);
+}
+
+void vertex(Vec3D v) {
+  vertex(v.x,v.y,v.z);
+}

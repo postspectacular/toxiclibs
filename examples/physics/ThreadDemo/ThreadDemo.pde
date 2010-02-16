@@ -1,6 +1,6 @@
 /**
  * Thread demo showing the following:
- * - construction of a 2D string made from particles and springs/sticks
+ * - construction of a 2D string made from particles and springs/sticks using the ParticleString2D class 
  * - dynamic locking & unlocking of particles
  *
  * Click the mouse to lock/unlock the end of the string at its current position.
@@ -28,7 +28,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 import processing.opengl.*;
 
 import toxi.physics2d.constraints.*;
@@ -49,18 +49,11 @@ void setup() {
   size(1024,768,OPENGL);
   smooth();
   physics=new VerletPhysics2D();
-  VerletParticle2D prev=null;
-  for(int i=0; i<NUM_PARTICLES; i++) {
-    VerletParticle2D p=new VerletParticle2D(new Vec2D());
-    physics.addParticle(p);
-    if (prev!=null) {
-      physics.addSpring(new VerletSpring2D(prev,p,REST_LENGTH, 0.5));
-    }
-    prev=p;
-  }
-  tail=prev;
-  head=physics.particles.get(0);
+  Vec2D stepDir=new Vec2D(1,1).normalizeTo(REST_LENGTH);
+  ParticleString2D s=new ParticleString2D(physics, new Vec2D(), stepDir, NUM_PARTICLES, 1, 0.1);
+  head=s.getHead();
   head.lock();
+  tail=s.getTail();
 }
 
 void draw() {
@@ -85,8 +78,10 @@ void mousePressed() {
   isTailLocked=!isTailLocked;
   if (isTailLocked) {
     tail.lock();
-  } else {
+  } 
+  else {
     tail.unlock();
   }
 }
+
 

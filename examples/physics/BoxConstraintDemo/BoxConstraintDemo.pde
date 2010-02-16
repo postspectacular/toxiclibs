@@ -9,7 +9,7 @@
  */
 
 /* 
- * Copyright (c) 2009 Karsten Schmidt
+ * Copyright (c) 2010 Karsten Schmidt
  * 
  * This demo & library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,8 +65,8 @@ void draw() {
   beginShape(LINES);
   for(Iterator i=physics.springs.iterator(); i.hasNext();) {
     VerletSpring s=(VerletSpring)i.next();
-    vertex(s.a.x,s.a.y,s.a.z); 
-    vertex(s.b.x,s.b.y,s.b.z);
+    vertex(s.a); 
+    vertex(s.b);
   }
   endShape();
   for(Iterator i=physics.particles.iterator(); i.hasNext();) {
@@ -98,4 +98,7 @@ void keyPressed() {
   }
 }
 
+void vertex(Vec3D v) {
+  vertex(v.x,v.y,v.z);
+}
 
