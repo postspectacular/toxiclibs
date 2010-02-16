@@ -5,9 +5,10 @@
  * ColorGradient & ToneMap classes of the colorutils package to create a
  * tone map for rendering the results of the Gray-Scott reaction-diffusion.</p>
  *
- * <p><strong>Usage:</strong></p>
- * <p>click + drag mouse to draw dots used as simulation seed,<br/>
- * press any key to reset</p>
+ * <p><strong>Usage:</strong><ul>
+ * <li>click + drag mouse to draw dots used as simulation seed</li>
+ * <li>press any key to reset</li>
+ * </ul></p>
  */
 
 /* 
@@ -96,5 +97,6 @@ class PatternedGrayScott extends GrayScott {
     return k-y*0.00004;
   } 
 }
+
 
 

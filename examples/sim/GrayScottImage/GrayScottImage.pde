@@ -1,16 +1,20 @@
 /**
- * Hello Gray-Scott is a very basic demonstration of the underlying
- * reaction-diffusion simulation. This model can be used to produce
- * a wide variety of patterns, both static and animated and is therefore
- * well suited for being combined with other generative techniques.
+ * <p>GrayScottImage uses the seedImage() method to use a bitmap as simulation seed.
+ * In this demo the image is re-applied every frame and the user can adjust the 
+ * F coefficient of the reaction diffusion to produce different patterns emerging
+ * from the boundary of the bitmapped seed. Unlike some other GS demos provided,
+ * this one also uses a wrapped simulation space, creating tiled patterns.</p>
  *
- * usage:
- * click + drag mouse to draw dots used as simulation seed,
- * press any key to reset
+ * <p><strong>usage:</strong></p>
+ * <ul>
+ * <li>click + drag mouse to locally disturb the simulation</li>
+ * <li>press 1-9 to adjust the F parameter of the simulation</li> 
+ * <li>press any other key to reset</li>
+ * </ul>
  */
 
 /* 
- * Copyright (c) 2009 Karsten Schmidt
+ * Copyright (c) 2010 Karsten Schmidt
  * 
  * This demo & library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,7 +45,8 @@ void setup() {
   size(256,256);
   gs=new GrayScott(width,height,true);
   img=loadImage("ti_yong.png");
-  toneMap=new ToneMap(0,0.33,0,256,NamedColor.CRIMSON,NamedColor.WHITE);
+  // create a duo-tone gradient map with 256 steps
+  toneMap=new ToneMap(0,0.33,NamedColor.CRIMSON,NamedColor.WHITE,256);
 }
 
 void draw() {
@@ -67,6 +72,3 @@ void keyPressed() {
     gs.reset();
   }
 }
-
-
-

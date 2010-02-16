@@ -11,6 +11,10 @@
  * <p>The last key feature of the demo deals with the visualization of the octree structure
  * underlying the DLA simulation. Both the tree structure and particle contents are shown.</p>
  *
+ * <p><em>Please note that DLA is an extremely slow & resource intensive process and can take
+ * several hours to complete. You should also increase your max. available memory setting in
+ * Processing to be able to store the possibly several million particles.</em></p>
+ * 
  * <p><strong>Usage:</strong><ul>
  * <li>move mouse to rotate view</li>
  * <li>- / = : adjust zoom</li>
@@ -18,7 +22,6 @@
  * <li>s : save current particles</li>
  * <li>r : restart simulation</li>
  * </ul></p>
- * 
  */
 
 /* 
@@ -149,7 +152,7 @@ void keyPressed() {
 }
 
 class DLAListener extends DLAEventAdapter {
-  
+
   // this method will be called when all guide segments
   // have been processed
   public void dlaAllSegmentsProcessed(DLA dla) {
@@ -161,5 +164,4 @@ class DLAListener extends DLAEventAdapter {
     dla.save(sketchPath("spiral.dla"), false);
   }
 }
-
 

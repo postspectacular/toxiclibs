@@ -1,15 +1,16 @@
 /**
- * GrayScottToneMap shows how to use the ColorGradient & ToneMap classes of the
+ * <p>GrayScottToneMap shows how to use the ColorGradient & ToneMap classes of the
  * colorutils package to create a tone map for rendering the results of
- * the Gray-Scott reaction-diffusion.
+ * the Gray-Scott reaction-diffusion.</p>
  *
- * usage:
- * click + drag mouse to draw dots used as simulation seed,
- * press any key to reset
+ * <p><strong>Usage:</strong><ul>
+ * <li>click + drag mouse to draw dots used as simulation seed</li>
+ * <li>press any key to reset</li>
+ * </ul></p>
  */
 
 /* 
- * Copyright (c) 2009 Karsten Schmidt
+ * Copyright (c) 2010 Karsten Schmidt
  * 
  * This demo & library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -78,4 +79,3 @@ void draw() {
 void keyPressed() {
   gs.reset();
 }
-
