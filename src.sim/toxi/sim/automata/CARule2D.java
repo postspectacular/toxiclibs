@@ -1,22 +1,30 @@
 package toxi.sim.automata;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import toxi.math.MathUtils;
+
 public class CARule2D implements CARule {
 
     protected boolean[] survivalRules;
     protected boolean[] birthRules;
     protected int stateCount;
-    private boolean isTiling;
+    protected float randomBirthChance = 0.15f;
+    protected float randomSurvivalChance = 0.25f;
+    protected boolean isTiling;
+    protected boolean isAutoExpire;
 
-    public CARule2D(byte[] s, byte[] b, int st, boolean tiled) {
-        survivalRules = new boolean[9];
+    public CARule2D(byte[] brules, byte[] srules, int st, boolean tiled) {
         birthRules = new boolean[9];
-        setSurvivalRules(s);
-        setBirthRules(b);
-        stateCount = st;
+        setBirthRules(brules);
+        survivalRules = new boolean[9];
+        setSurvivalRules(srules);
+        stateCount = MathUtils.max(1, st);
         setTiling(tiled);
     }
 
-    public void apply(CAMatrix m) {
+    public void evolve(EvolvableMatrix m) {
         int width = m.getWidth();
         int height = m.getHeight();
         int[] matrix = m.getMatrix();
@@ -47,10 +55,10 @@ public class CARule2D implements CARule {
                 int newVal = currVal;
                 int sum = 0;
                 if (currVal > 1) {
-                    if (currVal < maxState) {
-                        newVal++;
+                    if (isAutoExpire) {
+                        newVal = (newVal + 1) % stateCount;
                     } else {
-                        newVal = 0;
+                        newVal = MathUtils.min(newVal + 1, maxState);
                     }
                 } else {
                     if (matrix[up + left] == 1) {
@@ -80,10 +88,12 @@ public class CARule2D implements CARule {
                     if (currVal != 0) { // centre
                         if (survivalRules[sum]) {
                             newVal = 1;
-                        } else if (currVal < maxState) {
-                            newVal++;
                         } else {
-                            newVal = 0;
+                            if (isAutoExpire) {
+                                newVal = (newVal + 1) % stateCount;
+                            } else {
+                                newVal = MathUtils.min(newVal + 1, maxState);
+                            }
                         }
                     } else {
                         if (birthRules[sum]) {
@@ -100,12 +110,44 @@ public class CARule2D implements CARule {
         return stateCount;
     }
 
+    public boolean isAutoExpire() {
+        return isAutoExpire;
+    }
+
     public boolean isTiling() {
         return isTiling;
     }
 
+    protected byte[] randomArray(double chance) {
+        List<Byte> rules = new ArrayList<Byte>();
+        for (byte i = 0; i < 9; i++) {
+            if (Math.random() < chance) {
+                rules.add(i);
+            }
+        }
+        byte[] r = new byte[rules.size()];
+        for (int i = rules.size() - 1; i >= 0; i--) {
+            r[i] = rules.get(i);
+        }
+        return r;
+    }
+
+    public void randomize() {
+        setRuleArray(randomArray(randomBirthChance), birthRules);
+        setRuleArray(randomArray(randomSurvivalChance), survivalRules);
+    }
+
+    public void setAutoExpire(boolean state) {
+        this.isAutoExpire = state;
+    }
+
     public void setBirthRules(byte[] b) {
         setRuleArray(b, birthRules);
+    }
+
+    public void setRandomProbabilities(float birth, float survival) {
+        randomBirthChance = birth;
+        randomSurvivalChance = survival;
     }
 
     protected void setRuleArray(byte[] seed, boolean[] kernel) {
