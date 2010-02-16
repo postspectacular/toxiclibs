@@ -106,6 +106,10 @@ public class TriangleMesh {
     protected int numVertices;
     protected int numFaces;
 
+    public TriangleMesh() {
+        this("untitled");
+    }
+
     /**
      * Creates a new mesh instance with an initial buffer size of 1000 vertices
      * & 3000 faces.
