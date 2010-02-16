@@ -58,13 +58,17 @@ void draw() {
   for(Iterator i=mesh.faces.iterator(); i.hasNext();) {
     TriangleMesh.Face f=(TriangleMesh.Face)i.next();
     // create vertices for each corner point
-    vertex(f.a.x,f.a.y,f.a.z);
-    vertex(f.b.x,f.b.y,f.b.z);
-    vertex(f.c.x,f.c.y,f.c.z);
+    vertex(f.a);
+    vertex(f.b);
+    vertex(f.c);
   }
   endShape();
   // udpate rotation
   rotation.addSelf(0.014,0.0237);
+}
+
+void vertex(Vec3D v) {
+  vertex(v.x,v.y,v.z);
 }
 
 void mouseMoved() {
@@ -95,4 +99,3 @@ void keyPressed() {
     mesh.clear();
   }
 }
-

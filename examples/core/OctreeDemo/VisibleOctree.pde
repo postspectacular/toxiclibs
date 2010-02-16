@@ -15,7 +15,7 @@ class VisibleOctree extends PointOctree {
   void drawNode(PointOctree n) {
     if (n.getNumChildren() > 0) {
       noFill();
-      stroke(depth, 20);
+      stroke(n.getDepth(), 20);
       pushMatrix(); 
       translate(n.x, n.y, n.z);
       box(n.getNodeSize());
@@ -27,4 +27,3 @@ class VisibleOctree extends PointOctree {
     }
   }
 }
-
