@@ -1,193 +1,966 @@
-0014 - 2009-06-05
---------------------------------------------------------------------------------
+2010-02-16 17:41  toxmeister
 
-2009-06-04 23:45  toxmeister
-	* toxiclibs/ant/build_core.xml,
-	  toxiclibs/readme1st/core/CHANGELOG.txt: updated build version
-	  to 0014 and introduced new changelog format using svn2cl
+	* [r431] toxi/geom/util/TriangleMesh.java: adding default
+	  constructor
 
-2009-05-27 03:23  toxmeister
-	* toxiclibs/examples/core/SplineDebug,
-	  toxiclibs/examples/core/SplineDebug/SplineDebug.pde,
-	  toxiclibs/examples/core/SplineTightness,
-	  toxiclibs/examples/core/SplineTightness/SplineTightness.pde:
-	  adding new spline demos related to computeVertices() bug fix and
-	  the new tightness control parameter
-	* toxiclibs/src.core/toxi/geom/Spline2D.java,
-	  toxiclibs/src.core/toxi/geom/Spline3D.java: intermittent bugfix
-	  for computeVertices() methods in Spline2D/3D. see
-	  http://groups.google.com/group/toxiclibs-users/browse_thread/thread/518f7980a56fdf01
+2010-02-16 15:39  toxmeister
+
+	* [r418] toxi/math/ScaleMap.java: adding getters for input/output
+	  range and range median values (input/output/mapped)
+
+2010-02-16 15:38  toxmeister
+
+	* [r417] toxi/geom/Rect.java: adding fromCenterExtent() factory
+	  method
+
+2010-02-16 15:33  toxmeister
+
+	* [r416] toxi/geom/Ray2D.java, toxi/geom/Ray3D.java: adding
+	  toLineWithPointAtDistance() conversion methods to Ray2D/3D
+
+2010-02-13 16:47  toxmeister
+
+	* [r408] toxi/geom/PointOctree.java: minor updates (more efficient)
+	  to getPoints()
+
+2010-02-12 02:55  toxmeister
+
+	* [r404] toxi/geom/Line3D.java: eclipse re-formatter run
+
+2010-02-12 02:54  toxmeister
+
+	* [r403] toxi/geom/PointOctree.java: minor refactoring/renaming of
+	  fields, eclipse re-formatter run
+
+2010-02-09 13:18  toxmeister
+
+	* [r394] toxi/geom/Triangle.java: bug fix for issue #15,
+	  Triangle.containsPoint() now also includes the actual triangle
+	  vertices, which were previously excluded due to rounding errors,
+	  added new unit test to verify
+
+2010-02-09 01:17  toxmeister
+
+	* [r386] toxi/geom/Line2D.java, toxi/geom/Line3D.java: adding
+	  getDirection(), getLength(), getMidPoint() to Line2D/3D
+
+2010-02-08 23:31  toxmeister
+
+	* [r385] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: removing
+	  splitIntoSegments from Vec2D/3D (moved to Line2D/3D), adding
+	  static min()/max() methods to Vec2D (to be symmetrical with
+	  Vec3D)
+
+2010-02-08 23:29  toxmeister
+
+	* [r384] toxi/geom/Line2D.java, toxi/geom/Line3D.java[ADD]: adding
+	  Line3D class, adding toRay2D()/toRay3D() methods, moving static
+	  Vec2D/3D.splitIntoSegments() into Line2D/3D
+
+2010-02-07 02:41  toxmeister
+
+	* [r381] toxi/math/MathUtils.java: adding double-typed versions of
+	  clip(), min() & max()
+
+2010-02-05 06:57  toxmeister
+
+	* [r374] toxi/geom/Line2D.java: making intersection result
+	  immutable, adding javadocs
+
+2010-01-26 13:13  toxmeister
+
+	* [r372] toxi/geom/Triangle.java, toxi/geom/Triangle2D.java[ADD]:
+	  adding Triangle2D class, adding createEquilateralFrom() factory
+	  method to Triangle2D/3D, adding related tests
+
+2010-01-26 13:12  toxmeister
+
+	* [r371] toxi/geom/Line2D.java[ADD]: adding Line2D & unit tests
+
+2010-01-26 13:11  toxmeister
+
+	* [r370] toxi/math/MathUtils.java: adding SQRT3 constant
+
+2010-01-26 13:10  toxmeister
+
+	* [r369] toxi/math/conversion/UnitTranslator.java: adding area
+	  conversion methods
+
+2010-01-25 12:28  toxmeister
+
+	* [r368] toxi/geom/Polygon2D.java[ADD]: adding Polygon2D class &
+	  test case
+
+2010-01-20 23:57  toxmeister
+
+	* [r366] toxi/geom/util/TriangleMesh.java: minor updates to issues
+	  found by FindBugs
+
+2010-01-20 23:48  toxmeister
+
+	* [r365] toxi/geom/Circle.java, toxi/geom/Ellipse.java: adding
+	  radius only constructors to Ellipse & Circle, adding
+	  intersectsCircle() and getTangentPoints() to Circle
+
+2010-01-20 23:29  toxmeister
+
+	* [r364] toxi/geom/Quaternion.java: forcing normalization of the
+	  axis vector for Quaternion.createFromAxisAngle() since else
+	  results in unpredictable results, adding new unit tests for
+	  Quaternion class
+
+2010-01-20 22:49  toxmeister
+
+	* [r363] toxi/geom/Ray2D.java: fixed Ray2D constructor
+	  NullPointerException for new Ray2D(x,y,d)
+
+2010-01-20 22:48  toxmeister
+
+	* [r362] toxi/geom/Vec2D.java: (FindBugs run) fixed Vec2D.equals()
+	  to check for object type & null instances
+
+2010-01-20 14:55  toxmeister
+
+	* [r360] toxi/geom/Circle.java, toxi/geom/Ellipse.java: renaming
+	  Ellipse.get/setRadius() into plural get/setRadii() to avoid
+	  conflicts with overwriting, adding Circle.get/setRadius()
+	  returning a float instead
+
+2010-01-20 14:37  toxmeister
+
+	* [r359] toxi/geom/Ellipse.java, toxi/geom/Ray3D.java,
+	  toxi/geom/Rect.java: fixing javadocs
+
+2010-01-20 14:36  toxmeister
+
+	* [r358] toxi/geom/Sphere.java: refactored intersectsRay() to
+	  return a float array instead of Vec3D, updating javadocs
+
+2010-01-20 14:21  toxmeister
+
+	* [r357] toxi/geom/Circle.java, toxi/geom/Ellipse.java,
+	  toxi/math/MathUtils.java: refactoring Circle to subclass Ellipse
+	  and adding getArea(), getCircumference() methods, adding SQRT2
+	  constant to MathUtils
+
+2010-01-17 23:50  toxmeister
+
+	* [r349] toxi/geom/Intersector.java: applying eclipse formatter
+
+2010-01-17 23:49  toxmeister
+
+	* [r348] toxi/geom/Sphere.java,
+	  toxi/geom/SphereIntersectorReflector.java: adding
+	  Sphere.intersectsRay() to compute all possible intersection
+	  points, applying reformatting to SphereIntersectorReflector
+
+2010-01-17 23:46  toxmeister
+
+	* [r347] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: adding
+	  constrain(min,max) to Vec2D/3D
+
+2010-01-17 23:29  toxmeister
+
+	* [r346] toxi/geom/Spline2D.java, toxi/geom/Spline3D.java: adding
+	  getDecimatedVertices() to Spline2D/3D
+
+2010-01-17 23:28  toxmeister
+
+	* [r345] toxi/geom/Rect.java: removing static fromMinMax() factory
+	  method again since this shouldn't have been added to begin with
+	  (one of the constructors already does the same)
+
+2010-01-17 23:21  toxmeister
+
+	* [r344] toxi/math/MathUtils.java: fixing floor() for negative
+	  values (thanks to Lex)
+
+2010-01-06 13:17  toxmeister
+
+	* [r342] toxi/geom/Vec3D.java: removing JAXB annotation
+
+2010-01-06 13:16  toxmeister
+
+	* [r341] toxi/geom/AxisAlignedCylinder.java,
+	  toxi/geom/XAxisCylinder.java, toxi/geom/YAxisCylinder.java,
+	  toxi/geom/ZAxisCylinder.java: adding getMajorAxis() to
+	  AxisAlignedCylinder and updating implementation
+
+2010-01-06 13:14  toxmeister
+
+	* [r340] toxi/geom/Vec2D.java: adding Axis enum & accessors to
+	  Vec2D too
+
+2010-01-06 13:10  toxmeister
+
+	* [r339] toxi/geom/Vec3D.java: adding Axis enum to Vec3D and
+	  providing getComponent()/setComponent() methods for reflective
+	  access
+
+2010-01-06 12:30  toxmeister
+
+	* [r338] toxi/geom/AxisAlignedCylinder.java[ADD],
+	  toxi/geom/Circle.java[ADD], toxi/geom/Ellipse.java[ADD],
+	  toxi/geom/Sphere.java, toxi/geom/XAxisCylinder.java[ADD],
+	  toxi/geom/YAxisCylinder.java[ADD],
+	  toxi/geom/ZAxisCylinder.java[ADD]: adding FIXME marker to Sphere
+	  class, adding 2D Circle & Ellipse classes, adding
+	  AxisAlignedCylinder and XYZ implementations
+
+2010-01-05 04:58  toxmeister
+
+	* [r336] toxi/geom/Rect.java: adding Rect.fromMinMax() factory
+	  method, minor refactoring in intersectsRay()
+
+2010-01-05 04:57  toxmeister
+
+	* [r335] toxi/geom/AABB.java: deprecating minX/maxX etc. getters,
+	  refactoring getMin/getMax to avoid re-computing values
+
+2010-01-05 04:50  toxmeister
+
+	* [r334] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: Vec2D/3D:
+	  refactoring closestPointOnLine() to avoid sqrt, adding
+	  reciprocal()/getReciprocal() methods
+
+2010-01-05 04:46  toxmeister
+
+	* [r333] toxi/geom/Ray2D.java, toxi/geom/Ray3D.java: refactored
+	  Ray2D/3D to set direction vector protected, add setter and ensure
+	  dir vector is always normalized, adding javadocs
+
+2009-12-31 12:10  toxmeister
+
+	* [r331] toxi/geom/AABB.java, toxi/geom/Ray2D.java[ADD],
+	  toxi/geom/Rect.java: adding Ray2D class, adding intersectsRay()
+	  and intersectsRect() methods to Rect class, minor changes to AABB
+
+2009-12-11 11:32  toxmeister
+
+	* [r330] toxi/geom/Rect.java: adding copy() and getCentroid to Rect
+	  class
+
+2009-11-30 20:37  toxmeister
+
+	* [r328] toxi/math/MathUtils.java: minor updates to
+	  fastSin/fastCos, switched internally to double
+
+2009-11-23 03:58  toxmeister
+
+	* [r318] toxi/math/waves/AbstractWave.java,
+	  toxi/math/waves/ConstantWave.java,
+	  toxi/math/waves/FMTriangleWave.java: adding/fixing javadocs for
+	  AbstractWave, ConstantWave, FMTriangleWave
+
+2009-11-23 03:57  toxmeister
+
+	* [r317] toxi/geom/util/OBJMesh.java[DEL],
+	  toxi/geom/util/OBJWriter.java, toxi/geom/util/STLReader.java,
+	  toxi/geom/util/TriangleMesh.java: removing obsolete OBJMesh.
+	  Adding javadocs & new saveAsOBJ() method to TriangleMesh, but
+	  removing loadFromBinarySTL() and minor refactoring, adding
+	  javadocs and new loadBinary(InputStream) method to STLReader,
+	  updating OBJWriter with version number & javadocs
+
+2009-11-23 03:50  toxmeister
+
+	* [r316] toxi/geom/Matrix4x4.java, toxi/geom/Quaternion.java,
+	  toxi/geom/Spline2D.java, toxi/geom/Spline3D.java: javadoc fixes &
+	  updates to Matrix4x4 & Quaternion, fixing visibility issues in
+	  Spline2D/3D
+
+2009-11-22 14:05  toxmeister
+
+	* [r315] toxi/math/MathUtils.java,
+	  toxi/math/waves/AMFMSineWave.java,
+	  toxi/math/waves/AbstractWave.java,
+	  toxi/math/waves/ConstantWave.java,
+	  toxi/math/waves/FMHarmonicSquareWave.java,
+	  toxi/math/waves/FMSawtoothWave.java,
+	  toxi/math/waves/FMSineWave.java,
+	  toxi/math/waves/FMSquareWave.java,
+	  toxi/math/waves/FMTriangleWave.java[ADD],
+	  toxi/math/waves/WaveState.java[ADD]: solution for issue #12,
+	  adding push()/pop() to all wave types implementing a stack for
+	  saving WaveStates, fixing reset() to also reset any attached
+	  modulating waves, adding FMTriangleWave type & also adding
+	  AdditiveWaves Processing demo, added INV_PI constant to MathUtils
+
+2009-11-20 05:13  toxmeister
+
+	* [r314] toxi/geom/Quaternion.java: adding interpolateTo/Self
+	  method to be used with InterpolateStrategy just like Vec3D
+
+2009-10-31 00:16  toxmeister
+
+	* [r308] toxi/geom/Spline2D.java, toxi/geom/Spline3D.java: adding
+	  add() method & javadocs to spline classes
+
+2009-10-31 00:02  toxmeister
+
+	* [r307] toxi/geom/AABB.java, toxi/geom/BernsteinPolynomial.java,
+	  toxi/geom/Plane.java, toxi/geom/Quad.java,
+	  toxi/geom/Quaternion.java, toxi/geom/Ray3D.java,
+	  toxi/geom/Rect.java, toxi/geom/Sphere.java,
+	  toxi/geom/Spline2D.java, toxi/geom/Spline3D.java,
+	  toxi/geom/Triangle.java, toxi/geom/Vec3D.java,
+	  toxi/math/waves/AbstractWave.java,
+	  toxi/math/waves/ConstantWave.java, toxi/math/waves/SineWave.java:
+	  adding & refactoring JAXB annotation handling for most classes in
+	  toxi.geom package and where possible in toxi.math.waves. Also
+	  adding JAXBGeomTest app to marshal/unmarshal all supported types.
+	  Related refactoring of spline classes to work with lists instead
+	  of arrays and can be build dynamically (point by point)
+
+2009-10-30 20:15  toxmeister
+
+	* [r305] toxi/geom/AABB.java,
+	  toxi/geom/DimensionalVector.java[DEL], toxi/geom/Plane.java,
+	  toxi/geom/Quaternion.java, toxi/geom/Ray3D.java,
+	  toxi/geom/Rect.java, toxi/geom/Sphere.java,
+	  toxi/geom/Triangle.java, toxi/geom/Vec2D.java,
+	  toxi/geom/Vec3D.java, toxi/geom/util/TriangleMesh.java: phasing
+	  out/removing DimensionalVector interface, adding JAXB annotations
+	  to Vec2D/Vec3D subclasses, updating TriangleMesh & test
+
+2009-10-18 12:08  toxmeister
+
+	* [r303] toxi/math/noise/SimplexNoise.java: fixed bug in
+	  SimplexNoise.fastFloor(x) when x=0 - thanks Lex! The same method
+	  in MathUtils hasn't got this issue...
+
+2009-10-16 02:35  toxmeister
+
+	* [r302] toxi/geom/Quaternion.java, toxi/math/MathUtils.java:
+	  adding set(w,x,y,z) to Quaternion, bug fix to
+	  MathUtils.ceilPower2()
+
+2009-10-15 13:52  toxmeister
+
+	* [r300] toxi/geom/AABB.java, toxi/geom/DimensionalVector.java,
+	  toxi/geom/Quaternion.java, toxi/geom/Vec2D.java,
+	  toxi/geom/Vec3D.java, toxi/geom/util/TriangleMesh.java,
+	  toxi/math/MathUtils.java: deprecated DimensionalVector (was a bad
+	  idea), renamed Quaternion.getValue() into toAxisAngle(), added
+	  getNormalizedTo() to Vec2D/Vec3D, updates to TriangleMesh class
+	  (STL saving/loading), minor tweaks to MathUtils
+
+2009-09-06 21:13  toxmeister
+
+	* [r293] toxi/geom/Quaternion.java: adding interpolatToSelf() to
+	  Quaternion class, fixing interpolation NaN bug caused by loss of
+	  float precision
+
+2009-08-10 07:53  toxmeister
+
+	* [r282] toxi/geom/Matrix4x4.java, toxi/geom/Quaternion.java: minor
+	  additions to Matrix4x4 & Quaternion (for use in QuaternionCamera)
+
+2009-08-02 18:18  toxmeister
+
+	* [r279] toxi/geom/Matrix4x4.java, toxi/geom/Quaternion.java: major
+	  updates & refactoring to Matrix & Quaternion (incl. major API
+	  changes), updated unit tests
+
+2009-08-02 13:13  toxmeister
+
+	* [r278] toxi/geom/util/TriangleMesh.java: refactored TriangleMesh
+	  to use a LinkedHashMap as faster vertex storage, updated unit
+	  test
+
+2009-08-02 11:29  toxmeister
+
+	* [r277] toxi/geom/Vec3D.java: added hashCode method
+
+2009-07-27 15:48  toxmeister
+
+	* [r274] toxi/geom/util/STLReader.java[ADD],
+	  toxi/geom/util/TriangleMesh.java: added binary STLReader and
+	  integrated with TriangleMesh, new related unit test added
+
+2009-07-27 15:47  toxmeister
+
+	* [r273] toxi/geom/Matrix4x4.java: added toArray() and
+	  toFloatArray()
+
+2009-07-27 13:01  toxmeister
+
+	* [r271] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: bugfix for
+	  Vec3D.equalsWithTolerance() and adding for Vec2D as well
+
+2009-07-22 22:23  toxmeister
+
+	* [r269] toxi/geom/util/TriangleMesh.java: more refactoring &
+	  reducing footprint, added getBoundingBox() method since bounds
+	  are not computed automatically anymore
+
+2009-07-22 21:08  toxmeister
+
+	* [r268] toxi/geom/util/TriangleMesh.java: reducing new object
+	  creations and making things final
+
+2009-07-22 19:26  toxmeister
+
+	* [r266] toxi/geom/PointOctree.java: upgrading to Java5 for-loop
+	  syntax, adding empty() method
+
+2009-07-19 12:28  toxmeister
+
+	* [r264] toxi/geom/Matrix4x4.java: updating matrix4x4 class w/
+	  various optimizations
+
+2009-07-19 08:15  toxmeister
+
+	* [r263] toxi/math/MathUtils.java: adding experimental fast sin/cos
+	  approximations. needs further testing
+
+2009-07-19 08:10  toxmeister
+
+	* [r262] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: fixing javadoc
+	  warnings
+
+2009-07-19 08:08  toxmeister
+
+	* [r261] toxi/geom/Rect.java: adding default constructor, copy() &
+	  set() method, deprecated merge() replaced with union() (TODO:
+	  intersect)
+
+2009-07-17 23:59  toxmeister
+
+	* [r258] toxi/geom/util/TriangleMesh.java: minor update to
+	  TriangleMesh, keeping manual vertex/face counter instead of
+	  size() calls
+
+2009-07-15 15:47  toxmeister
+
+	* [r253] toxi/geom/Vec2D.java: adding toxi.data package, folder
+	  structure & build files for remote data (feed) parsing. also
+	  updating (c) info in all README's
+
+2009-07-09 06:39  toxmeister
+
+	* [r252] toxi/geom/Vec3D.java: adding to2DXY(), to2DXZ() and
+	  to2DYZ() conversion methods to Vec3D
+
+2009-07-05 20:39  toxmeister
+
+	* [r251] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: adding
+	  splitIntoSegments for Vec2D (incl. javadoc)
+
+2009-07-05 20:28  toxmeister
+
+	* [r250] toxi/geom/Vec3D.java: updating spherical coords based on
+	  azimuth = positive Y axis, added static splitIntoSegments()
+	  method (plus unit test), added final modifier where possible,
+	  updated javadocs
+
+2009-07-02 09:39  toxmeister
+
+	* [r248] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: added
+	  Vec3D.toSpherical()/toCartesian() methods and added "required"
+	  attrib to @XmlAttribute annotations
+
+2009-06-29 12:41  toxmeister
+
+	* [r244] toxi/geom/util/TriangleMesh.java: removed obsolete
+	  dependency with XYZComparator
+
+2009-06-29 12:40  toxmeister
+
+	* [r243] toxi/geom/util/TriangleMesh.java[ADD]: adding TriangleMesh
+	  class
+
+2009-06-29 12:39  toxmeister
+
+	* [r242] toxi/geom/util/OBJMesh.java,
+	  toxi/geom/util/OBJWriter.java: refactored
+	  OBJWriter.faceWithNormal() into faceWithNormals(), now requesting
+	  3 vertex normals instead of just one per face
+
+2009-06-29 12:08  toxmeister
+
+	* [r241] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: adding JAXB
+	  @XmlAttribute annotation for importing/exporting vectors, changed
+	  comparison method back to (==) in equals() and compareTo(),since
+	  Float.compare(a,b) created weird results
+
+2009-06-29 11:57  toxmeister
+
+	* [r240] toxi/geom/Triangle.java: minor internal changes and
+	  flipped vertex order for normal computation for consistency with
+	  other library parts
+
+2009-06-15 21:54  toxmeister
+
+	* [r238] toxi/geom/Rect.java: added merge() method to form compound
+	  rectangles and minor bug fix in containsPoint()
+
+2009-06-15 21:38  toxmeister
+
+	* [r237] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: added type
+	  information to Comparable implementations and changed compareTo()
+	  to expect Vec's, not generic objects
+
+2009-06-14 20:55  toxmeister
+
+	* [r234] toxi/geom/util/OBJMesh.java: added new class OBJMesh as
+	  basic container for exporting meshes to OBJ, automatically
+	  eliminates duplicate vertices and computes face normals
+	  automatically as long as mesh is convex (no support for vertex
+	  normals yet though)
+
+2009-06-14 20:48  toxmeister
+
+	* [r233] toxi/geom/util/OBJWriter.java: added support for normals,
+	  added methods: normal(), faceWithNormal(), getCurrNormalOffset(),
+	  getCurrVertexOffset(), updated version to 0.26
+
+2009-06-14 20:45  toxmeister
+
+	* [r232] toxi/geom/Vec2D.java: minor improvement to normalize() and
+	  some javadocs
+
+2009-06-14 20:42  toxmeister
+
+	* [r231] toxi/geom/Triangle.java: added computeCentroid(), set()
+	  and toString() methods. Minor improvement to computeNormal()
+
+2009-06-10 00:04  toxmeister
+
+	* [r229] toxi/geom/util/OBJMesh.java[ADD],
+	  toxi/geom/util/OBJWriter.java: added new class OBJMesh and added
+	  getCurrVertexOffset() method to OBJWriter
+
+2009-06-10 00:01  toxmeister
+
+	* [r228] toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: fixed
+	  copy&paste error (accidental Vec3D cast) in
+	  Vec2D.compareTo()/equals(), similar minor change to
+	  Vec3D.compareTo(), added Vec2D.cross() method and Vec2D -> Vec3D
+	  conversions: to3DXY(), to3DXZ() & to3DYZ()
+
+2009-06-04 22:59  toxmeister
+
+	* [r223] toxi/geom/Spline2D.java: removing unnecessary debug output
+	  in computeVertices()
+
+2009-05-27 03:22  toxmeister
+
+	* [r220] toxi/geom/Spline2D.java, toxi/geom/Spline3D.java:
+	  intermittent bugfix for computeVertices() methods in Spline2D/3D.
+	  see
+	  http://groups.google.com/group/toxiclibs-users/browse_thread/thread/9b40ee9cf3dfdb5a
 	  for discussion
 
 2009-05-18 00:39  toxmeister
 
-	* toxiclibs/src.core/toxi/math/ScaleMap.java: fixing javadocs for
-	  ScaleMap methods
-	* toxiclibs/src.core/toxi/geom/Vec2D.java: fixing javadocs for
+	* [r219] toxi/math/ScaleMap.java: fixing javadocs for ScaleMap
+	  methods
+
+2009-05-18 00:38  toxmeister
+
+	* [r218] toxi/geom/Vec2D.java: fixing javadocs for
 	  Vec2D.toCartesian()/toPolar() methods
-	* toxiclibs/src.core/toxi/geom/BernsteinPolynomial.java,
-	  toxiclibs/src.core/toxi/geom/Spline2D.java,
-	  toxiclibs/src.core/toxi/geom/Spline3D.java: adding manual curve
-	  tightness control to Spline2D/3D classes and making
+
+2009-05-18 00:38  toxmeister
+
+	* [r217] toxi/geom/BernsteinPolynomial.java,
+	  toxi/geom/Spline2D.java, toxi/geom/Spline3D.java: adding manual
+	  curve tightness control to Spline2D/3D classes and making
 	  BernsteinPolynomial fields public
 
 2009-04-26 16:21  toxmeister
 
-	* toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: bug fix
-	  for intervals with non-zero minimum values
-
-0013 - 2009-04-21
---------------------------------------------------------------------------------
+	* [r214] toxi/math/ZoomLensInterpolation.java: bug fix for
+	  intervals with non-zero minimum values
 
 2009-04-21 22:32  toxmeister
 
-	* toxiclibs/src.core/toxi/math/ScaleMap.java,
-	  toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: adding
-	  minimal javadocs to ScaleMap & ZoomLens
+	* [r212] toxi/math/ScaleMap.java,
+	  toxi/math/ZoomLensInterpolation.java: adding minimal javadocs to
+	  ScaleMap & ZoomLens
 
 2009-04-21 22:06  toxmeister
 
-	* toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java: bug fix
-	  in setLensStrength to also allow bundling lens types (strength
-	  now correctly clipped to -1 ... +1)
-
-2009-04-21 21:47  toxmeister
-
-	* toxiclibs/examples/core/InterpolateTest/InterpolateTest.pde,
-	  toxiclibs/examples/core/OctreeDemo/OctreeDemo.pde,
-	  toxiclibs/examples/core/OctreeDemo/VisibleOctree.pde,
-	  toxiclibs/examples/core/RayReflectSphere/RayReflectSphere.pde,
-	  toxiclibs/examples/core/ScaleMapDataViz,
-	  toxiclibs/examples/core/ScaleMapDataViz/ScaleMapDataViz.pde,
-	  toxiclibs/examples/core/SimplexNoiseTest/SimplexNoiseTest,
-	  toxiclibs/examples/core/SimplexNoiseTest/SimplexNoiseTest.pde,
-	  toxiclibs/examples/core/SplineBlobTest/SplineBlobTest.pde,
-	  toxiclibs/examples/core/ZoomLens,
-	  toxiclibs/examples/core/ZoomLens/ZoomLens.pde: adding new demos
-	  (ScaleMapDataViz & ZoomLens), adding/updating comments to
-	  existing demos for toxiclib core
+	* [r209] toxi/math/ZoomLensInterpolation.java: bug fix in
+	  setLensStrength to also allow bundling lens types (strength now
+	  correctly clipped to -1 ... +1)
 
 2009-04-19 09:21  toxmeister
 
-	* toxiclibs/src.core/toxi/geom/DimensionalVector.java,
-	  toxiclibs/src.core/toxi/geom/Vec2D.java,
-	  toxiclibs/src.core/toxi/geom/Vec3D.java,
-	  toxiclibs/src.core/toxi/math/CircularInterpolation.java,
-	  toxiclibs/src.core/toxi/math/MathUtils.java,
-	  toxiclibs/src.core/toxi/math/ScaleMap.java,
-	  toxiclibs/src.core/toxi/math/ZoomLensInterpolation.java,
-	  toxiclibs/src.core/toxi/util/datatypes/DoubleRange.java: adding
-	  ScaleMap, ZoomLens, DoubleRange, adding javadocs and minor tweaks
-	  to CircularInterpolation, adding toPolar/toCartesian conversion
-	  to Vec2D
+	* [r206] toxi/geom/DimensionalVector.java, toxi/geom/Vec2D.java,
+	  toxi/geom/Vec3D.java, toxi/math/CircularInterpolation.java,
+	  toxi/math/MathUtils.java, toxi/math/ScaleMap.java[ADD],
+	  toxi/math/ZoomLensInterpolation.java[ADD],
+	  toxi/util/datatypes/DoubleRange.java[ADD]: adding ScaleMap,
+	  ZoomLens, DoubleRange, adding javadocs and minor tweaks to
+	  CircularInterpolation, adding toPolar/toCartesian conversion to
+	  Vec2D
 
 2009-04-04 08:25  toxmeister
 
-	* toxiclibs/src.core/toxi/geom/Rect.java,
-	  toxiclibs/src.core/toxi/geom/Vec2D.java: added float based Rect
-	  class to replace int based java.awt.Rectangle use in Vec2D
+	* [r204] toxi/geom/Rect.java[ADD], toxi/geom/Vec2D.java: added
+	  float based Rect class to replace int based java.awt.Rectangle
+	  use in Vec2D
 
 2009-03-26 18:32  toxmeister
 
-	* toxiclibs/src.core/toxi/math/conversion/UnitTranslator.java:
-	  fixed visibility and made all methods static, added javadocs
+	* [r203] toxi/math/conversion/UnitTranslator.java: fixed visibility
+	  and made all methods static, added javadocs
 
 2009-03-21 12:17  toxmeister
 
-	* toxiclibs/src.core/toxi/geom/Vec2D.java: fixed typo in
-	  Vec2D.isInRectangle() - thanks lenny! :)
+	* [r199] toxi/geom/Vec2D.java: fixed typo in Vec2D.isInRectangle()
+	  - thanks lenny! :)
 
 2009-03-16 20:24  toxmeister
 
-	* toxiclibs/.settings/org.eclipse.jdt.ui.prefs,
-	  toxiclibs/readme1st/core/CHANGELOG.txt,
-	  toxiclibs/src.core/toxi/geom/AABB.java,
-	  toxiclibs/src.core/toxi/geom/DimensionalVector.java,
-	  toxiclibs/src.core/toxi/geom/Plane.java,
-	  toxiclibs/src.core/toxi/geom/PointList.java,
-	  toxiclibs/src.core/toxi/geom/PointOctree.java,
-	  toxiclibs/src.core/toxi/geom/Quaternion.java,
-	  toxiclibs/src.core/toxi/geom/Sphere.java,
-	  toxiclibs/src.core/toxi/geom/SphereIntersectorReflector.java,
-	  toxiclibs/src.core/toxi/geom/Vec2D.java,
-	  toxiclibs/src.core/toxi/geom/Vec3D.java,
-	  toxiclibs/src.test/toxi/test/GeomTestSuite.java: enabled sort
-	  members option in eclipse editor save actions. plus the long
-	  overdue extraction/redistribution of intersection methods from
-	  Vec3D into their new (better suited) parent types... updated
-	  GeomTestSuite to refactored state
+	* [r197] toxi/geom/AABB.java, toxi/geom/DimensionalVector.java,
+	  toxi/geom/Plane.java, toxi/geom/PointList.java,
+	  toxi/geom/PointOctree.java, toxi/geom/Quaternion.java,
+	  toxi/geom/Sphere.java, toxi/geom/SphereIntersectorReflector.java,
+	  toxi/geom/Vec2D.java, toxi/geom/Vec3D.java: enabled sort members
+	  option in eclipse editor save actions. plus the long overdue
+	  extraction/redistribution of intersection methods from Vec3D into
+	  their new (better suited) parent types... updated GeomTestSuite
+	  to refactored state
 
 2009-02-27 22:03  toxmeister
 
-	* toxiclibs/src.core, toxiclibs/src.core/toxi/geom/volume,
-	  toxiclibs/src.core/toxi/util,
-	  toxiclibs/src.core/toxi/util/datatypes,
-	  toxiclibs/src.core/toxi/util/datatypes/ArrayUtil.java,
-	  toxiclibs/src.core/toxi/util/datatypes/BiasedFloatRange.java,
-	  toxiclibs/src.core/toxi/util/datatypes/BiasedIntegerRange.java,
-	  toxiclibs/src.core/toxi/util/datatypes/FloatRange.java,
-	  toxiclibs/src.core/toxi/util/datatypes/GenericSet.java,
-	  toxiclibs/src.core/toxi/util/datatypes/IntegerRange.java,
-	  toxiclibs/src.core/toxi/util/datatypes/IntegerSet.java,
-	  toxiclibs/src.core/toxi/util/datatypes/SingletonRegistry.java,
-	  toxiclibs/src.core/toxi/util/datatypes/TypedProperties.java:
-	  renaming src.geom folder into src.core WRT the replacement of
-	  geomutils with toxiclibscore packages, which now also include the
-	  formerly separate prefutils classes. also removing
-	  toxi.geom.volume package from this source folder
+	* [r188] .[CPY], toxi/geom/volume[DEL], toxi/util[ADD],
+	  toxi/util/datatypes[ADD],
+	  toxi/util/datatypes/ArrayUtil.java[ADD],
+	  toxi/util/datatypes/BiasedFloatRange.java[ADD],
+	  toxi/util/datatypes/BiasedIntegerRange.java[ADD],
+	  toxi/util/datatypes/FloatRange.java[ADD],
+	  toxi/util/datatypes/GenericSet.java[ADD],
+	  toxi/util/datatypes/IntegerRange.java[ADD],
+	  toxi/util/datatypes/IntegerSet.java[ADD],
+	  toxi/util/datatypes/SingletonRegistry.java[ADD],
+	  toxi/util/datatypes/TypedProperties.java[ADD]: renaming src.geom
+	  folder into src.core WRT the replacement of geomutils with
+	  toxiclibscore packages, which now also include the formerly
+	  separate prefutils classes. also removing toxi.geom.volume
+	  package from this source folder
 
-2009-02-19 22:15  toxmeister
+2009-02-23 09:36  toxmeister
 
-	* toxiclibs/readme1st/prefs/CHANGELOG.txt,
-	  toxiclibs/src.prefs/toxi/util/datatypes/ArrayUtil.java: added
-	  indexInArray methods to ArrayUtil, updated changelog
+	* [r184] refactored IsoSurface, split out volume data into
+	  VolumetricSpace class and adding volumetric brushes.
+
+2009-02-20 01:36  toxmeister
+
+	* [r183] refactored IsoSurface.getVerticesForFace and added
+	  Processing demos for IsoSurface class visualising 3D SimplexNoise
+	  and MRI scan data
+
+2009-02-19 22:22  toxmeister
+
+	* [r182] added javadocs
+
+2009-02-19 22:14  toxmeister
+
+	* [r180] fixed face index bug in IsoSurface.saveAsOBJ, updated
+	  changelog
+
+2009-02-19 21:10  toxmeister
+
+	* [r179] fixed little endian bug in STLWriter and minor changes to
+	  IsoSurface
+
+2009-02-19 19:19  toxmeister
+
+	* [r178] renamed and move IsoSurface to new package
+	  toxi.geom.volume
+
+2009-02-19 14:40  toxmeister
+
+	* [r177] added marching cubes based IsoVolume class and started
+	  work on issue #9
 
 2009-02-16 02:06  toxmeister
 
-	* toxiclibs/readme1st/geom/CHANGELOG.txt,
-	  toxiclibs/src.geom/toxi/geom/Vec2D.java: Incomplete - task 8:
-	  SIAD additions todo
+	* [r176] Incomplete - task 8: SIAD additions todo
 	  http://code.google.com/p/toxiclibs/issues/detail?id=8
 	  added Vec2D poly test
 
 2009-02-13 13:09  toxmeister
 
-	* toxiclibs/src.geom/toxi/geom/Vec3D.java: issue 7 resolved: fixed
-	  flipped Y/Z coords in Vec3D.rotateX()
+	* [r175] issue 7 resolved: fixed flipped Y/Z coords in
+	  Vec3D.rotateX()
 
 2009-01-30 11:26  toxmeister
 
-	* toxiclibs/ant/build_core.xml, toxiclibs/ant/build_geom.xml,
-	  toxiclibs/src.geom/toxi/geom/BernsteinPolynomial.java,
-	  toxiclibs/src.geom/toxi/geom/DimensionalVector.java,
-	  toxiclibs/src.geom/toxi/geom/Spline2D.java,
-	  toxiclibs/src.geom/toxi/geom/Spline3D.java,
-	  toxiclibs/src.geom/toxi/geom/Vec2D.java,
-	  toxiclibs/src.geom/toxi/geom/Vec3D.java: adding Spline2D and
-	  separating Bernstein, added setXY() to Vec3D and introduced
-	  DimensionalVector interface
+	* [r174] adding Spline2D and separating Bernstein, added setXY() to
+	  Vec3D and introduced DimensionalVector interface
 
 2009-01-28 10:29  toxmeister
 
-	* toxiclibs/src.geom/toxi/math/MathUtils.java: undeprecating &
-	  improving fastPow after discussion with WBlut
+	* [r173] undeprecating & improving fastPow after discussion with
+	  WBlut
 
---------------------------------------------------------------------------------
-Old changelog format for previous versions:
---------------------------------------------------------------------------------
+2008-12-18 20:08  toxmeister
 
-0012 - 2008-12-18
---------------------------------------------------------------------------------
-! switched to Java 1.5 syntax
+	* [r158] switching back to the american spelling (2nd time) and
+	  renaming Color into TColor in the interim until the naming
+	  conflict caused by Processing's pre-processor autoimport is
+	  resolved...
 
-toxi.math.waves
-+ FMSawtoothWave
-+ FMSquareWave
-+ FMBandwidthLimitedSquareWave
-+ ConstantWave
-* made all wave properties public and deprecated the existing getters/setters
+2008-12-15 16:42  toxmeister
 
-toxi.math.MathUtils
-* deprecated fastInverseSqrt(), sqrt(), fastPow() since not faster at all anymore
-* renamed fastFloor() into floor() (it's still faster than Math.floor() though)
-+ added degrees(), radians() for conversion
+	* [r152] adding more javadocs to MathUtils
+
+2008-12-07 00:28  toxmeister
+
+	* [r145] adding type indicators to octree lists and toArray()
+	  method to vector classes
+
+2008-12-05 05:41  toxmeister
+
+	* [r141] global switch to Java 5 syntax (only held it off for P5
+	  compatibility, now obsolete requirement) and
+	  refactoring/restructuring in color package
+
+2008-12-03 21:12  toxmeister
+
+	* [r140] more mathutils deprecation induced corrections and javadoc
+	  fixes
+
+2008-12-03 21:04  toxmeister
+
+	* [r139] reflecting changes done to MathUtils in Vec2D/3D and
+	  adding jitter() methods to both
+
+2008-11-29 22:20  toxmeister
+
+	* [r135] refactoring and deprecation in MathUtils with reflected
+	  changes in Vec2D/3D
+
+2008-11-18 08:18  toxmeister
+
+	* [r133]
+
+2008-11-15 08:21  toxmeister
+
+	* [r131] added 2d version of physics engine, renamed
+	  IParticleConstraint into ParticleConstraint, added
+	  getPerpenticular() to Vec2D, updated ant build files for next
+	  version
+
+2008-11-13 18:24  toxmeister
+
+	* [r126] more color additions
+
+2008-11-03 22:30  toxmeister
+
+	* [r122] added getStringArray to TypedProperties and updated tests
+
+2008-10-02 11:35  toxmeister
+
+	* [r109] renamed FMBandwidthLimitedSquareWave into
+	  FMHarmonicSquareWave for it more technically correct
+
+2008-10-02 00:38  toxmeister
+
+	* [r106] cleaned up, fixed, refactored existing wave generators and
+	  added new ones: constant, sawtooth, square and bw-limited square
+	  (good for a bit bouncy behaviours)
+
+2008-09-19 11:31  toxmeister
+
+	* [r102] fixed bug in Vec2D where distanceTo() only took Vec3D
+	  params
+
+2008-09-08 22:43  toxmeister
+
+	* [r99] lil' javadoc fix
+
+2008-09-08 22:38  toxmeister
+
+	* [r98] more cosmetics on SimplexNoise, cleaned up Quaternion and
+	  Matrix4x4, corrected visibility issues in OBJWriter and added
+	  SimplexNoiseTest Processing example
+
+2008-09-08 21:32  toxmeister
+
+	* [r97] Fixed SimplexNoise bugs in 2D, 3D & 4D versions caused by
+	  some silly (partly typo) mistakes when optimizing Stefan's
+	  original version
+
+2008-08-27 21:24  toxmeister
+
+	* [r96] added Quaternion class
+
+2008-08-27 21:11  toxmeister
+
+	* [r95] fixed bug in octree demo and added few more features to it,
+	  added getters to PointOctree too
+
+2008-07-28 14:38  toxmeister
+
+	* [r94] fixed bug in fastFloor(), added abs() to Vec2D/3D and
+	  switched version number in build_geom.xml
+
+2008-07-28 12:45  toxmeister
+
+	* [r93] added signum/getSignum to Vec2D
+
+2008-07-18 16:24  toxmeister
+
+	* [r86] fixed a bug in Vec3D.closestPointOnLine (thanks to Aaron!)
+
+2008-07-17 13:08  toxmeister
+
+	* [r84] fixed a recursion bug in PointOctree and some old reference
+	  problems
+
+2008-07-17 10:47  toxmeister
+
+	* [r83] still restructuring project layout for easier builds (this
+	  might be semi-broken though at this point)
+
+2008-07-16 14:02  toxmeister
+
+	* [r82] fixed a little oversight with the worldbox and added
+	  javadocs
+
+2008-07-16 13:45  toxmeister
+
+	* [r81] javadoc cleanup and more small refactoring in geom package
+
+2008-07-16 13:43  toxmeister
+
+	* [r80] updated spring calculations to take particle weight into
+	  account
+
+2008-07-09 14:01  toxmeister
+
+	* [r79] added Spline3D skeleton, needs further work
+
+2008-06-26 18:14  toxmeister
+
+	* [r78] fixed some visibility issues in AABB and re-added
+	  minSelf/maxSelf methods to Vec3D
+
+2008-06-17 12:58  toxmeister
+
+	* [r77] more fixes to ant build files and removed some weirdo
+	  import in SphereIntersectorReflector
+
+2008-06-13 17:34  toxmeister
+
+	* [r72] renamed main src folder into src.geom to fix some weird
+	  build path reference errors
+
+2008-05-27 17:04  toxmeister
+
+	* [r69] merged "geom" branch back into trunk
+
+2008-02-10 22:33  toxmeister
+
+	* [r45] renamed FastMath into MathUtils
+
+2007-09-05 15:48  toxmeister
+
+	* [r40] added a more compact and flexible tiling frame exporter
+	  class
+
+2007-08-24 12:39  toxmeister
+
+	* [r39]
+
+2007-08-24 12:39  toxmeister
+
+	* [r38]
+
+2007-08-22 19:32  toxmeister
+
+	* [r37] added circular interpolation strategy
+
+2007-08-22 18:42  toxmeister
+
+	* [r36] added new interpolation type: SigmoidInterpolation
+
+2007-08-07 23:48  toxmeister
+
+	* [r35] added fromXYTheta, fromXZTheta and fromYZTheta factory
+	  methods for creating directional vectors
+
+2007-08-07 18:30  toxmeister
+
+	* [r34] fixed grave mistake in CosineInterpolation
+
+2007-08-07 18:15  toxmeister
+
+	* [r33]
+
+2007-08-07 18:14  toxmeister
+
+	* [r32]
+
+2007-08-07 18:14  toxmeister
+
+	* [r31]
+
+2007-07-21 14:03  toxmeister
+
+	* [r30] added ARGBGradient class to toxi.image.util
+
+2007-07-20 15:22  toxmeister
+
+	* [r27] added javadocs
+
+2007-07-20 14:46  toxmeister
+
+	* [r25]
+
+2007-07-20 14:46  toxmeister
+
+	* [r24] fixed PointOctree selection code, added AABB and Sphere
+	  types, slight refactoring of Vec3D"
+
+2007-07-15 00:14  toxmeister
+
+	* [r16]
+
+2007-07-15 00:13  toxmeister
+
+	* [r15] added ray intersection/reflection code to geom package
+
+2007-06-22 16:53  toxmeister
+
+	* [r14] Added isInAABB() method to Vec3D, moved debug output info
+	  in AbstractWave into toString()
+
+2007-05-11 13:19  toxmeister
+
+	* [r11] restructured toxi.math/toxi.util.datatypes package, added
+	  some interpolation strategies and added Simplex noise
+
+2007-03-21 21:46  toxmeister
+
+	* [r10] fixed error in constructor
+
+2007-03-20 20:02  toxmeister
+
+	* [r9] added/corrected few Vec3D methods and added more javadoc
+
+2007-03-17 11:51  toxmeister
+
+	* [r8] started adding javadocs
+
+2007-03-14 15:35  toxmeister
+
+	* [r6]
+
+2007-03-14 15:20  toxmeister
+
+	* [r5]
+
+2007-03-14 15:18  toxmeister
+
+	* [r4]
+
+2007-03-09 23:25  toxmeister
+
+	* [r3] Initial import.

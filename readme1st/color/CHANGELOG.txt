@@ -1,17 +1,216 @@
-0003 - 2009-10-09
---------------------------------------------------------------------------------
-! fixed issue #9: ColorList.createFromARGBArray() now correctly returns unique colors if requested
-+ extracted ReadonlyTColor interface for creating immutable colors,
-  this is now implemented by TColor, NamedColor and various other classes
-+ added setARGB() & toHex() methods to TColor
-+ added toRGBAArray(), toHSVArray(), toCMYKArray() to TColor
-* changed a ColorList constructor to use any type of collection instead of just ArrayList
+2010-02-16 15:46  toxmeister
 
-0002 - 2009-02-27
---------------------------------------------------------------------------------
-! fixed ColorList.size() now returns the size as int
+	* [r423] toxi/color/ToneMap.java: fixing support for duo-tone maps
+	  and adding more constructors
 
-0001 - 2008-12-18
---------------------------------------------------------------------------------
-! Java 1.5 syntax
-! initial release, inspired by the python "colors" library for NodeBox
+2010-02-16 15:43  toxmeister
+
+	* [r422] toxi/color/ColorList.java: fixing javadocs
+
+2010-02-16 15:43  toxmeister
+
+	* [r421] toxi/color/ColorGradient.java: adding support for custom
+	  interpolation methods (get/setInterpolator()) implementing
+	  toxi.math.InterpolateStrategy
+
+2010-02-14 12:27  toxmeister
+
+	* [r413] toxi/color/ToneMap.java: adding new constructor to create
+	  a simple duo-tone ToneMap
+
+2010-02-14 12:26  toxmeister
+
+	* [r412] toxi/color/ColorList.java: adding varargs constructor to
+	  create ColorList from a number of passed in colors
+
+2010-02-09 08:01  toxmeister
+
+	* [r393] toxi/color/ColorList.java: adding toARGBArray() to convert
+	  list to int[]
+
+2010-02-09 02:32  toxmeister
+
+	* [r390] toxi/color/ToneMap.java[ADD]: adding ToneMap class as
+	  composition of ScaleMap & ColorGradient classes
+
+2010-02-09 02:31  toxmeister
+
+	* [r389] toxi/color/ColorGradient.java: fixing divide-by-zero bug
+	  in ColorGradient for 1st computed color
+
+2010-01-20 23:57  toxmeister
+
+	* [r366] toxi/color/ColorGradient.java: minor updates to issues
+	  found by FindBugs
+
+2009-11-30 20:38  toxmeister
+
+	* [r329] toxi/color/TColor.java: refactoring distanceToHSV() to use
+	  MathUtils trigonometry instead of default Math
+
+2009-11-23 04:01  toxmeister
+
+	* [r320] toxi/color/ColorRange.java,
+	  toxi/color/ReadonlyTColor.java, toxi/color/TColor.java: fixing
+	  interface vs. concrete class issues in ColorRange, fixing
+	  javadocs in ReadonlyTColor & TColor
+
+2009-11-12 19:32  toxmeister
+
+	* [r309] toxi/color/ReadonlyTColor.java, toxi/color/TColor.java:
+	  updating javadocs
+
+2009-10-30 20:12  toxmeister
+
+	* [r304] toxi/color/ColorGradient.java, toxi/color/ColorTheme.java,
+	  toxi/color/TColor.java,
+	  toxi/color/theory/TetradTheoryStrategy.java: refactoring
+	  TColor.toRGBAArray(), making inner classes static in ColorTheme &
+	  ColorGradient, adding new constructor to TetradTheoryStrategy
+
+2009-10-09 15:37  toxmeister
+
+	* [r298] toxi/color/ReadonlyTColor.java: updating changelog for
+	  colorutils
+
+2009-10-09 13:18  toxmeister
+
+	* [r296] toxi/color/ColorList.java, toxi/color/ColorRange.java,
+	  toxi/color/ReadonlyTColor.java: fixing javadocs issues for
+	  colorutils
+
+2009-10-09 13:11  toxmeister
+
+	* [r295] toxi/color/ColorList.java, toxi/color/TColor.java: bug fix
+	  for issue #9: ColorList.createFromARGBArray() now correctly
+	  returns unique colors if requested, added setARGB() to TColor
+
+2009-10-06 14:52  toxmeister
+
+	* [r294] toxi/color/TColor.java: added toHex() method
+
+2009-08-07 00:50  toxmeister
+
+	* [r280] toxi/color/AccessCriteria.java,
+	  toxi/color/AlphaComparator.java, toxi/color/CMYKComparator.java,
+	  toxi/color/CMYKDistanceProxy.java, toxi/color/ColorGradient.java,
+	  toxi/color/ColorList.java, toxi/color/ColorRange.java,
+	  toxi/color/ColorTheme.java, toxi/color/DistanceProxy.java,
+	  toxi/color/HSVComparator.java, toxi/color/HSVDistanceProxy.java,
+	  toxi/color/LuminanceComparator.java, toxi/color/NamedColor.java,
+	  toxi/color/ProximityComparator.java,
+	  toxi/color/RGBComparator.java, toxi/color/RGBDistanceProxy.java,
+	  toxi/color/ReadonlyTColor.java[ADD], toxi/color/TColor.java,
+	  toxi/color/theory/AnalogousStrategy.java,
+	  toxi/color/theory/ColorTheoryStrategy.java,
+	  toxi/color/theory/ComplementaryStrategy.java,
+	  toxi/color/theory/CompoundTheoryStrategy.java,
+	  toxi/color/theory/LeftSplitComplementaryStrategy.java,
+	  toxi/color/theory/MonochromeTheoryStrategy.java,
+	  toxi/color/theory/RightSplitComplementaryStrategy.java,
+	  toxi/color/theory/SingleComplementStrategy.java,
+	  toxi/color/theory/SplitComplementaryStrategy.java,
+	  toxi/color/theory/TetradTheoryStrategy.java,
+	  toxi/color/theory/TriadTheoryStrategy.java: extracted
+	  ReadonlyTColor interface from TColor for enforcing immutable
+	  colors, applying triggered changes throughout all related classes
+	  & tests, added toRGBAArray(), toHSVAArray() & toCMYKAArray()
+	  methods to TColor
+
+2009-07-27 15:45  toxmeister
+
+	* [r272] toxi/color/TColor.java: adding more setRGB(), setHSV() &
+	  setCMYK() versions and toRGBAArray() for better workflow with
+	  OpenGL
+
+2009-04-21 22:31  toxmeister
+
+	* [r211] toxi/colour[DEL]: removing obsolete package
+
+2009-02-27 22:04  toxmeister
+
+	* [r189] toxi/color/ColorList.java: fixed size() now returns an int
+
+2009-02-19 14:40  toxmeister
+
+	* [r177] toxi/color/ColorList.java: added marching cubes based
+	  IsoVolume class and started work on issue #9
+
+2008-12-18 20:38  toxmeister
+
+	* [r159] toxi/color/ColorList.java,
+	  toxi/color/theory/AnalogousStrategy.java,
+	  toxi/color/theory/ColorTheoryStrategy.java,
+	  toxi/color/theory/ComplementaryStrategy.java,
+	  toxi/color/theory/CompoundTheoryStrategy.java,
+	  toxi/color/theory/LeftSplitComplementaryStrategy.java,
+	  toxi/color/theory/MonochromeTheoryStrategy.java,
+	  toxi/color/theory/RightSplitComplementaryStrategy.java,
+	  toxi/color/theory/SingleComplementStrategy.java,
+	  toxi/color/theory/SplitComplementaryStrategy.java,
+	  toxi/color/theory/TetradTheoryStrategy.java,
+	  toxi/color/theory/TriadTheoryStrategy.java: fixed typos caused by
+	  spelling changes
+
+2008-12-18 20:08  toxmeister
+
+	* [r158] .[CPY], toxi/color[ADD],
+	  toxi/color/AccessCriteria.java[CPY],
+	  toxi/color/AccessMode.java[CPY],
+	  toxi/color/AlphaComparator.java[CPY],
+	  toxi/color/CMYKComparator.java[CPY],
+	  toxi/color/CMYKDistanceProxy.java[CPY],
+	  toxi/color/ColorGradient.java[CPY],
+	  toxi/color/ColorList.java[CPY], toxi/color/ColorRange.java[CPY],
+	  toxi/color/ColorTheme.java[CPY],
+	  toxi/color/DistanceProxy.java[CPY],
+	  toxi/color/HSVComparator.java[CPY],
+	  toxi/color/HSVDistanceProxy.java[CPY], toxi/color/Hue.java[CPY],
+	  toxi/color/LuminanceComparator.java[CPY],
+	  toxi/color/NamedColor.java[CPY],
+	  toxi/color/ProximityComparator.java[CPY],
+	  toxi/color/RGBComparator.java[CPY],
+	  toxi/color/RGBDistanceProxy.java[CPY],
+	  toxi/color/TColor.java[CPY], toxi/color/theory[CPY],
+	  toxi/color/theory/AnalogousStrategy.java,
+	  toxi/color/theory/ColorTheoryRegistry.java,
+	  toxi/color/theory/ColorTheoryStrategy.java,
+	  toxi/color/theory/ComplementaryStrategy.java,
+	  toxi/color/theory/CompoundTheoryStrategy.java,
+	  toxi/color/theory/LeftSplitComplementaryStrategy.java,
+	  toxi/color/theory/MonochromeTheoryStrategy.java,
+	  toxi/color/theory/RightSplitComplementaryStrategy.java,
+	  toxi/color/theory/SingleComplementStrategy.java,
+	  toxi/color/theory/SplitComplementaryStrategy.java,
+	  toxi/color/theory/TetradTheoryStrategy.java,
+	  toxi/color/theory/TriadTheoryStrategy.java,
+	  toxi/colour/AccessCriteria.java[DEL],
+	  toxi/colour/AccessMode.java[DEL],
+	  toxi/colour/AlphaComparator.java[DEL],
+	  toxi/colour/CMYKComparator.java[DEL],
+	  toxi/colour/CMYKDistanceProxy.java[DEL],
+	  toxi/colour/Colour.java[DEL],
+	  toxi/colour/ColourGradient.java[DEL],
+	  toxi/colour/ColourList.java[DEL],
+	  toxi/colour/ColourRange.java[DEL],
+	  toxi/colour/ColourTheme.java[DEL],
+	  toxi/colour/DistanceProxy.java[DEL],
+	  toxi/colour/HSVComparator.java[DEL],
+	  toxi/colour/HSVDistanceProxy.java[DEL],
+	  toxi/colour/Hue.java[DEL],
+	  toxi/colour/LuminanceComparator.java[DEL],
+	  toxi/colour/NamedColour.java[DEL],
+	  toxi/colour/ProximityComparator.java[DEL],
+	  toxi/colour/RGBComparator.java[DEL],
+	  toxi/colour/RGBDistanceProxy.java[DEL], toxi/colour/theory[DEL]:
+	  switching back to the american spelling (2nd time) and renaming
+	  Color into TColor in the interim until the naming conflict caused
+	  by Processing's pre-processor autoimport is resolved...
+
+2008-12-17 04:09  toxmeister
+
+	* [r154] super large commit: killing toxi.image.colour package,
+	  adding src.colour folder, adding javadocs & file comments to all
+	  color classes, lots of refactoring in various classes as well as
+	  adding new types, updating ant build files to use new version
+	  numbers, unifying readme1st files for all packages

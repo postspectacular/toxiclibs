@@ -1,3 +1,114 @@
-0001 - 2010-02-07
---------------------------------------------------------------------------------
-initial release
+2010-02-16 15:54  toxmeister
+
+	* [r425] toxi/sim/fluids[ADD],
+	  toxi/sim/fluids/FluidSolver.java[ADD]: adding old FluidSolver
+	  class from dev.postspectacular.com/hg/StamFluids/, not supported
+	  though before simutils-0002 release
+
+2010-02-16 15:49  toxmeister
+
+	* [r424] toxi/sim/automata/CAMatrix.java,
+	  toxi/sim/automata/CARule.java, toxi/sim/automata/CARule2D.java,
+	  toxi/sim/automata/CAWolfram1D.java[CPY],
+	  toxi/sim/automata/EvolvableMatrix.java[ADD],
+	  toxi/sim/automata/MatrixEvolver.java[ADD],
+	  toxi/sim/automata/Wolfram1D.java[DEL]: renaming Wolfram1D into
+	  CAWolfram1D, extracting interfaces from CAMatrix & CARule, adding
+	  javadocs, adding flags for cell auto expire behaviour
+
+2010-02-14 16:21  toxmeister
+
+	* [r415] toxi/sim/automata/AbstractCARule.java[DEL],
+	  toxi/sim/automata/CAMatrix.java,
+	  toxi/sim/automata/CARule.java[CPY],
+	  toxi/sim/automata/CARule2D.java,
+	  toxi/sim/automata/Wolfram1D.java[ADD]: overhaul of CA classes,
+	  refactored AbstractCARule class into CARule interface, added
+	  Wolfram1D class and made its kernel flexible size, added
+	  tiled/non-tiled option for both 1D/2D, minor updates to CAMatrix
+
+2010-02-13 16:49  toxmeister
+
+	* [r409] toxi/sim/dla/DLA.java,
+	  toxi/sim/dla/DLAConfiguration.java[ADD],
+	  toxi/sim/dla/DLAEventAdapter.java[ADD],
+	  toxi/sim/dla/DLAGuideLines.java, toxi/sim/dla/DLASegment.java,
+	  toxi/sim/dla/DLATest.java[DEL]: extracted DLA user parameters
+	  into DLAConfiguration class, added DLAEventAdapter, minor updates
+	  to other DLA classes and removing DLATest from package
+
+2010-02-13 09:08  toxmeister
+
+	* [r407] toxi/sim/dla/DLA.java, toxi/sim/dla/DLAGuideLines.java,
+	  toxi/sim/dla/DLATest.java: minor updates to DLA & DLAGuidelines
+	  and changes to default config & demo
+
+2010-02-12 02:57  toxmeister
+
+	* [r405] toxi/sim/dla/DLA.java, toxi/sim/dla/DLAEventListener.java,
+	  toxi/sim/dla/DLAGuideLines.java, toxi/sim/dla/DLAParticle.java,
+	  toxi/sim/dla/DLATest.java: fixing DLA classes, adding test/demo,
+	  adding getters/setters for all parameters
+
+2010-02-11 14:54  toxmeister
+
+	* [r402] toxi/sim/dla/DLA.java, toxi/sim/dla/DLAGuideLines.java,
+	  toxi/sim/dla/DLAParticle.java, toxi/sim/dla/DLASegment.java,
+	  toxi/sim/dla/DLATest.java[ADD]: updating DLA classes, adding
+	  default parameters
+
+2010-02-10 03:58  toxmeister
+
+	* [r401] toxi/sim/grayscott/GrayScott.java: minor updates to
+	  GrayScott class
+
+2010-02-10 03:56  toxmeister
+
+	* [r400] toxi/sim/dla/CircularComparator.java[DEL],
+	  toxi/sim/dla/DLA.java, toxi/sim/dla/DLAGuideLines.java,
+	  toxi/sim/dla/PipelineOrder.java[ADD],
+	  toxi/sim/dla/RadialDistanceOrder.java[CPY]: renaming
+	  CircularComparator into RadialDistanceOrder, adding non-sorting
+	  (FIFO) PipelineOrder comparator, minor updates to other DLA
+	  classes
+
+2010-02-10 03:54  toxmeister
+
+	* [r399] toxi/sim/automata[ADD],
+	  toxi/sim/automata/AbstractCARule.java[ADD],
+	  toxi/sim/automata/CAMatrix.java[ADD],
+	  toxi/sim/automata/CARule2D.java[ADD]: adding toxi.sim.automata
+	  package and cellular automata classes
+
+2010-02-09 02:34  toxmeister
+
+	* [r391] toxi/sim/grayscott/GrayScott.java: small optimizations of
+	  inner loop
+
+2010-02-09 01:20  toxmeister
+
+	* [r387] toxi/sim/dla[ADD],
+	  toxi/sim/dla/CircularComparator.java[ADD],
+	  toxi/sim/dla/DLA.java[ADD],
+	  toxi/sim/dla/DLAEventListener.java[ADD],
+	  toxi/sim/dla/DLAGuideLines.java[ADD],
+	  toxi/sim/dla/DLAParticle.java[ADD],
+	  toxi/sim/dla/DLASegment.java[ADD]: adding work-in-progress DLA
+	  classes with event support, all need some more refactoring
+
+2010-02-07 12:27  toxmeister
+
+	* [r383] toxi/sim/grayscott/GrayScott.java: adding GrayScottToneMap
+	  demo and minor javadoc updates
+
+2010-02-07 04:18  toxmeister
+
+	* [r382] toxi/sim/grayscott/GrayScott.java: adding getters/setters
+	  for GrayScott params, adding HelloGrayScott Processing demo
+
+2010-02-07 02:39  toxmeister
+
+	* [r379] .[ADD], toxi[ADD], toxi/sim[ADD], toxi/sim/grayscott[ADD],
+	  toxi/sim/grayscott/GrayScott.java[ADD]: adding new simutils
+	  resources: source folder, build file, examples & readme folders,
+	  updating .classpath

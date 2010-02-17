@@ -1,0 +1,148 @@
+2010-01-20 23:57  toxmeister
+
+	* [r366] toxi/audio/MultiTimbralManager.java: minor updates to
+	  issues found by FindBugs
+
+2009-10-15 13:47  toxmeister
+
+	* [r299] toxi/audio/JOALUtil.java: applied eclipse formatter
+	  changes
+
+2009-08-23 21:03  toxmeister
+
+	* [r291] toxi/audio/JOALUtil.java: another bug fix for
+	  NullPointerException caused by new shutdown() logic for sources
+	  with no assigned buffers, updated 0004 release files
+
+2009-08-23 18:27  toxmeister
+
+	* [r289] toxi/audio/AudioBuffer.java, toxi/audio/AudioSource.java,
+	  toxi/audio/JOALUtil.java: bug fix memory leak in JOALUtil, now
+	  properly releasing memory when deleting audio buffers, refactored
+	  deleteSource() to also kill associated buffer, added deleteAll(),
+	  added MemTest test case
+
+2009-08-22 14:31  toxmeister
+
+	* [r288] toxi/audio/JOALUtil.java: adding getDeviceList() & lazy
+	  init() calls for various JOALUtil accessor methods
+
+2009-08-22 11:34  toxmeister
+
+	* [r287] toxi/audio/JOALUtil.java: fixed JOALUtil.shutdown() bug
+	  when no buffers or sources were allocated
+
+2009-08-19 21:42  toxmeister
+
+	* [r286] toxi/audio/JOALUtil.java: updated JOALUtil.init() to
+	  support named devices (for fallback to software mode only, e.g.
+	  needed on RealTek HD cards), added test, updated audio build file
+
+2009-07-18 16:37  toxmeister
+
+	* [r259] toxi/audio/AudioBuffer.java, toxi/audio/AudioSource.java,
+	  toxi/audio/JOALUtil.java, toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/SoundListener.java: added fluid interfaces,
+	  refactoring, bug fixes of all audioutils classes & added 3 new
+	  Processing examples
+
+2009-07-17 23:51  toxmeister
+
+	* [r256] toxi/audio/JOALUtil.java: refactoring
+	  JOALUtil.loadBuffer(String) version to handle exceptions
+	  internally to simplify usage from Processing.
+	  loadBuffer(InputStream) still passes exceptions on and is more
+	  likely to be used outside the P5 PDE
+
+2009-06-15 07:42  toxmeister
+
+	* [r236] toxi/audio/AudioSource.java, toxi/audio/JOALUtil.java:
+	  refactored internal audiobuffer/audiosource management, added
+	  deleteBuffer()/deleteSource() methods to remove/release
+	  individual instances
+
+2008-12-20 01:37  toxmeister
+
+	* [r167] toxi/audio/AudioBuffer.java, toxi/audio/AudioSource.java,
+	  toxi/audio/JOALUtil.java, toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/SoundListener.java: updated to latest version of JOAL
+	  & JOGL, added javadocs to audio classes, prepped audio build
+	  file, cleanup lib folder to avoid conflict for new JOAL native
+	  files
+
+2008-12-07 00:31  toxmeister
+
+	* [r146] toxi/audio/AudioBuffer.java, toxi/audio/AudioSource.java,
+	  toxi/audio/JOALUtil.java, toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/SoundListener.java: java 5 refactoring, adding
+	  javadocs
+
+2008-11-14 17:34  toxmeister
+
+	* [r127] toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/SoundListener.java: fixed bug where all sound source
+	  would stop if no free one is available. now really only the
+	  oldest is stopped, as it was meant to.
+
+2008-11-03 22:29  toxmeister
+
+	* [r121] toxi/audio/MultiTimbralManager.java: fixed bug in
+	  MultiTimbralManager which didn't 1st stop old sounds when running
+	  out of voices
+
+2008-10-30 15:28  toxmeister
+
+	* [r120] toxi/audio/JOALUtil.java[CPY],
+	  toxi/audio/LibOAL.java[DEL], toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/SoundListener.java: renamed LibOAL into JOALUtil
+
+2008-10-30 15:26  toxmeister
+
+	* [r119] toxi/audio/AudioBuffer.java[ADD],
+	  toxi/audio/AudioSource.java[CPY],
+	  toxi/audio/DynamicSoundSource.java[DEL],
+	  toxi/audio/DynamicSoundSourceMixer.java[DEL],
+	  toxi/audio/LibOAL.java, toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/OALUtil.java[DEL], toxi/audio/SoundManager.java[DEL],
+	  toxi/audio/SoundSource.java[DEL]: massive refactoring in
+	  toxi.audio package, now using own buffers and sources which are
+	  less restrictive than the default JOAL ones. emptied out old,
+	  unused classes
+
+2008-10-30 00:19  toxmeister
+
+	* [r117] toxi/audio/OALUtil.java: more additions and little fixes
+	  to toxi.util.datatypes and toxi.audio classes
+
+2008-10-28 09:51  toxmeister
+
+	* [r116] toxi/audio/MultiTimbralManager.java,
+	  toxi/audio/OALUtil.java: some refactoring in audio package, fixed
+	  static issues in ArrayUtil, added more array types to
+	  TypedProperties and added unit tests
+
+2008-10-27 02:10  toxmeister
+
+	* [r115] toxi/audio/MultiTimbralManager.java[ADD]: added
+	  MultiTimbralManager to libjoal and fixed class path for audio
+	  source folder
+
+2008-09-19 12:00  toxmeister
+
+	* [r104] toxi/audio/DynamicSoundSource.java,
+	  toxi/audio/DynamicSoundSourceMixer.java, toxi/audio/OALUtil.java:
+	  removed Java5 syntax for Processing compatibility
+
+2008-07-17 15:35  toxmeister
+
+	* [r85] toxi/audio/DynamicSoundSource.java,
+	  toxi/audio/DynamicSoundSourceMixer.java, toxi/audio/OALUtil.java:
+	  new build files for all distros, fixed reference problems, new
+	  examples, added comments
+
+2008-06-13 17:24  toxmeister
+
+	* [r71] .[ADD], toxi[ADD], toxi/audio[CPY]: putting things in
+	  separate source folders and started creating build file for
+	  individual libraries
+

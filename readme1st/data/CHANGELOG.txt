@@ -1,0 +1,43 @@
+2009-11-23 04:12  toxmeister
+
+	* [r322] toxi/data/feeds/AtomEntry.java,
+	  toxi/data/feeds/AtomFeed.java, toxi/data/feeds/RSSFeed.java:
+	  adding static newFromStream() & newFromURL() methods to both
+	  AtomFeed and RSSFeed, updating date annotations
+
+2009-07-27 15:52  toxmeister
+
+	* [r275] toxi/data/feeds/AtomEntry.java,
+	  toxi/data/feeds/RSSItem.java,
+	  toxi/data/feeds/util/Iso8601DateAdapter.java[ADD],
+	  toxi/data/feeds/util/Rfc822DateAdapter.java: adding
+	  Iso8601DateAdapter (still has issues with timezone offsets) used
+	  for AtomEntry, minor formatting changes to other classes in this
+	  package
+
+2009-07-17 01:45  toxmeister
+
+	* [r255] toxi/data/feeds/AtomAuthor.java[ADD],
+	  toxi/data/feeds/AtomEntry.java[ADD],
+	  toxi/data/feeds/AtomFeed.java[ADD],
+	  toxi/data/feeds/AtomLink.java[ADD]: adding atom feed parser and
+	  initial unit test
+
+2009-07-15 23:16  toxmeister
+
+	* [r254] toxi/data/feeds/RSSChannel.java,
+	  toxi/data/feeds/RSSItem.java, toxi/data/feeds/util[ADD],
+	  toxi/data/feeds/util/EntityStripper.java[ADD],
+	  toxi/data/feeds/util/Rfc822DateAdapter.java[ADD]: adding Rfc822
+	  date adapter and html entity stripper (from MindProd). added
+	  simple RSS unit test and test feed & RSS2 XSD
+
+2009-07-15 15:47  toxmeister
+
+	* [r253] .[ADD], toxi[ADD], toxi/data[ADD], toxi/data/feeds[ADD],
+	  toxi/data/feeds/RSSChannel.java[ADD],
+	  toxi/data/feeds/RSSFeed.java[ADD],
+	  toxi/data/feeds/RSSItem.java[ADD]: adding toxi.data package,
+	  folder structure & build files for remote data (feed) parsing.
+	  also updating (c) info in all README's
+

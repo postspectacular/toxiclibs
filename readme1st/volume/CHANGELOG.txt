@@ -1,12 +1,42 @@
-0002 - 2009-10-15
---------------------------------------------------------------------------------
-! changed BoxBrush.setSize() to be compatible with RoundBrush.setSize() (was twice as large before)
-+ added IsoSurface.computeSurfaceMesh() to store surface directly in a TriangleMesh instance
-+ added clear(), setScale(), getScale(), getResolution() to VolumetricSpace
-+ added new Processing demo BoxFluid (requires verletphysics library too)
-* minor optimizations in RoundBrush.drawAtGridPos() & IsoSurface.getCellIndex()
+2010-02-16 17:42  toxmeister
 
-0001 - 2009-02-27
---------------------------------------------------------------------------------
-* initial release
-+ added 4 demos to showcase core functionality
+	* [r432] toxi/volume/IsoSurface.java: fixing issue #11 and
+	  refactoring computeSurfaceMesh()
+
+2009-11-23 04:02  toxmeister
+
+	* [r321] toxi/volume/IsoSurface.java: changing vertex ordering in
+	  computeSurfaceMesh() in order to fix normals
+
+2009-10-15 20:13  toxmeister
+
+	* [r301] toxi/volume/BoxBrush.java, toxi/volume/IsoSurface.java,
+	  toxi/volume/RoundBrush.java, toxi/volume/VolumetricSpace.java:
+	  updating volumeutils classes with changes done during nokia
+	  project (see changelog), adding BoxFluidDemo example for
+	  Processing and updated changelog
+
+2009-07-22 21:06  toxmeister
+
+	* [r267] toxi/volume/IsoSurface.java,
+	  toxi/volume/MarchingCubesIndex.java: optimizations to inner loops
+	  in computeSurface() and getCellIndex()
+
+2009-06-29 12:44  toxmeister
+
+	* [r246] toxi/volume/IsoSurface.java: updating version number in
+	  volume build.xml and adding alternative
+	  IsoSurface.computeSurfaceMesh() method utilizing new TriangleMesh
+	  class
+
+2009-02-27 22:00  toxmeister
+
+	* [r187] .[ADD], toxi[ADD], toxi/volume[ADD],
+	  toxi/volume/BoxBrush.java[ADD], toxi/volume/IsoSurface.java[ADD],
+	  toxi/volume/MarchingCubesIndex.java[ADD],
+	  toxi/volume/RoundBrush.java[ADD],
+	  toxi/volume/VolumetricBrush.java[ADD],
+	  toxi/volume/VolumetricSpace.java[ADD]: moving volume classes out
+	  from core libs and into separate package toxi.volume which will
+	  also become its own subrelease
+

@@ -1,0 +1,192 @@
+2008-12-17 04:09  toxmeister
+
+	* [r154] toxi/color/AlphaComparator.java[DEL],
+	  toxi/color/CMYKComparator.java[DEL], toxi/color/Color.java[DEL],
+	  toxi/color/ColorAccessCriteria.java[DEL],
+	  toxi/color/ColorHue.java[DEL], toxi/color/ColorList.java[DEL],
+	  toxi/color/ColorRange.java[DEL], toxi/color/ColorTheme.java[DEL],
+	  toxi/color/HSVComparator.java[DEL],
+	  toxi/color/LuminanceComparator.java[DEL],
+	  toxi/color/NamedColor.java[DEL],
+	  toxi/color/RGBComparator.java[DEL], toxi/color/theory[DEL],
+	  toxi/image/colour/ARGBGradient.java[DEL],
+	  toxi/image/colour/AccentPalette.java[DEL],
+	  toxi/image/colour/Palette.java[DEL],
+	  toxi/image/colour/PaletteUtil.java[DEL]: super large commit:
+	  killing toxi.image.colour package, adding src.colour folder,
+	  adding javadocs & file comments to all color classes, lots of
+	  refactoring in various classes as well as adding new types,
+	  updating ant build files to use new version numbers, unifying
+	  readme1st files for all packages
+
+2008-12-16 00:46  toxmeister
+
+	* [r153] toxi/color/Color.java,
+	  toxi/color/ColorAccessCriteria.java, toxi/color/ColorHue.java,
+	  toxi/color/ColorList.java, toxi/color/ColorRange.java,
+	  toxi/color/ColorTheme.java,
+	  toxi/color/LuminanceComparator.java[ADD],
+	  toxi/color/NamedColor.java[ADD]: that's pretty much the first
+	  complete version of the colorlib checked in. only need to add
+	  javadocs and cleanup demo examples
+
+2008-12-15 10:27  toxmeister
+
+	* [r151] toxi/color/Color.java, toxi/color/ColorHue.java[ADD],
+	  toxi/color/ColorRange.java, toxi/color/ColorTheme.java[ADD]:
+	  refactorings in colorrange and added colorhue and starting themes
+
+2008-12-07 01:29  toxmeister
+
+	* [r150] toxi/color/ColorAccessCriteria.java: more new syntax fixes
+	  to verletphysics & color, added JOAL libs to classpath
+
+2008-12-07 00:45  toxmeister
+
+	* [r147] toxi/color/ColorRange.java,
+	  toxi/image/colour/ARGBGradient.java,
+	  toxi/image/colour/AccentPalette.java,
+	  toxi/image/colour/Palette.java,
+	  toxi/image/colour/PaletteUtil.java: ColorRange now using
+	  GenericSet. Deprecated most classes in toxi.image.colour. They
+	  will be finally obsolete once new toxi.color package is
+	  complete/stable (v.soon)
+
+2008-12-05 17:13  toxmeister
+
+	* [r142] toxi/color/Color.java, toxi/color/ColorRange.java,
+	  toxi/color/theory/AnalogousStrategy.java,
+	  toxi/color/theory/ColorTheoryFactory.java,
+	  toxi/color/theory/ColorTheoryStrategy.java: adding javadocs
+	  everywhere and refactoring to J5 syntax changes
+
+2008-12-05 05:41  toxmeister
+
+	* [r141] toxi/color/AlphaComparator.java,
+	  toxi/color/AnalogousStrategy.java[DEL],
+	  toxi/color/CMYKComparator.java, toxi/color/Color.java,
+	  toxi/color/ColorAccessCriteria.java, toxi/color/ColorList.java,
+	  toxi/color/ColorRange.java,
+	  toxi/color/ColorTheoryFactory.java[DEL],
+	  toxi/color/ColorTheoryStrategy.java[DEL],
+	  toxi/color/ComplementaryStrategy.java[DEL],
+	  toxi/color/CompoundTheoryStrategy.java[DEL],
+	  toxi/color/HSVComparator.java,
+	  toxi/color/LeftSplitComplementaryStrategy.java[DEL],
+	  toxi/color/MonochromeTheoryStrategy.java[DEL],
+	  toxi/color/RGBComparator.java,
+	  toxi/color/RightSplitComplementaryStrategy.java[DEL],
+	  toxi/color/SingleComplementStrategy.java[DEL],
+	  toxi/color/SplitComplementaryStrategy.java[DEL],
+	  toxi/color/TetradTheoryStrategy.java[DEL],
+	  toxi/color/TriadTheoryStrategy.java[DEL], toxi/color/theory[ADD],
+	  toxi/color/theory/AnalogousStrategy.java[ADD],
+	  toxi/color/theory/ColorTheoryFactory.java[ADD],
+	  toxi/color/theory/ColorTheoryStrategy.java[ADD],
+	  toxi/color/theory/ComplementaryStrategy.java[ADD],
+	  toxi/color/theory/CompoundTheoryStrategy.java[ADD],
+	  toxi/color/theory/LeftSplitComplementaryStrategy.java[ADD],
+	  toxi/color/theory/MonochromeTheoryStrategy.java[ADD],
+	  toxi/color/theory/RightSplitComplementaryStrategy.java[ADD],
+	  toxi/color/theory/SingleComplementStrategy.java[ADD],
+	  toxi/color/theory/SplitComplementaryStrategy.java[ADD],
+	  toxi/color/theory/TetradTheoryStrategy.java[ADD],
+	  toxi/color/theory/TriadTheoryStrategy.java[ADD]: global switch to
+	  Java 5 syntax (only held it off for P5 compatibility, now
+	  obsolete requirement) and refactoring/restructuring in color
+	  package
+
+2008-12-02 14:25  toxmeister
+
+	* [r138] toxi/color/Color.java: fixed typo in analog() method
+
+2008-11-27 22:31  toxmeister
+
+	* [r134] toxi/color/ColorList.java, toxi/color/ColorRange.java,
+	  toxi/color/ColorTheoryStrategy.java: small refactoring and added
+	  javadocs
+
+2008-11-15 14:38  toxmeister
+
+	* [r132] toxi/color/ColorRange.java: minor changes on color range
+	  and bugfix in ant file
+
+2008-11-15 05:12  toxmeister
+
+	* [r130] toxi/color/Color.java, toxi/color/ColorList.java,
+	  toxi/color/ColorRange.java: refactoring and additions to
+	  colorrange & co... getting there slowly!
+
+2008-11-14 17:37  toxmeister
+
+	* [r129] toxi/color/AnalogousStrategy.java, toxi/color/Color.java,
+	  toxi/color/ColorList.java, toxi/color/ColorRange.java[ADD],
+	  toxi/color/ColorTheoryFactory.java,
+	  toxi/color/CompoundTheoryStrategy.java[ADD],
+	  toxi/color/MonochromeTheoryStrategy.java[ADD],
+	  toxi/color/TetradTheoryStrategy.java[ADD],
+	  toxi/color/TriadTheoryStrategy.java[ADD]: added more colour
+	  theory strategies and working on defining ranges. needs a lot of
+	  refactoring still. also added a P5 demo and some tests
+
+2008-11-13 18:24  toxmeister
+
+	* [r126] toxi/color/AnalogousStrategy.java[ADD],
+	  toxi/color/Color.java, toxi/color/ColorList.java,
+	  toxi/color/ColorTheoryFactory.java[ADD],
+	  toxi/color/ColorTheoryStrategy.java,
+	  toxi/color/ComplementaryStrategy.java[ADD],
+	  toxi/color/LeftSplitComplementaryStrategy.java[ADD],
+	  toxi/color/RightSplitComplementaryStrategy.java[ADD],
+	  toxi/color/SingleComplementStrategy.java[ADD],
+	  toxi/color/SplitComplementaryStrategy.java[ADD]: more color
+	  additions
+
+2008-11-13 04:51  toxmeister
+
+	* [r125] toxi/color/Color.java, toxi/color/ColorList.java: bug
+	  fixes to color/colorlist and added some test cases
+
+2008-11-13 03:13  toxmeister
+
+	* [r124] toxi/color[ADD], toxi/color/AlphaComparator.java[ADD],
+	  toxi/color/CMYKComparator.java[ADD], toxi/color/Color.java[CPY],
+	  toxi/color/ColorAccessCriteria.java[ADD],
+	  toxi/color/ColorList.java[ADD],
+	  toxi/color/ColorTheoryStrategy.java[ADD],
+	  toxi/color/HSVComparator.java[ADD],
+	  toxi/color/RGBComparator.java[ADD],
+	  toxi/image/colour/Colour.java[DEL],
+	  toxi/image/colour/ColourMode.java[DEL],
+	  toxi/image/colour/PaletteUtil.java: adding more features to
+	  colour lib & bending to adopt american spelling of color for that
+	  new package. also some classpath & project setting edits (using
+	  1.4 compliance)
+
+2008-11-03 22:31  toxmeister
+
+	* [r123] toxi/image/colour/Colour.java[ADD],
+	  toxi/image/colour/ColourMode.java[ADD]: started porting Nodebox'
+	  colour library
+
+2008-07-23 00:51  toxmeister
+
+	* [r91] toxi/image/colour/AccentPalette.java,
+	  toxi/image/colour/PaletteUtil.java,
+	  toxi/image/util/Filter8bit.java,
+	  toxi/image/util/TiledFrameExporter.java: prepared & added
+	  imageutils for new sub-distro, incl. javadoc and build path fixes
+
+2008-06-16 16:32  toxmeister
+
+	* [r74] toxi/image/colour/ARGBGradient.java,
+	  toxi/image/colour/AccentPalette.java,
+	  toxi/image/colour/Palette.java: added args4j and other required
+	  3rd party libs, cleaned up eclipse build path
+
+2008-06-13 17:24  toxmeister
+
+	* [r71] .[ADD], toxi[ADD], toxi/image[ADD], toxi/image/colour[CPY],
+	  toxi/image/util[CPY]: putting things in separate source folders
+	  and started creating build file for individual libraries
+
