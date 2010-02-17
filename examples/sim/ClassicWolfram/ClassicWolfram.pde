@@ -54,7 +54,7 @@ void setup() {
   ca = new CAMatrix(width);
   // create a classic Wolfram automata
   wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x5a);
-  wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x49);
+  //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x49);
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x96);
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x65);
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x89);

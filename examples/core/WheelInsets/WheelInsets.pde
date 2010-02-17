@@ -3,7 +3,7 @@
  * generative wheels. The wheels are designed for laser cutting from
  * acrylic and the outer rim has a number of cutouts for friction fitting
  * wire track modules.</p>
- * <p>The complete generative design is available under GPL v3 and
+ * <p>The actual generative wheel design is available under GPL v3 and
  * can be downloaded from:
  * 
  * http://toxiclibs.org/2010/01/re-inventing-the-wheel/

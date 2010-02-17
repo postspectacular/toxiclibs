@@ -59,6 +59,3 @@ void draw() {
 void keyPressed() {
   gs.reset();
 }
-
-
-
