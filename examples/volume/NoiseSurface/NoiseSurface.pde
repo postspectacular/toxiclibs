@@ -127,7 +127,3 @@ void keyPressed() {
     surface.saveAsSTL(sketchPath("noise.stl"));
   }
 }
-
-
-
-
