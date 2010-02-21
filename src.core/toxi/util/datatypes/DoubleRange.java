@@ -2,46 +2,70 @@ package toxi.util.datatypes;
 
 import java.util.Random;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import toxi.math.MathUtils;
 
 public class DoubleRange {
 
-	public double min, max;
-	public double current;
+    @XmlAttribute
+    public double min, max;
 
-	protected Random random = new Random();
+    @XmlAttribute(name = "default")
+    public double currValue;
 
-	public DoubleRange(double min, double max) {
-		this.min = min;
-		this.max = max;
-	}
+    protected Random random = new Random();
 
-	public DoubleRange copy() {
-		DoubleRange range = new DoubleRange(min, max);
-		range.current = current;
-		range.random = random;
-		return range;
-	}
+    public DoubleRange() {
+        this(0d, 1d);
+    }
 
-	public double getCurrent() {
-		return current;
-	}
+    public DoubleRange(double min, double max) {
+        this.min = min;
+        this.max = max;
+        this.currValue = min;
+    }
 
-	public boolean isValueInRange(float val) {
-		return val >= min && val <= max;
-	}
+    public double adjustCurrentBy(float val) {
+        currValue = MathUtils.clip(currValue + val, min, max);
+        return currValue;
+    }
 
-	public double pickRandom() {
-		current = MathUtils.random(random, (float) min, (float) max);
-		return current;
-	}
+    public DoubleRange copy() {
+        DoubleRange range = new DoubleRange(min, max);
+        range.currValue = currValue;
+        range.random = random;
+        return range;
+    }
 
-	public void setRandom(Random rnd) {
-		random = rnd;
-	}
+    public double getCurrent() {
+        return currValue;
+    }
 
-	@Override
-	public String toString() {
-		return "DoubleRange: " + min + " -> " + max;
-	}
+    public double getMedian() {
+        return (min + max) * 0.5f;
+    }
+
+    public boolean isValueInRange(float val) {
+        return val >= min && val <= max;
+    }
+
+    public double pickRandom() {
+        currValue = MathUtils.random(random, (float) min, (float) max);
+        return currValue;
+    }
+
+    public double setCurrent(double val) {
+        currValue = MathUtils.clip(val, min, max);
+        return currValue;
+    }
+
+    public void setRandom(Random rnd) {
+        random = rnd;
+    }
+
+    @Override
+    public String toString() {
+        return "DoubleRange: " + min + " -> " + max;
+    }
 }
