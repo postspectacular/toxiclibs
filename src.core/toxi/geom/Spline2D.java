@@ -124,6 +124,10 @@ public class Spline2D {
         this(Arrays.asList(pointArray), b, tightness);
     }
 
+    public Spline2D add(float x, float y) {
+        return add(new Vec2D(x, y));
+    }
+
     /**
      * Adds the given point to the list of control points.
      * 
@@ -131,7 +135,7 @@ public class Spline2D {
      * @return itself
      */
     public Spline2D add(Vec2D p) {
-        pointList.add(p);
+        pointList.add(p.copy());
         return this;
     }
 
@@ -243,12 +247,31 @@ public class Spline2D {
     }
 
     /**
+     * @return the pointList
+     */
+    public List<Vec2D> getPointList() {
+        return pointList;
+    }
+
+    /**
      * @see #setTightness(float)
      * @return the spline3d tightness
      * @since 0014 (rev.216)
      */
     public float getTightness() {
         return tightness;
+    }
+
+    /**
+     * @param pointList
+     *            the pointList to set
+     */
+    public Spline2D setPointList(List<Vec2D> plist) {
+        pointList.clear();
+        for (Vec2D p : plist) {
+            add(p);
+        }
+        return this;
     }
 
     /**

@@ -124,6 +124,10 @@ public class Spline3D {
         this(Arrays.asList(pointArray), b, tightness);
     }
 
+    public Spline3D add(float x, float y, float z) {
+        return add(new Vec3D(x, y, z));
+    }
+
     /**
      * Adds the given point to the list of control points.
      * 
@@ -131,7 +135,7 @@ public class Spline3D {
      * @return itself
      */
     public Spline3D add(Vec3D p) {
-        pointList.add(p);
+        pointList.add(p.copy());
         return this;
     }
 
@@ -251,12 +255,31 @@ public class Spline3D {
     }
 
     /**
+     * @return the pointList
+     */
+    public List<Vec3D> getPointList() {
+        return pointList;
+    }
+
+    /**
      * @see #setTightness(float)
      * @return the spline3d tightness
      * @since 0014 (rev.216)
      */
     public float getTightness() {
         return tightness;
+    }
+
+    /**
+     * @param pointList
+     *            the pointList to set
+     */
+    public Spline3D setPointList(List<Vec3D> plist) {
+        pointList.clear();
+        for (Vec3D p : plist) {
+            add(p);
+        }
+        return this;
     }
 
     /**
