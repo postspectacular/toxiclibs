@@ -31,17 +31,17 @@ public class ToneMap {
     }
 
     public int getARGBToneFor(float t) {
+        return getToneFor(t).toARGB();
+    }
+
+    public ReadonlyTColor getToneFor(float t) {
         int idx;
         if (colors.size() > 2) {
             idx = (int) (map.getClippedValueFor(t) + 0.5);
         } else {
             idx = (t >= map.getInputMedian() ? 1 : 0);
         }
-        return colors.get(idx).toARGB();
-    }
-
-    public ReadonlyTColor getToneFor(float t) {
-        return colors.get((int) map.getClippedValueFor(t));
+        return colors.get(idx);
     }
 
     public void setMapFunction(InterpolateStrategy func) {
