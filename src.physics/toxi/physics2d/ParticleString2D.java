@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec2D;
+import toxi.physics.VerletSpring;
 
 /**
  * Utility builder/grouping/management class to connect a set of particles into
@@ -72,6 +73,7 @@ public class ParticleString2D {
         links = new ArrayList<VerletSpring2D>(num - 1);
         float len = step.magnitude();
         VerletParticle2D prev = null;
+        pos = pos.copy();
         for (int i = 0; i < num; i++) {
             VerletParticle2D p = new VerletParticle2D(pos.copy(), mass);
             particles.add(p);
