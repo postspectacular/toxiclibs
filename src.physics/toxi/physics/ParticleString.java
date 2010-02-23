@@ -71,6 +71,7 @@ public class ParticleString {
         links = new ArrayList<VerletSpring>(num - 1);
         float len = step.magnitude();
         VerletParticle prev = null;
+        pos = pos.copy();
         for (int i = 0; i < num; i++) {
             VerletParticle p = new VerletParticle(pos.copy(), mass);
             particles.add(p);
