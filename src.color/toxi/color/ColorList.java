@@ -146,7 +146,7 @@ public class ColorList implements Iterable<TColor> {
         return list;
     }
 
-    protected ArrayList<TColor> colors = new ArrayList<TColor>();
+    protected List<TColor> colors = new ArrayList<TColor>();
 
     /**
      * Creates an empty list.
@@ -270,7 +270,7 @@ public class ColorList implements Iterable<TColor> {
             AccessCriteria subClusterCriteria, int numClusters,
             boolean isReversed) {
         ArrayList<TColor> sorted = new ArrayList<TColor>(colors);
-        Collections.sort(sorted, clusterCriteria.getComparator());
+        Collections.sort(sorted, clusterCriteria);
         Collections.reverse(sorted);
         ArrayList<TColor> clusters = new ArrayList<TColor>();
 
@@ -282,7 +282,7 @@ public class ColorList implements Iterable<TColor> {
             if (c.getComponentValue(clusterCriteria) < d) {
                 ArrayList<TColor> slice = new ArrayList<TColor>();
                 slice.addAll(sorted.subList(i, j));
-                Collections.sort(slice, subClusterCriteria.getComparator());
+                Collections.sort(slice, subClusterCriteria);
                 clusters.addAll(slice);
                 d -= 1.0f / numClusters;
                 i = j;
@@ -290,7 +290,7 @@ public class ColorList implements Iterable<TColor> {
         }
         ArrayList<TColor> slice = new ArrayList<TColor>();
         slice.addAll(sorted.subList(i, sorted.size()));
-        Collections.sort(slice, subClusterCriteria.getComparator());
+        Collections.sort(slice, subClusterCriteria);
         clusters.addAll(slice);
         if (isReversed) {
             Collections.reverse(clusters);
@@ -524,12 +524,7 @@ public class ColorList implements Iterable<TColor> {
      * @return itself
      */
     public ColorList sortByCriteria(AccessCriteria criteria, boolean isReversed) {
-        Comparator<ReadonlyTColor> comparator = criteria.getComparator();
-        if (comparator != null) {
-            return sortByComparator(comparator, isReversed);
-        } else {
-            return this;
-        }
+        return sortByComparator(criteria, isReversed);
     }
 
     /**

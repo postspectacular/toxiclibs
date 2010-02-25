@@ -759,17 +759,7 @@ public class TColor implements ReadonlyTColor {
      * toxi.color.ReadonlyTColor#getComponentValue(toxi.color.AccessCriteria)
      */
     public float getComponentValue(AccessCriteria criteria) {
-        switch (criteria.getMode()) {
-            case HSV:
-                return hsv[criteria.getComponent()];
-            case RGB:
-                return rgb[criteria.getComponent()];
-            case CMYK:
-                return cmyk[criteria.getComponent()];
-            case ALPHA:
-                return alpha;
-        }
-        return 0;
+        return criteria.getComponentValueFor(this);
     }
 
     /*
@@ -1083,22 +1073,8 @@ public class TColor implements ReadonlyTColor {
      * @see AccessCriteria
      */
     public TColor setComponent(AccessCriteria criteria, float val) {
-        switch (criteria.getMode()) {
-            case RGB:
-                rgb[criteria.getComponent()] = val;
-                return setRGB(rgb);
-            case HSV:
-                hsv[criteria.getComponent()] = val;
-                return setHSV(hsv);
-            case ALPHA:
-                return setAlpha(val);
-            case CMYK:
-                cmyk[criteria.getComponent()] = val;
-                return setCMYK(cmyk);
-            default:
-                throw new IllegalArgumentException(
-                        "Invalid ColorAccessCriteria mode used");
-        }
+        criteria.setComponentValueFor(this, val);
+        return this;
     }
 
     public TColor setCyan(float val) {

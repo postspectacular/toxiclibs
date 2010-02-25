@@ -1,5 +1,10 @@
 package toxi.color;
 
+/**
+ * Defines an immutable API for the TColor class. This is used to define the
+ * preset color constants in {@link NamedColor}, but also throughout other parts
+ * of this package wherever immutable behaviour is required or encouraged.
+ */
 public interface ReadonlyTColor {
 
     /**

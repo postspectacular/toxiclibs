@@ -25,39 +25,26 @@
  */
 package toxi.color;
 
-import java.util.Comparator;
-
 /**
- * Compares 2 colors by one of their RGB component values.
+ * Compares 2 colors by their alpha value.
  * 
  * @author toxi
  * 
  */
-public class RGBComparator implements Comparator<ReadonlyTColor> {
+public class AlphaAccessor extends AccessCriteria {
 
-	private final int component;
+    public int compare(ReadonlyTColor a, ReadonlyTColor b) {
+        float aa = a.alpha();
+        float ba = b.alpha();
+        return aa < ba ? -1 : aa > ba ? 1 : 0;
+    }
 
-	public RGBComparator(int comp) {
-		component = comp;
-	}
+    public float getComponentValueFor(ReadonlyTColor col) {
+        return col.alpha();
+    }
 
-	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
-		float ca, cb;
-		switch (component) {
-		case 0:
-			ca = a.red();
-			cb = b.red();
-			break;
-		case 1:
-			ca = a.green();
-			cb = b.green();
-			break;
-		case 2:
-		default:
-			ca = a.blue();
-			cb = b.blue();
-		}
-		return Float.compare(ca, cb);
-	}
+    public void setComponentValueFor(TColor col, float value) {
+        col.setAlpha(value);
+    }
 
 }

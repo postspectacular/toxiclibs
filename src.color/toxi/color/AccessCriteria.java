@@ -29,84 +29,31 @@ package toxi.color;
 import java.util.Comparator;
 
 /**
- * Defines color component access criterias and associated {@link Comparator}s
- * used to sort colors based on component values.
- * 
- * @author toxi
- * 
+ * Defines standard color component access criterias and associated comparators
+ * used to sort colors based on component values. If a new custom accessor is
+ * needed (e.g. for sub-classes TColor's), then simply sub-class this class and
+ * implement the {@link Comparator} interface and the 2 abstract getter & setter
+ * methods defined by this class.
  */
-public class AccessCriteria {
+public abstract class AccessCriteria implements Comparator<ReadonlyTColor> {
 
-	public static final AccessCriteria HUE = new AccessCriteria(AccessMode.HSV,
-			0);
-	public static final AccessCriteria SATURATION = new AccessCriteria(
-			AccessMode.HSV, 1);
-	public static final AccessCriteria BRIGHTNESS = new AccessCriteria(
-			AccessMode.HSV, 2);
-	public static final AccessCriteria RED = new AccessCriteria(AccessMode.RGB,
-			0);
-	public static final AccessCriteria GREEN = new AccessCriteria(
-			AccessMode.RGB, 1);
-	public static final AccessCriteria BLUE = new AccessCriteria(
-			AccessMode.RGB, 2);
-	public static final AccessCriteria CYAN = new AccessCriteria(
-			AccessMode.CMYK, 0);
-	public static final AccessCriteria MAGENTA = new AccessCriteria(
-			AccessMode.CMYK, 1);
-	public static final AccessCriteria YELLOW = new AccessCriteria(
-			AccessMode.CMYK, 2);
-	public static final AccessCriteria BLACK = new AccessCriteria(
-			AccessMode.CMYK, 3);
+    public static final AccessCriteria HUE = new HSVAccessor(0);
+    public static final AccessCriteria SATURATION = new HSVAccessor(1);
+    public static final AccessCriteria BRIGHTNESS = new HSVAccessor(2);
 
-	public static final AccessCriteria ALPHA = new AccessCriteria(
-			AccessMode.ALPHA, 0);
+    public static final AccessCriteria RED = new RGBAccessor(0);
+    public static final AccessCriteria GREEN = new RGBAccessor(1);
+    public static final AccessCriteria BLUE = new RGBAccessor(2);
 
-	public static final AccessCriteria LUMINANCE = new AccessCriteria(
-			AccessMode.DIRECT, 0, new LuminanceComparator());
+    public static final AccessCriteria CYAN = new CMYKAccessor(0);
+    public static final AccessCriteria MAGENTA = new CMYKAccessor(1);
+    public static final AccessCriteria YELLOW = new CMYKAccessor(2);
+    public static final AccessCriteria BLACK = new CMYKAccessor(3);
 
-	protected final AccessMode mode;
-	protected final int component;
-	protected Comparator<ReadonlyTColor> comparator;
+    public static final AccessCriteria ALPHA = new AlphaAccessor();
+    public static final AccessCriteria LUMINANCE = new LuminanceAccessor();
 
-	protected AccessCriteria(AccessMode mode, int compID) {
-		this(mode, compID, null);
-	}
+    public abstract float getComponentValueFor(ReadonlyTColor col);
 
-	protected AccessCriteria(AccessMode mode, int compID,
-			Comparator<ReadonlyTColor> comparator) {
-		this.mode = mode;
-		this.component = compID;
-		this.comparator = comparator;
-	}
-
-	/**
-	 * @return the comparator associated with the criteria.
-	 */
-	public Comparator<ReadonlyTColor> getComparator() {
-		if (comparator == null) {
-			switch (mode) {
-			case HSV:
-				comparator = new HSVComparator(component);
-				break;
-			case RGB:
-				comparator = new RGBComparator(component);
-				break;
-			case CMYK:
-				comparator = new CMYKComparator(component);
-				break;
-			case ALPHA:
-				comparator = new AlphaComparator();
-				break;
-			}
-		}
-		return comparator;
-	}
-
-	public int getComponent() {
-		return component;
-	}
-
-	public AccessMode getMode() {
-		return mode;
-	}
+    public abstract void setComponentValueFor(TColor col, float value);
 }

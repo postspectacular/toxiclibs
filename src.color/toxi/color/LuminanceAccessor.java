@@ -25,39 +25,39 @@
  */
 package toxi.color;
 
-import java.util.Comparator;
-
 /**
- * Compares 2 colors by one of their HSV component values.
+ * Compares 2 colors by their luminance values.
  * 
  * @author toxi
  * 
  */
-public class HSVComparator implements Comparator<ReadonlyTColor> {
+public class LuminanceAccessor extends AccessCriteria {
 
-	private final int component;
+    public int compare(ReadonlyTColor a, ReadonlyTColor b) {
+        float lumA = a.luminance();
+        float lumB = b.luminance();
+        if (lumA < lumB) {
+            return -1;
+        }
+        if (lumA > lumB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
-	public HSVComparator(int comp) {
-		component = comp;
-	}
+    public float getComponentValueFor(ReadonlyTColor col) {
+        return col.luminance();
+    }
 
-	public int compare(ReadonlyTColor a, ReadonlyTColor b) {
-		float ca, cb;
-		switch (component) {
-		case 0:
-			ca = a.hue();
-			cb = b.hue();
-			break;
-		case 1:
-			ca = a.saturation();
-			cb = b.saturation();
-			break;
-		case 2:
-		default:
-			ca = a.brightness();
-			cb = b.brightness();
-		}
-		return Float.compare(ca, cb);
-	}
+    /**
+     * The setter for this accessor is not doing anything, since the luminance
+     * of a color is a coputed value depending on 3 color channels.
+     * 
+     * @see toxi.color.AccessCriteria#setComponentValueFor(toxi.color.TColor,
+     *      float)
+     */
+    public void setComponentValueFor(TColor col, float value) {
 
+    }
 }
