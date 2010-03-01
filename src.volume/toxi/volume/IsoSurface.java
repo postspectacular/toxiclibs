@@ -170,7 +170,7 @@ public class IsoSurface {
         Vec3D[] verts = null;
         for (int i = 0; i < numFaces; i++) {
             verts = getVerticesForFace(i, verts);
-            mesh.addFace(verts[2], verts[1], verts[0]);
+            mesh.addFace(verts[1], verts[2], verts[0]);
         }
         return mesh;
     }
