@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import toxi.geom.util.TriangleMesh;
 import toxi.math.MathUtils;
 
 /**
@@ -297,6 +298,37 @@ public class AABB extends Vec3D {
     public AABB setExtent(Vec3D extent) {
         this.extent = new Vec3D(extent);
         return updateBounds();
+    }
+
+    public TriangleMesh toMesh(String name) {
+        TriangleMesh mesh = new TriangleMesh(name);
+        // front
+        Vec3D a = new Vec3D(min.x, max.y, max.z);
+        Vec3D b = new Vec3D(max.x, max.y, max.z);
+        Vec3D c = new Vec3D(max.x, min.y, max.z);
+        Vec3D d = new Vec3D(min.x, min.y, max.z);
+        mesh.addFace(a, b, d);
+        mesh.addFace(b, c, d);
+        // back
+        Vec3D e = new Vec3D(min.x, max.y, min.z);
+        Vec3D f = new Vec3D(max.x, max.y, min.z);
+        Vec3D g = new Vec3D(max.x, min.y, min.z);
+        Vec3D h = new Vec3D(min.x, min.y, min.z);
+        mesh.addFace(f, e, g);
+        mesh.addFace(e, h, g);
+        // top
+        mesh.addFace(e, f, a);
+        mesh.addFace(f, b, a);
+        // bottom
+        mesh.addFace(g, h, d);
+        mesh.addFace(g, d, c);
+        // left
+        mesh.addFace(e, a, h);
+        mesh.addFace(a, d, h);
+        // right
+        mesh.addFace(b, f, g);
+        mesh.addFace(b, g, c);
+        return mesh;
     }
 
     /*
