@@ -552,7 +552,7 @@ public class TriangleMesh {
         STLWriter stl = new STLWriter();
         stl.beginSave(fileName, numFaces);
         for (Face f : faces) {
-            stl.face(f.a, f.b, f.c);
+            stl.face(f.b, f.a, f.c);
         }
         stl.endSave();
         logger.info(numFaces + " written");
