@@ -147,7 +147,7 @@ public class TriangleMesh {
      * @param b
      * @param c
      */
-    public final void addFace(Vec3D a, Vec3D b, Vec3D c) {
+    public void addFace(Vec3D a, Vec3D b, Vec3D c) {
         int aID, bID, cID;
         Vertex va = vertices.get(a);
         if (va != null) {
@@ -184,6 +184,18 @@ public class TriangleMesh {
             Face f = new Face(va, vb, vc);
             faces.add(f);
             numFaces++;
+        }
+    }
+
+    /**
+     * Adds all faces from the given mesh to this one.
+     * 
+     * @param m
+     *            source mesh instance
+     */
+    public void addMesh(TriangleMesh m) {
+        for (Face f : m.faces) {
+            addFace(f.a, f.b, f.c);
         }
     }
 
