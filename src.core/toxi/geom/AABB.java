@@ -300,6 +300,10 @@ public class AABB extends Vec3D {
         return updateBounds();
     }
 
+    public TriangleMesh toMesh() {
+        return toMesh("box");
+    }
+
     public TriangleMesh toMesh(String name) {
         TriangleMesh mesh = new TriangleMesh(name);
         // front
