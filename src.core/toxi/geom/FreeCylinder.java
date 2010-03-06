@@ -37,7 +37,7 @@ public class FreeCylinder extends Vec3D {
             mesh.addFace(top[i], bottom[i], top[(i + 1) % steps]);
             mesh.addFace(top[(i + 1) % steps], bottom[i], bottom[(i + 1)
                     % steps]);
-            mesh.addFace(this, top[i], top[(i + 1) % steps]);
+            mesh.addFace(p, top[i], top[(i + 1) % steps]);
             mesh.addFace(bottom[i], q, bottom[(i + 1) % steps]);
         }
         return mesh;
