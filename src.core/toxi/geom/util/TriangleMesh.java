@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
+import toxi.geom.Matrix4x4;
 import toxi.geom.Sphere;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
@@ -24,8 +25,8 @@ public class TriangleMesh {
 
     public final static class Face {
 
-        public final Vertex a, b, c;
-        public final Vec3D normal;
+        public Vertex a, b, c;
+        public Vec3D normal;
 
         Face(Vertex a, Vertex b, Vertex c) {
             this.a = a;
@@ -68,6 +69,11 @@ public class TriangleMesh {
         final void addFaceNormal(Vec3D n) {
             normal.addSelf(n);
             valence++;
+        }
+
+        final void clearNormal() {
+            normal.clear();
+            valence = 0;
         }
 
         final void computeNormal() {
@@ -229,11 +235,27 @@ public class TriangleMesh {
     }
 
     /**
-     * Computes the smooth vertex normals for the entire mesh. <strong>This
-     * method should only be called once in order to avoid disintegration of the
-     * normal vectors.</strong>
+     * Re-calculates all face normals.
+     */
+    public TriangleMesh computeFaceNormals() {
+        for (Face f : faces) {
+            f.normal = f.a.sub(f.c).crossSelf(f.a.sub(f.b)).normalize();
+        }
+        return this;
+    }
+
+    /**
+     * Computes the smooth vertex normals for the entire mesh.
      */
     public void computeVertexNormals() {
+        for (Vertex v : vertices.values()) {
+            v.clearNormal();
+        }
+        for (Face f : faces) {
+            f.a.addFaceNormal(f.normal);
+            f.b.addFaceNormal(f.normal);
+            f.c.addFaceNormal(f.normal);
+        }
         for (Vertex v : vertices.values()) {
             v.computeNormal();
         }
@@ -252,6 +274,22 @@ public class TriangleMesh {
             m.addFace(f.a, f.b, f.c);
         }
         return m;
+    }
+
+    /**
+     * Flips the vertex ordering between clockwise and anti-clockwise. Face
+     * normals are updated automatically too.
+     * 
+     * @return
+     */
+    public TriangleMesh flipVertexOrder() {
+        for (Face f : faces) {
+            Vertex t = f.a;
+            f.a = f.b;
+            f.b = t;
+            f.normal.invert();
+        }
+        return this;
     }
 
     /**
@@ -419,7 +457,7 @@ public class TriangleMesh {
     }
 
     public float[] getUniqueVerticesAsArray() {
-        float[] verts = new float[vertices.size() * 3];
+        float[] verts = new float[numVertices * 3];
         int i = 0;
         for (Vertex v : vertices.values()) {
             verts[i++] = v.x;
@@ -451,7 +489,8 @@ public class TriangleMesh {
      * @param offset
      *            start index in array to place normals
      * @param stride
-     *            stride/alignment setting for individual coordinates
+     *            stride/alignment setting for individual coordinates (min value
+     *            = 3)
      * @return array of xyz normal coords
      */
     public float[] getVertexNormalsAsArray(float[] normals, int offset,
@@ -574,5 +613,35 @@ public class TriangleMesh {
     public String toString() {
         return "TriangleMesh: " + name + " vertices: " + getNumVertices()
                 + " faces: " + getNumFaces();
+    }
+
+    /**
+     * Applies the given matrix transform to all mesh vertices and updates all
+     * face normals.
+     * 
+     * @param mat
+     * @return itself
+     */
+    public TriangleMesh transform(Matrix4x4 mat) {
+        return transform(mat, true);
+    }
+
+    /**
+     * Applies the given matrix transform to all mesh vertices. If the
+     * updateNormals flag is true, all face normals are updated automatically,
+     * however vertex normals need a manual update.
+     * 
+     * @param mat
+     * @param updateNormals
+     * @return itself
+     */
+    public TriangleMesh transform(Matrix4x4 mat, boolean updateNormals) {
+        for (Vertex v : vertices.values()) {
+            v.set(mat.applyTo(v));
+        }
+        if (updateNormals) {
+            computeFaceNormals();
+        }
+        return this;
     }
 }
