@@ -1,6 +1,7 @@
 package toxi.geom.util;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import toxi.geom.Vec3D;
@@ -44,7 +45,7 @@ public class OBJWriter {
             objWriter.close();
             objStream.flush();
             objStream.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
