@@ -49,7 +49,7 @@
 		</javac>
 	</target>
 
-	<target name="create_manifest" description="Create the jar manifest">
+    <target name="create_manifest" depends="compile" description="Create the jar manifest">
 		<echo file="${build.manifest}" append="false" message="Manifest-Version: 1.0${line.separator}" />
 	</target>
 
