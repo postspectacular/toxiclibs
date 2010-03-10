@@ -462,6 +462,18 @@ public class MathUtils {
         return theta;
     }
 
+    public static int sign(double x) {
+        return x < 0 ? -1 : (x > 0 ? 1 : 0);
+    }
+
+    public static int sign(float x) {
+        return x < 0 ? -1 : (x > 0 ? 1 : 0);
+    }
+
+    public static int sign(int x) {
+        return x < 0 ? -1 : (x > 0 ? 1 : 0);
+    }
+
     /**
      * Returns a fast sine approximation of a value. Note: code from <a
      * href="http://wiki.java.net/bin/view/Games/JeffGems">wiki posting on
