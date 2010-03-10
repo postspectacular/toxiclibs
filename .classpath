@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src.core"/>
 	<classpathentry including="../src.core/toxi/math/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
-	<classpathentry kind="src" path="src.video"/>
-	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
+	<classpathentry kind="src" path="src.core"/>
+	<classpathentry kind="src" path="src.color"/>
+	<classpathentry kind="src" path="src.data"/>
+	<classpathentry kind="src" path="src.doap"/>
 	<classpathentry including="../lib/core.jar|../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.image"/>
 	<classpathentry kind="src" path="src.net"/>
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.physics"/>
-	<classpathentry kind="src" path="src.color"/>
-	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
-	<classpathentry kind="src" path="src.data"/>
-	<classpathentry kind="src" path="src.doap"/>
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.sim"/>
+	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
+	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
+	<classpathentry kind="src" path="src.video"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/args4j-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/joal/gluegen-rt.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/joal"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/joal/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="lib/joal/joal.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/joal"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jogl/gluegen-rt.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/jogl"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="lib/jogl/jogl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/jogl"/>
