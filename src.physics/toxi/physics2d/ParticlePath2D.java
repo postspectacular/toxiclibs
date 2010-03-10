@@ -15,35 +15,53 @@ import toxi.geom.Vec2D;
  */
 public class ParticlePath2D extends Spline2D {
 
-    List<VerletParticle2D> particles = new ArrayList<VerletParticle2D>();
+	List<VerletParticle2D> particles = new ArrayList<VerletParticle2D>();
 
-    public ParticlePath2D() {
-        super();
-    }
+	public ParticlePath2D() {
+		super();
+	}
 
-    public ParticlePath2D(List<Vec2D> points) {
-        super(points);
-    }
+	public ParticlePath2D(List<Vec2D> points) {
+		super(points);
+	}
 
-    public List<VerletParticle2D> createParticles(VerletPhysics2D physics,
-            int subDiv, float step, float mass) {
-        particles.clear();
-        computeVertices(subDiv);
-        int num = vertices.size();
-        int i = 0;
-        while (i < num - 1) {
-            Vec2D a = vertices.get(i);
-            Vec2D b = vertices.get(i + 1);
-            Vec2D dir = b.sub(a);
-            Vec2D stepDir = dir.getNormalizedTo(step);
-            Vec2D curr = a.copy();
-            while (curr.sub(a).dot(dir) / dir.magSquared() <= 1) {
-                VerletParticle2D currP = new VerletParticle2D(curr, mass);
-                particles.add(currP);
-                curr.addSelf(stepDir);
-            }
-            i++;
-        }
-        return particles;
-    }
+	/**
+	 * Creates particles along the spline at the fixed interval given. The
+	 * precision of this interval will largely depend on the number of
+	 * subdivision vertices created, but can be adjusted via the related
+	 * parameter.
+	 * 
+	 * @param physics
+	 *            physics instance
+	 * @param subDiv
+	 *            number spline segment subdivisions
+	 * @param step
+	 *            desired rest length between particles
+	 * @param mass
+	 *            desired particle mass
+	 * @return list of particles
+	 */
+	public List<VerletParticle2D> createParticles(VerletPhysics2D physics,
+			int subDiv, float step, float mass) {
+		particles.clear();
+		computeVertices(subDiv);
+		for (Vec2D v : getDecimatedVertices(step, true)) {
+			VerletParticle2D p = createSingleParticle(v, mass);
+			particles.add(p);
+			physics.addParticle(p);
+		}
+		return particles;
+	}
+
+	/**
+	 * Extension point for creating a custom/sub-classed VerletParticle
+	 * instance.
+	 * 
+	 * @param pos
+	 * @param mass
+	 * @return particle
+	 */
+	protected VerletParticle2D createSingleParticle(Vec2D pos, float mass) {
+		return new VerletParticle2D(pos, mass);
+	}
 }
