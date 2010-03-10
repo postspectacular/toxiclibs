@@ -38,5 +38,11 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jogl/opengl.jar"/>
 	<classpathentry kind="lib" path="lib/doapamine.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/activation.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jaxb1-impl.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb/jsr173_1.0_api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

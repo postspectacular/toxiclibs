@@ -1,0 +1,8 @@
+syntax: glob
+
+bin
+docs
+dist
+
+.DS_Store
+

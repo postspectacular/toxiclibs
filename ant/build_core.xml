@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
-    <property file="versions.properties"/>
+	<property file="versions.properties" />
 	<property name="project.name" value="toxiclibscore" />
 	<property name="srcfolder.id" value="core" />
 	<property name="lib.version" value="${version.core}" />
 	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - toxiclibs core classes for Java &amp; Processing v${lib.version}" />
-	<property name="lib.libs.path" value="../lib" />
+	<property name="lib.libs.path" value="../lib,../lib/jaxb/jaxb-api.jar,../lib/jaxb/jsr173_1.0_api.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
 	<property name="src.dir" value="../src.${srcfolder.id}" />
 	<property name="build.dir" value="../bin" />
@@ -26,12 +26,14 @@
 	<property name="doap.src.dir" value="../src.doap" />
 	<property name="doap.file" value="doap.rdf" />
 
+	<!--
 	<taskdef name="doap" classname="com.triplescape.doapamine.DOAPTask">
 		<classpath>
 			<pathelement location="${doap.lib}" />
 			<pathelement location="${build.dir}" />
 		</classpath>
 	</taskdef>
+	-->
 
 	<target name="clean" description="Remove build files created this scripts">
 		<delete dir="${build.dir}" />
@@ -43,12 +45,12 @@
 	<target name="compile" depends="clean" description="Compile source">
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
-			<src path="${src.dir}"/>
-			<src path="${doap.src.dir}"/>
+			<src path="${src.dir}" />
+			<!-- <src path="${doap.src.dir}" /> -->
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
-				<pathelement location="${lib.libs.path}/doapamine.jar" />
+				<!-- <pathelement location="${lib.libs.path}/doapamine.jar" /> -->
 			</classpath>
 		</javac>
 	</target>
@@ -64,7 +66,6 @@
 		</jar>
 	</target>
 
-	<!-- release directory targets -->
 	<target name="zips" depends="jars" description="Create release zip files">
 		<mkdir dir="${release.dir}" />
 		<zip destfile="${release.bin.zip}" comment="${lib.zip.comment} - Binary release">
@@ -139,5 +140,5 @@
 		<doap class="toxi.doap.DOAPInfo" output="${release.dir}/${doap.file}" />
 	</target>
 
-	<target name="release" depends="clean, compile, generate_doap, javadoc, zips" />
+	<target name="release" depends="clean, compile, javadoc, zips" />
 </project>
