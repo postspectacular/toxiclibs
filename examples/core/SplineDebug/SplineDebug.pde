@@ -1,39 +1,53 @@
 import toxi.geom.*;
 
-int steps=8;
+int RES=32;
 
-size(300,300);
+size(300,500);
 background(255);
-noFill();
 smooth();
-
-translate(50,100);
+textFont(createFont("SansSerif",10));
 
 Spline2D s=new Spline2D();
-s.add(new Vec2D(0,100));
-s.add(new Vec2D(50,0));
+s.add(new Vec2D(60,100));
+s.add(new Vec2D(60,0));
 s.add(new Vec2D(100,0));
 s.add(new Vec2D(100,100));
 s.add(new Vec2D(200,0));
 s.add(new Vec2D(200,100));
 
+translate(50,20);
 stroke(255,0,0);
+fill(255,0,0);
+text("control points",-40,0);
+noFill();
 beginShape();
-for(int i=0; i<s.pointList.size(); i++) {
-  vertex(s.pointList.get(i).x,s.pointList.get(i).y);
+for(Iterator i=s.pointList.iterator(); i.hasNext();) {
+  Vec2D v=(Vec2D)i.next();
+  vertex(v.x, v.y);
 }
 endShape();
-java.util.List v=s.computeVertices(8);
-println("num verts: "+v.size());
 
+translate(0,160);
+fill(0);
+text("tweened vertices",-40,0);
+noFill();
 int c=0;
-Vec2D prev=null;
-for(Iterator i=v.iterator(); i.hasNext();) {
+for(Iterator i=s.computeVertices(RES).iterator(); i.hasNext();) {
   Vec2D p=(Vec2D)i.next();
-  if (0==c%steps) stroke(255,0,0);
-  else stroke((c%steps)*32);
+  if (0 == c % RES) stroke(255,0,0);
+  else stroke((c % RES)*(255f/RES));
   ellipse(p.x,p.y,5,5);
-  println(c+": "+p);
-  prev=p;
   c++;
 }
+
+translate(0,160);
+stroke(0,0,255);
+fill(0,0,255);
+text("fixed interval",-40,0);
+noFill();
+for(Iterator i=s.getDecimatedVertices(20).iterator(); i.hasNext();) {
+  Vec2D p=(Vec2D)i.next();
+  line(p.x-2,p.y,p.x+2,p.y);
+  line(p.x,p.y-2,p.x,p.y+2);
+}
+
