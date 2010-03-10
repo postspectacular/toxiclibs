@@ -57,7 +57,7 @@ public class STLReader {
                 Vec3D a = readVector(ds);
                 Vec3D b = readVector(ds);
                 Vec3D c = readVector(ds);
-                mesh.addFace(a, b, c);
+                mesh.addFace(a, c, b);
                 // ignore colour
                 ds.read(buf, 0, 2);
             }
