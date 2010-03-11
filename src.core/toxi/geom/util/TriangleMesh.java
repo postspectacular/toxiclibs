@@ -546,7 +546,6 @@ public class TriangleMesh {
         Vec3D target = dir.getNormalized();
         Vec3D axis = forward.cross(target);
         float length = axis.magnitude() + 0.0001f;
-        axis.scale(1f / length);
         float angle = (float) Math.atan2(length, forward.dot(target));
         Quaternion q = Quaternion.createFromAxisAngle(axis, angle);
         return transform(q.getMatrix());
