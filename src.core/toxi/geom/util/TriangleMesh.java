@@ -548,7 +548,7 @@ public class TriangleMesh {
         float length = axis.magnitude() + 0.0001f;
         float angle = (float) Math.atan2(length, forward.dot(target));
         Quaternion q = Quaternion.createFromAxisAngle(axis, angle);
-        return transform(q.getMatrix());
+        return transform(q.getMatrix(), true);
     }
 
     /**
