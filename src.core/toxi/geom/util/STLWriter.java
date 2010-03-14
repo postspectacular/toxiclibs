@@ -22,122 +22,136 @@ import toxi.geom.Vec3D;
  */
 public class STLWriter {
 
-	public static final STLColorModel DEFAULT = new DefaultSTLColorModel();
+    public static final STLColorModel DEFAULT = new DefaultSTLColorModel();
 
-	public static final STLColorModel MATERIALISE = new MaterialiseSTLColorModel(
-			0xffffffff);
+    public static final STLColorModel MATERIALISE =
+            new MaterialiseSTLColorModel(0xffffffff);
 
-	protected DataOutputStream ds;
+    protected DataOutputStream ds;
 
-	protected Vec3D scale = new Vec3D(1, 1, 1);
+    protected Vec3D scale = new Vec3D(1, 1, 1);
 
-	protected boolean useInvertedNormals = false;
+    protected boolean useInvertedNormals = false;
 
-	protected byte[] buf = new byte[4];
+    protected byte[] buf = new byte[4];
 
-	protected STLColorModel colorModel;
+    protected STLColorModel colorModel;
 
-	public STLWriter() {
-		this(DEFAULT);
-	}
+    public STLWriter() {
+        this(DEFAULT);
+    }
 
-	public STLWriter(STLColorModel cm) {
-		colorModel = cm;
-	}
+    public STLWriter(STLColorModel cm) {
+        colorModel = cm;
+    }
 
-	public void beginSave(String fn, int numFaces) {
-		try {
-			ds = new DataOutputStream(new FileOutputStream(fn));
-			writeHeader(numFaces);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void beginSave(String fn, int numFaces) {
+        try {
+            ds = new DataOutputStream(new FileOutputStream(fn));
+            writeHeader(numFaces);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void endSave() {
-		try {
-			ds.flush();
-			ds.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void endSave() {
+        try {
+            ds.flush();
+            ds.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void face(Vec3D a, Vec3D b, Vec3D c) {
-		face(a, b, c, 0);
-	}
+    public void face(Vec3D a, Vec3D b, Vec3D c) {
+        face(a, b, c, 0);
+    }
 
-	public void face(Vec3D a, Vec3D b, Vec3D c, int rgb) {
-		try {
-			// normal
-			Vec3D normal = b.sub(a).cross(c.sub(a)).normalize();
-			if (useInvertedNormals) {
-				normal.invert();
-			}
-			writeVector(normal);
-			// vertices
-			writeVector(a);
-			writeVector(b);
-			writeVector(c);
-			// vertex attrib (color)
-			if (rgb != 0) {
-				writeShort(colorModel.formatRGB(rgb));
-			} else {
-				writeShort(0);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public void face(Vec3D a, Vec3D b, Vec3D c, int rgb) {
+        // normal
+        Vec3D normal = b.sub(a).cross(c.sub(a)).normalize();
+        if (useInvertedNormals) {
+            normal.invert();
+        }
+        face(a, b, c, normal, rgb);
+    }
 
-	private final void prepareBuffer(int a) {
-		buf[3] = (byte) (a >>> 24);
-		buf[2] = (byte) (a >> 16 & 0xff);
-		buf[1] = (byte) (a >> 8 & 0xff);
-		buf[0] = (byte) (a & 0xff);
-	}
+    public void face(Vec3D a, Vec3D b, Vec3D c, Vec3D normal, int rgb) {
+        try {
+            writeVector(normal);
+            // vertices
+            writeScaledVector(a);
+            writeScaledVector(b);
+            writeScaledVector(c);
+            // vertex attrib (color)
+            if (rgb != 0) {
+                writeShort(colorModel.formatRGB(rgb));
+            } else {
+                writeShort(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setScale(float s) {
-		scale.set(s, s, s);
-	}
+    private final void prepareBuffer(int a) {
+        buf[3] = (byte) (a >>> 24);
+        buf[2] = (byte) (a >> 16 & 0xff);
+        buf[1] = (byte) (a >> 8 & 0xff);
+        buf[0] = (byte) (a & 0xff);
+    }
 
-	public void setScale(Vec3D s) {
-		scale.set(s);
-	}
+    public void setScale(float s) {
+        scale.set(s, s, s);
+    }
 
-	public void useInvertedNormals(boolean state) {
-		useInvertedNormals = state;
-	}
+    public void setScale(Vec3D s) {
+        scale.set(s);
+    }
 
-	protected void writeFloat(float a) throws IOException {
-		prepareBuffer(Float.floatToRawIntBits(a));
-		ds.write(buf, 0, 4);
-	}
+    public void useInvertedNormals(boolean state) {
+        useInvertedNormals = state;
+    }
 
-	protected void writeHeader(int num) throws IOException {
-		byte[] header = new byte[80];
-		colorModel.formatHeader(header);
-		ds.write(header, 0, 80);
-		writeInt(num);
-	}
+    protected void writeFloat(float a) throws IOException {
+        prepareBuffer(Float.floatToRawIntBits(a));
+        ds.write(buf, 0, 4);
+    }
 
-	protected void writeInt(int a) throws IOException {
-		prepareBuffer(a);
-		ds.write(buf, 0, 4);
-	}
+    protected void writeHeader(int num) throws IOException {
+        byte[] header = new byte[80];
+        colorModel.formatHeader(header);
+        ds.write(header, 0, 80);
+        writeInt(num);
+    }
 
-	protected void writeShort(int a) throws IOException {
-		ds.writeByte(a & 0xff);
-		ds.writeByte(a >> 8 & 0xff);
-	}
+    protected void writeInt(int a) throws IOException {
+        prepareBuffer(a);
+        ds.write(buf, 0, 4);
+    }
 
-	protected void writeVector(Vec3D v) {
-		try {
-			writeFloat(v.x * scale.x);
-			writeFloat(v.y * scale.y);
-			writeFloat(v.z * scale.z);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    protected void writeScaledVector(Vec3D v) {
+        try {
+            writeFloat(v.x * scale.x);
+            writeFloat(v.y * scale.y);
+            writeFloat(v.z * scale.z);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void writeShort(int a) throws IOException {
+        ds.writeByte(a & 0xff);
+        ds.writeByte(a >> 8 & 0xff);
+    }
+
+    protected void writeVector(Vec3D v) {
+        try {
+            writeFloat(v.x);
+            writeFloat(v.y);
+            writeFloat(v.z);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
