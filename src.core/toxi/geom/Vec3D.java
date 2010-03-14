@@ -938,7 +938,6 @@ public class Vec3D implements Comparable<Vec3D> {
     /**
      * Checks if vector has a magnitude equals or close to zero.
      * 
-     * @see MathUtils.EPS
      * @return true, if zero vector
      */
     public final boolean isZeroVector() {

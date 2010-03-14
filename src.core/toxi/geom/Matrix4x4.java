@@ -134,8 +134,10 @@ public class Matrix4x4 {
     }
 
     /**
+     * Creates a copy of the given vector, transformed by this matrix.
+     * 
      * @param v
-     * @return
+     * @return transformed vector
      */
     public Vec3D applyTo(Vec3D v) {
         for (int i = 0; i < 4; i++) {
