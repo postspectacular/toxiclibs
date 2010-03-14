@@ -294,6 +294,18 @@ public class TriangleMesh {
     }
 
     /**
+     * Flips all vertices along the Y axis and reverses the vertex ordering of
+     * all faces to compensate and keep the direction of normals intact.
+     * 
+     * @return itself
+     */
+    public TriangleMesh flipYAxis() {
+        transform(new Matrix4x4().scaleSelf(1, -1, 1));
+        flipVertexOrder();
+        return this;
+    }
+
+    /**
      * Computes & returns the axis-aligned bounding box of the mesh.
      * 
      * @return bounding box
@@ -633,14 +645,33 @@ public class TriangleMesh {
      * @param fileName
      */
     public final void saveAsSTL(String fileName) {
+        saveAsSTL(fileName, false);
+    }
+
+    /**
+     * Saves the mesh as binary STL format to the given file path. The exported
+     * mesh can optionally have it's Y axis flipped by setting the useFlippedY
+     * flag to true. Existing files will be overwritten.
+     * 
+     * @param fileName
+     * @param useFlippedY
+     */
+    public final void saveAsSTL(String fileName, boolean useFlippedY) {
         logger.info("saving mesh to: " + fileName);
         STLWriter stl = new STLWriter();
         stl.beginSave(fileName, numFaces);
-        for (Face f : faces) {
-            stl.face(f.b, f.a, f.c);
+        if (useFlippedY) {
+            stl.setScale(new Vec3D(1, -1, 1));
+            for (Face f : faces) {
+                stl.face(f.a, f.b, f.c, f.normal, 0);
+            }
+        } else {
+            for (Face f : faces) {
+                stl.face(f.b, f.a, f.c, f.normal, 0);
+            }
         }
         stl.endSave();
-        logger.info(numFaces + " written");
+        logger.info(numFaces + " faces written");
     }
 
     @Override
