@@ -1,280 +1,342 @@
-2010-02-16 15:41  toxmeister
+2010-03-10  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r420] toxi/physics2d/ParticlePath2D.java[ADD],
-	  toxi/physics2d/ParticleString2D.java[ADD]: adding 2D versions of
-	  ParticlePath & ParticleString classes
+	* src.physics/toxi/physics/ParticlePath.java,
+	src.physics/toxi/physics2d/ParticlePath2D.java:
+	updating ParticlePath2D/3D to reflect changes to
+	Spline2D/3D.getDecimatedVertices()
+	[6c87a05d5f5a]
 
-2010-02-16 15:40  toxmeister
+2010-02-23  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r419] toxi/physics/ParticleString.java: fixing javadocs
+	* src.physics/toxi/physics2d/ParticleString2D.java:
+	refactored, now using an internal copy of the pos parameter vector
+	for linear string constructor so that original doesn't get changed
+	[46ebc21a8b58]
 
-2010-02-05 07:28  toxmeister
+	* src.physics/toxi/physics/ParticleString.java:
+	refactored, now using an internal copy of the pos parameter vector
+	for linear string constructor so that original doesn't get changed
+	[5e129370ae61]
 
-	* [r377] toxi/physics/VerletPhysics.java,
-	  toxi/physics/VerletSpring.java,
-	  toxi/physics2d/VerletPhysics2D.java,
-	  toxi/physics2d/VerletSpring2D.java: renaming friction into drag,
-	  making it along with all other physics engine parameters
-	  protected, adding getters & setters instead of direct field
-	  access, updating all physics demos to reflect these changes
+2010-02-16  Karsten Schmidt  <k@postspectacular.com>
 
-2010-02-05 06:58  toxmeister
+	* src.physics/toxi/physics2d/ParticlePath2D.java,
+	src.physics/toxi/physics2d/ParticleString2D.java:
+	adding 2D versions of ParticlePath & ParticleString classes
+	[bb4b51a16e6b]
 
-	* [r375] toxi/physics/VerletPhysics.java,
-	  toxi/physics2d/VerletPhysics2D.java: setting default timestep to
-	  1.0 to adapt to improved mass/velocity logic, updating version
-	  number to 0006 in build file
+	* src.physics/toxi/physics/ParticleString.java:
+	fixing javadocs
+	[fe54cb6b1e5d]
 
-2010-01-20 14:56  toxmeister
+2010-02-05  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r361] toxi/physics2d/constraints/CircularConstraint.java:
-	  updating changes to Circle class in CircularConstraint
+	* examples/physics/BoxConstraintDemo/BoxConstraintDemo.pde,
+	examples/physics/BoxFluidDemo/BoxFluidDemo.pde,
+	examples/physics/BoxFluidDemo/Mesh.pde,
+	examples/physics/BoxFluidDemo/Physics.pde,
+	examples/physics/SoftBodySquare/SoftBodySquare.pde,
+	examples/physics/ThreadSphere/ThreadSphere.pde,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java:
+	renaming friction into drag, making it along with all other physics
+	engine parameters protected, adding getters & setters instead of
+	direct field access, updating all physics demos to reflect these
+	changes
+	[a461cb72edef]
 
-2010-01-18 01:42  toxmeister
+	* ant/build_physics.xml, src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java:
+	setting default timestep to 1.0 to adapt to improved mass/velocity
+	logic, updating version number to 0006 in build file
+	[e0333f818db1]
 
-	* [r356] toxi/physics/constraints/PlaneConstraint.java,
-	  toxi/physics/constraints/SphereConstraint.java,
-	  toxi/physics2d/constraints/RectConstraint.java: fixing
-	  SphereConstraint to work with spheres not located at world
-	  origin, minor updates to PlaneConstraint & RectConstraint
+2010-01-20  Karsten Schmidt  <k@postspectacular.com>
 
-2010-01-18 01:38  toxmeister
+	* src.physics/toxi/physics2d/constraints/CircularConstraint.java:
+	updating changes to Circle class in CircularConstraint
+	[723493c85813]
 
-	* [r355] toxi/physics/constraints/MaxConstraint.java[ADD],
-	  toxi/physics/constraints/MinConstraint.java[CPY],
-	  toxi/physics/constraints/MinXConstraint.java[DEL],
-	  toxi/physics/constraints/MinYConstraint.java[DEL],
-	  toxi/physics/constraints/MinZConstraint.java[DEL],
-	  toxi/physics2d/constraints/MaxConstraint.java[ADD],
-	  toxi/physics2d/constraints/MinConstraint.java[ADD]: refactoring
-	  MinX/Y/ZConstraint (removed) into MinConstraint only, but using
-	  Vec2D/3D's new reflective Axis accessors for flexibility, adding
-	  MaxConstraint too
+2010-01-18  Karsten Schmidt  <k@postspectacular.com>
 
-2010-01-18 00:30  toxmeister
+	* src.physics/toxi/physics/constraints/PlaneConstraint.java,
+	src.physics/toxi/physics/constraints/SphereConstraint.java,
+	src.physics/toxi/physics2d/constraints/RectConstraint.java:
+	fixing SphereConstraint to work with spheres not located at world
+	origin, minor updates to PlaneConstraint & RectConstraint
+	[0aae684d9cf1]
 
-	* [r354] toxi/physics/VerletPhysics.java,
-	  toxi/physics2d/VerletPhysics2D.java: refactoring force
-	  application when updating particles to be more correct (at least
-	  according to teknikus paper), adding static addConstraintToAll()
-	  & removeConstraintFromAll() methods, removing protected & now
-	  obsolete applyGravity() method
+	* src.physics/toxi/physics/constraints/MaxConstraint.java,
+	src.physics/toxi/physics/constraints/MinConstraint.java,
+	src.physics/toxi/physics/constraints/MinXConstraint.java,
+	src.physics/toxi/physics/constraints/MinYConstraint.java,
+	src.physics/toxi/physics/constraints/MinZConstraint.java,
+	src.physics/toxi/physics2d/constraints/MaxConstraint.java,
+	src.physics/toxi/physics2d/constraints/MinConstraint.java:
+	refactoring MinX/Y/ZConstraint (removed) into MinConstraint only,
+	but using Vec2D/3D's new reflective Axis accessors for flexibility,
+	adding MaxConstraint too
+	[3288724742d9]
 
-2010-01-18 00:17  toxmeister
+	* src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java:
+	refactoring force application when updating particles to be more
+	correct (at least according to teknikus paper), adding static
+	addConstraintToAll() & removeConstraintFromAll() methods, removing
+	protected & now obsolete applyGravity() method
+	[cdb3c5bd47cc]
 
-	* [r353] toxi/physics/VerletConstrainedSpring.java,
-	  toxi/physics/VerletMinDistanceSpring.java,
-	  toxi/physics/VerletSpring.java,
-	  toxi/physics2d/VerletConstrainedSpring2D.java,
-	  toxi/physics2d/VerletMinDistanceSpring2D.java,
-	  toxi/physics2d/VerletSpring2D.java: updating all spring classes
-	  to use new invWeight field of VerletParticle (2D & 3D versions)
+	* src.physics/toxi/physics/VerletConstrainedSpring.java,
+	src.physics/toxi/physics/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics2d/VerletConstrainedSpring2D.java,
+	src.physics/toxi/physics2d/VerletMinDistanceSpring2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java:
+	updating all spring classes to use new invWeight field of
+	VerletParticle (2D & 3D versions)
+	[0930e9d64ac4]
 
-2010-01-18 00:15  toxmeister
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java:
+	correcting & improving velocity handling, adding addVelocity(),
+	clearVelocity(), scaleVelocity(), weight is now protected and has
+	getter/setter, added invWeight field to speed up spring computations
+	[7c257637070e]
 
-	* [r352] toxi/physics/VerletParticle.java,
-	  toxi/physics2d/VerletParticle2D.java: correcting & improving
-	  velocity handling, adding addVelocity(), clearVelocity(),
-	  scaleVelocity(), weight is now protected and has getter/setter,
-	  added invWeight field to speed up spring computations
+	* src.physics/toxi/physics/ParticleString.java:
+	adding clear() method & javadocs for all
+	[d7235b643de5]
 
-2010-01-18 00:00  toxmeister
+2010-01-17  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r351] toxi/physics/ParticleString.java: adding clear() method &
-	  javadocs for all
+	* src.physics/toxi/physics/ParticlePath.java:
+	createParticles() now also calls computeVertices() on the parent
+	spline
+	[d52ca1319f80]
 
-2010-01-17 23:58  toxmeister
+2010-01-06  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r350] toxi/physics/ParticlePath.java: createParticles() now also
-	  calls computeVertices() on the parent spline
+	* src.physics/toxi/physics/constraints/AxisConstraint.java,
+	src.physics/toxi/physics/constraints/CylinderConstraint.java,
+	src.physics/toxi/physics/constraints/PlaneConstraint.java,
+	src.physics/toxi/physics/constraints/SoftBoxConstraint.java,
+	src.physics/toxi/physics/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics/constraints/YAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisCylinderConstraint.java,
+	src.physics/toxi/physics2d/constraints/AxisConstraint.java,
+	src.physics/toxi/physics2d/constraints/CircularConstraint.java,
+	src.physics/toxi/physics2d/constraints/RectConstraint.java,
+	src.physics/toxi/physics2d/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics2d/constraints/YAxisConstraint.java:
+	refactoring ParticleConstraints to utilize new Axis enums in
+	Vec2D/3D. replacing X/Y/ZAxisConstraint with new PlaneConstraint
+	class, adding AxisConstraint to only restrict a single axis,
+	replacing ZAxisCylinderConstraint with the more generic
+	CylinderConstraint, adding SoftBoxConstraint. for 2D also adding
+	Circular & RectConstraint
+	[d135e5d54150]
 
-2010-01-06 14:00  toxmeister
+2010-01-05  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r343] toxi/physics/constraints/AxisConstraint.java[ADD],
-	  toxi/physics/constraints/CylinderConstraint.java[CPY],
-	  toxi/physics/constraints/PlaneConstraint.java[ADD],
-	  toxi/physics/constraints/SoftBoxConstraint.java,
-	  toxi/physics/constraints/XAxisConstraint.java[DEL],
-	  toxi/physics/constraints/YAxisConstraint.java[DEL],
-	  toxi/physics/constraints/ZAxisConstraint.java[DEL],
-	  toxi/physics/constraints/ZAxisCylinderConstraint.java[DEL],
-	  toxi/physics2d/constraints/AxisConstraint.java[CPY],
-	  toxi/physics2d/constraints/CircularConstraint.java[ADD],
-	  toxi/physics2d/constraints/RectConstraint.java[ADD],
-	  toxi/physics2d/constraints/XAxisConstraint.java[DEL],
-	  toxi/physics2d/constraints/YAxisConstraint.java[DEL]: refactoring
-	  ParticleConstraints to utilize new Axis enums in Vec2D/3D.
-	  replacing X/Y/ZAxisConstraint with new PlaneConstraint class,
-	  adding AxisConstraint to only restrict a single axis, replacing
-	  ZAxisCylinderConstraint with the more generic CylinderConstraint,
-	  adding SoftBoxConstraint. for 2D also adding Circular &
-	  RectConstraint
+	* src.physics/toxi/physics/ParticlePath.java,
+	src.physics/toxi/physics/ParticleString.java,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics/constraints/BoxConstraint.java,
+	src.physics/toxi/physics/constraints/MinXConstraint.java,
+	src.physics/toxi/physics/constraints/MinYConstraint.java,
+	src.physics/toxi/physics/constraints/MinZConstraint.java,
+	src.physics/toxi/physics/constraints/SoftBoxConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisCylinderConstraint.java:
+	adding 3D ParticlePath, ParticleString and various new constraint
+	types (box, min, softbox, z-cylinder)
+	[38f7a3fa6b66]
 
-2010-01-05 05:24  toxmeister
+2009-11-15  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r337] toxi/physics/ParticlePath.java[ADD],
-	  toxi/physics/ParticleString.java[ADD],
-	  toxi/physics/VerletPhysics.java,
-	  toxi/physics/constraints/BoxConstraint.java[ADD],
-	  toxi/physics/constraints/MinXConstraint.java[ADD],
-	  toxi/physics/constraints/MinYConstraint.java[ADD],
-	  toxi/physics/constraints/MinZConstraint.java[ADD],
-	  toxi/physics/constraints/SoftBoxConstraint.java[ADD],
-	  toxi/physics/constraints/ZAxisCylinderConstraint.java[ADD]:
-	  adding 3D ParticlePath, ParticleString and various new constraint
-	  types (box, min, softbox, z-cylinder)
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java:
+	added isLocked() checks to VerletParticle classes
+	[7312c565cb18]
 
-2009-11-15 18:12  toxmeister
+2009-06-14  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r311] toxi/physics/VerletParticle.java,
-	  toxi/physics2d/VerletParticle2D.java: added isLocked() checks to
-	  VerletParticle classes
+	* ant/build_physics.xml,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java:
+	bug fix in VerletParticle2D.removeConstraint() which wrongly
+	expected a 3D constraint instance, now correctly wants
+	Particle2DConstraint
+	[50a7c38a4b00]
 
-2009-06-14 21:04  toxmeister
+2009-04-04  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r235] toxi/physics2d/VerletParticle2D.java,
-	  toxi/physics2d/VerletSpring2D.java: bug fix in
-	  VerletParticle2D.removeConstraint() which wrongly expected a 3D
-	  constraint instance, now correctly wants Particle2DConstraint
+	* src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java:
+	added getCurrentBounds() methods to VerletPhysics to return bounding
+	box/rect of current particle positions (useful for view fitting)
+	[ac80564163bd]
 
-2009-04-04 08:26  toxmeister
+2009-03-22  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r205] toxi/physics/VerletPhysics.java,
-	  toxi/physics2d/VerletParticle2D.java,
-	  toxi/physics2d/VerletPhysics2D.java: added getCurrentBounds()
-	  methods to VerletPhysics to return bounding box/rect of current
-	  particle positions (useful for view fitting)
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/constraints/ParticleConstraint.java,
+	src.physics/toxi/physics/constraints/SphereConstraint.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java:
+	made applyConstraints() public, slight refactoring in
+	SphereConstraint and added Javadocs
+	[5bcd30f458a9]
 
-2009-03-22 13:04  toxmeister
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java:
+	added missing addConstraint & removeConstraint methods to particle
+	classes
+	[c2ea1a96dfd1]
 
-	* [r201] toxi/physics/VerletParticle.java,
-	  toxi/physics/constraints/ParticleConstraint.java,
-	  toxi/physics/constraints/SphereConstraint.java,
-	  toxi/physics2d/VerletParticle2D.java: made applyConstraints()
-	  public, slight refactoring in SphereConstraint and added Javadocs
+2009-03-16  Karsten Schmidt  <k@postspectacular.com>
 
-2009-03-22 12:19  toxmeister
+	* readme1st/physics/CHANGELOG.txt,
+	src.physics/toxi/physics/VerletConstrainedSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics/constraints/ParticleConstraint.java,
+	src.physics/toxi/physics/constraints/SphereConstraint.java,
+	src.physics/toxi/physics2d/VerletConstrainedSpring2D.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java,
+	src.physics/toxi/physics2d/constraints/Particle2DConstraint.java:
+	adding SphereConstraint for 3D particles physics and refactored
+	particle constraints into a 1:M relationship
+	[cbcba1cf38f1]
 
-	* [r200] toxi/physics/VerletParticle.java,
-	  toxi/physics2d/VerletParticle2D.java: added missing addConstraint
-	  & removeConstraint methods to particle classes
+2008-12-07  Karsten Schmidt  <k@postspectacular.com>
 
-2009-03-16 20:29  toxmeister
+	* .classpath, lib/gluegen-rt.jar,
+	src.image/toxi/color/ColorAccessCriteria.java,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java:
+	more new syntax fixes to verletphysics & color, added JOAL libs to
+	classpath
+	[f1d0d3a00fc3]
 
-	* [r198] toxi/physics/VerletConstrainedSpring.java,
-	  toxi/physics/VerletParticle.java, toxi/physics/VerletSpring.java,
-	  toxi/physics/constraints/ParticleConstraint.java,
-	  toxi/physics/constraints/SphereConstraint.java[ADD],
-	  toxi/physics2d/VerletConstrainedSpring2D.java,
-	  toxi/physics2d/VerletParticle2D.java,
-	  toxi/physics2d/VerletSpring2D.java,
-	  toxi/physics2d/constraints/Particle2DConstraint.java: adding
-	  SphereConstraint for 3D particles physics and refactored particle
-	  constraints into a 1:M relationship
+2008-11-29  Karsten Schmidt  <k@postspectacular.com>
 
-2008-12-07 01:29  toxmeister
+	* src.physics/toxi/physics/VerletConstrainedSpring.java,
+	src.physics/toxi/physics/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics2d/VerletConstrainedSpring.java,
+	src.physics/toxi/physics2d/VerletConstrainedSpring2D.java,
+	src.physics/toxi/physics2d/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics2d/VerletMinDistanceSpring2D.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java,
+	src.physics/toxi/physics2d/constraints/AngularConstraint.java:
+	refactoring of all spring updates (particle constraints are now only
+	applied in last iteration of time step), made spring restLength and
+	strength protected and added accessors, added accessor for previous
+	position to VerletParticle, added AngularConstraint to 2D physics
+	[7b59d4ae514a]
 
-	* [r150] toxi/physics/VerletPhysics.java,
-	  toxi/physics2d/VerletPhysics2D.java: more new syntax fixes to
-	  verletphysics & color, added JOAL libs to classpath
+2008-11-15  Karsten Schmidt  <k@postspectacular.com>
 
-2008-11-29 22:32  toxmeister
+	* ant/build_geom.xml, ant/build_physics.xml,
+	src.geom/toxi/geom/Vec2D.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/constraints/IParticleConstraint.java,
+	src.physics/toxi/physics/constraints/ParticleConstraint.java,
+	src.physics/toxi/physics/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics/constraints/YAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisConstraint.java,
+	src.physics/toxi/physics2d/VerletConstrainedSpring.java,
+	src.physics/toxi/physics2d/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletPhysics2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java,
+	src.physics/toxi/physics2d/constraints/Particle2DConstraint.java,
+	src.physics/toxi/physics2d/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics2d/constraints/YAxisConstraint.java:
+	added 2d version of physics engine, renamed IParticleConstraint into
+	ParticleConstraint, added getPerpenticular() to Vec2D, updated ant
+	build files for next version
+	[12923138fd74]
 
-	* [r136] toxi/physics/VerletConstrainedSpring.java,
-	  toxi/physics/VerletMinDistanceSpring.java,
-	  toxi/physics/VerletParticle.java,
-	  toxi/physics/VerletPhysics.java, toxi/physics/VerletSpring.java,
-	  toxi/physics2d/VerletConstrainedSpring.java[DEL],
-	  toxi/physics2d/VerletConstrainedSpring2D.java[CPY],
-	  toxi/physics2d/VerletMinDistanceSpring.java[DEL],
-	  toxi/physics2d/VerletMinDistanceSpring2D.java[CPY],
-	  toxi/physics2d/VerletParticle2D.java,
-	  toxi/physics2d/VerletPhysics2D.java,
-	  toxi/physics2d/VerletSpring2D.java,
-	  toxi/physics2d/constraints/AngularConstraint.java[ADD]:
-	  refactoring of all spring updates (particle constraints are now
-	  only applied in last iteration of time step), made spring
-	  restLength and strength protected and added accessors, added
-	  accessor for previous position to VerletParticle, added
-	  AngularConstraint to 2D physics
+2008-10-21  Karsten Schmidt  <k@postspectacular.com>
 
-2008-11-15 08:21  toxmeister
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics/constraints/YAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisConstraint.java:
+	added call to applyConstraint() in update() to also catch particles
+	which are not connected with springs. Added more javadocs too
+	[094f1f39cf5d]
 
-	* [r131] toxi/physics/VerletParticle.java,
-	  toxi/physics/constraints/IParticleConstraint.java[DEL],
-	  toxi/physics/constraints/ParticleConstraint.java[CPY],
-	  toxi/physics/constraints/XAxisConstraint.java,
-	  toxi/physics/constraints/YAxisConstraint.java,
-	  toxi/physics/constraints/ZAxisConstraint.java,
-	  toxi/physics2d[ADD],
-	  toxi/physics2d/VerletConstrainedSpring.java[ADD],
-	  toxi/physics2d/VerletMinDistanceSpring.java[ADD],
-	  toxi/physics2d/VerletParticle2D.java[ADD],
-	  toxi/physics2d/VerletPhysics2D.java[ADD],
-	  toxi/physics2d/VerletSpring2D.java[ADD],
-	  toxi/physics2d/constraints[ADD],
-	  toxi/physics2d/constraints/Particle2DConstraint.java[ADD],
-	  toxi/physics2d/constraints/XAxisConstraint.java[ADD],
-	  toxi/physics2d/constraints/YAxisConstraint.java[ADD]: added 2d
-	  version of physics engine, renamed IParticleConstraint into
-	  ParticleConstraint, added getPerpenticular() to Vec2D, updated
-	  ant build files for next version
+2008-10-06  Karsten Schmidt  <k@postspectacular.com>
 
-2008-10-21 12:25  toxmeister
+	* .classpath, README, src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/constraints/IParticleConstraint.java,
+	src.physics/toxi/physics/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics/constraints/YAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisConstraint.java:
+	moved constraints into subpackage and fixed build path issues
+	[2e83133b4530]
 
-	* [r113] toxi/physics/VerletParticle.java,
-	  toxi/physics/constraints/XAxisConstraint.java,
-	  toxi/physics/constraints/YAxisConstraint.java,
-	  toxi/physics/constraints/ZAxisConstraint.java: added call to
-	  applyConstraint() in update() to also catch particles which are
-	  not connected with springs. Added more javadocs too
+	* src.physics/toxi/physics/VerletConstrainedSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics/constraints/IParticleConstraint.java,
+	src.physics/toxi/physics/constraints/XAxisConstraint.java,
+	src.physics/toxi/physics/constraints/YAxisConstraint.java,
+	src.physics/toxi/physics/constraints/ZAxisConstraint.java:
+	slight refactoring of VerletParticle to add constraint mechanism
+	[7b29c7cf33fb]
 
-2008-10-06 08:31  toxmeister
+2008-09-24  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r112] toxi/physics/VerletParticle.java,
-	  toxi/physics/constraints/IParticleConstraint.java,
-	  toxi/physics/constraints/XAxisConstraint.java,
-	  toxi/physics/constraints/YAxisConstraint.java,
-	  toxi/physics/constraints/ZAxisConstraint.java: moved constraints
-	  into subpackage and fixed build path issues
+	* src.physics/toxi/physics/VerletPhysics.java:
+	fixed bug in alternate constructor which didn't initialize the
+	particle & spring arraylists. Thanks Aaron! :)
+	[04b40f631804]
 
-2008-10-06 06:53  toxmeister
+2008-09-19  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r110] toxi/physics/VerletConstrainedSpring.java,
-	  toxi/physics/VerletParticle.java, toxi/physics/VerletSpring.java,
-	  toxi/physics/constraints[ADD],
-	  toxi/physics/constraints/IParticleConstraint.java[ADD],
-	  toxi/physics/constraints/XAxisConstraint.java[ADD],
-	  toxi/physics/constraints/YAxisConstraint.java[ADD],
-	  toxi/physics/constraints/ZAxisConstraint.java[ADD]: slight
-	  refactoring of VerletParticle to add constraint mechanism
+	* src.physics/toxi/physics/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics/VerletPhysics.java:
+	added MinDistanceSpring class and removal methods for springs and
+	particles to VerletPhysics
+	[85366c8af039]
 
-2008-09-24 08:57  toxmeister
+2008-07-22  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r105] toxi/physics/VerletPhysics.java: fixed bug in alternate
-	  constructor which didn't initialize the particle & spring
-	  arraylists. Thanks Aaron! :)
+	* src.physics/toxi/physics/VerletConstrainedSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics/VerletSpring.java:
+	added check for duplicates to addSpring(), added javadocs, new class
+	VerletConstrainedSpring and minor refactoring
+	[4c52f83b8293]
 
-2008-09-19 11:54  toxmeister
+2008-07-17  Karsten Schmidt  <k@postspectacular.com>
 
-	* [r103] toxi/physics/VerletMinDistanceSpring.java[ADD],
-	  toxi/physics/VerletPhysics.java: added MinDistanceSpring class
-	  and removal methods for springs and particles to VerletPhysics
+	* .classpath, CHANGELOG, LICENSE, LICENSE.txt, ant/build_geom.xml,
+	ant/build_physics.xml, examples/geom/SplineBlobTest/Spine.pde,
+	examples/geom/SplineBlobTest/SpineSplineBlob.pde,
+	examples/geom/SplineBlobTest/SplineBlob.pde,
+	examples/geom/SplineBlobTest/SplineBlobTest.pde,
+	readme/geom/README.txt, readme/physics/README.txt,
+	readme/prefs/README.txt, src.geom/toxi/geom/Spline3D.java,
+	src.geom/toxi/physics/VerletParticle.java,
+	src.geom/toxi/physics/VerletPhysics.java,
+	src.geom/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletPhysics.java,
+	src.physics/toxi/physics/VerletSpring.java:
+	still restructuring project layout for easier builds (this might be
+	semi-broken though at this point)
+	[6e2b3abb5ebc]
 
-2008-07-22 23:29  toxmeister
-
-	* [r89] toxi/physics/VerletConstrainedSpring.java[ADD],
-	  toxi/physics/VerletParticle.java,
-	  toxi/physics/VerletPhysics.java, toxi/physics/VerletSpring.java:
-	  added check for duplicates to addSpring(), added javadocs, new
-	  class VerletConstrainedSpring and minor refactoring
-
-2008-07-17 10:47  toxmeister
-
-	* [r83] .[ADD], toxi[ADD], toxi/physics[CPY],
-	  toxi/physics/Verlet.java[DEL],
-	  toxi/physics/VerletParticle.java[CPY],
-	  toxi/physics/VerletPhysics.java[CPY],
-	  toxi/physics/VerletSpring.java[CPY]: still restructuring project
-	  layout for easier builds (this might be semi-broken though at
-	  this point)
