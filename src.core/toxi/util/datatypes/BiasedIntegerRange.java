@@ -34,13 +34,44 @@ public class BiasedIntegerRange extends IntegerRange {
         this.standardDeviation = sd * 0.5f;
     }
 
+    /**
+     * @return the bias
+     */
+    public int getBias() {
+        return bias;
+    }
+
+    /**
+     * @return the standardDeviation
+     */
+    public float getStandardDeviation() {
+        return standardDeviation;
+    }
+
     @Override
     public int pickRandom() {
-        currValue =
-                (int) (random.nextGaussian() * standardDeviation * (max - min))
-                        + bias;
-        currValue = MathUtils.clip(currValue, min, max);
+        do {
+            currValue =
+                    (int) (random.nextGaussian() * standardDeviation * (max - min))
+                            + bias;
+        } while (currValue < min || currValue >= max);
         return currValue;
+    }
+
+    /**
+     * @param bias
+     *            the bias to set
+     */
+    public void setBias(int bias) {
+        this.bias = MathUtils.clip(bias, min, max);
+    }
+
+    /**
+     * @param sd
+     *            the standardDeviation to set
+     */
+    public void setStandardDeviation(float sd) {
+        this.standardDeviation = MathUtils.clip(sd, 0, 1.0f) * 0.5f;
     }
 
     @Override

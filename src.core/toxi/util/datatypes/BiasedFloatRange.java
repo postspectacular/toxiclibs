@@ -7,10 +7,10 @@ import toxi.math.MathUtils;
 public class BiasedFloatRange extends FloatRange {
 
     @XmlAttribute
-    public float bias = 0.5f;
+    protected float bias = 0.5f;
 
     @XmlAttribute
-    public float standardDeviation = bias * 0.5f;
+    protected float standardDeviation = bias * 0.5f;
 
     public BiasedFloatRange() {
         this(0, 1, 0.5f, 0.5f);
@@ -30,17 +30,48 @@ public class BiasedFloatRange extends FloatRange {
      */
     public BiasedFloatRange(float min, float max, float bias, float sd) {
         super(min, max);
-        this.bias = bias;
-        this.standardDeviation = sd * 0.5f;
+        setBias(bias);
+        setStandardDeviation(sd);
+    }
+
+    /**
+     * @return the bias
+     */
+    public float getBias() {
+        return bias;
+    }
+
+    /**
+     * @return the standardDeviation
+     */
+    public float getStandardDeviation() {
+        return standardDeviation;
     }
 
     @Override
     public float pickRandom() {
-        currValue =
-                (float) (random.nextGaussian() * standardDeviation * (max - min))
-                        + bias;
-        currValue = MathUtils.clip(currValue, min, max);
+        do {
+            currValue =
+                    (float) (random.nextGaussian() * standardDeviation * (max - min))
+                            + bias;
+        } while (currValue < min || currValue >= max);
         return currValue;
+    }
+
+    /**
+     * @param bias
+     *            the bias to set
+     */
+    public void setBias(float bias) {
+        this.bias = MathUtils.clip(bias, min, max);
+    }
+
+    /**
+     * @param sd
+     *            the standardDeviation to set
+     */
+    public void setStandardDeviation(float sd) {
+        this.standardDeviation = MathUtils.clip(sd, 0, 1.0f) * 0.5f;
     }
 
     @Override
