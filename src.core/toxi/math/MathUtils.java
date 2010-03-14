@@ -88,7 +88,7 @@ public class MathUtils {
     /**
      * Epsilon value
      */
-    public static final float EPS = 1.2e-7f; // was 1.1920928955078125E-7f;
+    public static final float EPS = 1.1920928955078125E-7f;
 
     /**
      * Degrees to radians conversion factor
@@ -172,6 +172,10 @@ public class MathUtils {
             return 1;
         }
         return a;
+    }
+
+    public static final double cos(final double theta) {
+        return sin(theta + HALF_PI);
     }
 
     /**
@@ -434,16 +438,28 @@ public class MathUtils {
     }
 
     public static final int random(Random rnd, int max) {
-        return (int) (rnd.nextDouble() * max);
+        return rnd.nextInt() % max;
     }
 
     public static final int random(Random rnd, int min, int max) {
-        return (int) (rnd.nextDouble() * (max - min)) + min;
+        return (rnd.nextInt() % (max - min)) + min;
+    }
+
+    public static final double reduceAngle(double theta) {
+        theta %= TWO_PI;
+        if (abs(theta) > PI) {
+            theta = theta - TWO_PI;
+        }
+        if (abs(theta) > HALF_PI) {
+            theta = PI - theta;
+        }
+        return theta;
     }
 
     /**
-     * Reduces the given angle into the -PI/4 ... PI/4 interval. This method is
-     * use by {@link #sin(float)} & {@link #cos(float)}.
+     * Reduces the given angle into the -PI/4 ... PI/4 interval for faster
+     * computation of sin/cos. This method is used by {@link #sin(float)} &
+     * {@link #cos(float)}.
      * 
      * @param theta
      *            angle in radians
@@ -472,6 +488,14 @@ public class MathUtils {
 
     public static int sign(int x) {
         return x < 0 ? -1 : (x > 0 ? 1 : 0);
+    }
+
+    public static final double sin(double theta) {
+        theta = reduceAngle(theta);
+        if (abs(theta) <= QUARTER_PI) {
+            return (float) fastSin(theta);
+        }
+        return (float) fastCos(HALF_PI - theta);
     }
 
     /**
