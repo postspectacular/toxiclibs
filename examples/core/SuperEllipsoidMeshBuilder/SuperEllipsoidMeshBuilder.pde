@@ -43,7 +43,7 @@ import toxi.math.waves.*;
 import toxi.geom.*;
 import toxi.math.*;
 import toxi.math.conversion.*;
-import toxi.geom.util.*;
+import toxi.geom.mesh.*;
 
 TriangleMesh mesh = new TriangleMesh();
 

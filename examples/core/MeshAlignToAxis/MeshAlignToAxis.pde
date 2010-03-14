@@ -27,7 +27,7 @@
 import processing.opengl.*;
 
 import toxi.geom.*;
-import toxi.geom.util.*;
+import toxi.geom.mesh.*;
 
 Vec3D BOX_SIZE = new Vec3D(5,5,50);
 float SCALE=200;

@@ -438,11 +438,11 @@ public class MathUtils {
     }
 
     public static final int random(Random rnd, int max) {
-        return rnd.nextInt() % max;
+        return (int) (rnd.nextDouble() * max);
     }
 
     public static final int random(Random rnd, int min, int max) {
-        return (rnd.nextInt() % (max - min)) + min;
+        return (int) (rnd.nextDouble() * (max - min)) + min;
     }
 
     public static final double reduceAngle(double theta) {

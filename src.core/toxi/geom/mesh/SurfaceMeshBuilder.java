@@ -1,4 +1,4 @@
-package toxi.geom.util;
+package toxi.geom.mesh;
 
 import toxi.geom.Vec3D;
 

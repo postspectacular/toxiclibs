@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-import toxi.geom.util.TriangleMesh;
+import toxi.geom.mesh.TriangleMesh;
 import toxi.math.MathUtils;
 
 /**

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import toxi.geom.Vec3D;
-import toxi.geom.util.STLReader;
-import toxi.geom.util.TriangleMesh;
-import toxi.geom.util.TriangleMesh.Face;
-import toxi.geom.util.TriangleMesh.Vertex;
+import toxi.geom.mesh.STLReader;
+import toxi.geom.mesh.TriangleMesh;
+import toxi.geom.mesh.TriangleMesh.Face;
+import toxi.geom.mesh.TriangleMesh.Vertex;
 
 public class TriangleMeshTest extends TestCase {
 

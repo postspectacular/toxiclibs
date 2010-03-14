@@ -1,4 +1,4 @@
-package toxi.geom.util;
+package toxi.geom.mesh;
 
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -580,12 +580,12 @@ public class TriangleMesh {
         }
         // normals
         for (Vertex v : vertices.values()) {
-            obj.normal(v.normal.getInverted());
+            obj.normal(v.normal);
         }
         // faces
         for (Face f : faces) {
-            obj.faceWithNormals(f.a.id + vOffset, f.b.id + vOffset, f.c.id
-                    + vOffset, f.a.id + nOffset, f.b.id + nOffset, f.c.id
+            obj.faceWithNormals(f.b.id + vOffset, f.a.id + vOffset, f.c.id
+                    + vOffset, f.b.id + nOffset, f.a.id + nOffset, f.c.id
                     + nOffset);
         }
     }
@@ -657,17 +657,21 @@ public class TriangleMesh {
      * @param useFlippedY
      */
     public final void saveAsSTL(String fileName, boolean useFlippedY) {
+        saveAsSTL(fileName, new STLWriter(), useFlippedY);
+    }
+
+    public final void saveAsSTL(String fileName, STLWriter stl,
+            boolean useFlippedY) {
         logger.info("saving mesh to: " + fileName);
-        STLWriter stl = new STLWriter();
         stl.beginSave(fileName, numFaces);
         if (useFlippedY) {
             stl.setScale(new Vec3D(1, -1, 1));
             for (Face f : faces) {
-                stl.face(f.a, f.b, f.c, f.normal, 0);
+                stl.face(f.a, f.b, f.c, f.normal, STLWriter.DEFAULT_RGB);
             }
         } else {
             for (Face f : faces) {
-                stl.face(f.b, f.a, f.c, f.normal, 0);
+                stl.face(f.b, f.a, f.c, f.normal, STLWriter.DEFAULT_RGB);
             }
         }
         stl.endSave();

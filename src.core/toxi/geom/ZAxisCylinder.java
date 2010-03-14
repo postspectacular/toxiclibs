@@ -1,6 +1,6 @@
 package toxi.geom;
 
-import toxi.geom.util.TriangleMesh;
+import toxi.geom.mesh.TriangleMesh;
 import toxi.math.MathUtils;
 
 public class ZAxisCylinder implements AxisAlignedCylinder {

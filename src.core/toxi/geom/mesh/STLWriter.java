@@ -1,4 +1,4 @@
-package toxi.geom.util;
+package toxi.geom.mesh;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
@@ -21,6 +21,8 @@ import toxi.geom.Vec3D;
  * 
  */
 public class STLWriter {
+
+    public static final int DEFAULT_RGB = -1;
 
     public static final STLColorModel DEFAULT = new DefaultSTLColorModel();
 
@@ -64,11 +66,10 @@ public class STLWriter {
     }
 
     public void face(Vec3D a, Vec3D b, Vec3D c) {
-        face(a, b, c, 0);
+        face(a, b, c, DEFAULT_RGB);
     }
 
     public void face(Vec3D a, Vec3D b, Vec3D c, int rgb) {
-        // normal
         Vec3D normal = b.sub(a).cross(c.sub(a)).normalize();
         if (useInvertedNormals) {
             normal.invert();
@@ -84,10 +85,10 @@ public class STLWriter {
             writeScaledVector(b);
             writeScaledVector(c);
             // vertex attrib (color)
-            if (rgb != 0) {
+            if (rgb != DEFAULT_RGB) {
                 writeShort(colorModel.formatRGB(rgb));
             } else {
-                writeShort(0);
+                writeShort(colorModel.getDefaultRGB());
             }
         } catch (IOException e) {
             e.printStackTrace();

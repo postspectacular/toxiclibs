@@ -3,9 +3,9 @@ package toxi.volume;
 import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
-import toxi.geom.util.OBJWriter;
-import toxi.geom.util.STLWriter;
-import toxi.geom.util.TriangleMesh;
+import toxi.geom.mesh.OBJWriter;
+import toxi.geom.mesh.STLWriter;
+import toxi.geom.mesh.TriangleMesh;
 import toxi.util.datatypes.ArrayUtil;
 
 /**

@@ -49,7 +49,7 @@ import processing.opengl.*;
 import toxi.physics.constraints.*;
 import toxi.physics.*;
 import toxi.geom.*;
-import toxi.geom.util.*;
+import toxi.geom.mesh.*;
 import toxi.math.*;
 import toxi.volume.*;
 

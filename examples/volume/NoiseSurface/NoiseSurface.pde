@@ -32,7 +32,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import toxi.geom.*;
-import toxi.geom.util.*;
+import toxi.geom.mesh.*;
 
 import toxi.volume.*;
 import toxi.math.noise.*;
