@@ -1,5 +1,6 @@
 package toxi.geom;
 
+import toxi.geom.util.TriangleMesh;
 import toxi.math.MathUtils;
 
 public class XAxisCylinder implements AxisAlignedCylinder {
@@ -88,5 +89,24 @@ public class XAxisCylinder implements AxisAlignedCylinder {
     public void setRadius(float radius) {
         this.radius = radius;
         this.radiusSquared = radius * radius;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.AxisAlignedCylinder#toMesh()
+     */
+    public TriangleMesh toMesh() {
+        return toMesh(12, 0);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.AxisAlignedCylinder#toMesh(int, float)
+     */
+    public TriangleMesh toMesh(int steps, float thetaOffset) {
+        return new Cone(pos, Vec3D.X_AXIS, radius, radius, length).toMesh(
+                "x-cylinder", steps, thetaOffset);
     }
 }

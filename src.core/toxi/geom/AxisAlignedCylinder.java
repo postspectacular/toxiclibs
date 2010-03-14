@@ -1,5 +1,7 @@
 package toxi.geom;
 
+import toxi.geom.util.TriangleMesh;
+
 public interface AxisAlignedCylinder {
 
     /**
@@ -15,6 +17,9 @@ public interface AxisAlignedCylinder {
      */
     public float getLength();
 
+    /**
+     * @return the cylinder's orientation axis
+     */
     public Vec3D.Axis getMajorAxis();
 
     /**
@@ -24,6 +29,9 @@ public interface AxisAlignedCylinder {
      */
     public Vec3D getPosition();
 
+    /**
+     * @return the cylinder radius
+     */
     public float getRadius();
 
     /**
@@ -38,5 +46,26 @@ public interface AxisAlignedCylinder {
      */
     public void setPosition(Vec3D pos);
 
+    /**
+     * @param radius
+     */
     public void setRadius(float radius);
+
+    /**
+     * Builds a TriangleMesh representation of the cylinder at a default
+     * resolution 30 degrees.
+     * 
+     * @return mesh instance
+     */
+    public TriangleMesh toMesh();
+
+    /**
+     * Builds a TriangleMesh representation of the cylinder using the given
+     * number of steps and start angle offset.
+     * 
+     * @param steps
+     * @param thetaOffset
+     * @return mesh
+     */
+    public TriangleMesh toMesh(int steps, float thetaOffset);
 }
