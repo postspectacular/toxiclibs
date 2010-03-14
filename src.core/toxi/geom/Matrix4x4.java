@@ -53,8 +53,12 @@ public class Matrix4x4 {
         m[3] = v44;
     }
 
-    // Initializing constructor - single-dimensional array
-    // Assumes row-major ordering (column idx increases faster)
+    /**
+     * Initialising constructor from a 1d array. Assumes row-major ordering
+     * (column index increases faster).
+     * 
+     * @param array
+     */
     public Matrix4x4(double[] array) {
         if (array.length != 9 && array.length != 16) {
             throw new RuntimeException("Array.length must == 9 or 16");
@@ -80,7 +84,7 @@ public class Matrix4x4 {
             matrix[3][1] = array[13];
             matrix[3][2] = array[14];
             matrix[3][3] = array[15];
-        } else if (array.length == 9) {
+        } else {
             matrix[0][0] = array[0];
             matrix[0][1] = array[1];
             matrix[0][2] = array[2];
@@ -129,7 +133,10 @@ public class Matrix4x4 {
         return this;
     }
 
-    // Matrix-Vector Multiplication (Application)
+    /**
+     * @param v
+     * @return
+     */
     public Vec3D applyTo(Vec3D v) {
         for (int i = 0; i < 4; i++) {
             double[] m = matrix[i];
@@ -137,6 +144,10 @@ public class Matrix4x4 {
         }
         return new Vec3D((float) temp[0], (float) temp[1], (float) temp[2])
                 .scaleSelf((float) (1 / temp[3]));
+    }
+
+    public Matrix4x4 copy() {
+        return new Matrix4x4(this);
     }
 
     public Matrix4x4 getInverted() {
@@ -557,13 +568,12 @@ public class Matrix4x4 {
      * Converts the matrix (in-place) between column-major to row-major order
      * (and vice versa).
      * 
-     * @return transposed version of matrix
+     * @return itself
      */
     public Matrix4x4 transpose() {
-        return new Matrix4x4(matrix[0][0], matrix[1][0], matrix[2][0],
-                matrix[3][0], matrix[0][1], matrix[1][1], matrix[2][1],
-                matrix[3][1], matrix[0][2], matrix[1][2], matrix[2][2],
-                matrix[3][2], matrix[0][3], matrix[1][3], matrix[2][3],
-                matrix[3][3]);
+        return set(matrix[0][0], matrix[1][0], matrix[2][0], matrix[3][0],
+                matrix[0][1], matrix[1][1], matrix[2][1], matrix[3][1],
+                matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2],
+                matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3]);
     }
 }
