@@ -58,8 +58,9 @@ void drawAxes(float l) {
 
 void drawMesh(TriangleMesh mesh) {
   beginShape(TRIANGLES);
-  for(Iterator i=mesh.faces.iterator(); i.hasNext();) {
-    TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+  int numFaces=mesh.getNumFaces();
+  for(int i=0; i<numFaces; i++) {
+    TriangleMesh.Face f=mesh.faces.get(i);
     Vec3D n=f.normal;
     normal(n.x,n.y,n.z);
     vertex(f.a.x,f.a.y,f.a.z);
@@ -67,8 +68,8 @@ void drawMesh(TriangleMesh mesh) {
     vertex(f.c.x,f.c.y,f.c.z);
   }
   endShape();
-  for(Iterator i=mesh.faces.iterator(); i.hasNext();) {
-    TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+  for(int i=0; i<numFaces; i++) {
+    TriangleMesh.Face f=mesh.faces.get(i);
     Vec3D c=f.a.add(f.b).addSelf(f.c).scaleSelf(1f/3);
     Vec3D d=c.add(f.normal.scale(20));
     Vec3D n=f.normal.scale(127);
