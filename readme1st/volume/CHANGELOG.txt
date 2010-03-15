@@ -1,3 +1,52 @@
+2010-03-14  Karsten Schmidt  <k@postspectacular.com>
+
+	* examples/core/MeshAlignToAxis/MeshAlignToAxis.pde,
+	examples/core/MeshDoodle/MeshDoodle.pde,
+	examples/core/STLImportTest/STLImportTest.pde, examples/core/SuperEl
+	lipsoidMeshBuilder/SuperEllipsoidMeshBuilder.pde,
+	examples/physics/BoxFluidDemo/BoxFluidDemo.pde,
+	examples/volume/BoxFluidDemo/BoxFluidDemo.pde,
+	examples/volume/MRISurface/MRISurface.pde,
+	examples/volume/NoiseSurface/NoiseSurface.pde,
+	src.core/toxi/geom/AABB.java,
+	src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Cone.java, src.core/toxi/geom/Plane.java,
+	src.core/toxi/geom/XAxisCylinder.java,
+	src.core/toxi/geom/YAxisCylinder.java,
+	src.core/toxi/geom/ZAxisCylinder.java,
+	src.core/toxi/geom/mesh/DefaultSTLColorModel.java,
+	src.core/toxi/geom/mesh/MaterialiseSTLColorModel.java,
+	src.core/toxi/geom/mesh/OBJWriter.java,
+	src.core/toxi/geom/mesh/STLColorModel.java,
+	src.core/toxi/geom/mesh/STLReader.java,
+	src.core/toxi/geom/mesh/STLWriter.java,
+	src.core/toxi/geom/mesh/SphericalHarmonics.java,
+	src.core/toxi/geom/mesh/SuperEllipsoid.java,
+	src.core/toxi/geom/mesh/SurfaceFunction.java,
+	src.core/toxi/geom/mesh/SurfaceMeshBuilder.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/util/DefaultSTLColorModel.java,
+	src.core/toxi/geom/util/MaterialiseSTLColorModel.java,
+	src.core/toxi/geom/util/OBJWriter.java,
+	src.core/toxi/geom/util/STLColorModel.java,
+	src.core/toxi/geom/util/STLReader.java,
+	src.core/toxi/geom/util/STLWriter.java,
+	src.core/toxi/geom/util/SphericalHarmonics.java,
+	src.core/toxi/geom/util/SuperEllipsoid.java,
+	src.core/toxi/geom/util/SurfaceFunction.java,
+	src.core/toxi/geom/util/SurfaceMeshBuilder.java,
+	src.core/toxi/geom/util/TriangleMesh.java,
+	src.core/toxi/math/MathUtils.java,
+	src.test/toxi/test/geom/TriangleMeshTest.java,
+	src.volume/toxi/volume/IsoSurface.java:
+	renamed package toxi.geom.util into toxi.geom.mesh, added
+	getDefaultRGB() to STLColorModel, refactored
+	TriangleMesh.saveAsSTL() and fixed vertex order in saveAsOBJ(),
+	added DEFAULT_RGB constant to STLWriter, added enableFacetColor flag
+	to MaterialiseSTLColorModel, updated new package references in
+	related classes & examples @twitter
+	[c16a57bd455f]
+
 2010-03-01  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.volume/toxi/volume/IsoSurface.java:
