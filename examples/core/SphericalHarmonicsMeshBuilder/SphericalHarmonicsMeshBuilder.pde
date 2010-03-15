@@ -49,6 +49,8 @@ TriangleMesh mesh = new TriangleMesh();
 boolean isWireFrame;
 boolean showNormals;
 
+Matrix4x4 normalMap = new Matrix4x4().translateSelf(128,128,128).scaleSelf(127);
+
 void setup() {
   size(1280,720, OPENGL);
   randomizeMesh();
@@ -56,10 +58,13 @@ void setup() {
 
 void draw() {
   background(0);
-  lights();
   translate(width / 2, height / 2, 0);
   rotateX(mouseY * 0.01f);
   rotateY(mouseX * 0.01f);
+  lights();
+  shininess(16);
+  directionalLight(255,255,255,0,-1,1);
+  specular(255);
   drawAxes(400);
   if (isWireFrame) {
     noFill();
@@ -83,13 +88,22 @@ void drawAxes(float l) {
 
 void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean showNormals) {
   gfx.beginShape(PConstants.TRIANGLES);
+  AABB bounds=mesh.getBoundingBox();
+  Vec3D min=bounds.getMin();
+  Vec3D max=bounds.getMax();
   if (vertexNormals) {
     for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
       TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+      Vec3D n = normalMap.applyTo(f.a.normal);
+      gfx.fill(n.x, n.y, n.z);
       gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
       gfx.vertex(f.a.x, f.a.y, f.a.z);
+      n = normalMap.applyTo(f.b.normal);
+      gfx.fill(n.x, n.y, n.z);
       gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
       gfx.vertex(f.b.x, f.b.y, f.b.z);
+      n = normalMap.applyTo(f.c.normal);
+      gfx.fill(n.x, n.y, n.z);
       gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
       gfx.vertex(f.c.x, f.c.y, f.c.z);
     }
@@ -150,3 +164,5 @@ void randomizeMesh() {
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(new SphericalHarmonics(m));
   mesh = b.createMesh(80, 100);
 }
+
+
