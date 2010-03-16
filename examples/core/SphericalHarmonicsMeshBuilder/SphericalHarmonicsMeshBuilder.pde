@@ -2,8 +2,8 @@
  * <p>SphericalHarmonicsMeshBuilder demonstrates how to use the SurfaceMeshBuilder class
  * in conjunction with a spherical harmonics function to dynamically create a variety
  * of organic looking forms. The function is described in detail on Paul Bourke's website.
- * Included is also a re-usable function for displaying a generic TriangleMesh instance,
- * incl. the display of surface normals useful for debug purposes.</p>
+ * Included is also a re-usable function for displaying a generic TriangleMesh instance
+ * using normal mapping. the display of surface normals useful for debug purposes.</p>
  * 
  * <p><strong>Usage:</strong>
  * <ul>
@@ -11,6 +11,7 @@
  * <li>w: toggle wireframe on/off</li>
  * <li>n: toggle normal vector display on/off</li>
  * <li>s: save current mesh as STL file</li>
+ * <li>space: save screenshot</li>
  * </ul></p>
  */
 
@@ -36,12 +37,8 @@
 
 import processing.opengl.*;
 
-import toxi.util.datatypes.*;
-import toxi.math.noise.*;
 import toxi.math.waves.*;
 import toxi.geom.*;
-import toxi.math.*;
-import toxi.math.conversion.*;
 import toxi.geom.mesh.*;
 
 TriangleMesh mesh = new TriangleMesh();
@@ -75,6 +72,10 @@ void draw() {
     noStroke();
   }
   drawMesh(g, mesh, !isWireFrame, showNormals);
+  if (doSave) {
+    saveFrame("sh-"+(System.currentTimeMillis()/1000)+".png");
+    doSave=false;
+  }
 }
 
 void drawAxes(float l) {
@@ -153,6 +154,9 @@ void keyPressed() {
   }
   if (key == 's') {
     mesh.saveAsSTL(sketchPath("superellipsoid-"+(System.currentTimeMillis()/1000)+".stl"));
+  }
+  if (key == ' ') {
+    doSave=true;
   }
 }
 
