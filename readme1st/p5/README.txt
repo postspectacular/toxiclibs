@@ -1,16 +1,17 @@
 This is a separate release of a subset of the available classes in the toxiclibs library.
 
-Only the following package is included:
+Only the following packages are included:
 
-toxi.sim.*
+toxi.processing
 
 This library also depends on the following other packages,
 get them via: http://hg.postspectacular.com/toxiclibs/downloads/
 
-toxi.geom, toxi.math (toxiclibscore-0016 release or later)
+toxi.geom (toxiclibscore-0017 release or later)
+Processing 1.x (from http://processing.org)
 
 If you're going to use these classes for Processing projects,
-first drop the "simutils" folder into the "libraries" folder of your
+first drop the "toxiclibs-p5" folder into the "libraries" folder of your
 Processing sketchbook and ensure the above listed dependent libraries
 are installed there too. You'll then need to restart Processing in order
 for it to find this new library.

@@ -5,7 +5,7 @@ Only the following package is included:
 toxi.volume
 
 This library also depends on the following other packages,
-get them via: http://toxiclibs.googlecode.com/downloads/list
+get them via: http://hg.postspectacular.com/toxiclibs/downloads/
 
 toxi.geom, toxi.math
 (both part of toxiclibscore-0013 release or later)
@@ -17,7 +17,7 @@ are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
 
 Source code is available via SVN, instructions over here:
-http://code.google.com/p/toxiclibs/source
+http://hg.postspectacular.com/toxiclibs/source/
 
 JavaDocs are available in the "docs" folder of each download.
 
