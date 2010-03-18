@@ -1,7 +1,8 @@
 package toxi.sim.dla;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -224,25 +225,30 @@ public class DLA {
             logger.info("bounds: " + minBounds + " -> " + maxBounds
                     + " offset origin: " + origin);
             try {
-                DataOutputStream ds =
-                        new DataOutputStream(new FileOutputStream(fname));
+                RandomAccessFile file = new RandomAccessFile(fname, "rw");
+                FileChannel channel = file.getChannel();
+                int size = parts.size() * 4 * 3;
+                MappedByteBuffer buffer =
+                        channel.map(FileChannel.MapMode.READ_WRITE, 0, size);
                 if (isCentered) {
                     for (Vec3D p : parts) {
                         p = p.sub(origin);
-                        ds.writeFloat(p.x);
-                        ds.writeFloat(p.y);
-                        ds.writeFloat(p.z);
+                        buffer.putFloat(p.x);
+                        buffer.putFloat(p.y);
+                        buffer.putFloat(p.z);
                     }
                 } else {
                     for (Vec3D p : parts) {
-                        ds.writeFloat(p.x);
-                        ds.writeFloat(p.y);
-                        ds.writeFloat(p.z);
+                        buffer.putFloat(p.x);
+                        buffer.putFloat(p.y);
+                        buffer.putFloat(p.z);
                     }
                 }
-                ds.flush();
-                ds.close();
-                logger.info("written " + parts.size() + " to " + fname);
+                buffer.force();
+                channel.close();
+                file.close();
+                logger.info("written " + parts.size() + " particles to "
+                        + fname);
             } catch (Exception e) {
                 e.printStackTrace();
             }
