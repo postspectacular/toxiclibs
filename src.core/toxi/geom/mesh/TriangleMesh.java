@@ -113,6 +113,8 @@ public class TriangleMesh {
     protected int numVertices;
     protected int numFaces;
 
+    private Matrix4x4 matrix = new Matrix4x4();
+
     public TriangleMesh() {
         this("untitled");
     }
@@ -473,6 +475,34 @@ public class TriangleMesh {
         return numVertices;
     }
 
+    public TriangleMesh getRotatedAroundAxis(Vec3D axis, float theta) {
+        return copy().rotateAroundAxis(axis, theta);
+    }
+
+    public TriangleMesh getRotatedX(float theta) {
+        return copy().rotateX(theta);
+    }
+
+    public TriangleMesh getRotatedY(float theta) {
+        return copy().rotateY(theta);
+    }
+
+    public TriangleMesh getRotatedZ(float theta) {
+        return copy().rotateZ(theta);
+    }
+
+    public TriangleMesh getScaled(float scale) {
+        return copy().scale(scale);
+    }
+
+    public TriangleMesh getScaled(Vec3D scale) {
+        return copy().scale(scale);
+    }
+
+    public TriangleMesh getTranslated(Vec3D trans) {
+        return copy().translate(trans);
+    }
+
     public float[] getUniqueVerticesAsArray() {
         float[] verts = new float[numVertices * 3];
         int i = 0;
@@ -565,6 +595,22 @@ public class TriangleMesh {
         float angle = (float) Math.atan2(length, forward.dot(target));
         Quaternion q = Quaternion.createFromAxisAngle(axis, angle);
         return transform(q.getMatrix(), true);
+    }
+
+    public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
+        return transform(matrix.identity().rotateAroundAxis(axis, theta));
+    }
+
+    public TriangleMesh rotateX(float theta) {
+        return transform(matrix.identity().rotateX(theta));
+    }
+
+    public TriangleMesh rotateY(float theta) {
+        return transform(matrix.identity().rotateY(theta));
+    }
+
+    public TriangleMesh rotateZ(float theta) {
+        return transform(matrix.identity().rotateZ(theta));
     }
 
     /**
@@ -684,6 +730,14 @@ public class TriangleMesh {
         logger.info(numFaces + " faces written");
     }
 
+    public TriangleMesh scale(float scale) {
+        return transform(matrix.identity().scaleSelf(scale));
+    }
+
+    public TriangleMesh scale(Vec3D scale) {
+        return transform(matrix.identity().scaleSelf(scale));
+    }
+
     @Override
     public String toString() {
         return "TriangleMesh: " + name + " vertices: " + getNumVertices()
@@ -718,5 +772,9 @@ public class TriangleMesh {
             computeFaceNormals();
         }
         return this;
+    }
+
+    public TriangleMesh translate(Vec3D trans) {
+        return transform(matrix.identity().translateSelf(trans));
     }
 }
