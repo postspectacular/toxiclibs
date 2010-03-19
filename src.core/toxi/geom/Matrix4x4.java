@@ -177,10 +177,15 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 identity() {
-        for (int i = 0; i < 4; i++) {
-            double[] m = matrix[i];
-            m[0] = m[1] = m[2] = m[3] = 0;
-        }
+        double[] m;
+        m = matrix[0];
+        m[1] = m[2] = m[3] = 0;
+        m = matrix[1];
+        m[0] = m[2] = m[3] = 0;
+        m = matrix[2];
+        m[0] = m[1] = m[3] = 0;
+        m = matrix[3];
+        m[0] = m[1] = m[2] = 0;
         matrix[0][0] = 1;
         matrix[1][1] = 1;
         matrix[2][2] = 1;
