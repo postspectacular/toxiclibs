@@ -154,7 +154,7 @@ public class TriangleMesh {
      * @param b
      * @param c
      */
-    public void addFace(Vec3D a, Vec3D b, Vec3D c) {
+    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
         int aID, bID, cID;
         Vertex va = vertices.get(a);
         if (va != null) {
@@ -192,6 +192,7 @@ public class TriangleMesh {
             faces.add(f);
             numFaces++;
         }
+        return this;
     }
 
     /**
@@ -200,10 +201,11 @@ public class TriangleMesh {
      * @param m
      *            source mesh instance
      */
-    public void addMesh(TriangleMesh m) {
+    public TriangleMesh addMesh(TriangleMesh m) {
         for (Face f : m.faces) {
             addFace(f.a, f.b, f.c);
         }
+        return this;
     }
 
     /**
@@ -227,12 +229,13 @@ public class TriangleMesh {
     /**
      * Clears all counters, and vertex & face buffers.
      */
-    public void clear() {
+    public TriangleMesh clear() {
         vertices.clear();
         faces.clear();
         bounds = null;
         numVertices = 0;
         numFaces = 0;
+        return this;
     }
 
     /**
@@ -248,7 +251,7 @@ public class TriangleMesh {
     /**
      * Computes the smooth vertex normals for the entire mesh.
      */
-    public void computeVertexNormals() {
+    public TriangleMesh computeVertexNormals() {
         for (Vertex v : vertices.values()) {
             v.clearNormal();
         }
@@ -260,6 +263,7 @@ public class TriangleMesh {
         for (Vertex v : vertices.values()) {
             v.computeNormal();
         }
+        return this;
     }
 
     /**
@@ -616,6 +620,8 @@ public class TriangleMesh {
      * 
      * @param fileName
      */
+    // FIXME need to save face list instead of normals! Is this method necessary
+    // at all?
     public final void saveAsRaw(String fileName) {
         try {
             DataOutputStream ds =
