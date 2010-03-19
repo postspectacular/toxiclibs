@@ -430,6 +430,10 @@ public class Matrix4x4 {
         return new Matrix4x4(this).scaleSelf(scaleX, scaleY, scaleZ);
     }
 
+    public Matrix4x4 scale(Vec3D scale) {
+        return new Matrix4x4(this).scaleSelf(scale.x, scale.y, scale.z);
+    }
+
     public Matrix4x4 scaleSelf(double scale) {
         return scaleSelf(scale, scale, scale);
     }
@@ -440,6 +444,10 @@ public class Matrix4x4 {
         TEMP.matrix[1][1] = scaleY;
         TEMP.matrix[2][2] = scaleZ;
         return this.multiplySelf(TEMP);
+    }
+
+    public Matrix4x4 scaleSelf(Vec3D scale) {
+        return scaleSelf(scale.x, scale.y, scale.y);
     }
 
     public Matrix4x4 set(double a, double b, double c, double d, double e,
@@ -558,12 +566,20 @@ public class Matrix4x4 {
         return new Matrix4x4(this).translateSelf(dx, dy, dz);
     }
 
+    public Matrix4x4 translate(Vec3D trans) {
+        return new Matrix4x4(this).translateSelf(trans.x, trans.y, trans.z);
+    }
+
     public Matrix4x4 translateSelf(double dx, double dy, double dz) {
         TEMP.identity();
         TEMP.matrix[0][3] = dx;
         TEMP.matrix[1][3] = dy;
         TEMP.matrix[2][3] = dz;
         return this.multiplySelf(TEMP);
+    }
+
+    public Matrix4x4 translateSelf(Vec3D trans) {
+        return translateSelf(trans.x, trans.y, trans.z);
     }
 
     /**
