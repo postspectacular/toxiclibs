@@ -414,6 +414,10 @@ public class ColorList implements Iterable<TColor> {
         return lightest;
     }
 
+    public TColor getRandom() {
+        return colors.get(MathUtils.random(colors.size()));
+    }
+
     /**
      * Returns a reversed copy of the current list.
      * 
