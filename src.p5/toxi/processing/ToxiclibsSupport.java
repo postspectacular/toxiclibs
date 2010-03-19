@@ -1,5 +1,7 @@
 package toxi.processing;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import processing.core.PApplet;
@@ -50,7 +52,11 @@ public class ToxiclibsSupport {
     }
 
     public final void box(AABB box, boolean smooth) {
-        mesh(box.toMesh(), smooth, 0);
+        TriangleMesh mesh = box.toMesh();
+        if (smooth) {
+            mesh.computeVertexNormals();
+        }
+        mesh(mesh, smooth, 0);
     }
 
     public final void cone(Cone cone) {
@@ -58,7 +64,11 @@ public class ToxiclibsSupport {
     }
 
     public final void cone(Cone cone, int res, boolean smooth) {
-        mesh(cone.toMesh(res), false, 0);
+        TriangleMesh mesh = cone.toMesh(res);
+        if (smooth) {
+            mesh.computeVertexNormals();
+        }
+        mesh(mesh, smooth, 0);
     }
 
     public final void cylinder(AxisAlignedCylinder cylinder) {
@@ -67,7 +77,11 @@ public class ToxiclibsSupport {
 
     public final void cylinder(AxisAlignedCylinder cylinder, int res,
             boolean smooth) {
-        mesh(cylinder.toMesh(res, 0), smooth, 0);
+        TriangleMesh mesh = cylinder.toMesh(res, 0);
+        if (smooth) {
+            mesh.computeVertexNormals();
+        }
+        mesh(mesh, smooth, 0);
     }
 
     public final void ellipse(Ellipse e) {
@@ -103,6 +117,20 @@ public class ToxiclibsSupport {
         gfx.line(line.a.x, line.a.y, line.a.z, line.b.x, line.b.y, line.b.z);
     }
 
+    public final void lineStrip2D(ArrayList<Vec2D> points) {
+        boolean isFilled = gfx.fill;
+        gfx.fill = false;
+        processVertices2D(points.iterator(), PConstants.POLYGON);
+        gfx.fill = isFilled;
+    }
+
+    public final void lineStrip3D(ArrayList<Vec3D> points) {
+        boolean isFilled = gfx.fill;
+        gfx.fill = false;
+        processVertices3D(points.iterator(), PConstants.POLYGON);
+        gfx.fill = isFilled;
+    }
+
     public final void mesh(TriangleMesh mesh) {
         mesh(mesh, false, 0);
     }
@@ -132,6 +160,11 @@ public class ToxiclibsSupport {
         }
         gfx.endShape();
         if (normalLength > 0) {
+            int strokeCol = 0;
+            boolean isStroked = gfx.stroke;
+            if (isStroked) {
+                strokeCol = gfx.strokeColor;
+            }
             if (smooth) {
                 for (TriangleMesh.Vertex v : mesh.vertices.values()) {
                     Vec3D w = v.add(v.normal.scale(normalLength));
@@ -148,11 +181,58 @@ public class ToxiclibsSupport {
                     gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
                 }
             }
+            if (isStroked) {
+                gfx.stroke(strokeCol);
+            } else {
+                gfx.noStroke();
+            }
         }
     }
 
     public final void plane(Plane plane, float size) {
         mesh(plane.toMesh(size), false, 0);
+    }
+
+    public final void point(Vec2D v) {
+        gfx.point(v.x, v.y);
+    }
+
+    public final void point(Vec3D v) {
+        gfx.point(v.x, v.y, v.z);
+    }
+
+    public final void points2D(ArrayList<Vec2D> points) {
+        processVertices2D(points.iterator(), PConstants.POINTS);
+    }
+
+    public final void points2D(Iterator<Vec2D> iterator) {
+        processVertices2D(iterator, PConstants.POINTS);
+    }
+
+    public final void points3D(ArrayList<Vec3D> points) {
+        processVertices3D(points.iterator(), PConstants.POINTS);
+    }
+
+    public final void points3D(Iterator<Vec3D> iterator) {
+        processVertices3D(iterator, PConstants.POINTS);
+    }
+
+    protected void processVertices2D(Iterator<Vec2D> iterator, int shapeID) {
+        gfx.beginShape(shapeID);
+        while (iterator.hasNext()) {
+            Vec2D v = iterator.next();
+            gfx.vertex(v.x, v.y);
+        }
+        gfx.endShape();
+    }
+
+    public final void processVertices3D(Iterator<Vec3D> iterator, int shapeID) {
+        gfx.beginShape(shapeID);
+        while (iterator.hasNext()) {
+            Vec3D v = iterator.next();
+            gfx.vertex(v.x, v.y, v.z);
+        }
+        gfx.endShape();
     }
 
     public final void ray(Ray2D ray, float length) {
@@ -195,7 +275,7 @@ public class ToxiclibsSupport {
         this.gfx = gfx;
     }
 
-    // FIXME replace with mesh drawing, blocked by issue #2
+    // TODO replace with mesh drawing, blocked by issue #2
     public final void sphere(Sphere sphere) {
         gfx.pushMatrix();
         gfx.translate(sphere.x, sphere.y, sphere.z);
@@ -207,6 +287,8 @@ public class ToxiclibsSupport {
         if (isFullShape) {
             gfx.beginShape(PConstants.TRIANGLES);
         }
+        Vec3D n = tri.computeNormal();
+        gfx.normal(n.x, n.y, n.z);
         gfx.vertex(tri.a.x, tri.a.y, tri.a.z);
         gfx.vertex(tri.b.x, tri.b.y, tri.b.z);
         gfx.vertex(tri.c.x, tri.c.y, tri.c.z);
@@ -232,7 +314,6 @@ public class ToxiclibsSupport {
     }
 
     public final void vertex(Vec3D v) {
-        gfx.vertex(v.x, v.y);
+        gfx.vertex(v.x, v.y, v.z);
     }
-
 }

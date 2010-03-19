@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="toxiclibs" default="release">
     <property file="versions.properties"/>
-    <property name="project.name" value="toxiclibs-p5" />
+    <property name="project.name" value="toxiclibs_p5" />
 	<property name="srcfolder.id" value="p5" />
 	<property name="lib.version" value="${version.p5}" />
 	<property name="lib.jdk.level" value="1.5" />
