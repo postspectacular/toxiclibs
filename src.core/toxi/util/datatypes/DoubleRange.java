@@ -26,9 +26,8 @@ public class DoubleRange {
         this.currValue = min;
     }
 
-    public double adjustCurrentBy(float val) {
-        currValue = MathUtils.clip(currValue + val, min, max);
-        return currValue;
+    public double adjustCurrentBy(double val) {
+        return setCurrent(currValue + val);
     }
 
     public DoubleRange copy() {

@@ -27,8 +27,7 @@ public class IntegerRange {
     }
 
     public int adjustCurrentBy(int val) {
-        currValue = MathUtils.clip(currValue + val, min, max);
-        return currValue;
+        return setCurrent(currValue + val);
     }
 
     public int getCurrent() {

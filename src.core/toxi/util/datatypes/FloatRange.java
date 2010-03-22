@@ -27,8 +27,7 @@ public class FloatRange {
     }
 
     public float adjustCurrentBy(float val) {
-        currValue = MathUtils.clip(currValue + val, min, max);
-        return currValue;
+        return setCurrent(currValue + val);
     }
 
     public FloatRange copy() {
