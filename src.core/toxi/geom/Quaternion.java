@@ -130,6 +130,14 @@ public class Quaternion {
                 (float) q[2]);
     }
 
+    public static Quaternion getAlignmentQuat(Vec3D dir, Vec3D forward) {
+        Vec3D target = dir.getNormalized();
+        Vec3D axis = forward.cross(target);
+        float length = axis.magnitude() + 0.0001f;
+        float angle = (float) Math.atan2(length, forward.dot(target));
+        return createFromAxisAngle(axis, angle);
+    }
+
     @XmlAttribute(required = true)
     public float x, y, z, w;
 
@@ -200,30 +208,12 @@ public class Quaternion {
     }
 
     /**
-     * Converts the quat into a 4x4 Matrix. Assumes the quat is currently
-     * normalized (if not, you'll need to call {@link #normalize()} first). This
-     * calculation would be a lot more complicated for non-unit length
-     * quaternions Note: The constructor of Matrix4 expects the Matrix in
-     * column-major format like expected by OpenGL
-     * 
+     * @deprecated use {@link #toMatrix4x4()} instead
      * @return result matrix
      */
+    @Deprecated
     public Matrix4x4 getMatrix() {
-        float x2 = x * x;
-        float y2 = y * y;
-        float z2 = z * z;
-        float xy = x * y;
-        float xz = x * z;
-        float yz = y * z;
-        float wx = w * x;
-        float wy = w * y;
-        float wz = w * z;
-
-        return new Matrix4x4(1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz),
-                2.0f * (xz + wy), 0.0f, 2.0f * (xy + wz),
-                1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 0.0f,
-                2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (x2 + y2),
-                0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        return toMatrix4x4();
     }
 
     /**
@@ -419,7 +409,18 @@ public class Quaternion {
         return res;
     }
 
+    /**
+     * Converts the quat to a 4x4 rotation matrix (in row-major format). Assumes
+     * the quat is currently normalized (if not, you'll need to call
+     * {@link #normalize()} first).
+     * 
+     * @return result matrix
+     */
     public Matrix4x4 toMatrix4x4() {
+        return toMatrix4x4(new Matrix4x4());
+    }
+
+    public Matrix4x4 toMatrix4x4(Matrix4x4 result) {
         // Converts this quaternion to a rotation matrix.
         //
         // | 1 - 2(y^2 + z^2) 2(xy + wz) 2(xz - wy) 0 |
@@ -440,8 +441,8 @@ public class Quaternion {
         float wy = w * y2;
         float wz = w * z2;
 
-        return new Matrix4x4(1 - (yy + zz), xy + wz, xz - wy, 0, xy - wz,
-                1 - (xx + zz), yz + wx, 0, xz + wy, yz - wx, 1 - (xx + yy), 0,
+        return result.set(1 - (yy + zz), xy - wz, xz + wy, 0, xy + wz,
+                1 - (xx + zz), yz - wx, 0, xz - wy, yz + wx, 1 - (xx + yy), 0,
                 0, 0, 0, 1);
     }
 

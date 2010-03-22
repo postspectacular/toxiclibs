@@ -574,7 +574,8 @@ public class TriangleMesh {
      * @return itself
      */
     public TriangleMesh pointTowards(Vec3D dir) {
-        return pointTowards(dir, Vec3D.Z_AXIS);
+        return transform(Quaternion.getAlignmentQuat(dir, Vec3D.Z_AXIS)
+                .toMatrix4x4(matrix), true);
     }
 
     /**
@@ -589,12 +590,8 @@ public class TriangleMesh {
      * @return itself
      */
     public TriangleMesh pointTowards(Vec3D dir, Vec3D forward) {
-        Vec3D target = dir.getNormalized();
-        Vec3D axis = forward.cross(target);
-        float length = axis.magnitude() + 0.0001f;
-        float angle = (float) Math.atan2(length, forward.dot(target));
-        Quaternion q = Quaternion.createFromAxisAngle(axis, angle);
-        return transform(q.getMatrix(), true);
+        return transform(Quaternion.getAlignmentQuat(dir, forward)
+                .toMatrix4x4(matrix), true);
     }
 
     public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
