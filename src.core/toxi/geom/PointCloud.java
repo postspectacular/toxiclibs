@@ -41,6 +41,13 @@ public class PointCloud implements Iterable<Vec3D> {
         return this;
     }
 
+    /**
+     * Applies the given transformation matrix to all points in the cloud.
+     * 
+     * @param m
+     *            transformation matrix
+     * @return itself
+     */
     public PointCloud applyMatrix(Matrix4x4 m) {
         for (Vec3D p : points) {
             p.set(m.applyTo(p));
@@ -49,17 +56,42 @@ public class PointCloud implements Iterable<Vec3D> {
         return this;
     }
 
+    /**
+     * Updates all points in the cloud so that their new centroid is at the
+     * origin.
+     * 
+     * @return itself
+     */
     public PointCloud center() {
+        return center(null);
+    }
+
+    /**
+     * Updates all points in the cloud so that their new centroid is at the
+     * given point.
+     * 
+     * @param origin
+     *            new centroid
+     * @return itself
+     */
+    public PointCloud center(Vec3D origin) {
         getCentroid();
+        Vec3D delta =
+                origin != null ? origin.sub(centroid) : centroid.getInverted();
         for (Vec3D p : points) {
-            p.subSelf(centroid);
+            p.addSelf(delta);
         }
-        min.subSelf(centroid);
-        max.subSelf(centroid);
-        centroid.clear();
+        min.addSelf(delta);
+        max.addSelf(delta);
+        centroid.addSelf(delta);
         return this;
     }
 
+    /**
+     * Removes all points from the cloud and resets the bounds and centroid.
+     * 
+     * @return itself
+     */
     public PointCloud clear() {
         points.clear();
         min = Vec3D.MAX_VALUE.copy();
@@ -68,6 +100,11 @@ public class PointCloud implements Iterable<Vec3D> {
         return this;
     }
 
+    /**
+     * Creates a deep copy of the cloud
+     * 
+     * @return copied instance
+     */
     public PointCloud copy() {
         PointCloud c = new PointCloud(points.size());
         for (Vec3D p : points) {
@@ -84,18 +121,45 @@ public class PointCloud implements Iterable<Vec3D> {
         return new Sphere(getCentroid(), (float) Math.sqrt(radiusSquared));
     }
 
+    /**
+     * @return the cloud centroid
+     */
     public Vec3D getCentroid() {
         return centroid;
     }
 
+    /**
+     * @return an iterator for the backing point collection.
+     * 
+     * @see java.lang.Iterable#iterator()
+     */
     public Iterator<Vec3D> iterator() {
         return points.iterator();
     }
 
+    /**
+     * Removes the point from the cloud, but doesn't update the bounds
+     * automatically.
+     * 
+     * @param p
+     * @return true, if point has been removed.
+     */
     public boolean removePoint(Vec3D p) {
         return points.remove(p);
     }
 
+    /**
+     * @return the current number of points in the cloud
+     */
+    public int size() {
+        return points.size();
+    }
+
+    /**
+     * Recalculates the bounding box, bounding sphere and centroid of the cloud.
+     * 
+     * @return itself
+     */
     public PointCloud updateBounds() {
         min = Vec3D.MAX_VALUE;
         max = Vec3D.MIN_VALUE;
