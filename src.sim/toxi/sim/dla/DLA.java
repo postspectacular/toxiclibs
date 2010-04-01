@@ -1,9 +1,13 @@
 package toxi.sim.dla;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -75,6 +79,7 @@ public class DLA {
     protected void alignAttachedParticle(DLAParticle p, Vec3D target) {
         Vec3D d = p.sub(target).normalize();
         d.interpolateToSelf(dirCurvePoint, config.getCurveAlign());
+        d.scaleSelf(config.getGrowthScale());
         d.normalizeTo(config.getParticleRadius());
         p.set(target).addSelf(d);
     }
@@ -255,6 +260,31 @@ public class DLA {
         }
     }
 
+    public void saveAsText(String fname, boolean isCentered) {
+        List<Vec3D> particles = octree.getPoints();
+        if (particles != null) {
+            Vec3D origin = minBounds.add(maxBounds).scaleSelf(0.5f);
+            logger.info("bounds: " + minBounds + " -> " + maxBounds
+                    + " offset origin: " + origin);
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(fname));
+                for (Iterator<Vec3D> i = octree.getPoints().iterator(); i
+                        .hasNext();) {
+                    Vec3D p = i.next();
+                    StringBuilder sb = new StringBuilder(36);
+                    sb.append(p.x).append(',').append(p.y).append(',').append(
+                            p.z).append("\n");
+                    out.write(sb.toString());
+                }
+                out.close();
+                logger.info("written " + particles.size() + " particles to "
+                        + fname);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * @param config
      *            the config to set
@@ -297,10 +327,11 @@ public class DLA {
     }
 
     protected void updateCurvePoint() {
-        if (Math.random() < config.getContinousGrowthRatio()
+        if (Math.random() < config.getContinuousGrowthRatio()
                 && numActiveSegments > 0) {
             DLASegment segment =
-                    activeSegments.get(MathUtils.random(numActiveSegments));
+                    activeSegments
+                            .get((int) (config.getContinuousGrowthCoeff() * (numActiveSegments - 1)));
             float currT = MathUtils.random(1f);
             dirCurvePoint = segment.getDirectionAt(currT);
             currCurvePoint =

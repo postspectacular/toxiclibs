@@ -1,5 +1,8 @@
 package toxi.sim.dla;
 
+import toxi.geom.Vec3D;
+import toxi.util.datatypes.BiasedFloatRange;
+
 public class DLAConfiguration {
 
     protected float snapDistance = 1.8f;
@@ -20,17 +23,29 @@ public class DLAConfiguration {
     protected float particleSpeed = 0.001f;
 
     protected double guideLineDensity = 0.1;
-    protected float continousGrowthRatio = 0.1f;
+    protected float continuousGrowthRatio = 0.1f;
+    protected Vec3D growthScale = new Vec3D(1, 1, 1);
+
+    protected BiasedFloatRange growthBiasRange =
+            new BiasedFloatRange(0, 1, 0, 1);
 
     public DLAConfiguration() {
 
     }
 
+    public float getContinuousGrowthBias() {
+        return growthBiasRange.getBias();
+    }
+
+    public float getContinuousGrowthCoeff() {
+        return growthBiasRange.pickRandom();
+    }
+
     /**
-     * @return the continousGrowthRatio
+     * @return the continuousGrowthRatio
      */
-    public float getContinousGrowthRatio() {
-        return continousGrowthRatio;
+    public float getContinuousGrowthRatio() {
+        return continuousGrowthRatio;
     }
 
     /**
@@ -63,6 +78,10 @@ public class DLAConfiguration {
      */
     public float getEscapeRadius() {
         return escapeRadius;
+    }
+
+    public Vec3D getGrowthScale() {
+        return growthScale;
     }
 
     /**
@@ -119,11 +138,20 @@ public class DLAConfiguration {
     }
 
     /**
-     * @param continousGrowthRatio
-     *            the continousGrowthRatio to set
+     * @param bias
+     * @param sd
      */
-    public void setContinousGrowthRatio(float continousGrowthRatio) {
-        this.continousGrowthRatio = continousGrowthRatio;
+    public void setContinuousGrowthBias(float bias, float sd) {
+        growthBiasRange.setBias(bias);
+        growthBiasRange.setStandardDeviation(sd);
+    }
+
+    /**
+     * @param continuousGrowthRatio
+     *            the continuousGrowthRatio to set
+     */
+    public void setContinuousGrowthRatio(float continousGrowthRatio) {
+        this.continuousGrowthRatio = continousGrowthRatio;
     }
 
     /**
@@ -156,6 +184,14 @@ public class DLAConfiguration {
      */
     public void setEscapeRadius(float escapeRadius) {
         this.escapeRadius = escapeRadius;
+    }
+
+    /**
+     * @param growthScale
+     *            the growthScale to set
+     */
+    public void setGrowthScale(Vec3D growthScale) {
+        this.growthScale = growthScale;
     }
 
     /**
@@ -213,5 +249,4 @@ public class DLAConfiguration {
     public void setStickiness(float stickiness) {
         this.stickiness = stickiness;
     }
-
 }

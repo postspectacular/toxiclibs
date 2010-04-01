@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.Line3D;
@@ -35,6 +36,12 @@ public class DLAGuideLines {
         segments = new TreeSet<DLASegment>(comparator);
     }
 
+    /**
+     * 
+     * @deprecated use {@link #addPointList(List)} instead
+     * @param points
+     * @return
+     */
     @Deprecated
     public DLAGuideLines addCurveStrip(List<Vec3D> points) {
         return addPointList(points);
@@ -46,9 +53,15 @@ public class DLAGuideLines {
 
     public DLAGuideLines addLine(Vec3D a, Vec3D b) {
         DLASegment s = new DLASegment(a, b, null);
-        logger.info("adding line segment: " + s);
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info("adding line segment: " + s);
+        }
         segments.add(s);
         return this;
+    }
+
+    public DLAGuideLines addPoint(Vec3D p) {
+        return addLine(p, p);
     }
 
     public DLAGuideLines addPointList(List<Vec3D> points) {
@@ -56,7 +69,9 @@ public class DLAGuideLines {
         for (int i = 1; i < numP; i++) {
             Vec3D p = i < numP - 1 ? points.get(i + 1) : null;
             DLASegment s = new DLASegment(points.get(i - 1), points.get(i), p);
-            logger.info("adding curve segment: " + s);
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info("adding line segment: " + s);
+            }
             segments.add(s);
         }
         return this;
@@ -103,7 +118,9 @@ public class DLAGuideLines {
                 currT -= 1.0;
                 currSegment = iterator.next();
                 currPoint = currSegment.a.copy();
-                logger.info("next segment: " + currSegment);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("next segment: " + currSegment);
+                }
             }
         }
         return currSegment;
