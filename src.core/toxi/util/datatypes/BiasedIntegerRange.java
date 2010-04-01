@@ -34,6 +34,13 @@ public class BiasedIntegerRange extends IntegerRange {
         this.standardDeviation = sd * 0.5f;
     }
 
+    public BiasedIntegerRange copy() {
+        BiasedIntegerRange r =
+                new BiasedIntegerRange(min, max, bias, standardDeviation * 2);
+        r.currValue = currValue;
+        return r;
+    }
+
     /**
      * @return the bias
      */

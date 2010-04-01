@@ -30,6 +30,13 @@ public class IntegerRange {
         return setCurrent(currValue + val);
     }
 
+    public IntegerRange copy() {
+        IntegerRange range = new IntegerRange(min, max);
+        range.currValue = currValue;
+        range.random = random;
+        return range;
+    }
+
     public int getCurrent() {
         return currValue;
     }

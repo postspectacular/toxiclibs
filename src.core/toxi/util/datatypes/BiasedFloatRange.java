@@ -13,7 +13,7 @@ public class BiasedFloatRange extends FloatRange {
     protected float standardDeviation = bias * 0.5f;
 
     public BiasedFloatRange() {
-        this(0, 1, 0.5f, 0.5f);
+        this(0, 1, 0.5f, 1);
     }
 
     /**
@@ -32,6 +32,13 @@ public class BiasedFloatRange extends FloatRange {
         super(min, max);
         setBias(bias);
         setStandardDeviation(sd);
+    }
+
+    public BiasedFloatRange copy() {
+        BiasedFloatRange r =
+                new BiasedFloatRange(min, max, bias, standardDeviation * 2);
+        r.currValue = currValue;
+        return r;
     }
 
     /**
