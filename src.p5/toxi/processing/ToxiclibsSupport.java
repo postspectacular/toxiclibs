@@ -60,10 +60,19 @@ public class ToxiclibsSupport {
     }
 
     public final void cone(Cone cone) {
-        mesh(cone.toMesh(6), false, 0);
+        mesh(cone.toMesh("cone", 6, 0, true, true), false, 0);
+    }
+
+    public final void cone(Cone cone, boolean topClosed, boolean bottomClosed) {
+        mesh(cone.toMesh("cone", 6, 0, topClosed, bottomClosed), false, 0);
     }
 
     public final void cone(Cone cone, int res, boolean smooth) {
+        cone(cone, res, true, true, smooth);
+    }
+
+    public final void cone(Cone cone, int res, boolean topClosed,
+            boolean bottomClosed, boolean smooth) {
         TriangleMesh mesh = cone.toMesh(res);
         if (smooth) {
             mesh.computeVertexNormals();
