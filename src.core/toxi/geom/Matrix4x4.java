@@ -13,11 +13,8 @@ public class Matrix4x4 {
     private static final Matrix4x4 TEMP = new Matrix4x4();
 
     public double[][] matrix;
-
     protected double[] temp = new double[4];
 
-    // Default constructor
-    // Sets matrix to identity
     public Matrix4x4() {
         init();
         matrix[0][0] = 1;
@@ -145,7 +142,7 @@ public class Matrix4x4 {
             temp[i] = v.x * m[0] + v.y * m[1] + v.z * m[2] + m[3];
         }
         return new Vec3D((float) temp[0], (float) temp[1], (float) temp[2])
-                .scaleSelf((float) (1 / temp[3]));
+                .scaleSelf((float) (1.0 / temp[3]));
     }
 
     public Matrix4x4 copy() {
@@ -301,7 +298,7 @@ public class Matrix4x4 {
         dst[15] -= tmp[8] * src1 + tmp[11] * src2 + tmp[5] * src0;
 
         double det =
-                1 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3]
+                1.0 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3]
                         * dst[3]);
 
         for (int i = 0, k = 0; i < 4; i++) {
@@ -345,7 +342,6 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 multiplySelf(Matrix4x4 mat) {
-        double[] col = new double[4];
         double[] mm0 = mat.matrix[0];
         double[] mm1 = mat.matrix[1];
         double[] mm2 = mat.matrix[2];
@@ -353,14 +349,14 @@ public class Matrix4x4 {
         for (int i = 0; i < 4; i++) {
             double[] m = matrix[i];
             for (int j = 0; j < 4; j++) {
-                col[j] =
+                temp[j] =
                         m[0] * mm0[j] + m[1] * mm1[j] + m[2] * mm2[j] + m[3]
                                 * mm3[j];
             }
-            m[0] = col[0];
-            m[1] = col[1];
-            m[2] = col[2];
-            m[3] = col[3];
+            m[0] = temp[0];
+            m[1] = temp[1];
+            m[2] = temp[2];
+            m[3] = temp[3];
         }
         return this;
     }
