@@ -173,9 +173,10 @@ public class ToxiclibsSupport {
                     gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
                 }
             } else {
+                float third = 1f / 3;
                 for (TriangleMesh.Face f : mesh.faces) {
-                    Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
-                    Vec3D d = c.add(f.normal.scale(20));
+                    Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(third);
+                    Vec3D d = c.add(f.normal.scale(normalLength));
                     Vec3D n = f.normal.scale(127);
                     gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
                     gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
