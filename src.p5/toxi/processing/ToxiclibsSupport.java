@@ -124,7 +124,7 @@ public class ToxiclibsSupport {
         gfx.fill = isFilled;
     }
 
-    public final void lineStrip3D(ArrayList<Vec3D> points) {
+    public final void lineStrip3D(ArrayList<? extends Vec3D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices3D(points.iterator(), PConstants.POLYGON);
@@ -201,23 +201,24 @@ public class ToxiclibsSupport {
         gfx.point(v.x, v.y, v.z);
     }
 
-    public final void points2D(ArrayList<Vec2D> points) {
+    public final void points2D(ArrayList<? extends Vec2D> points) {
         processVertices2D(points.iterator(), PConstants.POINTS);
     }
 
-    public final void points2D(Iterator<Vec2D> iterator) {
+    public final void points2D(Iterator<? extends Vec2D> iterator) {
         processVertices2D(iterator, PConstants.POINTS);
     }
 
-    public final void points3D(ArrayList<Vec3D> points) {
+    public final void points3D(ArrayList<? extends Vec3D> points) {
         processVertices3D(points.iterator(), PConstants.POINTS);
     }
 
-    public final void points3D(Iterator<Vec3D> iterator) {
+    public final void points3D(Iterator<? extends Vec3D> iterator) {
         processVertices3D(iterator, PConstants.POINTS);
     }
 
-    protected void processVertices2D(Iterator<Vec2D> iterator, int shapeID) {
+    protected void processVertices2D(Iterator<? extends Vec2D> iterator,
+            int shapeID) {
         gfx.beginShape(shapeID);
         while (iterator.hasNext()) {
             Vec2D v = iterator.next();
@@ -226,7 +227,8 @@ public class ToxiclibsSupport {
         gfx.endShape();
     }
 
-    public final void processVertices3D(Iterator<Vec3D> iterator, int shapeID) {
+    public final void processVertices3D(Iterator<? extends Vec3D> iterator,
+            int shapeID) {
         gfx.beginShape(shapeID);
         while (iterator.hasNext()) {
             Vec3D v = iterator.next();
