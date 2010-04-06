@@ -305,7 +305,7 @@ public class AABB extends Vec3D {
     }
 
     public TriangleMesh toMesh(String name) {
-        TriangleMesh mesh = new TriangleMesh(name);
+        TriangleMesh mesh = new TriangleMesh(name, 8, 12);
         // front
         Vec3D a = new Vec3D(min.x, max.y, max.z);
         Vec3D b = new Vec3D(max.x, max.y, max.z);

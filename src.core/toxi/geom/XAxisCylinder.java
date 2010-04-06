@@ -107,6 +107,6 @@ public class XAxisCylinder implements AxisAlignedCylinder {
      */
     public TriangleMesh toMesh(int steps, float thetaOffset) {
         return new Cone(pos, Vec3D.X_AXIS, radius, radius, length).toMesh(
-                "x-cylinder", steps, thetaOffset);
+                "x-cylinder", steps, thetaOffset, true, true);
     }
 }

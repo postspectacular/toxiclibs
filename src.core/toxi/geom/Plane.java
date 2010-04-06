@@ -140,7 +140,7 @@ public class Plane extends Vec3D {
         Vec3D b = this.add(n).subSelf(m);
         Vec3D c = this.sub(n).subSelf(m);
         Vec3D d = this.sub(n).addSelf(m);
-        TriangleMesh mesh = new TriangleMesh("plane");
+        TriangleMesh mesh = new TriangleMesh("plane", 4, 2);
         mesh.addFace(a, d, b);
         mesh.addFace(b, d, c);
         return mesh;

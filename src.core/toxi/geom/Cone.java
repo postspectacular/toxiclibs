@@ -43,31 +43,42 @@ public class Cone extends Vec3D {
     }
 
     public TriangleMesh toMesh(int steps, float thetaOffset) {
-        return toMesh("cone", steps, thetaOffset);
+        return toMesh("cone", steps, thetaOffset, true, true);
     }
 
-    public TriangleMesh toMesh(String name, int steps, float thetaOffset) {
+    public TriangleMesh toMesh(String name, int steps, float thetaOffset,
+            boolean topClosed, boolean bottomClosed) {
         Vec3D c = this.add(0.01f, 0.01f, 0.01f);
         Vec3D n = c.cross(dir.getNormalized()).normalize();
-        Vec3D p = sub(dir.scale(length * 0.5f));
-        Vec3D q = add(dir.scale(length * 0.5f));
+        Vec3D halfAxis = dir.scale(length * 0.5f);
+        Vec3D p = sub(halfAxis);
+        Vec3D q = add(halfAxis);
         Vec3D[] south = new Vec3D[steps];
         Vec3D[] north = new Vec3D[steps];
+        float phi = MathUtils.TWO_PI / steps;
         for (int i = 0; i < steps; i++) {
-            float theta = i * MathUtils.TWO_PI / steps + thetaOffset;
+            float theta = i * phi + thetaOffset;
             Vec3D nr = n.getRotatedAroundAxis(dir, theta);
-            Vec3D ts = nr.scale(radiusSouth);
-            Vec3D tn = nr.scale(radiusNorth);
-            south[i] = new Vec3D(p.x + ts.x, p.y + ts.y, p.z + ts.z);
-            north[i] = new Vec3D(q.x + tn.x, q.y + tn.y, q.z + tn.z);
+            south[i] = nr.scale(radiusSouth).addSelf(p);
+            north[i] = nr.scale(radiusNorth).addSelf(q);
         }
-        TriangleMesh mesh = new TriangleMesh(name);
-        for (int i = 0; i < steps; i++) {
-            mesh.addFace(south[i], north[i], south[(i + 1) % steps]);
-            mesh.addFace(south[(i + 1) % steps], north[i], north[(i + 1)
-                    % steps]);
-            mesh.addFace(p, south[i], south[(i + 1) % steps]);
-            mesh.addFace(north[i], q, north[(i + 1) % steps]);
+        int numV = steps * 2 + 2;
+        int numF =
+                steps * 2 + (topClosed ? steps : 0)
+                        + (bottomClosed ? steps : 0);
+        TriangleMesh mesh = new TriangleMesh(name, numV, numF);
+        for (int i = 0, j = 1; i < steps; i++, j++) {
+            if (j == steps) {
+                j = 0;
+            }
+            mesh.addFace(south[i], north[i], south[j]);
+            mesh.addFace(south[j], north[i], north[j]);
+            if (bottomClosed) {
+                mesh.addFace(p, south[i], south[j]);
+            }
+            if (topClosed) {
+                mesh.addFace(north[i], q, north[j]);
+            }
         }
         return mesh;
     }
