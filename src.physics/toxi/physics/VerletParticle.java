@@ -147,6 +147,13 @@ public class VerletParticle extends Vec3D {
     }
 
     /**
+     * @return the inverse weight (1/weight)
+     */
+    public final float getInvWeight() {
+        return invWeight;
+    }
+
+    /**
      * Returns the particle's position at the most recent time step.
      * 
      * @return previous position
@@ -158,14 +165,14 @@ public class VerletParticle extends Vec3D {
     /**
      * @return the weight
      */
-    public float getWeight() {
+    public final float getWeight() {
         return weight;
     }
 
     /**
      * @return true, if particle is locked
      */
-    public boolean isLocked() {
+    public final boolean isLocked() {
         return isLocked;
     }
 
