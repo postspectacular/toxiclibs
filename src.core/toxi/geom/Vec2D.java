@@ -830,6 +830,20 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
+    public final Vec2D jitter(Random rnd, float j) {
+        return jitter(rnd, j, j);
+    }
+
+    public final Vec2D jitter(Random rnd, float jx, float jy) {
+        x += MathUtils.normalizedRandom(rnd) * jx;
+        y += MathUtils.normalizedRandom(rnd) * jy;
+        return this;
+    }
+
+    public final Vec2D jitter(Random rnd, Vec2D jv) {
+        return jitter(rnd, jv.x, jv.y);
+    }
+
     public final Vec2D jitter(Vec2D jv) {
         return jitter(jv.x, jv.y);
     }

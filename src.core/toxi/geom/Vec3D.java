@@ -977,6 +977,21 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
+    public final Vec3D jitter(Random rnd, float j) {
+        return jitter(rnd, j, j, j);
+    }
+
+    public final Vec3D jitter(Random rnd, float jx, float jy, float jz) {
+        x += MathUtils.normalizedRandom(rnd) * jx;
+        y += MathUtils.normalizedRandom(rnd) * jy;
+        z += MathUtils.normalizedRandom(rnd) * jz;
+        return this;
+    }
+
+    public final Vec3D jitter(Random rnd, Vec3D jitterVec) {
+        return jitter(rnd, jitterVec.x, jitterVec.y, jitterVec.z);
+    }
+
     /**
      * Jitter.
      * 
