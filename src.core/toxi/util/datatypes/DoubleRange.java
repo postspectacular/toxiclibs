@@ -54,13 +54,19 @@ public class DoubleRange {
         return currValue;
     }
 
+    public DoubleRange seed(long seed) {
+        random.setSeed(seed);
+        return this;
+    }
+
     public double setCurrent(double val) {
         currValue = MathUtils.clip(val, min, max);
         return currValue;
     }
 
-    public void setRandom(Random rnd) {
+    public DoubleRange setRandom(Random rnd) {
         random = rnd;
+        return this;
     }
 
     @Override

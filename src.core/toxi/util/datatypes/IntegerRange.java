@@ -50,8 +50,13 @@ public class IntegerRange {
     }
 
     public int pickRandom() {
-        currValue = MathUtils.random(min, max);
+        currValue = MathUtils.random(random, min, max);
         return currValue;
+    }
+
+    public IntegerRange seed(long seed) {
+        random.setSeed(seed);
+        return this;
     }
 
     public int setCurrent(int val) {
@@ -59,8 +64,9 @@ public class IntegerRange {
         return currValue;
     }
 
-    public void setRandom(Random rnd) {
+    public IntegerRange setRandom(Random rnd) {
         random = rnd;
+        return this;
     }
 
     @Override

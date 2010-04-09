@@ -54,13 +54,19 @@ public class FloatRange {
         return currValue;
     }
 
+    public FloatRange seed(long seed) {
+        random.setSeed(seed);
+        return this;
+    }
+
     public float setCurrent(float val) {
         currValue = MathUtils.clip(val, min, max);
         return currValue;
     }
 
-    public void setRandom(Random rnd) {
+    public FloatRange setRandom(Random rnd) {
         random = rnd;
+        return this;
     }
 
     @Override
