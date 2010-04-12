@@ -1,7 +1,7 @@
 package toxi.processing;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import processing.core.PApplet;
@@ -126,14 +126,14 @@ public class ToxiclibsSupport {
         gfx.line(line.a.x, line.a.y, line.a.z, line.b.x, line.b.y, line.b.z);
     }
 
-    public final void lineStrip2D(ArrayList<Vec2D> points) {
+    public final void lineStrip2D(List<Vec2D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices2D(points.iterator(), PConstants.POLYGON);
         gfx.fill = isFilled;
     }
 
-    public final void lineStrip3D(ArrayList<? extends Vec3D> points) {
+    public final void lineStrip3D(List<? extends Vec3D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices3D(points.iterator(), PConstants.POLYGON);
@@ -211,20 +211,20 @@ public class ToxiclibsSupport {
         gfx.point(v.x, v.y, v.z);
     }
 
-    public final void points2D(ArrayList<? extends Vec2D> points) {
-        processVertices2D(points.iterator(), PConstants.POINTS);
-    }
-
     public final void points2D(Iterator<? extends Vec2D> iterator) {
         processVertices2D(iterator, PConstants.POINTS);
     }
 
-    public final void points3D(ArrayList<? extends Vec3D> points) {
-        processVertices3D(points.iterator(), PConstants.POINTS);
+    public final void points2D(List<? extends Vec2D> points) {
+        processVertices2D(points.iterator(), PConstants.POINTS);
     }
 
     public final void points3D(Iterator<? extends Vec3D> iterator) {
         processVertices3D(iterator, PConstants.POINTS);
+    }
+
+    public final void points3D(List<? extends Vec3D> points) {
+        processVertices3D(points.iterator(), PConstants.POINTS);
     }
 
     protected void processVertices2D(Iterator<? extends Vec2D> iterator,
