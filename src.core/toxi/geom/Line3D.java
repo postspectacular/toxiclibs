@@ -1,6 +1,7 @@
 package toxi.geom;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Line3D {
 
@@ -24,8 +25,8 @@ public class Line3D {
      *            false, if A is NOT to be added to results
      * @return list of result vectors
      */
-    public static final ArrayList<Vec3D> splitIntoSegments(Vec3D a, Vec3D b,
-            float stepLength, ArrayList<Vec3D> segments, boolean addFirst) {
+    public static final List<Vec3D> splitIntoSegments(Vec3D a, Vec3D b,
+            float stepLength, List<Vec3D> segments, boolean addFirst) {
         if (segments == null) {
             segments = new ArrayList<Vec3D>();
         }
@@ -73,7 +74,7 @@ public class Line3D {
         return b.cross(a);
     }
 
-    public ArrayList<Vec3D> splitIntoSegments(ArrayList<Vec3D> segments,
+    public List<Vec3D> splitIntoSegments(List<Vec3D> segments,
             float stepLength, boolean addFirst) {
         return splitIntoSegments(a, b, stepLength, segments, addFirst);
     }

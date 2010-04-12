@@ -20,11 +20,11 @@ public class PointCloud implements Iterable<Vec3D> {
     }
 
     public PointCloud(int numPoints) {
-        points = new ArrayList<Vec3D>();
+        points = new ArrayList<Vec3D>(numPoints);
         clear();
     }
 
-    public PointCloud addAll(List<Vec3D> plist) {
+    public PointCloud addAll(List<? extends Vec3D> plist) {
         for (Vec3D p : plist) {
             addPoint(p);
         }
