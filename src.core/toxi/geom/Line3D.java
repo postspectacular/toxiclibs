@@ -74,6 +74,12 @@ public class Line3D {
         return b.cross(a);
     }
 
+    public Line3D set(Vec3D a, Vec3D b) {
+        this.a = a;
+        this.b = b;
+        return this;
+    }
+
     public List<Vec3D> splitIntoSegments(List<Vec3D> segments,
             float stepLength, boolean addFirst) {
         return splitIntoSegments(a, b, stepLength, segments, addFirst);

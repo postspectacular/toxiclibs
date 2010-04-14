@@ -150,6 +150,12 @@ public class Line2D {
         return isec;
     }
 
+    public Line2D set(Vec2D a, Vec2D b) {
+        this.a = a;
+        this.b = b;
+        return this;
+    }
+
     public List<Vec2D> splitIntoSegments(List<Vec2D> segments,
             float stepLength, boolean addFirst) {
         return splitIntoSegments(a, b, stepLength, segments, addFirst);
