@@ -10,9 +10,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
+import toxi.geom.Intersector;
+import toxi.geom.IsectData;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
+import toxi.geom.Ray3D;
 import toxi.geom.Sphere;
+import toxi.geom.Triangle;
+import toxi.geom.TriangleIntersector;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
@@ -22,7 +27,7 @@ import toxi.math.MathUtils;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class TriangleMesh {
+public class TriangleMesh implements Intersector {
 
     public final static class Face {
 
@@ -114,6 +119,7 @@ public class TriangleMesh {
     protected int numFaces;
 
     private Matrix4x4 matrix = new Matrix4x4();
+    protected TriangleIntersector intersector = new TriangleIntersector();
 
     public TriangleMesh() {
         this("untitled");
@@ -373,6 +379,10 @@ public class TriangleMesh {
         return faceList;
     }
 
+    public IsectData getIntersectionData() {
+        return intersector.getIntersectionData();
+    }
+
     /**
      * Creates an array of unravelled vertex coordinates for all faces using a
      * stride setting of 3, resulting in a gap-less serialized version of all
@@ -564,6 +574,19 @@ public class TriangleMesh {
         return normals;
     }
 
+    public boolean intersectsRay(Ray3D ray) {
+        Triangle tri = intersector.getTriangle();
+        for (Face f : faces) {
+            tri.a = f.a;
+            tri.b = f.b;
+            tri.c = f.c;
+            if (intersector.intersectsRay(ray)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Rotates the mesh in such a way so that its "forward" axis is aligned with
      * the given direction. This version uses the positive Z-axis as default
@@ -590,8 +613,8 @@ public class TriangleMesh {
      * @return itself
      */
     public TriangleMesh pointTowards(Vec3D dir, Vec3D forward) {
-        return transform(Quaternion.getAlignmentQuat(dir, forward)
-                .toMatrix4x4(matrix), true);
+        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
+                matrix), true);
     }
 
     public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
