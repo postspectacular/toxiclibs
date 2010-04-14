@@ -5,10 +5,7 @@ import toxi.math.MathUtils;
 public class SphereIntersectorReflector implements Intersector, Reflector {
 
     protected Sphere sphere;
-    protected Vec3D sphereNormal;
-
-    protected Vec3D isectPos, isectDir;
-    protected float isectDist;
+    protected IsectData isectData = new IsectData();
 
     protected Vec3D reflectedDir, reflectedPos;
     protected float reflectTheta;
@@ -21,46 +18,8 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
         sphere = new Sphere(o, r);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.Intersector#getIntersectionDir(boolean)
-     */
-    public Vec3D getIntersectionDir(boolean normalized) {
-        if (isectDir != null) {
-            if (normalized) {
-                return isectDir.getNormalized();
-            }
-            return isectDir;
-        }
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.Intersector#getIntersectionDistance()
-     */
-    public float getIntersectionDistance() {
-        return isectDist;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.Intersector#getIntersectionPoint()
-     */
-    public Vec3D getIntersectionPoint() {
-        return isectPos;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.Intersector#getNormalAtIntersection()
-     */
-    public Vec3D getNormalAtIntersection() {
-        return sphereNormal;
+    public IsectData getIntersectionData() {
+        return isectData;
     }
 
     /*
@@ -70,7 +29,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
      */
     public Vec3D getReflectedRayPointAtDistance(float dist) {
         if (reflectedDir != null) {
-            return isectPos.add(reflectedDir.scale(dist));
+            return isectData.pos.add(reflectedDir.scale(dist));
         } else {
             return null;
         }
@@ -111,15 +70,16 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
     }
 
     public boolean intersectsRay(Ray3D ray) {
-        isectDist = intersectRayDistance(ray);
-        if (isectDist >= 0) {
+        isectData.dist = intersectRayDistance(ray);
+        isectData.isIntersection = isectData.dist >= 0;
+        if (isectData.isIntersection) {
             // get the intersection point
-            isectPos = ray.add(ray.getDirection().scale(isectDist));
+            isectData.pos = ray.add(ray.getDirection().scale(isectData.dist));
             // calculate the direction from our point to the intersection pos
-            isectDir = isectPos.sub(ray);
-            return true;
+            isectData.dir = isectData.pos.sub(ray);
+            isectData.normal = sphere.tangentPlaneNormalAt(isectData.pos);
         }
-        return false;
+        return isectData.isIntersection;
     }
 
     /*
@@ -131,26 +91,26 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
         if (intersectsRay(ray)) {
             // compute the normal vector of the sphere at the intersection
             // position
-            sphereNormal = sphere.tangentPlaneNormalAt(isectPos);
             // compute the reflection angle
             reflectTheta =
-                    isectDir.angleBetween(sphereNormal, true) * 2
+                    isectData.dir.angleBetween(isectData.normal, true) * 2
                             + MathUtils.PI;
             // then form a perpendicular vector standing on the plane spanned by
             // isectDir and sphereNormal
             // this vector will be used to mirror the ray around the
             // intersection point
             Vec3D reflectNormal =
-                    isectDir.getNormalized().cross(sphereNormal).normalize();
+                    isectData.dir.getNormalized().cross(isectData.normal)
+                            .normalize();
             if (!reflectNormal.isZeroVector()) {
                 // compute the reflected ray direction
                 reflectedDir =
-                        isectDir.getNormalized().rotateAroundAxis(
+                        isectData.dir.getNormalized().rotateAroundAxis(
                                 reflectNormal, reflectTheta);
             } else {
-                reflectedDir = isectDir.getInverted();
+                reflectedDir = isectData.dir.getInverted();
             }
-            return new Ray3D(isectPos, reflectedDir);
+            return new Ray3D(isectData.pos, reflectedDir);
         } else {
             return null;
         }

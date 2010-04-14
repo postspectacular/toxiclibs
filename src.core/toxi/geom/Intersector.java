@@ -25,27 +25,7 @@ package toxi.geom;
  */
 public interface Intersector {
 
-    /**
-     * @param normalized
-     *            true, if a normalized version should be returned
-     * @return direction vector from ray origin to intersection point
-     */
-    public Vec3D getIntersectionDir(boolean normalized);
-
-    /**
-     * @return distance from ray origin to intersection point
-     */
-    public float getIntersectionDistance();
-
-    /**
-     * @return point of intersection on the entity surface
-     */
-    public Vec3D getIntersectionPoint();
-
-    /**
-     * @return entity's surface normal vector at intersection point
-     */
-    public Vec3D getNormalAtIntersection();
+    public IsectData getIntersectionData();
 
     /**
      * Check if entity intersects with the given ray
