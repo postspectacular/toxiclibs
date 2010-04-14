@@ -38,17 +38,21 @@ public class TriangleIntersector implements Intersector {
                             / (n.x * ray.dir.x + n.y * ray.dir.y + n.z
                                     * ray.dir.z);
             if (t >= MathUtils.EPS) {
-                isectData.pos = ray.getPointAtDistance(t);
+                Vec3D pos = ray.getPointAtDistance(t);
+                // TODO commented out orientation check since it seems
+                // unnecessary and i can't remember why I used it for the Audi
+                // project, needs more testing
+                // if (isSameClockDir(triangle.a, triangle.b, pos, n)) {
+                // if (isSameClockDir(triangle.b, triangle.c, pos, n)) {
+                // if (isSameClockDir(triangle.c, triangle.a, pos, n)) {
+                isectData.isIntersection = true;
+                isectData.pos = pos;
                 isectData.normal = n;
                 isectData.dist = t;
-                if (isSameClockDir(triangle.a, triangle.b, isectData.pos, n)) {
-                    if (isSameClockDir(triangle.b, triangle.c, isectData.pos, n)) {
-                        if (isSameClockDir(triangle.c, triangle.a,
-                                isectData.pos, n)) {
-                            isectData.isIntersection = true;
-                        }
-                    }
-                }
+                isectData.dir = isectData.pos.sub(ray).normalize();
+                // }
+                // }
+                // }
             }
         }
         return isectData.isIntersection;
