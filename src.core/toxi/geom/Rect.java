@@ -188,6 +188,15 @@ public class Rect {
         return union(r);
     }
 
+    public Rect scale(float s) {
+        Vec2D c = getCentroid();
+        width *= s;
+        height *= s;
+        x = c.x - width * 0.5f;
+        y = c.y - height * 0.5f;
+        return this;
+    }
+
     /**
      * Sets new bounds for this rectangle.
      * 
