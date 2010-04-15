@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -16,7 +17,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import toxi.data.feeds.util.Iso8601DateAdapter;
 
 @XmlRootElement(name = "feed", namespace = AtomFeed.NS)
-public class AtomFeed {
+public class AtomFeed implements Iterable<AtomEntry> {
 
     public static final String NS = "http://www.w3.org/2005/Atom";
 
@@ -55,4 +56,8 @@ public class AtomFeed {
 
     @XmlElement(name = "entry", namespace = NS)
     public ArrayList<AtomEntry> entries = new ArrayList<AtomEntry>();
+
+    public Iterator<AtomEntry> iterator() {
+        return entries.iterator();
+    }
 }

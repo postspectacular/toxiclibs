@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -11,7 +12,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "rss")
-public class RSSFeed {
+public class RSSFeed implements Iterable<RSSItem> {
 
     public static RSSFeed newFromStream(InputStream stream) {
         RSSFeed feed = null;
@@ -40,4 +41,8 @@ public class RSSFeed {
     public float version;
 
     public RSSChannel channel;
+
+    public Iterator<RSSItem> iterator() {
+        return channel.items.iterator();
+    }
 }

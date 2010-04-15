@@ -7,42 +7,57 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.TestCase;
+import toxi.data.feeds.RSSEnclosure;
 import toxi.data.feeds.RSSFeed;
 import toxi.data.feeds.RSSItem;
 
 public class RSSTest extends TestCase {
 
-	private RSSFeed rss;
+    private RSSFeed rss;
 
-	@Override
-	public void setUp() {
-		try {
-			JAXBContext context = JAXBContext.newInstance(RSSFeed.class);
-			File file = new File("test/testrss.xml");
-			rss = (RSSFeed) context.createUnmarshaller().unmarshal(file);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setUp() {
+        try {
+            JAXBContext context = JAXBContext.newInstance(RSSFeed.class);
+            File file = new File("test/podcast.xml");
+            rss = (RSSFeed) context.createUnmarshaller().unmarshal(file);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void testDateParser() {
-		XMLGregorianCalendar date = rss.channel.items.get(0).pubDate;
-		System.out.println(date);
-	}
+    public void testCategories() {
+        System.out.println("categories...");
+        for (RSSItem i : rss) {
+            for (String cat : i.categories) {
+                System.out.println(cat);
+            }
+        }
+    }
 
-	public void testDumpAll() {
-		for (RSSItem i : rss.channel.items) {
-			System.out.println(i.title);
-		}
-	}
+    public void testDateParser() {
+        XMLGregorianCalendar date = rss.channel.items.get(0).pubDate;
+        System.out.println(date);
+    }
 
-	public void testStripEntities() {
-		String stripped = rss.channel.items.get(0).getTitlePlain();
-		System.out.println("stripped: " + stripped);
-	}
+    public void testDumpAll() {
+        for (RSSItem i : rss) {
+            System.out.println(i.title);
+        }
+    }
 
-	public void testTitle() {
-		String expected = "toxi: @pamela_dust I &lt;3 SIAD and missing the CNC lab too, how about next semester? ;)";
-		assertTrue(expected.equals(rss.channel.items.get(0).title));
-	}
+    public void testEnclosures() {
+        System.out.println("enclosures...");
+        for (RSSItem i : rss) {
+            System.out.println(i.title);
+            for (RSSEnclosure e : i.enclosures) {
+                System.out.println(e);
+            }
+        }
+    }
+
+    public void testStripEntities() {
+        String stripped = rss.channel.items.get(0).getTitlePlain();
+        System.out.println("stripped: " + stripped);
+    }
 }

@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:flickr="urn:flickr:"
+      xmlns:media="http://search.yahoo.com/mrss/">
+
+  <title>toxi's favorites</title>
+  <link rel="self" href="http://api.flickr.com/services/feeds/photos_faves.gne?nsid=73281046@N00&amp;lang=en-us&amp;format=atom" />
+  <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/toxi/favorites/"/>
+  <id>tag:flickr.com,2005:http://www.flickr.com/photos/toxi/favorites/</id>
+  <icon></icon>
+  <subtitle>toxi's favorites on Flickr.</subtitle>
+  <updated>2010-03-25T21:38:07Z</updated>
+  <generator uri="http://www.flickr.com/">Flickr</generator>
+
+  <entry>
+    <title>(Untitled)</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/lennyjpg/4462690461/"/>
+    <id>tag:flickr.com,2005:/photo/4462690461/</id>
+    <published>2010-03-25T21:38:07Z</published>
+    <updated>2010-03-25T21:38:07Z</updated>
+    <dc:date.Taken>2010-03-25T17:33:02-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/lennyjpg/&quot;&gt;lennyjpg&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/lennyjpg/4462690461/&quot; title=&quot;&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4058/4462690461_504e39c738_m.jpg&quot; width=&quot;180&quot; height=&quot;240&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>lennyjpg</name>
+      <uri>http://www.flickr.com/people/lennyjpg/</uri>
+      <flickr:nsid>98177330@N00</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4058/4462690461_4a6a34aec4_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>Branching Respiration Skin 36 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/architecturalecologies/4185034966/"/>
+    <id>tag:flickr.com,2005:/photo/4185034966/</id>
+    <published>2009-12-14T14:40:22Z</published>
+    <updated>2009-12-14T14:40:22Z</updated>
+    <dc:date.Taken>2009-12-14T23:06:04-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/architecturalecologies/&quot;&gt;ARCHITECTURALECOLOGIES&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/architecturalecologies/4185034966/&quot; title=&quot;Branching Respiration Skin 36 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4039/4185034966_bfb50465ed_m.jpg&quot; width=&quot;240&quot; height=&quot;170&quot; alt=&quot;Branching Respiration Skin 36 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://architecturalecologies.wordpress.com/&quot; rel=&quot;nofollow&quot;&gt;Branching Respiration Skin (Yukio minobe, 美濃部幸郎, 2008-2009)&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+この研究プロジェクトはバイオミメティクスの観点をベースに、自然の形態システム（モーフォロジー）をアルゴリズムにより再現し、環境性能の高い建築を生成する方法を探求している。自然界の中で高い換気性能をもつシロアリ塚を参照し、そのモーフォロジーが流線形の外形と内部の導管のブランチング・システムの組み合わせとして解釈されている。さらにこのモーフォロジーをデジタルに再現構成するアルゴリズムと、このアルゴリズムをエンジンとするパラメトリック・デザインと流体解析シミュレーションをループさせたデザイン・プロセスが新たに開発された。この統合的デザイン・プロセスは、環境の外的条件とその建築形態による内的な環境性能を有機的に関係させ、建築を自然環境に最適に適応するものとして生成することを可能にしている。&lt;br /&gt;
+&lt;br /&gt;
+This project investigates a computational design methodology with reconstructions of natural morphologies through computational algorithms based on Biomimetics whereby higher-performative architecture can be generated. Termite mounds as a representative reference of the highest performative system in nature in terms of its natural ventilation are interpreted as the combination between the streamlining external form and internal branching systems of air conduits. Furthermore, a computational algorithm, which can reconstruct termite mounds' morphologies, and a new design process looping between parametric designs driven by the algorithms and C.F.D. simulations are developed. This integral design process can make architectural forms adaptive to nature through the reciprocity between external conditions from environments and internal performances of architecture itself.&lt;/p&gt;</content>
+    <author>
+      <name>ARCHITECTURALECOLOGIES</name>
+      <uri>http://www.flickr.com/people/architecturalecologies/</uri>
+      <flickr:nsid>45145638@N08</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4039/4185034966_7f5d9dd7f8_o.jpg" />
+    <category term="green" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ecology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="architecture" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="computer" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="design" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="wind" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="simulation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="建築" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoceros" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scripting" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="cfd" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="termitemound" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="branching" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="風" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biomimetics" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="bifurcation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="コンピューター" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="streamlining" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoscript" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="naturalventilation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="algorithmicdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="エコロジー" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="parametricdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然換気" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="生物学" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シミュレーション" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="バイオミメティクス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="yukiominobe" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="美濃部幸郎" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="アルゴリズミック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="パラメトリック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シロアリ塚" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="流線形" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ブランチング" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="枝分かれ" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="スクリプト" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノセロス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノスクリプト" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>Branching Respiration Skin 38 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/architecturalecologies/4185035446/"/>
+    <id>tag:flickr.com,2005:/photo/4185035446/</id>
+    <published>2009-12-14T14:40:35Z</published>
+    <updated>2009-12-14T14:40:35Z</updated>
+    <dc:date.Taken>2009-12-14T23:06:18-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/architecturalecologies/&quot;&gt;ARCHITECTURALECOLOGIES&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/architecturalecologies/4185035446/&quot; title=&quot;Branching Respiration Skin 38 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2648/4185035446_46eef43676_m.jpg&quot; width=&quot;240&quot; height=&quot;170&quot; alt=&quot;Branching Respiration Skin 38 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://architecturalecologies.wordpress.com/&quot; rel=&quot;nofollow&quot;&gt;Branching Respiration Skin (Yukio minobe, 美濃部幸郎, 2008-2009)&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+この研究プロジェクトはバイオミメティクスの観点をベースに、自然の形態システム（モーフォロジー）をアルゴリズムにより再現し、環境性能の高い建築を生成する方法を探求している。自然界の中で高い換気性能をもつシロアリ塚を参照し、そのモーフォロジーが流線形の外形と内部の導管のブランチング・システムの組み合わせとして解釈されている。さらにこのモーフォロジーをデジタルに再現構成するアルゴリズムと、このアルゴリズムをエンジンとするパラメトリック・デザインと流体解析シミュレーションをループさせたデザイン・プロセスが新たに開発された。この統合的デザイン・プロセスは、環境の外的条件とその建築形態による内的な環境性能を有機的に関係させ、建築を自然環境に最適に適応するものとして生成することを可能にしている。&lt;br /&gt;
+&lt;br /&gt;
+This project investigates a computational design methodology with reconstructions of natural morphologies through computational algorithms based on Biomimetics whereby higher-performative architecture can be generated. Termite mounds as a representative reference of the highest performative system in nature in terms of its natural ventilation are interpreted as the combination between the streamlining external form and internal branching systems of air conduits. Furthermore, a computational algorithm, which can reconstruct termite mounds' morphologies, and a new design process looping between parametric designs driven by the algorithms and C.F.D. simulations are developed. This integral design process can make architectural forms adaptive to nature through the reciprocity between external conditions from environments and internal performances of architecture itself.&lt;/p&gt;</content>
+    <author>
+      <name>ARCHITECTURALECOLOGIES</name>
+      <uri>http://www.flickr.com/people/architecturalecologies/</uri>
+      <flickr:nsid>45145638@N08</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2648/4185035446_fa17346d42_o.jpg" />
+    <category term="green" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ecology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="architecture" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="computer" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="design" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="wind" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="simulation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="建築" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoceros" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scripting" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="cfd" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="termitemound" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="branching" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="風" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biomimetics" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="bifurcation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="コンピューター" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="streamlining" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoscript" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="naturalventilation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="algorithmicdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="エコロジー" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="parametricdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然換気" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="生物学" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シミュレーション" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="バイオミメティクス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="yukiominobe" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="美濃部幸郎" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="アルゴリズミック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="パラメトリック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シロアリ塚" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="流線形" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ブランチング" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="枝分かれ" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="スクリプト" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノセロス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノスクリプト" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>Branching Respiration Skin 40 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/architecturalecologies/4184276025/"/>
+    <id>tag:flickr.com,2005:/photo/4184276025/</id>
+    <published>2009-12-14T14:41:02Z</published>
+    <updated>2009-12-14T14:41:02Z</updated>
+    <dc:date.Taken>2009-12-14T23:06:23-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/architecturalecologies/&quot;&gt;ARCHITECTURALECOLOGIES&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/architecturalecologies/4184276025/&quot; title=&quot;Branching Respiration Skin 40 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2716/4184276025_32d8885c99_m.jpg&quot; width=&quot;240&quot; height=&quot;170&quot; alt=&quot;Branching Respiration Skin 40 | Atelier Yukio Minobe 美濃部 幸郎 アトリエ&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://architecturalecologies.wordpress.com/&quot; rel=&quot;nofollow&quot;&gt;Branching Respiration Skin (Yukio minobe, 2008-2009)&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+この研究プロジェクトはバイオミメティクスの観点をベースに、自然の形態システム（モーフォロジー）をアルゴリズムにより再現し、環境性能の高い建築を生成するデジタル・デザインの方法を探求している。自然界の中で高い換気性能をもつシロアリ塚が参照され、そのモーフォロジーが流線形の外形と内部の導管のブランチング・システムの組み合わせとして解釈されている。そしてこのモーフォロジーを再現構成するアルゴリズムと、そのアルゴリズムをエンジンとするパラメトリック・デザインと流体解析シミュレーションをループさせたデザイン・プロセスが新たに開発された。このデジタル・デザイン・プロセスは環境の外的条件とその建築形態による内的な環境性能を有機的に関係させ、建築を自然環境に最適に適応するものとして生成することを可能にしている。&lt;br /&gt;
+&lt;br /&gt;
+This project investigates a computational design methodology with reconstructions of natural morphologies through computational algorithms based on Biomimetics whereby higher-performative architecture can be generated. Termite mounds as a representative reference of the highest performative system in nature in terms of its natural ventilation are interpreted as the combination between the streamlining external form and internal branching systems of air conduits. Furthermore, a computational algorithm, which can reconstruct termite mounds' morphologies, and a new design process looping between parametric designs driven by the algorithms and C.F.D. simulations are developed. This digital design process can make architectural forms adaptive to nature through the reciprocity between external conditions from environments and internal performances of architecture itself.&lt;/p&gt;</content>
+    <author>
+      <name>ARCHITECTURALECOLOGIES</name>
+      <uri>http://www.flickr.com/people/architecturalecologies/</uri>
+      <flickr:nsid>45145638@N08</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2716/4184276025_36afe683a7_o.jpg" />
+    <category term="green" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ecology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="architecture" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="computer" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="design" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="wind" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="simulation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="建築" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoceros" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scripting" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="cfd" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="termitemound" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="branching" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="風" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="biomimetics" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="bifurcation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="コンピューター" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="streamlining" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="rhinoscript" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="naturalventilation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="algorithmicdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="エコロジー" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="parametricdesign" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="自然換気" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="生物学" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シミュレーション" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="バイオミメティクス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="yukiominobe" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="美濃部幸郎" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="アルゴリズミック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="パラメトリック・デザイン" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="シロアリ塚" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="流線形" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ブランチング" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="枝分かれ" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="スクリプト" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノセロス" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ライノスクリプト" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>3706530887_7eb0455ebf_b</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4410291321/"/>
+    <id>tag:flickr.com,2005:/photo/4410291321/</id>
+    <published>2010-03-06T13:49:30Z</published>
+    <updated>2010-03-06T13:49:30Z</updated>
+    <dc:date.Taken>2010-03-06T05:49:30-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4410291321/&quot; title=&quot;3706530887_7eb0455ebf_b&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2763/4410291321_46b4355e9f_m.jpg&quot; width=&quot;240&quot; height=&quot;94&quot; alt=&quot;3706530887_7eb0455ebf_b&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2763/4410291321_2135165223_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020410</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4410391463/"/>
+    <id>tag:flickr.com,2005:/photo/4410391463/</id>
+    <published>2010-03-06T14:44:58Z</published>
+    <updated>2010-03-06T14:44:58Z</updated>
+    <dc:date.Taken>2010-01-31T04:17:15-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4410391463/&quot; title=&quot;P1020410&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4030/4410391463_c9e7428a26_m.jpg&quot; width=&quot;135&quot; height=&quot;240&quot; alt=&quot;P1020410&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4030/4410391463_48f7f6bf18_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020371</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4411151836/"/>
+    <id>tag:flickr.com,2005:/photo/4411151836/</id>
+    <published>2010-03-06T14:41:18Z</published>
+    <updated>2010-03-06T14:41:18Z</updated>
+    <dc:date.Taken>2010-01-31T04:05:55-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4411151836/&quot; title=&quot;P1020371&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2531/4411151836_1f58eb1c78_m.jpg&quot; width=&quot;240&quot; height=&quot;132&quot; alt=&quot;P1020371&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2531/4411151836_071405036b_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020373</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4410386117/"/>
+    <id>tag:flickr.com,2005:/photo/4410386117/</id>
+    <published>2010-03-06T14:42:13Z</published>
+    <updated>2010-03-06T14:42:13Z</updated>
+    <dc:date.Taken>2010-01-31T04:06:16-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4410386117/&quot; title=&quot;P1020373&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4070/4410386117_93ff405177_m.jpg&quot; width=&quot;240&quot; height=&quot;135&quot; alt=&quot;P1020373&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4070/4410386117_94436f9d85_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020423</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4410396201/"/>
+    <id>tag:flickr.com,2005:/photo/4410396201/</id>
+    <published>2010-03-06T14:47:39Z</published>
+    <updated>2010-03-06T14:47:39Z</updated>
+    <dc:date.Taken>2010-01-31T04:19:55-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4410396201/&quot; title=&quot;P1020423&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2776/4410396201_8b88d74c23_m.jpg&quot; width=&quot;240&quot; height=&quot;135&quot; alt=&quot;P1020423&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2776/4410396201_201aaea2de_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020532</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4411177482/"/>
+    <id>tag:flickr.com,2005:/photo/4411177482/</id>
+    <published>2010-03-06T14:54:42Z</published>
+    <updated>2010-03-06T14:54:42Z</updated>
+    <dc:date.Taken>2010-01-31T05:03:06-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4411177482/&quot; title=&quot;P1020532&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2677/4411177482_5bf5eb2085_m.jpg&quot; width=&quot;240&quot; height=&quot;171&quot; alt=&quot;P1020532&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2677/4411177482_8a59dd18ec_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>P1020530</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/47408481@N02/4411176018/"/>
+    <id>tag:flickr.com,2005:/photo/4411176018/</id>
+    <published>2010-03-06T14:54:01Z</published>
+    <updated>2010-03-06T14:54:01Z</updated>
+    <dc:date.Taken>2010-01-31T05:02:39-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/47408481@N02/&quot;&gt;PROBOTICS&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/47408481@N02/4411176018/&quot; title=&quot;P1020530&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4060/4411176018_cd8223a8d5_m.jpg&quot; width=&quot;135&quot; height=&quot;240&quot; alt=&quot;P1020530&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>PROBOTICS</name>
+      <uri>http://www.flickr.com/people/47408481@N02/</uri>
+      <flickr:nsid>47408481@N02</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4060/4411176018_f1697c7679_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>computer curved folding</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/peterpanski/3115969224/"/>
+    <id>tag:flickr.com,2005:/photo/3115969224/</id>
+    <published>2008-12-17T13:42:39Z</published>
+    <updated>2008-12-17T13:42:39Z</updated>
+    <dc:date.Taken>2008-12-17T14:42:39-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/peterpanski/&quot;&gt;peterpanski42&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/peterpanski/3115969224/&quot; title=&quot;computer curved folding&quot;&gt;&lt;img src=&quot;http://farm4.static.flickr.com/3276/3115969224_2167a8d520_m.jpg&quot; width=&quot;240&quot; height=&quot;135&quot; alt=&quot;computer curved folding&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;rigid origami curved folding&lt;/p&gt;</content>
+    <author>
+      <name>peterpanski42</name>
+      <uri>http://www.flickr.com/people/peterpanski/</uri>
+      <flickr:nsid>33363406@N03</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm4.static.flickr.com/3276/3115969224_2bbf586b0b_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>2008_11_04_IMG_0380</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/peterpanski/3110609614/"/>
+    <id>tag:flickr.com,2005:/photo/3110609614/</id>
+    <published>2008-12-15T13:19:34Z</published>
+    <updated>2008-12-15T13:19:34Z</updated>
+    <dc:date.Taken>2008-11-04T22:11:26-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/peterpanski/&quot;&gt;peterpanski42&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/peterpanski/3110609614/&quot; title=&quot;2008_11_04_IMG_0380&quot;&gt;&lt;img src=&quot;http://farm4.static.flickr.com/3228/3110609614_6db3cb551d_m.jpg&quot; width=&quot;240&quot; height=&quot;160&quot; alt=&quot;2008_11_04_IMG_0380&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>peterpanski42</name>
+      <uri>http://www.flickr.com/people/peterpanski/</uri>
+      <flickr:nsid>33363406@N03</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm4.static.flickr.com/3228/3110609614_1ca5a1a421_o.jpg" />
+    <category term="paper" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="round" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="folding" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>(Untitled)</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/lennyjpg/4473309437/"/>
+    <id>tag:flickr.com,2005:/photo/4473309437/</id>
+    <published>2010-03-29T18:01:50Z</published>
+    <updated>2010-03-29T18:01:50Z</updated>
+    <dc:date.Taken>2010-03-29T20:01:50-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/lennyjpg/&quot;&gt;lennyjpg&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/lennyjpg/4473309437/&quot; title=&quot;&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4017/4473309437_7f3236dd7a_m.jpg&quot; width=&quot;240&quot; height=&quot;131&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>lennyjpg</name>
+      <uri>http://www.flickr.com/people/lennyjpg/</uri>
+      <flickr:nsid>98177330@N00</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4017/4473309437_71189ceef0_o.jpg" />
+    <category term="blur" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="colors" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="circle" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="focus" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="random" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="flash" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="bubble" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="layers" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="swf" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="blending" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="actionscript" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="as3" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>Thursday February 18 19:58</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/julianbleecker/4371206353/"/>
+    <id>tag:flickr.com,2005:/photo/4371206353/</id>
+    <published>2010-02-20T02:24:49Z</published>
+    <updated>2010-02-20T02:24:49Z</updated>
+    <dc:date.Taken>2010-02-18T19:58:14-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/julianbleecker/&quot;&gt;JulianBleecker&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/julianbleecker/4371206353/&quot; title=&quot;Thursday February 18 19:58&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4016/4371206353_d8f372fea6_m.jpg&quot; width=&quot;240&quot; height=&quot;160&quot; alt=&quot;Thursday February 18 19:58&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>JulianBleecker</name>
+      <uri>http://www.flickr.com/people/julianbleecker/</uri>
+      <flickr:nsid>66854529@N00</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4016/4371206353_d8f372fea6_m.jpg" />
+    <category term="california" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="travel" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="people" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="usa" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="art" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="design" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="losangeles" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="gallery" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="exhibition" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ucla" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="artexhibition" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="maywadenki" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="arttechnology" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="20mmf28" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="broadartcenter" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="meteringmodepattern" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ev0ev" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="subjectdistance710mm" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>Google Street View Camera Car [051-2010_project365]</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/woozie2010/4405013082/"/>
+    <id>tag:flickr.com,2005:/photo/4405013082/</id>
+    <published>2010-03-03T21:36:46Z</published>
+    <updated>2010-03-03T21:36:46Z</updated>
+    <dc:date.Taken>2010-03-03T13:59:18-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/woozie2010/&quot;&gt;woozie2010&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/woozie2010/4405013082/&quot; title=&quot;Google Street View Camera Car [051-2010_project365]&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4069/4405013082_55fb233f18_m.jpg&quot; width=&quot;240&quot; height=&quot;217&quot; alt=&quot;Google Street View Camera Car [051-2010_project365]&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Cebit 2010 Wednesday Hanover, Germany&lt;/p&gt;</content>
+    <author>
+      <name>woozie2010</name>
+      <uri>http://www.flickr.com/people/woozie2010/</uri>
+      <flickr:nsid>46405670@N07</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4069/4405013082_1c368ba9cf_o.jpg" />
+    <category term="street" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="camera" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="art" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="car" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="wednesday" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="germany" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="deutschland" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="google" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="view" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="hannover" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="artcar" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="astra" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="opel" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="2010" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="cebit" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="mittwoch" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="project365" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="googlestreetview" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="3652010" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="cebit2010" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>(Untitled)</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/nat-nat/4442981360/"/>
+    <id>tag:flickr.com,2005:/photo/4442981360/</id>
+    <published>2010-03-18T09:30:25Z</published>
+    <updated>2010-03-18T09:30:25Z</updated>
+    <dc:date.Taken>2009-12-07T20:29:33-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/nat-nat/&quot;&gt;Supernat13&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/nat-nat/4442981360/&quot; title=&quot;&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2704/4442981360_d861bc817c_m.jpg&quot; width=&quot;180&quot; height=&quot;240&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>Supernat13</name>
+      <uri>http://www.flickr.com/people/nat-nat/</uri>
+      <flickr:nsid>64185718@N00</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2704/4442981360_d861bc817c_m.jpg" />
+    <category term="va" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="decode" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>Clean Room at Goddard Space Flight Center</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/gsfc/4422310573/"/>
+    <id>tag:flickr.com,2005:/photo/4422310573/</id>
+    <published>2010-03-10T18:22:56Z</published>
+    <updated>2010-03-10T18:22:56Z</updated>
+    <dc:date.Taken>2010-03-04T12:07:17-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/gsfc/&quot;&gt;NASA Goddard Photo and Video&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/gsfc/4422310573/&quot; title=&quot;Clean Room at Goddard Space Flight Center&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4061/4422310573_caebd2dc15_m.jpg&quot; width=&quot;240&quot; height=&quot;87&quot; alt=&quot;Clean Room at Goddard Space Flight Center&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This panorama shows the inside of Goddard's High Bay Clean Room, as seen from the observation deck. &lt;br /&gt;
+&lt;br /&gt;
+Credit: NASA/Goddard Space Flight Center/Chris Gunn&lt;br /&gt;
+&lt;br /&gt;
+Go into a NASA Clean Room Daily with the Webb Telescope via NASA's 'Webb-cam' here:&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&quot;http://www.jwst.nasa.gov/webcam.html&quot; rel=&quot;nofollow&quot;&gt;www.jwst.nasa.gov/webcam.html&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+For more information on JWST go to:&lt;br /&gt;
+&lt;a href=&quot;http://www.jwst.nasa.gov/&quot; rel=&quot;nofollow&quot;&gt;www.jwst.nasa.gov/&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+For more information on Goddard Space Flight Center go to:&lt;br /&gt;
+&lt;a href=&quot;http://www.nasa.gov/centers/goddard/home/index.html&quot; rel=&quot;nofollow&quot;&gt;www.nasa.gov/centers/goddard/home/index.html&lt;/a&gt;&lt;/p&gt;</content>
+    <author>
+      <name>NASA Goddard Photo and Video</name>
+      <uri>http://www.flickr.com/people/gsfc/</uri>
+      <flickr:nsid>24662369@N07</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4061/4422310573_992e155c6e_o.jpg" />
+    <category term="space" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nasa" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="telescope" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="webb" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="jwst" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="chrisgunn" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="jameswebbspacetelescope" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="goddardspaceflightcenter" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>flock_volume_01</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/mtchl/4415453073/"/>
+    <id>tag:flickr.com,2005:/photo/4415453073/</id>
+    <published>2010-03-08T04:25:55Z</published>
+    <updated>2010-03-08T04:25:55Z</updated>
+    <dc:date.Taken>2010-03-08T15:25:55-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/mtchl/&quot;&gt;mtchl&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/mtchl/4415453073/&quot; title=&quot;flock_volume_01&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4040/4415453073_db1a3e721a_m.jpg&quot; width=&quot;240&quot; height=&quot;226&quot; alt=&quot;flock_volume_01&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Trying out the volumeutils in &lt;a href=&quot;http://toxiclibs.org/&quot; rel=&quot;nofollow&quot;&gt;Toxiclibs&lt;/a&gt; - this is a &amp;quot;hello world&amp;quot;, just hooking it up to a simple 3d flock. Exported as STL and rendered in Blender.&lt;/p&gt;</content>
+    <author>
+      <name>mtchl</name>
+      <uri>http://www.flickr.com/people/mtchl/</uri>
+      <flickr:nsid>10821475@N00</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4040/4415453073_b0dd9f6257_o.png" />
+    <category term="3d" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="flock" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="processing" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="blender" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="isosurface" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="toxiclibs" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>SCPT 250/450: Project1 Milling</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/afsart/4358312176/"/>
+    <id>tag:flickr.com,2005:/photo/4358312176/</id>
+    <published>2010-02-15T02:45:21Z</published>
+    <updated>2010-02-15T02:45:21Z</updated>
+    <dc:date.Taken>2010-02-11T06:07:32-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/afsart/&quot;&gt;afsart&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/afsart/4358312176/&quot; title=&quot;SCPT 250/450: Project1 Milling&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2801/4358312176_a1b2fca72c_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;SCPT 250/450: Project1 Milling&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Digital Applications in Sculpture, Winter 2010. Project 1 miling. Thomas Gibson. Form generated using a surface population script.&lt;br /&gt;
+&lt;a href=&quot;http://digitalsculpture250.blogspot.com/2010/02/surface-population-milling.html&quot; rel=&quot;nofollow&quot;&gt;digitalsculpture250.blogspot.com/2010/02/surface-populati...&lt;/a&gt;&lt;/p&gt;</content>
+    <author>
+      <name>afsart</name>
+      <uri>http://www.flickr.com/people/afsart/</uri>
+      <flickr:nsid>33151641@N07</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2801/4358312176_40c4b6cb1b_o.jpg" />
+    <category term="w10" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="fabbing" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="digitalsculpture" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="afsart" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scaddigisculpt" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scadscptsav" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scpt250450" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="digitalapps" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scadscptwinter2010" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="scpt250450w10p1" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>(Untitled)</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/associatedfabrication/4359633294/"/>
+    <id>tag:flickr.com,2005:/photo/4359633294/</id>
+    <published>2010-02-15T15:27:00Z</published>
+    <updated>2010-02-15T15:27:00Z</updated>
+    <dc:date.Taken>2010-02-03T03:32:52-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/associatedfabrication/&quot;&gt;Associated Fabrication&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/associatedfabrication/4359633294/&quot; title=&quot;&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2755/4359633294_6d43abb934_m.jpg&quot; width=&quot;185&quot; height=&quot;240&quot; alt=&quot;&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>Associated Fabrication</name>
+      <uri>http://www.flickr.com/people/associatedfabrication/</uri>
+      <flickr:nsid>31167421@N07</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2755/4359633294_6d43abb934_m.jpg" />
+    <category term="surface" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tribeca" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="associatedfabrication" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="solid" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="2010" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="4pli" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="corian" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="foxnahem" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="497greenwich" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>digitalartists</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/eyemagazine/4398305772/"/>
+    <id>tag:flickr.com,2005:/photo/4398305772/</id>
+    <published>2010-03-01T12:42:30Z</published>
+    <updated>2010-03-01T12:42:30Z</updated>
+    <dc:date.Taken>2010-03-01T12:42:30-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/eyemagazine/&quot;&gt;eyemagazine&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/eyemagazine/4398305772/&quot; title=&quot;digitalartists&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4032/4398305772_796e33e06e_m.jpg&quot; width=&quot;240&quot; height=&quot;135&quot; alt=&quot;digitalartists&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(Right to left) Frieder Nake, Roman Verostko, Manfred Mohr, Mark Wilson and James Faure Walker (who all feature in Digital Pioneers); plus Casey Reas and Karsten Schmidt ( who both feature in Decode).&lt;br /&gt;
+&lt;br /&gt;
+Photograph: Douglas Dodds.&lt;/p&gt;</content>
+    <author>
+      <name>eyemagazine</name>
+      <uri>http://www.flickr.com/people/eyemagazine/</uri>
+      <flickr:nsid>28419786@N08</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4032/4398305772_874c7eae41_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>verostkoreascropped</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/eyemagazine/4397539297/"/>
+    <id>tag:flickr.com,2005:/photo/4397539297/</id>
+    <published>2010-03-01T12:42:34Z</published>
+    <updated>2010-03-01T12:42:34Z</updated>
+    <dc:date.Taken>2010-02-26T18:00:52-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/eyemagazine/&quot;&gt;eyemagazine&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/eyemagazine/4397539297/&quot; title=&quot;verostkoreascropped&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2795/4397539297_c8c31da7f7_m.jpg&quot; width=&quot;240&quot; height=&quot;156&quot; alt=&quot;verostkoreascropped&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Roman Verostko and Casey Reas.&lt;br /&gt;
+&lt;br /&gt;
+Photograph: Douglas Dodds.&lt;/p&gt;</content>
+    <author>
+      <name>eyemagazine</name>
+      <uri>http://www.flickr.com/people/eyemagazine/</uri>
+      <flickr:nsid>28419786@N08</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2795/4397539297_05e6160602_o.jpg" />
+  </entry>
+
+  <entry>
+    <title>convolutions</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/lyubomirpopov/4385203174/"/>
+    <id>tag:flickr.com,2005:/photo/4385203174/</id>
+    <published>2010-02-24T15:58:47Z</published>
+    <updated>2010-02-24T15:58:47Z</updated>
+    <dc:date.Taken>2010-02-24T17:58:47-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/lyubomirpopov/&quot;&gt;Lyubomir Popov&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/lyubomirpopov/4385203174/&quot; title=&quot;convolutions&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4067/4385203174_c2bd072a9c_m.jpg&quot; width=&quot;240&quot; height=&quot;142&quot; alt=&quot;convolutions&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;started out as distorted type... ended up like this&lt;/p&gt;</content>
+    <author>
+      <name>Lyubomir Popov</name>
+      <uri>http://www.flickr.com/people/lyubomirpopov/</uri>
+      <flickr:nsid>24671582@N03</flickr:nsid>
+    </author>
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4067/4385203174_d560a0c08e_o.jpg" />
+    <category term="opengl" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="typography" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="processing" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="processingorg" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="additiveblending" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="toxiclibs" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="spline3d" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>IMG_8123</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/wurx/3521604747/"/>
+    <id>tag:flickr.com,2005:/photo/3521604747/</id>
+    <published>2009-05-11T14:34:11Z</published>
+    <updated>2009-05-11T14:34:11Z</updated>
+    <dc:date.Taken>2009-05-10T14:41:14-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/wurx/&quot;&gt;Marc de Vinck&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/wurx/3521604747/&quot; title=&quot;IMG_8123&quot;&gt;&lt;img src=&quot;http://farm4.static.flickr.com/3398/3521604747_7f1bf696ba_m.jpg&quot; width=&quot;240&quot; height=&quot;160&quot; alt=&quot;IMG_8123&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>Marc de Vinck</name>
+      <uri>http://www.flickr.com/people/wurx/</uri>
+      <flickr:nsid>15801496@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm4.static.flickr.com/3398/3521604747_901f2560f2_o.jpg" />
+    <category term="students" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="make" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="magazine" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="electronics" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="itp" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="devinck" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>IMG_8158</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/wurx/3522421758/"/>
+    <id>tag:flickr.com,2005:/photo/3522421758/</id>
+    <published>2009-05-11T14:36:28Z</published>
+    <updated>2009-05-11T14:36:28Z</updated>
+    <dc:date.Taken>2009-05-10T15:13:30-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/wurx/&quot;&gt;Marc de Vinck&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/wurx/3522421758/&quot; title=&quot;IMG_8158&quot;&gt;&lt;img src=&quot;http://farm4.static.flickr.com/3389/3522421758_bc0f4e73b0_m.jpg&quot; width=&quot;240&quot; height=&quot;160&quot; alt=&quot;IMG_8158&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>Marc de Vinck</name>
+      <uri>http://www.flickr.com/people/wurx/</uri>
+      <flickr:nsid>15801496@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm4.static.flickr.com/3389/3522421758_33f4475263_o.jpg" />
+    <category term="students" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="make" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="magazine" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="electronics" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="itp" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="devinck" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>HC Gilje – Blink</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/saschapohflepp/4350761973/"/>
+    <id>tag:flickr.com,2005:/photo/4350761973/</id>
+    <published>2010-02-12T15:07:37Z</published>
+    <updated>2010-02-12T15:07:37Z</updated>
+    <dc:date.Taken>2010-02-12T07:07:37-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/saschapohflepp/&quot;&gt;saschapohflepp&lt;/a&gt; posted a video:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/saschapohflepp/4350761973/&quot; title=&quot;HC Gilje – Blink&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4007/4350761973_cfe3e67355_m.jpg&quot; width=&quot;240&quot; height=&quot;135&quot; alt=&quot;HC Gilje – Blink&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The video doesn't really do it justice because its beauty was in the smoothness of the movement&lt;/p&gt;</content>
+    <author>
+      <name>saschapohflepp</name>
+      <uri>http://www.flickr.com/people/saschapohflepp/</uri>
+      <flickr:nsid>33503255@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4007/4350761973_1bc84acaa4_o.jpg" />
+    <category term="berlin" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="club" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tag" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="2010" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="transmediale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ctm" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ctm10" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="esemplasticism" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>CIMG2404.jpg</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/3915349635/"/>
+    <id>tag:flickr.com,2005:/photo/3915349635/</id>
+    <published>2009-09-13T15:43:33Z</published>
+    <updated>2009-09-13T15:43:33Z</updated>
+    <dc:date.Taken>2009-08-13T15:00:10-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/3915349635/&quot; title=&quot;CIMG2404.jpg&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2573/3915349635_2927f90d8f_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;CIMG2404.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2573/3915349635_f26b989eb7_o.jpg" />
+    <category term="plants" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tree" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="mushroom" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="norway" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="forest" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="dale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="sunnfjord" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>CIMG2460.jpg</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/3915368487/"/>
+    <id>tag:flickr.com,2005:/photo/3915368487/</id>
+    <published>2009-09-13T15:49:03Z</published>
+    <updated>2009-09-13T15:49:03Z</updated>
+    <dc:date.Taken>2009-08-16T12:59:46-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/3915368487/&quot; title=&quot;CIMG2460.jpg&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2578/3915368487_ba5dd5d766_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;CIMG2460.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2578/3915368487_a3e4f9d5aa_o.jpg" />
+    <category term="plants" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tree" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="mushroom" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="norway" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="forest" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="dale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="sunnfjord" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>CIMG2510.jpg</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/3916166674/"/>
+    <id>tag:flickr.com,2005:/photo/3916166674/</id>
+    <published>2009-09-13T15:52:48Z</published>
+    <updated>2009-09-13T15:52:48Z</updated>
+    <dc:date.Taken>2009-08-16T13:27:24-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/3916166674/&quot; title=&quot;CIMG2510.jpg&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2614/3916166674_92fcfea3ca_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;CIMG2510.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2614/3916166674_d74635ae61_o.jpg" />
+    <category term="plants" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tree" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="mushroom" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="norway" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="forest" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="dale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="sunnfjord" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>CIMG2541.jpg</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/3916170710/"/>
+    <id>tag:flickr.com,2005:/photo/3916170710/</id>
+    <published>2009-09-13T15:53:57Z</published>
+    <updated>2009-09-13T15:53:57Z</updated>
+    <dc:date.Taken>2009-08-16T14:29:09-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/3916170710/&quot; title=&quot;CIMG2541.jpg&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2501/3916170710_f2c4dbe31a_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;CIMG2541.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2501/3916170710_44624ed2d2_o.jpg" />
+    <category term="plants" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tree" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="nature" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="mushroom" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="norway" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="forest" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="dale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="sunnfjord" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>platform testing</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/4313294273/"/>
+    <id>tag:flickr.com,2005:/photo/4313294273/</id>
+    <published>2010-01-29T15:21:26Z</published>
+    <updated>2010-01-29T15:21:26Z</updated>
+    <dc:date.Taken>2010-01-09T19:04:09-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/4313294273/&quot; title=&quot;platform testing&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2760/4313294273_df45c2f805_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;platform testing&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2760/4313294273_ddf6a4c218_o.jpg" />
+    <category term="light" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="art" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tag" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="installation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="blink" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="transmediale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ctm" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="hcgilje" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>blink v2</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/4313296607/"/>
+    <id>tag:flickr.com,2005:/photo/4313296607/</id>
+    <published>2010-01-29T15:22:54Z</published>
+    <updated>2010-01-29T15:22:54Z</updated>
+    <dc:date.Taken>2010-01-13T21:52:54-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/4313296607/&quot; title=&quot;blink v2&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2750/4313296607_fc387ff73d_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;blink v2&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(the ladder is my model, no humans in the building at the time of documentation :-) )&lt;/p&gt;</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2750/4313296607_7f56bdddc8_o.jpg" />
+    <category term="light" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="art" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tag" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="installation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="blink" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="transmediale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ctm" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="hcgilje" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>chandelier</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/hcgilje/4314031416/"/>
+    <id>tag:flickr.com,2005:/photo/4314031416/</id>
+    <published>2010-01-29T15:21:52Z</published>
+    <updated>2010-01-29T15:21:52Z</updated>
+    <dc:date.Taken>2010-01-12T18:51:34-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/hcgilje/&quot;&gt;hc gilje&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/hcgilje/4314031416/&quot; title=&quot;chandelier&quot;&gt;&lt;img src=&quot;http://farm5.static.flickr.com/4005/4314031416_97b12d32c7_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;chandelier&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>hc gilje</name>
+      <uri>http://www.flickr.com/people/hcgilje/</uri>
+      <flickr:nsid>19549886@N00</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm5.static.flickr.com/4005/4314031416_44e9a0d8d8_o.jpg" />
+    <category term="light" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="art" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="tag" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="installation" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="blink" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="transmediale" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="ctm" scheme="http://www.flickr.com/photos/tags/" />
+    <category term="hcgilje" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>kdtree2</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/blackpawn/4170225345/"/>
+    <id>tag:flickr.com,2005:/photo/4170225345/</id>
+    <published>2009-12-09T03:15:40Z</published>
+    <updated>2009-12-09T03:15:40Z</updated>
+    <dc:date.Taken>2009-12-08T19:15:40-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/blackpawn/&quot;&gt;blackpawn&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/blackpawn/4170225345/&quot; title=&quot;kdtree2&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2643/4170225345_9e2e14bab5_m.jpg&quot; width=&quot;240&quot; height=&quot;229&quot; alt=&quot;kdtree2&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>blackpawn</name>
+      <uri>http://www.flickr.com/people/blackpawn/</uri>
+      <flickr:nsid>16977370@N08</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2643/4170225345_227e188948_o.png" />
+    <category term="datavis" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+  <entry>
+    <title>kdtree using surface area heuristic</title>
+    <link rel="alternate" type="text/html" href="http://www.flickr.com/photos/blackpawn/4164901669/"/>
+    <id>tag:flickr.com,2005:/photo/4164901669/</id>
+    <published>2009-12-07T06:13:27Z</published>
+    <updated>2009-12-07T06:13:27Z</updated>
+    <dc:date.Taken>2009-12-06T22:13:27-08:00</dc:date.Taken>
+    <content type="html">			&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/blackpawn/&quot;&gt;blackpawn&lt;/a&gt; posted a photo:&lt;/p&gt;
+	
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/blackpawn/4164901669/&quot; title=&quot;kdtree using surface area heuristic&quot;&gt;&lt;img src=&quot;http://farm3.static.flickr.com/2762/4164901669_5469022a43_m.jpg&quot; width=&quot;240&quot; height=&quot;141&quot; alt=&quot;kdtree using surface area heuristic&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+</content>
+    <author>
+      <name>blackpawn</name>
+      <uri>http://www.flickr.com/people/blackpawn/</uri>
+      <flickr:nsid>16977370@N08</flickr:nsid>
+    </author>
+    <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/2.0/deed.en_GB" />
+    <link rel="enclosure" type="image/jpeg" href="http://farm3.static.flickr.com/2762/4164901669_991c387a24_o.png" />
+    <category term="datavis" scheme="http://www.flickr.com/photos/tags/" />
+  </entry>
+
+
+</feed>
