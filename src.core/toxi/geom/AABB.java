@@ -73,6 +73,18 @@ public class AABB extends Vec3D {
     }
 
     /**
+     * Creates a new instance from centre point and uniform extent in all
+     * directions.
+     * 
+     * @param pos
+     * @param extent
+     */
+    public AABB(Vec3D pos, float extent) {
+        super(pos);
+        setExtent(new Vec3D(extent, extent, extent));
+    }
+
+    /**
      * Creates a new instance from centre point and extent
      * 
      * @param pos
