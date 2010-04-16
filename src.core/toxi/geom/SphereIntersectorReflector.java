@@ -45,6 +45,13 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
     }
 
     /**
+     * @return the sphere
+     */
+    public Sphere getSphere() {
+        return sphere;
+    }
+
+    /**
      * Calculates the distance of the vector to the given sphere in the
      * specified direction. A sphere is defined by a 3D point and a radius.
      * Normalized directional vectors expected.
@@ -114,5 +121,13 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
         } else {
             return null;
         }
+    }
+
+    /**
+     * @param sphere
+     *            the sphere to set
+     */
+    public void setSphere(Sphere sphere) {
+        this.sphere = sphere;
     }
 }
