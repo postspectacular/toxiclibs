@@ -45,11 +45,12 @@ TriangleMesh mesh = new TriangleMesh();
 
 boolean isWireFrame;
 boolean showNormals;
+boolean doSave;
 
 Matrix4x4 normalMap = new Matrix4x4().translateSelf(128,128,128).scaleSelf(127);
 
 void setup() {
-  size(1280,720, OPENGL);
+  size(1024,576, OPENGL);
   randomizeMesh();
 }
 
@@ -166,7 +167,5 @@ void randomizeMesh() {
     m[i]=(int)random(9);
   }
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(new SphericalHarmonics(m));
-  mesh = b.createMesh(80, 100);
+  mesh = b.createMesh(80, 60);
 }
-
-

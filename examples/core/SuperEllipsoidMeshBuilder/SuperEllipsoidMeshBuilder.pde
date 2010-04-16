@@ -53,7 +53,7 @@ boolean isWireFrame;
 boolean showNormals;
 
 void setup() {
-  size(1280,720, OPENGL);
+  size(1024,576, OPENGL);
   modX = new SineWave(0, 0.01f, 2.5f, 2.5f);
   modY = new SineWave(PI, 0.017f, 2.5f, 2.5f);
 }
@@ -61,13 +61,13 @@ void setup() {
 void draw() {
   SurfaceFunction functor=new SuperEllipsoid(modX.update(), modY.update());
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(functor);
-  mesh = b.createMesh(80, 100);
+  mesh = b.createMesh(80, 80);
   background(0);
   lights();
   translate(width / 2, height / 2, 0);
   rotateX(mouseY * 0.01f);
   rotateY(mouseX * 0.01f);
-  drawAxes(400);
+  drawAxes(300);
   if (isWireFrame) {
     noFill();
     stroke(255);
@@ -126,7 +126,7 @@ void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean s
       for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
         TriangleMesh.Face f=(TriangleMesh.Face)i.next();
         Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
-        Vec3D d = c.add(f.normal.scale(20));
+        Vec3D d = c.add(f.normal.scale(10));
         Vec3D n = f.normal.scale(127);
         gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
         gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);

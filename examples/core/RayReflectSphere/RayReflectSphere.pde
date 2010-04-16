@@ -1,6 +1,8 @@
 /**
  * <p>Processing demo use case for various features of the Vec3D class and
- * the sphere intersector & reflector util of the toxi.geom package</p>
+ * the sphere intersector & reflector util of the toxi.geom package.
+ * The demo also makes use of the ToxiclibsSupport class from the toxi.processing
+ * package which is available separately.</p>
  * 
  * <p>Use the mouse to rotate view, click+drag to change incident ray direction
  * and see its reflection changing.</p>
@@ -10,7 +12,7 @@
  */
 
 /* 
- * Copyright (c) 2006-2008 Karsten Schmidt
+ * Copyright (c) 2006 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +33,7 @@
 
 import processing.opengl.*;
 import toxi.geom.*;
+import toxi.processing.*;
 
 Vec3D pos=new Vec3D(0,200,0);  // ray start position/origin
 Vec3D target=new Vec3D(0,0,0); // ray end point / target position
@@ -43,13 +46,16 @@ float sRadius= 100;  // sphere radius
 // The Reflector interface extends the Intersector interface
 // That way you can choose to only implement a subset of features
 // if no reflection is required
-Reflector reflector=new SphereIntersectorReflector(sOrigin,sRadius);
+SphereIntersectorReflector reflector=new SphereIntersectorReflector(sOrigin,sRadius);
 
 // This vector holds the view rotation
 Vec3D camRot = new Vec3D();
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(500,500,OPENGL);
+  gfx=new ToxiclibsSupport(this);
 }
 
 void draw() {
@@ -78,80 +84,46 @@ void draw() {
 
   // does ray intersect sphere at all?
   if(reflectedRay!=null) {
+    IsectData isec=reflector.getIntersectionData();
     // get the intersection point
-    Vec3D isectPos=reflector.getIntersectionPoint();
-
+    Vec3D isectPos=isec.pos;
     // calc the mirrored point
-    Vec3D posMirrored=reflectedRay.getPointAtDistance(reflector.getIntersectionDistance());
-
+    Vec3D posMirrored=reflectedRay.getPointAtDistance(isec.dist);
     // show the intersection point & sphere's normal vector at intersection
-    Vec3D sphereNormal=reflector.getNormalAtIntersection();
+    Vec3D sphereNormal=isec.normal;
 
-    pushMatrix();
     stroke(0,255,0);
-    translate(isectPos);
-    box(5);
-    beginShape(LINES);
-    vertex(0,0,0);
-    vertex(sphereNormal.scale(sRadius));
-    endShape();
-    popMatrix();
+    gfx.box(new AABB(isectPos,2));
+    gfx.line(new Line3D(new Vec3D(),isectPos));
 
     // reflected point
-    pushMatrix();
-    translate(posMirrored);
-    stroke(255,160,0);
-    box(5);
-    popMatrix();
+    stroke(255,160,0);        
+    gfx.box(new AABB(posMirrored,2));
 
     // reflected ray
-    beginShape(LINES);
     stroke(255,0,0);
-    vertex(isectPos);
-    vertex(pos);
+    gfx.line(pos,isectPos);
     stroke(255,160,0);
-    vertex(isectPos);
-    vertex(posMirrored);
-    endShape();
+    gfx.line(isectPos,posMirrored);
   } 
   else {
-    beginShape(LINES);
     stroke(255,0,0);
-    vertex(pos);
-    vertex(target);
-    endShape();
+    gfx.line(pos,target);
   }
 
   // show sphere
-  pushMatrix();
   stroke(0,20);
-  translate(sOrigin);
-  scale(sRadius);
-  sphere(1);
-  popMatrix();
+  gfx.sphere(reflector.getSphere());
 
   // ray origin
   stroke(255,0,0);
-  pushMatrix();
-  translate(pos);
-  box(5);
-  popMatrix();
+  gfx.box(new AABB(pos,2));
 
   // ray target
   stroke(0,255,255);
-  pushMatrix();
-  translate(target);
-  box(5);
-  popMatrix();
-
+  gfx.box(new AABB(target,2));
 }
 
-// it's nicer to just work with vectors
-void translate(Vec3D v) {
-  translate(v.x, v.y, v.z);
-}
 
-void vertex(Vec3D v) {
-  vertex(v.x, v.y, v.z);
-}
+
 

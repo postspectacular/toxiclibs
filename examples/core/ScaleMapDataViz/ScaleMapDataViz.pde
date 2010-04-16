@@ -9,14 +9,11 @@
  * Lisboa in April 2009. More info and other source code can be found on the workshop wiki:
  * 
  * <a href="http://dataviz.postspectacular.com">http://dataviz.postspectacular.com</a>
- * </p>
- * 
- * @author toxi
- * 
+ * </p> 
  */
 
 /* 
- * Copyright (c) 2006-2009 Karsten Schmidt
+ * Copyright (c) 2009 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,7 +62,7 @@ int clickTolerance = 250;
 
 void setup() {
   size(1024, 256);
-  textFont(createFont("Arial", 12));
+  textFont(createFont("SansSerif", 12));
   long now = System.currentTimeMillis();
   timeMap = new ScaleMap(now - historyLength, now, 0, width);
   timeMap.setMapFunction(zoomLens);

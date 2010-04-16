@@ -1,10 +1,13 @@
 /**
- * This demo shows the effect of various InterpolateStrategy implementations available.
- * For the more interactive ZoomLensInterpolation please see the ZoomLens demo.
+ * <p>This demo shows the effect of various InterpolateStrategy implementations available.
+ * For the more interactive ZoomLensInterpolation please see the ZoomLens demo.</p>
+ *
+ * <p><strong>Usage:</strong> Move mouse to adjust parameters for
+ * sigmoid & exponential interpolation</p>
  */
 
 /* 
- * Copyright (c) 2006-2009 Karsten Schmidt
+ * Copyright (c) 2006 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,6 +40,7 @@ void draw() {
   InterpolateStrategy invCircular=new CircularInterpolation(true);
   InterpolateStrategy sigmoid=new SigmoidInterpolation((float)mouseX/width*4);
   InterpolateStrategy cosine=new CosineInterpolation();
+  InterpolateStrategy expo=new ExponentialInterpolation((float)mouseX/width*4);
 
   for(float x=0; x<width; x++) {
     float t=x/width;
@@ -46,15 +50,19 @@ void draw() {
     point(x,y);
     // circular (ease out)
     y=circular.interpolate(0,height,t);
-    stroke(0,250,0);
+    stroke(0,255,0);
     point(x,y);
     // circular flipped (ease in)
     y=invCircular.interpolate(0,height,t);
-    stroke(0,250,255);
+    stroke(0,255,255);
     point(x,y);
     // sigmoid (try setting sharpness in constructor)
     y=sigmoid.interpolate(0,height,t);
     stroke(255,0,255);
+    point(x,y);
+    // sigmoid (try setting sharpness in constructor)
+    y=expo.interpolate(0,height,t);
+    stroke(0,0,255);
     point(x,y);
     // cosine
     y=cosine.interpolate(0,height,t);
