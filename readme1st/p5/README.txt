@@ -7,7 +7,7 @@ toxi.processing
 This library also depends on the following other packages,
 get them via: http://hg.postspectacular.com/toxiclibs/downloads/
 
-toxi.geom (toxiclibscore-0017 release or later)
+toxi.geom (toxiclibscore-0018 release or later)
 Processing 1.x (from http://processing.org)
 
 If you're going to use these classes for Processing projects,

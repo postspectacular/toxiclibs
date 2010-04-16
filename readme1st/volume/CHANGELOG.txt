@@ -45,27 +45,27 @@
 	added DEFAULT_RGB constant to STLWriter, added enableFacetColor flag
 	to MaterialiseSTLColorModel, updated new package references in
 	related classes & examples @twitter
-	[c16a57bd455f]
+	[c16a57bd455f] <toxiclibs>
 
 2010-03-01  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.volume/toxi/volume/IsoSurface.java:
 	fixing vertex order when adding faces to mesh in
 	computeSurfaceMesh() (fixes normals now correctly outward facing)
-	[313e6fe5baf5]
+	[313e6fe5baf5] <toxiclibs>
 
 2010-02-16  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.volume/toxi/volume/IsoSurface.java:
 	fixing issue #11 and refactoring computeSurfaceMesh()
-	[1fe22b7693c4]
+	[1fe22b7693c4] <toxiclibs>
 
 2009-11-23  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.volume/toxi/volume/IsoSurface.java:
 	changing vertex ordering in computeSurfaceMesh() in order to fix
 	normals
-	[46627d4e7e72]
+	[46627d4e7e72] <toxiclibs>
 
 2009-10-15  Karsten Schmidt  <k@postspectacular.com>
 
@@ -81,14 +81,14 @@
 	updating volumeutils classes with changes done during nokia project
 	(see changelog), adding BoxFluidDemo example for Processing and
 	updated changelog
-	[adedc009d67f]
+	[adedc009d67f] <toxiclibs>
 
 2009-07-22  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.volume/toxi/volume/IsoSurface.java,
 	src.volume/toxi/volume/MarchingCubesIndex.java:
 	optimizations to inner loops in computeSurface() and getCellIndex()
-	[409aaafd9fb2]
+	[409aaafd9fb2] <toxiclibs>
 
 2009-06-29  Karsten Schmidt  <k@postspectacular.com>
 
@@ -96,7 +96,7 @@
 	updating version number in volume build.xml and adding alternative
 	IsoSurface.computeSurfaceMesh() method utilizing new TriangleMesh
 	class
-	[6f41c7f3acc7]
+	[6f41c7f3acc7] <toxiclibs>
 
 2009-02-27  Karsten Schmidt  <k@postspectacular.com>
 
@@ -108,5 +108,5 @@
 	src.volume/toxi/volume/VolumetricSpace.java:
 	moving volume classes out from core libs and into separate package
 	toxi.volume which will also become its own subrelease
-	[9b2a86a532cf]
+	[9b2a86a532cf] <toxiclibs>
 

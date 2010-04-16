@@ -1,0 +1,48 @@
+2010-04-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	another tweak to list generics for lineStrip2D()
+	[f642148c61ef] <toxiclibs>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding line() versions taking only 2 vectors instead of Line2D/3D
+	instances
+	[dceb60f9028a] <toxiclibs>
+
+2010-04-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	updating generics for lineStrip & pointList methods to support
+	Vec2D/3D sub-types
+	[2ac580ab925b] <toxiclibs>
+
+2010-04-06  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	downstream changes to cone class updates
+	[76c64461fe36] <toxiclibs>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	minor fix in mesh(), normal length param now used properly
+	[412ea3789600] <toxiclibs>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	updating generics for list drawing ops (now supporting Vec2D/3D
+	derrived classes too, e.g. VerletParticles)
+	[b7e40d209c35] <toxiclibs>
+
+2010-03-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* ant/build_p5.xml, examples/p5/GeometryInStyle/GeometryInStyle.pde,
+	src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding more methods to P5 wrappers, adding GeometryInStyle demo,
+	updating library package name in build_p5.xml
+	[b410f38c5dfc] <toxiclibs>
+
+2010-03-18  Karsten Schmidt  <k@postspectacular.com>
+
+	* .classpath, src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding src.p5 folder providing wrappers to allow direct use of
+	toxi.geom datatypes from Processing, updating eclipse classpath
+	[bb2a49d50cda] <toxiclibs>
+

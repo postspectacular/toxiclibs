@@ -77,7 +77,7 @@
 	classes, lots of refactoring in various classes as well as adding
 	new types, updating ant build files to use new version numbers,
 	unifying readme1st files for all packages
-	[3dc6af03d5ca]
+	[3dc6af03d5ca] <toxiclibs>
 
 2008-12-16  Karsten Schmidt  <k@postspectacular.com>
 
@@ -93,7 +93,7 @@
 	src.test/toxi/test/ColorThemeVisuals.java:
 	that's pretty much the first complete version of the colorlib
 	checked in. only need to add javadocs and cleanup demo examples
-	[dcbb8c6043f3]
+	[dcbb8c6043f3] <toxiclibs>
 
 2008-12-15  Karsten Schmidt  <k@postspectacular.com>
 
@@ -103,7 +103,7 @@
 	src.test/toxi/test/ColorTest.java,
 	src.test/toxi/test/ColourTestVisuals.java:
 	refactorings in colorrange and added colorhue and starting themes
-	[06d640b8d082]
+	[06d640b8d082] <toxiclibs>
 
 2008-12-07  Karsten Schmidt  <k@postspectacular.com>
 
@@ -113,7 +113,7 @@
 	src.physics/toxi/physics2d/VerletPhysics2D.java:
 	more new syntax fixes to verletphysics & color, added JOAL libs to
 	classpath
-	[f1d0d3a00fc3]
+	[f1d0d3a00fc3] <toxiclibs>
 
 	* src.image/toxi/color/ColorRange.java,
 	src.image/toxi/image/colour/ARGBGradient.java,
@@ -123,7 +123,7 @@
 	ColorRange now using GenericSet. Deprecated most classes in
 	toxi.image.colour. They will be finally obsolete once new toxi.color
 	package is complete/stable (v.soon)
-	[2ab034e5fb40]
+	[2ab034e5fb40] <toxiclibs>
 
 2008-12-05  Karsten Schmidt  <k@postspectacular.com>
 
@@ -141,7 +141,7 @@
 	src.prefs/toxi/util/datatypes/TypedProperties.java,
 	src.test/toxi/test/ColorTest.java:
 	adding javadocs everywhere and refactoring to J5 syntax changes
-	[5364918d7c6c]
+	[5364918d7c6c] <toxiclibs>
 
 	* .settings/org.eclipse.jdt.core.prefs,
 	src.geom/toxi/geom/SphereIntersectorReflector.java,
@@ -184,13 +184,13 @@
 	global switch to Java 5 syntax (only held it off for P5
 	compatibility, now obsolete requirement) and
 	refactoring/restructuring in color package
-	[66ea6c446c20]
+	[66ea6c446c20] <toxiclibs>
 
 2008-12-02  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.image/toxi/color/Color.java:
 	fixed typo in analog() method
-	[f583ec65240c]
+	[f583ec65240c] <toxiclibs>
 
 2008-11-27  Karsten Schmidt  <k@postspectacular.com>
 
@@ -198,14 +198,14 @@
 	src.image/toxi/color/ColorRange.java,
 	src.image/toxi/color/ColorTheoryStrategy.java:
 	small refactoring and added javadocs
-	[573fc7da2bc3]
+	[573fc7da2bc3] <toxiclibs>
 
 2008-11-15  Karsten Schmidt  <k@postspectacular.com>
 
 	* ant/build_image.xml, src.image/toxi/color/ColorRange.java,
 	src.test/toxi/test/ColourTestVisuals.java:
 	minor changes on color range and bugfix in ant file
-	[8e0861bf5b4c]
+	[8e0861bf5b4c] <toxiclibs>
 
 	* src.image/toxi/color/Color.java,
 	src.image/toxi/color/ColorList.java,
@@ -215,7 +215,7 @@
 	src.test/toxi/test/ColourTestVisuals.java:
 	refactoring and additions to colorrange & co... getting there
 	slowly!
-	[325223cf60f9]
+	[325223cf60f9] <toxiclibs>
 
 2008-11-14  Karsten Schmidt  <k@postspectacular.com>
 
@@ -233,7 +233,7 @@
 	added more colour theory strategies and working on defining ranges.
 	needs a lot of refactoring still. also added a P5 demo and some
 	tests
-	[de0971aa673a]
+	[de0971aa673a] <toxiclibs>
 
 2008-11-13  Karsten Schmidt  <k@postspectacular.com>
 
@@ -250,14 +250,14 @@
 	src.image/toxi/color/SplitComplementaryStrategy.java,
 	src.test/toxi/test/ColourTestVisuals.java:
 	more color additions
-	[ef92b216baf8]
+	[ef92b216baf8] <toxiclibs>
 
 	* src.image/toxi/color/Color.java,
 	src.image/toxi/color/ColorList.java,
 	src.test/toxi/test/ColorTest.java,
 	src.test/toxi/test/ColourTestVisuals.java:
 	bug fixes to color/colorlist and added some test cases
-	[d8777102a7ae]
+	[d8777102a7ae] <toxiclibs>
 
 	* .classpath, .settings/org.eclipse.jdt.core.prefs,
 	ant/build_image.xml, src.image/toxi/color/AlphaComparator.java,
@@ -275,14 +275,14 @@
 	adding more features to colour lib & bending to adopt american
 	spelling of color for that new package. also some classpath &
 	project setting edits (using 1.4 compliance)
-	[a368811a5fc4]
+	[a368811a5fc4] <toxiclibs>
 
 2008-11-03  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.image/toxi/image/colour/Colour.java,
 	src.image/toxi/image/colour/ColourMode.java:
 	started porting Nodebox' colour library
-	[732713fdfcdf]
+	[732713fdfcdf] <toxiclibs>
 
 2008-07-23  Karsten Schmidt  <k@postspectacular.com>
 
@@ -293,7 +293,7 @@
 	src.image/toxi/image/util/TiledFrameExporter.java:
 	prepared & added imageutils for new sub-distro, incl. javadoc and
 	build path fixes
-	[85232a89f1a7]
+	[85232a89f1a7] <toxiclibs>
 
 2008-06-16  Karsten Schmidt  <k@postspectacular.com>
 
@@ -313,7 +313,7 @@
 	src.net/com/toxi/nio/UDPServer.java:
 	added args4j and other required 3rd party libs, cleaned up eclipse
 	build path
-	[4399bcb9daeb]
+	[4399bcb9daeb] <toxiclibs>
 
 2008-06-13  Karsten Schmidt  <k@postspectacular.com>
 
@@ -376,5 +376,5 @@
 	toxiclibs.jardesc:
 	putting things in separate source folders and started creating build
 	file for individual libraries
-	[2a4f1124602f]
+	[2a4f1124602f] <toxiclibs>
 

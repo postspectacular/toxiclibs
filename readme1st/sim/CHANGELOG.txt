@@ -1,3 +1,22 @@
+2010-04-01  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.sim/toxi/sim/dla/DLA.java,
+	src.sim/toxi/sim/dla/DLAConfiguration.java,
+	src.sim/toxi/sim/dla/DLAGuideLines.java:
+	adding support for single growth guide points in DLAGuideLines via
+	addPoint(), adding growth scale parameter to control spread of
+	growth in all 3 dimensions, adding bias to control continuous
+	growth, fixing typos in parameter names, adding saveAsText() to
+	export Rhino compatible point clouds
+	[cd5c558dfdf4] <toxiclibs>
+
+2010-03-18  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.sim/toxi/sim/dla/DLA.java:
+	updating DLA.save() method with patch by Sen Haerens to java.nio
+	with 6x faster saving
+	[1e51d6af58c4] <toxiclibs>
+
 2010-02-21  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.sim/toxi/sim/dla/BottomUpOrder.java,
@@ -5,11 +24,11 @@
 	src.sim/toxi/sim/dla/RadialDistanceOrder.java:
 	updating existing comparators (adding flag for flipped ordering),
 	adding BottomUpOrder comparator from blog post
-	[56b1cf388a09]
+	[56b1cf388a09] <toxiclibs>
 
 	* src.sim/toxi/sim/dla/DLAGuideLines.java:
 	deprecting addCurveStip(), replacing with addPointList()
-	[3a36420b63f5]
+	[3a36420b63f5] <toxiclibs>
 
 2010-02-16  Karsten Schmidt  <k@postspectacular.com>
 
@@ -17,7 +36,7 @@
 	adding old FluidSolver class from
 	dev.postspectacular.com/hg/StamFluids/, not supported though before
 	simutils-0002 release
-	[225ccfc68768]
+	[225ccfc68768] <toxiclibs>
 
 	* src.sim/toxi/sim/automata/CAMatrix.java,
 	src.sim/toxi/sim/automata/CARule.java,
@@ -29,7 +48,7 @@
 	renaming Wolfram1D into CAWolfram1D, extracting interfaces from
 	CAMatrix & CARule, adding javadocs, adding flags for cell auto
 	expire behaviour
-	[4be726b9cc9c]
+	[4be726b9cc9c] <toxiclibs>
 
 2010-02-14  Karsten Schmidt  <k@postspectacular.com>
 
@@ -42,7 +61,7 @@
 	interface, added Wolfram1D class and made its kernel flexible size,
 	added tiled/non-tiled option for both 1D/2D, minor updates to
 	CAMatrix
-	[f29f2aaf31e2]
+	[f29f2aaf31e2] <toxiclibs>
 
 2010-02-13  Karsten Schmidt  <k@postspectacular.com>
 
@@ -55,14 +74,14 @@
 	extracted DLA user parameters into DLAConfiguration class, added
 	DLAEventAdapter, minor updates to other DLA classes and removing
 	DLATest from package
-	[6194a0d8f0c4]
+	[6194a0d8f0c4] <toxiclibs>
 
 	* src.sim/toxi/sim/dla/DLA.java,
 	src.sim/toxi/sim/dla/DLAGuideLines.java,
 	src.sim/toxi/sim/dla/DLATest.java:
 	minor updates to DLA & DLAGuidelines and changes to default config &
 	demo
-	[f4170a341c15]
+	[f4170a341c15] <toxiclibs>
 
 2010-02-12  Karsten Schmidt  <k@postspectacular.com>
 
@@ -73,7 +92,7 @@
 	src.sim/toxi/sim/dla/DLATest.java:
 	fixing DLA classes, adding test/demo, adding getters/setters for all
 	parameters
-	[79ce706ea65c]
+	[79ce706ea65c] <toxiclibs>
 
 2010-02-11  Karsten Schmidt  <k@postspectacular.com>
 
@@ -83,13 +102,13 @@
 	src.sim/toxi/sim/dla/DLASegment.java,
 	src.sim/toxi/sim/dla/DLATest.java:
 	updating DLA classes, adding default parameters
-	[0554b6dcbad8]
+	[0554b6dcbad8] <toxiclibs>
 
 2010-02-10  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.sim/toxi/sim/grayscott/GrayScott.java:
 	minor updates to GrayScott class
-	[16ac937c1d48]
+	[16ac937c1d48] <toxiclibs>
 
 	* src.sim/toxi/sim/dla/CircularComparator.java,
 	src.sim/toxi/sim/dla/DLA.java,
@@ -100,19 +119,19 @@
 	renaming CircularComparator into RadialDistanceOrder, adding non-
 	sorting (FIFO) PipelineOrder comparator, minor updates to other DLA
 	classes
-	[9998b478d86b]
+	[9998b478d86b] <toxiclibs>
 
 	* src.sim/toxi/sim/automata/AbstractCARule.java,
 	src.sim/toxi/sim/automata/CAMatrix.java,
 	src.sim/toxi/sim/automata/CARule2D.java:
 	adding toxi.sim.automata package and cellular automata classes
-	[de03ff52023e]
+	[de03ff52023e] <toxiclibs>
 
 2010-02-09  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.sim/toxi/sim/grayscott/GrayScott.java:
 	small optimizations of inner loop
-	[f16443f43b81]
+	[f16443f43b81] <toxiclibs>
 
 	* src.sim/toxi/sim/dla/CircularComparator.java,
 	src.sim/toxi/sim/dla/DLA.java,
@@ -122,24 +141,24 @@
 	src.sim/toxi/sim/dla/DLASegment.java:
 	adding work-in-progress DLA classes with event support, all need
 	some more refactoring
-	[278c713fd1f8]
+	[278c713fd1f8] <toxiclibs>
 
 2010-02-07  Karsten Schmidt  <k@postspectacular.com>
 
 	* examples/sim/GrayScottToneMap/GrayScottToneMap.pde,
 	src.sim/toxi/sim/grayscott/GrayScott.java:
 	adding GrayScottToneMap demo and minor javadoc updates
-	[621dfa5563ec]
+	[621dfa5563ec] <toxiclibs>
 
 	* examples/sim/HelloGrayScott/HelloGrayScott.pde,
 	src.sim/toxi/sim/grayscott/GrayScott.java:
 	adding getters/setters for GrayScott params, adding HelloGrayScott
 	Processing demo
-	[8f66d33bc446]
+	[8f66d33bc446] <toxiclibs>
 
 	* .classpath, ant/build_sim.xml, readme1st/sim/CHANGELOG.txt,
 	readme1st/sim/README.txt, src.sim/toxi/sim/grayscott/GrayScott.java:
 	adding new simutils resources: source folder, build file, examples &
 	readme folders, updating .classpath
-	[d4fcee36e75b]
+	[d4fcee36e75b] <toxiclibs>
 
