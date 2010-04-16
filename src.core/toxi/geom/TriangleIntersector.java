@@ -68,7 +68,7 @@ public class TriangleIntersector implements Intersector {
     }
 
     /**
-     * @param triangle
+     * @param tri
      *            the triangle to set
      */
     public TriangleIntersector setTriangle(Triangle tri) {

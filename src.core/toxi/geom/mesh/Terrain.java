@@ -125,7 +125,7 @@ public class Terrain {
      * 
      * @param x
      * @param z
-     * @return
+     * @return intersection data parcel
      */
     public IsectData intersectAtPoint(float x, float z) {
         float xx = x / scale + width * 0.5f;

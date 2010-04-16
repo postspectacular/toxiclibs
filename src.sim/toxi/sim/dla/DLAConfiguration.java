@@ -147,7 +147,7 @@ public class DLAConfiguration {
     }
 
     /**
-     * @param continuousGrowthRatio
+     * @param continousGrowthRatio
      *            the continuousGrowthRatio to set
      */
     public void setContinuousGrowthRatio(float continousGrowthRatio) {

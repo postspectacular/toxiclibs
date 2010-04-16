@@ -40,7 +40,7 @@ public class DLAGuideLines {
      * 
      * @deprecated use {@link #addPointList(List)} instead
      * @param points
-     * @return
+     * @return itself
      */
     @Deprecated
     public DLAGuideLines addCurveStrip(List<Vec3D> points) {
