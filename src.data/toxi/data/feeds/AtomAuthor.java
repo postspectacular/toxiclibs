@@ -4,6 +4,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class AtomAuthor {
 
-	@XmlElement
-	public String name, uri;
+    @XmlElement(namespace = AtomFeed.NS)
+    public String name, uri;
 }
