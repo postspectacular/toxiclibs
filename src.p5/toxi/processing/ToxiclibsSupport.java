@@ -126,6 +126,14 @@ public class ToxiclibsSupport {
         gfx.line(line.a.x, line.a.y, line.a.z, line.b.x, line.b.y, line.b.z);
     }
 
+    public final void line(Vec2D a, Vec2D b) {
+        gfx.line(a.x, a.y, b.x, b.y);
+    }
+
+    public final void line(Vec3D a, Vec3D b) {
+        gfx.line(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+
     public final void lineStrip2D(List<Vec2D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
