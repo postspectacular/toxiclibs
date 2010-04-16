@@ -134,7 +134,7 @@ public class ToxiclibsSupport {
         gfx.line(a.x, a.y, a.z, b.x, b.y, b.z);
     }
 
-    public final void lineStrip2D(List<Vec2D> points) {
+    public final void lineStrip2D(List<? extends Vec2D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices2D(points.iterator(), PConstants.POLYGON);
