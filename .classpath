@@ -9,7 +9,7 @@
 	<classpathentry kind="src" path="src.net"/>
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.physics"/>
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.sim"/>
-	<classpathentry including="../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|../src.p5/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
+	<classpathentry including="../src.audio/**/*.java|../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|../src.p5/**/*.java|toxi/**/*.java" kind="src" path="src.test"/>
 	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
 	<classpathentry kind="src" path="src.video"/>
 	<classpathentry including="**/*.java|../lib/core.jar|../src.core/toxi/**/*.java" kind="src" path="src.p5"/>
@@ -18,7 +18,7 @@
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/args4j-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/joal/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/joal/joal.jar">
+	<classpathentry kind="lib" path="lib/joal/joal.jar" sourcepath="/Users/toxi/Documents/dev/java/joal-1.1.3-pre-20090308-src/joal/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="toxiclibs/lib/joal"/>
 		</attributes>

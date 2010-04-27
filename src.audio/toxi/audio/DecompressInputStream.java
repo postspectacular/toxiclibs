@@ -4,24 +4,26 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * <p>
+ * Convert A-Law or u-Law byte stream into mono PCM byte stream
+ * </p>
+ * 
+ * <code>
+ * static AudioFormat alawformat= new AudioFormat(AudioFormat.Encoding.ALAW,8000,8,1,1,8000,false);
+ * static AudioFormat ulawformat= new AudioFormat(AudioFormat.Encoding.ULAW,8000,8,1,1,8000,false);
+ * </code>
+ * <p>
+ * PCM 8000.0 Hz, 16 bit, mono, SIGNED, little-endian
+ * </p>
+ * <code>static AudioFormat pcmformat = new AudioFormat(8000,16,1,true,false);</code>
+ * 
+ * <p>
+ * From: Mathematical Tools in Signal Processing with C++ and Java Simulations
+ * by Willi-Hans Steeb International School for Scientific Computing
+ * </p>
+ */
 public class DecompressInputStream extends FilterInputStream {
-
-    /**
-     * Convert A-Law or u-Law byte stream into mono PCM byte stream
-     * 
-     * static AudioFormat alawformat= new
-     * AudioFormat(AudioFormat.Encoding.ALAW,8000,8,1,1,8000,false); static
-     * AudioFormat ulawformat= new
-     * AudioFormat(AudioFormat.Encoding.ULAW,8000,8,1,1,8000,false);
-     * 
-     * PCM 8000.0 Hz, 16 bit, mono, SIGNED, little-endian static AudioFormat
-     * pcmformat = new AudioFormat(8000,16,1,true,false);
-     */
-
-    /*
-     * Mathematical Tools in Signal Processing with C++ and Java Simulations by
-     * Willi-Hans Steeb International School for Scientific Computing
-     */
 
     static private int[] alawtable =
             { 0x80ea, 0x80eb, 0x80e8, 0x80e9, 0x80ee, 0x80ef, 0x80ec, 0x80ed,
@@ -130,7 +132,7 @@ public class DecompressInputStream extends FilterInputStream {
 
         for (int i = 0; i < len; i++) {
             value = table[inb[i] & 0x00FF];
-            b[off++] = (byte) ((value >> 8) & 0x00FF);
+            b[off++] = (byte) ((value >> 8) & 0x00FF); // little-endian
             b[off++] = (byte) (value & 0x00FF);
         }
         return len << 1;
