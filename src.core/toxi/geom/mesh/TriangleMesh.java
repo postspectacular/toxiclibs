@@ -18,6 +18,7 @@ import toxi.geom.Ray3D;
 import toxi.geom.Sphere;
 import toxi.geom.Triangle;
 import toxi.geom.TriangleIntersector;
+import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
@@ -32,6 +33,7 @@ public class TriangleMesh implements Intersector {
     public final static class Face {
 
         public Vertex a, b, c;
+        public Vec2D uvA, uvB, uvC;
         public Vec3D normal;
 
         Face(Vertex a, Vertex b, Vertex c) {
@@ -42,6 +44,14 @@ public class TriangleMesh implements Intersector {
             a.addFaceNormal(normal);
             b.addFaceNormal(normal);
             c.addFaceNormal(normal);
+        }
+
+        public Face(Vertex a, Vertex b, Vertex c, Vec2D uvA, Vec2D uvB,
+                Vec2D uvC) {
+            this(a, b, c);
+            this.uvA = uvA;
+            this.uvB = uvB;
+            this.uvC = uvC;
         }
 
         public final Vertex[] getVertices(Vertex[] verts) {
@@ -163,40 +173,40 @@ public class TriangleMesh implements Intersector {
      * @param c
      */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        int aID, bID, cID;
-        Vertex va = vertices.get(a);
-        if (va != null) {
-            aID = va.id;
-        } else {
-            aID = numVertices;
-            va = new Vertex(a, aID);
-            vertices.put(va, va);
-            numVertices++;
-        }
-        Vertex vb = vertices.get(b);
-        if (vb != null) {
-            bID = vb.id;
-        } else {
-            bID = numVertices;
-            vb = new Vertex(b, bID);
-            vertices.put(vb, vb);
-            numVertices++;
-        }
-        Vertex vc = vertices.get(c);
-        if (vc != null) {
-            cID = vc.id;
-        } else {
-            cID = numVertices;
-            vc = new Vertex(c, cID);
-            vertices.put(vc, vc);
-            numVertices++;
-        }
-        if (aID == bID || aID == cID || bID == cID) {
+        Vertex va = checkVertex(a);
+        Vertex vb = checkVertex(b);
+        Vertex vc = checkVertex(c);
+        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
             }
         } else {
             Face f = new Face(va, vb, vc);
+            faces.add(f);
+            numFaces++;
+        }
+        return this;
+    }
+
+    /**
+     * Adds the given 3 points as triangle face to the mesh. The assumed vertex
+     * order is anti-clockwise.
+     * 
+     * @param a
+     * @param b
+     * @param c
+     */
+    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
+            Vec2D uvB, Vec2D uvC) {
+        Vertex va = checkVertex(a);
+        Vertex vb = checkVertex(b);
+        Vertex vc = checkVertex(c);
+        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
+            }
+        } else {
+            Face f = new Face(va, vb, vc, uvA, uvB, uvC);
             faces.add(f);
             numFaces++;
         }
@@ -211,7 +221,7 @@ public class TriangleMesh implements Intersector {
      */
     public TriangleMesh addMesh(TriangleMesh m) {
         for (Face f : m.faces) {
-            addFace(f.a, f.b, f.c);
+            addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return this;
     }
@@ -232,6 +242,16 @@ public class TriangleMesh implements Intersector {
         }
         getBoundingBox();
         return bounds;
+    }
+
+    private final Vertex checkVertex(Vec3D v) {
+        Vertex vertex = vertices.get(v);
+        if (vertex == null) {
+            vertex = new Vertex(v, numVertices);
+            vertices.put(vertex, vertex);
+            numVertices++;
+        }
+        return vertex;
     }
 
     /**
@@ -284,7 +304,7 @@ public class TriangleMesh implements Intersector {
         TriangleMesh m =
                 new TriangleMesh(name + "-copy", numVertices, numFaces);
         for (Face f : faces) {
-            m.addFace(f.a, f.b, f.c);
+            m.addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return m;
     }
