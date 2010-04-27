@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import toxi.geom.AABB;
 import toxi.geom.AxisAlignedCylinder;
 import toxi.geom.Cone;
@@ -301,6 +302,41 @@ public class ToxiclibsSupport {
         gfx.translate(sphere.x, sphere.y, sphere.z);
         gfx.sphere(sphere.radius);
         gfx.popMatrix();
+    }
+
+    public void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
+        gfx.beginShape(PConstants.TRIANGLES);
+        gfx.texture(tex);
+        if (smooth) {
+            for (TriangleMesh.Face f : mesh.faces) {
+                if (f.uvA != null && f.uvB != null && f.uvC != null) {
+                    gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
+                    gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
+                    gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
+                    gfx.vertex(f.b.x, f.b.y, f.b.z, f.uvB.x, f.uvB.y);
+                    gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
+                    gfx.vertex(f.c.x, f.c.y, f.c.z, f.uvC.x, f.uvC.y);
+                } else {
+                    gfx.vertex(f.a.x, f.a.y, f.a.z);
+                    gfx.vertex(f.b.x, f.b.y, f.b.z);
+                    gfx.vertex(f.c.x, f.c.y, f.c.z);
+                }
+            }
+        } else {
+            for (TriangleMesh.Face f : mesh.faces) {
+                gfx.normal(f.normal.x, f.normal.y, f.normal.z);
+                if (f.uvA != null && f.uvB != null && f.uvC != null) {
+                    gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
+                    gfx.vertex(f.b.x, f.b.y, f.b.z, f.uvB.x, f.uvB.y);
+                    gfx.vertex(f.c.x, f.c.y, f.c.z, f.uvC.x, f.uvC.y);
+                } else {
+                    gfx.vertex(f.a.x, f.a.y, f.a.z);
+                    gfx.vertex(f.b.x, f.b.y, f.b.z);
+                    gfx.vertex(f.c.x, f.c.y, f.c.z);
+                }
+            }
+        }
+        gfx.endShape();
     }
 
     public final void triangle(Triangle tri, boolean isFullShape) {
