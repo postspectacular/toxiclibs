@@ -109,6 +109,10 @@ public class Line2D {
         return b.sub(a).perpendicular();
     }
 
+    public float getTheta() {
+        return a.angleBetween(b, true);
+    }
+
     /**
      * Computes intersection between this and the given line. The returned value
      * is a {@link LineIntersection} instance and contains both the type of
