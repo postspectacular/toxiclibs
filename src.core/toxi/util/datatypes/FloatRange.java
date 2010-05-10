@@ -1,5 +1,7 @@
 package toxi.util.datatypes;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -67,6 +69,16 @@ public class FloatRange {
     public FloatRange setRandom(Random rnd) {
         random = rnd;
         return this;
+    }
+
+    public Float[] toArray(float step) {
+        List<Float> range = new LinkedList<Float>();
+        double v = min;
+        while (v < max) {
+            range.add((float) v);
+            v += step;
+        }
+        return range.toArray(new Float[0]);
     }
 
     @Override

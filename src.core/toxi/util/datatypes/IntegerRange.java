@@ -69,6 +69,14 @@ public class IntegerRange {
         return this;
     }
 
+    public Integer[] toArray() {
+        Integer[] range = new Integer[max - min];
+        for (int i = 0, j = min; j < max; i++, j++) {
+            range[i] = j;
+        }
+        return range;
+    }
+
     @Override
     public String toString() {
         return "IntegerRange: " + min + " -> " + max;
