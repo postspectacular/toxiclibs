@@ -36,21 +36,52 @@ import net.java.games.joal.AL;
 public class AudioBuffer {
 
     /**
-     * Format descriptor for 8bit mono samples
+     * Format descriptor
      */
-    public final static int FORMAT_MONO8 = AL.AL_FORMAT_MONO8;
-    /**
-     * Format descriptor for 16bit mono samples
-     */
-    public final static int FORMAT_MONO16 = AL.AL_FORMAT_MONO16;
-    /**
-     * Format descriptor for 8bit stereo samples
-     */
-    public final static int FORMAT_STEREO8 = AL.AL_FORMAT_STEREO8;
-    /**
-     * Format descriptor for 16bit stereo samples
-     */
-    public final static int FORMAT_STEREO16 = AL.AL_FORMAT_STEREO16;
+    public enum Format {
+        MONO8(AL.AL_FORMAT_MONO8, 8, 1), MONO16(AL.AL_FORMAT_MONO16, 16, 1),
+        STEREO8(AL.AL_FORMAT_STEREO8, 8, 2), STEREO16(AL.AL_FORMAT_STEREO16,
+                16, 2);
+
+        public static Format getForID(int id) {
+            Format format = null;
+            for (Format f : values()) {
+                if (f.id == id) {
+                    format = f;
+                    break;
+                }
+            }
+            return format;
+        }
+
+        private final int id;
+        private final int numBits;
+        private final int numChannels;
+
+        private Format(int id, int bits, int channels) {
+            this.id = id;
+            this.numBits = bits;
+            this.numChannels = channels;
+        }
+
+        public int getID() {
+            return id;
+        }
+
+        /**
+         * @return the numBits
+         */
+        public int getNumBits() {
+            return numBits;
+        }
+
+        /**
+         * @return the numChannels
+         */
+        public int getNumChannels() {
+            return numChannels;
+        }
+    }
 
     protected final AL al;
     protected ByteBuffer data;
@@ -58,7 +89,7 @@ public class AudioBuffer {
     protected final int id;
 
     protected final int[] alResult = new int[1];
-    private int format;
+    protected Format format;
 
     public AudioBuffer(AL al, int bufferID) {
         this.id = bufferID;
@@ -78,20 +109,21 @@ public class AudioBuffer {
      */
     public AudioBuffer configure(ByteBuffer data, int format, int freq) {
         this.data = data;
-        this.format = format;
+        this.format = Format.getForID(format);
         al.alBufferData(id, format, data, data.capacity(), freq);
         return this;
     }
 
     public boolean convertUlawToPCM(boolean isAlaw) {
-        byte[] ulaw = new byte[getSampleSize()];
+        byte[] ulaw = new byte[getByteSize()];
         data.rewind();
         data.get(ulaw);
-        byte[] pcm = new byte[ulaw.length];
+        byte[] pcm = new byte[ulaw.length * 2];
         ByteArrayInputStream bin = new ByteArrayInputStream(ulaw);
         try {
             new DecompressInputStream(bin, isAlaw).read(pcm);
-            configure(ByteBuffer.wrap(pcm), AudioBuffer.FORMAT_MONO16, 8000);
+            configure(ByteBuffer.wrap(pcm), Format.MONO16.getID(),
+                    getFrequency());
             return true;
         } catch (IOException e) {
         }
@@ -115,8 +147,9 @@ public class AudioBuffer {
      * @return the bit-depth of the data
      */
     public final int getBitDepth() {
-        al.alGetBufferi(id, AL.AL_BITS, alResult, 0);
-        return alResult[0];
+        // al.alGetBufferi(id, AL.AL_BITS, alResult, 0);
+        // return alResult[0];
+        return format.getNumBits();
     }
 
     /**
@@ -125,8 +158,9 @@ public class AudioBuffer {
      * @return the size of the data.
      */
     public final int getByteSize() {
-        al.alGetBufferi(id, AL.AL_SIZE, alResult, 0);
-        return alResult[0];
+        // al.alGetBufferi(id, AL.AL_SIZE, alResult, 0);
+        // return alResult[0];
+        return data.capacity();
     }
 
     /**
@@ -163,9 +197,9 @@ public class AudioBuffer {
      * @return the number of audio channels.
      */
     public final int getNumChannels() {
-        al.alGetBufferi(id, AL.AL_CHANNELS, alResult, 0);
-
-        return alResult[0];
+        // al.alGetBufferi(id, AL.AL_CHANNELS, alResult, 0);
+        // return alResult[0];
+        return format.getNumChannels();
     }
 
     /**
