@@ -477,6 +477,13 @@ public class TColor implements ReadonlyTColor {
         this.alpha = c.alpha();
     }
 
+    public TColor addSelf(TColor c) {
+        rgb[0] = MathUtils.min(rgb[0] + c.rgb[0], 1);
+        rgb[1] = MathUtils.min(rgb[1] + c.rgb[1], 1);
+        rgb[2] = MathUtils.min(rgb[2] + c.rgb[2], 1);
+        return setRGB(rgb);
+    }
+
     /**
      * Changes the brightness of the color by the given amount in the direction
      * towards either the black or white point (depending on if current
@@ -637,6 +644,11 @@ public class TColor implements ReadonlyTColor {
     public TColor desaturate(float step) {
         hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
         return setHSV(hsv);
+    }
+
+    public TColor differenceTo(TColor c) {
+        return TColor.newRGB(MathUtils.abs(rgb[0] - c.rgb[0]), MathUtils
+                .abs(rgb[1] - c.rgb[1]), MathUtils.abs(rgb[2] - c.rgb[2]));
     }
 
     /*
@@ -1149,6 +1161,13 @@ public class TColor implements ReadonlyTColor {
     public TColor setYellow(float val) {
         cmyk[2] = val;
         return setCMYK(cmyk);
+    }
+
+    public TColor subSelf(TColor c) {
+        rgb[0] = MathUtils.max(rgb[0] - c.rgb[0], 0);
+        rgb[1] = MathUtils.max(rgb[1] - c.rgb[1], 0);
+        rgb[2] = MathUtils.max(rgb[2] - c.rgb[2], 0);
+        return setRGB(rgb);
     }
 
     /*
