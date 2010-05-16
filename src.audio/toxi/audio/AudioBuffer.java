@@ -96,14 +96,17 @@ public class AudioBuffer {
         this.al = al;
     }
 
+    public AudioBuffer configure(ByteBuffer data, Format format, int freq) {
+        return configure(data, format.getID(), freq);
+    }
+
     /**
      * Configure the audio buffer
      * 
      * @param data
      *            the raw audio data
      * @param format
-     *            the format of the data: <code>FORMAT_MONO8, FORMAT_MONO16,
-     *        FORMAT_STEREO8</code> and <code>FORMAT_STEREO16</code>
+     *            the internal format ID of the audio data
      * @param freq
      *            the frequency of the data
      */
@@ -122,8 +125,7 @@ public class AudioBuffer {
         ByteArrayInputStream bin = new ByteArrayInputStream(ulaw);
         try {
             new DecompressInputStream(bin, isAlaw).read(pcm);
-            configure(ByteBuffer.wrap(pcm), Format.MONO16.getID(),
-                    getFrequency());
+            configure(ByteBuffer.wrap(pcm), Format.MONO16, getFrequency());
             return true;
         } catch (IOException e) {
         }
