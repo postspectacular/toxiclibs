@@ -477,6 +477,10 @@ public class TColor implements ReadonlyTColor {
         this.alpha = c.alpha();
     }
 
+    public TColor add(TColor c) {
+        return copy().addSelf(c);
+    }
+
     public TColor addSelf(TColor c) {
         rgb[0] = MathUtils.min(rgb[0] + c.rgb[0], 1);
         rgb[1] = MathUtils.min(rgb[1] + c.rgb[1], 1);
@@ -790,6 +794,10 @@ public class TColor implements ReadonlyTColor {
      */
     public TColor getDesaturated(float step) {
         return new TColor(this).desaturate(step);
+    }
+
+    public TColor getDifferenceTo(TColor c) {
+        return copy().differenceTo(c);
     }
 
     /*
@@ -1161,6 +1169,10 @@ public class TColor implements ReadonlyTColor {
     public TColor setYellow(float val) {
         cmyk[2] = val;
         return setCMYK(cmyk);
+    }
+
+    public TColor sub(TColor c) {
+        return copy().subSelf(c);
     }
 
     public TColor subSelf(TColor c) {
