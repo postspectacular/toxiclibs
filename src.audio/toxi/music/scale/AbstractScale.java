@@ -1,4 +1,4 @@
-package toxi.audio.scale;
+package toxi.music.scale;
 
 import toxi.math.MathUtils;
 

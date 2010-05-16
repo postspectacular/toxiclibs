@@ -1,4 +1,4 @@
-package toxi.audio.scale;
+package toxi.music.scale;
 
 public class GenericScale extends AbstractScale {
 

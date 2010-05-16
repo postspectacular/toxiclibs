@@ -1,4 +1,4 @@
-package toxi.audio.scale;
+package toxi.music.scale;
 
 /**
  * seed: 0xad5 (101011010101) C# D# F F# G# A# C
