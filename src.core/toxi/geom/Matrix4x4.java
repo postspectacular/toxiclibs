@@ -448,7 +448,7 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 scaleSelf(Vec3D scale) {
-        return scaleSelf(scale.x, scale.y, scale.y);
+        return scaleSelf(scale.x, scale.y, scale.z);
     }
 
     public Matrix4x4 set(double a, double b, double c, double d, double e,
