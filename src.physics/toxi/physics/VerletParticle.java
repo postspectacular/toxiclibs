@@ -162,6 +162,10 @@ public class VerletParticle extends Vec3D {
         return prev;
     }
 
+    public Vec3D getVelocity() {
+        return sub(prev);
+    }
+
     /**
      * @return the weight
      */
@@ -210,6 +214,11 @@ public class VerletParticle extends Vec3D {
 
     public VerletParticle scaleVelocity(float scl) {
         prev.interpolateToSelf(this, 1 - scl);
+        return this;
+    }
+
+    public VerletParticle setPreviousPosition(Vec3D p) {
+        prev.set(p);
         return this;
     }
 
