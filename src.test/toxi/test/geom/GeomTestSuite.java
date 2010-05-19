@@ -67,6 +67,22 @@ public class GeomTestSuite extends TestCase {
         assertEquals(box.intersectsBox(b2), false);
     }
 
+    public void testAABBNormal() {
+        AABB box = new AABB(new Vec3D(100, 100, 100), new Vec3D(100, 100, 100));
+        Vec3D p = new Vec3D(100, 300, 100);
+        assertEquals(Vec3D.Y_AXIS, box.getNormalForPoint(p));
+        p.set(100, -300, 100);
+        assertEquals(Vec3D.Y_AXIS.getInverted(), box.getNormalForPoint(p));
+        p.set(300, 100, 100);
+        assertEquals(Vec3D.X_AXIS, box.getNormalForPoint(p));
+        p.set(-300, 100, 100);
+        assertEquals(Vec3D.X_AXIS.getInverted(), box.getNormalForPoint(p));
+        p.set(100, 100, 300);
+        assertEquals(Vec3D.Z_AXIS, box.getNormalForPoint(p));
+        p.set(100, 100, -300);
+        assertEquals(Vec3D.Z_AXIS.getInverted(), box.getNormalForPoint(p));
+    }
+
     public void testAABBRayIntersect() {
         AABB box = AABB.fromMinMax(new Vec3D(), new Vec3D(100, 100, 100));
         Ray3D r = new Ray3D(new Vec3D(50, 10, 10), new Vec3D(0, 1, 0));
@@ -149,5 +165,4 @@ public class GeomTestSuite extends TestCase {
         Quaternion c = a.interpolateTo(b, 0.05f);
         System.out.println(c);
     }
-
 }
