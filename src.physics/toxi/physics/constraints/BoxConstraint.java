@@ -9,6 +9,7 @@ public class BoxConstraint implements ParticleConstraint {
 
     protected AABB box;
     protected Ray3D intersectRay;
+    private float restitution = 1;
 
     public BoxConstraint(AABB box) {
         this.box = box.copy();
@@ -21,8 +22,19 @@ public class BoxConstraint implements ParticleConstraint {
 
     public void apply(VerletParticle p) {
         if (p.isInAABB(box)) {
-            p.set(box.intersectsRay(intersectRay.setDirection(box.sub(p)), 0,
-                    Float.MAX_VALUE));
+            Vec3D dir = p.getVelocity();
+            Vec3D prev = p.getPreviousPosition();
+            if (prev.isInAABB(box)) {
+                dir.invert();
+            }
+            intersectRay.set(prev);
+            intersectRay.setDirection(dir);
+            Vec3D isec = box.intersectsRay(intersectRay, 0, Float.MAX_VALUE);
+            if (isec != null) {
+                isec.addSelf(box.getNormalForPoint(isec).scaleSelf(0.01f));
+                p.setPreviousPosition(isec);
+                p.set(isec.sub(dir.scaleSelf(restitution)));
+            }
         }
     }
 
@@ -30,8 +42,16 @@ public class BoxConstraint implements ParticleConstraint {
         return box.copy();
     }
 
+    public float getRestitution() {
+        return restitution;
+    }
+
     public void setBox(AABB box) {
         this.box = box.copy();
         intersectRay.set(box);
+    }
+
+    public void setRestitution(float restitution) {
+        this.restitution = restitution;
     }
 }
