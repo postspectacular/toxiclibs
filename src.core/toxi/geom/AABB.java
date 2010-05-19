@@ -119,7 +119,22 @@ public class AABB extends Vec3D {
 
     public final Vec3D getMin() {
         return min.copy();
-        // return this.sub(extent);
+    }
+
+    public Vec3D getNormalForPoint(Vec3D p) {
+        p = p.sub(this);
+        Vec3D pabs = extent.sub(p.getAbs());
+        Vec3D psign = p.getSignum();
+        Vec3D normal = Vec3D.X_AXIS.scale(psign.x);
+        float minDist = pabs.x;
+        if (pabs.y < minDist) {
+            minDist = pabs.y;
+            normal = Vec3D.Y_AXIS.scale(psign.y);
+        }
+        if (pabs.z < minDist) {
+            normal = Vec3D.Z_AXIS.scale(psign.z);
+        }
+        return normal;
     }
 
     /**
