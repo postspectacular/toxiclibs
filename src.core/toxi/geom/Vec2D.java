@@ -39,7 +39,7 @@ public class Vec2D implements Comparable<Vec2D> {
 
     public static enum Axis {
         X, Y
-    };
+    }
 
     /**
      * Defines positive X axis
@@ -49,7 +49,7 @@ public class Vec2D implements Comparable<Vec2D> {
     /**
      * Defines positive Y axis
      */
-    public static final Vec2D Y_AXIS = new Vec2D(0, 1);
+    public static final Vec2D Y_AXIS = new Vec2D(0, 1);;
 
     /** Defines the zero vector. */
     public static final Vec2D ZERO = new Vec2D();
@@ -60,6 +60,7 @@ public class Vec2D implements Comparable<Vec2D> {
      */
     public static final Vec2D MIN_VALUE =
             new Vec2D(Float.MIN_VALUE, Float.MIN_VALUE);
+
     /**
      * Defines vector with both coords set to Float.MAX_VALUE. Useful for
      * bounding box operations.
@@ -515,6 +516,16 @@ public class Vec2D implements Comparable<Vec2D> {
                 return y;
         }
         return 0;
+    }
+
+    public final float getComponent(int id) {
+        switch (id) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+        }
+        return Float.NaN;
     }
 
     /**
@@ -1121,6 +1132,18 @@ public class Vec2D implements Comparable<Vec2D> {
                 x = val;
                 break;
             case Y:
+                y = val;
+                break;
+        }
+        return this;
+    }
+
+    public final Vec2D setComponent(int id, float val) {
+        switch (id) {
+            case 0:
+                x = val;
+                break;
+            case 1:
                 y = val;
                 break;
         }

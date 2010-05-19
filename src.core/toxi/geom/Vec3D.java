@@ -594,7 +594,7 @@ public class Vec3D implements Comparable<Vec3D> {
         return new Vec3D(this).abs();
     }
 
-    public float getComponent(Axis id) {
+    public final float getComponent(Axis id) {
         switch (id) {
             case X:
                 return x;
@@ -603,7 +603,19 @@ public class Vec3D implements Comparable<Vec3D> {
             case Z:
                 return z;
         }
-        return 0;
+        return Float.NaN;
+    }
+
+    public final float getComponent(int id) {
+        switch (id) {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+        }
+        return Float.NaN;
     }
 
     /**
@@ -1371,7 +1383,7 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    public Vec3D setComponent(Axis id, float val) {
+    public final Vec3D setComponent(Axis id, float val) {
         switch (id) {
             case X:
                 x = val;
@@ -1380,6 +1392,21 @@ public class Vec3D implements Comparable<Vec3D> {
                 y = val;
                 break;
             case Z:
+                z = val;
+                break;
+        }
+        return this;
+    }
+
+    public final Vec3D setComponent(int id, float val) {
+        switch (id) {
+            case 0:
+                x = val;
+                break;
+            case 1:
+                y = val;
+                break;
+            case 2:
                 z = val;
                 break;
         }
