@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="../src.core/toxi/math/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
+	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.audio"/>
 	<classpathentry kind="src" path="src.core"/>
 	<classpathentry kind="src" path="src.color"/>
 	<classpathentry kind="src" path="src.data"/>

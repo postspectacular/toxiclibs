@@ -11,9 +11,9 @@ public class FileUtilsTest extends TestCase {
     public void testSequence() {
         FileSequenceDescriptor d =
                 FileUtils.getFileSequenceDescriptorFor("test/img-010.tga");
+        assertEquals(3, d.getDuration());
         for (Iterator<String> i = d.iterator(); i.hasNext();) {
             System.out.println(i.next());
         }
-        assertEquals(3, d.getDuration());
     }
 }

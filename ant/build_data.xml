@@ -4,9 +4,9 @@
 	<property name="project.name" value="datautils" />
 	<property name="srcfolder.id" value="data" />
 	<property name="lib.version" value="${version.data}" />
-	<property name="lib.jdk.level" value="1.6" />
+	<property name="lib.jdk.level" value="1.5" />
 	<property name="lib.zip.comment" value="${project.name} - remote data utilities v${lib.version}" />
-	<property name="lib.libs.path" value="../lib" />
+	<property name="lib.libs.path" value="../lib/jaxb/jaxb-api.jar" />
 	<property name="lib.jar.filename" value="${project.name}.jar" />
 
 	<!-- Basic targets -->
@@ -40,6 +40,7 @@
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
+				<pathelement location="../lib/jaxb/jsr173_1.0_api.jar" />
 			</classpath>
 		</javac>
 	</target>

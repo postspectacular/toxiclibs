@@ -3,6 +3,7 @@ syntax: glob
 bin
 docs
 dist
+blog
 
 .DS_Store
 

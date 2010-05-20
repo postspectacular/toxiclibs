@@ -1,7 +1,8 @@
 /**
  * <p>This simple example shows how to compute tangent points on a circle using
- * the new Circle and Line2D classes. The demo also shows how these points
- * are constructed geometrically.</p>
+ * the new Circle and Line2D classes. Furthermore, the demo shows how these points
+ * are constructed geometrically and how to use the ToxiclibsSupport class of
+ * the toxi.processing package to handle the drawing of these geometrical shapes.</p>
  *
  * <p><strong>Usage:</strong><ul>
  * <li>move mouse to move/recalculate tangents</li>
@@ -30,14 +31,17 @@
  */
 
 import toxi.geom.*;
+import toxi.processing.*;
 
 // define a fixed circle at 300,300 with radius=100
-Circle c=new Circle(300,300,100);
+Circle c=new Circle(340,190,100);
+
+ToxiclibsSupport gfx;
 
 void setup() {
-  size(600,600);
+  size(680,382);
   noFill();
-  ellipseMode(RADIUS);
+  gfx=new ToxiclibsSupport(this);
 }
 
 void draw() {
@@ -48,28 +52,19 @@ void draw() {
     c.setRadius(p.distanceTo(c));
   }
   Line2D l=new Line2D(p,c);
-  ellipse(c.x,c.y,c.getRadius(),c.getRadius());
-  line(p,c);
+  gfx.ellipse(c);
+  gfx.line(p,c);
   // compute the tangent points to P on the circle
   Vec2D[] isec=c.getTangentPoints(p);
   if (isec!=null) {
     for(int i=0; i<2; i++) {
-      ellipse(isec[i].x,isec[i].y,5,5);
-      Vec2D q=new Ray2D(p,isec[i].sub(p)).getPointAtDistance(1000);
-      line(p,q);
-      line(c,isec[i]);
+      gfx.ellipse(new Circle(isec[i],5));
+      gfx.ray(new Ray2D(p,isec[i].sub(p)),1000);
+      gfx.line(c,isec[i]);
     }
     // draw secondary circle around mid-point
     // from main circle to mouse position
-    Vec2D m=l.getMidPoint();
-    float r=l.getLength()/2;
-    ellipse(m.x,m.y,r,r);
+    gfx.ellipse(new Circle(l.getMidPoint(),l.getLength()/2));
   }
 }
-
-void line(Vec2D a, Vec2D b) {
-  line(a.x,a.y,b.x,b.y);
-}
-
-
 
