@@ -30,7 +30,8 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Triangle2D {
 
-    public static Triangle2D createEquilateralFrom(Vec2D a, Vec2D b) {
+    public static Triangle2D createEquilateralFrom(ReadonlyVec2D a,
+            ReadonlyVec2D b) {
         Vec2D c = a.interpolateTo(b, 0.5f);
         Vec2D dir = a.sub(b);
         Vec2D n = dir.getPerpendicular();
@@ -52,10 +53,10 @@ public class Triangle2D {
     public Triangle2D() {
     }
 
-    public Triangle2D(Vec2D a, Vec2D b, Vec2D c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+    public Triangle2D(ReadonlyVec2D a, ReadonlyVec2D b, ReadonlyVec2D c) {
+        this.a = a.copy();
+        this.b = b.copy();
+        this.c = c.copy();
     }
 
     public Vec2D computeCentroid() {
@@ -72,7 +73,7 @@ public class Triangle2D {
      * 
      * @return true, if point is in triangle.
      */
-    public boolean containsPoint(Vec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         Vec2D v1 = p.sub(a).normalize();
         Vec2D v2 = p.sub(b).normalize();
         Vec2D v3 = p.sub(c).normalize();
@@ -91,7 +92,7 @@ public class Triangle2D {
      * @return closest point
      */
 
-    public Vec2D getClosestVertexTo(Vec2D p) {
+    public ReadonlyVec2D getClosestVertexTo(ReadonlyVec2D p) {
         Vec2D Rab = p.closestPointOnLine(a, b);
         Vec2D Rbc = p.closestPointOnLine(b, c);
         Vec2D Rca = p.closestPointOnLine(c, a);
@@ -101,7 +102,7 @@ public class Triangle2D {
         float dCA = p.sub(Rca).magSquared();
 
         float min = dAB;
-        Vec2D result = Rab;
+        ReadonlyVec2D result = Rab;
 
         if (dBC < min) {
             min = dBC;

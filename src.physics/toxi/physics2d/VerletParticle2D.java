@@ -22,6 +22,7 @@ package toxi.physics2d;
 
 import java.util.ArrayList;
 
+import toxi.geom.ReadonlyVec2D;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.physics2d.constraints.Particle2DConstraint;
@@ -84,8 +85,8 @@ public class VerletParticle2D extends Vec2D {
      * @param v
      *            position
      */
-    public VerletParticle2D(Vec2D v) {
-        this(v.x, v.y, 1);
+    public VerletParticle2D(ReadonlyVec2D v) {
+        this(v.x(), v.y(), 1);
     }
 
     /**
@@ -96,8 +97,8 @@ public class VerletParticle2D extends Vec2D {
      * @param w
      *            weight
      */
-    public VerletParticle2D(Vec2D v, float w) {
-        this(v.x, v.y, w);
+    public VerletParticle2D(ReadonlyVec2D v, float w) {
+        this(v.x(), v.y(), w);
     }
 
     /**
@@ -236,7 +237,7 @@ public class VerletParticle2D extends Vec2D {
         return this;
     }
 
-    protected void update(Vec2D force) {
+    protected void update(ReadonlyVec2D force) {
         if (!isLocked) {
             // TODO pos += (curr-prev) + force * timestep * timestep ?
             temp.set(this);

@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import toxi.geom.AABB;
 import toxi.geom.Plane;
-import toxi.geom.Quad;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
 import toxi.geom.Rect;
@@ -59,8 +58,6 @@ public class JAXBGeomTest {
             test.rect = new Rect(0, 0, 100, 200);
             test.sphere = new Sphere();
             test.tri = new Triangle(new Vec3D(), new Vec3D(), new Vec3D());
-            test.quad =
-                    new Quad(new Vec3D(), new Vec3D(), new Vec3D(), new Vec3D());
             List<Vec2D> points2d = new ArrayList<Vec2D>();
             points2d.add(new Vec2D());
             points2d.add(new Vec2D());
@@ -107,8 +104,5 @@ public class JAXBGeomTest {
 
     @XmlElement
     Rect rect;
-
-    @XmlElement
-    Quad quad;
 
 }

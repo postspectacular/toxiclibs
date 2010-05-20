@@ -3,6 +3,7 @@ package toxi.test.geom;
 import junit.framework.TestCase;
 import toxi.geom.Circle;
 import toxi.geom.Polygon2D;
+import toxi.geom.ReadonlyVec2D;
 import toxi.geom.Vec2D;
 import toxi.math.MathUtils;
 
@@ -18,7 +19,7 @@ public class PolygonTest extends TestCase {
         assertEquals(4, p.getNumPoints());
         float area = p.getArea();
         assertEquals(1f, area);
-        Vec2D centroid = p.getCentroid();
+        ReadonlyVec2D centroid = p.getCentroid();
         assertEquals(new Vec2D(0.5f, 0.5f), centroid);
     }
 

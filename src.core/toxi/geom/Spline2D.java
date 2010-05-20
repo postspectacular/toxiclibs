@@ -139,7 +139,7 @@ public class Spline2D {
 	 * @param p
 	 * @return itself
 	 */
-	public Spline2D add(Vec2D p) {
+	public Spline2D add(ReadonlyVec2D p) {
 		pointList.add(p.copy());
 		return this;
 	}
@@ -251,7 +251,7 @@ public class Spline2D {
 			while (currT >= arcLenIndex[currIdx]) {
 				currIdx++;
 			}
-			Vec2D p = vertices.get(currIdx - 1);
+			ReadonlyVec2D p = vertices.get(currIdx - 1);
 			Vec2D q = vertices.get(currIdx);
 			float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
 			Vec2D i = p.interpolateTo(q, frac);
@@ -275,7 +275,7 @@ public class Spline2D {
 		}
 		float arcLen = 0;
 		for (int i = 1; i < arcLenIndex.length; i++) {
-			Vec2D p = vertices.get(i - 1);
+			ReadonlyVec2D p = vertices.get(i - 1);
 			Vec2D q = vertices.get(i);
 			arcLen += p.distanceTo(q);
 			arcLenIndex[i] = arcLen;
@@ -316,7 +316,7 @@ public class Spline2D {
 	 */
 	public Spline2D setPointList(List<Vec2D> plist) {
 		pointList.clear();
-		for (Vec2D p : plist) {
+		for (ReadonlyVec2D p : plist) {
 			add(p);
 		}
 		return this;

@@ -14,9 +14,9 @@ public class Line2D {
         }
 
         private final Type type;
-        private final Vec2D pos;
+        private final ReadonlyVec2D pos;
 
-        public LineIntersection(Type type, Vec2D pos) {
+        public LineIntersection(Type type, ReadonlyVec2D pos) {
             this.type = type;
             this.pos = pos;
         }
@@ -24,7 +24,7 @@ public class Line2D {
         /**
          * @return the pos
          */
-        public Vec2D getPos() {
+        public ReadonlyVec2D getPos() {
             return pos.copy();
         }
 
@@ -93,7 +93,7 @@ public class Line2D {
         return new Line2D(a.copy(), b.copy());
     }
 
-    public Vec2D getDirection() {
+    public ReadonlyVec2D getDirection() {
         return b.sub(a).normalize();
     }
 
@@ -101,11 +101,11 @@ public class Line2D {
         return a.distanceTo(b);
     }
 
-    public Vec2D getMidPoint() {
+    public ReadonlyVec2D getMidPoint() {
         return a.add(b).scaleSelf(0.5f);
     }
 
-    public Vec2D getNormal() {
+    public ReadonlyVec2D getNormal() {
         return b.sub(a).perpendicular();
     }
 

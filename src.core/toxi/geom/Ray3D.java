@@ -74,7 +74,7 @@ public class Ray3D extends Vec3D {
      *            new direction
      * @return itself
      */
-    public Ray3D setDirection(Vec3D d) {
+    public Ray3D setDirection(ReadonlyVec3D d) {
         dir.set(d).normalize();
         return this;
     }

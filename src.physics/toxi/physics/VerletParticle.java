@@ -23,6 +23,7 @@ package toxi.physics;
 import java.util.ArrayList;
 
 import toxi.geom.AABB;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
 import toxi.physics.constraints.ParticleConstraint;
 
@@ -86,8 +87,8 @@ public class VerletParticle extends Vec3D {
      * @param v
      *            position
      */
-    public VerletParticle(Vec3D v) {
-        this(v.x, v.y, v.z, 1);
+    public VerletParticle(ReadonlyVec3D v) {
+        this(v.x(), v.y(), v.z(), 1);
     }
 
     /**
@@ -98,8 +99,8 @@ public class VerletParticle extends Vec3D {
      * @param w
      *            weight
      */
-    public VerletParticle(Vec3D v, float w) {
-        this(v.x, v.y, v.z, w);
+    public VerletParticle(ReadonlyVec3D v, float w) {
+        this(v.x(), v.y(), v.z(), w);
     }
 
     /**

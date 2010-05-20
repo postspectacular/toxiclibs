@@ -17,7 +17,7 @@ public class Rect {
      * @param extent
      * @return new rect
      */
-    public static final Rect fromCenterExtent(Vec2D center, Vec2D extent) {
+    public static final Rect fromCenterExtent(ReadonlyVec2D center, Vec2D extent) {
         return new Rect(center.sub(extent), center.add(extent));
     }
 
@@ -106,7 +106,7 @@ public class Rect {
      * 
      * @return dimension vector
      */
-    public final Vec2D getDimensions() {
+    public final ReadonlyVec2D getDimensions() {
         return new Vec2D(width, height);
     }
 
@@ -128,7 +128,7 @@ public class Rect {
      * @return intersection point or null if no intersection in the given
      *         interval
      */
-    public Vec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
+    public ReadonlyVec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
         Vec2D invDir = ray.getDirection().reciprocal();
         boolean signDirX = invDir.x < 0;
         boolean signDirY = invDir.y < 0;

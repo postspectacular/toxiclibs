@@ -35,7 +35,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec2D implements Comparable<Vec2D> {
+public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
 
     public static enum Axis {
         X, Y
@@ -44,28 +44,28 @@ public class Vec2D implements Comparable<Vec2D> {
     /**
      * Defines positive X axis
      */
-    public static final Vec2D X_AXIS = new Vec2D(1, 0);
+    public static final ReadonlyVec2D X_AXIS = new Vec2D(1, 0);
 
     /**
      * Defines positive Y axis
      */
-    public static final Vec2D Y_AXIS = new Vec2D(0, 1);;
+    public static final ReadonlyVec2D Y_AXIS = new Vec2D(0, 1);;
 
     /** Defines the zero vector. */
-    public static final Vec2D ZERO = new Vec2D();
+    public static final ReadonlyVec2D ZERO = new Vec2D();
 
     /**
      * Defines vector with both coords set to Float.MIN_VALUE. Useful for
      * bounding box operations.
      */
-    public static final Vec2D MIN_VALUE =
+    public static final ReadonlyVec2D MIN_VALUE =
             new Vec2D(Float.MIN_VALUE, Float.MIN_VALUE);
 
     /**
      * Defines vector with both coords set to Float.MAX_VALUE. Useful for
      * bounding box operations.
      */
-    public static final Vec2D MAX_VALUE =
+    public static final ReadonlyVec2D MAX_VALUE =
             new Vec2D(Float.MAX_VALUE, Float.MAX_VALUE);
 
     /**
@@ -182,26 +182,14 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Adds vector {a,b,c} and returns result as new vector.
-     * 
-     * @param a
-     *            X coordinate
-     * @param b
-     *            Y coordinate
-     * @return result as new vector
-     */
     public final Vec2D add(float a, float b) {
         return new Vec2D(x + a, y + b);
     }
 
-    /**
-     * Add vector v and returns result as new vector.
-     * 
-     * @param v
-     *            vector to add
-     * @return result as new vector
-     */
+    public Vec2D add(ReadonlyVec2D v) {
+        return v.copy().addSelf(this);
+    }
+
     public final Vec2D add(Vec2D v) {
         return new Vec2D(x + v.x, y + v.y);
     }
@@ -234,30 +222,10 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Computes the angle between this vector and vector V. This function
-     * assumes both vectors are normalized, if this can't be guaranteed, use the
-     * alternative implementation {@link #angleBetween(Vec2D, boolean)}
-     * 
-     * @param v
-     *            vector
-     * @return angle in radians, or NaN if vectors are parallel
-     */
     public final float angleBetween(Vec2D v) {
         return (float) Math.acos(dot(v));
     }
 
-    /**
-     * Computes the angle between this vector and vector V
-     * 
-     * @param v
-     *            vector
-     * @param forceNormalize
-     *            true, if normalized versions of the vectors are to be used
-     *            (Note: only copies will be used, original vectors will not be
-     *            altered by this method)
-     * @return angle in radians, or NaN if vectors are parallel
-     */
     public final float angleBetween(Vec2D v, boolean forceNormalize) {
         float theta;
         if (forceNormalize) {
@@ -278,16 +246,6 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Computes the closest point on the given line segment.
-     * 
-     * @param a
-     *            start point of line segment
-     * @param b
-     *            end point of line segment
-     * @return closest point on the line segment a -> b
-     */
-
     public Vec2D closestPointOnLine(Vec2D a, Vec2D b) {
         final Vec2D v = b.sub(a);
         final float t = sub(a).dot(v) / v.magSquared();
@@ -301,19 +259,6 @@ public class Vec2D implements Comparable<Vec2D> {
         // Return the point between 'a' and 'b'
         return a.add(v.scaleSelf(t));
     }
-
-    /**
-     * Finds and returns the closest point on any of the edges of the given
-     * triangle.
-     * 
-     * @param a
-     *            triangle vertex
-     * @param b
-     *            triangle vertex
-     * @param c
-     *            triangle vertex
-     * @return closest point
-     */
 
     public Vec2D closestPointOnTriangle(Vec2D a, Vec2D b, Vec2D c) {
         Vec2D Rab = closestPointOnLine(a, b);
@@ -338,13 +283,13 @@ public class Vec2D implements Comparable<Vec2D> {
         return result;
     }
 
-    /**
-     * Compares the length of the vector with another one.
-     * 
-     * @param v
-     *            vector to compare with
-     * @return -1 if other vector is longer, 0 if both are equal or else +1
-     */
+    public int compareTo(ReadonlyVec2D v) {
+        if (x == v.x() && y == v.y()) {
+            return 0;
+        }
+        return (int) (magSquared() - v.magSquared());
+    }
+
     public int compareTo(Vec2D v) {
         if (x == v.x && y == v.y) {
             return 0;
@@ -377,38 +322,14 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * @return a new independent instance/copy of a given vector
-     */
     public final Vec2D copy() {
         return new Vec2D(this);
     }
 
-    /**
-     * Calculates the cross-product with the given vector.
-     * 
-     * @param v
-     *            vector
-     * @return the magnitude of the vector that would result from a regular 3D
-     *         cross product of the input vectors, taking their Z values
-     *         implicitly as 0 (i.e. treating the 2D space as a plane in the 3D
-     *         space). The 3D cross product will be perpendicular to that plane,
-     *         and thus have 0 X & Y components (thus the scalar returned is the
-     *         Z value of the 3D cross product vector).
-     * @see <a href="http://stackoverflow.com/questions/243945/">Stackoverflow
-     *      entry</a>
-     */
     public float cross(Vec2D v) {
         return (x * v.y) - (y * v.x);
     }
 
-    /**
-     * Calculates distance to another vector
-     * 
-     * @param v
-     *            non-null vector
-     * @return distance or Float.NaN if v=null
-     */
     public final float distanceTo(Vec2D v) {
         if (v != null) {
             float dx = x - v.x;
@@ -419,14 +340,6 @@ public class Vec2D implements Comparable<Vec2D> {
         }
     }
 
-    /**
-     * Calculates the squared distance to another vector
-     * 
-     * @see #magSquared()
-     * @param v
-     *            non-null vector
-     * @return distance or NaN if v=null
-     */
     public final float distanceToSquared(Vec2D v) {
         if (v != null) {
             float dx = x - v.x;
@@ -437,17 +350,8 @@ public class Vec2D implements Comparable<Vec2D> {
         }
     }
 
-    /**
-     * Computes the scalar product (dot product) with the given vector.
-     * 
-     * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia entry<
-     *      /a>
-     * 
-     * @param v
-     * @return dot product
-     */
-    public final float dot(Vec2D v) {
-        return x * v.x + y * v.y;
+    public final float dot(ReadonlyVec2D v) {
+        return x * v.x() + y * v.y();
     }
 
     @Override
@@ -459,18 +363,6 @@ public class Vec2D implements Comparable<Vec2D> {
         return false;
     }
 
-    /**
-     * Compares this vector with the one given. The vectors are deemed equal if
-     * the individual differences of all component values are within the given
-     * tolerance.
-     * 
-     * @param v
-     *            the v
-     * @param tolerance
-     *            the tolerance
-     * 
-     * @return true, if equal
-     */
     public boolean equalsWithTolerance(Vec2D v, float tolerance) {
         if (MathUtils.abs(x - v.x) < tolerance) {
             if (MathUtils.abs(y - v.y) < tolerance) {
@@ -525,57 +417,25 @@ public class Vec2D implements Comparable<Vec2D> {
             case 1:
                 return y;
         }
-        return Float.NaN;
+        throw new IllegalArgumentException("index must be 0 or 1");
     }
 
-    /**
-     * Creates a copy of the vector which forcefully fits in the given
-     * rectangle.
-     * 
-     * @param r
-     * @return fitted vector
-     */
     public final Vec2D getConstrained(Rect r) {
         return new Vec2D(this).constrain(r);
     }
 
-    /**
-     * Creates a new vector whose components are the integer value of their
-     * current values
-     * 
-     * @return result as new vector
-     */
     public final Vec2D getFloored() {
         return new Vec2D(this).floor();
     }
 
-    /**
-     * Creates a new vector whose components are the fractional part of their
-     * current values
-     * 
-     * @return result as new vector
-     */
     public final Vec2D getFrac() {
         return new Vec2D(this).frac();
     }
 
-    /**
-     * Scales vector uniformly by factor -1 ( v = -v )
-     * 
-     * @return result as new vector
-     */
     public final Vec2D getInverted() {
         return new Vec2D(-x, -y);
     }
 
-    /**
-     * Creates a copy of the vector with its magnitude limited to the length
-     * given
-     * 
-     * @param lim
-     *            new maximum magnitude
-     * @return result as new vector
-     */
     public final Vec2D getLimited(float lim) {
         if (magSquared() > lim * lim) {
             return getNormalized().scaleSelf(lim);
@@ -583,24 +443,11 @@ public class Vec2D implements Comparable<Vec2D> {
         return new Vec2D(this);
     }
 
-    /**
-     * Produces the normalized version as a new vector
-     * 
-     * @return new vector
-     */
     public final Vec2D getNormalized() {
         return new Vec2D(this).normalize();
     }
 
-    /**
-     * Produces a new vector normalized to the given length.
-     * 
-     * @param len
-     *            new desired length
-     * 
-     * @return new vector
-     */
-    public Vec2D getNormalizedTo(float len) {
+    public final Vec2D getNormalizedTo(float len) {
         return getNormalized().scaleSelf(len);
     }
 
@@ -612,23 +459,14 @@ public class Vec2D implements Comparable<Vec2D> {
         return copy().reciprocal();
     }
 
-    /**
-     * Creates a new vector rotated by the given angle around the Z axis.
-     * 
-     * @param theta
-     * @return rotated vector
-     */
+    public final Vec2D getReflected(Vec2D normal) {
+        return copy().reflect(normal);
+    }
+
     public final Vec2D getRotated(float theta) {
         return new Vec2D(this).rotate(theta);
     }
 
-    /**
-     * Creates a new vector in which all components are replaced with the signum
-     * of their original values. In other words if a components value was
-     * negative its new value will be -1, if zero => 0, if positive => +1
-     * 
-     * @return result vector
-     */
     public Vec2D getSignum() {
         return new Vec2D(this).signum();
     }
@@ -644,42 +482,22 @@ public class Vec2D implements Comparable<Vec2D> {
         return 37 * Float.floatToIntBits(x) + Float.floatToIntBits(y);
     }
 
-    /**
-     * Computes the vector's direction in the XY plane (for example for 2D
-     * points). The positive X axis equals 0 degrees.
-     * 
-     * @return rotation angle
-     */
     public final float heading() {
         return (float) Math.atan2(y, x);
     }
 
-    /**
-     * Interpolates the vector towards the given target vector, using linear
-     * interpolation
-     * 
-     * @param v
-     *            target vector
-     * @param f
-     *            interpolation factor (should be in the range 0..1)
-     * @return result as new vector
-     */
+    public Vec2D interpolateTo(ReadonlyVec2D v, float f) {
+        return new Vec2D(x + (v.x() - x) * f, y + (v.y() - y) * f);
+    }
+
+    public Vec2D interpolateTo(ReadonlyVec2D v, float f, InterpolateStrategy s) {
+        return new Vec2D(s.interpolate(x, v.x(), f), s.interpolate(y, v.y(), f));
+    }
+
     public final Vec2D interpolateTo(Vec2D v, float f) {
         return new Vec2D(x + (v.x - x) * f, y + (v.y - y) * f);
     }
 
-    /**
-     * Interpolates the vector towards the given target vector, using the given
-     * {@link InterpolateStrategy}
-     * 
-     * @param v
-     *            target vector
-     * @param f
-     *            interpolation factor (should be in the range 0..1)
-     * @param s
-     *            InterpolateStrategy instance
-     * @return result as new vector
-     */
     public Vec2D interpolateTo(Vec2D v, float f, InterpolateStrategy s) {
         return new Vec2D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f));
     }
@@ -718,21 +536,9 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Calculates the distance of the vector to the given sphere in the
-     * specified direction. A sphere is defined by a 3D point and a radius.
-     * Normalized directional vectors expected.
-     * 
-     * @param rayDir
-     *            intersection direction
-     * @param circleOrigin
-     * @param circleRadius
-     * @return distance to sphere in world units, -1 if no intersection.
-     */
-
-    public float intersectRayCircle(Vec2D rayDir, Vec2D circleOrigin,
-            float circleRadius) {
-        Vec2D q = circleOrigin.sub(this);
+    public float intersectRayCircle(ReadonlyVec2D rayDir,
+            ReadonlyVec2D circleOrigin, float circleRadius) {
+        ReadonlyVec2D q = circleOrigin.sub(this);
         float distSquared = q.magSquared();
         float v = q.dot(rayDir);
         float d = circleRadius * circleRadius - (distSquared - v * v);
@@ -758,28 +564,11 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Checks if the point is inside the given sphere.
-     * 
-     * @param sO
-     *            circle origin/centre
-     * @param sR
-     *            circle radius
-     * @return true, if point is in sphere
-     */
-
-    public boolean isInCircle(Vec2D sO, float sR) {
+    public boolean isInCircle(ReadonlyVec2D sO, float sR) {
         float d = sub(sO).magSquared();
         return (d <= sR * sR);
     }
 
-    /**
-     * Checks if the point is inside the given rectangle.
-     * 
-     * @param r
-     *            bounding rectangle
-     * @return true, if point is inside
-     */
     public boolean isInRectangle(Rect r) {
         if (x < r.x || x > r.x + r.width) {
             return false;
@@ -789,16 +578,6 @@ public class Vec2D implements Comparable<Vec2D> {
         }
         return true;
     }
-
-    /**
-     * Checks if point vector is inside the triangle created by the points a, b
-     * and c. These points will create a plane and the point checked will have
-     * to be on this plane in the region between a,b,c.
-     * 
-     * Note: The triangle must be defined in clockwise order a,b,c
-     * 
-     * @return true, if point is in triangle.
-     */
 
     public boolean isInTriangle(Vec2D a, Vec2D b, Vec2D c) {
         Vec2D v1 = sub(a).normalize();
@@ -812,17 +591,12 @@ public class Vec2D implements Comparable<Vec2D> {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
     }
 
-    /**
-     * Checks if vector has a magnitude of 0
-     * 
-     * @return true, if vector = {0,0,0}
-     */
     public final boolean isZeroVector() {
         return MathUtils.abs(x) < MathUtils.EPS
                 && MathUtils.abs(y) < MathUtils.EPS;
     }
 
-    public final Vec2D jitter(float j) {
+    public final ReadonlyVec2D jitter(float j) {
         return jitter(j, j);
     }
 
@@ -873,37 +647,14 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Calculates the magnitude/eucledian length of the vector
-     * 
-     * @return vector length
-     */
     public final float magnitude() {
         return (float) Math.sqrt(x * x + y * y);
     }
 
-    /**
-     * Calculates only the squared magnitude/length of the vector. Useful for
-     * inverse square law applications and/or for speed reasons or if the real
-     * eucledian distance is not required (e.g. sorting).
-     * 
-     * Please note the vector should contain cartesian (not polar) coordinates
-     * in order for this function to work. The magnitude of polar vectors is
-     * stored in the x component.
-     * 
-     * @return squared magnitude (x^2 + y^2)
-     */
     public final float magSquared() {
         return x * x + y * y;
     }
 
-    /**
-     * Constructs a new vector consisting of the largest components of both
-     * vectors.
-     * 
-     * @param v
-     * @return result as new vector
-     */
     public final Vec2D max(Vec2D v) {
         return new Vec2D(MathUtils.max(x, v.x), MathUtils.max(y, v.y));
     }
@@ -920,14 +671,6 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Constructs a new vector consisting of the smallest components of both
-     * vectors.
-     * 
-     * @param v
-     *            comparing vector
-     * @return result as new vector
-     */
     public final Vec2D min(Vec2D v) {
         return new Vec2D(MathUtils.min(x, v.x), MathUtils.min(y, v.y));
     }
@@ -966,7 +709,7 @@ public class Vec2D implements Comparable<Vec2D> {
      *            desired length
      * @return itself
      */
-    public Vec2D normalizeTo(float len) {
+    public final Vec2D normalizeTo(float len) {
         return normalize().scaleSelf(len);
     }
 
@@ -983,27 +726,22 @@ public class Vec2D implements Comparable<Vec2D> {
      * 
      * @param vertices
      * @return true, if inside polygon
+     * 
+     * @deprecated use {@link Polygon2D#containsPoint(Vec2D)} instead
      */
+    @Deprecated
     public boolean pointInPolygon(ArrayList<Vec2D> vertices) {
-        int i, j = vertices.size() - 1;
-        boolean oddNodes = false;
-        for (i = 0; i < vertices.size(); i++) {
-            Vec2D vi = vertices.get(i);
-            Vec2D vj = vertices.get(j);
-            if (vi.y < y && vj.y >= y || vj.y < y && vi.y >= y) {
-                if (vi.x + (y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x) {
-                    oddNodes = !oddNodes;
-                }
-            }
-            j = i;
-        }
-        return oddNodes;
+        return new Polygon2D(vertices).containsPoint(this);
     }
 
     public final Vec2D reciprocal() {
         x = 1f / x;
         y = 1f / y;
         return this;
+    }
+
+    public final Vec2D reflect(Vec2D normal) {
+        return set(normal.scale(this.dot(normal) * 2).subSelf(this));
     }
 
     /**
@@ -1021,37 +759,18 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Scales vector uniformly and returns result as new vector.
-     * 
-     * @param s
-     *            scale factor
-     * @return new vector
-     */
     public final Vec2D scale(float s) {
         return new Vec2D(x * s, y * s);
     }
 
-    /**
-     * Scales vector non-uniformly and returns result as new vector.
-     * 
-     * @param a
-     *            scale factor for X coordinate
-     * @param b
-     *            scale factor for Y coordinate
-     * @return new vector
-     */
     public final Vec2D scale(float a, float b) {
         return new Vec2D(x * a, y * b);
     }
 
-    /**
-     * Scales vector non-uniformly by vector v and returns result as new vector
-     * 
-     * @param s
-     *            scale vector
-     * @return new vector
-     */
+    public Vec2D scale(ReadonlyVec2D s) {
+        return s.copy().scaleSelf(this);
+    }
+
     public final Vec2D scale(Vec2D s) {
         return new Vec2D(x * s.x, y * s.y);
     }
@@ -1113,6 +832,12 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
+    public Vec2D set(ReadonlyVec2D v) {
+        x = v.x();
+        y = v.y();
+        return this;
+    }
+
     /**
      * Overrides coordinates with the ones of the given vector
      * 
@@ -1126,7 +851,7 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    public Vec2D setComponent(Axis id, float val) {
+    public final Vec2D setComponent(Axis id, float val) {
         switch (id) {
             case X:
                 x = val;
@@ -1157,32 +882,20 @@ public class Vec2D implements Comparable<Vec2D> {
      * 
      * @return itself
      */
-    public Vec2D signum() {
+    public final Vec2D signum() {
         x = (x < 0 ? -1 : x == 0 ? 0 : 1);
         y = (y < 0 ? -1 : y == 0 ? 0 : 1);
         return this;
     }
 
-    /**
-     * Subtracts vector {a,b,c} and returns result as new vector.
-     * 
-     * @param a
-     *            X coordinate
-     * @param b
-     *            Y coordinate
-     * @return result as new vector
-     */
     public final Vec2D sub(float a, float b) {
         return new Vec2D(x - a, y - b);
     }
 
-    /**
-     * Subtracts vector v and returns result as new vector.
-     * 
-     * @param v
-     *            vector to be subtracted
-     * @return result as new vector
-     */
+    public final Vec2D sub(ReadonlyVec2D v) {
+        return new Vec2D(x - v.x(), y - v.y());
+    }
+
     public final Vec2D sub(Vec2D v) {
         return new Vec2D(x - v.x, y - v.y);
     }
@@ -1215,18 +928,6 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Calculates the normal vector on the given ellipse in the direction of the
-     * current point.
-     * 
-     * @param eO
-     *            ellipse origin/centre
-     * @param eR
-     *            ellipse radii
-     * @return a unit normal vector to the tangent plane of the ellipsoid in the
-     *         point.
-     */
-
     public Vec2D tangentNormalOfEllipse(Vec2D eO, Vec2D eR) {
         Vec2D p = this.sub(eO);
 
@@ -1236,50 +937,22 @@ public class Vec2D implements Comparable<Vec2D> {
         return new Vec2D(p.x / xr2, p.y / yr2).normalize();
     }
 
-    /**
-     * Creates a 3D version of this vector in the XY plane.
-     * 
-     * @return 3D vector
-     */
     public Vec3D to3DXY() {
         return new Vec3D(x, y, 0);
     }
 
-    /**
-     * Creates a 3D version of this vector in the XZ plane. (The 2D Y coordinate
-     * interpreted as Z)
-     * 
-     * @return 3D vector
-     */
     public Vec3D to3DXZ() {
         return new Vec3D(x, 0, y);
     }
 
-    /**
-     * Creates a 3D version of this vector in the YZ plane. (The 2D X coordinate
-     * interpreted as Y &amp; 2D Y as Z)
-     * 
-     * @return 3D vector
-     */
     public Vec3D to3DYZ() {
         return new Vec3D(0, x, y);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.DimensionalVector#toArray()
-     */
     public float[] toArray() {
         return new float[] { x, y };
     }
 
-    /**
-     * Converts the vector from polar to Cartesian space. Assumes this order:
-     * x=radius, y=theta
-     * 
-     * @return itself as Cartesian vector
-     */
     public Vec2D toCartesian() {
         float xx = (float) (x * Math.cos(y));
         y = (float) (x * Math.sin(y));
@@ -1287,13 +960,6 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /**
-     * Converts the current vector into polar coordinates. After the conversion
-     * the x component of the vector contains the radius (magnitude) and y the
-     * rotation angle.
-     * 
-     * @return itself as polar vector
-     */
     public Vec2D toPolar() {
         float r = (float) Math.sqrt(x * x + y * y);
         y = (float) Math.atan2(y, x);
@@ -1301,14 +967,17 @@ public class Vec2D implements Comparable<Vec2D> {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     public String toString() {
         StringBuffer sb = new StringBuffer(32);
         sb.append("{x:").append(x).append(", y:").append(y).append("}");
         return sb.toString();
+    }
+
+    public final float x() {
+        return x;
+    }
+
+    public final float y() {
+        return y;
     }
 }

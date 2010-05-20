@@ -69,7 +69,7 @@ public class Polygon2D {
      * 
      * @return centroid point
      */
-    public Vec2D getCentroid() {
+    public ReadonlyVec2D getCentroid() {
         Vec2D res = new Vec2D();
         int numPoints = vertices.size();
         for (int i = 0; i < numPoints; i++) {
