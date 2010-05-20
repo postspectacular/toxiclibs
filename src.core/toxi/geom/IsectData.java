@@ -2,13 +2,14 @@ package toxi.geom;
 
 public class IsectData {
 
-    public boolean isIntersection = false;
+    public boolean isIntersection;
     public float dist;
-    public Vec3D pos;
-    public Vec3D dir;
+    public ReadonlyVec3D pos;
+    public ReadonlyVec3D dir;
     public Vec3D normal;
 
     public IsectData() {
+
     }
 
     public IsectData(IsectData isec) {

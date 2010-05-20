@@ -33,36 +33,36 @@ import toxi.math.MathUtils;
  * 
  * @author Karsten Schmidt
  */
-public class Vec3D implements Comparable<Vec3D> {
+public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
 
     public static enum Axis {
         X, Y, Z
     };
 
     /** Defines positive X axis. */
-    public static final Vec3D X_AXIS = new Vec3D(1, 0, 0);
+    public static final ReadonlyVec3D X_AXIS = new Vec3D(1, 0, 0);
 
     /** Defines positive Y axis. */
-    public static final Vec3D Y_AXIS = new Vec3D(0, 1, 0);
+    public static final ReadonlyVec3D Y_AXIS = new Vec3D(0, 1, 0);
 
     /** Defines positive Z axis. */
-    public static final Vec3D Z_AXIS = new Vec3D(0, 0, 1);
+    public static final ReadonlyVec3D Z_AXIS = new Vec3D(0, 0, 1);
 
     /** Defines the zero vector. */
-    public static final Vec3D ZERO = new Vec3D();
+    public static final ReadonlyVec3D ZERO = new Vec3D();
 
     /**
      * Defines vector with all coords set to Float.MIN_VALUE. Useful for
      * bounding box operations.
      */
-    public static final Vec3D MIN_VALUE =
+    public static final ReadonlyVec3D MIN_VALUE =
             new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
 
     /**
      * Defines vector with all coords set to Float.MAX_VALUE. Useful for
      * bounding box operations.
      */
-    public static final Vec3D MAX_VALUE =
+    public static final ReadonlyVec3D MAX_VALUE =
             new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
 
     /**
@@ -213,7 +213,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * @param v
      *            vector to be copied
      */
-    public Vec3D(Vec3D v) {
+    public Vec3D(ReadonlyVec3D v) {
         set(v);
     }
 
@@ -229,29 +229,19 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Adds vector {a,b,c} and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param a
-     *            X coordinate
-     * @param b
-     *            Y coordinate
-     * @param c
-     *            Z coordinate
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#add(float, float, float)
      */
     public final Vec3D add(float a, float b, float c) {
         return new Vec3D(x + a, y + b, z + c);
     }
 
-    /**
-     * Add vector v and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector to add
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#add(toxi.geom.Vec3D)
      */
     public final Vec3D add(Vec3D v) {
         return new Vec3D(x + v.x, y + v.y, z + v.z);
@@ -269,7 +259,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public final Vec3D addSelf(float a, float b, float c) {
+    public final ReadonlyVec3D addSelf(float a, float b, float c) {
         x += a;
         y += b;
         z += c;
@@ -291,31 +281,19 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Computes the angle between this vector and vector V. This function
-     * assumes both vectors are normalized, if this can't be guaranteed, use the
-     * alternative implementation {@link #angleBetween(Vec3D, boolean)}
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector
-     * 
-     * @return angle in radians, or NaN if vectors are parallel
+     * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D)
      */
     public final float angleBetween(Vec3D v) {
         return (float) Math.acos(dot(v));
     }
 
-    /**
-     * Computes the angle between this vector and vector V.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector
-     * @param forceNormalize
-     *            true, if normalized versions of the vectors are to be used
-     *            (Note: only copies will be used, original vectors will not be
-     *            altered by this method)
-     * 
-     * @return angle in radians, or NaN if vectors are parallel
+     * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D, boolean)
      */
     public final float angleBetween(Vec3D v, boolean forceNormalize) {
         float theta;
@@ -332,21 +310,16 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public final Vec3D clear() {
+    public final ReadonlyVec3D clear() {
         x = y = z = 0;
         return this;
     }
 
-    /**
-     * Computes the closest point on the given line segments. Helper function
-     * for {@link toxi.geom.Triangle#getClosestVertexTo(Vec3D)}
+    /*
+     * (non-Javadoc)
      * 
-     * @param a
-     *            start point of line segment
-     * @param b
-     *            end point of line segment
-     * 
-     * @return closest point on the line segment a -> b
+     * @see toxi.geom.ReadonlyVec3D#closestPointOnLine(toxi.geom.Vec3D,
+     * toxi.geom.Vec3D)
      */
 
     public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
@@ -363,14 +336,18 @@ public class Vec3D implements Comparable<Vec3D> {
         return a.add(v.scaleSelf(t));
     }
 
-    /**
-     * Compares the length of the vector with another one.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector to compare with
-     * 
-     * @return -1 if other vector is longer, 0 if both are equal or else +1
+     * @see toxi.geom.ReadonlyVec3D#compareTo(toxi.geom.Vec3D)
      */
+    public int compareTo(ReadonlyVec3D v) {
+        if (x == v.x() && y == v.y() && z == v.z()) {
+            return 0;
+        }
+        return (int) (magSquared() - v.magSquared());
+    }
+
     public int compareTo(Vec3D v) {
         if (x == v.x && y == v.y && z == v.z) {
             return 0;
@@ -405,40 +382,29 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Copy.
+    /*
+     * (non-Javadoc)
      * 
-     * @return a new independent instance/copy of a given vector
+     * @see toxi.geom.ReadonlyVec3D#copy()
      */
     public Vec3D copy() {
         return new Vec3D(this);
     }
 
-    /**
-     * Calculates cross-product with vector v. The resulting vector is
-     * perpendicular to both the current and supplied vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector to cross
-     * 
-     * @return cross-product as new vector
+     * @see toxi.geom.ReadonlyVec3D#cross(toxi.geom.Vec3D)
      */
     public final Vec3D cross(Vec3D v) {
         return new Vec3D(y * v.z - v.y * z, z * v.x - v.z * x, x * v.y - v.x
                 * y);
     }
 
-    /**
-     * Calculates cross-product with vector v. The resulting vector is
-     * perpendicular to both the current and supplied vector and stored in the
-     * supplied result vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            vector to cross
-     * @param result
-     *            result vector
-     * 
-     * @return result vector
+     * @see toxi.geom.ReadonlyVec3D#crossInto(toxi.geom.Vec3D, toxi.geom.Vec3D)
      */
     public final Vec3D crossInto(Vec3D v, Vec3D result) {
         final float rx = y * v.z - v.y * z;
@@ -467,13 +433,10 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Calculates distance to another vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            non-null vector
-     * 
-     * @return distance or Float.NaN if v=null
+     * @see toxi.geom.ReadonlyVec3D#distanceTo(toxi.geom.Vec3D)
      */
     public final float distanceTo(Vec3D v) {
         if (v != null) {
@@ -486,15 +449,10 @@ public class Vec3D implements Comparable<Vec3D> {
         }
     }
 
-    /**
-     * Calculates the squared distance to another vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            non-null vector
-     * 
-     * @return distance or NaN if v=null
-     * 
-     * @see #magSquared()
+     * @see toxi.geom.ReadonlyVec3D#distanceToSquared(toxi.geom.Vec3D)
      */
     public final float distanceToSquared(Vec3D v) {
         if (v != null) {
@@ -507,16 +465,10 @@ public class Vec3D implements Comparable<Vec3D> {
         }
     }
 
-    /**
-     * Computes the scalar product (dot product) with the given vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            the v
-     * 
-     * @return dot product
-     * 
-     * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia
-     *      entry</a>
+     * @see toxi.geom.ReadonlyVec3D#dot(toxi.geom.Vec3D)
      */
     public final float dot(Vec3D v) {
         return x * v.x + y * v.y + z * v.z;
@@ -527,6 +479,11 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.ReadonlyVec3D#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Vec3D) {
@@ -536,22 +493,15 @@ public class Vec3D implements Comparable<Vec3D> {
         return false;
     }
 
-    /**
-     * Compares this vector with the one given. The vectors are deemed equal if
-     * the individual differences of all component values are within the given
-     * tolerance.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            the v
-     * @param tolerance
-     *            the tolerance
-     * 
-     * @return true, if equal
+     * @see toxi.geom.ReadonlyVec3D#equalsWithTolerance(toxi.geom.Vec3D, float)
      */
-    public boolean equalsWithTolerance(Vec3D v, float tolerance) {
-        if (MathUtils.abs(x - v.x) < tolerance) {
-            if (MathUtils.abs(y - v.y) < tolerance) {
-                if (MathUtils.abs(z - v.z) < tolerance) {
+    public boolean equalsWithTolerance(ReadonlyVec3D v, float tolerance) {
+        if (MathUtils.abs(x - v.x()) < tolerance) {
+            if (MathUtils.abs(y - v.y()) < tolerance) {
+                if (MathUtils.abs(z - v.z()) < tolerance) {
                     return true;
                 }
             }
@@ -585,15 +535,20 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Gets the abs.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the abs
+     * @see toxi.geom.ReadonlyVec3D#getAbs()
      */
     public final Vec3D getAbs() {
         return new Vec3D(this).abs();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.ReadonlyVec3D#getComponent(toxi.geom.Vec3D.Axis)
+     */
     public final float getComponent(Axis id) {
         switch (id) {
             case X:
@@ -606,6 +561,11 @@ public class Vec3D implements Comparable<Vec3D> {
         return Float.NaN;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.ReadonlyVec3D#getComponent(int)
+     */
     public final float getComponent(int id) {
         switch (id) {
             case 0:
@@ -618,55 +578,46 @@ public class Vec3D implements Comparable<Vec3D> {
         return Float.NaN;
     }
 
-    /**
-     * Creates a copy of the vector which forcefully fits in the given AABB.
+    /*
+     * (non-Javadoc)
      * 
-     * @param box
-     *            the box
-     * 
-     * @return fitted vector
+     * @see toxi.geom.ReadonlyVec3D#getConstrained(toxi.geom.AABB)
      */
     public final Vec3D getConstrained(AABB box) {
         return new Vec3D(this).constrain(box);
     }
 
-    /**
-     * Creates a new vector whose components are the integer value of their
-     * current values.
+    /*
+     * (non-Javadoc)
      * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#getFloored()
      */
     public final Vec3D getFloored() {
         return new Vec3D(this).floor();
     }
 
-    /**
-     * Creates a new vector whose components are the fractional part of their
-     * current values.
+    /*
+     * (non-Javadoc)
      * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#getFrac()
      */
     public final Vec3D getFrac() {
         return new Vec3D(this).frac();
     }
 
-    /**
-     * Scales vector uniformly by factor -1 ( v = -v ).
+    /*
+     * (non-Javadoc)
      * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#getInverted()
      */
     public final Vec3D getInverted() {
         return new Vec3D(-x, -y, -z);
     }
 
-    /**
-     * Creates a copy of the vector with its magnitude limited to the length
-     * given.
+    /*
+     * (non-Javadoc)
      * 
-     * @param lim
-     *            new maximum magnitude
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#getLimited(float)
      */
     public final Vec3D getLimited(float lim) {
         if (magSquared() > lim * lim) {
@@ -675,94 +626,73 @@ public class Vec3D implements Comparable<Vec3D> {
         return new Vec3D(this);
     }
 
-    /**
-     * Produces the normalized version as a new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#getNormalized()
      */
     public Vec3D getNormalized() {
         return new Vec3D(this).normalize();
     }
 
-    /**
-     * Produces a new vector normalized to the given length.
+    /*
+     * (non-Javadoc)
      * 
-     * @param len
-     *            new desired length
-     * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#getNormalizedTo(float)
      */
     public Vec3D getNormalizedTo(float len) {
         return copy().normalizeTo(len);
     }
 
-    /**
-     * Returns a multiplicative inverse copy of the vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#getReciprocal()
      */
     public final Vec3D getReciprocal() {
         return copy().reciprocal();
     }
 
-    /**
-     * Gets the rotated around axis.
+    /*
+     * (non-Javadoc)
      * 
-     * @param axis
-     *            the axis
-     * @param theta
-     *            the theta
-     * 
-     * @return new result vector
-     * 
-     * @see #rotateAroundAxis(Vec3D, float)
+     * @see toxi.geom.ReadonlyVec3D#getRotatedAroundAxis(toxi.geom.Vec3D, float)
      */
     public final Vec3D getRotatedAroundAxis(Vec3D axis, float theta) {
         return new Vec3D(this).rotateAroundAxis(axis, theta);
     }
 
-    /**
-     * Creates a new vector rotated by the given angle around the X axis.
+    /*
+     * (non-Javadoc)
      * 
-     * @param theta
-     *            the theta
-     * 
-     * @return rotated vector
+     * @see toxi.geom.ReadonlyVec3D#getRotatedX(float)
      */
     public final Vec3D getRotatedX(float theta) {
         return new Vec3D(this).rotateX(theta);
     }
 
-    /**
-     * Creates a new vector rotated by the given angle around the Y axis.
+    /*
+     * (non-Javadoc)
      * 
-     * @param theta
-     *            the theta
-     * 
-     * @return rotated vector
+     * @see toxi.geom.ReadonlyVec3D#getRotatedY(float)
      */
     public final Vec3D getRotatedY(float theta) {
         return new Vec3D(this).rotateY(theta);
     }
 
-    /**
-     * Creates a new vector rotated by the given angle around the Z axis.
+    /*
+     * (non-Javadoc)
      * 
-     * @param theta
-     *            the theta
-     * 
-     * @return rotated vector
+     * @see toxi.geom.ReadonlyVec3D#getRotatedZ(float)
      */
     public final Vec3D getRotatedZ(float theta) {
         return new Vec3D(this).rotateZ(theta);
     }
 
-    /**
-     * Creates a new vector in which all components are replaced with the signum
-     * of their original values. In other words if a components value was
-     * negative its new value will be -1, if zero => 0, if positive => +1
+    /*
+     * (non-Javadoc)
      * 
-     * @return result vector
+     * @see toxi.geom.ReadonlyVec3D#getSignum()
      */
     public final Vec3D getSignum() {
         return new Vec3D(this).signum();
@@ -782,64 +712,52 @@ public class Vec3D implements Comparable<Vec3D> {
         return hash;
     }
 
-    /**
-     * Computes the vector's direction in the XY plane (for example for 2D
-     * points). The positive X axis equals 0 degrees.
+    /*
+     * (non-Javadoc)
      * 
-     * @return rotation angle
+     * @see toxi.geom.ReadonlyVec3D#headingXY()
      */
     public final float headingXY() {
         return (float) Math.atan2(y, x);
     }
 
-    /**
-     * Computes the vector's direction in the XZ plane. The positive X axis
-     * equals 0 degrees.
+    /*
+     * (non-Javadoc)
      * 
-     * @return rotation angle
+     * @see toxi.geom.ReadonlyVec3D#headingXZ()
      */
     public final float headingXZ() {
         return (float) Math.atan2(z, x);
     }
 
-    /**
-     * Computes the vector's direction in the YZ plane. The positive Z axis
-     * equals 0 degrees.
+    /*
+     * (non-Javadoc)
      * 
-     * @return rotation angle
+     * @see toxi.geom.ReadonlyVec3D#headingYZ()
      */
     public final float headingYZ() {
         return (float) Math.atan2(y, z);
     }
 
-    /**
-     * Interpolates the vector towards the given target vector, using linear
-     * interpolation.
+    public ReadonlyVec3D immutable() {
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            target vector
-     * @param f
-     *            interpolation factor (should be in the range 0..1)
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#interpolateTo(toxi.geom.Vec3D, float)
      */
     public final Vec3D interpolateTo(Vec3D v, float f) {
         return new Vec3D(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z)
                 * f);
     }
 
-    /**
-     * Interpolates the vector towards the given target vector, using the given
-     * {@link InterpolateStrategy}.
+    /*
+     * (non-Javadoc)
      * 
-     * @param v
-     *            target vector
-     * @param f
-     *            interpolation factor (should be in the range 0..1)
-     * @param s
-     *            InterpolateStrategy instance
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#interpolateTo(toxi.geom.Vec3D, float,
+     * toxi.math.InterpolateStrategy)
      */
     public Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
         return new Vec3D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f), s
@@ -877,12 +795,19 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself, result overrides current vector
      */
-    public Vec3D interpolateToSelf(Vec3D v, float f, InterpolateStrategy s) {
+    public ReadonlyVec3D interpolateToSelf(Vec3D v, float f,
+            InterpolateStrategy s) {
         x = s.interpolate(x, v.x, f);
         y = s.interpolate(y, v.y, f);
         z = s.interpolate(z, v.z, f);
         return this;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.ReadonlyVec3D#isInAABB(toxi.geom.Vec3D, toxi.geom.Vec3D)
+     */
 
     /**
      * Scales vector uniformly by factor -1 ( v = -v ), overrides coordinates
@@ -890,20 +815,17 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public final Vec3D invert() {
+    public final ReadonlyVec3D invert() {
         x *= -1;
         y *= -1;
         z *= -1;
         return this;
     }
 
-    /**
-     * Checks if the point is inside the given AABB.
+    /*
+     * (non-Javadoc)
      * 
-     * @param box
-     *            bounding box to check
-     * 
-     * @return true, if point is inside
+     * @see toxi.geom.ReadonlyVec3D#isInAABB(toxi.geom.AABB)
      */
     public boolean isInAABB(AABB box) {
         final Vec3D min = box.getMin();
@@ -919,17 +841,6 @@ public class Vec3D implements Comparable<Vec3D> {
         }
         return true;
     }
-
-    /**
-     * Checks if the point is inside the given axis-aligned bounding box.
-     * 
-     * @param boxOrigin
-     *            bounding box origin/center
-     * @param boxExtent
-     *            bounding box extends (half measure)
-     * 
-     * @return true, if point is inside the box
-     */
 
     public boolean isInAABB(Vec3D boxOrigin, Vec3D boxExtent) {
         float w = boxExtent.x;
@@ -947,10 +858,10 @@ public class Vec3D implements Comparable<Vec3D> {
         return true;
     }
 
-    /**
-     * Checks if vector has a magnitude equals or close to zero.
+    /*
+     * (non-Javadoc)
      * 
-     * @return true, if zero vector
+     * @see toxi.geom.ReadonlyVec3D#isZeroVector()
      */
     public final boolean isZeroVector() {
         return MathUtils.abs(x) < MathUtils.EPS
@@ -1031,21 +942,19 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Calculates the magnitude/eucledian length of the vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @return vector length
+     * @see toxi.geom.ReadonlyVec3D#magnitude()
      */
     public float magnitude() {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
-    /**
-     * Calculates only the squared magnitude/length of the vector. Useful for
-     * inverse square law applications and/or for speed reasons or if the real
-     * eucledian distance is not required (e.g. sorting).
+    /*
+     * (non-Javadoc)
      * 
-     * @return squared magnitude (x^2 + y^2 + z^2)
+     * @see toxi.geom.ReadonlyVec3D#magSquared()
      */
     public float magSquared() {
         return x * x + y * y + z * z;
@@ -1059,10 +968,10 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return the vec3 d
      */
-    public final Vec3D maxSelf(Vec3D b) {
-        x = MathUtils.max(x, b.x);
-        y = MathUtils.max(y, b.y);
-        z = MathUtils.max(z, b.z);
+    public final Vec3D maxSelf(ReadonlyVec3D b) {
+        x = MathUtils.max(x, b.x());
+        y = MathUtils.max(y, b.y());
+        z = MathUtils.max(z, b.z());
         return this;
     }
 
@@ -1074,10 +983,10 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return the vec3 d
      */
-    public final Vec3D minSelf(Vec3D b) {
-        x = MathUtils.min(x, b.x);
-        y = MathUtils.min(y, b.y);
-        z = MathUtils.min(z, b.z);
+    public final Vec3D minSelf(ReadonlyVec3D b) {
+        x = MathUtils.min(x, b.x());
+        y = MathUtils.min(y, b.y());
+        z = MathUtils.min(z, b.z());
         return this;
     }
 
@@ -1257,41 +1166,28 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Scales vector uniformly and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param s
-     *            scale factor
-     * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#scale(float)
      */
     public Vec3D scale(float s) {
         return new Vec3D(x * s, y * s, z * s);
     }
 
-    /**
-     * Scales vector non-uniformly and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param a
-     *            scale factor for X coordinate
-     * @param b
-     *            scale factor for Y coordinate
-     * @param c
-     *            scale factor for Z coordinate
-     * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#scale(float, float, float)
      */
     public Vec3D scale(float a, float b, float c) {
         return new Vec3D(x * a, y * b, z * c);
     }
 
-    /**
-     * Scales vector non-uniformly by vector v and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param s
-     *            scale vector
-     * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#scale(toxi.geom.Vec3D)
      */
     public Vec3D scale(Vec3D s) {
         return new Vec3D(x * s.x, y * s.y, z * s.z);
@@ -1325,7 +1221,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public Vec3D scaleSelf(float a, float b, float c) {
+    public ReadonlyVec3D scaleSelf(float a, float b, float c) {
         x *= a;
         y *= b;
         z *= c;
@@ -1342,7 +1238,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * @return itself
      */
 
-    public Vec3D scaleSelf(Vec3D s) {
+    public ReadonlyVec3D scaleSelf(Vec3D s) {
         x *= s.x;
         y *= s.y;
         z *= s.z;
@@ -1365,6 +1261,13 @@ public class Vec3D implements Comparable<Vec3D> {
         this.x = x;
         this.y = y;
         this.z = z;
+        return this;
+    }
+
+    public Vec3D set(ReadonlyVec3D v) {
+        x = v.x();
+        y = v.y();
+        z = v.z();
         return this;
     }
 
@@ -1398,7 +1301,7 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    public final Vec3D setComponent(int id, float val) {
+    public final ReadonlyVec3D setComponent(int id, float val) {
         switch (id) {
             case 0:
                 x = val;
@@ -1421,7 +1324,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public Vec3D setXY(Vec2D v) {
+    public ReadonlyVec3D setXY(Vec2D v) {
         x = v.x;
         y = v.y;
         return this;
@@ -1441,30 +1344,19 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Subtracts vector {a,b,c} and returns result as new vector.
+    /*
+     * (non-Javadoc)
      * 
-     * @param a
-     *            X coordinate
-     * @param b
-     *            Y coordinate
-     * @param c
-     *            Z coordinate
-     * 
-     * @return result as new vector
+     * @see toxi.geom.ReadonlyVec3D#sub(float, float, float)
      */
     public final Vec3D sub(float a, float b, float c) {
         return new Vec3D(x - a, y - b, z - c);
     }
 
-    /**
-     * Subtracts vector v and returns result as new vector.
-     * 
-     * @param v
-     *            vector to be subtracted
-     * 
-     * @return result as new vector
-     */
+    public final Vec3D sub(ReadonlyVec3D v) {
+        return new Vec3D(x - v.x(), y - v.y(), z - v.z());
+    }
+
     public final Vec3D sub(Vec3D v) {
         return new Vec3D(x - v.x, y - v.y, z - v.z);
     }
@@ -1481,7 +1373,7 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @return itself
      */
-    public final Vec3D subSelf(float a, float b, float c) {
+    public final ReadonlyVec3D subSelf(float a, float b, float c) {
         x -= a;
         y -= b;
         z -= c;
@@ -1503,28 +1395,28 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Creates a new 2D vector of the XY components.
+    /*
+     * (non-Javadoc)
      * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#to2DXY()
      */
     public final Vec2D to2DXY() {
         return new Vec2D(x, y);
     }
 
-    /**
-     * Creates a new 2D vector of the XZ components.
+    /*
+     * (non-Javadoc)
      * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#to2DXZ()
      */
     public final Vec2D to2DXZ() {
         return new Vec2D(x, z);
     }
 
-    /**
-     * Creates a new 2D vector of the YZ components.
+    /*
+     * (non-Javadoc)
      * 
-     * @return new vector
+     * @see toxi.geom.ReadonlyVec3D#to2DYZ()
      */
     public final Vec2D to2DYZ() {
         return new Vec2D(y, z);
@@ -1535,14 +1427,19 @@ public class Vec3D implements Comparable<Vec3D> {
      * 
      * @see toxi.geom.DimensionalVector#toArray()
      */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.ReadonlyVec3D#toArray()
+     */
     public float[] toArray() {
         return new float[] { x, y, z };
     }
 
-    /**
-     * Converts the spherical vector back into cartesian coordinates.
+    /*
+     * (non-Javadoc)
      * 
-     * @return itself
+     * @see toxi.geom.ReadonlyVec3D#toCartesian()
      */
     public Vec3D toCartesian() {
         final float a = (float) (x * Math.cos(z));
@@ -1555,16 +1452,10 @@ public class Vec3D implements Comparable<Vec3D> {
         return this;
     }
 
-    /**
-     * Converts the vector into spherical coordinates. After the conversion the
-     * vector components are to be interpreted as:
-     * <ul>
-     * <li>x = radius</li>
-     * <li>y = azimuth</li>
-     * <li>z = theta</li>
-     * </ul>
+    /*
+     * (non-Javadoc)
      * 
-     * @return itself
+     * @see toxi.geom.ReadonlyVec3D#toSpherical()
      */
     public Vec3D toSpherical() {
         final float xx = Math.abs(x) <= MathUtils.EPS ? MathUtils.EPS : x;
@@ -1587,5 +1478,17 @@ public class Vec3D implements Comparable<Vec3D> {
         sb.append("{x:").append(x).append(", y:").append(y).append(", z:")
                 .append(z).append("}");
         return sb.toString();
+    }
+
+    public final float x() {
+        return x;
+    }
+
+    public final float y() {
+        return y;
+    }
+
+    public final float z() {
+        return z;
     }
 }

@@ -2,13 +2,14 @@ package toxi.test.geom;
 
 import junit.framework.TestCase;
 import toxi.geom.Quaternion;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
 public class QuaternionTest extends TestCase {
 
     public void testCreateFromAxisAngle() {
-        Vec3D axis = new Vec3D(100, 100, 100);
+        ReadonlyVec3D axis = new Vec3D(100, 100, 100);
         float angle = MathUtils.PI * 1.5f;
         Quaternion a = Quaternion.createFromAxisAngle(axis, angle);
         assertEquals(MathUtils.sin(-MathUtils.QUARTER_PI), a.w);

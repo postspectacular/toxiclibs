@@ -45,5 +45,5 @@ public interface Reflector extends Intersector {
 	 * @param dist distance from isect position
 	 * @return point on reflected ray
 	 */
-	public Vec3D getReflectedRayPointAtDistance(float dist);
+	public ReadonlyVec3D getReflectedRayPointAtDistance(float dist);
 }

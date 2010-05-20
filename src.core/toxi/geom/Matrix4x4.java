@@ -368,11 +368,11 @@ public class Matrix4x4 {
      * @param theta
      * @return rotation applied to this matrix
      */
-    public Matrix4x4 rotateAroundAxis(Vec3D axis, double theta) {
+    public Matrix4x4 rotateAroundAxis(ReadonlyVec3D axis, double theta) {
         double x, y, z, s, c, t, tx, ty;
-        x = axis.x;
-        y = axis.y;
-        z = axis.z;
+        x = axis.x();
+        y = axis.y();
+        z = axis.z();
         s = Math.sin(theta);
         c = Math.cos(theta);
         t = 1 - c;

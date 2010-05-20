@@ -26,6 +26,23 @@ public class Polygon2D {
         return this;
     }
 
+    public boolean containsPoint(Vec2D p) {
+        int num = vertices.size();
+        int i, j = num - 1;
+        boolean oddNodes = false;
+        for (i = 0; i < num; i++) {
+            Vec2D vi = vertices.get(i);
+            Vec2D vj = vertices.get(j);
+            if (vi.y < p.y && vj.y >= p.y || vj.y < p.y && vi.y >= p.y) {
+                if (vi.x + (p.y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < p.x) {
+                    oddNodes = !oddNodes;
+                }
+            }
+            j = i;
+        }
+        return oddNodes;
+    }
+
     /**
      * Computes the area of the polygon, provided it isn't self intersecting.
      * Code ported from:
@@ -73,4 +90,5 @@ public class Polygon2D {
     public int getNumPoints() {
         return vertices.size();
     }
+
 }

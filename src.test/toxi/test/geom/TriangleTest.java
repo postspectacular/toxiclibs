@@ -1,6 +1,7 @@
 package toxi.test.geom;
 
 import junit.framework.TestCase;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
 
@@ -11,7 +12,7 @@ public class TriangleTest extends TestCase {
         Vec3D b = new Vec3D(0, 100, 0);
         Vec3D c = new Vec3D(0, 0, 100);
         Triangle t = new Triangle(a, b, c);
-        Vec3D centroid = t.computeCentroid();
+        ReadonlyVec3D centroid = t.computeCentroid();
         assertTrue("incorrect centroid", centroid.equals(new Vec3D(100, 100,
                 100).scaleSelf(1f / 3)));
     }
@@ -49,7 +50,7 @@ public class TriangleTest extends TestCase {
         Vec3D b = new Vec3D(100, 0, 0);
         Vec3D c = new Vec3D(-100, -100, 0);
         Triangle t = new Triangle(a, b, c);
-        Vec3D n = t.computeNormal();
+        ReadonlyVec3D n = t.computeNormal();
         assertTrue("normal wrong", n.equals(new Vec3D(0, 0, 1)));
     }
 }

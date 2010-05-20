@@ -121,7 +121,7 @@ public class AABB extends Vec3D {
         return min.copy();
     }
 
-    public Vec3D getNormalForPoint(Vec3D p) {
+    public Vec3D getNormalForPoint(ReadonlyVec3D p) {
         p = p.sub(this);
         Vec3D pabs = extent.sub(p.getAbs());
         Vec3D psign = p.getSignum();

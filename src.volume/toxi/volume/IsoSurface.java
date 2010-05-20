@@ -2,6 +2,7 @@ package toxi.volume;
 
 import java.util.logging.Logger;
 
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.OBJWriter;
 import toxi.geom.mesh.STLWriter;
@@ -36,7 +37,7 @@ public class IsoSurface {
     protected int[] faces;
     protected int numFaces;
 
-    public Vec3D[] faceNormals;
+    public ReadonlyVec3D[] faceNormals;
 
     public IsoSurface(VolumetricSpace volume) {
         this.volume = volume;
@@ -81,12 +82,12 @@ public class IsoSurface {
 
     public void computeFaceNormals() {
         if (faceNormals == null || faceNormals.length != numFaces) {
-            faceNormals = new Vec3D[numFaces];
+            faceNormals = new ReadonlyVec3D[numFaces];
         }
         Vec3D[] verts = null;
         for (int i = 0; i < numFaces; i++) {
             verts = getVerticesForFace(i, verts);
-            Vec3D n =
+            ReadonlyVec3D n =
                     verts[0].sub(verts[1]).crossSelf(verts[0].sub(verts[2]))
                             .normalize();
             faceNormals[i] = n;
@@ -205,7 +206,7 @@ public class IsoSurface {
         return cellIndex;
     }
 
-    public Vec3D getNormalForFace(int faceID) {
+    public ReadonlyVec3D getNormalForFace(int faceID) {
         return faceNormals[faceID];
     }
 

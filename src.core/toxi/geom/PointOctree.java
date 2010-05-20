@@ -180,7 +180,7 @@ public class PointOctree extends AABB {
      *            point to check
      * @return leaf node or null if point is outside the tree dimensions
      */
-    protected PointOctree getLeafForPoint(Vec3D p) {
+    protected PointOctree getLeafForPoint(ReadonlyVec3D p) {
         // if not a leaf node...
         if (p.isInAABB(this)) {
             if (numChildren > 0) {
@@ -232,7 +232,7 @@ public class PointOctree extends AABB {
     /**
      * @return the offset
      */
-    public Vec3D getOffset() {
+    public ReadonlyVec3D getOffset() {
         return offset;
     }
 
@@ -383,7 +383,7 @@ public class PointOctree extends AABB {
      *            point to delete
      * @return true, if the point was found & removed
      */
-    public boolean remove(Vec3D p) {
+    public boolean remove(ReadonlyVec3D p) {
         boolean found = false;
         PointOctree leaf = getLeafForPoint(p);
         if (leaf != null) {
@@ -398,7 +398,7 @@ public class PointOctree extends AABB {
     }
 
     public void removeAll(Collection<Vec3D> points) {
-        for (Vec3D p : points) {
+        for (ReadonlyVec3D p : points) {
             remove(p);
         }
     }

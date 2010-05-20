@@ -53,7 +53,7 @@ public class Quad {
 		vertices[3] = d;
 	}
 
-	public Quad(Vec3D[] vertices, int vertOffset) {
+	public Quad(ReadonlyVec3D[] vertices, int vertOffset) {
 		System.arraycopy(vertices, vertOffset, this.vertices, 0, 4);
 	}
 }

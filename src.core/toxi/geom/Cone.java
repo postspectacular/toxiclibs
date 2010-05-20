@@ -30,7 +30,8 @@ public class Cone extends Vec3D {
      * @param len
      *            length of the cone
      */
-    public Cone(Vec3D pos, Vec3D dir, float rNorth, float rSouth, float len) {
+    public Cone(ReadonlyVec3D pos, ReadonlyVec3D dir, float rNorth,
+            float rSouth, float len) {
         super(pos);
         this.dir = dir.getNormalized();
         this.radiusNorth = rNorth;
@@ -48,8 +49,8 @@ public class Cone extends Vec3D {
 
     public TriangleMesh toMesh(String name, int steps, float thetaOffset,
             boolean topClosed, boolean bottomClosed) {
-        Vec3D c = this.add(0.01f, 0.01f, 0.01f);
-        Vec3D n = c.cross(dir.getNormalized()).normalize();
+        ReadonlyVec3D c = this.add(0.01f, 0.01f, 0.01f);
+        ReadonlyVec3D n = c.cross(dir.getNormalized()).normalize();
         Vec3D halfAxis = dir.scale(length * 0.5f);
         Vec3D p = sub(halfAxis);
         Vec3D q = add(halfAxis);
@@ -58,7 +59,7 @@ public class Cone extends Vec3D {
         float phi = MathUtils.TWO_PI / steps;
         for (int i = 0; i < steps; i++) {
             float theta = i * phi + thetaOffset;
-            Vec3D nr = n.getRotatedAroundAxis(dir, theta);
+            ReadonlyVec3D nr = n.getRotatedAroundAxis(dir, theta);
             south[i] = nr.scale(radiusSouth).addSelf(p);
             north[i] = nr.scale(radiusNorth).addSelf(q);
         }

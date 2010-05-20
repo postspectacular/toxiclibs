@@ -50,7 +50,7 @@ public class ZAxisCylinder implements AxisAlignedCylinder {
      * 
      * @see toxi.geom.AxisAlignedCylinder#getPosition()
      */
-    public Vec3D getPosition() {
+    public ReadonlyVec3D getPosition() {
         return pos.copy();
     }
 

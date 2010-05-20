@@ -5,17 +5,18 @@ import toxi.math.MathUtils;
 public class SphereIntersectorReflector implements Intersector, Reflector {
 
     protected Sphere sphere;
-    protected IsectData isectData = new IsectData();
+    protected IsectData isectData;
 
-    protected Vec3D reflectedDir, reflectedPos;
+    protected ReadonlyVec3D reflectedDir, reflectedPos;
     protected float reflectTheta;
 
     public SphereIntersectorReflector(Sphere s) {
         sphere = s;
+        isectData = new IsectData();
     }
 
     public SphereIntersectorReflector(Vec3D o, float r) {
-        sphere = new Sphere(o, r);
+        this(new Sphere(o, r));
     }
 
     public IsectData getIntersectionData() {
@@ -27,7 +28,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
      * 
      * @see toxi.geom.Reflector#getReflectedRayPointAtDistance(float)
      */
-    public Vec3D getReflectedRayPointAtDistance(float dist) {
+    public ReadonlyVec3D getReflectedRayPointAtDistance(float dist) {
         if (reflectedDir != null) {
             return isectData.pos.add(reflectedDir.scale(dist));
         } else {
@@ -62,7 +63,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
      */
 
     public float intersectRayDistance(Ray3D ray) {
-        Vec3D q = sphere.sub(ray);
+        ReadonlyVec3D q = sphere.sub(ray);
         float distSquared = q.magSquared();
         float v = q.dot(ray.dir);
         float d = sphere.radius * sphere.radius - (distSquared - v * v);

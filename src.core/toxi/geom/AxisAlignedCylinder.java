@@ -27,7 +27,7 @@ public interface AxisAlignedCylinder {
      * 
      * @return the pos
      */
-    public Vec3D getPosition();
+    public ReadonlyVec3D getPosition();
 
     /**
      * @return the cylinder radius

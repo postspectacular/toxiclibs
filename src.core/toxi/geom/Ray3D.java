@@ -38,13 +38,13 @@ public class Ray3D extends Vec3D {
         dir = Vec3D.Y_AXIS.copy();
     }
 
-    public Ray3D(float x, float y, float z, Vec3D d) {
+    public Ray3D(float x, float y, float z, ReadonlyVec3D d) {
         super(x, y, z);
         dir = d.getNormalized();
     }
 
-    public Ray3D(Vec3D o, Vec3D d) {
-        this(o.x, o.y, o.z, d);
+    public Ray3D(ReadonlyVec3D o, ReadonlyVec3D d) {
+        this(o.x(), o.y(), o.z(), d);
     }
 
     /**

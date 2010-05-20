@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import toxi.geom.AABB;
 import toxi.geom.IsectData;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -76,7 +77,7 @@ public class TerrainTest extends PApplet {
     private PImage img;
     private TriangleMesh mesh;
     private Bot bot;
-    private Vec3D camOffset = new Vec3D(0, 100, 300);
+    private ReadonlyVec3D camOffset = new Vec3D(0, 100, 300);
     private Vec3D eyePos = new Vec3D(0, 1000, 0);
 
     public void draw() {
@@ -111,9 +112,8 @@ public class TerrainTest extends PApplet {
 
     public void setup() {
         size(800, 600, OPENGL);
-        img = loadImage("terrain.jpg");
-        terrain = new Terrain(img.width, img.height, 50);
-        float[] el = new float[img.pixels.length];
+        terrain = new Terrain(64, 64, 50);
+        float[] el = new float[terrain.getWidth() * terrain.getDepth()];
         noiseDetail(8);
         for (int z = 0, i = 0; z < terrain.getDepth(); z++) {
             for (int x = 0; x < terrain.getWidth(); x++) {
@@ -121,7 +121,7 @@ public class TerrainTest extends PApplet {
             }
         }
         terrain.setElevation(el);
-        mesh = terrain.toMesh();
+        mesh = terrain.toMesh(0);
         // terrain = null;
         gfx = new ToxiclibsSupport(this);
         bot = new Bot(0, 0);

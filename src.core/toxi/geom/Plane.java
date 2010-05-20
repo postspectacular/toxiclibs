@@ -48,7 +48,7 @@ public class Plane extends Vec3D {
         this(t.computeCentroid(), t.computeNormal());
     }
 
-    public Plane(Vec3D origin, Vec3D norm) {
+    public Plane(Vec3D origin, ReadonlyVec3D norm) {
         super(origin);
         normal = norm.getNormalized();
     }
@@ -78,7 +78,7 @@ public class Plane extends Vec3D {
     public float getDistanceToPoint(Vec3D p) {
         float sn = -normal.dot(p.sub(this));
         float sd = normal.magSquared();
-        Vec3D isec = p.add(normal.scale(sn / sd));
+        ReadonlyVec3D isec = p.add(normal.scale(sn / sd));
         return isec.distanceTo(p);
     }
 
@@ -88,7 +88,7 @@ public class Plane extends Vec3D {
      * @param r
      * @return intersection point or null if ray doesn't intersect plane
      */
-    public Vec3D getIntersectionWithRay(Ray3D r) {
+    public ReadonlyVec3D getIntersectionWithRay(Ray3D r) {
         float denom = normal.dot(r.getDirection());
         if (denom > MathUtils.EPS) {
             float u = normal.dot(this.sub(r)) / denom;
@@ -130,7 +130,7 @@ public class Plane extends Vec3D {
      * @return mesh
      */
     public TriangleMesh toMesh(float size) {
-        Vec3D p =
+        ReadonlyVec3D p =
                 equalsWithTolerance(Vec3D.ZERO, 0.01f) ? add(0.01f, 0.01f,
                         0.01f) : this;
         size *= 0.5f;

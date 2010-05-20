@@ -49,9 +49,9 @@ public class Line3D {
 
     public Vec3D a, b;
 
-    public Line3D(Vec3D a, Vec3D b) {
-        this.a = a;
-        this.b = b;
+    public Line3D(ReadonlyVec3D a, ReadonlyVec3D b) {
+        this.a = a.copy();
+        this.b = b.copy();
     }
 
     public Line3D copy() {

@@ -2,6 +2,7 @@ package toxi.test.geom;
 
 import junit.framework.TestCase;
 import toxi.geom.Matrix4x4;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
@@ -16,7 +17,7 @@ public class MatrixTest extends TestCase {
 		Vec3D v = new Vec3D(0, 1, 0);
 		Vec3D w = m.applyTo(v);
 		m = m.getInverted();
-		Vec3D v2 = m.applyTo(w);
+		ReadonlyVec3D v2 = m.applyTo(w);
 		System.out.println(w);
 		System.out.println(v2);
 		assertTrue(v2.equalsWithTolerance(v, 0.0001f));
