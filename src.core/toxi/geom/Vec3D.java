@@ -290,7 +290,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D)
      */
-    public final float angleBetween(Vec3D v) {
+    public final float angleBetween(ReadonlyVec3D v) {
         return (float) Math.acos(dot(v));
     }
 
@@ -299,7 +299,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D, boolean)
      */
-    public final float angleBetween(Vec3D v, boolean forceNormalize) {
+    public final float angleBetween(ReadonlyVec3D v, boolean forceNormalize) {
         float theta;
         if (forceNormalize) {
             theta = getNormalized().dot(v.getNormalized());
@@ -395,6 +395,11 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return new Vec3D(this);
     }
 
+    public final Vec3D cross(ReadonlyVec3D v) {
+        return new Vec3D(y * v.z() - v.y() * z, z * v.x() - v.z() * x, x
+                * v.y() - v.x() * y);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -442,11 +447,11 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#distanceTo(toxi.geom.Vec3D)
      */
-    public final float distanceTo(Vec3D v) {
+    public final float distanceTo(ReadonlyVec3D v) {
         if (v != null) {
-            final float dx = x - v.x;
-            final float dy = y - v.y;
-            final float dz = z - v.z;
+            final float dx = x - v.x();
+            final float dy = y - v.y();
+            final float dz = z - v.z();
             return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
         } else {
             return Float.NaN;
@@ -458,15 +463,19 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#distanceToSquared(toxi.geom.Vec3D)
      */
-    public final float distanceToSquared(Vec3D v) {
+    public final float distanceToSquared(ReadonlyVec3D v) {
         if (v != null) {
-            final float dx = x - v.x;
-            final float dy = y - v.y;
-            final float dz = z - v.z;
+            final float dx = x - v.x();
+            final float dy = y - v.y();
+            final float dz = z - v.z();
             return dx * dx + dy * dy + dz * dz;
         } else {
             return Float.NaN;
         }
+    }
+
+    public final float dot(ReadonlyVec3D v) {
+        return x * v.x() + y * v.y() + z * v.z();
     }
 
     /*

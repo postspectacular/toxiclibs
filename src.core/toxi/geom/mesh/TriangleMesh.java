@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
-import toxi.geom.Intersector;
-import toxi.geom.IsectData;
+import toxi.geom.Intersectable;
+import toxi.geom.IsectData3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
@@ -29,7 +29,7 @@ import toxi.math.MathUtils;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class TriangleMesh implements Intersector {
+public class TriangleMesh implements Intersectable {
 
     public final static class Face {
 
@@ -400,7 +400,7 @@ public class TriangleMesh implements Intersector {
         return faceList;
     }
 
-    public IsectData getIntersectionData() {
+    public IsectData3D getIntersectionData() {
         return intersector.getIntersectionData();
     }
 

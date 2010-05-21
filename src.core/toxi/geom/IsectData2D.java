@@ -1,18 +1,18 @@
 package toxi.geom;
 
-public class IsectData {
+public class IsectData2D {
 
     public boolean isIntersection;
     public float dist;
-    public ReadonlyVec3D pos;
-    public ReadonlyVec3D dir;
-    public Vec3D normal;
+    public ReadonlyVec2D pos;
+    public ReadonlyVec2D dir;
+    public ReadonlyVec2D normal;
 
-    public IsectData() {
+    public IsectData2D() {
 
     }
 
-    public IsectData(IsectData isec) {
+    public IsectData2D(IsectData2D isec) {
         isIntersection = isec.isIntersection;
         dist = isec.dist;
         pos = isec.pos.copy();

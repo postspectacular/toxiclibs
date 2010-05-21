@@ -115,7 +115,7 @@ public interface ReadonlyVec2D {
      *            non-null vector
      * @return distance or Float.NaN if v=null
      */
-    public float distanceTo(Vec2D v);
+    public float distanceTo(ReadonlyVec2D v);
 
     /**
      * Calculates the squared distance to another vector
@@ -125,7 +125,7 @@ public interface ReadonlyVec2D {
      *            non-null vector
      * @return distance or NaN if v=null
      */
-    public float distanceToSquared(Vec2D v);
+    public float distanceToSquared(ReadonlyVec2D v);
 
     /**
      * Computes the scalar product (dot product) with the given vector.

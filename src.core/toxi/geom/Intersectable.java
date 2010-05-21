@@ -21,29 +21,19 @@
 package toxi.geom;
 
 /**
- * Generic interface for ray reflection with 3D geometry
+ * Generic interface for ray intersection with 3D geometry
  */
-public interface Reflector extends Intersector {
+public interface Intersectable {
 
-	/**
-	 * Reflects given ray on the entity's surface
-	 * 
-	 * @param ray incident ray
-	 * @return reflected ray starting from intersection point
-	 */
-	public Ray3D reflectRay(Ray3D ray);
+    public IsectData3D getIntersectionData();
 
-	/**
-	 * @return angle between incident ray and surface normal
-	 */
-	public float getReflectionAngle();
+    /**
+     * Check if entity intersects with the given ray
+     * 
+     * @param ray
+     *            ray to check
+     * @return true, if ray hits the entity
+     */
+    public boolean intersectsRay(Ray3D ray);
 
-	/**
-	 * Returns the point on the reflected ray at given distance from the
-	 * intersection point
-	 * 
-	 * @param dist distance from isect position
-	 * @return point on reflected ray
-	 */
-	public ReadonlyVec3D getReflectedRayPointAtDistance(float dist);
 }

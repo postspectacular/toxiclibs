@@ -330,20 +330,20 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return (x * v.y) - (y * v.x);
     }
 
-    public final float distanceTo(Vec2D v) {
+    public final float distanceTo(ReadonlyVec2D v) {
         if (v != null) {
-            float dx = x - v.x;
-            float dy = y - v.y;
+            float dx = x - v.x();
+            float dy = y - v.y();
             return (float) Math.sqrt(dx * dx + dy * dy);
         } else {
             return Float.NaN;
         }
     }
 
-    public final float distanceToSquared(Vec2D v) {
+    public final float distanceToSquared(ReadonlyVec2D v) {
         if (v != null) {
-            float dx = x - v.x;
-            float dy = y - v.y;
+            float dx = x - v.x();
+            float dy = y - v.y();
             return dx * dx + dy * dy;
         } else {
             return Float.NaN;

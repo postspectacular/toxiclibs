@@ -2,10 +2,10 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
-public class TriangleIntersector implements Intersector {
+public class TriangleIntersector implements Intersectable {
 
     public Triangle triangle;
-    private IsectData isectData;
+    private IsectData3D isectData;
 
     public TriangleIntersector() {
         this(new Triangle());
@@ -13,10 +13,10 @@ public class TriangleIntersector implements Intersector {
 
     public TriangleIntersector(Triangle t) {
         this.triangle = t;
-        this.isectData = new IsectData();
+        this.isectData = new IsectData3D();
     }
 
-    public IsectData getIntersectionData() {
+    public IsectData3D getIntersectionData() {
         return isectData;
     }
 

@@ -41,7 +41,7 @@ public interface ReadonlyVec3D {
      * 
      * @return angle in radians, or NaN if vectors are parallel
      */
-    public float angleBetween(Vec3D v);
+    public float angleBetween(ReadonlyVec3D v);
 
     /**
      * Computes the angle between this vector and vector V.
@@ -55,7 +55,7 @@ public interface ReadonlyVec3D {
      * 
      * @return angle in radians, or NaN if vectors are parallel
      */
-    public float angleBetween(Vec3D v, boolean forceNormalize);
+    public float angleBetween(ReadonlyVec3D v, boolean forceNormalize);
 
     /**
      * Computes the closest point on the given line segments. Helper function
@@ -121,7 +121,7 @@ public interface ReadonlyVec3D {
      * 
      * @return distance or Float.NaN if v=null
      */
-    public float distanceTo(Vec3D v);
+    public float distanceTo(ReadonlyVec3D v);
 
     /**
      * Calculates the squared distance to another vector.
@@ -133,7 +133,7 @@ public interface ReadonlyVec3D {
      * 
      * @see #magSquared()
      */
-    public float distanceToSquared(Vec3D v);
+    public float distanceToSquared(ReadonlyVec3D v);
 
     /**
      * Computes the scalar product (dot product) with the given vector.
