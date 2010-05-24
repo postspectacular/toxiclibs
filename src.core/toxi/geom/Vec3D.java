@@ -33,7 +33,7 @@ import toxi.math.MathUtils;
  * 
  * @author Karsten Schmidt
  */
-public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
+public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public static enum Axis {
         X, Y, Z
@@ -121,9 +121,9 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return result as new vector
      */
-    public static final Vec3D max(Vec3D a, Vec3D b) {
-        return new Vec3D(MathUtils.max(a.x, b.x), MathUtils.max(a.y, b.y),
-                MathUtils.max(a.z, b.z));
+    public static final Vec3D max(ReadonlyVec3D a, ReadonlyVec3D b) {
+        return new Vec3D(MathUtils.max(a.x(), b.x()), MathUtils.max(a.y(), b
+                .y()), MathUtils.max(a.z(), b.z()));
     }
 
     /**
@@ -137,9 +137,9 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return result as new vector
      */
-    public static final Vec3D min(Vec3D a, Vec3D b) {
-        return new Vec3D(MathUtils.min(a.x, b.x), MathUtils.min(a.y, b.y),
-                MathUtils.min(a.z, b.z));
+    public static final Vec3D min(ReadonlyVec3D a, ReadonlyVec3D b) {
+        return new Vec3D(MathUtils.min(a.x(), b.x()), MathUtils.min(a.y(), b
+                .y()), MathUtils.min(a.z(), b.z()));
     }
 
     /**
@@ -214,7 +214,9 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      *            vector to be copied
      */
     public Vec3D(ReadonlyVec3D v) {
-        set(v);
+        this.x = v.x();
+        this.y = v.y();
+        this.z = v.z();
     }
 
     /**
@@ -229,24 +231,14 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#add(float, float, float)
-     */
     public final Vec3D add(float a, float b, float c) {
         return new Vec3D(x + a, y + b, z + c);
     }
 
     public Vec3D add(ReadonlyVec3D v) {
-        return null;
+        return new Vec3D(x + v.x(), y + v.y(), z + v.z());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#add(toxi.geom.Vec3D)
-     */
     public final Vec3D add(Vec3D v) {
         return new Vec3D(x + v.x, y + v.y, z + v.z);
     }
@@ -285,20 +277,10 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D)
-     */
     public final float angleBetween(ReadonlyVec3D v) {
         return (float) Math.acos(dot(v));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#angleBetween(toxi.geom.Vec3D, boolean)
-     */
     public final float angleBetween(ReadonlyVec3D v, boolean forceNormalize) {
         float theta;
         if (forceNormalize) {
@@ -308,13 +290,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         }
         return (float) Math.acos(theta);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#closestPointOnLine(toxi.geom.Vec3D,
-     * toxi.geom.Vec3D)
-     */
 
     /**
      * Sets all vector components to 0.
@@ -326,34 +301,8 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    public Vec3D closestPointOnLine(Vec3D a, Vec3D b) {
-        final Vec3D v = b.sub(a);
-        final float t = sub(a).dot(v) / v.magSquared();
-        // Check to see if t is beyond the extents of the line segment
-        if (t < 0.0f) {
-            return a;
-        }
-        if (t > 1.0f) {
-            return b;
-        }
-        // Return the point between 'a' and 'b'
-        return a.add(v.scaleSelf(t));
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#compareTo(toxi.geom.Vec3D)
-     */
     public int compareTo(ReadonlyVec3D v) {
         if (x == v.x() && y == v.y() && z == v.z()) {
-            return 0;
-        }
-        return (int) (magSquared() - v.magSquared());
-    }
-
-    public int compareTo(Vec3D v) {
-        if (x == v.x && y == v.y && z == v.z) {
             return 0;
         }
         return (int) (magSquared() - v.magSquared());
@@ -386,11 +335,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#copy()
-     */
     public Vec3D copy() {
         return new Vec3D(this);
     }
@@ -400,26 +344,18 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
                 * v.y() - v.x() * y);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#cross(toxi.geom.Vec3D)
-     */
     public final Vec3D cross(Vec3D v) {
         return new Vec3D(y * v.z - v.y * z, z * v.x - v.z * x, x * v.y - v.x
                 * y);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#crossInto(toxi.geom.Vec3D, toxi.geom.Vec3D)
-     */
-    public final Vec3D crossInto(Vec3D v, Vec3D result) {
-        final float rx = y * v.z - v.y * z;
-        final float ry = z * v.x - v.z * x;
-        final float rz = x * v.y - v.x * y;
-        result.set(rx, ry, rz);
+    public final Vec3D crossInto(ReadonlyVec3D v, Vec3D result) {
+        final float vx = v.x();
+        final float vy = v.y();
+        final float vz = v.z();
+        result.x = y * vz - vy * z;
+        result.y = z * vx - vz * x;
+        result.z = x * vy - vx * y;
         return result;
     }
 
@@ -442,11 +378,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#distanceTo(toxi.geom.Vec3D)
-     */
     public final float distanceTo(ReadonlyVec3D v) {
         if (v != null) {
             final float dx = x - v.x();
@@ -458,11 +389,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#distanceToSquared(toxi.geom.Vec3D)
-     */
     public final float distanceToSquared(ReadonlyVec3D v) {
         if (v != null) {
             final float dx = x - v.x();
@@ -478,39 +404,19 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return x * v.x() + y * v.y() + z * v.z();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#dot(toxi.geom.Vec3D)
-     */
     public final float dot(Vec3D v) {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Vec3D) {
-            final Vec3D v = (Vec3D) obj;
-            return x == v.x && y == v.y && z == v.z;
+        if (obj instanceof ReadonlyVec3D) {
+            final ReadonlyVec3D v = (ReadonlyVec3D) obj;
+            return x == v.x() && y == v.y() && z == v.z();
         }
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#equalsWithTolerance(toxi.geom.Vec3D, float)
-     */
     public boolean equalsWithTolerance(ReadonlyVec3D v, float tolerance) {
         if (MathUtils.abs(x - v.x()) < tolerance) {
             if (MathUtils.abs(y - v.y()) < tolerance) {
@@ -548,20 +454,10 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#getAbs()
-     */
     public final Vec3D getAbs() {
         return new Vec3D(this).abs();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#getComponent(toxi.geom.Vec3D.Axis)
-     */
     public final float getComponent(Axis id) {
         switch (id) {
             case X:
@@ -571,14 +467,9 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
             case Z:
                 return z;
         }
-        return Float.NaN;
+        throw new IllegalArgumentException();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#getComponent(int)
-     */
     public final float getComponent(int id) {
         switch (id) {
             case 0:
@@ -588,7 +479,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
             case 2:
                 return z;
         }
-        return Float.NaN;
+        throw new IllegalArgumentException("index must be 0, 1 or 2");
     }
 
     /*
@@ -634,7 +525,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      */
     public final Vec3D getLimited(float lim) {
         if (magSquared() > lim * lim) {
-            return getNormalized().scaleSelf(lim);
+            return getNormalizedTo(lim);
         }
         return new Vec3D(this);
     }
@@ -644,7 +535,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#getNormalized()
      */
-    public Vec3D getNormalized() {
+    public final Vec3D getNormalized() {
         return new Vec3D(this).normalize();
     }
 
@@ -653,8 +544,8 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#getNormalizedTo(float)
      */
-    public Vec3D getNormalizedTo(float len) {
-        return copy().normalizeTo(len);
+    public final Vec3D getNormalizedTo(float len) {
+        return new Vec3D(this).normalizeTo(len);
     }
 
     /*
@@ -666,7 +557,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return copy().reciprocal();
     }
 
-    public Vec3D getReflected(Vec3D normal) {
+    public final Vec3D getReflected(ReadonlyVec3D normal) {
         return copy().reflect(normal);
     }
 
@@ -675,7 +566,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @see toxi.geom.ReadonlyVec3D#getRotatedAroundAxis(toxi.geom.Vec3D, float)
      */
-    public final Vec3D getRotatedAroundAxis(Vec3D axis, float theta) {
+    public final Vec3D getRotatedAroundAxis(ReadonlyVec3D axis, float theta) {
         return new Vec3D(this).rotateAroundAxis(axis, theta);
     }
 
@@ -760,23 +651,23 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#interpolateTo(toxi.geom.Vec3D, float)
-     */
+    public final Vec3D interpolateTo(ReadonlyVec3D v, float f) {
+        return new Vec3D(x + (v.x() - x) * f, y + (v.y() - y) * f, z
+                + (v.z() - z) * f);
+    }
+
+    public final Vec3D interpolateTo(ReadonlyVec3D v, float f,
+            InterpolateStrategy s) {
+        return new Vec3D(s.interpolate(x, v.x(), f),
+                s.interpolate(y, v.y(), f), s.interpolate(z, v.z(), f));
+    }
+
     public final Vec3D interpolateTo(Vec3D v, float f) {
         return new Vec3D(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z)
                 * f);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#interpolateTo(toxi.geom.Vec3D, float,
-     * toxi.math.InterpolateStrategy)
-     */
-    public Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
+    public final Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
         return new Vec3D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f), s
                 .interpolate(z, v.z, f));
     }
@@ -1041,7 +932,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public Vec3D normalize() {
+    public final Vec3D normalize() {
         float mag = (float) Math.sqrt(x * x + y * y + z * z);
         if (mag > 0) {
             mag = 1f / mag;
@@ -1059,7 +950,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      *            desired length
      * @return itself
      */
-    public Vec3D normalizeTo(float len) {
+    public final Vec3D normalizeTo(float len) {
         float mag = (float) Math.sqrt(x * x + y * y + z * z);
         if (mag > 0) {
             mag = len / mag;
@@ -1082,7 +973,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    public Vec3D reflect(Vec3D normal) {
+    public final Vec3D reflect(ReadonlyVec3D normal) {
         return set(normal.scale(this.dot(normal) * 2).subSelf(this));
     }
 
@@ -1096,33 +987,33 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public final Vec3D rotateAroundAxis(Vec3D axis, float theta) {
-        final float ux = axis.x * x;
-        final float uy = axis.x * y;
-        final float uz = axis.x * z;
-        final float vx = axis.y * x;
-        final float vy = axis.y * y;
-        final float vz = axis.y * z;
-        final float wx = axis.z * x;
-        final float wy = axis.z * y;
-        final float wz = axis.z * z;
+    public final Vec3D rotateAroundAxis(ReadonlyVec3D axis, float theta) {
+        final float ax = axis.x();
+        final float ay = axis.y();
+        final float az = axis.z();
+        final float ux = ax * x;
+        final float uy = ax * y;
+        final float uz = ax * z;
+        final float vx = ay * x;
+        final float vy = ay * y;
+        final float vz = ay * z;
+        final float wx = az * x;
+        final float wy = az * y;
+        final float wz = az * z;
         final double si = Math.sin(theta);
         final double co = Math.cos(theta);
         float xx =
-                (float) (axis.x
-                        * (ux + vy + wz)
-                        + (x * (axis.y * axis.y + axis.z * axis.z) - axis.x
-                                * (vy + wz)) * co + (-wy + vz) * si);
+                (float) (ax * (ux + vy + wz)
+                        + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
+                        * si);
         float yy =
-                (float) (axis.y
-                        * (ux + vy + wz)
-                        + (y * (axis.x * axis.x + axis.z * axis.z) - axis.y
-                                * (ux + wz)) * co + (wx - uz) * si);
+                (float) (ay * (ux + vy + wz)
+                        + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
+                        * si);
         float zz =
-                (float) (axis.z
-                        * (ux + vy + wz)
-                        + (z * (axis.x * axis.x + axis.y * axis.y) - axis.z
-                                * (ux + vy)) * co + (-vx + uy) * si);
+                (float) (az * (ux + vy + wz)
+                        + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
+                        * si);
         x = xx;
         y = yy;
         z = zz;
@@ -1180,20 +1071,10 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#scale(float)
-     */
     public Vec3D scale(float s) {
         return new Vec3D(x * s, y * s, z * s);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#scale(float, float, float)
-     */
     public Vec3D scale(float a, float b, float c) {
         return new Vec3D(x * a, y * b, z * c);
     }
@@ -1202,11 +1083,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return new Vec3D(x * s.x(), y * s.y(), z * s.z());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#scale(toxi.geom.Vec3D)
-     */
     public Vec3D scale(Vec3D s) {
         return new Vec3D(x * s.x, y * s.y, z * s.z);
     }
@@ -1239,7 +1115,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public ReadonlyVec3D scaleSelf(float a, float b, float c) {
+    public Vec3D scaleSelf(float a, float b, float c) {
         x *= a;
         y *= b;
         z *= c;
@@ -1256,7 +1132,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * @return itself
      */
 
-    public ReadonlyVec3D scaleSelf(Vec3D s) {
+    public Vec3D scaleSelf(Vec3D s) {
         x *= s.x;
         y *= s.y;
         z *= s.z;
@@ -1319,7 +1195,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    public final ReadonlyVec3D setComponent(int id, float val) {
+    public final Vec3D setComponent(int id, float val) {
         switch (id) {
             case 0:
                 x = val;
@@ -1342,7 +1218,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public ReadonlyVec3D setXY(Vec2D v) {
+    public Vec3D setXY(Vec2D v) {
         x = v.x;
         y = v.y;
         return this;
@@ -1362,11 +1238,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#sub(float, float, float)
-     */
     public final Vec3D sub(float a, float b, float c) {
         return new Vec3D(x - a, y - b, z - c);
     }
@@ -1391,7 +1262,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public final ReadonlyVec3D subSelf(float a, float b, float c) {
+    public final Vec3D subSelf(float a, float b, float c) {
         x -= a;
         y -= b;
         z -= c;
@@ -1413,53 +1284,23 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#to2DXY()
-     */
     public final Vec2D to2DXY() {
         return new Vec2D(x, y);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#to2DXZ()
-     */
     public final Vec2D to2DXZ() {
         return new Vec2D(x, z);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#to2DYZ()
-     */
     public final Vec2D to2DYZ() {
         return new Vec2D(y, z);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.DimensionalVector#toArray()
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#toArray()
-     */
     public float[] toArray() {
         return new float[] { x, y, z };
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#toCartesian()
-     */
-    public Vec3D toCartesian() {
+    public final Vec3D toCartesian() {
         final float a = (float) (x * Math.cos(z));
         final float xx = (float) (a * Math.cos(y));
         final float yy = (float) (x * Math.sin(z));
@@ -1470,12 +1311,7 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#toSpherical()
-     */
-    public Vec3D toSpherical() {
+    public final Vec3D toSpherical() {
         final float xx = Math.abs(x) <= MathUtils.EPS ? MathUtils.EPS : x;
         final float zz = z;
 
@@ -1486,11 +1322,6 @@ public class Vec3D implements Comparable<Vec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     public String toString() {
         final StringBuffer sb = new StringBuffer(48);
         sb.append("{x:").append(x).append(", y:").append(y).append(", z:")

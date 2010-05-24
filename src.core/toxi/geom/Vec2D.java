@@ -35,7 +35,7 @@ import toxi.math.MathUtils;
  * @author Karsten Schmidt
  * 
  */
-public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
+public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
 
     public static enum Axis {
         X, Y
@@ -172,8 +172,9 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
      * @param v
      *            vector to be copied
      */
-    public Vec2D(Vec2D v) {
-        set(v);
+    public Vec2D(ReadonlyVec2D v) {
+        this.x = v.x();
+        this.y = v.y();
     }
 
     public final Vec2D abs() {
@@ -187,7 +188,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
     }
 
     public Vec2D add(ReadonlyVec2D v) {
-        return v.copy().addSelf(this);
+        return new Vec2D(x + v.x(), y + v.y());
     }
 
     public final Vec2D add(Vec2D v) {
@@ -222,11 +223,11 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return this;
     }
 
-    public final float angleBetween(Vec2D v) {
+    public final float angleBetween(ReadonlyVec2D v) {
         return (float) Math.acos(dot(v));
     }
 
-    public final float angleBetween(Vec2D v, boolean forceNormalize) {
+    public final float angleBetween(ReadonlyVec2D v, boolean forceNormalize) {
         float theta;
         if (forceNormalize) {
             theta = getNormalized().dot(v.getNormalized());
@@ -246,52 +247,8 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return this;
     }
 
-    public Vec2D closestPointOnLine(Vec2D a, Vec2D b) {
-        final Vec2D v = b.sub(a);
-        final float t = sub(a).dot(v) / v.magSquared();
-        // Check to see if t is beyond the extents of the line segment
-        if (t < 0.0f) {
-            return a;
-        }
-        if (t > 1.0f) {
-            return b;
-        }
-        // Return the point between 'a' and 'b'
-        return a.add(v.scaleSelf(t));
-    }
-
-    public Vec2D closestPointOnTriangle(Vec2D a, Vec2D b, Vec2D c) {
-        Vec2D Rab = closestPointOnLine(a, b);
-        Vec2D Rbc = closestPointOnLine(b, c);
-        Vec2D Rca = closestPointOnLine(c, a);
-
-        float dAB = sub(Rab).magnitude();
-        float dBC = sub(Rbc).magnitude();
-        float dCA = sub(Rca).magnitude();
-
-        float min = dAB;
-        Vec2D result = Rab;
-
-        if (dBC < min) {
-            min = dBC;
-            result = Rbc;
-        }
-        if (dCA < min) {
-            result = Rca;
-        }
-
-        return result;
-    }
-
     public int compareTo(ReadonlyVec2D v) {
         if (x == v.x() && y == v.y()) {
-            return 0;
-        }
-        return (int) (magSquared() - v.magSquared());
-    }
-
-    public int compareTo(Vec2D v) {
-        if (x == v.x && y == v.y) {
             return 0;
         }
         return (int) (magSquared() - v.magSquared());
@@ -326,8 +283,8 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return new Vec2D(this);
     }
 
-    public float cross(Vec2D v) {
-        return (x * v.y) - (y * v.x);
+    public float cross(ReadonlyVec2D v) {
+        return (x * v.y()) - (y * v.x());
     }
 
     public final float distanceTo(ReadonlyVec2D v) {
@@ -356,16 +313,16 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Vec2D) {
-            final Vec2D v = (Vec2D) obj;
-            return x == v.x && y == v.y;
+        if (obj instanceof ReadonlyVec2D) {
+            final ReadonlyVec2D v = (ReadonlyVec2D) obj;
+            return x == v.x() && y == v.y();
         }
         return false;
     }
 
-    public boolean equalsWithTolerance(Vec2D v, float tolerance) {
-        if (MathUtils.abs(x - v.x) < tolerance) {
-            if (MathUtils.abs(y - v.y) < tolerance) {
+    public boolean equalsWithTolerance(ReadonlyVec2D v, float tolerance) {
+        if (MathUtils.abs(x - v.x()) < tolerance) {
+            if (MathUtils.abs(y - v.y()) < tolerance) {
                 return true;
             }
         }
@@ -438,7 +395,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
 
     public final Vec2D getLimited(float lim) {
         if (magSquared() > lim * lim) {
-            return getNormalized().scaleSelf(lim);
+            return getNormalizedTo(lim);
         }
         return new Vec2D(this);
     }
@@ -448,7 +405,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
     }
 
     public final Vec2D getNormalizedTo(float len) {
-        return getNormalized().scaleSelf(len);
+        return new Vec2D(this).normalizeTo(len);
     }
 
     public final Vec2D getPerpendicular() {
@@ -459,7 +416,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return copy().reciprocal();
     }
 
-    public final Vec2D getReflected(Vec2D normal) {
+    public final Vec2D getReflected(ReadonlyVec2D normal) {
         return copy().reflect(normal);
     }
 
@@ -534,22 +491,6 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         x = s.interpolate(x, v.x, f);
         y = s.interpolate(y, v.y, f);
         return this;
-    }
-
-    public float intersectRayCircle(ReadonlyVec2D rayDir,
-            ReadonlyVec2D circleOrigin, float circleRadius) {
-        ReadonlyVec2D q = circleOrigin.sub(this);
-        float distSquared = q.magSquared();
-        float v = q.dot(rayDir);
-        float d = circleRadius * circleRadius - (distSquared - v * v);
-
-        // If there was no intersection, return -1
-        if (d < 0.0) {
-            return -1;
-        }
-
-        // Return the distance to the [first] intersecting point
-        return v - (float) Math.sqrt(d);
     }
 
     /**
@@ -710,7 +651,13 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
      * @return itself
      */
     public final Vec2D normalizeTo(float len) {
-        return normalize().scaleSelf(len);
+        float mag = (float) Math.sqrt(x * x + y * y);
+        if (mag > 0) {
+            mag = len / mag;
+            x *= mag;
+            y *= mag;
+        }
+        return this;
     }
 
     public final Vec2D perpendicular() {
@@ -740,7 +687,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return this;
     }
 
-    public final Vec2D reflect(Vec2D normal) {
+    public final Vec2D reflect(ReadonlyVec2D normal) {
         return set(normal.scale(this.dot(normal) * 2).subSelf(this));
     }
 
@@ -767,7 +714,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return new Vec2D(x * a, y * b);
     }
 
-    public Vec2D scale(ReadonlyVec2D s) {
+    public final Vec2D scale(ReadonlyVec2D s) {
         return s.copy().scaleSelf(this);
     }
 
@@ -832,7 +779,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return this;
     }
 
-    public Vec2D set(ReadonlyVec2D v) {
+    public final Vec2D set(ReadonlyVec2D v) {
         x = v.x();
         y = v.y();
         return this;
@@ -871,6 +818,9 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
             case 1:
                 y = val;
                 break;
+            default:
+                throw new IllegalArgumentException(
+                        "component id needs to be 0 or 1");
         }
         return this;
     }
@@ -928,7 +878,7 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return this;
     }
 
-    public Vec2D tangentNormalOfEllipse(Vec2D eO, Vec2D eR) {
+    public final Vec2D tangentNormalOfEllipse(Vec2D eO, Vec2D eR) {
         Vec2D p = this.sub(eO);
 
         float xr2 = eR.x * eR.x;
@@ -937,15 +887,15 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return new Vec2D(p.x / xr2, p.y / yr2).normalize();
     }
 
-    public Vec3D to3DXY() {
+    public final Vec3D to3DXY() {
         return new Vec3D(x, y, 0);
     }
 
-    public Vec3D to3DXZ() {
+    public final Vec3D to3DXZ() {
         return new Vec3D(x, 0, y);
     }
 
-    public Vec3D to3DYZ() {
+    public final Vec3D to3DYZ() {
         return new Vec3D(0, x, y);
     }
 
@@ -953,14 +903,14 @@ public class Vec2D implements Comparable<Vec2D>, ReadonlyVec2D {
         return new float[] { x, y };
     }
 
-    public Vec2D toCartesian() {
+    public final Vec2D toCartesian() {
         float xx = (float) (x * Math.cos(y));
         y = (float) (x * Math.sin(y));
         x = xx;
         return this;
     }
 
-    public Vec2D toPolar() {
+    public final Vec2D toPolar() {
         float r = (float) Math.sqrt(x * x + y * y);
         y = (float) Math.atan2(y, x);
         x = r;

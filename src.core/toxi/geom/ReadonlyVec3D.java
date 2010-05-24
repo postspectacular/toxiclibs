@@ -2,6 +2,7 @@ package toxi.geom;
 
 import toxi.geom.Vec3D.Axis;
 import toxi.math.InterpolateStrategy;
+import toxi.math.MathUtils;
 
 public interface ReadonlyVec3D {
 
@@ -58,20 +59,6 @@ public interface ReadonlyVec3D {
     public float angleBetween(ReadonlyVec3D v, boolean forceNormalize);
 
     /**
-     * Computes the closest point on the given line segments. Helper function
-     * for {@link toxi.geom.Triangle#getClosestVertexTo(Vec3D)}
-     * 
-     * @param a
-     *            start point of line segment
-     * @param b
-     *            end point of line segment
-     * 
-     * @return closest point on the line segment a -> b
-     */
-
-    public Vec3D closestPointOnLine(Vec3D a, Vec3D b);
-
-    /**
      * Compares the length of the vector with another one.
      * 
      * @param v
@@ -97,7 +84,7 @@ public interface ReadonlyVec3D {
      * 
      * @return cross-product as new vector
      */
-    public Vec3D cross(Vec3D v);
+    public Vec3D cross(ReadonlyVec3D v);
 
     /**
      * Calculates cross-product with vector v. The resulting vector is
@@ -111,7 +98,7 @@ public interface ReadonlyVec3D {
      * 
      * @return result vector
      */
-    public Vec3D crossInto(Vec3D v, Vec3D result);
+    public Vec3D crossInto(ReadonlyVec3D v, Vec3D result);
 
     /**
      * Calculates distance to another vector.
@@ -146,7 +133,7 @@ public interface ReadonlyVec3D {
      * @see <a href="http://en.wikipedia.org/wiki/Dot_product">Wikipedia
      *      entry</a>
      */
-    public float dot(Vec3D v);
+    public float dot(ReadonlyVec3D v);
 
     /*
      * (non-Javadoc)
@@ -248,7 +235,7 @@ public interface ReadonlyVec3D {
      */
     public Vec3D getReciprocal();
 
-    public Vec3D getReflected(Vec3D normal);
+    public Vec3D getReflected(ReadonlyVec3D normal);
 
     /**
      * Gets the rotated around axis.
@@ -262,7 +249,7 @@ public interface ReadonlyVec3D {
      * 
      * @see #rotateAroundAxis(Vec3D, float)
      */
-    public Vec3D getRotatedAroundAxis(Vec3D axis, float theta);
+    public Vec3D getRotatedAroundAxis(ReadonlyVec3D axis, float theta);
 
     /**
      * Creates a new vector rotated by the given angle around the X axis.
@@ -338,7 +325,7 @@ public interface ReadonlyVec3D {
      * 
      * @return result as new vector
      */
-    public Vec3D interpolateTo(Vec3D v, float f);
+    public Vec3D interpolateTo(ReadonlyVec3D v, float f);
 
     /**
      * Interpolates the vector towards the given target vector, using the given
@@ -353,7 +340,7 @@ public interface ReadonlyVec3D {
      * 
      * @return result as new vector
      */
-    public Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s);
+    public Vec3D interpolateTo(ReadonlyVec3D v, float f, InterpolateStrategy s);
 
     /**
      * Checks if the point is inside the given AABB.
@@ -379,7 +366,8 @@ public interface ReadonlyVec3D {
     public boolean isInAABB(Vec3D boxOrigin, Vec3D boxExtent);
 
     /**
-     * Checks if vector has a magnitude equals or close to zero.
+     * Checks if vector has a magnitude equals or close to zero (tolerance used
+     * is {@link MathUtils#EPS}).
      * 
      * @return true, if zero vector
      */
@@ -425,8 +413,6 @@ public interface ReadonlyVec3D {
      */
     public Vec3D scale(float a, float b, float c);
 
-    public Vec3D scale(ReadonlyVec3D s);
-
     /**
      * Scales vector non-uniformly by vector v and returns result as new vector.
      * 
@@ -435,7 +421,7 @@ public interface ReadonlyVec3D {
      * 
      * @return new vector
      */
-    public Vec3D scale(Vec3D s);
+    public Vec3D scale(ReadonlyVec3D s);
 
     /**
      * Subtracts vector {a,b,c} and returns result as new vector.
@@ -451,8 +437,6 @@ public interface ReadonlyVec3D {
      */
     public Vec3D sub(float a, float b, float c);
 
-    public Vec3D sub(ReadonlyVec3D v);
-
     /**
      * Subtracts vector v and returns result as new vector.
      * 
@@ -461,7 +445,7 @@ public interface ReadonlyVec3D {
      * 
      * @return result as new vector
      */
-    public Vec3D sub(Vec3D v);
+    public Vec3D sub(ReadonlyVec3D v);
 
     /**
      * Creates a new 2D vector of the XY components.
@@ -484,11 +468,6 @@ public interface ReadonlyVec3D {
      */
     public Vec2D to2DYZ();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.DimensionalVector#toArray()
-     */
     public float[] toArray();
 
     /**

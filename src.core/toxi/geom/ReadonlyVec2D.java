@@ -2,6 +2,7 @@ package toxi.geom;
 
 import toxi.geom.Vec2D.Axis;
 import toxi.math.InterpolateStrategy;
+import toxi.math.MathUtils;
 
 public interface ReadonlyVec2D {
 
@@ -16,8 +17,6 @@ public interface ReadonlyVec2D {
      */
     public Vec2D add(float a, float b);
 
-    public Vec2D add(ReadonlyVec2D v);
-
     /**
      * Add vector v and returns result as new vector.
      * 
@@ -25,7 +24,7 @@ public interface ReadonlyVec2D {
      *            vector to add
      * @return result as new vector
      */
-    public Vec2D add(Vec2D v);
+    public Vec2D add(ReadonlyVec2D v);
 
     /**
      * Computes the angle between this vector and vector V. This function
@@ -36,7 +35,7 @@ public interface ReadonlyVec2D {
      *            vector
      * @return angle in radians, or NaN if vectors are parallel
      */
-    public float angleBetween(Vec2D v);
+    public float angleBetween(ReadonlyVec2D v);
 
     /**
      * Computes the angle between this vector and vector V
@@ -49,34 +48,7 @@ public interface ReadonlyVec2D {
      *            altered by this method)
      * @return angle in radians, or NaN if vectors are parallel
      */
-    public float angleBetween(Vec2D v, boolean forceNormalize);
-
-    /**
-     * Computes the closest point on the given line segment.
-     * 
-     * @param a
-     *            start point of line segment
-     * @param b
-     *            end point of line segment
-     * @return closest point on the line segment a -> b
-     */
-
-    public Vec2D closestPointOnLine(Vec2D a, Vec2D b);
-
-    /**
-     * Finds and returns the closest point on any of the edges of the given
-     * triangle.
-     * 
-     * @param a
-     *            triangle vertex
-     * @param b
-     *            triangle vertex
-     * @param c
-     *            triangle vertex
-     * @return closest point
-     */
-
-    public Vec2D closestPointOnTriangle(Vec2D a, Vec2D b, Vec2D c);
+    public float angleBetween(ReadonlyVec2D v, boolean forceNormalize);
 
     /**
      * Compares the length of the vector with another one.
@@ -106,7 +78,7 @@ public interface ReadonlyVec2D {
      * @see <a href="http://stackoverflow.com/questions/243945/">Stackoverflow
      *      entry</a>
      */
-    public float cross(Vec2D v);
+    public float cross(ReadonlyVec2D v);
 
     /**
      * Calculates distance to another vector
@@ -152,7 +124,7 @@ public interface ReadonlyVec2D {
      * 
      * @return true, if equal
      */
-    public boolean equalsWithTolerance(Vec2D v, float tolerance);
+    public boolean equalsWithTolerance(ReadonlyVec2D v, float tolerance);
 
     public Vec2D getAbs();
 
@@ -223,7 +195,7 @@ public interface ReadonlyVec2D {
 
     public Vec2D getReciprocal();
 
-    public Vec2D getReflected(Vec2D normal);
+    public Vec2D getReflected(ReadonlyVec2D normal);
 
     /**
      * Creates a new vector rotated by the given angle around the Z axis.
@@ -250,10 +222,6 @@ public interface ReadonlyVec2D {
      */
     public float heading();
 
-    public Vec2D interpolateTo(ReadonlyVec2D v, float f);
-
-    public Vec2D interpolateTo(ReadonlyVec2D v, float f, InterpolateStrategy s);
-
     /**
      * Interpolates the vector towards the given target vector, using linear
      * interpolation
@@ -264,7 +232,7 @@ public interface ReadonlyVec2D {
      *            interpolation factor (should be in the range 0..1)
      * @return result as new vector
      */
-    public Vec2D interpolateTo(Vec2D v, float f);
+    public Vec2D interpolateTo(ReadonlyVec2D v, float f);
 
     /**
      * Interpolates the vector towards the given target vector, using the given
@@ -278,22 +246,7 @@ public interface ReadonlyVec2D {
      *            InterpolateStrategy instance
      * @return result as new vector
      */
-    public Vec2D interpolateTo(Vec2D v, float f, InterpolateStrategy s);
-
-    /**
-     * Calculates the distance of the vector to the given sphere in the
-     * specified direction. A sphere is defined by a 3D point and a radius.
-     * Normalized directional vectors expected.
-     * 
-     * @param rayDir
-     *            intersection direction
-     * @param circleOrigin
-     * @param circleRadius
-     * @return distance to sphere in world units, -1 if no intersection.
-     */
-
-    public float intersectRayCircle(ReadonlyVec2D rayDir,
-            ReadonlyVec2D circleOrigin, float circleRadius);
+    public Vec2D interpolateTo(ReadonlyVec2D v, float f, InterpolateStrategy s);
 
     /**
      * Checks if the point is inside the given sphere.
@@ -329,9 +282,10 @@ public interface ReadonlyVec2D {
     public boolean isInTriangle(Vec2D a, Vec2D b, Vec2D c);
 
     /**
-     * Checks if vector has a magnitude of 0
+     * Checks if vector has a magnitude equals or close to zero (tolerance used
+     * is {@link MathUtils#EPS}).
      * 
-     * @return true, if vector = {0,0,0}
+     * @return true, if zero vector
      */
     public boolean isZeroVector();
 
