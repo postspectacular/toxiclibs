@@ -33,7 +33,7 @@ public abstract class AxisAlignedCylinder implements Shape3D {
     /**
      * @return the cylinder's orientation axis
      */
-    public abstract ReadonlyVec3D getMajorAxis();
+    public abstract Vec3D.Axis getMajorAxis();
 
     /**
      * Returns the cylinder's position (centroid).
@@ -94,7 +94,7 @@ public abstract class AxisAlignedCylinder implements Shape3D {
      * @return mesh
      */
     public TriangleMesh toMesh(int steps, float thetaOffset) {
-        return new Cone(pos, getMajorAxis(), radius, radius, length).toMesh(
-                "cylinder", steps, thetaOffset, true, true);
+        return new Cone(pos, getMajorAxis().getVector(), radius, radius, length)
+                .toMesh("cylinder", steps, thetaOffset, true, true);
     }
 }

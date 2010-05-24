@@ -37,7 +37,18 @@ import toxi.math.MathUtils;
 public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
 
     public static enum Axis {
-        X, Y
+
+        X(Vec2D.X_AXIS), Y(Vec2D.Y_AXIS);
+
+        private final ReadonlyVec2D vector;
+
+        private Axis(ReadonlyVec2D v) {
+            this.vector = v;
+        }
+
+        public ReadonlyVec2D getVector() {
+            return vector;
+        }
     }
 
     /**

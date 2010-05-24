@@ -19,7 +19,7 @@ public class ZAxisCylinder extends AxisAlignedCylinder {
         return false;
     }
 
-    public ReadonlyVec3D getMajorAxis() {
-        return Vec3D.Z_AXIS;
+    public Vec3D.Axis getMajorAxis() {
+        return Vec3D.Axis.Z;
     }
 }

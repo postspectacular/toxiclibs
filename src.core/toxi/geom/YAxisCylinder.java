@@ -19,8 +19,8 @@ public class YAxisCylinder extends AxisAlignedCylinder {
         return false;
     }
 
-    public ReadonlyVec3D getMajorAxis() {
-        return Vec3D.Y_AXIS;
+    public Vec3D.Axis getMajorAxis() {
+        return Vec3D.Axis.Y;
     }
 
 }

@@ -36,8 +36,19 @@ import toxi.math.MathUtils;
 public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public static enum Axis {
-        X, Y, Z
-    };
+
+        X(Vec3D.X_AXIS), Y(Vec3D.Y_AXIS), Z(Vec3D.Z_AXIS);
+
+        private final ReadonlyVec3D vector;
+
+        private Axis(ReadonlyVec3D v) {
+            this.vector = v;
+        }
+
+        public ReadonlyVec3D getVector() {
+            return vector;
+        }
+    }
 
     /** Defines positive X axis. */
     public static final ReadonlyVec3D X_AXIS = new Vec3D(1, 0, 0);
@@ -49,7 +60,7 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     public static final ReadonlyVec3D Z_AXIS = new Vec3D(0, 0, 1);
 
     /** Defines the zero vector. */
-    public static final ReadonlyVec3D ZERO = new Vec3D();
+    public static final ReadonlyVec3D ZERO = new Vec3D();;
 
     /**
      * Defines vector with all coords set to Float.MIN_VALUE. Useful for
