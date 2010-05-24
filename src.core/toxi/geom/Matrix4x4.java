@@ -136,13 +136,18 @@ public class Matrix4x4 {
      * @param v
      * @return transformed vector
      */
-    public Vec3D applyTo(Vec3D v) {
+    public Vec3D applyTo(ReadonlyVec3D v) {
+        return applyToSelf(new Vec3D(v));
+    }
+
+    public Vec3D applyToSelf(Vec3D v) {
         for (int i = 0; i < 4; i++) {
             double[] m = matrix[i];
             temp[i] = v.x * m[0] + v.y * m[1] + v.z * m[2] + m[3];
         }
-        return new Vec3D((float) temp[0], (float) temp[1], (float) temp[2])
-                .scaleSelf((float) (1.0 / temp[3]));
+        v.set((float) temp[0], (float) temp[1], (float) temp[2]).scaleSelf(
+                (float) (1.0 / temp[3]));
+        return v;
     }
 
     public Matrix4x4 copy() {
