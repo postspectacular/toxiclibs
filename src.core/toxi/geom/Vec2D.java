@@ -20,7 +20,6 @@
 
 package toxi.geom;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -469,9 +468,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      *            interpolation factor (should be in the range 0..1)
      * @return itself, result overrides current vector
      */
-    public final Vec2D interpolateToSelf(Vec2D v, float f) {
-        x += (v.x - x) * f;
-        y += (v.y - y) * f;
+    public final Vec2D interpolateToSelf(ReadonlyVec2D v, float f) {
+        x += (v.x() - x) * f;
+        y += (v.y() - y) * f;
         return this;
     }
 
@@ -487,9 +486,10 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      *            InterpolateStrategy instance
      * @return itself, result overrides current vector
      */
-    public Vec2D interpolateToSelf(Vec2D v, float f, InterpolateStrategy s) {
-        x = s.interpolate(x, v.x, f);
-        y = s.interpolate(y, v.y, f);
+    public Vec2D interpolateToSelf(ReadonlyVec2D v, float f,
+            InterpolateStrategy s) {
+        x = s.interpolate(x, v.x(), f);
+        y = s.interpolate(y, v.y(), f);
         return this;
     }
 
@@ -665,20 +665,6 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         x = -y;
         y = t;
         return this;
-    }
-
-    /**
-     * Checks if the point is within the convex polygon defined by the points in
-     * the given list
-     * 
-     * @param vertices
-     * @return true, if inside polygon
-     * 
-     * @deprecated use {@link Polygon2D#containsPoint(Vec2D)} instead
-     */
-    @Deprecated
-    public boolean pointInPolygon(ArrayList<Vec2D> vertices) {
-        return new Polygon2D(vertices).containsPoint(this);
     }
 
     public final Vec2D reciprocal() {

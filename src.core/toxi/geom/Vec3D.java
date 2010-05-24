@@ -683,10 +683,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * 
      * @return itself, result overrides current vector
      */
-    public final Vec3D interpolateToSelf(Vec3D v, float f) {
-        x += (v.x - x) * f;
-        y += (v.y - y) * f;
-        z += (v.z - z) * f;
+    public final Vec3D interpolateToSelf(ReadonlyVec3D v, float f) {
+        x += (v.x() - x) * f;
+        y += (v.y() - y) * f;
+        z += (v.z() - z) * f;
         return this;
     }
 
@@ -703,10 +703,11 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * 
      * @return itself, result overrides current vector
      */
-    public final Vec3D interpolateToSelf(Vec3D v, float f, InterpolateStrategy s) {
-        x = s.interpolate(x, v.x, f);
-        y = s.interpolate(y, v.y, f);
-        z = s.interpolate(z, v.z, f);
+    public final Vec3D interpolateToSelf(ReadonlyVec3D v, float f,
+            InterpolateStrategy s) {
+        x = s.interpolate(x, v.x(), f);
+        y = s.interpolate(y, v.y(), f);
+        z = s.interpolate(z, v.z(), f);
         return this;
     }
 
