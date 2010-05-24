@@ -3,7 +3,7 @@ package toxi.test;
 import processing.core.PApplet;
 import processing.core.PImage;
 import toxi.geom.AABB;
-import toxi.geom.IsectData;
+import toxi.geom.IsectData3D;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -23,7 +23,7 @@ public class TerrainTest extends PApplet {
         private float targetSpeed;
         private float speed;
         private Vec3D pos;
-        private IsectData isec;
+        private IsectData3D isec;
 
         public Bot(float x, float y) {
             super(x, y);
