@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wrapper
+ * Container type for convex polygons. Implements {@link Shape2D}.
  */
-public class Polygon2D {
+public class Polygon2D implements Shape2D {
 
     public List<Vec2D> vertices = new ArrayList<Vec2D>();
 
@@ -26,15 +26,17 @@ public class Polygon2D {
         return this;
     }
 
-    public boolean containsPoint(Vec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         int num = vertices.size();
         int i, j = num - 1;
         boolean oddNodes = false;
+        float px = p.x();
+        float py = p.y();
         for (i = 0; i < num; i++) {
             Vec2D vi = vertices.get(i);
             Vec2D vj = vertices.get(j);
-            if (vi.y < p.y && vj.y >= p.y || vj.y < p.y && vi.y >= p.y) {
-                if (vi.x + (p.y - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < p.x) {
+            if (vi.y < py && vj.y >= py || vj.y < py && vi.y >= py) {
+                if (vi.x + (py - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < px) {
                     oddNodes = !oddNodes;
                 }
             }
@@ -69,7 +71,7 @@ public class Polygon2D {
      * 
      * @return centroid point
      */
-    public ReadonlyVec2D getCentroid() {
+    public Vec2D getCentroid() {
         Vec2D res = new Vec2D();
         int numPoints = vertices.size();
         for (int i = 0; i < numPoints; i++) {
@@ -80,6 +82,14 @@ public class Polygon2D {
             res.y += (a.y + b.y) * factor;
         }
         return res.scale(1f / (getArea() * 6));
+    }
+
+    public float getCircumference() {
+        float circ = 0;
+        for (int i = 0, num = vertices.size(); i < num; i++) {
+            circ += vertices.get(i).distanceTo(vertices.get((i + 1) % num));
+        }
+        return circ;
     }
 
     /**

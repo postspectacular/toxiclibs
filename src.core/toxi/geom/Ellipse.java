@@ -5,7 +5,7 @@ import toxi.math.MathUtils;
 /**
  * This class defines a 2D ellipse and provides several utility methods for it.
  */
-public class Ellipse extends Vec2D {
+public class Ellipse extends Vec2D implements Shape2D {
 
     protected Vec2D radius = new Vec2D();
     protected float focus;

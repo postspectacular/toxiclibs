@@ -20,7 +20,19 @@ public class IsectData2D {
         normal = isec.normal.copy();
     }
 
+    public void clear() {
+        isIntersection = false;
+        dist = 0;
+        pos = new Vec2D();
+        dir = new Vec2D();
+        normal = new Vec2D();
+    }
+
     public String toString() {
-        return "isec: " + isIntersection + " at:" + pos + " dist:" + dist;
+        String s = "isec: " + isIntersection;
+        if (isIntersection) {
+            s += " at:" + pos + " dist:" + dist + "normal:" + normal;
+        }
+        return s;
     }
 }

@@ -84,16 +84,41 @@ public class Line2D {
 
     public Vec2D a, b;
 
+    public Line2D(ReadonlyVec2D a, ReadonlyVec2D b) {
+        this.a = a.copy();
+        this.b = b.copy();
+    }
+
     public Line2D(Vec2D a, Vec2D b) {
         this.a = a;
         this.b = b;
+    }
+
+    /**
+     * Computes the closest point on this line to the given one.
+     * 
+     * @param p
+     *            point to check against
+     * @return closest point on the line
+     */
+    public Vec2D closestPointTo(ReadonlyVec2D p) {
+        final Vec2D v = b.sub(a);
+        final float t = p.sub(a).dot(v) / v.magSquared();
+        // Check to see if t is beyond the extents of the line segment
+        if (t < 0.0f) {
+            return a.copy();
+        } else if (t > 1.0f) {
+            return b.copy();
+        }
+        // Return the point between 'a' and 'b'
+        return a.add(v.scaleSelf(t));
     }
 
     public Line2D copy() {
         return new Line2D(a.copy(), b.copy());
     }
 
-    public ReadonlyVec2D getDirection() {
+    public Vec2D getDirection() {
         return b.sub(a).normalize();
     }
 
@@ -101,11 +126,11 @@ public class Line2D {
         return a.distanceTo(b);
     }
 
-    public ReadonlyVec2D getMidPoint() {
+    public Vec2D getMidPoint() {
         return a.add(b).scaleSelf(0.5f);
     }
 
-    public ReadonlyVec2D getNormal() {
+    public Vec2D getNormal() {
         return b.sub(a).perpendicular();
     }
 

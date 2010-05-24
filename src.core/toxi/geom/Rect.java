@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Rect {
+public class Rect implements Shape2D {
 
     /**
      * Factory method, constructs a new rectangle from a center point and extent
@@ -55,11 +55,11 @@ public class Rect {
      * @param topLeft
      * @param bottomRight
      */
-    public Rect(Vec2D topLeft, Vec2D bottomRight) {
-        x = topLeft.x;
-        y = topLeft.y;
-        width = bottomRight.x - x;
-        height = bottomRight.y - y;
+    public Rect(ReadonlyVec2D topLeft, ReadonlyVec2D bottomRight) {
+        x = topLeft.x();
+        y = topLeft.y();
+        width = bottomRight.x() - x;
+        height = bottomRight.y() - y;
     }
 
     /**
@@ -69,11 +69,13 @@ public class Rect {
      *            point to check
      * @return true, if point is contained
      */
-    public final boolean containsPoint(Vec2D p) {
-        if (p.x < x || p.x >= x + width) {
+    public final boolean containsPoint(ReadonlyVec2D p) {
+        float px = p.x();
+        float py = p.y();
+        if (px < x || px >= x + width) {
             return false;
         }
-        if (p.y < y || p.y >= y + height) {
+        if (py < y || py >= y + height) {
             return false;
         }
         return true;
@@ -86,6 +88,10 @@ public class Rect {
      */
     public Rect copy() {
         return new Rect(x, y, width, height);
+    }
+
+    public final float getArea() {
+        return width * height;
     }
 
     public final Vec2D getBottomRight() {
@@ -101,12 +107,16 @@ public class Rect {
         return new Vec2D(x + width * 0.5f, y + height * 0.5f);
     }
 
+    public final float getCircumference() {
+        return 2 * width + 2 * height;
+    }
+
     /**
      * Returns a vector containing the width and height of the rectangle.
      * 
      * @return dimension vector
      */
-    public final ReadonlyVec2D getDimensions() {
+    public final Vec2D getDimensions() {
         return new Vec2D(width, height);
     }
 
@@ -176,16 +186,6 @@ public class Rect {
             }
         }
         return true;
-    }
-
-    /**
-     * @deprecated use {@link #union(Rect)} instead.
-     * @param r
-     * @return itself
-     */
-    @Deprecated
-    public final Rect merge(Rect r) {
-        return union(r);
     }
 
     public Rect scale(float s) {

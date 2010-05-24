@@ -45,7 +45,7 @@ public class Circle extends Ellipse {
      */
     @Override
     public float getCircumference() {
-        return MathUtils.PI * 2 * radius.x;
+        return MathUtils.TWO_PI * radius.x;
     }
 
     public float getRadius() {
