@@ -2,7 +2,7 @@ package toxi.geom;
 
 import toxi.geom.mesh.TriangleMesh;
 
-public abstract class AxisAlignedCylinder {
+public abstract class AxisAlignedCylinder implements Shape3D {
 
     protected Vec3D pos;
     protected float radius;

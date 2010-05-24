@@ -33,7 +33,7 @@ import toxi.math.MathUtils;
  * Sphere classes.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AABB extends Vec3D {
+public class AABB extends Vec3D implements Shape3D {
 
     /**
      * Creates a new instance from two vectors specifying opposite corners of
@@ -95,6 +95,10 @@ public class AABB extends Vec3D {
     public AABB(ReadonlyVec3D pos, ReadonlyVec3D extent) {
         super(pos);
         setExtent(extent);
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
+        return p.isInAABB(this);
     }
 
     public AABB copy() {

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Triangle {
+public class Triangle implements Shape3D {
 
     public static Triangle createEquilateralFrom(Vec3D a, Vec3D b) {
         Vec3D c = a.interpolateTo(b, 0.5f);
@@ -201,17 +201,18 @@ public class Triangle {
      * @return closest point
      */
 
-    public ReadonlyVec3D getClosestVertexTo(ReadonlyVec3D p) {
-        Vec3D Rab = p.closestPointOnLine(a, b);
-        Vec3D Rbc = p.closestPointOnLine(b, c);
-        Vec3D Rca = p.closestPointOnLine(c, a);
+    public Vec3D getClosestPointTo(ReadonlyVec3D p) {
+        Line3D edge = new Line3D(a, b);
+        final Vec3D Rab = edge.closestPointTo(p);
+        final Vec3D Rbc = edge.set(b, c).closestPointTo(p);
+        final Vec3D Rca = edge.set(c, a).closestPointTo(p);
 
-        float dAB = p.sub(Rab).magSquared();
-        float dBC = p.sub(Rbc).magSquared();
-        float dCA = p.sub(Rca).magSquared();
+        final float dAB = p.sub(Rab).magSquared();
+        final float dBC = p.sub(Rbc).magSquared();
+        final float dCA = p.sub(Rca).magSquared();
 
         float min = dAB;
-        ReadonlyVec3D result = Rab;
+        Vec3D result = Rab;
 
         if (dBC < min) {
             min = dBC;

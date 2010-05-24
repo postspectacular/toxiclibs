@@ -2,7 +2,7 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
-public class TriangleIntersector implements Intersectable {
+public class TriangleIntersector implements Intersector3D {
 
     public Triangle triangle;
     private IsectData3D isectData;

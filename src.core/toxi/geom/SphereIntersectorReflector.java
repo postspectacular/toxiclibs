@@ -2,7 +2,7 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
-public class SphereIntersectorReflector implements Intersectable, Reflectable {
+public class SphereIntersectorReflector implements Intersector3D, Reflector3D {
 
     protected Sphere sphere;
     protected IsectData3D isectData;
@@ -26,7 +26,7 @@ public class SphereIntersectorReflector implements Intersectable, Reflectable {
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflectable#getReflectedRayPointAtDistance(float)
+     * @see toxi.geom.Reflector3D#getReflectedRayPointAtDistance(float)
      */
     public ReadonlyVec3D getReflectedRayPointAtDistance(float dist) {
         if (reflectedDir != null) {
@@ -39,7 +39,7 @@ public class SphereIntersectorReflector implements Intersectable, Reflectable {
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflectable#getReflectionAngle()
+     * @see toxi.geom.Reflector3D#getReflectionAngle()
      */
     public float getReflectionAngle() {
         return reflectTheta;
@@ -93,7 +93,7 @@ public class SphereIntersectorReflector implements Intersectable, Reflectable {
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflectable#reflectRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
+     * @see toxi.geom.Reflector3D#reflectRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
      */
     public Ray3D reflectRay(Ray3D ray) {
         if (intersectsRay(ray)) {

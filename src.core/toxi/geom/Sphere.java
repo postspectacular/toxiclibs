@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Sphere extends Vec3D {
+public class Sphere extends Vec3D implements Shape3D {
 
     @XmlAttribute(required = true)
     public float radius;
@@ -43,7 +43,7 @@ public class Sphere extends Vec3D {
         this(s, s.radius);
     }
 
-    public boolean containsPoint(Vec3D p) {
+    public boolean containsPoint(ReadonlyVec3D p) {
         float d = this.sub(p).magSquared();
         return (d <= radius * radius);
     }

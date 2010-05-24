@@ -31,7 +31,7 @@ import java.util.List;
  * For further reference also see the OctreeDemo in the /examples folder.
  * 
  */
-public class PointOctree extends AABB {
+public class PointOctree extends AABB implements Shape3D {
 
     /**
      * alternative tree recursion limit, number of world units when cells are
@@ -121,7 +121,7 @@ public class PointOctree extends AABB {
      */
     public boolean addPoint(Vec3D p) {
         // check if point is inside cube
-        if (p.isInAABB(this)) {
+        if (containsPoint(p)) {
             // only add points to leaves for now
             if (halfSize <= minNodeSize) {
                 if (points == null) {
@@ -149,6 +149,10 @@ public class PointOctree extends AABB {
             }
         }
         return false;
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
+        return p.isInAABB(this);
     }
 
     public void empty() {

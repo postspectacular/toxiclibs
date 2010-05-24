@@ -15,7 +15,7 @@ import toxi.math.MathUtils;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Plane extends Vec3D {
+public class Plane extends Vec3D implements Shape3D {
 
     public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
     public static final Plane XZ = new Plane(new Vec3D(), Vec3D.Y_AXIS);
@@ -59,7 +59,7 @@ public class Plane extends Vec3D {
      * @return One of the 3 integer classification codes: PLANE_FRONT,
      *         PLANE_BACK, ON_PLANE
      */
-    public int classifyPoint(Vec3D p) {
+    public int classifyPoint(ReadonlyVec3D p) {
         float d = this.sub(p).dot(normal);
         if (d < -MathUtils.EPS) {
             return PLANE_FRONT;
@@ -67,6 +67,10 @@ public class Plane extends Vec3D {
             return PLANE_BACK;
         }
         return ON_PLANE;
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
+        return classifyPoint(p) == ON_PLANE;
     }
 
     /**
@@ -78,7 +82,7 @@ public class Plane extends Vec3D {
     public float getDistanceToPoint(Vec3D p) {
         float sn = -normal.dot(p.sub(this));
         float sd = normal.magSquared();
-        ReadonlyVec3D isec = p.add(normal.scale(sn / sd));
+        Vec3D isec = p.add(normal.scale(sn / sd));
         return isec.distanceTo(p);
     }
 
