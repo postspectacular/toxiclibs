@@ -35,7 +35,7 @@ public interface ReadonlyVec3D {
     /**
      * Computes the angle between this vector and vector V. This function
      * assumes both vectors are normalized, if this can't be guaranteed, use the
-     * alternative implementation {@link #angleBetween(Vec3D, boolean)}
+     * alternative implementation {@link #angleBetween(ReadonlyVec3D, boolean)}
      * 
      * @param v
      *            vector
@@ -246,8 +246,6 @@ public interface ReadonlyVec3D {
      *            the theta
      * 
      * @return new result vector
-     * 
-     * @see #rotateAroundAxis(Vec3D, float)
      */
     public Vec3D getRotatedAroundAxis(ReadonlyVec3D axis, float theta);
 

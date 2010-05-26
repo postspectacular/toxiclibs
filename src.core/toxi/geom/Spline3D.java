@@ -77,7 +77,8 @@ public class Spline3D {
 
     /**
      * Constructs an empty spline container with default curve tightness. You
-     * need to populate the spline manually by using {@link #add(Vec3D)}.
+     * need to populate the spline manually by using {@link #add(ReadonlyVec3D)}
+     * .
      */
     public Spline3D() {
         setTightness(DEFAULT_TIGHTNESS);

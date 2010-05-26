@@ -22,17 +22,17 @@ public class Plane extends Vec3D implements Shape3D {
     public static final Plane YZ = new Plane(new Vec3D(), Vec3D.X_AXIS);
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int PLANE_FRONT = -1;
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int PLANE_BACK = 1;
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int ON_PLANE = 0;
 

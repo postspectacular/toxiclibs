@@ -107,8 +107,8 @@ public class AABB extends Vec3D implements Shape3D {
 
     /**
      * Returns the current box size as new Vec3D instance (updating this vector
-     * will NOT update the box size! Use {@link #setExtent(Vec3D)} for those
-     * purposes)
+     * will NOT update the box size! Use {@link #setExtent(ReadonlyVec3D)} for
+     * those purposes)
      * 
      * @return box size
      */

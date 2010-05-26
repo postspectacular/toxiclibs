@@ -29,7 +29,7 @@ public interface ReadonlyVec2D {
     /**
      * Computes the angle between this vector and vector V. This function
      * assumes both vectors are normalized, if this can't be guaranteed, use the
-     * alternative implementation {@link #angleBetween(Vec2D, boolean)}
+     * alternative implementation {@link #angleBetween(ReadonlyVec2D, boolean)}
      * 
      * @param v
      *            vector
