@@ -45,7 +45,7 @@ public class FileSequenceDescriptor implements Iterable<String> {
      * Creates a new descriptor from the given sequence details.
      * 
      * @param filePattern
-     *            file pattern in the format: e.g. "basename%d04.ext"
+     *            file pattern in the format: e.g. "path/basename%d04.ext"
      * @param extension
      *            file extension (e.g. ".tga")
      * @param numDigits
@@ -59,6 +59,17 @@ public class FileSequenceDescriptor implements Iterable<String> {
         this.extension = extension;
         this.numDigits = numDigits;
         this.start = start;
+    }
+
+    /**
+     * Returns the base path of the sequence, i.e. the substring of the
+     * sequence's file pattern from the beginning until the first occurence of
+     * the % sign indicating the frame numbers.
+     * 
+     * @return path string
+     */
+    public String getBasePath() {
+        return filePattern.substring(0, filePattern.indexOf('%'));
     }
 
     /**
@@ -98,6 +109,15 @@ public class FileSequenceDescriptor implements Iterable<String> {
      */
     public String getPathForIndex(int i) {
         return String.format(filePattern, i);
+    }
+
+    /**
+     * Returns the index of the first file of the sequence.
+     * 
+     * @return start index
+     */
+    public int getStartIndex() {
+        return start;
     }
 
     /**
