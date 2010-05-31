@@ -4,7 +4,7 @@ import toxi.audio.AudioBuffer;
 import toxi.audio.AudioSource;
 import toxi.audio.JOALUtil;
 import toxi.audio.SoundListener;
-import toxi.geom.Vec3D;
+import toxi.geom.ReadonlyVec3D;
 
 public class JOALTest {
 
@@ -35,5 +35,5 @@ public class JOALTest {
         audioUtil.shutdown();
     }
 
-    Vec3D pos;
+    ReadonlyVec3D pos;
 }

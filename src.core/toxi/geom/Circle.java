@@ -24,7 +24,7 @@ public class Circle extends Ellipse {
         super(x, y, radius, radius);
     }
 
-    public Circle(Vec2D origin, float radius) {
+    public Circle(ReadonlyVec2D origin, float radius) {
         super(origin, radius);
     }
 
@@ -34,7 +34,7 @@ public class Circle extends Ellipse {
      * @see toxi.geom.Ellipse#containsPoint(toxi.geom.Vec2D)
      */
     @Override
-    public boolean containsPoint(Vec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         return distanceToSquared(p) <= radius.x * radius.x;
     }
 
@@ -45,14 +45,14 @@ public class Circle extends Ellipse {
      */
     @Override
     public float getCircumference() {
-        return MathUtils.PI * 2 * radius.x;
+        return MathUtils.TWO_PI * radius.x;
     }
 
     public float getRadius() {
         return radius.x;
     }
 
-    public Vec2D[] getTangentPoints(Vec2D p) {
+    public Vec2D[] getTangentPoints(ReadonlyVec2D p) {
         Vec2D m = interpolateTo(p, 0.5f);
         return intersectsCircle(new Circle(m, m.distanceTo(p)));
     }

@@ -28,9 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Triangle2D {
+public class Triangle2D implements Shape2D {
 
-    public static Triangle2D createEquilateralFrom(Vec2D a, Vec2D b) {
+    public static Triangle2D createEquilateralFrom(ReadonlyVec2D a,
+            ReadonlyVec2D b) {
         Vec2D c = a.interpolateTo(b, 0.5f);
         Vec2D dir = a.sub(b);
         Vec2D n = dir.getPerpendicular();
@@ -52,10 +53,10 @@ public class Triangle2D {
     public Triangle2D() {
     }
 
-    public Triangle2D(Vec2D a, Vec2D b, Vec2D c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+    public Triangle2D(ReadonlyVec2D a, ReadonlyVec2D b, ReadonlyVec2D c) {
+        this.a = a.copy();
+        this.b = b.copy();
+        this.c = c.copy();
     }
 
     public Vec2D computeCentroid() {
@@ -72,7 +73,7 @@ public class Triangle2D {
      * 
      * @return true, if point is in triangle.
      */
-    public boolean containsPoint(Vec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         Vec2D v1 = p.sub(a).normalize();
         Vec2D v2 = p.sub(b).normalize();
         Vec2D v3 = p.sub(c).normalize();
@@ -80,6 +81,14 @@ public class Triangle2D {
         total_angles += Math.acos(v2.dot(v3));
         total_angles += Math.acos(v3.dot(v1));
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.01f);
+    }
+
+    public float getArea() {
+        return b.sub(a).cross(c.sub(a)) * 0.5f;
+    }
+
+    public float getCircumference() {
+        return a.distanceTo(b) + b.distanceTo(c) + c.distanceTo(a);
     }
 
     /**
@@ -90,11 +99,11 @@ public class Triangle2D {
      *            point to check
      * @return closest point
      */
-
-    public Vec2D getClosestVertexTo(Vec2D p) {
-        Vec2D Rab = p.closestPointOnLine(a, b);
-        Vec2D Rbc = p.closestPointOnLine(b, c);
-        Vec2D Rca = p.closestPointOnLine(c, a);
+    public Vec2D getClosestPointTo(ReadonlyVec2D p) {
+        Line2D edge = new Line2D(a, b);
+        Vec2D Rab = edge.closestPointTo(p);
+        Vec2D Rbc = edge.set(b, c).closestPointTo(p);
+        Vec2D Rca = edge.set(c, a).closestPointTo(p);
 
         float dAB = p.sub(Rab).magSquared();
         float dBC = p.sub(Rbc).magSquared();

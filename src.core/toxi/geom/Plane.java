@@ -15,24 +15,24 @@ import toxi.math.MathUtils;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Plane extends Vec3D {
+public class Plane extends Vec3D implements Shape3D {
 
     public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
     public static final Plane XZ = new Plane(new Vec3D(), Vec3D.Y_AXIS);
     public static final Plane YZ = new Plane(new Vec3D(), Vec3D.X_AXIS);
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int PLANE_FRONT = -1;
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int PLANE_BACK = 1;
 
     /**
-     * Classifier constant for {@link #classifyPoint(Vec3D)}
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public static final int ON_PLANE = 0;
 
@@ -48,7 +48,7 @@ public class Plane extends Vec3D {
         this(t.computeCentroid(), t.computeNormal());
     }
 
-    public Plane(Vec3D origin, Vec3D norm) {
+    public Plane(Vec3D origin, ReadonlyVec3D norm) {
         super(origin);
         normal = norm.getNormalized();
     }
@@ -59,7 +59,7 @@ public class Plane extends Vec3D {
      * @return One of the 3 integer classification codes: PLANE_FRONT,
      *         PLANE_BACK, ON_PLANE
      */
-    public int classifyPoint(Vec3D p) {
+    public int classifyPoint(ReadonlyVec3D p) {
         float d = this.sub(p).dot(normal);
         if (d < -MathUtils.EPS) {
             return PLANE_FRONT;
@@ -67,6 +67,10 @@ public class Plane extends Vec3D {
             return PLANE_BACK;
         }
         return ON_PLANE;
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
+        return classifyPoint(p) == ON_PLANE;
     }
 
     /**
@@ -88,7 +92,7 @@ public class Plane extends Vec3D {
      * @param r
      * @return intersection point or null if ray doesn't intersect plane
      */
-    public Vec3D getIntersectionWithRay(Ray3D r) {
+    public ReadonlyVec3D getIntersectionWithRay(Ray3D r) {
         float denom = normal.dot(r.getDirection());
         if (denom > MathUtils.EPS) {
             float u = normal.dot(this.sub(r)) / denom;
@@ -130,7 +134,7 @@ public class Plane extends Vec3D {
      * @return mesh
      */
     public TriangleMesh toMesh(float size) {
-        Vec3D p =
+        ReadonlyVec3D p =
                 equalsWithTolerance(Vec3D.ZERO, 0.01f) ? add(0.01f, 0.01f,
                         0.01f) : this;
         size *= 0.5f;

@@ -49,9 +49,34 @@ public class Line3D {
 
     public Vec3D a, b;
 
+    public Line3D(ReadonlyVec3D a, ReadonlyVec3D b) {
+        this.a = a.copy();
+        this.b = b.copy();
+    }
+
     public Line3D(Vec3D a, Vec3D b) {
         this.a = a;
         this.b = b;
+    }
+
+    /**
+     * Computes the closest point on this line to the given one.
+     * 
+     * @param p
+     *            point to check against
+     * @return closest point on the line
+     */
+    public Vec3D closestPointTo(ReadonlyVec3D p) {
+        final Vec3D v = b.sub(a);
+        final float t = p.sub(a).dot(v) / v.magSquared();
+        // Check to see if t is beyond the extents of the line segment
+        if (t < 0.0f) {
+            return a.copy();
+        } else if (t > 1.0f) {
+            return b.copy();
+        }
+        // Return the point between 'a' and 'b'
+        return a.add(v.scaleSelf(t));
     }
 
     public Line3D copy() {

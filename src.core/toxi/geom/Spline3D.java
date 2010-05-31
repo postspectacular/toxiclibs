@@ -77,7 +77,8 @@ public class Spline3D {
 
     /**
      * Constructs an empty spline container with default curve tightness. You
-     * need to populate the spline manually by using {@link #add(Vec3D)}.
+     * need to populate the spline manually by using {@link #add(ReadonlyVec3D)}
+     * .
      */
     public Spline3D() {
         setTightness(DEFAULT_TIGHTNESS);
@@ -138,7 +139,7 @@ public class Spline3D {
      * @param p
      * @return itself
      */
-    public Spline3D add(Vec3D p) {
+    public Spline3D add(ReadonlyVec3D p) {
         pointList.add(p.copy());
         return this;
     }
@@ -262,7 +263,7 @@ public class Spline3D {
             while (currT >= arcLenIndex[currIdx]) {
                 currIdx++;
             }
-            Vec3D p = vertices.get(currIdx - 1);
+            ReadonlyVec3D p = vertices.get(currIdx - 1);
             Vec3D q = vertices.get(currIdx);
             float frac =
                     (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
@@ -287,7 +288,7 @@ public class Spline3D {
         }
         float arcLen = 0;
         for (int i = 1; i < arcLenIndex.length; i++) {
-            Vec3D p = vertices.get(i - 1);
+            ReadonlyVec3D p = vertices.get(i - 1);
             Vec3D q = vertices.get(i);
             arcLen += p.distanceTo(q);
             arcLenIndex[i] = arcLen;
@@ -327,7 +328,7 @@ public class Spline3D {
      */
     public Spline3D setPointList(List<Vec3D> plist) {
         pointList.clear();
-        for (Vec3D p : plist) {
+        for (ReadonlyVec3D p : plist) {
             add(p);
         }
         return this;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wrapper
+ * Container type for convex polygons. Implements {@link Shape2D}.
  */
-public class Polygon2D {
+public class Polygon2D implements Shape2D {
 
     public List<Vec2D> vertices = new ArrayList<Vec2D>();
 
@@ -24,6 +24,25 @@ public class Polygon2D {
             vertices.add(p);
         }
         return this;
+    }
+
+    public boolean containsPoint(ReadonlyVec2D p) {
+        int num = vertices.size();
+        int i, j = num - 1;
+        boolean oddNodes = false;
+        float px = p.x();
+        float py = p.y();
+        for (i = 0; i < num; i++) {
+            Vec2D vi = vertices.get(i);
+            Vec2D vj = vertices.get(j);
+            if (vi.y < py && vj.y >= py || vj.y < py && vi.y >= py) {
+                if (vi.x + (py - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < px) {
+                    oddNodes = !oddNodes;
+                }
+            }
+            j = i;
+        }
+        return oddNodes;
     }
 
     /**
@@ -65,6 +84,14 @@ public class Polygon2D {
         return res.scale(1f / (getArea() * 6));
     }
 
+    public float getCircumference() {
+        float circ = 0;
+        for (int i = 0, num = vertices.size(); i < num; i++) {
+            circ += vertices.get(i).distanceTo(vertices.get((i + 1) % num));
+        }
+        return circ;
+    }
+
     /**
      * Returns the number of polygon vertices.
      * 
@@ -73,4 +100,5 @@ public class Polygon2D {
     public int getNumPoints() {
         return vertices.size();
     }
+
 }

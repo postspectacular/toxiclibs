@@ -38,13 +38,13 @@ public class Ray2D extends Vec2D {
         dir = Vec2D.Y_AXIS.copy();
     }
 
-    public Ray2D(float x, float y, Vec2D d) {
+    public Ray2D(float x, float y, ReadonlyVec2D d) {
         super(x, y);
         dir = d.getNormalized();
     }
 
-    public Ray2D(Vec2D o, Vec2D d) {
-        this(o.x, o.y, d);
+    public Ray2D(ReadonlyVec2D o, ReadonlyVec2D d) {
+        this(o.x(), o.y(), d);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Ray2D extends Vec2D {
      *            new direction
      * @return itself
      */
-    public Ray2D setDirection(Vec2D d) {
+    public Ray2D setDirection(ReadonlyVec2D d) {
         dir.set(d).normalize();
         return this;
     }

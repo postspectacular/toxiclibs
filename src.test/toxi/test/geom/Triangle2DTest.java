@@ -1,6 +1,7 @@
 package toxi.test.geom;
 
 import junit.framework.TestCase;
+import toxi.geom.ReadonlyVec2D;
 import toxi.geom.Triangle2D;
 import toxi.geom.Vec2D;
 
@@ -11,7 +12,7 @@ public class Triangle2DTest extends TestCase {
         Vec2D b = new Vec2D(0, 100);
         Vec2D c = new Vec2D(100, 0);
         Triangle2D t = new Triangle2D(a, b, c);
-        Vec2D centroid = t.computeCentroid();
+        ReadonlyVec2D centroid = t.computeCentroid();
         System.out.println(centroid);
         assertTrue("incorrect centroid", centroid.equals(new Vec2D(0, 100)
                 .scaleSelf(1f / 3)));

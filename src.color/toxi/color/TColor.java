@@ -26,6 +26,7 @@
 
 package toxi.color;
 
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
@@ -677,7 +678,7 @@ public class TColor implements ReadonlyTColor {
     public float distanceToHSV(ReadonlyTColor c) {
         float hue = hsv[0] * MathUtils.TWO_PI;
         float hue2 = c.hue() * MathUtils.TWO_PI;
-        Vec3D v1 =
+        ReadonlyVec3D v1 =
                 new Vec3D((MathUtils.cos(hue) * hsv[1]),
                         (MathUtils.sin(hue) * hsv[1]), hsv[2]);
         Vec3D v2 =

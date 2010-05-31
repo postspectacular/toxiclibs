@@ -115,7 +115,7 @@ public class DLATest extends PApplet implements DLAEventListener {
             r *= 0.92;
         }
         DLAGuideLines guides = new DLAGuideLines();
-        guides.addCurveStrip(new Spline3D(points).computeVertices(8));
+        guides.addPointList(new Spline3D(points).computeVertices(8));
         dla = new DLA(128);
         dla.setConfig(new DLAConfiguration());
         dla.setGuidelines(guides);

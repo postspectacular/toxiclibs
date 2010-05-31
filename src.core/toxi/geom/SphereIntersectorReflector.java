@@ -2,32 +2,33 @@ package toxi.geom;
 
 import toxi.math.MathUtils;
 
-public class SphereIntersectorReflector implements Intersector, Reflector {
+public class SphereIntersectorReflector implements Intersector3D, Reflector3D {
 
     protected Sphere sphere;
-    protected IsectData isectData = new IsectData();
+    protected IsectData3D isectData;
 
-    protected Vec3D reflectedDir, reflectedPos;
+    protected ReadonlyVec3D reflectedDir, reflectedPos;
     protected float reflectTheta;
 
     public SphereIntersectorReflector(Sphere s) {
         sphere = s;
+        isectData = new IsectData3D();
     }
 
     public SphereIntersectorReflector(Vec3D o, float r) {
-        sphere = new Sphere(o, r);
+        this(new Sphere(o, r));
     }
 
-    public IsectData getIntersectionData() {
+    public IsectData3D getIntersectionData() {
         return isectData;
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflector#getReflectedRayPointAtDistance(float)
+     * @see toxi.geom.Reflector3D#getReflectedRayPointAtDistance(float)
      */
-    public Vec3D getReflectedRayPointAtDistance(float dist) {
+    public ReadonlyVec3D getReflectedRayPointAtDistance(float dist) {
         if (reflectedDir != null) {
             return isectData.pos.add(reflectedDir.scale(dist));
         } else {
@@ -38,7 +39,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflector#getReflectionAngle()
+     * @see toxi.geom.Reflector3D#getReflectionAngle()
      */
     public float getReflectionAngle() {
         return reflectTheta;
@@ -62,7 +63,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
      */
 
     public float intersectRayDistance(Ray3D ray) {
-        Vec3D q = sphere.sub(ray);
+        ReadonlyVec3D q = sphere.sub(ray);
         float distSquared = q.magSquared();
         float v = q.dot(ray.dir);
         float d = sphere.radius * sphere.radius - (distSquared - v * v);
@@ -92,7 +93,7 @@ public class SphereIntersectorReflector implements Intersector, Reflector {
     /*
      * (non-Javadoc)
      * 
-     * @see toxi.geom.Reflector#reflectRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
+     * @see toxi.geom.Reflector3D#reflectRay(toxi.geom.Vec3D, toxi.geom.Vec3D)
      */
     public Ray3D reflectRay(Ray3D ray) {
         if (intersectsRay(ray)) {

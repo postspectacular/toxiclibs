@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Triangle {
+public class Triangle implements Shape3D {
 
     public static Triangle createEquilateralFrom(Vec3D a, Vec3D b) {
         Vec3D c = a.interpolateTo(b, 0.5f);
@@ -72,15 +72,6 @@ public class Triangle {
     }
 
     /**
-     * @see #closestPointOnSurface(Vec3D)
-     * @deprecated
-     */
-    @Deprecated
-    public Vec3D closedPoint(Vec3D p) {
-        return closestPointOnSurface(p);
-    }
-
-    /**
      * Computes the the point closest to the current vector on the surface of
      * triangle abc.
      * 
@@ -94,9 +85,9 @@ public class Triangle {
         Vec3D ac = c.sub(a);
         Vec3D bc = c.sub(b);
 
-        Vec3D pa = p.sub(a);
-        Vec3D pb = p.sub(b);
-        Vec3D pc = p.sub(c);
+        ReadonlyVec3D pa = p.sub(a);
+        ReadonlyVec3D pb = p.sub(b);
+        ReadonlyVec3D pc = p.sub(c);
 
         Vec3D ap = a.sub(p);
         Vec3D bp = b.sub(p);
@@ -130,7 +121,7 @@ public class Triangle {
         }
 
         // P is outside (or on) AB if the triple scalar product [N PA PB] <= 0
-        Vec3D n = ab.cross(ac);
+        ReadonlyVec3D n = ab.cross(ac);
         float vc = n.dot(ap.crossSelf(bp));
 
         // If P outside AB and within feature region of AB,
@@ -186,7 +177,7 @@ public class Triangle {
      * 
      * @return true, if point is in triangle.
      */
-    public boolean containsPoint(Vec3D p) {
+    public boolean containsPoint(ReadonlyVec3D p) {
         if (p.equals(a) || p.equals(b) || p.equals(c)) {
             return true;
         }
@@ -210,14 +201,15 @@ public class Triangle {
      * @return closest point
      */
 
-    public Vec3D getClosestVertexTo(Vec3D p) {
-        Vec3D Rab = p.closestPointOnLine(a, b);
-        Vec3D Rbc = p.closestPointOnLine(b, c);
-        Vec3D Rca = p.closestPointOnLine(c, a);
+    public Vec3D getClosestPointTo(ReadonlyVec3D p) {
+        Line3D edge = new Line3D(a, b);
+        final Vec3D Rab = edge.closestPointTo(p);
+        final Vec3D Rbc = edge.set(b, c).closestPointTo(p);
+        final Vec3D Rca = edge.set(c, a).closestPointTo(p);
 
-        float dAB = p.sub(Rab).magSquared();
-        float dBC = p.sub(Rbc).magSquared();
-        float dCA = p.sub(Rca).magSquared();
+        final float dAB = p.sub(Rab).magSquared();
+        final float dBC = p.sub(Rbc).magSquared();
+        final float dCA = p.sub(Rca).magSquared();
 
         float min = dAB;
         Vec3D result = Rab;

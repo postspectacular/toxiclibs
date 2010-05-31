@@ -10,11 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
-import toxi.geom.Intersector;
-import toxi.geom.IsectData;
+import toxi.geom.Intersector3D;
+import toxi.geom.IsectData3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Sphere;
 import toxi.geom.Triangle;
 import toxi.geom.TriangleIntersector;
@@ -28,7 +29,7 @@ import toxi.math.MathUtils;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class TriangleMesh implements Intersector {
+public class TriangleMesh implements Intersector3D {
 
     public final static class Face {
 
@@ -233,7 +234,7 @@ public class TriangleMesh implements Intersector {
      * @param origin
      *            new centroid or null (defaults to {0,0,0})
      */
-    public AABB center(Vec3D origin) {
+    public AABB center(ReadonlyVec3D origin) {
         getCentroid();
         Vec3D delta =
                 origin != null ? origin.sub(centroid) : centroid.getInverted();
@@ -373,7 +374,7 @@ public class TriangleMesh implements Intersector {
      * 
      * @return centre point
      */
-    public Vec3D getCentroid() {
+    public ReadonlyVec3D getCentroid() {
         centroid.clear();
         for (Vec3D v : vertices.values()) {
             centroid.addSelf(v);
@@ -399,7 +400,7 @@ public class TriangleMesh implements Intersector {
         return faceList;
     }
 
-    public IsectData getIntersectionData() {
+    public IsectData3D getIntersectionData() {
         return intersector.getIntersectionData();
     }
 
@@ -616,7 +617,7 @@ public class TriangleMesh implements Intersector {
      *            new target direction to point in
      * @return itself
      */
-    public TriangleMesh pointTowards(Vec3D dir) {
+    public TriangleMesh pointTowards(ReadonlyVec3D dir) {
         return transform(Quaternion.getAlignmentQuat(dir, Vec3D.Z_AXIS)
                 .toMatrix4x4(matrix), true);
     }
@@ -632,7 +633,7 @@ public class TriangleMesh implements Intersector {
      *            current forward axis
      * @return itself
      */
-    public TriangleMesh pointTowards(Vec3D dir, Vec3D forward) {
+    public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
         return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
                 matrix), true);
     }

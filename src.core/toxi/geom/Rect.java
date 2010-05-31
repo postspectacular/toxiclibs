@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Rect {
+public class Rect implements Shape2D {
 
     /**
      * Factory method, constructs a new rectangle from a center point and extent
@@ -17,7 +17,7 @@ public class Rect {
      * @param extent
      * @return new rect
      */
-    public static final Rect fromCenterExtent(Vec2D center, Vec2D extent) {
+    public static final Rect fromCenterExtent(ReadonlyVec2D center, Vec2D extent) {
         return new Rect(center.sub(extent), center.add(extent));
     }
 
@@ -55,11 +55,11 @@ public class Rect {
      * @param topLeft
      * @param bottomRight
      */
-    public Rect(Vec2D topLeft, Vec2D bottomRight) {
-        x = topLeft.x;
-        y = topLeft.y;
-        width = bottomRight.x - x;
-        height = bottomRight.y - y;
+    public Rect(ReadonlyVec2D topLeft, ReadonlyVec2D bottomRight) {
+        x = topLeft.x();
+        y = topLeft.y();
+        width = bottomRight.x() - x;
+        height = bottomRight.y() - y;
     }
 
     /**
@@ -69,11 +69,13 @@ public class Rect {
      *            point to check
      * @return true, if point is contained
      */
-    public final boolean containsPoint(Vec2D p) {
-        if (p.x < x || p.x >= x + width) {
+    public final boolean containsPoint(ReadonlyVec2D p) {
+        float px = p.x();
+        float py = p.y();
+        if (px < x || px >= x + width) {
             return false;
         }
-        if (p.y < y || p.y >= y + height) {
+        if (py < y || py >= y + height) {
             return false;
         }
         return true;
@@ -88,6 +90,10 @@ public class Rect {
         return new Rect(x, y, width, height);
     }
 
+    public final float getArea() {
+        return width * height;
+    }
+
     public final Vec2D getBottomRight() {
         return new Vec2D(x + width, y + height);
     }
@@ -99,6 +105,10 @@ public class Rect {
      */
     public final Vec2D getCentroid() {
         return new Vec2D(x + width * 0.5f, y + height * 0.5f);
+    }
+
+    public final float getCircumference() {
+        return 2 * width + 2 * height;
     }
 
     /**
@@ -128,7 +138,7 @@ public class Rect {
      * @return intersection point or null if no intersection in the given
      *         interval
      */
-    public Vec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
+    public ReadonlyVec2D intersectsRay(Ray2D ray, float minDist, float maxDist) {
         Vec2D invDir = ray.getDirection().reciprocal();
         boolean signDirX = invDir.x < 0;
         boolean signDirY = invDir.y < 0;
@@ -176,16 +186,6 @@ public class Rect {
             }
         }
         return true;
-    }
-
-    /**
-     * @deprecated use {@link #union(Rect)} instead.
-     * @param r
-     * @return itself
-     */
-    @Deprecated
-    public final Rect merge(Rect r) {
-        return union(r);
     }
 
     public Rect scale(float s) {

@@ -26,7 +26,7 @@ public class Quaternion {
      * 
      * @return new quaternion
      */
-    public static Quaternion createFromAxisAngle(Vec3D axis, float angle) {
+    public static Quaternion createFromAxisAngle(ReadonlyVec3D axis, float angle) {
         angle *= 0.5;
         float sin = MathUtils.sin(angle);
         float cos = MathUtils.cos(angle);
@@ -130,9 +130,10 @@ public class Quaternion {
                 (float) q[2]);
     }
 
-    public static Quaternion getAlignmentQuat(Vec3D dir, Vec3D forward) {
+    public static Quaternion getAlignmentQuat(ReadonlyVec3D dir,
+            ReadonlyVec3D forward) {
         Vec3D target = dir.getNormalized();
-        Vec3D axis = forward.cross(target);
+        ReadonlyVec3D axis = forward.cross(target);
         float length = axis.magnitude() + 0.0001f;
         float angle = (float) Math.atan2(length, forward.dot(target));
         return createFromAxisAngle(axis, angle);
@@ -152,10 +153,10 @@ public class Quaternion {
         this.z = z;
     }
 
-    public Quaternion(float w, Vec3D v) {
-        this.x = v.x;
-        this.y = v.y;
-        this.z = v.z;
+    public Quaternion(float w, ReadonlyVec3D v) {
+        this.x = v.x();
+        this.y = v.y();
+        this.z = v.z();
         this.w = w;
     }
 

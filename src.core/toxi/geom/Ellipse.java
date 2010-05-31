@@ -5,7 +5,7 @@ import toxi.math.MathUtils;
 /**
  * This class defines a 2D ellipse and provides several utility methods for it.
  */
-public class Ellipse extends Vec2D {
+public class Ellipse extends Vec2D implements Shape2D {
 
     protected Vec2D radius = new Vec2D();
     protected float focus;
@@ -29,15 +29,15 @@ public class Ellipse extends Vec2D {
         setRadii(rx, ry);
     }
 
-    public Ellipse(Vec2D v, float r) {
-        this(v.x, v.y, r, r);
+    public Ellipse(ReadonlyVec2D v, float r) {
+        this(v.x(), v.y(), r, r);
     }
 
-    public Ellipse(Vec2D v, Vec2D r) {
-        this(v.x, v.y, r.x, r.y);
+    public Ellipse(ReadonlyVec2D v, ReadonlyVec2D r) {
+        this(v.x(), v.y(), r.x(), r.y());
     }
 
-    public boolean containsPoint(Vec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         Vec2D[] foci = getFoci();
         return p.distanceTo(foci[0]) + p.distanceTo(foci[1]) < 2 * MathUtils
                 .max(radius.x, radius.y);
@@ -111,7 +111,7 @@ public class Ellipse extends Vec2D {
      * @param r
      * @return itself
      */
-    public Ellipse setRadii(Vec2D r) {
-        return setRadii(r.x, r.y);
+    public Ellipse setRadii(ReadonlyVec3D r) {
+        return setRadii(r.x(), r.y());
     }
 }

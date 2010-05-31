@@ -33,7 +33,7 @@ import toxi.math.MathUtils;
  * Sphere classes.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AABB extends Vec3D {
+public class AABB extends Vec3D implements Shape3D {
 
     /**
      * Creates a new instance from two vectors specifying opposite corners of
@@ -79,7 +79,7 @@ public class AABB extends Vec3D {
      * @param pos
      * @param extent
      */
-    public AABB(Vec3D pos, float extent) {
+    public AABB(ReadonlyVec3D pos, float extent) {
         super(pos);
         setExtent(new Vec3D(extent, extent, extent));
     }
@@ -92,9 +92,13 @@ public class AABB extends Vec3D {
      *            box dimensions (the box will be double the size in each
      *            direction)
      */
-    public AABB(Vec3D pos, Vec3D extent) {
+    public AABB(ReadonlyVec3D pos, ReadonlyVec3D extent) {
         super(pos);
         setExtent(extent);
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
+        return p.isInAABB(this);
     }
 
     public AABB copy() {
@@ -103,8 +107,8 @@ public class AABB extends Vec3D {
 
     /**
      * Returns the current box size as new Vec3D instance (updating this vector
-     * will NOT update the box size! Use {@link #setExtent(Vec3D)} for those
-     * purposes)
+     * will NOT update the box size! Use {@link #setExtent(ReadonlyVec3D)} for
+     * those purposes)
      * 
      * @return box size
      */
@@ -121,7 +125,7 @@ public class AABB extends Vec3D {
         return min.copy();
     }
 
-    public Vec3D getNormalForPoint(Vec3D p) {
+    public Vec3D getNormalForPoint(ReadonlyVec3D p) {
         p = p.sub(this);
         Vec3D pabs = extent.sub(p.getAbs());
         Vec3D psign = p.getSignum();
@@ -252,39 +256,9 @@ public class AABB extends Vec3D {
         return d <= r * r;
     }
 
-    @Deprecated
-    public final float maxX() {
-        return x + extent.x;
-    }
-
-    @Deprecated
-    public final float maxY() {
-        return y + extent.y;
-    }
-
-    @Deprecated
-    public final float maxZ() {
-        return z + extent.z;
-    }
-
-    @Deprecated
-    public final float minX() {
-        return x - extent.x;
-    }
-
-    @Deprecated
-    public final float minY() {
-        return y - extent.y;
-    }
-
-    @Deprecated
-    public final float minZ() {
-        return z - extent.z;
-    }
-
     public AABB set(AABB box) {
         extent.set(box.extent);
-        return set((Vec3D) box);
+        return set((ReadonlyVec3D) box);
     }
 
     /**
@@ -307,10 +281,10 @@ public class AABB extends Vec3D {
      * 
      * @see toxi.geom.Vec3D#set(toxi.geom.Vec3D)
      */
-    public AABB set(Vec3D v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+    public AABB set(ReadonlyVec3D v) {
+        x = v.x();
+        y = v.y();
+        z = v.z();
         updateBounds();
         return this;
     }
@@ -322,8 +296,8 @@ public class AABB extends Vec3D {
      *            new box size
      * @return itself, for method chaining
      */
-    public AABB setExtent(Vec3D extent) {
-        this.extent = new Vec3D(extent);
+    public AABB setExtent(ReadonlyVec3D extent) {
+        this.extent = extent.copy();
         return updateBounds();
     }
 

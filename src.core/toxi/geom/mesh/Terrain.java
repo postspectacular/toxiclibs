@@ -1,6 +1,6 @@
 package toxi.geom.mesh;
 
-import toxi.geom.IsectData;
+import toxi.geom.IsectData3D;
 import toxi.geom.Ray3D;
 import toxi.geom.Triangle;
 import toxi.geom.TriangleIntersector;
@@ -121,16 +121,16 @@ public class Terrain {
      * Computes the 3D position (with elevation) and normal vector at the given
      * 2D location in the terrain. The position is in scaled world coordinates
      * based on the given terrain scale. The returned data is encapsulated in a
-     * {@link toxi.geom.IsectData} instance.
+     * {@link toxi.geom.IsectData3D} instance.
      * 
      * @param x
      * @param z
      * @return intersection data parcel
      */
-    public IsectData intersectAtPoint(float x, float z) {
+    public IsectData3D intersectAtPoint(float x, float z) {
         float xx = x / scale + width * 0.5f;
         float zz = z / scale + depth * 0.5f;
-        IsectData isec = new IsectData();
+        IsectData3D isec = new IsectData3D();
         if (xx >= 0 && xx < width && zz >= 0 && zz < depth) {
             int x2 = (int) MathUtils.min(xx + 1, width - 1);
             int z2 = (int) MathUtils.min(zz + 1, depth - 1);

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Sphere extends Vec3D {
+public class Sphere extends Vec3D implements Shape3D {
 
     @XmlAttribute(required = true)
     public float radius;
@@ -34,16 +34,16 @@ public class Sphere extends Vec3D {
         this(new Vec3D(), 1);
     }
 
-    public Sphere(Sphere s) {
-        this(s, s.radius);
-    }
-
-    public Sphere(Vec3D v, float r) {
+    public Sphere(ReadonlyVec3D v, float r) {
         super(v);
         radius = r;
     }
 
-    public boolean containsPoint(Vec3D p) {
+    public Sphere(Sphere s) {
+        this(s, s.radius);
+    }
+
+    public boolean containsPoint(ReadonlyVec3D p) {
         float d = this.sub(p).magSquared();
         return (d <= radius * radius);
     }
@@ -65,7 +65,7 @@ public class Sphere extends Vec3D {
      */
     public float[] intersectRay(Ray3D ray) {
         float[] result = null;
-        Vec3D q = ray.sub(this);
+        ReadonlyVec3D q = ray.sub(this);
         float distSquared = q.magSquared();
         float v = -q.dot(ray.getDirection());
         float d = radius * radius - (distSquared - v * v);
@@ -111,7 +111,7 @@ public class Sphere extends Vec3D {
 
         // Sphere and triangle intersect if the (squared) distance from sphere
         // center to Vec3D p is less than the (squared) sphere radius
-        Vec3D v = result.sub(this);
+        ReadonlyVec3D v = result.sub(this);
         return v.magSquared() <= radius * radius;
     }
 
@@ -124,7 +124,7 @@ public class Sphere extends Vec3D {
      *         point.
      */
     // FIXME this method is totally broken for ages
-    public Vec3D tangentPlaneNormalAt(Vec3D q) {
+    public Vec3D tangentPlaneNormalAt(ReadonlyVec3D q) {
         // Vec3D p = this.sub(q);
         // float xr2 = eR.x * eR.x;
         // float yr2 = eR.y * eR.y;

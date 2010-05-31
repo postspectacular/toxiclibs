@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import toxi.geom.AABB;
+import toxi.geom.Line3D;
 import toxi.geom.PointOctree;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.SphereIntersectorReflector;
@@ -15,7 +17,8 @@ import toxi.math.MathUtils;
 
 public class GeomTestSuite extends TestCase {
 
-    Vec3D intersectsRay(AABB box, Ray3D ray, float minDist, float maxDist) {
+    ReadonlyVec3D intersectsRay(AABB box, Ray3D ray, float minDist,
+            float maxDist) {
         Vec3D invDir = ray.getDirection().getReciprocal();
         boolean signDirX = invDir.x < 0;
         boolean signDirY = invDir.y < 0;
@@ -99,16 +102,17 @@ public class GeomTestSuite extends TestCase {
         Vec3D a = new Vec3D();
         Vec3D b = new Vec3D(100, 0, 0);
         Vec3D c = new Vec3D(50, 50, 0);
-        Vec3D isec = c.closestPointOnLine(a, b);
+        Line3D line = new Line3D(a, b);
+        Vec3D isec = line.closestPointTo(c);
         assertEquals(MathUtils.abs(isec.x - c.x) < 0.5, true);
         c = new Vec3D(-50, -50, 0);
-        isec = c.closestPointOnLine(a, b);
+        isec = line.closestPointTo(c);
         assertEquals(isec.equals(a), true);
     }
 
     public void testIsInAABB() {
         AABB box = new AABB(new Vec3D(100, 0, 0), new Vec3D(20, 20, 20));
-        Vec3D p = new Vec3D(80, -19.99f, 0);
+        ReadonlyVec3D p = new Vec3D(80, -19.99f, 0);
         assertEquals(p.isInAABB(box), true);
         assertEquals(new Vec3D(120.01f, 19.99f, 0).isInAABB(box), false);
     }

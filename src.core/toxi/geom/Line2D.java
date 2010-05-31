@@ -14,9 +14,9 @@ public class Line2D {
         }
 
         private final Type type;
-        private final Vec2D pos;
+        private final ReadonlyVec2D pos;
 
-        public LineIntersection(Type type, Vec2D pos) {
+        public LineIntersection(Type type, ReadonlyVec2D pos) {
             this.type = type;
             this.pos = pos;
         }
@@ -24,7 +24,7 @@ public class Line2D {
         /**
          * @return the pos
          */
-        public Vec2D getPos() {
+        public ReadonlyVec2D getPos() {
             return pos.copy();
         }
 
@@ -84,9 +84,34 @@ public class Line2D {
 
     public Vec2D a, b;
 
+    public Line2D(ReadonlyVec2D a, ReadonlyVec2D b) {
+        this.a = a.copy();
+        this.b = b.copy();
+    }
+
     public Line2D(Vec2D a, Vec2D b) {
         this.a = a;
         this.b = b;
+    }
+
+    /**
+     * Computes the closest point on this line to the given one.
+     * 
+     * @param p
+     *            point to check against
+     * @return closest point on the line
+     */
+    public Vec2D closestPointTo(ReadonlyVec2D p) {
+        final Vec2D v = b.sub(a);
+        final float t = p.sub(a).dot(v) / v.magSquared();
+        // Check to see if t is beyond the extents of the line segment
+        if (t < 0.0f) {
+            return a.copy();
+        } else if (t > 1.0f) {
+            return b.copy();
+        }
+        // Return the point between 'a' and 'b'
+        return a.add(v.scaleSelf(t));
     }
 
     public Line2D copy() {
