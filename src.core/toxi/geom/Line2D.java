@@ -24,7 +24,7 @@ public class Line2D {
         /**
          * @return the pos
          */
-        public ReadonlyVec2D getPos() {
+        public Vec2D getPos() {
             return pos.copy();
         }
 
