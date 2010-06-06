@@ -6,12 +6,14 @@ import junit.framework.TestCase;
 import toxi.geom.AABB;
 import toxi.geom.Line3D;
 import toxi.geom.PointOctree;
+import toxi.geom.PointQuadtree;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.SphereIntersectorReflector;
+import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
@@ -142,6 +144,19 @@ public class GeomTestSuite extends TestCase {
                 t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50), new Vec3D(
                         50, 50, 50)));
         assertEquals(points.size() == 3, true);
+    }
+
+    public void testQuadtree() {
+        PointQuadtree t = new PointQuadtree(new Vec2D(), 100);
+        t.setMinNodeSize(2);
+        assertEquals(t.addPoint(new Vec2D(0, 0)), true);
+        assertEquals(t.addPoint(new Vec2D(1, 1)), true);
+        assertEquals(t.addPoint(new Vec2D(4, 0)), true);
+        PointQuadtree leaf1 = t.getLeafForPoint(new Vec2D(0, 0));
+        PointQuadtree leaf2 = t.getLeafForPoint(new Vec2D(4, 0));
+        assertNotSame(leaf1, leaf2);
+        ArrayList<Vec2D> points = t.getPointsWithinRect(leaf1);
+        assertEquals(2, points.size());
     }
 
     public void testRectMerge() {
