@@ -69,7 +69,7 @@ public class Rect implements Shape2D {
      *            point to check
      * @return true, if point is contained
      */
-    public final boolean containsPoint(ReadonlyVec2D p) {
+    public boolean containsPoint(ReadonlyVec2D p) {
         float px = p.x();
         float py = p.y();
         if (px < x || px >= x + width) {
