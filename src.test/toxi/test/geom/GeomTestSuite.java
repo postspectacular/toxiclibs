@@ -127,16 +127,21 @@ public class GeomTestSuite extends TestCase {
 
     public void testOctree() {
         PointOctree t = new PointOctree(new Vec3D(), 100);
+        t.setMinNodeSize(0.5f);
         assertEquals(t.addPoint(new Vec3D(0, 0, 0)), true);
+        assertEquals(t.addPoint(new Vec3D(1, 0, 0)), true);
+        PointOctree leaf1 = t.getLeafForPoint(new Vec3D(0, 0, 0));
+        PointOctree leaf2 = t.getLeafForPoint(new Vec3D(1, 0, 0));
+        assertNotSame(leaf1, leaf2);
         assertEquals(t.addPoint(new Vec3D(0, 100, 0)), true);
         assertEquals(t.addPoint(new Vec3D(101, 0, 0)), false);
         ArrayList<Vec3D> points =
                 t.getPointsWithinSphere(new Sphere(new Vec3D(50, 0, 0), 50));
-        assertEquals(points.size() == 1, true);
+        assertEquals(points.size() == 2, true);
         points =
                 t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50), new Vec3D(
                         50, 50, 50)));
-        assertEquals(points.size() == 2, true);
+        assertEquals(points.size() == 3, true);
     }
 
     public void testRectMerge() {
