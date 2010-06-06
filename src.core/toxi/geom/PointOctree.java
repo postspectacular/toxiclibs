@@ -79,6 +79,7 @@ public class PointOctree extends AABB implements Shape3D {
         this.numChildren = 0;
         if (parent != null) {
             depth = parent.depth + 1;
+            minNodeSize = parent.minNodeSize;
         }
     }
 
@@ -184,7 +185,7 @@ public class PointOctree extends AABB implements Shape3D {
      *            point to check
      * @return leaf node or null if point is outside the tree dimensions
      */
-    protected PointOctree getLeafForPoint(ReadonlyVec3D p) {
+    public PointOctree getLeafForPoint(ReadonlyVec3D p) {
         // if not a leaf node...
         if (p.isInAABB(this)) {
             if (numChildren > 0) {
