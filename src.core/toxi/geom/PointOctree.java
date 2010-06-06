@@ -412,7 +412,7 @@ public class PointOctree extends AABB implements Shape3D {
      * @param minNodeSize
      */
     public void setMinNodeSize(float minNodeSize) {
-        this.minNodeSize = minNodeSize;
+        this.minNodeSize = minNodeSize * 0.5f;
     }
 
     /**
