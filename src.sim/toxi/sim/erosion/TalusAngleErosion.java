@@ -4,7 +4,9 @@ package toxi.sim.erosion;
  * For each neighbour it’s computed the difference between the processed cell
  * and the neighbour:
  * 
+ * <pre>
  * d[i] = h - h[i];
+ * </pre>
  * 
  * the maximum positive difference is stored in d_max, and the sum of all the
  * positive differences that are bigger than T (this numer is n), the talus
@@ -13,11 +15,15 @@ package toxi.sim.erosion;
  * Now it’s possible to update all the n cells (where d[i] is bigger than T)
  * using this formula:
  * 
+ * <pre>
  * h[i] = h[i] + c * (d_max - T) * (d[i] / d_tot);
+ * </pre>
  * 
  * and the main cell with this other formula:
  * 
+ * <pre>
  * h = h - (d_max - (n * d_max * T / d_tot));
+ * </pre>
  * 
  * The Talus angle T is a threshold that determines which slopes are affected by
  * the erosion, instead the c constant determines how much material is eroded.
@@ -27,6 +33,12 @@ public class TalusAngleErosion extends ErosionFunction {
     private float theta;
     private float amount;
 
+    /**
+     * @param theta
+     *            talus angle
+     * @param amount
+     *            material transport amount
+     */
     public TalusAngleErosion(float theta, float amount) {
         this.theta = theta;
         this.amount = amount;
@@ -59,5 +71,4 @@ public class TalusAngleErosion extends ErosionFunction {
             }
         }
     }
-
 }

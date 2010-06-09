@@ -1,5 +1,9 @@
 package toxi.sim.erosion;
 
+/**
+ * Abstract parent class for various 2D erosion simulations, implemented as
+ * sub-classes.
+ */
 public abstract class ErosionFunction {
 
     protected float[] elevation;
@@ -10,6 +14,13 @@ public abstract class ErosionFunction {
     protected float[] h = new float[9];
     protected int[] off;
 
+    /**
+     * Destructively erodes the given array.
+     * 
+     * @param elevation
+     * @param width
+     * @param height
+     */
     public void erode(float[] elevation, int width, int height) {
         this.elevation = elevation;
         this.width = width;

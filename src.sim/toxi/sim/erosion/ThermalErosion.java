@@ -6,6 +6,7 @@ package toxi.sim.erosion;
  */
 public class ThermalErosion extends ErosionFunction {
 
+    @Override
     public void erodeAt(int x, int y) {
         int idx = y * width + x;
         float minD = Float.MAX_VALUE;
