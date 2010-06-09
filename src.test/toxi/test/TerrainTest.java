@@ -12,6 +12,8 @@ import toxi.geom.mesh.Terrain;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.math.MathUtils;
 import toxi.processing.ToxiclibsSupport;
+import toxi.sim.erosion.ErosionFunction;
+import toxi.sim.erosion.TalusAngleErosion;
 
 public class TerrainTest extends PApplet {
 
@@ -77,8 +79,9 @@ public class TerrainTest extends PApplet {
     private PImage img;
     private TriangleMesh mesh;
     private Bot bot;
-    private ReadonlyVec3D camOffset = new Vec3D(0, 100, 300);
+    private ReadonlyVec3D camOffset = new Vec3D(0, 50, 100);
     private Vec3D eyePos = new Vec3D(0, 1000, 0);
+    private PImage imgTerra;
 
     public void draw() {
         if (keyPressed) {
@@ -108,6 +111,9 @@ public class TerrainTest extends PApplet {
         noStroke();
         gfx.mesh(mesh, false);
         bot.draw();
+        camera();
+        fill(255);
+        image(imgTerra, 0, 0);
     }
 
     public void setup() {
@@ -117,11 +123,24 @@ public class TerrainTest extends PApplet {
         noiseDetail(8);
         for (int z = 0, i = 0; z < terrain.getDepth(); z++) {
             for (int x = 0; x < terrain.getWidth(); x++) {
-                el[i++] = noise(x * NOISE_SCALE, z * NOISE_SCALE) * 400;
+                el[i++] = noise(x * NOISE_SCALE, z * NOISE_SCALE);
             }
         }
+        ErosionFunction f = new TalusAngleErosion(0.04f, 1f);
+        // ErosionFunction f = new ThermalErosion();
+        for (int i = 0; i < 100; i++) {
+            f.erode(el, terrain.getWidth(), terrain.getDepth());
+        }
+        imgTerra = new PImage(terrain.getWidth(), terrain.getDepth(), ARGB);
+        for (int i = 0; i < el.length; i++) {
+            int c = (int) (el[i] * 255);
+            el[i] *= 800;
+            imgTerra.pixels[i] = c << 16 | c << 8 | c | 0xff000000;
+        }
+        imgTerra.updatePixels();
         terrain.setElevation(el);
-        mesh = terrain.toMesh(0);
+        mesh = terrain.toMesh();
+        mesh.saveAsSTL("terrain.stl");
         // terrain = null;
         gfx = new ToxiclibsSupport(this);
         bot = new Bot(0, 0);
