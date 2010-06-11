@@ -25,10 +25,10 @@ import java.util.List;
 
 /**
  * Implements a spatial subdivision tree to work efficiently with large numbers
- * of 3D particles. This quadtree can only be used for particle type objects and
- * does NOT support 3D mesh geometry as other forms of quadtree do.
+ * of 2D particles. This quadtree can only be used for particle type objects and
+ * does NOT support 2D mesh geometry as other forms of quadtree might do.
  * 
- * For further reference also see the OctreeDemo in the /examples folder.
+ * For further reference also see the QuadtreeDemo in the /examples folder.
  * 
  */
 public class PointQuadtree extends Rect implements Shape2D {
@@ -255,7 +255,7 @@ public class PointQuadtree extends Rect implements Shape2D {
      * 
      * @param r
      *            clipping rect
-     * @return all points with the box volume
+     * @return all points with the rect
      */
     public ArrayList<Vec2D> getPointsWithinRect(Rect r) {
         ArrayList<Vec2D> results = null;
