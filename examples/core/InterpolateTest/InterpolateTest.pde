@@ -1,9 +1,14 @@
 /**
  * <p>This demo shows the effect of various InterpolateStrategy implementations available.
- * For the more interactive ZoomLensInterpolation please see the ZoomLens demo.</p>
+ * For the more interactive ZoomLensInterpolation please see the separate ZoomLens demo.</p>
  *
- * <p><strong>Usage:</strong> Move mouse to adjust parameters for
- * sigmoid & exponential interpolation</p>
+ * <p><strong>Usage:</strong> Move mouse to adjust parameters for these functions:
+ * <ul>
+ * <li>sigmoid</li>
+ * <li>exponential</li>
+ * <li>threshold</li>
+ * <li>decimated (also note you can change the underlying function/curve itself)</li>
+ * </ul></p>
  */
 
 /* 
@@ -29,7 +34,7 @@
 import toxi.math.*;
 
 void setup() {
-  size(200,200);
+  size(200,200,P3D);
 }
 
 void draw() {
@@ -41,32 +46,43 @@ void draw() {
   InterpolateStrategy sigmoid=new SigmoidInterpolation((float)mouseX/width*4);
   InterpolateStrategy cosine=new CosineInterpolation();
   InterpolateStrategy expo=new ExponentialInterpolation((float)mouseX/width*4);
+  InterpolateStrategy threshold=new ThresholdInterpolation((float)mouseX/width);
+  InterpolateStrategy steps=new DecimatedInterpolation((int)((float)mouseX/width*20),circular);
 
+  int h=height-1;
   for(float x=0; x<width; x++) {
     float t=x/width;
     //linear
-    float y=linear.interpolate(0,height,t);
+    float y=linear.interpolate(0,h,t);
     stroke(255,0,0);
     point(x,y);
     // circular (ease out)
-    y=circular.interpolate(0,height,t);
+    y=circular.interpolate(0,h,t);
     stroke(0,255,0);
     point(x,y);
     // circular flipped (ease in)
-    y=invCircular.interpolate(0,height,t);
+    y=invCircular.interpolate(0,h,t);
     stroke(0,255,255);
     point(x,y);
     // sigmoid (try setting sharpness in constructor)
-    y=sigmoid.interpolate(0,height,t);
+    y=sigmoid.interpolate(0,h,t);
     stroke(255,0,255);
     point(x,y);
     // sigmoid (try setting sharpness in constructor)
-    y=expo.interpolate(0,height,t);
+    y=expo.interpolate(0,h,t);
     stroke(0,0,255);
     point(x,y);
     // cosine
-    y=cosine.interpolate(0,height,t);
+    y=cosine.interpolate(0,h,t);
     stroke(255,255,0);
+    point(x,y);
+    // threshold
+    y=threshold.interpolate(0,h,t);
+    stroke(255,128,0);
+    point(x,y);
+    // steps
+    y=steps.interpolate(0,h,t);
+    stroke(255,0,128);
     point(x,y);
   }
 }
