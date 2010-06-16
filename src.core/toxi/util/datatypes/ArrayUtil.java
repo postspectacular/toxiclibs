@@ -53,11 +53,13 @@ public class ArrayUtil {
      * 
      * <pre>
      * 
+     * 
+     * 
      * // use 16 bits as shift offset for accessing red channel 
      * float[] red = ArrayUtil.getAsNormalizedFloatArray(argbPixels, 16, 255, 255);
      * </pre>
      * 
-     * @param array
+     * @param source
      *            source data
      * @param bits
      *            number of bits to right shift each value
@@ -65,14 +67,16 @@ public class ArrayUtil {
      *            bitmask to apply after bitshifting
      * @param peak
      *            peak value (in the source domain) to normalize against
+     * @param target
+     *            peak of the normalized values
      * @return
      */
-    public static float[] getAsNormalizedFloatArray(int[] array, int bits,
-            int mask, int peak) {
-        float invPeak = 1f / peak;
-        float[] normalized = new float[array.length];
-        for (int i = 0; i < array.length; i++) {
-            int val = array[i];
+    public static float[] getAsNormalizedFloatArray(int[] source, int bits,
+            int mask, int peak, float target) {
+        float invPeak = target / peak;
+        float[] normalized = new float[source.length];
+        for (int i = 0; i < source.length; i++) {
+            int val = source[i];
             if (bits > 0) {
                 val >>= bits;
             }
