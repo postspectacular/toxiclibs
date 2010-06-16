@@ -90,13 +90,15 @@
 
 	<target name="javadoc" depends="compile" description="Generate documentation">
 		<mkdir dir="${release.javadoc.dir}" />
-		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}">
+		<javadoc destdir="${release.javadoc.dir}" access="public" use="true" notree="false" nonavbar="false" noindex="false" splitindex="true" author="true" version="true" nodeprecatedlist="false" nodeprecated="false" sourcepath="${src.dir}" doctitle="toxiclibs (${project.name}) v${lib.version}" doclet="org.jboss.apiviz.APIviz"
+	           docletpath="../lib/apiviz-1.3.1.GA.jar" additionalparam="-sourceclasspath ${build.dir}">
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
 			</classpath>
 			<packageset dir="${src.dir}" defaultexcludes="yes">
 				<include name="**" />
 			</packageset>
+		    
 		</javadoc>
 	</target>
 
