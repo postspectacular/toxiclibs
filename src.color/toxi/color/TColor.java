@@ -548,7 +548,7 @@ public class TColor implements ReadonlyTColor {
      * @return itself
      */
     public TColor analog(float theta, float delta) {
-        return analog(MathUtils.degrees(theta), delta);
+        return analog((int) MathUtils.degrees(theta), delta);
     }
 
     public TColor analog(int angle, float delta) {
