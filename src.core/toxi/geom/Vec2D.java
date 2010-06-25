@@ -127,10 +127,7 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @return a new random normalized unit vector.
      */
     public static final Vec2D randomVector() {
-        Vec2D rnd =
-                new Vec2D((float) Math.random() * 2 - 1,
-                        (float) Math.random() * 2 - 1);
-        return rnd.normalize();
+        return randomVector(MathUtils.RND);
     }
 
     /**
@@ -562,8 +559,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @return itself
      */
     public final Vec2D jitter(float jx, float jy) {
-        x += MathUtils.normalizedRandom() * jx;
-        y += MathUtils.normalizedRandom() * jy;
+        x += MathUtils.normalizedRandom(MathUtils.RND) * jx;
+        y += MathUtils.normalizedRandom(MathUtils.RND) * jy;
         return this;
     }
 

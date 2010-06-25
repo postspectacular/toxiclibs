@@ -154,16 +154,14 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     /**
-     * Static factory method. Creates a new random unit vector using the default
-     * Math.random() Random instance.
+     * Static factory method. Creates a new random unit vector using the Random
+     * implementation set as default for the Vec3D class.
      * 
      * @return a new random normalized unit vector.
+     * @see
      */
     public static final Vec3D randomVector() {
-        Vec3D rnd =
-                new Vec3D(MathUtils.normalizedRandom(), MathUtils
-                        .normalizedRandom(), MathUtils.normalizedRandom());
-        return rnd.normalize();
+        return randomVector(MathUtils.RND);
     }
 
     /**
@@ -179,8 +177,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      */
     public static final Vec3D randomVector(Random rnd) {
         Vec3D v =
-                new Vec3D(MathUtils.normalizedRandom(rnd), MathUtils
-                        .normalizedRandom(rnd), MathUtils.normalizedRandom(rnd));
+                new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1, rnd
+                        .nextFloat() * 2 - 1);
         return v.normalize();
     }
 
@@ -807,9 +805,9 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @return itself
      */
     public final Vec3D jitter(float jx, float jy, float jz) {
-        x += MathUtils.normalizedRandom() * jx;
-        y += MathUtils.normalizedRandom() * jy;
-        z += MathUtils.normalizedRandom() * jz;
+        x += MathUtils.normalizedRandom(MathUtils.RND) * jx;
+        y += MathUtils.normalizedRandom(MathUtils.RND) * jy;
+        z += MathUtils.normalizedRandom(MathUtils.RND) * jz;
         return this;
     }
 

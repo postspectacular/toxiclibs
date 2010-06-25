@@ -28,7 +28,7 @@ import java.util.Random;
  * @author toxi
  * 
  */
-public class MathUtils {
+public final class MathUtils {
 
     /**
      * Square root of 2
@@ -106,6 +106,11 @@ public class MathUtils {
     private final static double SIN_A = -4d / (PI * PI);
     private final static double SIN_B = 4d / PI;
     private final static double SIN_P = 9d / 40;
+
+    /**
+     * Class internal random number generator used by {@link #randomVector()}
+     */
+    public static Random RND = new Random();
 
     /**
      * @param x
@@ -388,7 +393,7 @@ public class MathUtils {
      * @return random float
      */
     public static final float normalizedRandom() {
-        return (float) Math.random() * 2 - 1;
+        return RND.nextFloat() * 2 - 1;
     }
 
     /**
@@ -406,19 +411,19 @@ public class MathUtils {
     }
 
     public static final float random(float max) {
-        return (float) Math.random() * max;
+        return RND.nextFloat() * max;
     }
 
     public static final float random(float min, float max) {
-        return (float) Math.random() * (max - min) + min;
+        return RND.nextFloat() * (max - min) + min;
     }
 
     public static final int random(int max) {
-        return (int) (Math.random() * max);
+        return (int) (RND.nextFloat() * max);
     }
 
     public static final int random(int min, int max) {
-        return (int) (Math.random() * (max - min)) + min;
+        return (int) (RND.nextFloat() * (max - min)) + min;
     }
 
     public static final double random(Random rnd, double max) {
@@ -476,6 +481,17 @@ public class MathUtils {
             theta = PI - theta;
         }
         return theta;
+    }
+
+    /**
+     * Sets the default Random number generator for this class. This generator
+     * is being reused by all future calls to random() method versions which
+     * don't explicitly ask for a {@link Random} instance to be used.
+     * 
+     * @param rnd
+     */
+    public static void setDefaultRandomGenerator(Random rnd) {
+        RND = rnd;
     }
 
     public static int sign(double x) {
