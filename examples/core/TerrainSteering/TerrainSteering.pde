@@ -89,7 +89,12 @@ void draw() {
   car.update();
   // adjust camera offset & rotate behind car based on current steering angle
   Vec3D camPos = car.pos.add(camOffset.getRotatedY(car.currTheta + HALF_PI));
-  eyePos.interpolateToSelf(camPos, 0.05f);
+  camPos.constrain(mesh.getBoundingBox());
+  float y = terrain.getHeightAtPoint(camPos.x, camPos.z);
+  if (!Float.isNaN(y)) {
+    camPos.y = max(camPos.y, y + 100);
+  }
+  eyePos.interpolateToSelf(camPos, 0.05f);     
   background(0xffaaeeff);
   camera(eyePos.x, eyePos.y, eyePos.z, car.pos.x, car.pos.y, car.pos.z, 0, -1, 0);
   // setup lights
@@ -101,5 +106,6 @@ void draw() {
   gfx.mesh(mesh, false);
   car.draw();
 }
+
 
 

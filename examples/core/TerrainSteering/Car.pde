@@ -2,7 +2,7 @@ class Car extends Vec2D {
 
   Vec3D currNormal = Vec3D.Y_AXIS.copy();
   Vec3D pos;
-  IsectData isec;
+  IsectData3D isec;
 
   float currTheta;
   float targetTheta;
