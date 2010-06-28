@@ -1,9 +1,6 @@
 package toxi.geom.mesh;
 
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
@@ -595,6 +592,21 @@ public class TriangleMesh implements Intersector3D {
         return normals;
     }
 
+    protected void handleSaveAsSTL(STLWriter stl, boolean useFlippedY) {
+        if (useFlippedY) {
+            stl.setScale(new Vec3D(1, -1, 1));
+            for (Face f : faces) {
+                stl.face(f.a, f.b, f.c, f.normal, STLWriter.DEFAULT_RGB);
+            }
+        } else {
+            for (Face f : faces) {
+                stl.face(f.b, f.a, f.c, f.normal, STLWriter.DEFAULT_RGB);
+            }
+        }
+        stl.endSave();
+        logger.info(numFaces + " faces written");
+    }
+
     public boolean intersectsRay(Ray3D ray) {
         Triangle tri = intersector.getTriangle();
         for (Face f : faces) {
@@ -682,13 +694,25 @@ public class TriangleMesh implements Intersector3D {
     }
 
     /**
+     * Saves the mesh as OBJ format to the given {@link OutputStream}. Currently
+     * no texture coordinates are supported or written.
+     * 
+     * @param stream
+     */
+    public void saveAsOBJ(OutputStream stream) {
+        OBJWriter obj = new OBJWriter();
+        obj.beginSave(stream);
+        saveAsOBJ(obj);
+        obj.endSave();
+    }
+
+    /**
      * Saves the mesh as OBJ format to the given file path. Existing files will
      * be overwritten.
      * 
      * @param path
      */
     public void saveAsOBJ(String path) {
-        logger.info("saving mesh to: " + path);
         OBJWriter obj = new OBJWriter();
         obj.beginSave(path);
         saveAsOBJ(obj);
@@ -696,39 +720,43 @@ public class TriangleMesh implements Intersector3D {
     }
 
     /**
-     * Saves the mesh in a simple, proprietary compact binary format written
-     * using the standard {@link DataOutputStream} methods. The format is as
-     * follows:
-     * <ul>
-     * <li>int: number of vertex coordinates</li>
-     * <li>float: count times vertice coordinates in x,y,z order</li>
-     * <li>float: count times vertex normal coordinates in x,y,z order</li>
-     * </ul>
+     * Saves the mesh as binary STL format to the given {@link OutputStream}.
      * 
-     * @param fileName
+     * @param stream
+     * @see #saveAsSTL(OutputStream, boolean)
      */
-    // FIXME need to save face list instead of normals! Is this method necessary
-    // at all?
-    public final void saveAsRaw(String fileName) {
-        try {
-            DataOutputStream ds =
-                    new DataOutputStream(new FileOutputStream(fileName));
-            float[] coords = getMeshAsVertexArray();
-            ds.writeInt(coords.length);
-            for (float f : coords) {
-                ds.writeFloat(f);
-            }
-            coords = getVertexNormalsAsArray();
-            for (float f : coords) {
-                ds.writeFloat(f);
-            }
-            ds.flush();
-            ds.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public final void saveAsSTL(OutputStream stream) {
+        saveAsSTL(stream, false);
+    }
+
+    /**
+     * Saves the mesh as binary STL format to the given {@link OutputStream}.
+     * The exported mesh can optionally have it's Y axis flipped by setting the
+     * useFlippedY flag to true.
+     * 
+     * @param stream
+     * @param useFlippedY
+     */
+    public final void saveAsSTL(OutputStream stream, boolean useFlippedY) {
+        STLWriter stl = new STLWriter();
+        stl.beginSave(stream, numFaces);
+        handleSaveAsSTL(stl, useFlippedY);
+    }
+
+    /**
+     * Saves the mesh as binary STL format to the given {@link OutputStream} and
+     * using the supplied {@link STLWriter} instance. Use this method to export
+     * data in a custom {@link STLColorModel}. The exported mesh can optionally
+     * have it's Y axis flipped by setting the useFlippedY flag to true.
+     * 
+     * @param stream
+     * @param stl
+     * @param useFlippedY
+     */
+    public final void saveAsSTL(OutputStream stream, STLWriter stl,
+            boolean useFlippedY) {
+        stl.beginSave(stream, numFaces);
+        handleSaveAsSTL(stl, useFlippedY);
     }
 
     /**
@@ -755,20 +783,8 @@ public class TriangleMesh implements Intersector3D {
 
     public final void saveAsSTL(String fileName, STLWriter stl,
             boolean useFlippedY) {
-        logger.info("saving mesh to: " + fileName);
         stl.beginSave(fileName, numFaces);
-        if (useFlippedY) {
-            stl.setScale(new Vec3D(1, -1, 1));
-            for (Face f : faces) {
-                stl.face(f.a, f.b, f.c, f.normal, STLWriter.DEFAULT_RGB);
-            }
-        } else {
-            for (Face f : faces) {
-                stl.face(f.b, f.a, f.c, f.normal, STLWriter.DEFAULT_RGB);
-            }
-        }
-        stl.endSave();
-        logger.info(numFaces + " faces written");
+        handleSaveAsSTL(stl, useFlippedY);
     }
 
     public TriangleMesh scale(float scale) {

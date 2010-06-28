@@ -3,6 +3,8 @@ package toxi.geom.mesh;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
 
@@ -21,6 +23,9 @@ import toxi.geom.Vec3D;
  * 
  */
 public class STLWriter {
+
+    protected static final Logger logger =
+            Logger.getLogger(STLWriter.class.getName());
 
     public static final int DEFAULT_RGB = -1;
 
@@ -47,7 +52,19 @@ public class STLWriter {
         colorModel = cm;
     }
 
+    public void beginSave(OutputStream stream, int numFaces) {
+        logger.info("starting to save STL data to output stream...");
+        try {
+            ds = new DataOutputStream(stream);
+            writeHeader(numFaces);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void beginSave(String fn, int numFaces) {
+        logger.info("saving mesh to: " + fn);
         try {
             ds = new DataOutputStream(new FileOutputStream(fn));
             writeHeader(numFaces);
@@ -70,7 +87,7 @@ public class STLWriter {
     }
 
     public void face(Vec3D a, Vec3D b, Vec3D c, int rgb) {
-        Vec3D normal = b.sub(a).cross(c.sub(a)).normalize();
+        Vec3D normal = b.sub(a).crossSelf(c.sub(a)).normalize();
         if (useInvertedNormals) {
             normal.invert();
         }
