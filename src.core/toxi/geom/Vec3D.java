@@ -155,10 +155,9 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     /**
      * Static factory method. Creates a new random unit vector using the Random
-     * implementation set as default for the Vec3D class.
+     * implementation set as default for the {@link MathUtils} class.
      * 
      * @return a new random normalized unit vector.
-     * @see
      */
     public static final Vec3D randomVector() {
         return randomVector(MathUtils.RND);
@@ -781,7 +780,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     /**
-     * Jitter.
+     * Add random jitter to the vector in the range -j ... +j using the default
+     * {@link Random} generator of {@link MathUtils}.
      * 
      * @param j
      *            the j
@@ -793,7 +793,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     /**
-     * Adds random jitter to the vector.
+     * Adds random jitter to the vector in the range -j ... +j using the default
+     * {@link Random} generator of {@link MathUtils}.
      * 
      * @param jx
      *            maximum x jitter
@@ -805,9 +806,9 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @return itself
      */
     public final Vec3D jitter(float jx, float jy, float jz) {
-        x += MathUtils.normalizedRandom(MathUtils.RND) * jx;
-        y += MathUtils.normalizedRandom(MathUtils.RND) * jy;
-        z += MathUtils.normalizedRandom(MathUtils.RND) * jz;
+        x += MathUtils.normalizedRandom() * jx;
+        y += MathUtils.normalizedRandom() * jy;
+        z += MathUtils.normalizedRandom() * jz;
         return this;
     }
 
@@ -827,12 +828,14 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     /**
-     * Jitter.
+     * Adds random jitter to the vector in the range defined by the given vector
+     * components and using the default {@link Random} generator of
+     * {@link MathUtils}.
      * 
      * @param jitterVec
      *            the jitter vec
      * 
-     * @return the vec3 d
+     * @return itself
      */
     public final Vec3D jitter(Vec3D jitterVec) {
         return jitter(jitterVec.x, jitterVec.y, jitterVec.z);

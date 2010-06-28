@@ -121,8 +121,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     }
 
     /**
-     * Static factory method. Creates a new random unit vector using the default
-     * Math.random() Random instance.
+     * Static factory method. Creates a new random unit vector using the Random
+     * implementation set as default for the {@link MathUtils} class.
      * 
      * @return a new random normalized unit vector.
      */
@@ -550,7 +550,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     }
 
     /**
-     * Adds random jitter to the vector.
+     * Adds random jitter to the vector in the range -j ... +j using the default
+     * {@link Random} generator of {@link MathUtils}.
      * 
      * @param jx
      *            maximum x jitter
@@ -559,8 +560,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @return itself
      */
     public final Vec2D jitter(float jx, float jy) {
-        x += MathUtils.normalizedRandom(MathUtils.RND) * jx;
-        y += MathUtils.normalizedRandom(MathUtils.RND) * jy;
+        x += MathUtils.normalizedRandom() * jx;
+        y += MathUtils.normalizedRandom() * jy;
         return this;
     }
 

@@ -108,7 +108,8 @@ public final class MathUtils {
     private final static double SIN_P = 9d / 40;
 
     /**
-     * Class internal random number generator used by {@link #randomVector()}
+     * Default random number generator used by random methods of this class
+     * which don't use a passed in {@link Random} instance.
      */
     public static Random RND = new Random();
 
