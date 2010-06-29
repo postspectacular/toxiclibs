@@ -55,6 +55,7 @@ public class ArrayUtil {
      * 
      * 
      * 
+     * 
      * // use 16 bits as shift offset for accessing red channel 
      * float[] red = ArrayUtil.getAsNormalizedFloatArray(argbPixels, 16, 255, 255);
      * </pre>
@@ -69,7 +70,7 @@ public class ArrayUtil {
      *            peak value (in the source domain) to normalize against
      * @param target
      *            peak of the normalized values
-     * @return
+     * @return normalized values
      */
     public static float[] getAsNormalizedFloatArray(int[] source, int bits,
             int mask, int peak, float target) {
