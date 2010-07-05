@@ -87,6 +87,21 @@ public class Triangle2D implements Shape2D {
         return b.sub(a).cross(c.sub(a)) * 0.5f;
     }
 
+    public Circle getCircumCircle() {
+        Vec3D cr = a.bisect(b).cross(b.bisect(c));
+        Vec2D circ = new Vec2D(cr.x / cr.z, cr.y / cr.z);
+        float sa = a.distanceTo(b);
+        float sb = b.distanceTo(c);
+        float sc = c.distanceTo(a);
+        float radius =
+                sa
+                        * sb
+                        * sc
+                        / (float) Math.sqrt((sa + sb + sc) * (-sa + sb + sc)
+                                * (sa - sb + sc) * (sa + sb - sc));
+        return new Circle(circ, radius);
+    }
+
     public float getCircumference() {
         return a.distanceTo(b) + b.distanceTo(c) + c.distanceTo(a);
     }

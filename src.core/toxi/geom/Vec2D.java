@@ -244,6 +244,13 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return (float) Math.acos(theta);
     }
 
+    public Vec3D bisect(Vec2D b) {
+        Vec2D diff = this.sub(b);
+        Vec2D sum = this.add(b);
+        float dot = diff.dot(sum);
+        return new Vec3D(diff.x, diff.y, -dot / 2);
+    }
+
     /**
      * Sets all vector components to 0.
      * 

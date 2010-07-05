@@ -51,6 +51,15 @@ public interface ReadonlyVec2D {
     public float angleBetween(ReadonlyVec2D v, boolean forceNormalize);
 
     /**
+     * Computes the perpendicular bisector of two points.
+     * 
+     * @param p
+     *            other point
+     * @return bisector coefficients as {@link Vec3D}
+     */
+    public Vec3D bisect(Vec2D p);
+
+    /**
      * Compares the length of the vector with another one.
      * 
      * @param v
