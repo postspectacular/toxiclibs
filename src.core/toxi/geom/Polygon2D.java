@@ -1,6 +1,8 @@
 package toxi.geom;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -15,10 +17,17 @@ public class Polygon2D implements Shape2D {
 
     public Polygon2D(List<Vec2D> points) {
         for (Vec2D p : points) {
-            add(p);
+            add(p.copy());
         }
     }
 
+    /**
+     * Adds a new vertex to the polygon (builder pattern).
+     * 
+     * @param p
+     *            vertex point to add
+     * @return itself
+     */
     public Polygon2D add(Vec2D p) {
         if (!vertices.contains(p)) {
             vertices.add(p);
@@ -101,4 +110,38 @@ public class Polygon2D implements Shape2D {
         return vertices.size();
     }
 
+    /**
+     * Checks if the vertices of this polygon are in clockwise ordering by
+     * examining the first 3.
+     * 
+     * @return true, if clockwise
+     */
+    public boolean isClockwise() {
+        if (vertices.size() > 2) {
+            return Triangle2D.isClockwise(vertices.get(0), vertices.get(1),
+                    vertices.get(2));
+        }
+        return false;
+    }
+
+    /**
+     * Flips the ordering of the polygon's vertices.
+     * 
+     * @return itself
+     */
+    public Polygon2D reverseOrientation() {
+        Collections.reverse(vertices);
+        return this;
+    }
+
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        for (Iterator<Vec2D> i = vertices.iterator(); i.hasNext();) {
+            buf.append(i.next().toString());
+            if (i.hasNext()) {
+                buf.append(", ");
+            }
+        }
+        return buf.toString();
+    }
 }

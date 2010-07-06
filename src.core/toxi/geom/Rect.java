@@ -120,6 +120,48 @@ public class Rect implements Shape2D {
         return new Vec2D(width, height);
     }
 
+    /**
+     * Returns one of the rectangles edges as {@link Line2D}. The edge IDs are:
+     * <ul>
+     * <li>0 - top</li>
+     * <li>1 - right</li>
+     * <li>2 - bottom</li>
+     * <li>3 - left</li>
+     * </ul>
+     * 
+     * @param id
+     *            edge ID
+     * @return edge as Line2D
+     */
+    public Line2D getEdge(int id) {
+        Line2D edge = null;
+        switch (id) {
+            // top
+            case 0:
+                edge = new Line2D(new Vec2D(x, y), new Vec2D(x + width, y));
+                break;
+            // right
+            case 1:
+                edge =
+                        new Line2D(new Vec2D(x + width, y), new Vec2D(
+                                x + width, y + height));
+                break;
+            // bottom
+            case 2:
+                edge =
+                        new Line2D(new Vec2D(x, y + height), new Vec2D(x
+                                + width, y + height));
+                break;
+            // left
+            case 3:
+                edge = new Line2D(new Vec2D(x, y), new Vec2D(x, y + height));
+                break;
+            default:
+                throw new IllegalArgumentException("edge ID needs to be 0...3");
+        }
+        return edge;
+    }
+
     public final Vec2D getTopLeft() {
         return new Vec2D(x, y);
     }
@@ -236,6 +278,20 @@ public class Rect implements Shape2D {
         x = pos.x;
         y = pos.y;
         return this;
+    }
+
+    /**
+     * Creates a {@link Polygon2D} instance of the rect.
+     * 
+     * @return rect as polygon
+     */
+    public Polygon2D toPolygon2D() {
+        Polygon2D poly = new Polygon2D();
+        poly.add(new Vec2D(x, y));
+        poly.add(new Vec2D(x + width, y));
+        poly.add(new Vec2D(x + width, y + height));
+        poly.add(new Vec2D(x, y + height));
+        return poly;
     }
 
     @Override

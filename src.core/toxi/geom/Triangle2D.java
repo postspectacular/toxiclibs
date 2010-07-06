@@ -148,7 +148,21 @@ public class Triangle2D implements Shape2D {
         c = c2;
     }
 
+    /**
+     * Creates a {@link Polygon2D} instance of the triangle. The vertices of
+     * this polygon are disconnected from the ones defining this triangle.
+     * 
+     * @return triangle as polygon
+     */
+    public Polygon2D toPolygon2D() {
+        Polygon2D poly = new Polygon2D();
+        poly.add(a.copy());
+        poly.add(b.copy());
+        poly.add(c.copy());
+        return poly;
+    }
+
     public String toString() {
-        return "Triangle: " + a + "," + b + "," + c;
+        return "Triangle2D: " + a + "," + b + "," + c;
     }
 }
