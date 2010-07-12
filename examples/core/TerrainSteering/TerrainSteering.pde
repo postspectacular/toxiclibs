@@ -2,7 +2,8 @@
  * This demo shows a simple 2D car steering algorithm and alignment of
  * the car on the 3D terrain surface. The demo also features a third
  * person camera, following the car and re-orienting itself towards the
- * current direction of movement.
+ * current direction of movement. The camera ensures it's always positioned
+ * above ground level too...
  *
  * <p>Usage: use cursor keys to control car
  * <ul>
@@ -106,6 +107,7 @@ void draw() {
   gfx.mesh(mesh, false);
   car.draw();
 }
+
 
 
 
