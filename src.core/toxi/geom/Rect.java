@@ -94,6 +94,19 @@ public class Rect implements Shape2D {
         return width * height;
     }
 
+    /**
+     * Computes the aspect ratio of the rect as width over height.
+     * 
+     * @return aspect ratio
+     */
+    public final float getAspect() {
+        return width / height;
+    }
+
+    public float getBottom() {
+        return y + height;
+    }
+
     public final Vec2D getBottomRight() {
         return new Vec2D(x + width, y + height);
     }
@@ -160,6 +173,18 @@ public class Rect implements Shape2D {
                 throw new IllegalArgumentException("edge ID needs to be 0...3");
         }
         return edge;
+    }
+
+    public float getLeft() {
+        return x;
+    }
+
+    public float getRight() {
+        return x + width;
+    }
+
+    public float getTop() {
+        return y;
     }
 
     public final Vec2D getTopLeft() {
