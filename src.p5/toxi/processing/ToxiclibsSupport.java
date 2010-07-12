@@ -18,6 +18,8 @@ import toxi.geom.Plane;
 import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
 import toxi.geom.Ray3D;
+import toxi.geom.ReadonlyVec2D;
+import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.Triangle;
@@ -126,6 +128,14 @@ public class ToxiclibsSupport {
 
     public final void line(Line3D line) {
         gfx.line(line.a.x, line.a.y, line.a.z, line.b.x, line.b.y, line.b.z);
+    }
+
+    public final void line(ReadonlyVec2D a, ReadonlyVec2D b) {
+        gfx.line(a.x(), a.y(), b.x(), b.y());
+    }
+
+    public final void line(ReadonlyVec3D a, ReadonlyVec3D b) {
+        gfx.line(a.x(), a.y(), a.z(), b.x(), b.y(), b.z());
     }
 
     public final void line(Vec2D a, Vec2D b) {
@@ -255,13 +265,16 @@ public class ToxiclibsSupport {
      * @param len
      *            axis length
      */
-    public final void origin(Vec3D o, float len) {
+    public final void origin(ReadonlyVec3D o, float len) {
+        final float x = o.x();
+        final float y = o.y();
+        final float z = o.z();
         gfx.stroke(255, 0, 0);
-        gfx.line(o.x, o.y, o.z, o.x + len, o.y, o.z);
+        gfx.line(x, y, z, x + len, y, z);
         gfx.stroke(0, 255, 0);
-        gfx.line(o.x, o.y, o.z, o.x, o.y + len, o.z);
+        gfx.line(x, y, z, x, y + len, z);
         gfx.stroke(0, 0, 255);
-        gfx.line(o.x, o.y, o.z, o.x, o.y, o.z + len);
+        gfx.line(x, y, z, x, y, z + len);
     }
 
     /**
@@ -274,6 +287,14 @@ public class ToxiclibsSupport {
      */
     public final void plane(Plane plane, float size) {
         mesh(plane.toMesh(size), false, 0);
+    }
+
+    public final void point(ReadonlyVec2D v) {
+        gfx.point(v.x(), v.y());
+    }
+
+    public final void point(ReadonlyVec3D v) {
+        gfx.point(v.x(), v.y(), v.z());
     }
 
     /**
@@ -457,6 +478,14 @@ public class ToxiclibsSupport {
         if (isFullShape) {
             gfx.endShape();
         }
+    }
+
+    public final void vertex(ReadonlyVec2D v) {
+        gfx.vertex(v.x(), v.y());
+    }
+
+    public final void vertex(ReadonlyVec3D v) {
+        gfx.vertex(v.x(), v.y(), v.z());
     }
 
     public final void vertex(Vec2D v) {
