@@ -15,6 +15,7 @@ import toxi.geom.Ellipse;
 import toxi.geom.Line2D;
 import toxi.geom.Line3D;
 import toxi.geom.Plane;
+import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
 import toxi.geom.Ray3D;
 import toxi.geom.Rect;
@@ -33,8 +34,8 @@ import toxi.geom.mesh.TriangleMesh;
  */
 public class ToxiclibsSupport {
 
-    protected static final Logger logger =
-            Logger.getLogger(ToxiclibsSupport.class.getName());
+    protected static final Logger logger = Logger
+            .getLogger(ToxiclibsSupport.class.getName());
 
     protected PApplet app;
     protected PGraphics gfx;
@@ -115,7 +116,7 @@ public class ToxiclibsSupport {
     /**
      * @return the gfx
      */
-    public PGraphics getGraphics() {
+    public final PGraphics getGraphics() {
         return gfx;
     }
 
@@ -135,29 +136,67 @@ public class ToxiclibsSupport {
         gfx.line(a.x, a.y, a.z, b.x, b.y, b.z);
     }
 
+    /**
+     * Draws a 2D line strip using all points in the given list of vectors.
+     * 
+     * @param points
+     *            point list
+     */
     public final void lineStrip2D(List<? extends Vec2D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
-        processVertices2D(points.iterator(), PConstants.POLYGON);
+        processVertices2D(points.iterator(), PConstants.POLYGON, false);
         gfx.fill = isFilled;
     }
 
+    /**
+     * Draws a 3D line strip using all points in the given list of vectors.
+     * 
+     * @param points
+     *            point list
+     */
     public final void lineStrip3D(List<? extends Vec3D> points) {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
-        processVertices3D(points.iterator(), PConstants.POLYGON);
+        processVertices3D(points.iterator(), PConstants.POLYGON, false);
         gfx.fill = isFilled;
     }
 
+    /**
+     * Draws a mesh instance using flat shading.
+     * 
+     * @param mesh
+     */
     public final void mesh(TriangleMesh mesh) {
         mesh(mesh, false, 0);
     }
 
+    /**
+     * Draws a mesh instance.
+     * 
+     * @param mesh
+     * @param smooth
+     *            true to enable gouroud shading (uses vertex normals, which
+     *            should have been computed beforehand) or false for flat
+     *            shading
+     */
     public final void mesh(TriangleMesh mesh, boolean smooth) {
         mesh(mesh, smooth, 0);
     }
 
-    public void mesh(TriangleMesh mesh, boolean smooth, float normalLength) {
+    /**
+     * Draws a mesh instance.
+     * 
+     * @param mesh
+     * @param smooth
+     *            true to enable gouroud shading (uses vertex normals, which
+     *            should have been computed beforehand) or false for flat
+     *            shading
+     * @param normalLength
+     *            if >0 then face (or vertex) normals are rendered at this
+     *            length
+     */
+    public final void mesh(TriangleMesh mesh, boolean smooth, float normalLength) {
         gfx.beginShape(PConstants.TRIANGLES);
         if (smooth) {
             for (TriangleMesh.Face f : mesh.faces) {
@@ -208,52 +247,99 @@ public class ToxiclibsSupport {
         }
     }
 
+    /**
+     * Draws the major axes from the given point.
+     * 
+     * @param o
+     *            origin point
+     * @param len
+     *            axis length
+     */
+    public final void origin(Vec3D o, float len) {
+        gfx.stroke(255, 0, 0);
+        gfx.line(o.x, o.y, o.z, o.x + len, o.y, o.z);
+        gfx.stroke(0, 255, 0);
+        gfx.line(o.x, o.y, o.z, o.x, o.y + len, o.z);
+        gfx.stroke(0, 0, 255);
+        gfx.line(o.x, o.y, o.z, o.x, o.y, o.z + len);
+    }
+
+    /**
+     * Draws a square section of a plane at the given size.
+     * 
+     * @param plane
+     *            plane to draw
+     * @param size
+     *            edge length
+     */
     public final void plane(Plane plane, float size) {
         mesh(plane.toMesh(size), false, 0);
     }
 
+    /**
+     * Draws a 2D point at the given position.
+     * 
+     * @param v
+     */
     public final void point(Vec2D v) {
         gfx.point(v.x, v.y);
     }
 
+    /**
+     * Draws a 3D point at the given position.
+     * 
+     * @param v
+     */
     public final void point(Vec3D v) {
         gfx.point(v.x, v.y, v.z);
     }
 
     public final void points2D(Iterator<? extends Vec2D> iterator) {
-        processVertices2D(iterator, PConstants.POINTS);
+        processVertices2D(iterator, PConstants.POINTS, false);
     }
 
     public final void points2D(List<? extends Vec2D> points) {
-        processVertices2D(points.iterator(), PConstants.POINTS);
+        processVertices2D(points.iterator(), PConstants.POINTS, false);
     }
 
     public final void points3D(Iterator<? extends Vec3D> iterator) {
-        processVertices3D(iterator, PConstants.POINTS);
+        processVertices3D(iterator, PConstants.POINTS, false);
     }
 
     public final void points3D(List<? extends Vec3D> points) {
-        processVertices3D(points.iterator(), PConstants.POINTS);
+        processVertices3D(points.iterator(), PConstants.POINTS, false);
     }
 
-    protected void processVertices2D(Iterator<? extends Vec2D> iterator,
-            int shapeID) {
+    public final void polygon2D(Polygon2D poly) {
+        processVertices2D(poly.vertices.iterator(), PConstants.POLYGON, true);
+    }
+
+    public final void processVertices2D(Iterator<? extends Vec2D> iterator,
+            int shapeID, boolean closed) {
         gfx.beginShape(shapeID);
         while (iterator.hasNext()) {
             Vec2D v = iterator.next();
             gfx.vertex(v.x, v.y);
         }
-        gfx.endShape();
+        if (closed) {
+            gfx.endShape(PConstants.CLOSE);
+        } else {
+            gfx.endShape();
+        }
     }
 
     public final void processVertices3D(Iterator<? extends Vec3D> iterator,
-            int shapeID) {
+            int shapeID, boolean closed) {
         gfx.beginShape(shapeID);
         while (iterator.hasNext()) {
             Vec3D v = iterator.next();
             gfx.vertex(v.x, v.y, v.z);
         }
-        gfx.endShape();
+        if (closed) {
+            gfx.endShape(PConstants.CLOSE);
+        } else {
+            gfx.endShape();
+        }
     }
 
     public final void ray(Ray2D ray, float length) {
@@ -292,7 +378,7 @@ public class ToxiclibsSupport {
      * @param gfx
      *            the gfx to set
      */
-    public void setGraphics(PGraphics gfx) {
+    public final void setGraphics(PGraphics gfx) {
         this.gfx = gfx;
     }
 
@@ -304,7 +390,7 @@ public class ToxiclibsSupport {
         gfx.popMatrix();
     }
 
-    public void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
+    public final void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
         gfx.beginShape(PConstants.TRIANGLES);
         gfx.texture(tex);
         if (smooth) {
@@ -339,6 +425,10 @@ public class ToxiclibsSupport {
         gfx.endShape();
     }
 
+    public final void triangle(Triangle tri) {
+        triangle(tri, true);
+    }
+
     public final void triangle(Triangle tri, boolean isFullShape) {
         if (isFullShape) {
             gfx.beginShape(PConstants.TRIANGLES);
@@ -351,6 +441,10 @@ public class ToxiclibsSupport {
         if (isFullShape) {
             gfx.endShape();
         }
+    }
+
+    public final void triangle(Triangle2D tri) {
+        triangle(tri, true);
     }
 
     public final void triangle(Triangle2D tri, boolean isFullShape) {
