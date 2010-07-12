@@ -1,7 +1,7 @@
 package toxi.sim.erosion;
 
 /**
- * For each neighbour it’s computed the difference between the processed cell
+ * For each neighbour it's computed the difference between the processed cell
  * and the neighbour:
  * 
  * <pre>
@@ -12,7 +12,7 @@ package toxi.sim.erosion;
  * positive differences that are bigger than T (this numer is n), the talus
  * angle, is stored in d_tot.
  * 
- * Now it’s possible to update all the n cells (where d[i] is bigger than T)
+ * Now it's possible to update all the n cells (where d[i] is bigger than T)
  * using this formula:
  * 
  * <pre>

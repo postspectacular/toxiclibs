@@ -4,6 +4,7 @@ bin
 docs
 dist
 blog
+metrics
 
 .DS_Store
 
