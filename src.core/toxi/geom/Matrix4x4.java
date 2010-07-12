@@ -158,7 +158,7 @@ public class Matrix4x4 {
         return new Matrix4x4(this).invert();
     }
 
-    public Matrix4x4 getRotatedAroundAxis(Vec3D axis, double theta) {
+    public Matrix4x4 getRotatedAroundAxis(ReadonlyVec3D axis, double theta) {
         return new Matrix4x4(this).rotateAroundAxis(axis, theta);
     }
 
@@ -436,8 +436,8 @@ public class Matrix4x4 {
         return new Matrix4x4(this).scaleSelf(scaleX, scaleY, scaleZ);
     }
 
-    public Matrix4x4 scale(Vec3D scale) {
-        return new Matrix4x4(this).scaleSelf(scale.x, scale.y, scale.z);
+    public Matrix4x4 scale(ReadonlyVec3D scale) {
+        return new Matrix4x4(this).scaleSelf(scale.x(), scale.y(), scale.z());
     }
 
     public Matrix4x4 scaleSelf(double scale) {
@@ -452,8 +452,8 @@ public class Matrix4x4 {
         return this.multiplySelf(TEMP);
     }
 
-    public Matrix4x4 scaleSelf(Vec3D scale) {
-        return scaleSelf(scale.x, scale.y, scale.z);
+    public Matrix4x4 scaleSelf(ReadonlyVec3D scale) {
+        return scaleSelf(scale.x(), scale.y(), scale.z());
     }
 
     public Matrix4x4 set(double a, double b, double c, double d, double e,
@@ -572,8 +572,9 @@ public class Matrix4x4 {
         return new Matrix4x4(this).translateSelf(dx, dy, dz);
     }
 
-    public Matrix4x4 translate(Vec3D trans) {
-        return new Matrix4x4(this).translateSelf(trans.x, trans.y, trans.z);
+    public Matrix4x4 translate(ReadonlyVec3D trans) {
+        return new Matrix4x4(this).translateSelf(trans.x(), trans.y(), trans
+                .z());
     }
 
     public Matrix4x4 translateSelf(double dx, double dy, double dz) {
@@ -584,8 +585,8 @@ public class Matrix4x4 {
         return this.multiplySelf(TEMP);
     }
 
-    public Matrix4x4 translateSelf(Vec3D trans) {
-        return translateSelf(trans.x, trans.y, trans.z);
+    public Matrix4x4 translateSelf(ReadonlyVec3D trans) {
+        return translateSelf(trans.x(), trans.y(), trans.z());
     }
 
     /**
