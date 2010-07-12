@@ -1,3 +1,32 @@
+2010-06-09  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.sim/toxi/sim/erosion/ErosionFunction.java,
+	src.sim/toxi/sim/erosion/TalusAngleErosion.java,
+	src.sim/toxi/sim/erosion/ThermalErosion.java:
+	adding javadocs
+	[c3c59d9c3385] <toxiclibs>
+
+	* src.sim/toxi/sim/erosion/ErosionFunction.java,
+	src.sim/toxi/sim/erosion/TalusAngleErosion.java,
+	src.sim/toxi/sim/erosion/ThermalErosion.java:
+	refactored erosion processes into abstract ErosionFunction and
+	implementations: ThermalErosion, TalusAngleErosion
+	[20696df16b60] <toxiclibs>
+
+	* src.sim/toxi/sim/erosion/ThermalErosion.java:
+	adding toxi.sim.erosion package and initial thermal erosion
+	processes
+	[d4a08bd7bae4] <toxiclibs>
+
+2010-04-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/TriangleIntersector.java,
+	src.core/toxi/geom/mesh/Terrain.java,
+	src.sim/toxi/sim/dla/DLAConfiguration.java,
+	src.sim/toxi/sim/dla/DLAGuideLines.java:
+	fixing javadocs
+	[33600a543630] <toxiclibs>
+
 2010-04-01  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.sim/toxi/sim/dla/DLA.java,

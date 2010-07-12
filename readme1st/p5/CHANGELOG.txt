@@ -1,3 +1,10 @@
+2010-04-27  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding texturedMesh() method to support new UV coords feature of
+	TriangleMesh
+	[4589dc31e384] <toxiclibs>
+
 2010-04-16  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.p5/toxi/processing/ToxiclibsSupport.java:

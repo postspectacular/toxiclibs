@@ -6,7 +6,7 @@
     <property name="lib.version" value="${version.volume}" />
     <property name="lib.jdk.level" value="1.5" />
     <property name="lib.zip.comment" value="${project.name} - volumetric modelling for Java &amp; Processing v${lib.version}" />
-    <property name="lib.libs.path" value="../lib" />
+    <property name="lib.libs.path" value="../lib,../lib/core.jar,../lib/jaxb/jaxb-api.jar,../lib/jaxb/jsr173_1.0_api.jar" />
     <property name="lib.jar.filename" value="${project.name}.jar" />
 
     <!-- Basic targets -->

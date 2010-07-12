@@ -1,3 +1,35 @@
+2010-05-20  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Polygon2D.java,
+	src.core/toxi/geom/Ray2D.java, src.core/toxi/geom/Ray3D.java,
+	src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java, src.core/toxi/geom/Rect.java,
+	src.core/toxi/geom/Spline2D.java,
+	src.core/toxi/geom/Triangle2D.java, src.core/toxi/geom/Vec2D.java,
+	src.core/toxi/geom/Vec3D.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.test/toxi/test/JAXBGeomTest.java,
+	src.test/toxi/test/geom/PolygonTest.java,
+	src.test/toxi/test/geom/Triangle2DTest.java:
+	extracted ReadonlyVec2D interface and updated all resulting changes
+	through all packages, also further updates to usage of 2D/3D
+	immutable types within other classes, needs further performance
+	testing and can possibly avoid separate versions for immutables
+	[5d59113bd38e] <vec3drefactor>
+
+2010-05-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.physics/toxi/physics/constraints/BoxConstraint.java:
+	bug fix BoxConstraint to handle collisions based on actual particle
+	velocity and adding restitution handling
+	[867cb87c6a5d] <toxiclibs>
+
+	* src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java:
+	adding getVelocity() and setPreviousPosition() methods
+	[2452f1469901] <toxiclibs>
+
 2010-04-06  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.physics/toxi/physics/VerletParticle.java,

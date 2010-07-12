@@ -1,4 +1,272 @@
+2010-06-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/PointQuadtree.java:
+	javadoc tweaks
+	[a4678223c271] [tip] <toxiclibs>
+
+	* src.core/toxi/util/datatypes/ArrayUtil.java:
+	adding getAsNormalizedFloatArray() method to ArrayUtil
+	[df1c99334548] <toxiclibs>
+
+2010-06-06  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/PointQuadtree.java:
+	adding PointQuadtree class for Vec2D
+	[841657c7ab31] <toxiclibs>
+
+	* src.core/toxi/geom/PointOctree.java:
+	PointOctree.setMinNodeSize() now specifies the actual (not half)
+	size required
+	[e40f1a83b962] <toxiclibs>
+
+	* src.core/toxi/geom/Rect.java:
+	made Rect.containsPoint() non-final again
+	[425b370e3618] <toxiclibs>
+
+	* src.core/toxi/geom/PointOctree.java:
+	bug fix: PointOctree.setMinNodeSize() now working as expected. The
+	setting wasn't being copied down to child nodes so far, which would
+	continue to work with the default node size=4
+	[6c20b806a1e9] <toxiclibs>
+
+2010-06-03  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Line2D.java:
+	made Line2D.LineIntersection.getPos() return a Vec2D instead of
+	ReadonlyVec2D
+	[e660a973f246] <toxiclibs>
+
+2010-05-31  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Intersector.java,
+	src.core/toxi/geom/IsectData.java,
+	src.core/toxi/geom/PointList.java, src.core/toxi/geom/Quad.java,
+	src.core/toxi/geom/Reflector.java,
+	src.test/toxi/test/audio/MemTest.java:
+	Merge with vec3drefactor branch
+	[e4521ace548e] <toxiclibs>
+
+	* src.core/toxi/util/FileSequenceDescriptor.java:
+	adding getBasePath() and getStartIndex() to FSD
+	[a0715069a7ae] <vec3drefactor>
+
+2010-05-26  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AABB.java, src.core/toxi/geom/Plane.java,
+	src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java,
+	src.core/toxi/geom/Spline2D.java, src.core/toxi/geom/Spline3D.java:
+	fixed javadoc issues
+	[e3937a1d0e75] <vec3drefactor>
+
+2010-05-24  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/geom/XAxisCylinder.java,
+	src.core/toxi/geom/YAxisCylinder.java,
+	src.core/toxi/geom/ZAxisCylinder.java:
+	refactored Vec2D/3D.Axis enum to be able to produce a valid axis
+	vector, updated/bugfixed axis handling in AxisAlignedCylinder and
+	XYZ subclasses
+	[8e8f383c0a89] <vec3drefactor>
+
+	* src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java:
+	changed interpolateToSelf() methods to take a ReadonlyVec2D/3D as
+	param, removed deprecated Vec2D.pointInPolygon() method (use
+	Polygon2D class instead)
+	[a37521c1bf59] <vec3drefactor>
+
+	* src.core/toxi/geom/PointList.java:
+	removing obsolete PointList class
+	[a6040d1fcb60] <vec3drefactor>
+
+	* src.core/toxi/geom/Matrix4x4.java:
+	adding applyToSelf() method to directly apply matrix to given vector
+	(instead of producing a transformed copy)
+	[228206f088bb] <vec3drefactor>
+
+	* src.core/toxi/geom/AABB.java,
+	src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Intersectable.java,
+	src.core/toxi/geom/Intersector3D.java,
+	src.core/toxi/geom/IsectData3D.java, src.core/toxi/geom/Line3D.java,
+	src.core/toxi/geom/Plane.java, src.core/toxi/geom/PointOctree.java,
+	src.core/toxi/geom/Reflectable.java,
+	src.core/toxi/geom/Reflector3D.java,
+	src.core/toxi/geom/Shape3D.java, src.core/toxi/geom/Sphere.java,
+	src.core/toxi/geom/SphereIntersectorReflector.java,
+	src.core/toxi/geom/Triangle.java,
+	src.core/toxi/geom/TriangleIntersector.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding Shape3D interface for unified containment tests for points in
+	AABB, AxisAlignedCylinder, Plane, PointOctree, Sphere, Triangle,
+	further minor updates caused by ReadonlyVec3D, renamed Intersectable
+	and Reflectable into Intersector3D/Reflector3D, renamed IsectData
+	into IsectData3D
+	[94c43215f54a] <vec3drefactor>
+
+	* src.core/toxi/geom/Circle.java,
+	src.core/toxi/geom/CircleIntersector.java,
+	src.core/toxi/geom/Ellipse.java,
+	src.core/toxi/geom/Intersector2D.java,
+	src.core/toxi/geom/IsectData2D.java, src.core/toxi/geom/Line2D.java,
+	src.core/toxi/geom/Polygon2D.java, src.core/toxi/geom/Rect.java,
+	src.core/toxi/geom/Shape2D.java, src.core/toxi/geom/Triangle2D.java:
+	adding Shape2D interface to provide unified containment tests for
+	points, getArea() and getCircumference() methods for Circle,
+	Ellipse, Polygon2D, Rect and Triangle2D classes. Adding &
+	implementing Intersector2D interface and IsectData2D class for ray
+	intersections, adding CircleIntersector class
+	[3c7cc0cef81a] <vec3drefactor>
+
+	* src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java,
+	src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java:
+	further refactoring and cleaning up caused by ReadonlyVec2D/3D
+	interface extraction. removed deprecated methods in Vec2D/3D and
+	moved some intersection/containment tests into their respective
+	geometric shape/form classes
+	[601239d48dbd] <vec3drefactor>
+
+2010-05-21  Karsten Schmidt  <k@postspectacular.com>
+
+	* .classpath, src.core/toxi/geom/AABB.java,
+	src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Circle.java, src.core/toxi/geom/Ellipse.java,
+	src.core/toxi/geom/Intersectable.java,
+	src.core/toxi/geom/Intersector.java,
+	src.core/toxi/geom/IsectData.java,
+	src.core/toxi/geom/IsectData2D.java,
+	src.core/toxi/geom/IsectData3D.java, src.core/toxi/geom/Quad.java,
+	src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java,
+	src.core/toxi/geom/Reflectable.java,
+	src.core/toxi/geom/Reflector.java,
+	src.core/toxi/geom/SphereIntersectorReflector.java,
+	src.core/toxi/geom/TriangleIntersector.java,
+	src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/geom/XAxisCylinder.java,
+	src.core/toxi/geom/YAxisCylinder.java,
+	src.core/toxi/geom/ZAxisCylinder.java,
+	src.core/toxi/geom/mesh/Terrain.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java:
+	more immutability related refactoring, deprecation of old methods,
+	removed old Quad class, refactoring cylinder classes,
+	AxisAlignedCylinder now an abstract class instead of interface,
+	renamed Intersector/Reflector into Intersectable/Reflectable,
+	IsecData into IsecData3D, added IsecData2D
+	[1c32f8d3ffe2] <vec3drefactor>
+
+2010-05-20  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Polygon2D.java,
+	src.core/toxi/geom/Ray2D.java, src.core/toxi/geom/Ray3D.java,
+	src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java, src.core/toxi/geom/Rect.java,
+	src.core/toxi/geom/Spline2D.java,
+	src.core/toxi/geom/Triangle2D.java, src.core/toxi/geom/Vec2D.java,
+	src.core/toxi/geom/Vec3D.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.test/toxi/test/JAXBGeomTest.java,
+	src.test/toxi/test/geom/PolygonTest.java,
+	src.test/toxi/test/geom/Triangle2DTest.java:
+	extracted ReadonlyVec2D interface and updated all resulting changes
+	through all packages, also further updates to usage of 2D/3D
+	immutable types within other classes, needs further performance
+	testing and can possibly avoid separate versions for immutables
+	[5d59113bd38e] <vec3drefactor>
+
+	* src.color/toxi/color/TColor.java, src.core/toxi/geom/AABB.java,
+	src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Cone.java, src.core/toxi/geom/IsectData.java,
+	src.core/toxi/geom/Line3D.java, src.core/toxi/geom/Matrix4x4.java,
+	src.core/toxi/geom/Plane.java, src.core/toxi/geom/PointCloud.java,
+	src.core/toxi/geom/PointOctree.java,
+	src.core/toxi/geom/Polygon2D.java, src.core/toxi/geom/Quad.java,
+	src.core/toxi/geom/Quaternion.java, src.core/toxi/geom/Ray3D.java,
+	src.core/toxi/geom/Reflector.java, src.core/toxi/geom/Sphere.java,
+	src.core/toxi/geom/SphereIntersectorReflector.java,
+	src.core/toxi/geom/Spline3D.java, src.core/toxi/geom/Triangle.java,
+	src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/geom/XAxisCylinder.java,
+	src.core/toxi/geom/YAxisCylinder.java,
+	src.core/toxi/geom/ZAxisCylinder.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.test/toxi/test/DLATest.java,
+	src.test/toxi/test/TerrainTest.java,
+	src.test/toxi/test/audio/JOALTest.java,
+	src.test/toxi/test/audio/MemTest.java,
+	src.test/toxi/test/geom/GeomTestSuite.java,
+	src.test/toxi/test/geom/MatrixTest.java,
+	src.test/toxi/test/geom/QuaternionTest.java,
+	src.test/toxi/test/geom/TriangleTest.java,
+	src.volume/toxi/volume/IsoSurface.java:
+	extracted ReadonlyVec3D interface and updated all resulting changes
+	through all packages
+	[f2fd58158ce5] <vec3drefactor>
+
+	* src.core/toxi/util/FileSequenceDescriptor.java,
+	src.core/toxi/util/FileUtils.java,
+	src.test/toxi/test/FileUtilsTest.java, test/img-010.tga,
+	test/img-011.tga, test/img-012.tga:
+	adding FileUtils and FileSequenceDescriptor classes in toxi.util
+	package (coreutils), incl. unit test and test assets
+	[c5954360d85a] <toxiclibs>
+
+2010-05-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AABB.java:
+	adding getNormalForPoint()
+	[7edf755662f2] <toxiclibs>
+
+	* src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java:
+	adding getComponent()/setComponent() methods for accessing vectors
+	in array style
+	[93423d1819bf] <toxiclibs>
+
+2010-05-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Matrix4x4.java:
+	fixed issue #3 in Matrix4x4.scaleSelf() - thanks to Tobias Jewson
+	[6c21e027cec0] <toxiclibs>
+
+2010-05-10  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/events/EventDispatcher.java:
+	adding EventDispatcher and toxi.util.events package
+	[6eed63e36387] <toxiclibs>
+
+	* src.core/toxi/geom/Line2D.java:
+	adding getTheta() to Line2D
+	[a786d8a1e163] <toxiclibs>
+
+	* src.core/toxi/util/datatypes/TypedProperties.java:
+	adding toHashMap() toTypedProperties
+	[3dbb216b0cfc] <toxiclibs>
+
+	* src.core/toxi/util/datatypes/DoubleRange.java,
+	src.core/toxi/util/datatypes/FloatRange.java,
+	src.core/toxi/util/datatypes/IntegerRange.java:
+	adding toArray() methods to range types
+	[3ce6ea6d3a9b] <toxiclibs>
+
+2010-04-27  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding UV coordinates to TriangleMesh.Face, refactoring addFace()
+	and adding new version of addFace() with UV support
+	[35d289f02791] <toxiclibs>
+
 2010-04-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/TriangleIntersector.java,
+	src.core/toxi/geom/mesh/Terrain.java,
+	src.sim/toxi/sim/dla/DLAConfiguration.java,
+	src.sim/toxi/sim/dla/DLAGuideLines.java:
+	fixing javadocs
+	[33600a543630] <toxiclibs>
 
 	* src.core/toxi/geom/SphereIntersectorReflector.java:
 	adding getter/setter for internal sphere instance

@@ -1,3 +1,34 @@
+2010-05-20  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.color/toxi/color/TColor.java, src.core/toxi/geom/AABB.java,
+	src.core/toxi/geom/AxisAlignedCylinder.java,
+	src.core/toxi/geom/Cone.java, src.core/toxi/geom/IsectData.java,
+	src.core/toxi/geom/Line3D.java, src.core/toxi/geom/Matrix4x4.java,
+	src.core/toxi/geom/Plane.java, src.core/toxi/geom/PointCloud.java,
+	src.core/toxi/geom/PointOctree.java,
+	src.core/toxi/geom/Polygon2D.java, src.core/toxi/geom/Quad.java,
+	src.core/toxi/geom/Quaternion.java, src.core/toxi/geom/Ray3D.java,
+	src.core/toxi/geom/Reflector.java, src.core/toxi/geom/Sphere.java,
+	src.core/toxi/geom/SphereIntersectorReflector.java,
+	src.core/toxi/geom/Spline3D.java, src.core/toxi/geom/Triangle.java,
+	src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/geom/XAxisCylinder.java,
+	src.core/toxi/geom/YAxisCylinder.java,
+	src.core/toxi/geom/ZAxisCylinder.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.test/toxi/test/DLATest.java,
+	src.test/toxi/test/TerrainTest.java,
+	src.test/toxi/test/audio/JOALTest.java,
+	src.test/toxi/test/audio/MemTest.java,
+	src.test/toxi/test/geom/GeomTestSuite.java,
+	src.test/toxi/test/geom/MatrixTest.java,
+	src.test/toxi/test/geom/QuaternionTest.java,
+	src.test/toxi/test/geom/TriangleTest.java,
+	src.volume/toxi/volume/IsoSurface.java:
+	extracted ReadonlyVec3D interface and updated all resulting changes
+	through all packages
+	[f2fd58158ce5] <vec3drefactor>
+
 2010-03-14  Karsten Schmidt  <k@postspectacular.com>
 
 	* examples/core/MeshAlignToAxis/MeshAlignToAxis.pde,

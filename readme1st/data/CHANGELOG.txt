@@ -1,3 +1,13 @@
+2010-05-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.data/toxi/data/csv/CSVAdapter.java,
+	src.data/toxi/data/csv/CSVFieldMapper.java,
+	src.data/toxi/data/csv/CSVListener.java,
+	src.data/toxi/data/csv/CSVParser.java:
+	adding toxi.data.csv package with CSVParser and helper classes for
+	event based parsing and associative field access
+	[c866309edcf3] <toxiclibs>
+
 2010-04-16  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.data/toxi/data/feeds/AtomAuthor.java,

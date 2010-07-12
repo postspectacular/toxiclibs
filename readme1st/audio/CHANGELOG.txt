@@ -1,3 +1,54 @@
+2010-05-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.audio/toxi/audio/SynthUtil.java,
+	src.audio/toxi/audio/scale/AbstractScale.java,
+	src.audio/toxi/audio/scale/GenericScale.java,
+	src.audio/toxi/audio/scale/MajorScale.java,
+	src.audio/toxi/music/DelayedSamplePlayer.java,
+	src.audio/toxi/music/QuantizedTimeHandler.java,
+	src.audio/toxi/music/QuantizedTimeProvider.java,
+	src.audio/toxi/music/scale/AbstractScale.java,
+	src.audio/toxi/music/scale/GenericScale.java,
+	src.audio/toxi/music/scale/MajorScale.java:
+	renaming toxi.audio.scale package into toxi.music.scale, adding
+	SynthUtil class, adding QuantizedTimeProvider/Handler and
+	DelayedSamplePlayer classes in toxi.music package
+	[3a5e07d95734] <toxiclibs>
+
+	* src.audio/toxi/audio/AudioBuffer.java:
+	minor updates to format handling in configure()
+	[a63d585be512] <toxiclibs>
+
+2010-05-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.audio/toxi/audio/scale/AbstractScale.java,
+	src.audio/toxi/audio/scale/GenericScale.java,
+	src.audio/toxi/audio/scale/MajorScale.java:
+	adding toxi.audio.scale package and Scale classes for pitching
+	samples based on musical scales
+	[003f43ba2514] <toxiclibs>
+
+	* src.audio/toxi/audio/AudioBuffer.java:
+	refactoring AudioBuffer format handling, adding Format enums and so
+	replacing need for native AL calls for status/info methods
+	[8b3e752406ed] <toxiclibs>
+
+2010-04-27  Karsten Schmidt  <k@postspectacular.com>
+
+	* .classpath, ant/versions.properties,
+	src.audio/toxi/audio/DecompressInputStream.java,
+	src.test/toxi/test/audio/JOALTest.java, test/phone_pcm.wav,
+	test/phone_ulaw.wav:
+	updating audio version, classpath, updating JOALTest and fixing
+	comments in DecompressInputStream, adding audio test files
+	[67d25502e5c9] <toxiclibs>
+
+	* src.audio/toxi/audio/AudioBuffer.java,
+	src.audio/toxi/audio/DecompressInputStream.java:
+	adding DecompressInputStream and convertUlawToPCM() method to
+	AudioBuffer, enabling support for µ-Law 8bit audio
+	[7ecae1751e5a] <toxiclibs>
+
 2010-01-20  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.audio/toxi/audio/MultiTimbralManager.java,
