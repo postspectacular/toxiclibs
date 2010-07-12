@@ -135,7 +135,7 @@ public class Polygon2D implements Shape2D {
     }
 
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (Iterator<Vec2D> i = vertices.iterator(); i.hasNext();) {
             buf.append(i.next().toString());
             if (i.hasNext()) {
