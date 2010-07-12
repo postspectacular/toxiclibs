@@ -114,4 +114,21 @@ public class Ellipse extends Vec2D implements Shape2D {
     public Ellipse setRadii(ReadonlyVec3D r) {
         return setRadii(r.x(), r.y());
     }
+
+    /**
+     * Creates a {@link Polygon2D} instance of the ellipse sampling it at the
+     * given resolution.
+     * 
+     * @param res
+     *            number of steps
+     * @return ellipse as polygon
+     */
+    public Polygon2D toPolygon2D(int res) {
+        Polygon2D poly = new Polygon2D();
+        float step = MathUtils.TWO_PI / res;
+        for (int i = 0; i < res; i++) {
+            poly.add(Vec2D.fromTheta(i * step).scaleSelf(radius).addSelf(this));
+        }
+        return poly;
+    }
 }
