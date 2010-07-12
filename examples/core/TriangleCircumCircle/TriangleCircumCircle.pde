@@ -1,3 +1,13 @@
+/**
+ * This demo shows how to construct a circle through 3 points by computing
+ * the triangles circumcircle (a circle defined for any triangle and which
+ * goes through all its points)
+ *
+ * <p><strong>Usage:</strong><br/>
+ * Move mouse to adjust size/shape of triangle
+ * </p>
+ */
+
 /* 
  * Copyright (c) 2010 Karsten Schmidt
  * 
@@ -17,7 +27,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
 import toxi.geom.*;
 import toxi.processing.*;
 
@@ -40,6 +50,9 @@ void draw() {
   stroke(0,224,255);
   gfx.ellipse(t.getCircumCircle()); 
 }
+
+
+
 
 
 

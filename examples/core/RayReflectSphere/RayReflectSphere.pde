@@ -84,13 +84,13 @@ void draw() {
 
   // does ray intersect sphere at all?
   if(reflectedRay!=null) {
-    IsectData isec=reflector.getIntersectionData();
+    IsectData3D isec=reflector.getIntersectionData();
     // get the intersection point
-    Vec3D isectPos=isec.pos;
+    ReadonlyVec3D isectPos=isec.pos;
     // calc the mirrored point
     Vec3D posMirrored=reflectedRay.getPointAtDistance(isec.dist);
     // show the intersection point & sphere's normal vector at intersection
-    Vec3D sphereNormal=isec.normal;
+    ReadonlyVec3D sphereNormal=isec.normal;
 
     stroke(0,255,0);
     gfx.box(new AABB(isectPos,2));
