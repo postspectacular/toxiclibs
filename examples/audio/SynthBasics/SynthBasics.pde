@@ -40,30 +40,32 @@ AudioSource source;
 void setup() {
   size(100,100);
   // create an array for a 1 second long stereo sample
-  byte[] sample=new byte[SAMPLE_FREQ*2];
+  float[] sample=new float[SAMPLE_FREQ*4];
   // calculate the base frequency in radians
   float freq=AbstractWave.hertzToRadians(220,SAMPLE_FREQ);
   // create an oscillator for the left channel
-  AbstractWave osc=new FMSawtoothWave(0,freq,127,0);
-  // and another for the right one (at 1/2 the base freq)
-  AbstractWave osc2=new SineWave(0,freq/2,127,0);
+  AbstractWave osc=new SineWave(0,freq,0.5,0);
+  // and another modulated one for the right channel (at 2x the base freq)
+  // (first define the freq modulation wave)
+  AbstractWave fmod=new FMSquareWave(0,AbstractWave.hertzToRadians(6,SAMPLE_FREQ),freq,0);
+  // (use a triangle wave to modulate the amplitude)
+  AbstractWave amod=new FMTriangleWave(0,AbstractWave.hertzToRadians(1,SAMPLE_FREQ),0.5,0);
+  // now create the actual 2nd oscillator
+  AbstractWave osc2=new AMFMSineWave(0,freq*2,0,fmod,amod);
   // populate the sample buffer
   for(int i=0; i<sample.length; i+=2) {
-    sample[i]=(byte)osc.update();
-    sample[i+1]=(byte)osc2.update();
+    sample[i]=osc.update();
+    sample[i+1]=osc2.update();
   }
   // init the audio library
   audio=JOALUtil.getInstance();
   audio.init();
-  // allocate a buffer via JOAL
-  buffer=audio.generateBuffers(1)[0];
-  // set the computed sample as buffer data
-  buffer.configure(ByteBuffer.wrap(sample),AudioBuffer.FORMAT_STEREO8,SAMPLE_FREQ);
+  // convert raw signal into JOAL 16bit stereo buffer
+  buffer=SynthUtil.floatArrayTo16bitStereoBuffer(audio,sample,SAMPLE_FREQ);
   // create a sound source, enable looping & play it
   source=audio.generateSource();
   source.setBuffer(buffer);
   source.setLooping(true);
-  source.setReferenceDistance(width/2);
   source.play();
 }
 

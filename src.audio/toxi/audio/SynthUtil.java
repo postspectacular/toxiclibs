@@ -26,25 +26,36 @@ public class SynthUtil {
         return sample;
     }
 
-    public static byte[] floatArrayTo16bitPCMStereo(float[] raw) {
-        byte[] sample = new byte[raw.length * 2];
-        for (int i = 0, j = 0; i < raw.length; i += 2) {
-            int left = (int) (raw[i] * 0x8000);
-            int right = (int) (raw[i + 1] * 0x8000);
-            sample[j++] = (byte) (left & 0xff);
-            sample[j++] = (byte) (left >> 8 & 0xff);
-            sample[j++] = (byte) (right & 0xff);
-            sample[j++] = (byte) (right >> 8 & 0xff);
+    public static AudioBuffer floatArrayTo16bitStereoBuffer(JOALUtil audioSys,
+            float[] raw, int rate) {
+        byte[] pcm = floatArrayTo16bitPCM(raw);
+        AudioBuffer buffer = audioSys.generateBuffers(1)[0];
+        buffer.configure(ByteBuffer.wrap(pcm), AudioBuffer.Format.STEREO16,
+                rate);
+        return buffer;
+    }
+
+    public static AudioBuffer floatArrayTo8bitBuffer(JOALUtil audioSys,
+            float[] raw, int rate) {
+        byte[] pcm = floatArrayTo8bitPCM(raw);
+        AudioBuffer buffer = audioSys.generateBuffers(1)[0];
+        buffer.configure(ByteBuffer.wrap(pcm), AudioBuffer.Format.MONO8, rate);
+        return buffer;
+    }
+
+    public static byte[] floatArrayTo8bitPCM(float[] raw) {
+        byte[] sample = new byte[raw.length];
+        for (int i = 0; i < raw.length; i++) {
+            sample[i] = (byte) (raw[i] * 0x7f + 0x80);
         }
         return sample;
     }
 
-    public static AudioBuffer floatArrayTo16bitStereoBuffer(JOALUtil audioSys,
+    public static AudioBuffer floatArrayTo8bitStereoBuffer(JOALUtil audioSys,
             float[] raw, int rate) {
-        byte[] pcm = floatArrayTo16bitPCMStereo(raw);
+        byte[] pcm = floatArrayTo8bitPCM(raw);
         AudioBuffer buffer = audioSys.generateBuffers(1)[0];
-        buffer.configure(ByteBuffer.wrap(pcm), AudioBuffer.Format.STEREO16,
-                rate);
+        buffer.configure(ByteBuffer.wrap(pcm), AudioBuffer.Format.STEREO8, rate);
         return buffer;
     }
 }

@@ -70,22 +70,15 @@ void setup() {
       raw[i+1]=raw[i+1]*(1-feedback)+raw[i-delayTime+1]*feedback;
     }
   }
-  // convert into 8bit stereo PCM
-  for(int i=0; i<sample.length; i++) {
-    sample[i]=(byte)(raw[i]*127+128);
-  }
   // init the audio library
   audio=JOALUtil.getInstance();
   audio.init();
-  // allocate a buffer via JOAL
-  buffer=audio.generateBuffers(1)[0];
-  // set the computed sample as buffer data
-  buffer.configure(ByteBuffer.wrap(sample),AudioBuffer.FORMAT_STEREO8,SAMPLE_FREQ);
+  // convert raw signal into JOAL 16bit stereo buffer
+  buffer=SynthUtil.floatArrayTo16bitStereoBuffer(audio,raw,SAMPLE_FREQ);
   // create a sound source, enable looping & play it
   source=audio.generateSource();
   source.setBuffer(buffer);
   source.setLooping(true);
-  source.setReferenceDistance(width/2);
   source.play();
 }
 
