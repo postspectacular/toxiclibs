@@ -2,13 +2,95 @@ package toxi.util;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * A collection of file handling utilities.
  */
 public class FileUtils {
+
+    static public void createDirectories(File file) {
+        try {
+            String parentName = file.getParent();
+            if (parentName != null) {
+                File parent = new File(parentName);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+            }
+        } catch (SecurityException se) {
+            System.err.println("You don't have permissions to create "
+                    + file.getAbsolutePath());
+        }
+    }
+
+    static public InputStream createInputStream(File file) throws IOException {
+        if (file == null) {
+            throw new IllegalArgumentException("file can't be null");
+        }
+        InputStream input = new FileInputStream(file);
+        if (file.getName().toLowerCase().endsWith(".gz")) {
+            return new GZIPInputStream(input);
+        }
+        return input;
+    }
+
+    static public OutputStream createOutputStream(File file) throws IOException {
+        if (file == null) {
+            throw new IllegalArgumentException("file can't be null");
+        }
+        createDirectories(file);
+        FileOutputStream fos = new FileOutputStream(file);
+        if (file.getName().toLowerCase().endsWith(".gz")) {
+            return new GZIPOutputStream(fos);
+        }
+        return fos;
+    }
+
+    public static BufferedReader createReader(File file) throws IOException {
+        return createReader(createInputStream(file));
+    }
+
+    public static BufferedReader createReader(InputStream input) {
+        return createReader(input, "UTF-8");
+    }
+
+    public static BufferedReader createReader(InputStream input, String encoding) {
+        InputStreamReader isr = null;
+        try {
+            isr = new InputStreamReader(input, encoding);
+        } catch (UnsupportedEncodingException e) {
+        }
+        return new BufferedReader(isr);
+    }
+
+    public static PrintWriter createWriter(OutputStream out) {
+        return createWriter(out, "UTF-8");
+    }
+
+    public static PrintWriter createWriter(OutputStream out, String encoding) {
+        OutputStreamWriter w = null;
+        try {
+            w = new OutputStreamWriter(out, encoding);
+        } catch (UnsupportedEncodingException e) {
+        }
+        return new PrintWriter(w);
+    }
 
     /**
      * <p>
@@ -47,6 +129,45 @@ public class FileUtils {
         } else {
             return null;
         }
+    }
+
+    static public byte[] loadBytes(InputStream stream) throws IOException {
+        BufferedInputStream input = new BufferedInputStream(stream);
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int c;
+        while ((c = input.read()) != -1) {
+            buffer.write(c);
+        }
+        return buffer.toByteArray();
+    }
+
+    public static String loadText(BufferedReader r) throws IOException {
+        StringBuilder result = new StringBuilder();
+        String line;
+        while ((line = r.readLine()) != null) {
+            result.append(line).append("\n");
+        }
+        return result.toString();
+    }
+
+    public static String loadText(InputStream input) throws IOException {
+        return loadText(input, "UTF-8");
+    }
+
+    public static String loadText(InputStream input, String encoding)
+            throws IOException {
+        byte[] raw = loadBytes(input);
+        return new String(raw, encoding);
+    }
+
+    static public void saveText(OutputStream output, String string) {
+        saveText(createWriter(output), string);
+    }
+
+    static public void saveText(PrintWriter writer, String string) {
+        writer.println(string);
+        writer.flush();
+        writer.close();
     }
 
     /**
