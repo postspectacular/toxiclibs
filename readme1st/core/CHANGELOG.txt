@@ -1,8 +1,116 @@
+2010-07-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/SingletonRegistry.java:
+	minor edit to SingletonRegistry: made REGISTRY final and applied
+	Eclipse formatter
+	[c613f23cfe4a] <toxiclibs>
+
+	* src.core/toxi/geom/mesh2d/DelaunayTriangle.java,
+	src.core/toxi/geom/mesh2d/DelaunayTriangulation.java,
+	src.core/toxi/geom/mesh2d/DelaunayVertex.java,
+	src.core/toxi/geom/mesh2d/Voronoi.java,
+	src.core/toxi/util/datatypes/ArraySet.java,
+	src.core/toxi/util/datatypes/UndirectedGraph.java:
+	adding toxi.geom.mesh2d package with ported DelaunayTriangulation &
+	Voronoi classes by Paul Chew, incl. generic ArraySet and
+	UndirectedGraph classes in toxi.util.datatypes package
+	[46850791b75b] <toxiclibs>
+
+	* src.core/toxi/util/DateUtils.java:
+	adding DateUtils class, for now only providing a timeStamp function
+	[b26ca7f5062d] <toxiclibs>
+
+	* src.core/toxi/util/FileUtils.java:
+	adding createDirectories/InputStream/OutputStream/Reader/Writer,
+	loadBytes, loadText, saveText (ported from PApplet)
+	[17785aea3121] <toxiclibs>
+
+	* src.core/toxi/geom/Matrix4x4.java:
+	minor edit: replaced methods taking a Vec3D to use ReadonlyVec3D for
+	better compatibility
+	[42953aff6d54] <toxiclibs>
+
+	* src.core/toxi/geom/Polygon2D.java:
+	minor edit: replaced StringBuffer with the faster StringBuilder
+	inside toString() method
+	[b37941d876be] <toxiclibs>
+
+	* src.core/toxi/geom/Rect.java:
+	adding getters for left, right, top, bottom coordinates
+	[5c7fa34ec37d] <toxiclibs>
+
+	* src.core/toxi/geom/Ellipse.java:
+	adding toPolygon2D() method
+	[d4a906c656c7] <toxiclibs>
+
+2010-07-06  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Polygon2D.java,
+	src.core/toxi/geom/PolygonClipper2D.java,
+	src.core/toxi/geom/Rect.java,
+	src.core/toxi/geom/SutherlandHodgemanClipper.java,
+	src.core/toxi/geom/Triangle2D.java:
+	adding PolygonClipper2D and SutherlandHodgemanClipper
+	implementation, adding toPolygon2D() methods to Rect & Triangle2D
+	[d139599876f9] <toxiclibs>
+
+2010-07-05  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/Triangle2D.java, src.core/toxi/geom/Vec2D.java:
+	adding getCircumCircle() to Triangle2D, adding bisect() to
+	ReadonlyVec2D & Vec2D
+	[1379cd29ab17] <toxiclibs>
+
+2010-06-29  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/ArrayUtil.java:
+	minor javadoc updates
+	[df9ecd29ce29] <toxiclibs>
+
+2010-06-28  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/OBJWriter.java,
+	src.core/toxi/geom/mesh/STLWriter.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding support for OutputStream to OBJWriter, STLWriter and
+	TriangleMesh classes
+	[a4e718aa541b] <toxiclibs>
+
+	* src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/math/MathUtils.java:
+	updating javadocs
+	[096776291d65] <toxiclibs>
+
+2010-06-25  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java,
+	src.core/toxi/math/MathUtils.java:
+	adding default Random generator to MathUtils (in place of
+	Math.random() calls), updating Vec2D/3D classes to reflect this
+	change
+	[edd16b4d17b7] <toxiclibs>
+
+2010-06-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/ArrayUtil.java:
+	adding target peak value to getAsNormalizedFloatArray()
+	[c778f53925be] <toxiclibs>
+
+2010-06-15  Karsten Schmidt  <k@postspectacular.com>
+
+	* examples/core/InterpolateTest/InterpolateTest.pde,
+	src.core/toxi/math/DecimatedInterpolation.java,
+	src.core/toxi/math/ThresholdInterpolation.java:
+	adding ThresholdInterpolation and DecimatedInterpolation strategies,
+	updating InterpolateTest demo
+	[c1d10b997316] <toxiclibs>
+
 2010-06-11  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.core/toxi/geom/PointQuadtree.java:
 	javadoc tweaks
-	[a4678223c271] [tip] <toxiclibs>
+	[a4678223c271] <toxiclibs>
 
 	* src.core/toxi/util/datatypes/ArrayUtil.java:
 	adding getAsNormalizedFloatArray() method to ArrayUtil

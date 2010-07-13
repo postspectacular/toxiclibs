@@ -1,3 +1,11 @@
+2010-07-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* .hgignore, ant/build_audio.xml,
+	src.sim/toxi/sim/erosion/TalusAngleErosion.java:
+	clean up: hgignore, build_audio.xml and fixing encoding in
+	TalusAngleErosion
+	[e05bf1593a48] <toxiclibs>
+
 2010-06-09  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.sim/toxi/sim/erosion/ErosionFunction.java,

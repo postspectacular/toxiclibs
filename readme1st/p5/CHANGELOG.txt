@@ -1,3 +1,15 @@
+2010-07-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding support for Readonly vectors
+	[0be0f428d14c] <toxiclibs>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding origin() and polygon2D() methods, adding javadocs and minor
+	refactoring of processVertices2D/3D methods to support open/closed
+	shapes
+	[52ad597daf85] <toxiclibs>
+
 2010-04-27  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.p5/toxi/processing/ToxiclibsSupport.java:

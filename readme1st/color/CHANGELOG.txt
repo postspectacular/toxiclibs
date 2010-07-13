@@ -1,3 +1,16 @@
+2010-07-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.color/toxi/color/TColorAdapter.java:
+	adding TColorAdapter for JAXB parsing of color values to TColor
+	instances
+	[9a064cd287fd] <toxiclibs>
+
+2010-06-22  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.color/toxi/color/TColor.java:
+	fixed StackOverflowException issue in TColor.analog(float,float)
+	[00d80bd732a3] <toxiclibs>
+
 2010-05-20  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.color/toxi/color/TColor.java, src.core/toxi/geom/AABB.java,

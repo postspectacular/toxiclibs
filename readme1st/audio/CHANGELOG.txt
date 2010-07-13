@@ -1,3 +1,12 @@
+2010-07-12  Karsten Schmidt  <k@postspectacular.com>
+
+	* examples/audio/SynthBasics/SynthBasics.pde,
+	examples/audio/SynthXfadeFmod/SynthXfadeFmod.pde,
+	src.audio/toxi/audio/SynthUtil.java:
+	updating SynthBasics & SynthXfadeFmod demos for audioutils, adding
+	8bit sample support to SynthUtil
+	[e06691309a10] <toxiclibs>
+
 2010-05-16  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.audio/toxi/audio/SynthUtil.java,
