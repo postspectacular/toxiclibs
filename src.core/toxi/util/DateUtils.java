@@ -10,7 +10,7 @@ public class DateUtils {
     }
 
     public static final String timeStamp(GregorianCalendar date) {
-        return String.format("%4d%02d%02d-%02d%02d%02d",
+        return String.format("%4d%02d%02d-%02d-%02d-%02d",
                 date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1,
                 date.get(Calendar.DAY_OF_MONTH),
                 date.get(Calendar.HOUR_OF_DAY), date.get(Calendar.MINUTE),

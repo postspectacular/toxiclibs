@@ -113,16 +113,21 @@ public class FileUtils {
      */
     public static FileSequenceDescriptor getFileSequenceDescriptorFor(
             String path) {
-        int zeroIndex = path.indexOf('-') + 1;
+        int dotIndex = path.lastIndexOf('.');
+        int zeroIndex = path.lastIndexOf('-') + 1;
         if (zeroIndex == 0) {
-            zeroIndex = path.indexOf('0');
+            zeroIndex = dotIndex - 1;
+            while (path.charAt(zeroIndex) >= '0'
+                    && path.charAt(zeroIndex) <= '9') {
+                zeroIndex--;
+            }
+            zeroIndex++;
         }
-        String base = path.substring(0, zeroIndex);
-        int dotIndex = path.indexOf('.', zeroIndex);
-        if (dotIndex != -1) {
+        int numDigits = dotIndex - zeroIndex;
+        if (dotIndex != -1 && numDigits > 0) {
+            String base = path.substring(0, zeroIndex);
             String extension = path.substring(dotIndex);
-            String filePattern =
-                    base + "%0" + (dotIndex - zeroIndex) + "d" + extension;
+            String filePattern = base + "%0" + numDigits + "d" + extension;
             int start = Integer.parseInt(path.substring(zeroIndex, dotIndex));
             return new FileSequenceDescriptor(filePattern, extension, dotIndex
                     - zeroIndex, start);
