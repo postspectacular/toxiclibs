@@ -20,18 +20,20 @@ public class GenericSet<T> implements Iterable<T> {
         pickRandom();
     }
 
-    public GenericSet(T obj) {
-        items = new ArrayList<T>();
-        items.add(obj);
-        current = obj;
+    public GenericSet(T... obj) {
+        items = new ArrayList<T>(obj.length);
+        for (int i = 0; i < obj.length; i++) {
+            items.add(obj[i]);
+        }
+        pickRandom();
     }
 
-    public void add(T obj) {
-        items.add(obj);
+    public boolean add(T obj) {
+        return items.add(obj);
     }
 
-    public void addAll(Collection<T> coll) {
-        items.addAll(coll);
+    public boolean addAll(Collection<T> coll) {
+        return items.addAll(coll);
     }
 
     public void clear() {
@@ -90,5 +92,9 @@ public class GenericSet<T> implements Iterable<T> {
 
     public void setRandom(Random rnd) {
         random = rnd;
+    }
+
+    public int size() {
+        return items.size();
     }
 }

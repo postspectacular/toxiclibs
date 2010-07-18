@@ -17,6 +17,14 @@ public class IntegerSet {
         pickRandom();
     }
 
+    public IntegerSet(Integer... items) {
+        this.items = new int[items.length];
+        for (int i = 0; i < items.length; i++) {
+            this.items[i] = items[i];
+        }
+        pickRandom();
+    }
+
     public boolean contains(int value) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == value) {
