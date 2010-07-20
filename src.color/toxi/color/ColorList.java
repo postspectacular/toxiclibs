@@ -190,7 +190,7 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Creates new ColorList from the given array of colors No copies of the
+     * Creates new ColorList from the given number of colors. Copies of the
      * given colors are created (shallow copy only).
      * 
      * @param colorArray
