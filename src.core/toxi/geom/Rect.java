@@ -242,13 +242,21 @@ public class Rect implements Shape2D {
      * @return true, if intersecting
      */
     public boolean intersectsRect(Rect r) {
+        return intersectsRect(r, true);
+    }
+
+    protected boolean intersectsRect(Rect r, boolean crossCheck) {
         Vec2D tl = r.getTopLeft();
         if (!containsPoint(tl)) {
             Vec2D br = r.getBottomRight();
             if (!containsPoint(br)) {
                 Vec2D v = new Vec2D(tl.x, br.y);
                 if (!containsPoint(v)) {
-                    return containsPoint(v.set(br.x, tl.y));
+                    boolean result = containsPoint(v.set(br.x, tl.y));
+                    if (!result && crossCheck) {
+                        result = r.intersectsRect(this, false);
+                    }
+                    return result;
                 }
             }
         }
