@@ -5,10 +5,11 @@ package toxi.math;
  * parameters need to be normalized offsets relative to the start and end values
  * passed to the {@link #interpolate(float, float, float)} method, but can
  * exceed the normal 0 .. 1.0 interval. Use symmetrical offsets to create a
- * symmetrical curve, e.g. this will create a curve with 2 dips...
+ * symmetrical curve, e.g. this will create a curve with 2 dips reaching the
+ * minimum and maximum values at 25% and 75% of the interval...
  * 
  * <p>
- * <code>BezierInterpolation b=new BezierInterpolation(2,-2);</code>
+ * <code>BezierInterpolation b=new BezierInterpolation(3,-3);</code>
  * </p>
  * 
  * The curve will be a straight line with this configuration:
