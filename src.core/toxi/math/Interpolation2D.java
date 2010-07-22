@@ -60,7 +60,7 @@ public class Interpolation2D {
      */
     public static float bilinear(Vec2D p, Vec2D p1, Vec2D p2, float tl,
             float tr, float bl, float br) {
-        return bilinear(p1.x, p1.y, p2.x, p2.y, p.x, p.y, tl, tr, bl, br);
+        return bilinear(p.x, p.y, p1.x, p1.y, p2.x, p2.y, tl, tr, bl, br);
     }
 
 }

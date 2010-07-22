@@ -10,13 +10,25 @@ public class BilinearTest extends TestCase {
         Vec2D p = new Vec2D();
         Vec2D q = new Vec2D(100, 100);
         float val;
-        val = Interpolation2D.bilinear(new Vec2D(10, 0), p, q, 100, 0, 0, 0);
-        assertEquals(90f, val);
-        val = Interpolation2D.bilinear(new Vec2D(50, 0), p, q, 0, 100, 0, 0);
-        assertEquals(50f, val);
-        val = Interpolation2D.bilinear(new Vec2D(0, 10), p, q, 0, 0, 100, 0);
-        assertEquals(10f, val);
-        val = Interpolation2D.bilinear(new Vec2D(90, 100), p, q, 0, 0, 0, 100);
-        assertEquals(90f, val);
+        val =
+                Interpolation2D.bilinear(new Vec2D(10, 0), p, q, 100, 200, 200,
+                        100);
+        assertEquals(110f, val);
+        val =
+                Interpolation2D.bilinear(new Vec2D(50, 0), p, q, 100, 200, 200,
+                        100);
+        assertEquals(150f, val);
+        val =
+                Interpolation2D.bilinear(new Vec2D(90, 10), p, q, 100, 200,
+                        200, 100);
+        assertEquals(182f, val);
+        val =
+                Interpolation2D.bilinear(new Vec2D(90, 100), p, q, 100, 200,
+                        200, 100);
+        assertEquals(110f, val);
+        val =
+                Interpolation2D.bilinear(10, 10, 0, 0, 100, 100, 100, 200, 200,
+                        100);
+        assertEquals(118f, val);
     }
 }
