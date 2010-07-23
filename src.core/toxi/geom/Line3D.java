@@ -83,6 +83,19 @@ public class Line3D {
         return new Line3D(a.copy(), b.copy());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Line3D)) {
+            return false;
+        }
+        Line3D l = (Line3D) obj;
+        return (a.equals(l.a) || a.equals(l.b))
+                && (b.equals(l.b) || b.equals(l.a));
+    }
+
     public Vec3D getDirection() {
         return b.sub(a).normalize();
     }
@@ -97,6 +110,11 @@ public class Line3D {
 
     public Vec3D getNormal() {
         return b.cross(a);
+    }
+
+    @Override
+    public int hashCode() {
+        return a.hashCode() + b.hashCode();
     }
 
     public Line3D set(Vec3D a, Vec3D b) {

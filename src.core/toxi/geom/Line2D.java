@@ -95,7 +95,7 @@ public class Line2D {
     }
 
     /**
-     * Computes the closest point on this line to the given one.
+     * Computes the closest point on this line to the point given.
      * 
      * @param p
      *            point to check against
@@ -118,6 +118,19 @@ public class Line2D {
         return new Line2D(a.copy(), b.copy());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Line2D)) {
+            return false;
+        }
+        Line2D l = (Line2D) obj;
+        return (a.equals(l.a) || a.equals(l.b))
+                && (b.equals(l.b) || b.equals(l.a));
+    }
+
     public Vec2D getDirection() {
         return b.sub(a).normalize();
     }
@@ -136,6 +149,11 @@ public class Line2D {
 
     public float getTheta() {
         return a.angleBetween(b, true);
+    }
+
+    @Override
+    public int hashCode() {
+        return a.hashCode() + b.hashCode();
     }
 
     /**
@@ -164,8 +182,8 @@ public class Line2D {
             float ub = nb / denom;
             if (ua >= 0.0f && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
                 isec =
-                        new LineIntersection(Type.INTERSECTING, a
-                                .interpolateTo(b, ua));
+                        new LineIntersection(Type.INTERSECTING,
+                                a.interpolateTo(b, ua));
             } else {
                 isec = new LineIntersection(Type.NON_INTERSECTING, null);
             }
