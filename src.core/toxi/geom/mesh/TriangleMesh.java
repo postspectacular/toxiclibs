@@ -103,8 +103,13 @@ public class TriangleMesh implements Intersector3D {
         }
     }
 
-    protected static final Logger logger =
-            Logger.getLogger(TriangleMesh.class.getName());
+    /**
+     * Default stride setting used for serializing mesh properties into arrays.
+     */
+    public static final int DEFAULT_STRIDE = 4;
+
+    protected static final Logger logger = Logger.getLogger(TriangleMesh.class
+            .getName());
 
     /**
      * Mesh name
@@ -380,6 +385,59 @@ public class TriangleMesh implements Intersector3D {
     }
 
     /**
+     * Creates an array of unravelled normal coordinates. For each vertex the
+     * normal vector of its parent face is used. This is a convienence
+     * invocation of {@link #getFaceNormalsAsArray(float[], int, int)} with a
+     * default stride = 4.
+     * 
+     * @return array of xyz normal coords
+     */
+    public float[] getFaceNormalsAsArray() {
+        return getFaceNormalsAsArray(null, 0, DEFAULT_STRIDE);
+    }
+
+    /**
+     * Creates an array of unravelled normal coordinates. For each vertex the
+     * normal vector of its parent face is used. This method can be used to
+     * translate the internal mesh data structure into a format suitable for
+     * OpenGL Vertex Buffer Objects (by choosing stride=4). For more detail,
+     * please see {@link #getMeshAsVertexArray(float[], int, int)}
+     * 
+     * @see #getMeshAsVertexArray(float[], int, int)
+     * 
+     * @param normals
+     *            existing float array or null to automatically create one
+     * @param offset
+     *            start index in array to place normals
+     * @param stride
+     *            stride/alignment setting for individual coordinates (min value
+     *            = 3)
+     * @return array of xyz normal coords
+     */
+    public float[] getFaceNormalsAsArray(float[] normals, int offset, int stride) {
+        stride = MathUtils.max(stride, 3);
+        if (normals == null) {
+            normals = new float[faces.size() * 3 * stride];
+        }
+        int i = offset;
+        for (Face f : faces) {
+            normals[i] = f.normal.x;
+            normals[i + 1] = f.normal.y;
+            normals[i + 2] = f.normal.z;
+            i += stride;
+            normals[i] = f.normal.x;
+            normals[i + 1] = f.normal.y;
+            normals[i + 2] = f.normal.z;
+            i += stride;
+            normals[i] = f.normal.x;
+            normals[i + 1] = f.normal.y;
+            normals[i + 2] = f.normal.z;
+            i += stride;
+        }
+        return normals;
+    }
+
+    /**
      * Builds an array of vertex indices of all faces. Each vertex ID
      * corresponds to its position in the {@link #vertices} HashMap. The
      * resulting array will be 3 times the face count.
@@ -403,14 +461,14 @@ public class TriangleMesh implements Intersector3D {
 
     /**
      * Creates an array of unravelled vertex coordinates for all faces using a
-     * stride setting of 3, resulting in a gap-less serialized version of all
-     * mesh vertex coordinates.
+     * stride setting of 4, resulting in a serialized version of all mesh vertex
+     * coordinates suitable for VBOs.
      * 
      * @see #getMeshAsVertexArray(float[], int, int)
      * @return float array of vertex coordinates
      */
     public float[] getMeshAsVertexArray() {
-        return getMeshAsVertexArray(null, 0, 3);
+        return getMeshAsVertexArray(null, 0, DEFAULT_STRIDE);
     }
 
     /**
@@ -543,11 +601,14 @@ public class TriangleMesh implements Intersector3D {
     }
 
     /**
+     * Creates an array of unravelled vertex normal coordinates for all faces.
+     * Uses default stride = 4.
+     * 
      * @see #getVertexNormalsAsArray(float[], int, int)
      * @return array of xyz normal coords
      */
     public float[] getVertexNormalsAsArray() {
-        return getVertexNormalsAsArray(null, 0, 3);
+        return getVertexNormalsAsArray(null, 0, DEFAULT_STRIDE);
     }
 
     /**
@@ -646,8 +707,9 @@ public class TriangleMesh implements Intersector3D {
      * @return itself
      */
     public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
-        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
-                matrix), true);
+        return transform(
+                Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(matrix),
+                true);
     }
 
     public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
