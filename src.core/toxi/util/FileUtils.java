@@ -34,7 +34,7 @@ public class FileUtils {
                 }
             }
         } catch (SecurityException se) {
-            System.err.println("You don't have permissions to create "
+            System.err.println("No permissions to create "
                     + file.getAbsolutePath());
         }
     }
@@ -43,11 +43,11 @@ public class FileUtils {
         if (file == null) {
             throw new IllegalArgumentException("file can't be null");
         }
-        InputStream input = new FileInputStream(file);
+        InputStream stream = new FileInputStream(file);
         if (file.getName().toLowerCase().endsWith(".gz")) {
-            return new GZIPInputStream(input);
+            stream = new GZIPInputStream(stream);
         }
-        return input;
+        return stream;
     }
 
     static public OutputStream createOutputStream(File file) throws IOException {
@@ -55,11 +55,11 @@ public class FileUtils {
             throw new IllegalArgumentException("file can't be null");
         }
         createDirectories(file);
-        FileOutputStream fos = new FileOutputStream(file);
+        OutputStream stream = new FileOutputStream(file);
         if (file.getName().toLowerCase().endsWith(".gz")) {
-            return new GZIPOutputStream(fos);
+            stream = new GZIPOutputStream(stream);
         }
-        return fos;
+        return stream;
     }
 
     public static BufferedReader createReader(File file) throws IOException {
@@ -77,6 +77,10 @@ public class FileUtils {
         } catch (UnsupportedEncodingException e) {
         }
         return new BufferedReader(isr);
+    }
+
+    public static PrintWriter createWriter(File file) throws IOException {
+        return createWriter(createOutputStream(file));
     }
 
     public static PrintWriter createWriter(OutputStream out) {
