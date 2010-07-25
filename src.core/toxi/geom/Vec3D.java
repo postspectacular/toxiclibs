@@ -66,15 +66,15 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * Defines vector with all coords set to Float.MIN_VALUE. Useful for
      * bounding box operations.
      */
-    public static final ReadonlyVec3D MIN_VALUE =
-            new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
+    public static final ReadonlyVec3D MIN_VALUE = new Vec3D(Float.MIN_VALUE,
+            Float.MIN_VALUE, Float.MIN_VALUE);
 
     /**
      * Defines vector with all coords set to Float.MAX_VALUE. Useful for
      * bounding box operations.
      */
-    public static final ReadonlyVec3D MAX_VALUE =
-            new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
+    public static final ReadonlyVec3D MAX_VALUE = new Vec3D(Float.MAX_VALUE,
+            Float.MAX_VALUE, Float.MAX_VALUE);
 
     /**
      * Creates a new vector from the given angle in the XY plane. The Z
@@ -133,8 +133,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @return result as new vector
      */
     public static final Vec3D max(ReadonlyVec3D a, ReadonlyVec3D b) {
-        return new Vec3D(MathUtils.max(a.x(), b.x()), MathUtils.max(a.y(), b
-                .y()), MathUtils.max(a.z(), b.z()));
+        return new Vec3D(MathUtils.max(a.x(), b.x()), MathUtils.max(a.y(),
+                b.y()), MathUtils.max(a.z(), b.z()));
     }
 
     /**
@@ -149,8 +149,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @return result as new vector
      */
     public static final Vec3D min(ReadonlyVec3D a, ReadonlyVec3D b) {
-        return new Vec3D(MathUtils.min(a.x(), b.x()), MathUtils.min(a.y(), b
-                .y()), MathUtils.min(a.z(), b.z()));
+        return new Vec3D(MathUtils.min(a.x(), b.x()), MathUtils.min(a.y(),
+                b.y()), MathUtils.min(a.z(), b.z()));
     }
 
     /**
@@ -176,8 +176,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      */
     public static final Vec3D randomVector(Random rnd) {
         Vec3D v =
-                new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1, rnd
-                        .nextFloat() * 2 - 1);
+                new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1,
+                        rnd.nextFloat() * 2 - 1);
         return v.normalize();
     }
 
@@ -676,8 +676,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     public final Vec3D interpolateTo(Vec3D v, float f, InterpolateStrategy s) {
-        return new Vec3D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f), s
-                .interpolate(z, v.z, f));
+        return new Vec3D(s.interpolate(x, v.x, f), s.interpolate(y, v.y, f),
+                s.interpolate(z, v.z, f));
     }
 
     /**
@@ -1081,6 +1081,34 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         final float xx = co * x - si * y;
         y = si * x + co * y;
         x = xx;
+        return this;
+    }
+
+    /**
+     * Rounds the vector to the closest major axis. Assumes the vector is
+     * normalized.
+     * 
+     * @return itself
+     */
+    public final Vec3D roundToAxis() {
+        if (MathUtils.abs(x) < 0.5f) {
+            x = 0;
+        } else {
+            x = x < 0 ? -1 : 1;
+            y = z = 0;
+        }
+        if (MathUtils.abs(y) < 0.5f) {
+            y = 0;
+        } else {
+            y = y < 0 ? -1 : 1;
+            x = z = 0;
+        }
+        if (MathUtils.abs(z) < 0.5f) {
+            z = 0;
+        } else {
+            z = z < 0 ? -1 : 1;
+            x = y = 0;
+        }
         return this;
     }
 

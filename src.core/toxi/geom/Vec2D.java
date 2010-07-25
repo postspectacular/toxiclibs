@@ -68,15 +68,15 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * Defines vector with both coords set to Float.MIN_VALUE. Useful for
      * bounding box operations.
      */
-    public static final ReadonlyVec2D MIN_VALUE =
-            new Vec2D(Float.MIN_VALUE, Float.MIN_VALUE);
+    public static final ReadonlyVec2D MIN_VALUE = new Vec2D(Float.MIN_VALUE,
+            Float.MIN_VALUE);
 
     /**
      * Defines vector with both coords set to Float.MAX_VALUE. Useful for
      * bounding box operations.
      */
-    public static final ReadonlyVec2D MAX_VALUE =
-            new Vec2D(Float.MAX_VALUE, Float.MAX_VALUE);
+    public static final ReadonlyVec2D MAX_VALUE = new Vec2D(Float.MAX_VALUE,
+            Float.MAX_VALUE);
 
     /**
      * Creates a new vector from the given angle in the XY plane.
@@ -705,6 +705,28 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         float xx = co * x - si * y;
         y = si * x + co * y;
         x = xx;
+        return this;
+    }
+
+    /**
+     * Rounds the vector to the closest major axis. Assumes the vector is
+     * normalized.
+     * 
+     * @return itself
+     */
+    public final Vec2D roundToAxis() {
+        if (MathUtils.abs(x) < 0.5f) {
+            x = 0;
+        } else {
+            x = x < 0 ? -1 : 1;
+            y = 0;
+        }
+        if (MathUtils.abs(y) < 0.5f) {
+            y = 0;
+        } else {
+            y = y < 0 ? -1 : 1;
+            x = 0;
+        }
         return this;
     }
 
