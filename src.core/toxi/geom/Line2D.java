@@ -139,6 +139,10 @@ public class Line2D {
         return a.distanceTo(b);
     }
 
+    public float getLengthSquared() {
+        return a.distanceToSquared(b);
+    }
+
     public Vec2D getMidPoint() {
         return a.add(b).scaleSelf(0.5f);
     }
@@ -149,6 +153,10 @@ public class Line2D {
 
     public float getTheta() {
         return a.angleBetween(b, true);
+    }
+
+    public boolean hasEndPoint(Vec2D p) {
+        return a.equals(p) || b.equals(p);
     }
 
     @Override

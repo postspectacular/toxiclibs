@@ -104,12 +104,20 @@ public class Line3D {
         return a.distanceTo(b);
     }
 
+    public float getLengthSquared() {
+        return a.distanceToSquared(b);
+    }
+
     public Vec3D getMidPoint() {
         return a.add(b).scaleSelf(0.5f);
     }
 
     public Vec3D getNormal() {
         return b.cross(a);
+    }
+
+    public boolean hasEndPoint(Vec3D p) {
+        return a.equals(p) || b.equals(p);
     }
 
     @Override
