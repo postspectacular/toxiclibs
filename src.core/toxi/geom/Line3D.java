@@ -3,7 +3,62 @@ package toxi.geom;
 import java.util.ArrayList;
 import java.util.List;
 
+import toxi.geom.Line3D.LineIntersection.Type;
+import toxi.math.MathUtils;
+
 public class Line3D {
+
+    public static class LineIntersection {
+
+        public static enum Type {
+            NON_INTERSECTING, INTERSECTING
+        }
+
+        private final Type type;
+        private final Line3D line;
+        private float[] coeff;
+
+        private LineIntersection(Type type) {
+            this(type, null, 0, 0);
+        }
+
+        private LineIntersection(Type type, Line3D line, float mua, float mub) {
+            this.type = type;
+            this.line = line;
+            this.coeff = new float[] { mua, mub };
+        }
+
+        public float[] getCoefficients() {
+            return coeff;
+        }
+
+        public float getLength() {
+            return line.getLength();
+        }
+
+        /**
+         * @return the pos
+         */
+        public Line3D getLine() {
+            return line.copy();
+        }
+
+        /**
+         * @return the type
+         */
+        public Type getType() {
+            return type;
+        }
+
+        public boolean isIntersectionInside() {
+            return type == Type.INTERSECTING && coeff[0] >= 0 && coeff[0] <= 1
+                    && coeff[1] >= 0 && coeff[1] <= 1;
+        }
+
+        public String toString() {
+            return "type: " + type + " line: " + line;
+        }
+    }
 
     /**
      * Splits the line between A and B into segments of the given length,
@@ -57,6 +112,51 @@ public class Line3D {
     public Line3D(Vec3D a, Vec3D b) {
         this.a = a;
         this.b = b;
+    }
+
+    /**
+     * Calculates the line segment that is the shortest route between this line
+     * and the given one. Also calculates the coefficients where the end points
+     * of this new line lie on the existing ones. If these coefficients are
+     * within the 0.0 .. 1.0 interval the endpoints of the intersection line are
+     * within the given line segments, if not then the intersection line is
+     * outside.
+     * 
+     * <p>
+     * Code based on original by Paul Bourke:<br/>
+     * http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline3d/
+     * </p>
+     */
+    public LineIntersection closestLineTo(Line3D l) {
+
+        Vec3D p43 = l.a.sub(l.b);
+        if (p43.isZeroVector()) {
+            return new LineIntersection(Type.NON_INTERSECTING);
+        }
+        Vec3D p21 = b.sub(a);
+        if (p21.isZeroVector()) {
+            return new LineIntersection(Type.NON_INTERSECTING);
+        }
+        Vec3D p13 = a.sub(l.a);
+
+        float d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
+        float d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
+        float d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
+        float d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
+        float d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
+
+        float denom = d2121 * d4343 - d4321 * d4321;
+        if (MathUtils.abs(denom) < MathUtils.EPS) {
+            return new LineIntersection(Type.NON_INTERSECTING);
+        }
+        float numer = d1343 * d4321 - d1321 * d4343;
+        float mua = numer / denom;
+        float mub = (d1343 + d4321 * mua) / d4343;
+
+        Vec3D pa = a.add(p21.scaleSelf(mua));
+        Vec3D pb = l.a.add(p43.scaleSelf(mub));
+        return new LineIntersection(Type.INTERSECTING, new Line3D(pa, pb), mua,
+                mub);
     }
 
     /**
