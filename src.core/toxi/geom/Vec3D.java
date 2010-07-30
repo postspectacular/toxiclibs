@@ -768,6 +768,27 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return true;
     }
 
+    public final boolean isMajorAxis(float tol) {
+        float ax = MathUtils.abs(x);
+        float ay = MathUtils.abs(y);
+        float az = MathUtils.abs(z);
+        float itol = 1 - tol;
+        if (ax > itol) {
+            if (ay < tol) {
+                return (az < tol);
+            }
+        } else if (ay > itol) {
+            if (ax < tol) {
+                return (az < tol);
+            }
+        } else if (az > itol) {
+            if (ax < tol) {
+                return (ay < tol);
+            }
+        }
+        return false;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -1339,6 +1360,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public float[] toArray() {
         return new float[] { x, y, z };
+    }
+
+    public float[] toArray4(float w) {
+        return new float[] { x, y, z, w };
     }
 
     public final Vec3D toCartesian() {

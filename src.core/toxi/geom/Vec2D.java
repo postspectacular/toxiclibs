@@ -547,6 +547,18 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
     }
 
+    public final boolean isMajorAxis(float tol) {
+        float ax = MathUtils.abs(x);
+        float ay = MathUtils.abs(y);
+        float itol = 1 - tol;
+        if (ax > itol) {
+            return (ay < tol);
+        } else if (ay > itol) {
+            return (ax < tol);
+        }
+        return false;
+    }
+
     public final boolean isZeroVector() {
         return MathUtils.abs(x) < MathUtils.EPS
                 && MathUtils.abs(y) < MathUtils.EPS;

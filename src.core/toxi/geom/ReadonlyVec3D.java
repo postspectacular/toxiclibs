@@ -364,6 +364,15 @@ public interface ReadonlyVec3D {
     public boolean isInAABB(Vec3D boxOrigin, Vec3D boxExtent);
 
     /**
+     * Checks if the vector is parallel with either the X or Y axis (any
+     * direction).
+     * 
+     * @param tolerance
+     * @return true, if parallel within the given tolerance
+     */
+    public boolean isMajorAxis(float tolerance);
+
+    /**
      * Checks if vector has a magnitude equals or close to zero (tolerance used
      * is {@link MathUtils#EPS}).
      * 

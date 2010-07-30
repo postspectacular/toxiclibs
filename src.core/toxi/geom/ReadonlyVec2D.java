@@ -287,8 +287,16 @@ public interface ReadonlyVec2D {
      * 
      * @return true, if point is in triangle.
      */
-
     public boolean isInTriangle(Vec2D a, Vec2D b, Vec2D c);
+
+    /**
+     * Checks if the vector is parallel with either the X or Y axis (any
+     * direction).
+     * 
+     * @param tolerance
+     * @return true, if parallel within the given tolerance
+     */
+    public boolean isMajorAxis(float tolerance);
 
     /**
      * Checks if vector has a magnitude equals or close to zero (tolerance used
