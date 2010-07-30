@@ -142,6 +142,21 @@ public class AABB extends Vec3D implements Shape3D {
     }
 
     /**
+     * Adjusts the box size and position such that it includes the given point.
+     * 
+     * @param p
+     *            point to include
+     * @return itself
+     */
+    public AABB includePoint(ReadonlyVec3D p) {
+        min.minSelf(p);
+        max.maxSelf(p);
+        set(min.interpolateTo(max, 0.5f));
+        extent.set(max.sub(min).scaleSelf(0.5f));
+        return this;
+    }
+
+    /**
      * Checks if the box intersects the passed in one.
      * 
      * @param box
