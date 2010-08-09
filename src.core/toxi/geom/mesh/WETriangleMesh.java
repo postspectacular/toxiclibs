@@ -2,13 +2,16 @@ package toxi.geom.mesh;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
 import toxi.geom.Intersector3D;
 import toxi.geom.IsectData3D;
+import toxi.geom.Line3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
 import toxi.geom.Ray3D;
@@ -26,115 +29,36 @@ import toxi.math.MathUtils;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class TriangleMesh implements Intersector3D {
+public class WETriangleMesh implements Intersector3D {
 
-    public final static class Face {
-
-        public Vertex a, b, c;
-        public Vec2D uvA, uvB, uvC;
-        public Vec3D normal;
-
-        Face(Vertex a, Vertex b, Vertex c) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            normal = a.sub(c).crossSelf(a.sub(b)).normalize();
-            a.addFaceNormal(normal);
-            b.addFaceNormal(normal);
-            c.addFaceNormal(normal);
-        }
-
-        public Face(Vertex a, Vertex b, Vertex c, Vec2D uvA, Vec2D uvB,
-                Vec2D uvC) {
-            this(a, b, c);
-            this.uvA = uvA;
-            this.uvB = uvB;
-            this.uvC = uvC;
-        }
-
-        public final Vertex[] getVertices(Vertex[] verts) {
-            if (verts != null) {
-                verts[0] = a;
-                verts[1] = b;
-                verts[2] = c;
-            } else {
-                verts = new Vertex[] { a, b, c };
-            }
-            return verts;
-        }
-
-        public String toString() {
-            return "TriangleMesh.Face: " + a + ", " + b + ", " + c;
-        }
-    }
-
-    public final static class Vertex extends Vec3D {
-
-        public final Vec3D normal = new Vec3D();
-
-        public final int id;
-        private int valence = 0;
-
-        Vertex(Vec3D v, int id) {
-            super(v);
-            this.id = id;
-        }
-
-        final void addFaceNormal(Vec3D n) {
-            normal.addSelf(n);
-            valence++;
-        }
-
-        final void clearNormal() {
-            normal.clear();
-            valence = 0;
-        }
-
-        final void computeNormal() {
-            normal.scaleSelf(1f / valence).normalize();
-        }
-
-        final public int getValence() {
-            return valence;
-        }
-
-        public String toString() {
-            return id + ": p: " + super.toString() + " n:" + normal.toString();
-        }
-    }
+    protected static final Logger logger =
+            Logger.getLogger(WETriangleMesh.class.getName());
 
     /**
-     * Default stride setting used for serializing mesh properties into arrays.
+     * WEVertex buffer & lookup index when adding new faces
      */
-    public static final int DEFAULT_STRIDE = 4;
-
-    protected static final Logger logger = Logger.getLogger(TriangleMesh.class
-            .getName());
+    public LinkedHashMap<Vec3D, WEVertex> vertices;
+    public LinkedHashMap<Line3D, WingedEdge> edges;
 
     /**
-     * Mesh name
+     * WEFace list
      */
-    public String name;
-
-    /**
-     * Vertex buffer & lookup index when adding new faces
-     */
-    public final LinkedHashMap<Vec3D, Vertex> vertices;
-
-    /**
-     * Face list
-     */
-    public final ArrayList<Face> faces;
+    public final ArrayList<WEFace> faces;
 
     protected AABB bounds;
     protected Vec3D centroid = new Vec3D();
     protected int numVertices;
     protected int numFaces;
+    protected int numEdges;
 
     private Matrix4x4 matrix = new Matrix4x4();
     protected TriangleIntersector intersector = new TriangleIntersector();
 
-    public TriangleMesh() {
+    private String name;
+
+    private Line3D edgeCheck = new Line3D(new Vec3D(), new Vec3D());
+
+    public WETriangleMesh() {
         this("untitled");
     }
 
@@ -145,7 +69,7 @@ public class TriangleMesh implements Intersector3D {
      * @param name
      *            mesh name
      */
-    public TriangleMesh(String name) {
+    public WETriangleMesh(String name) {
         this(name, 1000, 3000);
     }
 
@@ -161,10 +85,11 @@ public class TriangleMesh implements Intersector3D {
      * @param numF
      *            initial face list size
      */
-    public TriangleMesh(String name, int numV, int numF) {
+    public WETriangleMesh(String name, int numV, int numF) {
         this.name = name;
-        faces = new ArrayList<Face>(numF);
-        vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.75f, false);
+        faces = new ArrayList<WEFace>(numF);
+        vertices = new LinkedHashMap<Vec3D, WEVertex>(numV, 1.75f, false);
+        edges = new LinkedHashMap<Line3D, WingedEdge>();
     }
 
     /**
@@ -175,18 +100,21 @@ public class TriangleMesh implements Intersector3D {
      * @param b
      * @param c
      */
-    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        Vertex va = checkVertex(a);
-        Vertex vb = checkVertex(b);
-        Vertex vc = checkVertex(c);
+    public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
+        WEVertex va = checkVertex(a);
+        WEVertex vb = checkVertex(b);
+        WEVertex vc = checkVertex(c);
         if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
             }
         } else {
-            Face f = new Face(va, vb, vc);
+            WEFace f = new WEFace(va, vb, vc);
             faces.add(f);
             numFaces++;
+            updateEdge(va, vb, f);
+            updateEdge(vb, vc, f);
+            updateEdge(vc, va, f);
         }
         return this;
     }
@@ -199,19 +127,22 @@ public class TriangleMesh implements Intersector3D {
      * @param b
      * @param c
      */
-    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
+    public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
             Vec2D uvB, Vec2D uvC) {
-        Vertex va = checkVertex(a);
-        Vertex vb = checkVertex(b);
-        Vertex vc = checkVertex(c);
+        WEVertex va = checkVertex(a);
+        WEVertex vb = checkVertex(b);
+        WEVertex vc = checkVertex(c);
         if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
             }
         } else {
-            Face f = new Face(va, vb, vc, uvA, uvB, uvC);
+            WEFace f = new WEFace(va, vb, vc, uvA, uvB, uvC);
             faces.add(f);
             numFaces++;
+            updateEdge(va, vb, f);
+            updateEdge(vb, vc, f);
+            updateEdge(vc, va, f);
         }
         return this;
     }
@@ -222,8 +153,21 @@ public class TriangleMesh implements Intersector3D {
      * @param m
      *            source mesh instance
      */
-    public TriangleMesh addMesh(TriangleMesh m) {
-        for (Face f : m.faces) {
+    public WETriangleMesh addMesh(TriangleMesh m) {
+        for (TriangleMesh.Face f : m.faces) {
+            addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
+        }
+        return this;
+    }
+
+    /**
+     * Adds all faces from the given mesh to this one.
+     * 
+     * @param m
+     *            source mesh instance
+     */
+    public WETriangleMesh addMesh(WETriangleMesh m) {
+        for (WEFace f : m.faces) {
             addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return this;
@@ -240,15 +184,15 @@ public class TriangleMesh implements Intersector3D {
         getCentroid();
         Vec3D delta =
                 origin != null ? origin.sub(centroid) : centroid.getInverted();
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             v.addSelf(delta);
         }
         getBoundingBox();
         return bounds;
     }
 
-    private final Vertex checkVertex(Vec3D v) {
-        Vertex vertex = vertices.get(v);
+    private WEVertex checkVertex(Vec3D v) {
+        WEVertex vertex = vertices.get(v);
         if (vertex == null) {
             vertex = createVertex(v, numVertices);
             vertices.put(vertex, vertex);
@@ -260,7 +204,7 @@ public class TriangleMesh implements Intersector3D {
     /**
      * Clears all counters, and vertex & face buffers.
      */
-    public TriangleMesh clear() {
+    public WETriangleMesh clear() {
         vertices.clear();
         faces.clear();
         bounds = null;
@@ -272,8 +216,8 @@ public class TriangleMesh implements Intersector3D {
     /**
      * Re-calculates all face normals.
      */
-    public TriangleMesh computeFaceNormals() {
-        for (Face f : faces) {
+    public WETriangleMesh computeFaceNormals() {
+        for (WEFace f : faces) {
             f.normal = f.a.sub(f.c).crossSelf(f.a.sub(f.b)).normalize();
         }
         return this;
@@ -282,16 +226,16 @@ public class TriangleMesh implements Intersector3D {
     /**
      * Computes the smooth vertex normals for the entire mesh.
      */
-    public TriangleMesh computeVertexNormals() {
-        for (Vertex v : vertices.values()) {
+    public WETriangleMesh computeVertexNormals() {
+        for (WEVertex v : vertices.values()) {
             v.clearNormal();
         }
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             f.a.addFaceNormal(f.normal);
             f.b.addFaceNormal(f.normal);
             f.c.addFaceNormal(f.normal);
         }
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             v.computeNormal();
         }
         return this;
@@ -303,31 +247,39 @@ public class TriangleMesh implements Intersector3D {
      * 
      * @return new mesh instance
      */
-    public TriangleMesh copy() {
-        TriangleMesh m =
-                new TriangleMesh(name + "-copy", numVertices, numFaces);
-        for (Face f : faces) {
+    public WETriangleMesh copy() {
+        WETriangleMesh m =
+                new WETriangleMesh(name + "-copy", numVertices, numFaces);
+        for (WEFace f : faces) {
             m.addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return m;
     }
 
-    protected Vertex createVertex(Vec3D v, int id) {
-        return new Vertex(v, id);
+    protected WEVertex createVertex(Vec3D v, int id) {
+        return new WEVertex(v, id);
+    }
+
+    public void faceOutwards() {
+        getCentroid();
+        for (WEFace f : faces) {
+            Vec3D n = f.getCentroid().sub(centroid).normalize();
+            float dot = n.dot(f.normal);
+            if (dot < 0) {
+                f.flipVertexOrder();
+            }
+        }
     }
 
     /**
-     * Flips the vertex ordering between clockwise and anti-clockwise. Face
+     * Flips the vertex ordering between clockwise and anti-clockwise. WEFace
      * normals are updated automatically too.
      * 
      * @return itself
      */
-    public TriangleMesh flipVertexOrder() {
-        for (Face f : faces) {
-            Vertex t = f.a;
-            f.a = f.b;
-            f.b = t;
-            f.normal.invert();
+    public WETriangleMesh flipVertexOrder() {
+        for (WEFace f : faces) {
+            f.flipVertexOrder();
         }
         return this;
     }
@@ -338,7 +290,7 @@ public class TriangleMesh implements Intersector3D {
      * 
      * @return itself
      */
-    public TriangleMesh flipYAxis() {
+    public WETriangleMesh flipYAxis() {
         transform(new Matrix4x4().scaleSelf(1, -1, 1));
         flipVertexOrder();
         return this;
@@ -352,7 +304,7 @@ public class TriangleMesh implements Intersector3D {
     public AABB getBoundingBox() {
         final Vec3D minBounds = Vec3D.MAX_VALUE.copy();
         final Vec3D maxBounds = Vec3D.MIN_VALUE.copy();
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             minBounds.minSelf(v);
             maxBounds.maxSelf(v);
         }
@@ -369,7 +321,7 @@ public class TriangleMesh implements Intersector3D {
     public Sphere getBoundingSphere() {
         float radius = 0;
         getCentroid();
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             radius = MathUtils.max(radius, v.distanceToSquared(centroid));
         }
         return new Sphere(centroid, (float) Math.sqrt(radius));
@@ -380,18 +332,18 @@ public class TriangleMesh implements Intersector3D {
      * 
      * @return centre point
      */
-    public ReadonlyVec3D getCentroid() {
+    public Vec3D getCentroid() {
         centroid.clear();
         for (Vec3D v : vertices.values()) {
             centroid.addSelf(v);
         }
-        return centroid.scaleSelf(1f / numVertices);
+        return centroid.scaleSelf(1f / numVertices).copy();
     }
 
-    public Vertex getClosestVertexToPoint(ReadonlyVec3D p) {
-        Vertex closest = null;
+    public WEVertex getClosestVertexToPoint(ReadonlyVec3D p) {
+        WEVertex closest = null;
         float minDist = Float.MAX_VALUE;
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             float d = v.distanceToSquared(p);
             if (d < minDist) {
                 closest = v;
@@ -402,22 +354,17 @@ public class TriangleMesh implements Intersector3D {
     }
 
     /**
-     * Creates an array of unravelled normal coordinates. For each vertex the
-     * normal vector of its parent face is used. This is a convienence
-     * invocation of {@link #getFaceNormalsAsArray(float[], int, int)} with a
-     * default stride = 4.
-     * 
-     * @return array of xyz normal coords
+     * @return
      */
     public float[] getFaceNormalsAsArray() {
-        return getFaceNormalsAsArray(null, 0, DEFAULT_STRIDE);
+        return getFaceNormalsAsArray(null, 0, 3);
     }
 
     /**
      * Creates an array of unravelled normal coordinates. For each vertex the
      * normal vector of its parent face is used. This method can be used to
      * translate the internal mesh data structure into a format suitable for
-     * OpenGL Vertex Buffer Objects (by choosing stride=4). For more detail,
+     * OpenGL WEVertex Buffer Objects (by choosing stride=4). For more detail,
      * please see {@link #getMeshAsVertexArray(float[], int, int)}
      * 
      * @see #getMeshAsVertexArray(float[], int, int)
@@ -437,7 +384,7 @@ public class TriangleMesh implements Intersector3D {
             normals = new float[faces.size() * 3 * stride];
         }
         int i = offset;
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             normals[i] = f.normal.x;
             normals[i + 1] = f.normal.y;
             normals[i + 2] = f.normal.z;
@@ -464,7 +411,7 @@ public class TriangleMesh implements Intersector3D {
     public int[] getFacesAsArray() {
         int[] faceList = new int[faces.size() * 3];
         int i = 0;
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             faceList[i++] = f.a.id;
             faceList[i++] = f.b.id;
             faceList[i++] = f.c.id;
@@ -478,34 +425,26 @@ public class TriangleMesh implements Intersector3D {
 
     /**
      * Creates an array of unravelled vertex coordinates for all faces using a
-     * stride setting of 4, resulting in a serialized version of all mesh vertex
-     * coordinates suitable for VBOs.
+     * stride setting of 3, resulting in a gap-less serialized version of all
+     * mesh vertex coordinates.
      * 
      * @see #getMeshAsVertexArray(float[], int, int)
      * @return float array of vertex coordinates
      */
     public float[] getMeshAsVertexArray() {
-        return getMeshAsVertexArray(null, 0, DEFAULT_STRIDE);
+        return getMeshAsVertexArray(null, 0, 3);
     }
 
     /**
      * Creates an array of unravelled vertex coordinates for all faces. This
      * method can be used to translate the internal mesh data structure into a
-     * format suitable for OpenGL Vertex Buffer Objects (by choosing stride=4).
-     * The order of the array will be as follows:
+     * format suitable for OpenGL WEVertex Buffer Objects (by choosing
+     * stride=4). The order of the array will be as follows:
      * 
      * <ul>
-     * <li>Face 1:
+     * <li>WEFace 1:
      * <ul>
-     * <li>Vertex #1
-     * <ul>
-     * <li>x</li>
-     * <li>y</li>
-     * <li>z</li>
-     * <li>[optional empty indices to match stride setting]</li>
-     * </ul>
-     * </li>
-     * <li>Vertex #2
+     * <li>WEVertex #1
      * <ul>
      * <li>x</li>
      * <li>y</li>
@@ -513,7 +452,15 @@ public class TriangleMesh implements Intersector3D {
      * <li>[optional empty indices to match stride setting]</li>
      * </ul>
      * </li>
-     * <li>Vertex #3
+     * <li>WEVertex #2
+     * <ul>
+     * <li>x</li>
+     * <li>y</li>
+     * <li>z</li>
+     * <li>[optional empty indices to match stride setting]</li>
+     * </ul>
+     * </li>
+     * <li>WEVertex #3
      * <ul>
      * <li>x</li>
      * <li>y</li>
@@ -522,9 +469,9 @@ public class TriangleMesh implements Intersector3D {
      * </ul>
      * </li>
      * </ul>
-     * <li>Face 2:
+     * <li>WEFace 2:
      * <ul>
-     * <li>Vertex #1</li>
+     * <li>WEVertex #1</li>
      * <li>...etc.</li>
      * </ul>
      * </ul>
@@ -543,7 +490,7 @@ public class TriangleMesh implements Intersector3D {
             verts = new float[faces.size() * 3 * stride];
         }
         int i = offset;
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             verts[i] = f.a.x;
             verts[i + 1] = f.a.y;
             verts[i + 2] = f.a.z;
@@ -578,38 +525,38 @@ public class TriangleMesh implements Intersector3D {
         return numVertices;
     }
 
-    public TriangleMesh getRotatedAroundAxis(Vec3D axis, float theta) {
+    public WETriangleMesh getRotatedAroundAxis(Vec3D axis, float theta) {
         return copy().rotateAroundAxis(axis, theta);
     }
 
-    public TriangleMesh getRotatedX(float theta) {
+    public WETriangleMesh getRotatedX(float theta) {
         return copy().rotateX(theta);
     }
 
-    public TriangleMesh getRotatedY(float theta) {
+    public WETriangleMesh getRotatedY(float theta) {
         return copy().rotateY(theta);
     }
 
-    public TriangleMesh getRotatedZ(float theta) {
+    public WETriangleMesh getRotatedZ(float theta) {
         return copy().rotateZ(theta);
     }
 
-    public TriangleMesh getScaled(float scale) {
+    public WETriangleMesh getScaled(float scale) {
         return copy().scale(scale);
     }
 
-    public TriangleMesh getScaled(Vec3D scale) {
+    public WETriangleMesh getScaled(Vec3D scale) {
         return copy().scale(scale);
     }
 
-    public TriangleMesh getTranslated(Vec3D trans) {
+    public WETriangleMesh getTranslated(Vec3D trans) {
         return copy().translate(trans);
     }
 
     public float[] getUniqueVerticesAsArray() {
         float[] verts = new float[numVertices * 3];
         int i = 0;
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             verts[i++] = v.x;
             verts[i++] = v.y;
             verts[i++] = v.z;
@@ -617,21 +564,33 @@ public class TriangleMesh implements Intersector3D {
         return verts;
     }
 
+    public WEVertex getVertexAtPoint(Vec3D v) {
+        return vertices.get(v);
+    }
+
+    public WEVertex getVertexForID(int id) {
+        WEVertex vertex = null;
+        for (WEVertex v : vertices.values()) {
+            if (v.id == id) {
+                vertex = v;
+                break;
+            }
+        }
+        return vertex;
+    }
+
     /**
-     * Creates an array of unravelled vertex normal coordinates for all faces.
-     * Uses default stride = 4.
-     * 
      * @see #getVertexNormalsAsArray(float[], int, int)
      * @return array of xyz normal coords
      */
     public float[] getVertexNormalsAsArray() {
-        return getVertexNormalsAsArray(null, 0, DEFAULT_STRIDE);
+        return getVertexNormalsAsArray(null, 0, 3);
     }
 
     /**
      * Creates an array of unravelled vertex normal coordinates for all faces.
      * This method can be used to translate the internal mesh data structure
-     * into a format suitable for OpenGL Vertex Buffer Objects (by choosing
+     * into a format suitable for OpenGL WEVertex Buffer Objects (by choosing
      * stride=4). For more detail, please see
      * {@link #getMeshAsVertexArray(float[], int, int)}
      * 
@@ -653,7 +612,7 @@ public class TriangleMesh implements Intersector3D {
             normals = new float[faces.size() * 3 * stride];
         }
         int i = offset;
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             normals[i] = f.a.normal.x;
             normals[i + 1] = f.a.normal.y;
             normals[i + 2] = f.a.normal.z;
@@ -673,11 +632,11 @@ public class TriangleMesh implements Intersector3D {
     protected void handleSaveAsSTL(STLWriter stl, boolean useFlippedY) {
         if (useFlippedY) {
             stl.setScale(new Vec3D(1, -1, 1));
-            for (Face f : faces) {
+            for (WEFace f : faces) {
                 stl.face(f.a, f.b, f.c, f.normal, STLWriter.DEFAULT_RGB);
             }
         } else {
-            for (Face f : faces) {
+            for (WEFace f : faces) {
                 stl.face(f.b, f.a, f.c, f.normal, STLWriter.DEFAULT_RGB);
             }
         }
@@ -687,7 +646,7 @@ public class TriangleMesh implements Intersector3D {
 
     public boolean intersectsRay(Ray3D ray) {
         Triangle tri = intersector.getTriangle();
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             tri.a = f.a;
             tri.b = f.b;
             tri.c = f.c;
@@ -707,7 +666,7 @@ public class TriangleMesh implements Intersector3D {
      *            new target direction to point in
      * @return itself
      */
-    public TriangleMesh pointTowards(ReadonlyVec3D dir) {
+    public WETriangleMesh pointTowards(ReadonlyVec3D dir) {
         return transform(Quaternion.getAlignmentQuat(dir, Vec3D.Z_AXIS)
                 .toMatrix4x4(matrix), true);
     }
@@ -723,25 +682,61 @@ public class TriangleMesh implements Intersector3D {
      *            current forward axis
      * @return itself
      */
-    public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
-        return transform(
-                Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(matrix),
-                true);
+    public WETriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
+        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
+                matrix), true);
     }
 
-    public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
+    public void rebuildIndex() {
+        LinkedHashMap<Vec3D, WEVertex> newV =
+                new LinkedHashMap<Vec3D, WEVertex>(vertices.size());
+        for (WEVertex v : vertices.values()) {
+            newV.put(v, v);
+        }
+        vertices = newV;
+        LinkedHashMap<Line3D, WingedEdge> newE =
+                new LinkedHashMap<Line3D, WingedEdge>(edges.size());
+        for (WingedEdge e : edges.values()) {
+            newE.put(e, e);
+        }
+        edges = newE;
+    }
+
+    private void removeEdge(WingedEdge e) {
+        e.remove();
+        for (WEFace f : e.faces) {
+            removeFace(f);
+        }
+        if (edges.remove(edgeCheck.set(e.a, e.b)) == e) {
+            logger.fine("removed edge: " + e);
+        } else {
+            throw new IllegalStateException("can't remove edge");
+        }
+    }
+
+    public void removeFace(WEFace f) {
+        faces.remove(f);
+        for (WingedEdge e : f.edges) {
+            e.faces.remove(f);
+            if (e.faces.size() == 0) {
+                removeEdge(e);
+            }
+        }
+    }
+
+    public WETriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
         return transform(matrix.identity().rotateAroundAxis(axis, theta));
     }
 
-    public TriangleMesh rotateX(float theta) {
+    public WETriangleMesh rotateX(float theta) {
         return transform(matrix.identity().rotateX(theta));
     }
 
-    public TriangleMesh rotateY(float theta) {
+    public WETriangleMesh rotateY(float theta) {
         return transform(matrix.identity().rotateY(theta));
     }
 
-    public TriangleMesh rotateZ(float theta) {
+    public WETriangleMesh rotateZ(float theta) {
         return transform(matrix.identity().rotateZ(theta));
     }
 
@@ -757,15 +752,15 @@ public class TriangleMesh implements Intersector3D {
         logger.info("writing OBJMesh: " + this.toString());
         obj.newObject(name);
         // vertices
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             obj.vertex(v);
         }
         // normals
-        for (Vertex v : vertices.values()) {
+        for (WEVertex v : vertices.values()) {
             obj.normal(v.normal);
         }
         // faces
-        for (Face f : faces) {
+        for (WEFace f : faces) {
             obj.faceWithNormals(f.b.id + vOffset, f.a.id + vOffset, f.c.id
                     + vOffset, f.b.id + nOffset, f.a.id + nOffset, f.c.id
                     + nOffset);
@@ -866,17 +861,77 @@ public class TriangleMesh implements Intersector3D {
         handleSaveAsSTL(stl, useFlippedY);
     }
 
-    public TriangleMesh scale(float scale) {
+    public WETriangleMesh scale(float scale) {
         return transform(matrix.identity().scaleSelf(scale));
     }
 
-    public TriangleMesh scale(Vec3D scale) {
+    public WETriangleMesh scale(Vec3D scale) {
         return transform(matrix.identity().scaleSelf(scale));
+    }
+
+    public void splitEdge(ReadonlyVec3D a, ReadonlyVec3D b,
+            SubdivisionStrategy subDiv) {
+        WingedEdge e = edges.get(new Line3D(a, b));
+        if (e != null) {
+            splitEdge(e, subDiv);
+        }
+    }
+
+    public void splitEdge(WingedEdge e, SubdivisionStrategy subDiv) {
+        Vec3D mid = subDiv.computeSplitPoint(e);
+        splitFace(e.faces.get(0), e, mid);
+        if (e.faces.size() > 1) {
+            splitFace(e.faces.get(1), e, mid);
+        }
+        removeEdge(e);
+    }
+
+    protected void splitFace(WEFace f, WingedEdge e, Vec3D mid) {
+        Vec3D p = null;
+        for (int i = 0; i < 3; i++) {
+            WingedEdge ec = f.edges.get(i);
+            if (!ec.equals(e)) {
+                if (ec.a.equals(e.a) || ec.a.equals(e.b)) {
+                    p = ec.b;
+                } else {
+                    p = ec.a;
+                }
+                break;
+            }
+        }
+        Vec3D n = p.sub(mid).crossSelf(p.sub(e.a)).normalize();
+        if (n.dot(f.normal) < 0) {
+            addFace(p, e.a, mid);
+            addFace(p, mid, e.b);
+        } else {
+            addFace(p, mid, e.a);
+            addFace(p, e.b, mid);
+        }
+    }
+
+    public void subdivide() {
+        subdivide(0);
+    }
+
+    public void subdivide(float minLength) {
+        subdivide(new MidpointSubdivision(), minLength * minLength);
+    }
+
+    public void subdivide(SubdivisionStrategy subDiv, float minLength) {
+        List<WingedEdge> origEdges = new ArrayList<WingedEdge>(edges.values());
+        Collections.sort(origEdges, subDiv.getEdgeOrdering());
+        for (WingedEdge e : origEdges) {
+            if (edges.containsKey(e)) {
+                if (e.getLengthSquared() >= minLength) {
+                    splitEdge(e, subDiv);
+                }
+            }
+        }
     }
 
     @Override
     public String toString() {
-        return "TriangleMesh: " + name + " vertices: " + getNumVertices()
+        return "WETriangleMesh: " + name + " vertices: " + getNumVertices()
                 + " faces: " + getNumFaces();
     }
 
@@ -887,7 +942,7 @@ public class TriangleMesh implements Intersector3D {
      * @param mat
      * @return itself
      */
-    public TriangleMesh transform(Matrix4x4 mat) {
+    public WETriangleMesh transform(Matrix4x4 mat) {
         return transform(mat, true);
     }
 
@@ -900,17 +955,40 @@ public class TriangleMesh implements Intersector3D {
      * @param updateNormals
      * @return itself
      */
-    public TriangleMesh transform(Matrix4x4 mat, boolean updateNormals) {
-        for (Vertex v : vertices.values()) {
-            v.set(mat.applyTo(v));
+    public WETriangleMesh transform(Matrix4x4 mat, boolean updateNormals) {
+        for (WEVertex v : vertices.values()) {
+            mat.applyToSelf(v);
         }
+        // FIXME need to figure out why transform breaks edge lookups
+        List<WingedEdge> origEdges = new ArrayList<WingedEdge>(edges.values());
+        edges.clear();
+        for (WingedEdge e : origEdges) {
+            edges.put(e, e);
+        }
+        origEdges = null;
         if (updateNormals) {
             computeFaceNormals();
         }
         return this;
     }
 
-    public TriangleMesh translate(Vec3D trans) {
+    public WETriangleMesh translate(Vec3D trans) {
         return transform(matrix.identity().translateSelf(trans));
+    }
+
+    protected void updateEdge(WEVertex va, WEVertex vb, WEFace f) {
+        edgeCheck.set(va, vb);
+        WingedEdge e = edges.get(edgeCheck);
+        if (e != null) {
+            e.addFace(f);
+            // System.out.println("updating edge: " + e);
+        } else {
+            e = new WingedEdge(va, vb, f, edges.size());
+            edges.put(e, e);
+            va.addEdge(e);
+            vb.addEdge(e);
+            // System.out.println("new edge: " + e);
+        }
+        f.addEdge(e);
     }
 }
