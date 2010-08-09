@@ -14,6 +14,8 @@ import toxi.math.MathUtils;
 import toxi.processing.ToxiclibsSupport;
 import toxi.sim.erosion.ErosionFunction;
 import toxi.sim.erosion.TalusAngleErosion;
+import toxi.sim.erosion.ThermalErosion;
+import toxi.util.datatypes.ArrayUtil;
 
 public class TerrainTest extends PApplet {
 
@@ -57,8 +59,8 @@ public class TerrainTest extends PApplet {
             speed += (targetSpeed - speed) * 0.1f;
             addSelf(Vec2D.fromTheta(currTheta).scaleSelf(speed));
             AABB b = mesh.getBoundingBox();
-            constrain(new Rect(b.getMin().to2DXZ().scale(0.99f), b.getMax()
-                    .to2DXZ().scale(0.99f)));
+            constrain(new Rect(b.getMin().to2DXZ().scale(0.9f), b.getMax()
+                    .to2DXZ().scale(0.9f)));
             isec = terrain.intersectAtPoint(x, y);
             if (isec.isIntersection) {
                 currNormal.interpolateToSelf(isec.normal, 0.25f);
@@ -79,7 +81,7 @@ public class TerrainTest extends PApplet {
     private PImage img;
     private TriangleMesh mesh;
     private Bot bot;
-    private ReadonlyVec3D camOffset = new Vec3D(0, 50, 100);
+    private ReadonlyVec3D camOffset = new Vec3D(0, 20, 300);
     private Vec3D eyePos = new Vec3D(0, 1000, 0);
     private PImage imgTerra;
 
@@ -101,6 +103,11 @@ public class TerrainTest extends PApplet {
         bot.update();
         Vec3D camPos =
                 bot.pos.add(camOffset.getRotatedY(bot.currTheta + HALF_PI));
+        camPos.constrain(mesh.getBoundingBox());
+        float y = terrain.getHeightAtPoint(camPos.x, camPos.z);
+        if (!Float.isNaN(y)) {
+            camPos.y = max(camPos.y, y + 100);
+        }
         eyePos.interpolateToSelf(camPos, 0.05f);
         background(0xffaaeeff);
         camera(eyePos.x, eyePos.y, eyePos.z, bot.pos.x, bot.pos.y, bot.pos.z,
@@ -112,34 +119,44 @@ public class TerrainTest extends PApplet {
         gfx.mesh(mesh, false);
         bot.draw();
         camera();
+        hint(DISABLE_DEPTH_TEST);
         fill(255);
         image(imgTerra, 0, 0);
+        hint(ENABLE_DEPTH_TEST);
     }
 
     public void setup() {
         size(800, 600, OPENGL);
-        terrain = new Terrain(64, 64, 50);
-        float[] el = new float[terrain.getWidth() * terrain.getDepth()];
-        noiseDetail(8);
-        for (int z = 0, i = 0; z < terrain.getDepth(); z++) {
-            for (int x = 0; x < terrain.getWidth(); x++) {
-                el[i++] = noise(x * NOISE_SCALE, z * NOISE_SCALE);
-            }
+        img = loadImage("test/terrain_shard64.png");
+        terrain = new Terrain(img.width, img.height, 50);
+        float[] el =
+                ArrayUtil.getAsNormalizedFloatArray(img.pixels, 0, 255, 255, 1);
+        // terrain = new Terrain(64, 64, 50);
+        // float[] el = new float[terrain.getWidth() * terrain.getDepth()];
+        // noiseDetail(8);
+        // for (int z = 0, i = 0; z < terrain.getDepth(); z++) {
+        // for (int x = 0; x < terrain.getWidth(); x++) {
+        // el[i++] = noise(x * NOISE_SCALE, z * NOISE_SCALE);
+        // }
+        // }
+        ErosionFunction f = new TalusAngleErosion(0.02f, 0.5f);
+        for (int i = 0; i < 50; i++) {
+            f.erode(el, terrain.getWidth(), terrain.getDepth());
         }
-        ErosionFunction f = new TalusAngleErosion(0.04f, 1f);
-        // ErosionFunction f = new ThermalErosion();
-        for (int i = 0; i < 100; i++) {
+        f = new ThermalErosion();
+        for (int i = 0; i < 50; i++) {
             f.erode(el, terrain.getWidth(), terrain.getDepth());
         }
         imgTerra = new PImage(terrain.getWidth(), terrain.getDepth(), ARGB);
         for (int i = 0; i < el.length; i++) {
             int c = (int) (el[i] * 255);
-            el[i] *= 800;
+            el[i] *= 2000;
             imgTerra.pixels[i] = c << 16 | c << 8 | c | 0xff000000;
         }
         imgTerra.updatePixels();
         terrain.setElevation(el);
         mesh = terrain.toMesh();
+        mesh.computeVertexNormals();
         mesh.saveAsSTL("terrain.stl");
         // terrain = null;
         gfx = new ToxiclibsSupport(this);
