@@ -27,6 +27,9 @@ import toxi.geom.Triangle2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.TriangleMesh;
+import toxi.geom.mesh.WEFace;
+import toxi.geom.mesh.WETriangleMesh;
+import toxi.geom.mesh.WEVertex;
 
 /**
  * In addition to providing new drawing commands, this class provides wrappers
@@ -242,6 +245,92 @@ public class ToxiclibsSupport {
             } else {
                 float third = 1f / 3;
                 for (TriangleMesh.Face f : mesh.faces) {
+                    Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(third);
+                    Vec3D d = c.add(f.normal.scale(normalLength));
+                    Vec3D n = f.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
+                }
+            }
+            if (isStroked) {
+                gfx.stroke(strokeCol);
+            } else {
+                gfx.noStroke();
+            }
+        }
+    }
+
+    /**
+     * Draws a mesh instance using flat shading.
+     * 
+     * @param mesh
+     */
+    public final void mesh(WETriangleMesh mesh) {
+        mesh(mesh, false, 0);
+    }
+
+    /**
+     * Draws a mesh instance.
+     * 
+     * @param mesh
+     * @param smooth
+     *            true to enable gouroud shading (uses vertex normals, which
+     *            should have been computed beforehand) or false for flat
+     *            shading
+     */
+    public final void mesh(WETriangleMesh mesh, boolean smooth) {
+        mesh(mesh, smooth, 0);
+    }
+
+    /**
+     * Draws a mesh instance.
+     * 
+     * @param mesh
+     * @param smooth
+     *            true to enable gouroud shading (uses vertex normals, which
+     *            should have been computed beforehand) or false for flat
+     *            shading
+     * @param normalLength
+     *            if >0 then face (or vertex) normals are rendered at this
+     *            length
+     */
+    public final void mesh(WETriangleMesh mesh, boolean smooth,
+            float normalLength) {
+        gfx.beginShape(PConstants.TRIANGLES);
+        if (smooth) {
+            for (WEFace f : mesh.faces) {
+                gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        } else {
+            for (WEFace f : mesh.faces) {
+                gfx.normal(f.normal.x, f.normal.y, f.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        }
+        gfx.endShape();
+        if (normalLength > 0) {
+            int strokeCol = 0;
+            boolean isStroked = gfx.stroke;
+            if (isStroked) {
+                strokeCol = gfx.strokeColor;
+            }
+            if (smooth) {
+                for (WEVertex v : mesh.vertices.values()) {
+                    Vec3D w = v.add(v.normal.scale(normalLength));
+                    Vec3D n = v.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
+                }
+            } else {
+                float third = 1f / 3;
+                for (WEFace f : mesh.faces) {
                     Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(third);
                     Vec3D d = c.add(f.normal.scale(normalLength));
                     Vec3D n = f.normal.scale(127);
