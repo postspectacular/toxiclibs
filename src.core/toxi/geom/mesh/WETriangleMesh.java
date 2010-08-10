@@ -101,22 +101,7 @@ public class WETriangleMesh implements Intersector3D {
      * @param c
      */
     public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        WEVertex va = checkVertex(a);
-        WEVertex vb = checkVertex(b);
-        WEVertex vc = checkVertex(c);
-        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
-            }
-        } else {
-            WEFace f = new WEFace(va, vb, vc);
-            faces.add(f);
-            numFaces++;
-            updateEdge(va, vb, f);
-            updateEdge(vb, vc, f);
-            updateEdge(vc, va, f);
-        }
-        return this;
+        return addFace(a, b, c, null);
     }
 
     /**
@@ -138,6 +123,33 @@ public class WETriangleMesh implements Intersector3D {
             }
         } else {
             WEFace f = new WEFace(va, vb, vc, uvA, uvB, uvC);
+            faces.add(f);
+            numFaces++;
+            updateEdge(va, vb, f);
+            updateEdge(vb, vc, f);
+            updateEdge(vc, va, f);
+        }
+        return this;
+    }
+
+    public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n) {
+        WEVertex va = checkVertex(a);
+        WEVertex vb = checkVertex(b);
+        WEVertex vc = checkVertex(c);
+        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
+            }
+        } else {
+            if (n != null) {
+                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb)).normalize();
+                if (n.dot(nc) < 0) {
+                    WEVertex t = va;
+                    va = vb;
+                    vb = t;
+                }
+            }
+            WEFace f = new WEFace(va, vb, vc);
             faces.add(f);
             numFaces++;
             updateEdge(va, vb, f);
@@ -871,14 +883,14 @@ public class WETriangleMesh implements Intersector3D {
 
     public void splitEdge(ReadonlyVec3D a, ReadonlyVec3D b,
             SubdivisionStrategy subDiv) {
-        WingedEdge e = edges.get(new Line3D(a, b));
+        WingedEdge e = edges.get(edgeCheck.set(a, b));
         if (e != null) {
             splitEdge(e, subDiv);
         }
     }
 
     public void splitEdge(WingedEdge e, SubdivisionStrategy subDiv) {
-        Vec3D mid = subDiv.computeSplitPoint(e);
+        List<Vec3D> mid = subDiv.computeSplitPoint(e);
         splitFace(e.faces.get(0), e, mid);
         if (e.faces.size() > 1) {
             splitFace(e.faces.get(1), e, mid);
@@ -886,7 +898,7 @@ public class WETriangleMesh implements Intersector3D {
         removeEdge(e);
     }
 
-    protected void splitFace(WEFace f, WingedEdge e, Vec3D mid) {
+    protected void splitFace(WEFace f, WingedEdge e, List<Vec3D> midPoints) {
         Vec3D p = null;
         for (int i = 0; i < 3; i++) {
             WingedEdge ec = f.edges.get(i);
@@ -899,13 +911,18 @@ public class WETriangleMesh implements Intersector3D {
                 break;
             }
         }
-        Vec3D n = p.sub(mid).crossSelf(p.sub(e.a)).normalize();
-        if (n.dot(f.normal) < 0) {
-            addFace(p, e.a, mid);
-            addFace(p, mid, e.b);
-        } else {
-            addFace(p, mid, e.a);
-            addFace(p, e.b, mid);
+        Vec3D prev = null;
+        for (int i = 0, num = midPoints.size(); i < num; i++) {
+            Vec3D mid = midPoints.get(i);
+            if (i == 0) {
+                addFace(p, e.a, mid, f.normal);
+            } else {
+                addFace(p, prev, mid, f.normal);
+            }
+            if (i == num - 1) {
+                addFace(p, mid, e.b, f.normal);
+            }
+            prev = mid;
         }
     }
 

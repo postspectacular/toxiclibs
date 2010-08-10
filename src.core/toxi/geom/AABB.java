@@ -327,27 +327,27 @@ public class AABB extends Vec3D implements Shape3D {
         Vec3D b = new Vec3D(max.x, max.y, max.z);
         Vec3D c = new Vec3D(max.x, min.y, max.z);
         Vec3D d = new Vec3D(min.x, min.y, max.z);
-        mesh.addFace(a, b, d);
-        mesh.addFace(b, c, d);
+        mesh.addFace(a, b, d, null);
+        mesh.addFace(b, c, d, null);
         // back
         Vec3D e = new Vec3D(min.x, max.y, min.z);
         Vec3D f = new Vec3D(max.x, max.y, min.z);
         Vec3D g = new Vec3D(max.x, min.y, min.z);
         Vec3D h = new Vec3D(min.x, min.y, min.z);
-        mesh.addFace(f, e, g);
-        mesh.addFace(e, h, g);
+        mesh.addFace(f, e, g, null);
+        mesh.addFace(e, h, g, null);
         // top
-        mesh.addFace(e, f, a);
-        mesh.addFace(f, b, a);
+        mesh.addFace(e, f, a, null);
+        mesh.addFace(f, b, a, null);
         // bottom
-        mesh.addFace(g, h, d);
-        mesh.addFace(g, d, c);
+        mesh.addFace(g, h, d, null);
+        mesh.addFace(g, d, c, null);
         // left
-        mesh.addFace(e, a, h);
-        mesh.addFace(a, d, h);
+        mesh.addFace(e, a, h, null);
+        mesh.addFace(a, d, h, null);
         // right
-        mesh.addFace(b, f, g);
-        mesh.addFace(b, g, c);
+        mesh.addFace(b, f, g, null);
+        mesh.addFace(b, g, c, null);
         return mesh;
     }
 

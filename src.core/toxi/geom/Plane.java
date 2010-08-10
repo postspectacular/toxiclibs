@@ -145,8 +145,8 @@ public class Plane extends Vec3D implements Shape3D {
         Vec3D c = this.sub(n).subSelf(m);
         Vec3D d = this.sub(n).addSelf(m);
         TriangleMesh mesh = new TriangleMesh("plane", 4, 2);
-        mesh.addFace(a, d, b);
-        mesh.addFace(b, d, c);
+        mesh.addFace(a, d, b, null);
+        mesh.addFace(b, d, c, null);
         return mesh;
     }
 

@@ -6,11 +6,13 @@ import java.util.List;
 
 import toxi.geom.Vec3D;
 
-public class MidpointSubdivision implements SubdivisionStrategy {
+public class TriSubdivision implements SubdivisionStrategy {
 
     public List<Vec3D> computeSplitPoint(WingedEdge edge) {
-        List<Vec3D> mid = new ArrayList<Vec3D>(1);
-        mid.add(edge.getMidPoint());
+        List<Vec3D> mid = new ArrayList<Vec3D>(3);
+        mid.add(edge.a.interpolateTo(edge.b, 0.25f));
+        mid.add(edge.a.interpolateTo(edge.b, 0.5f));
+        mid.add(edge.a.interpolateTo(edge.b, 0.75f));
         return mid;
     }
 

@@ -9,8 +9,8 @@ import toxi.geom.Cone;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.DualSubdivision;
 import toxi.geom.mesh.LaplacianSmooth;
-import toxi.geom.mesh.MidpointDisplacementSubdivision;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.SubdivisionStrategy;
 import toxi.geom.mesh.WEFace;
@@ -25,18 +25,21 @@ public class SubdivTest extends PApplet {
         PApplet.main(new String[] { "toxi.test.SubdivTest" });
     }
 
-    ToxiclibsSupport gfx;
+    private ToxiclibsSupport gfx;
     private WETriangleMesh mesh;
     private int depth;
     private boolean isWireframe;
 
     private Matrix4x4 normalMap =
             new Matrix4x4().translateSelf(128, 128, 128).scaleSelf(127);
-    private float currZoom = 1;
+    private float currZoom = 1.5f;
+    private boolean doSave;
 
     public void draw() {
-        background(255, 240, 220);
+        background(255);
         translate(width / 2, height / 2, 0);
+        // rotateX(HALF_PI);
+        // rotateY(QUARTER_PI);
         rotateX(mouseY * 0.01f);
         rotateY(mouseX * 0.01f);
         scale(currZoom);
@@ -45,11 +48,16 @@ public class SubdivTest extends PApplet {
             noStroke();
             lights();
         } else {
+            // gfx.origin(new Vec3D(), 100);
             noFill();
             stroke(0);
         }
-        // gfx.mesh(mesh, true, 0);
-        drawMesh(g, mesh, true, isWireframe);
+        gfx.mesh(mesh, false, 0);
+        // drawMesh(g, mesh, true, isWireframe);
+        if (doSave) {
+            saveFrame("sd-mid-" + DateUtils.timeStamp() + ".png");
+            doSave = false;
+        }
     }
 
     void drawMesh(PGraphics gfx, WETriangleMesh mesh, boolean vertexNormals,
@@ -134,12 +142,15 @@ public class SubdivTest extends PApplet {
         }
         if (key == 's') {
             SubdivisionStrategy subdiv;
-            subdiv =
-                    new MidpointDisplacementSubdivision(mesh.getCentroid(),
-                            depth % 7 == 0 ? -0.25f : 0.25f);
+            // subdiv =
+            // new MidpointDisplacementSubdivision(mesh.getCentroid(),
+            // depth % 7 == 0 ? -0.25f : 0.25f);
             // subdiv = new MidpointSubdivision();
+            subdiv = new DualSubdivision();
+            // subdiv = new TriSubdivision();
             depth++;
             mesh.subdivide(subdiv, 0);
+            // mesh.splitEdge(mesh.faces.get(0).c.edges.get(0), subdiv);
             mesh.computeFaceNormals();
             mesh.faceOutwards();
             mesh.computeVertexNormals();
@@ -159,6 +170,9 @@ public class SubdivTest extends PApplet {
         }
         if (key == '=') {
             currZoom += 0.1;
+        }
+        if (key == ' ') {
+            doSave = true;
         }
     }
 

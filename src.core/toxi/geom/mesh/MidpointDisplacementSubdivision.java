@@ -1,5 +1,8 @@
 package toxi.geom.mesh;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import toxi.geom.Vec3D;
 
 public class MidpointDisplacementSubdivision extends MidpointSubdivision {
@@ -13,11 +16,13 @@ public class MidpointDisplacementSubdivision extends MidpointSubdivision {
     }
 
     @Override
-    public Vec3D computeSplitPoint(WingedEdge edge) {
+    public List<Vec3D> computeSplitPoint(WingedEdge edge) {
         Vec3D mid = edge.getMidPoint();
         // Vec3D mid = edge.a.interpolateTo(edge.b, 0.25f);
         Vec3D n = mid.sub(centroid).normalizeTo(amp * edge.getLength());
-        return mid.addSelf(n);
+        List<Vec3D> points = new ArrayList<Vec3D>(1);
+        points.add(mid.addSelf(n));
+        return points;
     }
 
 }

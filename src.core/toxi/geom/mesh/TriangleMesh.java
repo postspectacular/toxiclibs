@@ -108,8 +108,8 @@ public class TriangleMesh implements Intersector3D {
      */
     public static final int DEFAULT_STRIDE = 4;
 
-    protected static final Logger logger = Logger.getLogger(TriangleMesh.class
-            .getName());
+    protected static final Logger logger =
+            Logger.getLogger(TriangleMesh.class.getName());
 
     /**
      * Mesh name
@@ -176,28 +176,21 @@ public class TriangleMesh implements Intersector3D {
      * @param c
      */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        Vertex va = checkVertex(a);
-        Vertex vb = checkVertex(b);
-        Vertex vc = checkVertex(c);
-        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
-            }
-        } else {
-            Face f = new Face(va, vb, vc);
-            faces.add(f);
-            numFaces++;
-        }
-        return this;
+        return addFace(a, b, c, null);
     }
 
     /**
-     * Adds the given 3 points as triangle face to the mesh. The assumed vertex
-     * order is anti-clockwise.
+     * Adds the given 3 points as triangle face to the mesh and assigns the
+     * given texture coordinates to each vertex. The assumed vertex order is
+     * anti-clockwise.
      * 
      * @param a
      * @param b
      * @param c
+     * @param uvA
+     * @param uvB
+     * @param uvC
+     * @return
      */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
             Vec2D uvB, Vec2D uvC) {
@@ -210,6 +203,37 @@ public class TriangleMesh implements Intersector3D {
             }
         } else {
             Face f = new Face(va, vb, vc, uvA, uvB, uvC);
+            faces.add(f);
+            numFaces++;
+        }
+        return this;
+    }
+
+    /**
+     * @param a
+     * @param b
+     * @param c
+     * @param n
+     * @return
+     */
+    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n) {
+        Vertex va = checkVertex(a);
+        Vertex vb = checkVertex(b);
+        Vertex vc = checkVertex(c);
+        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
+            }
+        } else {
+            if (n != null) {
+                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb)).normalize();
+                if (n.dot(nc) < 0) {
+                    Vertex t = va;
+                    va = vb;
+                    vb = t;
+                }
+            }
+            Face f = new Face(va, vb, vc);
             faces.add(f);
             numFaces++;
         }
@@ -724,9 +748,8 @@ public class TriangleMesh implements Intersector3D {
      * @return itself
      */
     public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
-        return transform(
-                Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(matrix),
-                true);
+        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
+                matrix), true);
     }
 
     public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
@@ -878,6 +901,11 @@ public class TriangleMesh implements Intersector3D {
     public String toString() {
         return "TriangleMesh: " + name + " vertices: " + getNumVertices()
                 + " faces: " + getNumFaces();
+    }
+
+    public WETriangleMesh toWEMesh() {
+        return new WETriangleMesh(name, vertices.size(), faces.size())
+                .addMesh(this);
     }
 
     /**

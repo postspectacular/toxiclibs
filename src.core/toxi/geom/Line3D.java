@@ -225,6 +225,12 @@ public class Line3D {
         return a.hashCode() + b.hashCode();
     }
 
+    public Line3D set(ReadonlyVec3D a, ReadonlyVec3D b) {
+        this.a = a.copy();
+        this.b = b.copy();
+        return this;
+    }
+
     public Line3D set(Vec3D a, Vec3D b) {
         this.a = a;
         this.b = b;
