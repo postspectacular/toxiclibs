@@ -72,13 +72,13 @@ public class Cone extends Vec3D {
             if (j == steps) {
                 j = 0;
             }
-            mesh.addFace(south[i], north[i], south[j], null);
-            mesh.addFace(south[j], north[i], north[j], null);
+            mesh.addFace(south[i], north[i], south[j], null, null, null, null);
+            mesh.addFace(south[j], north[i], north[j], null, null, null, null);
             if (bottomClosed) {
-                mesh.addFace(p, south[i], south[j], null);
+                mesh.addFace(p, south[i], south[j], null, null, null, null);
             }
             if (topClosed) {
-                mesh.addFace(north[i], q, north[j], null);
+                mesh.addFace(north[i], q, north[j], null, null, null, null);
             }
         }
         return mesh;

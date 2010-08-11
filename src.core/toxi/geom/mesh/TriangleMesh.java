@@ -26,82 +26,7 @@ import toxi.math.MathUtils;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class TriangleMesh implements Intersector3D {
-
-    public final static class Face {
-
-        public Vertex a, b, c;
-        public Vec2D uvA, uvB, uvC;
-        public Vec3D normal;
-
-        Face(Vertex a, Vertex b, Vertex c) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            normal = a.sub(c).crossSelf(a.sub(b)).normalize();
-            a.addFaceNormal(normal);
-            b.addFaceNormal(normal);
-            c.addFaceNormal(normal);
-        }
-
-        public Face(Vertex a, Vertex b, Vertex c, Vec2D uvA, Vec2D uvB,
-                Vec2D uvC) {
-            this(a, b, c);
-            this.uvA = uvA;
-            this.uvB = uvB;
-            this.uvC = uvC;
-        }
-
-        public final Vertex[] getVertices(Vertex[] verts) {
-            if (verts != null) {
-                verts[0] = a;
-                verts[1] = b;
-                verts[2] = c;
-            } else {
-                verts = new Vertex[] { a, b, c };
-            }
-            return verts;
-        }
-
-        public String toString() {
-            return "TriangleMesh.Face: " + a + ", " + b + ", " + c;
-        }
-    }
-
-    public final static class Vertex extends Vec3D {
-
-        public final Vec3D normal = new Vec3D();
-
-        public final int id;
-        private int valence = 0;
-
-        Vertex(Vec3D v, int id) {
-            super(v);
-            this.id = id;
-        }
-
-        final void addFaceNormal(Vec3D n) {
-            normal.addSelf(n);
-            valence++;
-        }
-
-        final void clearNormal() {
-            normal.clear();
-            valence = 0;
-        }
-
-        final void computeNormal() {
-            normal.scaleSelf(1f / valence).normalize();
-        }
-
-        final public int getValence() {
-            return valence;
-        }
-
-        public String toString() {
-            return id + ": p: " + super.toString() + " n:" + normal.toString();
-        }
-    }
+public class TriangleMesh implements Mesh3D, Intersector3D {
 
     /**
      * Default stride setting used for serializing mesh properties into arrays.
@@ -131,7 +56,7 @@ public class TriangleMesh implements Intersector3D {
     protected int numVertices;
     protected int numFaces;
 
-    private Matrix4x4 matrix = new Matrix4x4();
+    protected Matrix4x4 matrix = new Matrix4x4();
     protected TriangleIntersector intersector = new TriangleIntersector();
 
     public TriangleMesh() {
@@ -164,59 +89,24 @@ public class TriangleMesh implements Intersector3D {
     public TriangleMesh(String name, int numV, int numF) {
         this.name = name;
         faces = new ArrayList<Face>(numF);
-        vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.75f, false);
+        vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.5f, false);
     }
 
-    /**
-     * Adds the given 3 points as triangle face to the mesh. The assumed vertex
-     * order is anti-clockwise.
-     * 
-     * @param a
-     * @param b
-     * @param c
-     */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        return addFace(a, b, c, null);
+        return addFace(a, b, c, null, null, null, null);
     }
 
-    /**
-     * Adds the given 3 points as triangle face to the mesh and assigns the
-     * given texture coordinates to each vertex. The assumed vertex order is
-     * anti-clockwise.
-     * 
-     * @param a
-     * @param b
-     * @param c
-     * @param uvA
-     * @param uvB
-     * @param uvC
-     * @return
-     */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
             Vec2D uvB, Vec2D uvC) {
-        Vertex va = checkVertex(a);
-        Vertex vb = checkVertex(b);
-        Vertex vc = checkVertex(c);
-        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
-            }
-        } else {
-            Face f = new Face(va, vb, vc, uvA, uvB, uvC);
-            faces.add(f);
-            numFaces++;
-        }
-        return this;
+        return addFace(a, b, c, null, uvA, uvB, uvC);
     }
 
-    /**
-     * @param a
-     * @param b
-     * @param c
-     * @param n
-     * @return
-     */
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n) {
+        return addFace(a, b, c, n, null, null, null);
+    }
+
+    public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n, Vec2D uvA,
+            Vec2D uvB, Vec2D uvC) {
         Vertex va = checkVertex(a);
         Vertex vb = checkVertex(b);
         Vertex vc = checkVertex(c);
@@ -233,7 +123,7 @@ public class TriangleMesh implements Intersector3D {
                     vb = t;
                 }
             }
-            Face f = new Face(va, vb, vc);
+            Face f = new Face(va, vb, vc, uvA, uvB, uvC);
             faces.add(f);
             numFaces++;
         }
@@ -253,15 +143,8 @@ public class TriangleMesh implements Intersector3D {
         return this;
     }
 
-    /**
-     * Centers the mesh around the given pivot point (the centroid of its AABB).
-     * Method also updates & returns the new bounding box.
-     * 
-     * @param origin
-     *            new centroid or null (defaults to {0,0,0})
-     */
     public AABB center(ReadonlyVec3D origin) {
-        getCentroid();
+        computeCentroid();
         Vec3D delta =
                 origin != null ? origin.sub(centroid) : centroid.getInverted();
         for (Vertex v : vertices.values()) {
@@ -293,12 +176,20 @@ public class TriangleMesh implements Intersector3D {
         return this;
     }
 
+    public Vec3D computeCentroid() {
+        centroid.clear();
+        for (Vec3D v : vertices.values()) {
+            centroid.addSelf(v);
+        }
+        return centroid.scaleSelf(1f / numVertices).copy();
+    }
+
     /**
      * Re-calculates all face normals.
      */
     public TriangleMesh computeFaceNormals() {
         for (Face f : faces) {
-            f.normal = f.a.sub(f.c).crossSelf(f.a.sub(f.b)).normalize();
+            f.computeNormal();
         }
         return this;
     }
@@ -340,12 +231,18 @@ public class TriangleMesh implements Intersector3D {
         return new Vertex(v, id);
     }
 
-    /**
-     * Flips the vertex ordering between clockwise and anti-clockwise. Face
-     * normals are updated automatically too.
-     * 
-     * @return itself
-     */
+    public TriangleMesh faceOutwards() {
+        computeCentroid();
+        for (Face f : faces) {
+            Vec3D n = f.getCentroid().sub(centroid).normalize();
+            float dot = n.dot(f.normal);
+            if (dot < 0) {
+                f.flipVertexOrder();
+            }
+        }
+        return this;
+    }
+
     public TriangleMesh flipVertexOrder() {
         for (Face f : faces) {
             Vertex t = f.a;
@@ -356,23 +253,12 @@ public class TriangleMesh implements Intersector3D {
         return this;
     }
 
-    /**
-     * Flips all vertices along the Y axis and reverses the vertex ordering of
-     * all faces to compensate and keep the direction of normals intact.
-     * 
-     * @return itself
-     */
     public TriangleMesh flipYAxis() {
         transform(new Matrix4x4().scaleSelf(1, -1, 1));
         flipVertexOrder();
         return this;
     }
 
-    /**
-     * Computes & returns the axis-aligned bounding box of the mesh.
-     * 
-     * @return bounding box
-     */
     public AABB getBoundingBox() {
         final Vec3D minBounds = Vec3D.MAX_VALUE.copy();
         final Vec3D maxBounds = Vec3D.MIN_VALUE.copy();
@@ -384,32 +270,13 @@ public class TriangleMesh implements Intersector3D {
         return bounds;
     }
 
-    /**
-     * Computes & returns the bounding sphere of the mesh. The origin of the
-     * sphere is the mesh's centroid.
-     * 
-     * @return bounding sphere
-     */
     public Sphere getBoundingSphere() {
         float radius = 0;
-        getCentroid();
+        computeCentroid();
         for (Vertex v : vertices.values()) {
             radius = MathUtils.max(radius, v.distanceToSquared(centroid));
         }
         return new Sphere(centroid, (float) Math.sqrt(radius));
-    }
-
-    /**
-     * Computes the mesh centroid, the average position of all vertices.
-     * 
-     * @return centre point
-     */
-    public ReadonlyVec3D getCentroid() {
-        centroid.clear();
-        for (Vec3D v : vertices.values()) {
-            centroid.addSelf(v);
-        }
-        return centroid.scaleSelf(1f / numVertices);
     }
 
     public Vertex getClosestVertexToPoint(ReadonlyVec3D p) {
@@ -584,20 +451,10 @@ public class TriangleMesh implements Intersector3D {
         return verts;
     }
 
-    /**
-     * Returns the number of triangles used.
-     * 
-     * @return face count
-     */
     public int getNumFaces() {
         return numFaces;
     }
 
-    /**
-     * Returns the number of actual vertices used (unique vertices).
-     * 
-     * @return vertex count
-     */
     public int getNumVertices() {
         return numVertices;
     }
