@@ -30,7 +30,14 @@ import toxi.math.MathUtils;
  */
 public class TriangleMesh implements Mesh3D, Intersector3D {
 
+    /**
+     * Default size for vertex list
+     */
     public static final int DEFAULT_NUM_VERTICES = 1000;
+
+    /**
+     * Default size for face list
+     */
     public static final int DEFAULT_NUM_FACES = 3000;
 
     /**
@@ -69,8 +76,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     }
 
     /**
-     * Creates a new mesh instance with an initial buffer size of 1000 vertices
-     * & 3000 faces.
+     * Creates a new mesh instance with initial default buffer sizes.
      * 
      * @param name
      *            mesh name
@@ -507,6 +513,17 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
 
     public Vertex getVertexAtPoint(Vec3D v) {
         return vertices.get(v);
+    }
+
+    public Vertex getVertexForID(int id) {
+        Vertex vertex = null;
+        for (Vertex v : vertices.values()) {
+            if (v.id == id) {
+                vertex = v;
+                break;
+            }
+        }
+        return vertex;
     }
 
     /**

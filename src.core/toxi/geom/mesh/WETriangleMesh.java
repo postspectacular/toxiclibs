@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import toxi.geom.Intersector3D;
-import toxi.geom.IsectData3D;
 import toxi.geom.Line3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
@@ -28,15 +27,14 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      */
     public LinkedHashMap<Line3D, WingedEdge> edges;
 
-    private Line3D edgeCheck = new Line3D(new Vec3D(), new Vec3D());
+    private final Line3D edgeCheck = new Line3D(new Vec3D(), new Vec3D());
 
     public WETriangleMesh() {
         this("untitled");
     }
 
     /**
-     * Creates a new mesh instance with an initial buffer size of 1000 vertices
-     * & 3000 faces.
+     * Creates a new mesh instance with initial default buffer sizes.
      * 
      * @param name
      *            mesh name
@@ -113,19 +111,6 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         return this;
     }
 
-    /**
-     * Adds all faces from the given mesh to this one.
-     * 
-     * @param m
-     *            source mesh instance
-     */
-    public WETriangleMesh addMesh(WETriangleMesh m) {
-        for (Face f : m.faces) {
-            addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
-        }
-        return this;
-    }
-
     private final WEVertex checkVertex(Vec3D v) {
         WEVertex vertex = (WEVertex) vertices.get(v);
         if (vertex == null) {
@@ -184,10 +169,6 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         return (WEVertex) super.getClosestVertexToPoint(p);
     }
 
-    public IsectData3D getIntersectionData() {
-        return intersector.getIntersectionData();
-    }
-
     public WETriangleMesh getRotatedAroundAxis(Vec3D axis, float theta) {
         return copy().rotateAroundAxis(axis, theta);
     }
@@ -221,14 +202,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     }
 
     public WEVertex getVertexForID(int id) {
-        Vertex vertex = null;
-        for (Vertex v : vertices.values()) {
-            if (v.id == id) {
-                vertex = v;
-                break;
-            }
-        }
-        return (WEVertex) vertex;
+        return (WEVertex) super.getVertexForID(id);
     }
 
     public WETriangleMesh init(String name, int numV, int numF) {
@@ -282,7 +256,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         edges = newE;
     }
 
-    private void removeEdge(WingedEdge e) {
+    protected void removeEdge(WingedEdge e) {
         e.remove();
         for (WEFace f : e.faces) {
             removeFace(f);
