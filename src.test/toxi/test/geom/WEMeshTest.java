@@ -3,6 +3,7 @@ package toxi.test.geom;
 import junit.framework.TestCase;
 import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.MidpointSubdivision;
 import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
@@ -32,7 +33,7 @@ public class WEMeshTest extends TestCase {
         for (WingedEdge e : m.edges.values()) {
             System.out.println(e);
         }
-        WEVertex v = m.vertices.get(new Vec3D());
+        WEVertex v = (WEVertex) m.vertices.get(new Vec3D());
         assertEquals(3, v.edges.size());
         assertEquals(1, v.edges.get(0).faces.size());
         assertEquals(2, v.edges.get(1).faces.size());
@@ -43,24 +44,24 @@ public class WEMeshTest extends TestCase {
     }
 
     public void testFaceEdgeCount() {
-        for (WEFace f : m.faces) {
-            assertEquals(3, f.edges.size());
+        for (Face f : m.faces) {
+            assertEquals(3, ((WEFace) f).edges.size());
         }
     }
 
     public void testSplitEdge() {
-        WingedEdge e = m.vertices.get(new Vec3D()).edges.get(1);
+        WingedEdge e = ((WEVertex) m.vertices.get(new Vec3D())).edges.get(1);
         m.splitEdge(e, new MidpointSubdivision());
         assertEquals(4, m.faces.size());
         assertEquals(8, m.edges.size());
         m.computeVertexNormals();
-        for (WEFace f : m.faces) {
+        for (Face f : m.faces) {
             System.out.println(Triangle.isClockwiseInXY(f.a, f.b, f.c) + " "
                     + f);
         }
-        assertEquals(3, m.faces.get(0).a.edges.size());
-        assertEquals(4, m.faces.get(0).b.edges.size());
-        assertEquals(3, m.faces.get(0).c.edges.size());
+        assertEquals(3, ((WEVertex) m.faces.get(0).a).edges.size());
+        assertEquals(3, ((WEVertex) m.faces.get(0).b).edges.size());
+        assertEquals(4, ((WEVertex) m.faces.get(0).c).edges.size());
     }
 
     public void testSubdivide() {

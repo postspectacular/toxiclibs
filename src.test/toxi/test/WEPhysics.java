@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.STLReader;
+import toxi.geom.mesh.Vertex;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WEVertex;
 import toxi.geom.mesh.WingedEdge;
@@ -28,12 +29,12 @@ public class WEPhysics extends PApplet {
         grav.rotateX(mouseY * 0.01f);
         grav.rotateY(mouseX * 0.01f);
         physics.update();
-        for (WEVertex v : box.vertices.values()) {
+        for (Vertex v : box.vertices.values()) {
             v.set(physics.particles.get(v.id));
         }
         box.computeFaceNormals();
         box.computeVertexNormals();
-        Vec3D c = box.getCentroid();
+        Vec3D c = box.computeCentroid();
         background(51);
         noFill();
         lights();
@@ -54,8 +55,8 @@ public class WEPhysics extends PApplet {
     private void initPhysics() {
         physics = new VerletPhysics();
         box =
-                new WETriangleMesh().addMesh(new STLReader()
-                        .loadBinary("test/audi.stl"));
+                (WETriangleMesh) new STLReader().loadBinary("test/audi.stl",
+                        STLReader.WEMESH);
         box.rotateX(HALF_PI);
         box.scale(8);
         AABB bounds = box.getBoundingBox();
@@ -66,7 +67,7 @@ public class WEPhysics extends PApplet {
         physics.setGravity(new Vec3D(-0.1f, 0.001f, 0));
         box.translate(new Vec3D(ext.scale(3, 2, 0)));
         // turn mesh vertices into physics particles
-        for (WEVertex v : box.vertices.values()) {
+        for (Vertex v : box.vertices.values()) {
             physics.addParticle(new VerletParticle(v));
         }
         // turn mesh edges into springs

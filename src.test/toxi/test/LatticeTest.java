@@ -3,10 +3,12 @@ package toxi.test;
 import java.util.List;
 
 import processing.core.PApplet;
-import toxi.geom.Cone;
+import toxi.geom.AABB;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.DualSubdivision;
 import toxi.geom.mesh.LaplacianSmooth;
 import toxi.geom.mesh.MidpointDisplacementSubdivision;
+import toxi.geom.mesh.SubdivisionStrategy;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WingedEdge;
 import toxi.processing.ToxiclibsSupport;
@@ -66,13 +68,14 @@ public class LatticeTest extends PApplet {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
         mesh = new WETriangleMesh();
-        // mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 150).toMesh());
-        mesh.addMesh(new Cone(new Vec3D(), new Vec3D(0, 1, 0), 0, 150, 300)
-                .toMesh(3));
-        for (int i = 0; i < 3; i++) {
-            MidpointDisplacementSubdivision subdiv =
-                    new MidpointDisplacementSubdivision(mesh.getCentroid(),
+        mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 150).toMesh());
+        // mesh.addMesh(new Cone(new Vec3D(), new Vec3D(0, 1, 0), 0, 150, 300)
+        // .toMesh(3));
+        for (int i = 0; i < 1; i++) {
+            SubdivisionStrategy subdiv =
+                    new MidpointDisplacementSubdivision(mesh.computeCentroid(),
                             i % 2 == 0 ? 0.25f : -0.25f);
+            subdiv = new DualSubdivision();
             mesh.subdivide(subdiv, 0);
         }
         VolumetricSpace volume =

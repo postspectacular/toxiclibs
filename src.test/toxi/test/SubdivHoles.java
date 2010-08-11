@@ -9,6 +9,7 @@ import toxi.geom.AABB;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.LaplacianSmooth;
+import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WEVertex;
 import toxi.geom.mesh.WingedEdge;
@@ -109,7 +110,7 @@ public class SubdivHoles extends PApplet {
         mesh.subdivide();
         for (int i = 0; i < 500; i++) {
             int id = (int) (MathUtils.random(0.1f, 0.9f) * mesh.faces.size());
-            mesh.removeFace(mesh.faces.get(id));
+            mesh.removeFace((WEFace) mesh.faces.get(id));
         }
         backup();
     }

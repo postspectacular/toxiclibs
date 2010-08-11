@@ -10,12 +10,12 @@ import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.DualSubdivision;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.LaplacianSmooth;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.SubdivisionStrategy;
-import toxi.geom.mesh.WEFace;
+import toxi.geom.mesh.Vertex;
 import toxi.geom.mesh.WETriangleMesh;
-import toxi.geom.mesh.WEVertex;
 import toxi.processing.ToxiclibsSupport;
 import toxi.util.DateUtils;
 
@@ -52,8 +52,8 @@ public class SubdivTest extends PApplet {
             noFill();
             stroke(0);
         }
-        gfx.mesh(mesh, false, 0);
-        // drawMesh(g, mesh, true, isWireframe);
+        // gfx.mesh(mesh, false, 0);
+        drawMesh(g, mesh, true, isWireframe);
         if (doSave) {
             saveFrame("sd-mid-" + DateUtils.timeStamp() + ".png");
             doSave = false;
@@ -64,8 +64,8 @@ public class SubdivTest extends PApplet {
             boolean showNormals) {
         gfx.beginShape(TRIANGLES);
         if (vertexNormals) {
-            for (Iterator<WEFace> i = mesh.faces.iterator(); i.hasNext();) {
-                WEFace f = i.next();
+            for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
+                Face f = i.next();
                 Vec3D n = normalMap.applyTo(f.a.normal);
                 gfx.fill(n.x, n.y, n.z);
                 gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
@@ -80,8 +80,8 @@ public class SubdivTest extends PApplet {
                 gfx.vertex(f.c.x, f.c.y, f.c.z);
             }
         } else {
-            for (Iterator<WEFace> i = mesh.faces.iterator(); i.hasNext();) {
-                WEFace f = i.next();
+            for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
+                Face f = i.next();
                 gfx.normal(f.normal.x, f.normal.y, f.normal.z);
                 gfx.vertex(f.a.x, f.a.y, f.a.z);
                 gfx.vertex(f.b.x, f.b.y, f.b.z);
@@ -91,17 +91,17 @@ public class SubdivTest extends PApplet {
         gfx.endShape();
         if (showNormals) {
             if (vertexNormals) {
-                for (Iterator<WEVertex> i = mesh.vertices.values().iterator(); i
+                for (Iterator<Vertex> i = mesh.vertices.values().iterator(); i
                         .hasNext();) {
-                    WEVertex v = i.next();
+                    Vertex v = i.next();
                     Vec3D w = v.add(v.normal.scale(10));
                     Vec3D n = v.normal.scale(127);
                     gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
                     gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
                 }
             } else {
-                for (Iterator<WEFace> i = mesh.faces.iterator(); i.hasNext();) {
-                    WEFace f = i.next();
+                for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
+                    Face f = i.next();
                     Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
                     Vec3D d = c.add(f.normal.scale(20));
                     Vec3D n = f.normal.scale(127);
@@ -131,7 +131,8 @@ public class SubdivTest extends PApplet {
                         200).toMesh(3));
                 break;
             case 4:
-                mesh.addMesh(new STLReader().loadBinary("test/test.stl"));
+                mesh.addMesh(new STLReader().loadBinary("test/test.stl",
+                        STLReader.TRIANGLEMESH));
                 break;
         }
     }
@@ -148,7 +149,11 @@ public class SubdivTest extends PApplet {
             // subdiv = new MidpointSubdivision();
             subdiv = new DualSubdivision();
             // subdiv = new TriSubdivision();
+            // subdiv =
+            // new DualDisplacementSubdivision(mesh.computeCentroid(),
+            // 0.25f, -0.25f);
             depth++;
+            // subdiv.setEdgeOrdering(new FaceCountComparator());
             mesh.subdivide(subdiv, 0);
             // mesh.splitEdge(mesh.faces.get(0).c.edges.get(0), subdiv);
             mesh.computeFaceNormals();

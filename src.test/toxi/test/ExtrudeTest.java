@@ -4,8 +4,8 @@ import processing.core.PApplet;
 import toxi.geom.AABB;
 import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.TriangleMesh;
-import toxi.geom.mesh.TriangleMesh.Face;
 import toxi.processing.ToxiclibsSupport;
 
 public class ExtrudeTest extends PApplet {
