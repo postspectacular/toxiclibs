@@ -12,14 +12,14 @@ public class LaplacianSmooth implements FilterStrategy {
                 new HashMap<WEVertex, Vec3D>(mesh.vertices.size());
         for (int i = 0; i < numIterations; i++) {
             smoothed.clear();
-            for (WEVertex v : mesh.vertices.values()) {
+            for (Vertex v : mesh.vertices.values()) {
                 Vec3D laplacian = new Vec3D();
-                List<WEVertex> neighbours = v.getNeighbors();
+                List<WEVertex> neighbours = ((WEVertex) v).getNeighbors();
                 for (WEVertex n : neighbours) {
                     laplacian.addSelf(n);
                 }
                 laplacian.scaleSelf(1f / neighbours.size());
-                smoothed.put(v, laplacian);
+                smoothed.put((WEVertex) v, laplacian);
             }
             for (WEVertex v : smoothed.keySet()) {
                 mesh.vertices.get(v).set(smoothed.get(v));

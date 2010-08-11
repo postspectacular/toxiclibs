@@ -26,13 +26,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     /**
      * WEVertex buffer & lookup index when adding new faces
      */
-    public LinkedHashMap<Vec3D, WEVertex> vertices;
     public LinkedHashMap<Line3D, WingedEdge> edges;
-
-    /**
-     * WEFace list
-     */
-    public final ArrayList<WEFace> faces;
 
     private Line3D edgeCheck = new Line3D(new Vec3D(), new Vec3D());
 
@@ -64,53 +58,25 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      *            initial face list size
      */
     public WETriangleMesh(String name, int numV, int numF) {
-        this.name = name;
-        faces = new ArrayList<WEFace>(numF);
-        vertices = new LinkedHashMap<Vec3D, WEVertex>(numV, 1.75f, false);
-        edges = new LinkedHashMap<Line3D, WingedEdge>();
+        super(name, numV, numF);
+        edges = new LinkedHashMap<Line3D, WingedEdge>(numV);
     }
 
-    /**
-     * Adds the given 3 points as triangle face to the mesh. The assumed vertex
-     * order is anti-clockwise.
-     * 
-     * @param a
-     * @param b
-     * @param c
-     */
     public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
-        return addFace(a, b, c, null);
+        return addFace(a, b, c, null, null, null, null);
     }
 
-    /**
-     * Adds the given 3 points as triangle face to the mesh. The assumed vertex
-     * order is anti-clockwise.
-     * 
-     * @param a
-     * @param b
-     * @param c
-     */
     public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA,
             Vec2D uvB, Vec2D uvC) {
-        WEVertex va = checkVertex(a);
-        WEVertex vb = checkVertex(b);
-        WEVertex vc = checkVertex(c);
-        if (va.id == vb.id || va.id == vc.id || vb.id == vc.id) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("ignorning invalid face: " + a + "," + b + "," + c);
-            }
-        } else {
-            WEFace f = new WEFace(va, vb, vc, uvA, uvB, uvC);
-            faces.add(f);
-            numFaces++;
-            updateEdge(va, vb, f);
-            updateEdge(vb, vc, f);
-            updateEdge(vc, va, f);
-        }
-        return this;
+        return addFace(a, b, c, null, uvA, uvB, uvC);
     }
 
     public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n) {
+        return addFace(a, b, c, n, null, null, null);
+    }
+
+    public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n,
+            Vec2D uvA, Vec2D uvB, Vec2D uvC) {
         WEVertex va = checkVertex(a);
         WEVertex vb = checkVertex(b);
         WEVertex vc = checkVertex(c);
@@ -127,7 +93,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
                     vb = t;
                 }
             }
-            WEFace f = new WEFace(va, vb, vc);
+            WEFace f = new WEFace(va, vb, vc, uvA, uvB, uvC);
             faces.add(f);
             numFaces++;
             updateEdge(va, vb, f);
@@ -157,20 +123,29 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      *            source mesh instance
      */
     public WETriangleMesh addMesh(WETriangleMesh m) {
-        for (WEFace f : m.faces) {
+        for (Face f : m.faces) {
             addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return this;
     }
 
-    private WEVertex checkVertex(Vec3D v) {
-        WEVertex vertex = vertices.get(v);
+    private final WEVertex checkVertex(Vec3D v) {
+        WEVertex vertex = (WEVertex) vertices.get(v);
         if (vertex == null) {
             vertex = createVertex(v, numVertices);
             vertices.put(vertex, vertex);
             numVertices++;
         }
         return vertex;
+    }
+
+    /**
+     * Clears all counters, and vertex & face buffers.
+     */
+    public WETriangleMesh clear() {
+        super.clear();
+        edges.clear();
+        return this;
     }
 
     /**
@@ -182,7 +157,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     public WETriangleMesh copy() {
         WETriangleMesh m =
                 new WETriangleMesh(name + "-copy", numVertices, numFaces);
-        for (WEFace f : faces) {
+        for (Face f : faces) {
             m.addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return m;
@@ -245,18 +220,18 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     }
 
     public WEVertex getVertexAtPoint(Vec3D v) {
-        return vertices.get(v);
+        return (WEVertex) vertices.get(v);
     }
 
     public WEVertex getVertexForID(int id) {
-        WEVertex vertex = null;
-        for (WEVertex v : vertices.values()) {
+        Vertex vertex = null;
+        for (Vertex v : vertices.values()) {
             if (v.id == id) {
                 vertex = v;
                 break;
             }
         }
-        return vertex;
+        return (WEVertex) vertex;
     }
 
     /**
@@ -290,9 +265,9 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     }
 
     public void rebuildIndex() {
-        LinkedHashMap<Vec3D, WEVertex> newV =
-                new LinkedHashMap<Vec3D, WEVertex>(vertices.size());
-        for (WEVertex v : vertices.values()) {
+        LinkedHashMap<Vec3D, Vertex> newV =
+                new LinkedHashMap<Vec3D, Vertex>(vertices.size());
+        for (Vertex v : vertices.values()) {
             newV.put(v, v);
         }
         vertices = newV;
@@ -448,7 +423,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      * @return itself
      */
     public WETriangleMesh transform(Matrix4x4 mat, boolean updateNormals) {
-        for (WEVertex v : vertices.values()) {
+        for (Vertex v : vertices.values()) {
             mat.applyToSelf(v);
         }
         // FIXME need to figure out why transform breaks edge lookups

@@ -44,7 +44,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     /**
      * Vertex buffer & lookup index when adding new faces
      */
-    public final LinkedHashMap<Vec3D, Vertex> vertices;
+    public LinkedHashMap<Vec3D, Vertex> vertices;
 
     /**
      * Face list
