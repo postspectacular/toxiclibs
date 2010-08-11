@@ -890,7 +890,7 @@ public class WETriangleMesh implements Intersector3D {
     }
 
     public void splitEdge(WingedEdge e, SubdivisionStrategy subDiv) {
-        List<Vec3D> mid = subDiv.computeSplitPoint(e);
+        List<Vec3D> mid = subDiv.computeSplitPoints(e);
         splitFace(e.faces.get(0), e, mid);
         if (e.faces.size() > 1) {
             splitFace(e.faces.get(1), e, mid);

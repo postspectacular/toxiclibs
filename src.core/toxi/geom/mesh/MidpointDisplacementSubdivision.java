@@ -16,7 +16,7 @@ public class MidpointDisplacementSubdivision extends MidpointSubdivision {
     }
 
     @Override
-    public List<Vec3D> computeSplitPoint(WingedEdge edge) {
+    public List<Vec3D> computeSplitPoints(WingedEdge edge) {
         Vec3D mid = edge.getMidPoint();
         // Vec3D mid = edge.a.interpolateTo(edge.b, 0.25f);
         Vec3D n = mid.sub(centroid).normalizeTo(amp * edge.getLength());
