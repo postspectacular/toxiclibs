@@ -28,6 +28,9 @@ import toxi.math.MathUtils;
  */
 public class TriangleMesh implements Mesh3D, Intersector3D {
 
+    public static final int DEFAULT_NUM_VERTICES = 1000;
+    public static final int DEFAULT_NUM_FACES = 3000;
+
     /**
      * Default stride setting used for serializing mesh properties into arrays.
      */
@@ -49,7 +52,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     /**
      * Face list
      */
-    public final ArrayList<Face> faces;
+    public ArrayList<Face> faces;
 
     protected AABB bounds;
     protected Vec3D centroid = new Vec3D();
@@ -71,7 +74,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      *            mesh name
      */
     public TriangleMesh(String name) {
-        this(name, 1000, 3000);
+        this(name, DEFAULT_NUM_VERTICES, DEFAULT_NUM_FACES);
     }
 
     /**
@@ -88,8 +91,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      */
     public TriangleMesh(String name, int numV, int numF) {
         this.name = name;
-        faces = new ArrayList<Face>(numF);
-        vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.5f, false);
+        init(numV, numF);
     }
 
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
@@ -116,7 +118,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
             }
         } else {
             if (n != null) {
-                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb)).normalize();
+                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb));
                 if (n.dot(nc) < 0) {
                     Vertex t = va;
                     va = vb;
@@ -222,7 +224,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         TriangleMesh m =
                 new TriangleMesh(name + "-copy", numVertices, numFaces);
         for (Face f : faces) {
-            m.addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
+            m.addFace(f.a, f.b, f.c, f.normal, f.uvA, f.uvB, f.uvC);
         }
         return m;
     }
@@ -234,7 +236,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     public TriangleMesh faceOutwards() {
         computeCentroid();
         for (Face f : faces) {
-            Vec3D n = f.getCentroid().sub(centroid).normalize();
+            Vec3D n = f.getCentroid().sub(centroid);
             float dot = n.dot(f.normal);
             if (dot < 0) {
                 f.flipVertexOrder();
@@ -498,6 +500,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         return verts;
     }
 
+    public Vertex getVertexAtPoint(Vec3D v) {
+        return vertices.get(v);
+    }
+
     /**
      * Creates an array of unravelled vertex normal coordinates for all faces.
      * Uses default stride = 4.
@@ -564,6 +570,12 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         }
         stl.endSave();
         logger.info(numFaces + " faces written");
+    }
+
+    public TriangleMesh init(int numV, int numF) {
+        vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.5f, false);
+        faces = new ArrayList<Face>(numF);
+        return this;
     }
 
     public boolean intersectsRay(Ray3D ray) {

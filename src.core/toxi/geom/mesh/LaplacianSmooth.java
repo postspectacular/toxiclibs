@@ -8,10 +8,10 @@ import toxi.geom.Vec3D;
 public class LaplacianSmooth implements FilterStrategy {
 
     public void filter(WETriangleMesh mesh, int numIterations) {
-        HashMap<WEVertex, Vec3D> smoothed =
-                new HashMap<WEVertex, Vec3D>(mesh.vertices.size());
+        HashMap<Vertex, Vec3D> filtered =
+                new HashMap<Vertex, Vec3D>(mesh.vertices.size());
         for (int i = 0; i < numIterations; i++) {
-            smoothed.clear();
+            filtered.clear();
             for (Vertex v : mesh.vertices.values()) {
                 Vec3D laplacian = new Vec3D();
                 List<WEVertex> neighbours = ((WEVertex) v).getNeighbors();
@@ -19,10 +19,10 @@ public class LaplacianSmooth implements FilterStrategy {
                     laplacian.addSelf(n);
                 }
                 laplacian.scaleSelf(1f / neighbours.size());
-                smoothed.put((WEVertex) v, laplacian);
+                filtered.put(v, laplacian);
             }
-            for (WEVertex v : smoothed.keySet()) {
-                mesh.vertices.get(v).set(smoothed.get(v));
+            for (Vertex v : filtered.keySet()) {
+                mesh.vertices.get(v).set(filtered.get(v));
             }
             mesh.rebuildIndex();
         }

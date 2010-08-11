@@ -117,4 +117,5 @@ public interface Mesh3D {
      */
     public int getNumVertices();
 
+    public Mesh3D init(int numV, int numF);
 }

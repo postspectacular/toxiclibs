@@ -42,7 +42,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      *            mesh name
      */
     public WETriangleMesh(String name) {
-        this(name, 1000, 3000);
+        this(name, DEFAULT_NUM_VERTICES, DEFAULT_NUM_FACES);
     }
 
     /**
@@ -59,7 +59,6 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      */
     public WETriangleMesh(String name, int numV, int numF) {
         super(name, numV, numF);
-        edges = new LinkedHashMap<Line3D, WingedEdge>(numV);
     }
 
     public WETriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
@@ -86,7 +85,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
             }
         } else {
             if (n != null) {
-                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb)).normalize();
+                Vec3D nc = va.sub(vc).crossSelf(va.sub(vb));
                 if (n.dot(nc) < 0) {
                     WEVertex t = va;
                     va = vb;
@@ -158,7 +157,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         WETriangleMesh m =
                 new WETriangleMesh(name + "-copy", numVertices, numFaces);
         for (Face f : faces) {
-            m.addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
+            m.addFace(f.a, f.b, f.c, f.normal, f.uvA, f.uvB, f.uvC);
         }
         return m;
     }
@@ -234,6 +233,12 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         return (WEVertex) vertex;
     }
 
+    public WETriangleMesh init(int numV, int numF) {
+        super.init(numV, numF);
+        edges = new LinkedHashMap<Line3D, WingedEdge>(numV, 1.5f, false);
+        return this;
+    }
+
     /**
      * Rotates the mesh in such a way so that its "forward" axis is aligned with
      * the given direction. This version uses the positive Z-axis as default
@@ -301,34 +306,28 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         }
     }
 
-    @Override
     public WETriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
-        return rotateAroundAxis(axis, theta);
+        return transform(matrix.identity().rotateAroundAxis(axis, theta));
     }
 
-    @Override
     public WETriangleMesh rotateX(float theta) {
-        return rotateX(theta);
+        return transform(matrix.identity().rotateX(theta));
     }
 
-    @Override
     public WETriangleMesh rotateY(float theta) {
-        return rotateY(theta);
+        return transform(matrix.identity().rotateY(theta));
     }
 
-    @Override
     public WETriangleMesh rotateZ(float theta) {
-        return rotateZ(theta);
+        return transform(matrix.identity().rotateZ(theta));
     }
 
-    @Override
     public WETriangleMesh scale(float scale) {
-        return scale(scale);
+        return transform(matrix.identity().scaleSelf(scale));
     }
 
-    @Override
     public WETriangleMesh scale(Vec3D scale) {
-        return scale(scale);
+        return transform(matrix.identity().scaleSelf(scale));
     }
 
     public void splitEdge(ReadonlyVec3D a, ReadonlyVec3D b,
@@ -381,12 +380,13 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     }
 
     public void subdivide(float minLength) {
-        subdivide(new MidpointSubdivision(), minLength * minLength);
+        subdivide(new MidpointSubdivision(), minLength);
     }
 
     public void subdivide(SubdivisionStrategy subDiv, float minLength) {
         List<WingedEdge> origEdges = new ArrayList<WingedEdge>(edges.values());
         Collections.sort(origEdges, subDiv.getEdgeOrdering());
+        minLength *= minLength;
         for (WingedEdge e : origEdges) {
             if (edges.containsKey(e)) {
                 if (e.getLengthSquared() >= minLength) {
@@ -416,7 +416,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
     /**
      * Applies the given matrix transform to all mesh vertices. If the
      * updateNormals flag is true, all face normals are updated automatically,
-     * however vertex normals need a manual update.
+     * however vertex normals still need a manual update.
      * 
      * @param mat
      * @param updateNormals
@@ -426,13 +426,7 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         for (Vertex v : vertices.values()) {
             mat.applyToSelf(v);
         }
-        // FIXME need to figure out why transform breaks edge lookups
-        List<WingedEdge> origEdges = new ArrayList<WingedEdge>(edges.values());
-        edges.clear();
-        for (WingedEdge e : origEdges) {
-            edges.put(e, e);
-        }
-        origEdges = null;
+        rebuildIndex();
         if (updateNormals) {
             computeFaceNormals();
         }
