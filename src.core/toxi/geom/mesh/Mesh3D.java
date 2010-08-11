@@ -1,5 +1,7 @@
 package toxi.geom.mesh;
 
+import java.util.List;
+
 import toxi.geom.AABB;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Sphere;
@@ -38,6 +40,8 @@ public interface Mesh3D {
 
     public Mesh3D addFace(Vec3D a, Vec3D b, Vec3D c, Vec3D n, Vec2D uvA,
             Vec2D uvB, Vec2D uvC);
+
+    public Mesh3D addMesh(Mesh3D mesh);
 
     /**
      * Centers the mesh around the given pivot point (the centroid of its AABB).
@@ -103,6 +107,8 @@ public interface Mesh3D {
 
     public Vertex getClosestVertexToPoint(ReadonlyVec3D p);
 
+    public List<Face> getFaces();
+
     /**
      * Returns the number of triangles used.
      * 
@@ -117,5 +123,7 @@ public interface Mesh3D {
      */
     public int getNumVertices();
 
-    public Mesh3D init(int numV, int numF);
+    public Mesh3D init(String name, int numV, int numF);
+
+    public Mesh3D setName(String name);
 }

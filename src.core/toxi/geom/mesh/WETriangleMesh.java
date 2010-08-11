@@ -108,10 +108,8 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
      * @param m
      *            source mesh instance
      */
-    public WETriangleMesh addMesh(TriangleMesh m) {
-        for (Face f : m.faces) {
-            addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
-        }
+    public WETriangleMesh addMesh(Mesh3D m) {
+        super.addMesh(m);
         return this;
     }
 
@@ -233,8 +231,8 @@ public class WETriangleMesh extends TriangleMesh implements Intersector3D {
         return (WEVertex) vertex;
     }
 
-    public WETriangleMesh init(int numV, int numF) {
-        super.init(numV, numF);
+    public WETriangleMesh init(String name, int numV, int numF) {
+        super.init(name, numV, numF);
         edges = new LinkedHashMap<Line3D, WingedEdge>(numV, 1.5f, false);
         return this;
     }

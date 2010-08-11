@@ -3,6 +3,7 @@ package toxi.geom.mesh;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,8 +91,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      *            initial face list size
      */
     public TriangleMesh(String name, int numV, int numF) {
-        this.name = name;
-        init(numV, numF);
+        init(name, numV, numF);
     }
 
     public TriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c) {
@@ -138,8 +138,8 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      * @param m
      *            source mesh instance
      */
-    public TriangleMesh addMesh(TriangleMesh m) {
-        for (Face f : m.faces) {
+    public TriangleMesh addMesh(Mesh3D m) {
+        for (Face f : m.getFaces()) {
             addFace(f.a, f.b, f.c, f.uvA, f.uvB, f.uvC);
         }
         return this;
@@ -345,6 +345,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
             i += stride;
         }
         return normals;
+    }
+
+    public List<Face> getFaces() {
+        return faces;
     }
 
     /**
@@ -572,7 +576,8 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         logger.info(numFaces + " faces written");
     }
 
-    public TriangleMesh init(int numV, int numF) {
+    public TriangleMesh init(String name, int numV, int numF) {
+        setName(name);
         vertices = new LinkedHashMap<Vec3D, Vertex>(numV, 1.5f, false);
         faces = new ArrayList<Face>(numF);
         return this;
@@ -764,6 +769,11 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
 
     public TriangleMesh scale(Vec3D scale) {
         return transform(matrix.identity().scaleSelf(scale));
+    }
+
+    public TriangleMesh setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
