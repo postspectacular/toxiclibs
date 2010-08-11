@@ -1,6 +1,6 @@
 package toxi.geom.mesh;
 
-import java.util.List;
+import java.util.Collection;
 
 import toxi.geom.AABB;
 import toxi.geom.ReadonlyVec3D;
@@ -107,7 +107,7 @@ public interface Mesh3D {
 
     public Vertex getClosestVertexToPoint(ReadonlyVec3D p);
 
-    public List<Face> getFaces();
+    public Collection<Face> getFaces();
 
     /**
      * Returns the number of triangles used.
@@ -122,6 +122,8 @@ public interface Mesh3D {
      * @return vertex count
      */
     public int getNumVertices();
+
+    public Collection<Vertex> getVertices();
 
     public Mesh3D init(String name, int numV, int numF);
 

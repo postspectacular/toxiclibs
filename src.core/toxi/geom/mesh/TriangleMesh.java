@@ -2,6 +2,7 @@ package toxi.geom.mesh;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -559,6 +560,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
             i += stride;
         }
         return normals;
+    }
+
+    public Collection<Vertex> getVertices() {
+        return vertices.values();
     }
 
     protected void handleSaveAsSTL(STLWriter stl, boolean useFlippedY) {
