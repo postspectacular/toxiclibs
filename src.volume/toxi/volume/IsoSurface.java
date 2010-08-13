@@ -1,5 +1,6 @@
 package toxi.volume;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
@@ -28,10 +29,17 @@ public class IsoSurface {
     protected int sliceRes;
     protected int nextXY;
 
-    protected Vec3D[] edgeVertices;
+    protected HashMap<Integer, Vec3D> edgeVertices;
+
+    protected float density;
 
     public IsoSurface(VolumetricSpace volume) {
+        this(volume, 0.5f);
+    }
+
+    public IsoSurface(VolumetricSpace volume, float density) {
         this.volume = volume;
+        this.density = density;
         cellSize =
                 new Vec3D(volume.scale.x / volume.resX1, volume.scale.y
                         / volume.resY1, volume.scale.z / volume.resZ1);
@@ -48,8 +56,7 @@ public class IsoSurface {
 
         data = volume.data;
         centreOffset = volume.halfScale.getInverted();
-
-        edgeVertices = new Vec3D[3 * volume.numCells];
+        reset();
     }
 
     /**
@@ -82,30 +89,30 @@ public class IsoSurface {
                                 float t =
                                         isoDiff
                                                 / (data[offset + 1] - offsetData);
-                                edgeVertices[edgeOffsetIndex] =
-                                        new Vec3D(offsetX + t * cellSize.x, y
+                                edgeVertices.put(edgeOffsetIndex, new Vec3D(
+                                        offsetX + t * cellSize.x, y
                                                 * cellSize.y + centreOffset.y,
-                                                z * cellSize.z + centreOffset.z);
+                                        z * cellSize.z + centreOffset.z));
                             }
                             if ((edgeFlags & 2) > 0) {
                                 float t =
                                         isoDiff
                                                 / (data[offset + resX] - offsetData);
-                                edgeVertices[edgeOffsetIndex + 1] =
+                                edgeVertices.put(edgeOffsetIndex + 1,
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, offsetY + t
                                                 * cellSize.y, z * cellSize.z
-                                                + centreOffset.z);
+                                                + centreOffset.z));
                             }
                             if ((edgeFlags & 4) > 0) {
                                 float t =
                                         isoDiff
                                                 / (data[offset + sliceRes] - offsetData);
-                                edgeVertices[edgeOffsetIndex + 2] =
+                                edgeVertices.put(edgeOffsetIndex + 2,
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, y
                                                 * cellSize.y + centreOffset.y,
-                                                offsetZ + t * cellSize.z);
+                                                offsetZ + t * cellSize.z));
                             }
                         }
                     }
@@ -140,9 +147,9 @@ public class IsoSurface {
                             n++;
                         }
                         for (int i = 0; i < n; i += 3) {
-                            mesh.addFace(edgeVertices[face[i + 1]],
-                                    edgeVertices[face[i + 2]],
-                                    edgeVertices[face[i]]);
+                            mesh.addFace(edgeVertices.get(face[i + 1]),
+                                    edgeVertices.get(face[i + 2]), edgeVertices
+                                            .get(face[i]));
                         }
                     }
                     offset++;
@@ -187,8 +194,11 @@ public class IsoSurface {
      * be called inbetween successive calls to {@link #computeSurface(float)}.
      */
     public void reset() {
-        for (int i = 0; i < edgeVertices.length; i++) {
-            edgeVertices[i] = null;
-        }
+        edgeVertices =
+                new HashMap<Integer, Vec3D>((int) (density * data.length));
+    }
+
+    public void setExpectedDensity(float density) {
+        this.density = density;
     }
 }
