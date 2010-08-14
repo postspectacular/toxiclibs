@@ -1,5 +1,6 @@
 package toxi.util.datatypes;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -7,6 +8,16 @@ import javax.xml.bind.annotation.XmlAttribute;
 import toxi.math.MathUtils;
 
 public class IntegerRange {
+
+    public static IntegerRange fromSamples(List<Integer> samples) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int s : samples) {
+            min = MathUtils.min(min, s);
+            max = MathUtils.max(max, s);
+        }
+        return new IntegerRange(min, max);
+    }
 
     @XmlAttribute
     public int min, max;

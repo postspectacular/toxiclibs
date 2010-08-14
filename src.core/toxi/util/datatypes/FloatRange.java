@@ -10,6 +10,16 @@ import toxi.math.MathUtils;
 
 public class FloatRange {
 
+    public static FloatRange fromSamples(List<Float> samples) {
+        float min = Float.MAX_VALUE;
+        float max = Float.MIN_VALUE;
+        for (float s : samples) {
+            min = MathUtils.min(min, s);
+            max = MathUtils.max(max, s);
+        }
+        return new FloatRange(min, max);
+    }
+
     @XmlAttribute
     public float min, max;
 
