@@ -74,7 +74,7 @@ public class ArrayIsoSurface implements IsoSurface {
                     if (cellIndex > 0 && cellIndex < 255) {
                         final int edgeFlags =
                                 MarchingCubesIndex.edgesToCompute[cellIndex];
-                        if (edgeFlags > 0) {
+                        if (edgeFlags > 0 && edgeFlags < 255) {
                             int edgeOffsetIndex = offset * 3;
                             float offsetData = data[offset];
                             float isoDiff = isoValue - offsetData;
