@@ -14,6 +14,7 @@ import toxi.geom.Cone;
 import toxi.geom.Ellipse;
 import toxi.geom.Line2D;
 import toxi.geom.Line3D;
+import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
@@ -39,11 +40,14 @@ import toxi.geom.mesh.Vertex;
  */
 public class ToxiclibsSupport {
 
-    protected static final Logger logger =
-            Logger.getLogger(ToxiclibsSupport.class.getName());
+    protected static final Logger logger = Logger
+            .getLogger(ToxiclibsSupport.class.getName());
 
     protected PApplet app;
     protected PGraphics gfx;
+
+    private Matrix4x4 normalMap = new Matrix4x4().translateSelf(128, 128, 128)
+            .scaleSelf(127);
 
     public ToxiclibsSupport(PApplet app) {
         this(app, app.g);
@@ -256,6 +260,63 @@ public class ToxiclibsSupport {
                 gfx.stroke(strokeCol);
             } else {
                 gfx.noStroke();
+            }
+        }
+    }
+
+    /**
+     * Draws the given mesh with each face or vertex tinted using its related
+     * normal vector as RGB color. Normals can also optionally be shown as
+     * lines.
+     * 
+     * @param mesh
+     * @param vertexNormals
+     *            true, if using vertex normals (else face normals only)
+     * @param normalLength
+     */
+    public final void meshNormalMapped(Mesh3D mesh, boolean vertexNormals,
+            float normalLength) {
+        gfx.beginShape(PConstants.TRIANGLES);
+        if (vertexNormals) {
+            for (Face f : mesh.getFaces()) {
+                Vec3D n = normalMap.applyTo(f.a.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                n = normalMap.applyTo(f.b.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                n = normalMap.applyTo(f.c.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        } else {
+            for (Face f : mesh.getFaces()) {
+                gfx.normal(f.normal.x, f.normal.y, f.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        }
+        gfx.endShape();
+        if (normalLength > 0) {
+            if (vertexNormals) {
+                for (Vertex v : mesh.getVertices()) {
+                    Vec3D w = v.add(v.normal.scale(normalLength));
+                    Vec3D n = v.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
+                }
+            } else {
+                for (Face f : mesh.getFaces()) {
+                    Vec3D c = f.getCentroid();
+                    Vec3D d = c.add(f.normal.scale(normalLength));
+                    Vec3D n = f.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
+                }
             }
         }
     }
