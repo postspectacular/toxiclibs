@@ -24,7 +24,6 @@ public class ArrayIsoSurface implements IsoSurface {
     protected int resX, resY, resZ;
     protected int resX1, resY1, resZ1;
 
-    protected float[] data;
     protected int sliceRes;
     protected int nextXY;
 
@@ -46,7 +45,6 @@ public class ArrayIsoSurface implements IsoSurface {
         sliceRes = volume.sliceRes;
         nextXY = resX + sliceRes;
 
-        data = volume.data;
         centreOffset = volume.halfScale.getInverted();
 
         edgeVertices = new Vec3D[3 * volume.numCells];
@@ -76,12 +74,13 @@ public class ArrayIsoSurface implements IsoSurface {
                                 MarchingCubesIndex.edgesToCompute[cellIndex];
                         if (edgeFlags > 0 && edgeFlags < 255) {
                             int edgeOffsetIndex = offset * 3;
-                            float offsetData = data[offset];
+                            float offsetData = volume.getVoxelAt(offset);
                             float isoDiff = isoValue - offsetData;
                             if ((edgeFlags & 1) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + 1] - offsetData);
+                                                / (volume
+                                                        .getVoxelAt(offset + 1) - offsetData);
                                 edgeVertices[edgeOffsetIndex] =
                                         new Vec3D(offsetX + t * cellSize.x, y
                                                 * cellSize.y + centreOffset.y,
@@ -90,7 +89,8 @@ public class ArrayIsoSurface implements IsoSurface {
                             if ((edgeFlags & 2) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + resX] - offsetData);
+                                                / (volume.getVoxelAt(offset
+                                                        + resX) - offsetData);
                                 edgeVertices[edgeOffsetIndex + 1] =
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, offsetY + t
@@ -100,7 +100,8 @@ public class ArrayIsoSurface implements IsoSurface {
                             if ((edgeFlags & 4) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + sliceRes] - offsetData);
+                                                / (volume.getVoxelAt(offset
+                                                        + sliceRes) - offsetData);
                                 edgeVertices[edgeOffsetIndex + 2] =
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, y
@@ -154,29 +155,29 @@ public class ArrayIsoSurface implements IsoSurface {
 
     protected final int getCellIndex(int idx) {
         int cellIndex = 0;
-        if (data[idx] < isoValue) {
+        if (volume.getVoxelAt(idx) < isoValue) {
             cellIndex |= 0x01;
         }
-        if (data[idx + sliceRes] < isoValue) {
+        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
             cellIndex |= 0x08;
         }
-        if (data[idx + resX] < isoValue) {
+        if (volume.getVoxelAt(idx + resX) < isoValue) {
             cellIndex |= 0x10;
         }
-        if (data[idx + nextXY] < isoValue) {
+        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
             cellIndex |= 0x80;
         }
         idx++;
-        if (data[idx] < isoValue) {
+        if (volume.getVoxelAt(idx) < isoValue) {
             cellIndex |= 0x02;
         }
-        if (data[idx + sliceRes] < isoValue) {
+        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
             cellIndex |= 0x04;
         }
-        if (data[idx + resX] < isoValue) {
+        if (volume.getVoxelAt(idx + resX) < isoValue) {
             cellIndex |= 0x20;
         }
-        if (data[idx + nextXY] < isoValue) {
+        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
             cellIndex |= 0x40;
         }
         return cellIndex;

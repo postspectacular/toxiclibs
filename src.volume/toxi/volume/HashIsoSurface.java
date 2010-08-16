@@ -29,7 +29,6 @@ public class HashIsoSurface implements IsoSurface {
     protected int resX, resY, resZ;
     protected int resX1, resY1, resZ1;
 
-    protected float[] data;
     protected int sliceRes;
     protected int nextXY;
 
@@ -73,7 +72,6 @@ public class HashIsoSurface implements IsoSurface {
         sliceRes = volume.sliceRes;
         nextXY = resX + sliceRes;
 
-        data = volume.data;
         cellIndexCache = new short[sliceRes];
         prevCellIndexCache = new short[sliceRes];
 
@@ -104,12 +102,13 @@ public class HashIsoSurface implements IsoSurface {
                                 MarchingCubesIndex.edgesToCompute[cellIndex];
                         if (edgeFlags > 0 && edgeFlags < 255) {
                             int edgeOffsetIndex = offset * 3;
-                            float offsetData = data[offset];
+                            float offsetData = volume.getVoxelAt(offset);
                             float isoDiff = isoValue - offsetData;
                             if ((edgeFlags & 1) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + 1] - offsetData);
+                                                / (volume
+                                                        .getVoxelAt(offset + 1) - offsetData);
                                 edgeVertices.put(edgeOffsetIndex, new Vec3D(
                                         offsetX + t * cellSize.x, y
                                                 * cellSize.y + centreOffset.y,
@@ -118,7 +117,8 @@ public class HashIsoSurface implements IsoSurface {
                             if ((edgeFlags & 2) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + resX] - offsetData);
+                                                / (volume.getVoxelAt(offset
+                                                        + resX) - offsetData);
                                 edgeVertices.put(edgeOffsetIndex + 1,
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, offsetY + t
@@ -128,7 +128,8 @@ public class HashIsoSurface implements IsoSurface {
                             if ((edgeFlags & 4) > 0) {
                                 float t =
                                         isoDiff
-                                                / (data[offset + sliceRes] - offsetData);
+                                                / (volume.getVoxelAt(offset
+                                                        + sliceRes) - offsetData);
                                 edgeVertices.put(edgeOffsetIndex + 2,
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, y
@@ -199,29 +200,29 @@ public class HashIsoSurface implements IsoSurface {
 
     protected final int getCellIndex(int idx) {
         int cellIndex = 0;
-        if (data[idx] < isoValue) {
+        if (volume.getVoxelAt(idx) < isoValue) {
             cellIndex |= 0x01;
         }
-        if (data[idx + sliceRes] < isoValue) {
+        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
             cellIndex |= 0x08;
         }
-        if (data[idx + resX] < isoValue) {
+        if (volume.getVoxelAt(idx + resX) < isoValue) {
             cellIndex |= 0x10;
         }
-        if (data[idx + nextXY] < isoValue) {
+        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
             cellIndex |= 0x80;
         }
         idx++;
-        if (data[idx] < isoValue) {
+        if (volume.getVoxelAt(idx) < isoValue) {
             cellIndex |= 0x02;
         }
-        if (data[idx + sliceRes] < isoValue) {
+        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
             cellIndex |= 0x04;
         }
-        if (data[idx + resX] < isoValue) {
+        if (volume.getVoxelAt(idx + resX) < isoValue) {
             cellIndex |= 0x20;
         }
-        if (data[idx + nextXY] < isoValue) {
+        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
             cellIndex |= 0x40;
         }
         return cellIndex;
@@ -233,7 +234,7 @@ public class HashIsoSurface implements IsoSurface {
      */
     public void reset() {
         edgeVertices =
-                new HashMap<Integer, Vec3D>((int) (density * data.length));
+                new HashMap<Integer, Vec3D>((int) (density * volume.numCells));
     }
 
     public void setExpectedDensity(float density) {
