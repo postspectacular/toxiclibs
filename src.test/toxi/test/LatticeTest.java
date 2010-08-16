@@ -1,21 +1,24 @@
 package toxi.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
-import toxi.geom.mesh.DualSubdivision;
 import toxi.geom.mesh.LaplacianSmooth;
 import toxi.geom.mesh.MidpointDisplacementSubdivision;
 import toxi.geom.mesh.SubdivisionStrategy;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WingedEdge;
+import toxi.math.ScaleMap;
 import toxi.processing.ToxiclibsSupport;
 import toxi.util.DateUtils;
+import toxi.util.datatypes.FloatRange;
+import toxi.volume.HashIsoSurface;
 import toxi.volume.IsoSurface;
 import toxi.volume.RoundBrush;
-import toxi.volume.VolumetricSpace;
+import toxi.volume.VolumetricSpaceArray;
 
 public class LatticeTest extends PApplet {
 
@@ -47,8 +50,7 @@ public class LatticeTest extends PApplet {
 
     public void keyPressed() {
         if (key == 'x') {
-            mesh.saveAsSTL(sketchPath("lattice-" + DateUtils.timeStamp()
-                    + ".stl"));
+            saveMesh();
         }
         if (key == 'w') {
             isWireframe = !isWireframe;
@@ -64,6 +66,10 @@ public class LatticeTest extends PApplet {
         }
     }
 
+    private void saveMesh() {
+        mesh.saveAsSTL(sketchPath("lattice-" + DateUtils.timeStamp() + ".stl"));
+    }
+
     public void setup() {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
@@ -71,24 +77,50 @@ public class LatticeTest extends PApplet {
         mesh.addMesh(new AABB(new Vec3D(0, 0, 0), 150).toMesh());
         // mesh.addMesh(new Cone(new Vec3D(), new Vec3D(0, 1, 0), 0, 150, 300)
         // .toMesh(3));
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 3; i++) {
             SubdivisionStrategy subdiv =
                     new MidpointDisplacementSubdivision(mesh.computeCentroid(),
-                            i % 2 == 0 ? 0.25f : -0.25f);
-            subdiv = new DualSubdivision();
+                            i % 3 == 0 ? 0.25f : -0.25f);
+            // subdiv = new DualSubdivision();
             mesh.subdivide(subdiv, 0);
         }
-        VolumetricSpace volume =
-                new VolumetricSpace(new Vec3D(310, 310, 310), 96, 96, 96);
-        RoundBrush brush = new RoundBrush(volume, 5);
+        System.out.println("creating lattice...");
+        VolumetricSpaceArray volume =
+                new VolumetricSpaceArray(new Vec3D(460, 460, 460), 192, 192,
+                        192);
+        RoundBrush brush = new RoundBrush(volume, 4.5f);
+        List<Float> edgeLengths = new ArrayList<Float>();
+        for (WingedEdge e : mesh.edges.values()) {
+            edgeLengths.add(e.getLength());
+        }
+        FloatRange range = FloatRange.fromSamples(edgeLengths);
+        ScaleMap brushSize = new ScaleMap(range.min, range.max, 3.75f, 8);
         for (WingedEdge e : mesh.edges.values()) {
             List<Vec3D> points = e.splitIntoSegments(null, 1, true);
+            brush.setSize((float) brushSize.getClippedValueFor(e.getLength()));
             for (Vec3D p : points) {
                 brush.drawAtAbsolutePos(p, 0.5f);
             }
         }
         volume.closeSides();
-        IsoSurface surface = new IsoSurface(volume);
-        mesh.clear().addMesh(surface.computeSurfaceMesh(null, 0.2f));
+        mesh = null;
+        System.out.println("creating surface...");
+        IsoSurface surface;
+        // surface = new ArrayIsoSurface(volume);
+        surface = new HashIsoSurface(volume);
+        // surface.useMinimumRAM(true);
+        mesh =
+                (WETriangleMesh) surface.computeSurfaceMesh(new WETriangleMesh(
+                        "iso", 300000, 900000), 0.2f);
+        volume = null;
+        surface = null;
+        System.out.println("mesh: " + mesh);
+        System.out.println("scaling...");
+        // float scale = 75f / mesh.getBoundingBox().getExtent().x;
+        // mesh.scale(scale);
+        System.out.println("smoothing...");
+        new LaplacianSmooth().filter(mesh, 4);
+        saveMesh();
+        System.exit(0);
     }
 }

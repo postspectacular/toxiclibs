@@ -1,6 +1,8 @@
 package toxi.test;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -9,12 +11,13 @@ import toxi.geom.Cone;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Vec3D;
-import toxi.geom.mesh.DualSubdivision;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.LaplacianSmooth;
+import toxi.geom.mesh.MidpointDisplacementSubdivision;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.SubdivisionStrategy;
 import toxi.geom.mesh.Vertex;
+import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.processing.ToxiclibsSupport;
 import toxi.util.DateUtils;
@@ -30,10 +33,28 @@ public class SubdivTest extends PApplet {
     private int depth;
     private boolean isWireframe;
 
-    private Matrix4x4 normalMap =
-            new Matrix4x4().translateSelf(128, 128, 128).scaleSelf(127);
+    private Matrix4x4 normalMap = new Matrix4x4().translateSelf(128, 128, 128)
+            .scaleSelf(127);
     private float currZoom = 1.5f;
     private boolean doSave;
+
+    public void addHole(WEFace f, float d, float l) {
+        Vec3D centroid = f.getCentroid();
+        Vec3D a2 = f.a.interpolateTo(centroid, d);
+        Vec3D b2 = f.b.interpolateTo(centroid, d);
+        Vec3D c2 = f.c.interpolateTo(centroid, d);
+        // Vec3D s = centroid.add(f.normal.scale(l));
+        mesh.removeFace(f);
+        mesh.addFace(f.a, b2, a2);
+        mesh.addFace(f.a, f.b, b2);
+        mesh.addFace(f.b, c2, b2);
+        mesh.addFace(f.b, f.c, c2);
+        mesh.addFace(f.c, a2, c2);
+        mesh.addFace(f.c, f.a, a2);
+        // mesh.addFace(a2, b2, s);
+        // mesh.addFace(b2, c2, s);
+        // mesh.addFace(c2, a2, s);
+    }
 
     public void draw() {
         background(255);
@@ -143,12 +164,13 @@ public class SubdivTest extends PApplet {
         }
         if (key == 's') {
             SubdivisionStrategy subdiv;
-            // subdiv =
-            // new MidpointDisplacementSubdivision(mesh.getCentroid(),
-            // depth % 7 == 0 ? -0.25f : 0.25f);
+            subdiv =
+                    new MidpointDisplacementSubdivision(mesh.computeCentroid(),
+                            depth % 3 == 0 ? -0.25f : 0.25f);
             // subdiv = new MidpointSubdivision();
-            subdiv = new DualSubdivision();
+            // subdiv = new DualSubdivision();
             // subdiv = new TriSubdivision();
+            // subdiv = new NormalDisplacementSubdivision(0.25f);
             // subdiv =
             // new DualDisplacementSubdivision(mesh.computeCentroid(),
             // 0.25f, -0.25f);
@@ -178,6 +200,14 @@ public class SubdivTest extends PApplet {
         }
         if (key == ' ') {
             doSave = true;
+        }
+        if (key == 'h') {
+            List<Face> faces = new ArrayList<Face>(mesh.faces);
+            for (Face f : faces) {
+                addHole((WEFace) f, 0.25f, 50);
+            }
+            mesh.computeFaceNormals();
+            mesh.computeVertexNormals();
         }
     }
 
