@@ -157,7 +157,7 @@ public class HashIsoSurface implements IsoSurface {
 
     private void createFacesForSlice(Mesh3D mesh, int z) {
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("creating polygons for slice: " + z);
+            logger.info("creating polygons for slice: " + z);
         }
         int[] face = new int[16];
         int sliceOffset = sliceRes * z;
