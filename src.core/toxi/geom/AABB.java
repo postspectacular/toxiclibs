@@ -272,100 +272,102 @@ public class AABB extends Vec3D implements Shape3D {
     }
 
     public boolean intersectsTriangle(Triangle tri) {
-
-        /* use separating axis theorem to test overlap between triangle and box */
-        /* need to test for overlap in these directions: */
-        /*
-         * 1) the {x,y,z}-directions (actually, since we use the AABB of the
-         * triangle
-         */
-        /* we do not even need to test these) */
-        /* 2) normal of the triangle */
-        /* 3) crossproduct(edge from tri, {x,y,z}-directin) */
-        /* this gives 3x3=9 more tests */
+        // use separating axis theorem to test overlap between triangle and box
+        // need to test for overlap in these directions:
+        // 
+        // 1) the {x,y,z}-directions (actually, since we use the AABB of the
+        // triangle
+        // we do not even need to test these)
+        // 2) normal of the triangle
+        // 3) crossproduct(edge from tri, {x,y,z}-directin)
+        // this gives 3x3=9 more tests
         Vec3D v0, v1, v2;
         Vec3D normal, e0, e1, e2, f;
 
-        /* This is the fastest branch on Sun */
-        /* move everything so that the boxcenter is in (0,0,0) */
+        // move everything so that the boxcenter is in (0,0,0)
         v0 = tri.a.sub(this);
         v1 = tri.b.sub(this);
         v2 = tri.c.sub(this);
 
-        /* compute triangle edges */
-        e0 = v1.sub(v0); /* tri edge 0 */
-        e1 = v2.sub(v1); /* tri edge 1 */
-        e2 = v0.sub(v2); /* tri edge 2 */
+        // compute triangle edges
+        e0 = v1.sub(v0);
+        e1 = v2.sub(v1);
+        e2 = v0.sub(v2);
 
-        /* Bullet 3: */
-        /* test the 9 tests first (this was faster) */
+        // test the 9 tests first (this was faster)
         f = e0.getAbs();
-        if (testAxisX02(e0.z, e0.y, f.z, f.y, v0, v2)) {
+        if (testAxis(e0.z, -e0.y, f.z, f.y, v0.y, v0.z, v2.y, v2.z, extent.y,
+                extent.z)) {
             return false;
         }
-        if (testAxisY02(e0.z, e0.x, f.z, f.x, v0, v2)) {
+        if (testAxis(-e0.z, e0.x, f.z, f.x, v0.x, v0.z, v2.x, v2.z, extent.x,
+                extent.z)) {
             return false;
         }
-        if (testAxisZ12(e0.y, e0.x, f.y, f.x, v1, v2)) {
+        if (testAxis(e0.y, -e0.x, f.y, f.x, v1.x, v1.y, v2.x, v2.y, extent.x,
+                extent.y)) {
             return false;
         }
 
         f = e1.getAbs();
-        if (testAxisX02(e1.z, e1.y, f.z, f.y, v0, v2)) {
+        if (testAxis(e1.z, -e1.y, f.z, f.y, v0.y, v0.z, v2.y, v2.z, extent.y,
+                extent.z)) {
             return false;
         }
-        if (testAxisY02(e1.z, e1.x, f.z, f.x, v0, v2)) {
+        if (testAxis(-e1.z, e1.x, f.z, f.x, v0.x, v0.z, v2.x, v2.z, extent.x,
+                extent.z)) {
             return false;
         }
-        if (testAxisZ01(e1.y, e1.x, f.y, f.x, v0, v1)) {
+        if (testAxis(e1.y, -e1.x, f.y, f.x, v0.x, v0.y, v1.x, v1.y, extent.x,
+                extent.y)) {
             return false;
         }
 
         f = e2.getAbs();
-        if (testAxisX01(e2.z, e2.y, f.z, f.y, v0, v1)) {
+        if (testAxis(e2.z, -e2.y, f.z, f.y, v0.y, v0.z, v1.y, v1.z, extent.y,
+                extent.z)) {
             return false;
         }
-        if (testAxisY01(e2.z, e2.x, f.z, f.x, v0, v1)) {
+        if (testAxis(-e2.z, e2.x, f.z, f.x, v0.x, v0.z, v1.x, v1.z, extent.x,
+                extent.z)) {
             return false;
         }
-        if (testAxisZ12(e2.y, e2.x, f.y, f.x, v1, v2)) {
+        if (testAxis(e2.y, -e2.x, f.y, f.x, v1.x, v1.y, v2.x, v2.y, extent.x,
+                extent.y)) {
             return false;
         }
 
-        /* Bullet 1: */
-        /* first test overlap in the {x,y,z}-directions */
-        /* find min, max of the triangle each direction, and test for overlap in */
-        /* that direction -- this is equivalent to testing a minimal AABB around */
-        /* the triangle against the AABB */
+        // first test overlap in the {x,y,z}-directions
+        // find min, max of the triangle each direction, and test for overlap in
+        // that direction -- this is equivalent to testing a minimal AABB around
+        // the triangle against the AABB
 
-        /* test in X-direction */
+        // test in X-direction
         if (MathUtils.min(v0.x, v1.x, v2.x) > extent.x
                 || MathUtils.max(v0.x, v1.x, v2.x) < -extent.x) {
             return false;
         }
 
-        /* test in Y-direction */
+        // test in Y-direction
         if (MathUtils.min(v0.y, v1.y, v2.y) > extent.y
                 || MathUtils.max(v0.y, v1.y, v2.y) < -extent.y) {
             return false;
         }
 
-        /* test in Z-direction */
+        // test in Z-direction
         if (MathUtils.min(v0.z, v1.z, v2.z) > extent.z
                 || MathUtils.max(v0.z, v1.z, v2.z) < -extent.z) {
             return false;
         }
 
-        /* Bullet 2: */
-        /* test if the box intersects the plane of the triangle */
-        /* compute plane equation of triangle: normal*x+d=0 */
+        // test if the box intersects the plane of the triangle
+        // compute plane equation of triangle: normal*x+d=0
         normal = e0.cross(e1);
-        float d = -normal.dot(v0); /* plane eq: normal.x+d=0 */
+        float d = -normal.dot(v0);
         if (!planeBoxOverlap(normal, d, extent)) {
             return false;
         }
-
-        return true; /* box and triangle overlaps */
+        return true;
     }
 
     private boolean planeBoxOverlap(Vec3D normal, float d, Vec3D maxbox) {
@@ -401,7 +403,6 @@ public class AABB extends Vec3D implements Shape3D {
         if (normal.dot(vmax) + d >= 0.0f) {
             return true;
         }
-
         return false;
     }
 
@@ -451,9 +452,9 @@ public class AABB extends Vec3D implements Shape3D {
     }
 
     private boolean testAxis(float a, float b, float fa, float fb, float va,
-            float vb, float wa, float wb) {
-        float p0 = a * va - b * vb;
-        float p2 = a * wa - b * wb;
+            float vb, float wa, float wb, float ea, float eb) {
+        float p0 = a * va + b * vb;
+        float p2 = a * wa + b * wb;
         float min, max;
         if (p0 < p2) {
             min = p0;
@@ -462,103 +463,7 @@ public class AABB extends Vec3D implements Shape3D {
             min = p2;
             max = p0;
         }
-        float rad = fa + fb;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisX01(float a, float b, float fa, float fb, Vec3D v0,
-            Vec3D v1) {
-        float p0 = a * v0.y - b * v0.z;
-        float p1 = a * v1.y - b * v1.z;
-        float min, max;
-        if (p0 < p1) {
-            min = p0;
-            max = p1;
-        } else {
-            min = p1;
-            max = p0;
-        }
-        float rad = fa * extent.y + fb * extent.z;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisX02(float a, float b, float fa, float fb, Vec3D v0,
-            Vec3D v2) {
-        float p0 = a * v0.y - b * v0.z;
-        float p2 = a * v2.y - b * v2.z;
-        float min, max;
-        if (p0 < p2) {
-            min = p0;
-            max = p2;
-        } else {
-            min = p2;
-            max = p0;
-        }
-        float rad = fa * extent.y + fb * extent.z;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisY01(float a, float b, float fa, float fb, Vec3D v0,
-            Vec3D v1) {
-        float p0 = -a * v0.x + b * v0.z;
-        float p1 = -a * v1.x + b * v1.z;
-        float min, max;
-        if (p0 < p1) {
-            min = p0;
-            max = p1;
-        } else {
-            min = p1;
-            max = p0;
-        }
-        float rad = fa * extent.x + fb * extent.z;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisY02(float a, float b, float fa, float fb, Vec3D v0,
-            Vec3D v2) {
-        float p0 = -a * v0.x + b * v0.z;
-        float p2 = -a * v2.x + b * v2.z;
-        float min, max;
-        if (p0 < p2) {
-            min = p0;
-            max = p2;
-        } else {
-            min = p2;
-            max = p0;
-        }
-        float rad = fa * extent.x + fb * extent.z;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisZ01(float a, float b, float fa, float fb, Vec3D v0,
-            Vec3D v1) {
-        float p0 = a * v0.x - b * v0.y;
-        float p1 = a * v1.x - b * v1.y;
-        float min, max;
-        if (p0 < p1) {
-            min = p0;
-            max = p1;
-        } else {
-            min = p1;
-            max = p0;
-        }
-        float rad = fa * extent.x + fb * extent.y;
-        return (min > rad || max < -rad);
-    }
-
-    private boolean testAxisZ12(float a, float b, float fa, float fb, Vec3D v1,
-            Vec3D v2) {
-        float p1 = a * v1.x - b * v1.y;
-        float p2 = a * v2.x - b * v2.y;
-        float min, max;
-        if (p2 < p1) {
-            min = p2;
-            max = p1;
-        } else {
-            min = p1;
-            max = p2;
-        }
-        float rad = fa * extent.x + fb * extent.y;
+        float rad = fa * ea + fb * eb;
         return (min > rad || max < -rad);
     }
 
