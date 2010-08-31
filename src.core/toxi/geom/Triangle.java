@@ -192,6 +192,12 @@ public class Triangle implements Shape3D {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
     }
 
+    public AABB getBoundingBox() {
+        Vec3D min = Vec3D.min(Vec3D.min(a, b), c);
+        Vec3D max = Vec3D.max(Vec3D.max(a, b), c);
+        return AABB.fromMinMax(min, max);
+    }
+
     /**
      * Finds and returns the closest point on any of the triangle edges to the
      * point given.
