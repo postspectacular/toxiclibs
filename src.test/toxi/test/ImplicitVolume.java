@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.LaplacianSmooth;
 import toxi.geom.mesh.WETriangleMesh;
-import toxi.math.noise.SimplexNoise;
 import toxi.processing.ToxiclibsSupport;
 import toxi.volume.HashIsoSurface;
 import toxi.volume.IsoSurface;
@@ -12,20 +11,14 @@ import toxi.volume.VolumetricSpace;
 
 public class ImplicitVolume extends PApplet {
 
-    public class SphereVolume extends VolumetricSpace {
+    public class EvaluatingVolume extends VolumetricSpace {
 
-        private int cx;
-        private int cy;
-        private int cz;
-        private int radius;
+        private float upperBound;
 
-        public SphereVolume(Vec3D scale, int resX, int resY, int resZ,
-                int radius) {
+        public EvaluatingVolume(Vec3D scale, int resX, int resY, int resZ,
+                float upperBound) {
             super(scale, resX, resY, resZ);
-            cx = resX / 2;
-            cy = resY / 2;
-            cz = resZ / 2;
-            this.radius = radius * radius;
+            this.upperBound = upperBound;
         }
 
         @Override
@@ -37,23 +30,18 @@ public class ImplicitVolume extends PApplet {
         }
 
         public float getVoxelAt(int x, int y, int z) {
+            float val = 0;
             if (x > 0 && x < resX1 && y > 0 && y < resY1 && z > 0 && z < resZ1) {
-                x -= cx;
-                y -= cy;
-                z -= cz;
-                return (x * x + y * y + z * z) < radius ? 1 : 0;
+                float xx = (float) x / resX - 0.5f;
+                float yy = (float) y / resY - 0.5f;
+                float zz = (float) z / resZ - 0.5f;
+                val = sin(xx * PI * 8) + cos(yy * PI * 8) + sin(zz * PI * 8);
+                if (val > upperBound) {
+                    val = 0;
+                }
             }
-            return 0;
+            return val;
         }
-
-        public float getVoxelAt2(int x, int y, int z) {
-            if (x > 0 && x < resX1 && y > 0 && y < resY1 && z > 0 && z < resZ1) {
-                return (float) (SimplexNoise.noise(x * 0.05f, y * 0.05f,
-                        z * 0.05f) * 0.5);
-            }
-            return 0;
-        }
-
     }
 
     public static void main(String[] args) {
@@ -101,7 +89,7 @@ public class ImplicitVolume extends PApplet {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
         VolumetricSpace vol =
-                new SphereVolume(new Vec3D(400, 400, 400), 64, 64, 64, 32);
+                new EvaluatingVolume(new Vec3D(400, 400, 400), 64, 64, 64, 0.4f);
         IsoSurface surface = new HashIsoSurface(vol);
         mesh =
                 (WETriangleMesh) surface.computeSurfaceMesh(

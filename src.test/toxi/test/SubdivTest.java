@@ -1,28 +1,74 @@
 package toxi.test;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import toxi.geom.AABB;
 import toxi.geom.Cone;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
+import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.LaplacianSmooth;
+import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.MidpointDisplacementSubdivision;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.SubdivisionStrategy;
-import toxi.geom.mesh.Vertex;
 import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.processing.ToxiclibsSupport;
 import toxi.util.DateUtils;
+import toxi.volume.HashIsoSurface;
+import toxi.volume.IsoSurface;
+import toxi.volume.VolumetricSpace;
 
 public class SubdivTest extends PApplet {
+
+    class MeshVolume extends VolumetricSpace {
+
+        private Mesh3D mesh;
+        private Triangle tri = new Triangle();
+        private Plane plane = new Plane();
+        private AABB voxel;
+
+        public MeshVolume(Mesh3D mesh, int resX, int resY, int resZ) {
+            super(mesh.getBoundingBox().getExtent().scale(2.2f), resX, resY,
+                    resZ);
+            this.mesh = mesh;
+            this.voxel =
+                    new AABB(new Vec3D(), halfScale.scale(1f / resX, 1f / resY,
+                            1f / resZ));
+        }
+
+        @Override
+        public float getVoxelAt(int index) {
+            int z = index / sliceRes;
+            int y = (index % sliceRes) / resX;
+            int x = index % resX;
+            return getVoxelAt(x, y, z);
+        }
+
+        @Override
+        public float getVoxelAt(int x, int y, int z) {
+            if (x > 0 && x < resX1 && y > 0 && y < resY1 && z > 0 && z < resZ1) {
+                Vec3D pos =
+                        new Vec3D(x, y, z).scaleSelf(voxelSize).subSelf(
+                                halfScale);
+                voxel.set(pos);
+                for (Face f : mesh.getFaces()) {
+                    tri.a = f.a;
+                    tri.b = f.b;
+                    tri.c = f.c;
+                    if (voxel.intersectsTriangle(tri)) {
+                        return 1;
+                    }
+                }
+            }
+            return 0;
+        }
+    }
 
     public static void main(String[] args) {
         PApplet.main(new String[] { "toxi.test.SubdivTest" });
@@ -31,11 +77,12 @@ public class SubdivTest extends PApplet {
     private ToxiclibsSupport gfx;
     private WETriangleMesh mesh;
     private int depth;
-    private boolean isWireframe;
 
-    private Matrix4x4 normalMap = new Matrix4x4().translateSelf(128, 128, 128)
-            .scaleSelf(127);
+    private boolean isWireframe;
+    private Matrix4x4 normalMap =
+            new Matrix4x4().translateSelf(128, 128, 128).scaleSelf(127);
     private float currZoom = 1.5f;
+
     private boolean doSave;
 
     public void addHole(WEFace f, float d, float l) {
@@ -74,62 +121,10 @@ public class SubdivTest extends PApplet {
             stroke(0);
         }
         // gfx.mesh(mesh, false, 0);
-        drawMesh(g, mesh, true, isWireframe);
+        gfx.meshNormalMapped(mesh, !isWireframe, 10);
         if (doSave) {
             saveFrame("sd-mid-" + DateUtils.timeStamp() + ".png");
             doSave = false;
-        }
-    }
-
-    void drawMesh(PGraphics gfx, WETriangleMesh mesh, boolean vertexNormals,
-            boolean showNormals) {
-        gfx.beginShape(TRIANGLES);
-        if (vertexNormals) {
-            for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
-                Face f = i.next();
-                Vec3D n = normalMap.applyTo(f.a.normal);
-                gfx.fill(n.x, n.y, n.z);
-                gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
-                gfx.vertex(f.a.x, f.a.y, f.a.z);
-                n = normalMap.applyTo(f.b.normal);
-                gfx.fill(n.x, n.y, n.z);
-                gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
-                gfx.vertex(f.b.x, f.b.y, f.b.z);
-                n = normalMap.applyTo(f.c.normal);
-                gfx.fill(n.x, n.y, n.z);
-                gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
-                gfx.vertex(f.c.x, f.c.y, f.c.z);
-            }
-        } else {
-            for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
-                Face f = i.next();
-                gfx.normal(f.normal.x, f.normal.y, f.normal.z);
-                gfx.vertex(f.a.x, f.a.y, f.a.z);
-                gfx.vertex(f.b.x, f.b.y, f.b.z);
-                gfx.vertex(f.c.x, f.c.y, f.c.z);
-            }
-        }
-        gfx.endShape();
-        if (showNormals) {
-            if (vertexNormals) {
-                for (Iterator<Vertex> i = mesh.vertices.values().iterator(); i
-                        .hasNext();) {
-                    Vertex v = i.next();
-                    Vec3D w = v.add(v.normal.scale(10));
-                    Vec3D n = v.normal.scale(127);
-                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
-                    gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
-                }
-            } else {
-                for (Iterator<Face> i = mesh.faces.iterator(); i.hasNext();) {
-                    Face f = i.next();
-                    Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
-                    Vec3D d = c.add(f.normal.scale(20));
-                    Vec3D n = f.normal.scale(127);
-                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
-                    gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
-                }
-            }
         }
     }
 
@@ -204,10 +199,13 @@ public class SubdivTest extends PApplet {
         if (key == 'h') {
             List<Face> faces = new ArrayList<Face>(mesh.faces);
             for (Face f : faces) {
-                addHole((WEFace) f, 0.25f, 50);
+                addHole((WEFace) f, 0.75f, 50);
             }
             mesh.computeFaceNormals();
             mesh.computeVertexNormals();
+        }
+        if (key == 'v') {
+            voxelizeMesh();
         }
     }
 
@@ -215,5 +213,13 @@ public class SubdivTest extends PApplet {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
         initMesh(0);
+    }
+
+    private void voxelizeMesh() {
+        VolumetricSpace vol = new MeshVolume(mesh, 48, 48, 48);
+        IsoSurface surface = new HashIsoSurface(vol);
+        mesh =
+                (WETriangleMesh) surface.computeSurfaceMesh(
+                        new WETriangleMesh(), 0.2f);
     }
 }
