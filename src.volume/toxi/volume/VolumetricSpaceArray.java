@@ -29,10 +29,6 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         return data;
     }
 
-    public final float getVoxelAt(int index) {
-        return data[index];
-    }
-
     public final float getVoxelAt(int x, int y, int z) {
         return data[x + y * resX + z * sliceRes];
     }
@@ -78,6 +74,13 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         for (int i = 0, front = 0, back = resZ1 * sliceRes; i < sliceRes; i++) {
             data[front++] = density;
             data[back++] = density;
+        }
+    }
+
+    public final void setVoxelAt(int x, int y, int z, float value) {
+        int idx = x + y * resX + z * sliceRes;
+        if (idx >= 0 && idx < data.length) {
+            data[idx] = value;
         }
     }
 }

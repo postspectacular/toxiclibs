@@ -7,8 +7,8 @@ import toxi.math.MathUtils;
 
 public abstract class VolumetricSpace {
 
-    protected static final Logger logger = Logger
-            .getLogger(VolumetricSpace.class.getName());
+    protected static final Logger logger =
+            Logger.getLogger(VolumetricSpace.class.getName());
 
     public final int resX, resY, resZ;
     public final int resX1, resY1, resZ1;
@@ -17,6 +17,7 @@ public abstract class VolumetricSpace {
 
     public final Vec3D scale = new Vec3D();
     public final Vec3D halfScale = new Vec3D();
+    public final Vec3D voxelSize = new Vec3D();
 
     public final int numCells;
 
@@ -28,6 +29,7 @@ public abstract class VolumetricSpace {
         resX1 = resX - 1;
         resY1 = resY - 1;
         resZ1 = resZ - 1;
+        voxelSize.set(scale.x / resX, scale.y / resY, scale.z / resZ);
         sliceRes = resX * resY;
         numCells = sliceRes * resZ;
         logger.info("new space of " + resX + "x" + resY + "x" + resZ
@@ -51,8 +53,6 @@ public abstract class VolumetricSpace {
     public final Vec3D getScale() {
         return scale.copy();
     }
-
-    public abstract float getVoxelAt(int index);
 
     public abstract float getVoxelAt(int x, int y, int z);
 
