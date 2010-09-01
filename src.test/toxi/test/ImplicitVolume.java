@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.LaplacianSmooth;
 import toxi.geom.mesh.WETriangleMesh;
+import toxi.math.MathUtils;
 import toxi.processing.ToxiclibsSupport;
 import toxi.volume.HashIsoSurface;
 import toxi.volume.IsoSurface;
@@ -21,21 +22,16 @@ public class ImplicitVolume extends PApplet {
             this.upperBound = upperBound;
         }
 
-        @Override
-        public float getVoxelAt(int index) {
-            int z = index / sliceRes;
-            int y = index % sliceRes / resX;
-            int x = index % resX;
-            return getVoxelAt(x, y, z);
-        }
-
         public float getVoxelAt(int x, int y, int z) {
             float val = 0;
             if (x > 0 && x < resX1 && y > 0 && y < resY1 && z > 0 && z < resZ1) {
                 float xx = (float) x / resX - 0.5f;
                 float yy = (float) y / resY - 0.5f;
                 float zz = (float) z / resZ - 0.5f;
-                val = sin(xx * PI * 8) + cos(yy * PI * 8) + sin(zz * PI * 8);
+                val =
+                        MathUtils.sin(xx * PI * 8) + MathUtils.cos(yy * PI * 8)
+                                + MathUtils.sin(zz * PI * 8);
+                // val = sin(xx * PI * 8) + cos(yy * PI * 8) + sin(zz * PI * 8);
                 if (val > upperBound) {
                     val = 0;
                 }
@@ -89,7 +85,7 @@ public class ImplicitVolume extends PApplet {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
         VolumetricSpace vol =
-                new EvaluatingVolume(new Vec3D(400, 400, 400), 64, 64, 64, 0.4f);
+                new EvaluatingVolume(new Vec3D(400, 400, 400), 64, 64, 64, 0.6f);
         IsoSurface surface = new HashIsoSurface(vol);
         mesh =
                 (WETriangleMesh) surface.computeSurfaceMesh(

@@ -6,7 +6,6 @@ import java.util.List;
 import processing.core.PApplet;
 import toxi.geom.AABB;
 import toxi.geom.Cone;
-import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
@@ -16,13 +15,16 @@ import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.MidpointDisplacementSubdivision;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.SubdivisionStrategy;
-import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.processing.ToxiclibsSupport;
 import toxi.util.DateUtils;
 import toxi.volume.HashIsoSurface;
 import toxi.volume.IsoSurface;
+import toxi.volume.MeshVoxelizer;
+import toxi.volume.RoundBrush;
+import toxi.volume.VolumetricBrush;
 import toxi.volume.VolumetricSpace;
+import toxi.volume.VolumetricSpaceArray;
 
 public class SubdivTest extends PApplet {
 
@@ -30,7 +32,6 @@ public class SubdivTest extends PApplet {
 
         private Mesh3D mesh;
         private Triangle tri = new Triangle();
-        private Plane plane = new Plane();
         private AABB voxel;
 
         public MeshVolume(Mesh3D mesh, int resX, int resY, int resZ) {
@@ -40,14 +41,6 @@ public class SubdivTest extends PApplet {
             this.voxel =
                     new AABB(new Vec3D(), halfScale.scale(1f / resX, 1f / resY,
                             1f / resZ));
-        }
-
-        @Override
-        public float getVoxelAt(int index) {
-            int z = index / sliceRes;
-            int y = (index % sliceRes) / resX;
-            int x = index % resX;
-            return getVoxelAt(x, y, z);
         }
 
         @Override
@@ -79,29 +72,10 @@ public class SubdivTest extends PApplet {
     private int depth;
 
     private boolean isWireframe;
-    private Matrix4x4 normalMap =
-            new Matrix4x4().translateSelf(128, 128, 128).scaleSelf(127);
     private float currZoom = 1.5f;
 
     private boolean doSave;
-
-    public void addHole(WEFace f, float d, float l) {
-        Vec3D centroid = f.getCentroid();
-        Vec3D a2 = f.a.interpolateTo(centroid, d);
-        Vec3D b2 = f.b.interpolateTo(centroid, d);
-        Vec3D c2 = f.c.interpolateTo(centroid, d);
-        // Vec3D s = centroid.add(f.normal.scale(l));
-        mesh.removeFace(f);
-        mesh.addFace(f.a, b2, a2);
-        mesh.addFace(f.a, f.b, b2);
-        mesh.addFace(f.b, c2, b2);
-        mesh.addFace(f.b, f.c, c2);
-        mesh.addFace(f.c, a2, c2);
-        mesh.addFace(f.c, f.a, a2);
-        // mesh.addFace(a2, b2, s);
-        // mesh.addFace(b2, c2, s);
-        // mesh.addFace(c2, a2, s);
-    }
+    private boolean showNormals;
 
     public void draw() {
         background(255);
@@ -116,12 +90,12 @@ public class SubdivTest extends PApplet {
             noStroke();
             lights();
         } else {
-            // gfx.origin(new Vec3D(), 100);
+            gfx.origin(new Vec3D(), 100);
             noFill();
             stroke(0);
         }
         // gfx.mesh(mesh, false, 0);
-        gfx.meshNormalMapped(mesh, !isWireframe, 10);
+        gfx.meshNormalMapped(mesh, !isWireframe, !showNormals ? 10 : 0);
         if (doSave) {
             saveFrame("sd-mid-" + DateUtils.timeStamp() + ".png");
             doSave = false;
@@ -161,7 +135,7 @@ public class SubdivTest extends PApplet {
             SubdivisionStrategy subdiv;
             subdiv =
                     new MidpointDisplacementSubdivision(mesh.computeCentroid(),
-                            depth % 3 == 0 ? -0.25f : 0.25f);
+                            depth % 3 == 0 ? 0.25f : -0.55f);
             // subdiv = new MidpointSubdivision();
             // subdiv = new DualSubdivision();
             // subdiv = new TriSubdivision();
@@ -199,13 +173,16 @@ public class SubdivTest extends PApplet {
         if (key == 'h') {
             List<Face> faces = new ArrayList<Face>(mesh.faces);
             for (Face f : faces) {
-                addHole((WEFace) f, 0.75f, 50);
+                mesh.perforateFace(f, 0.85f);
             }
             mesh.computeFaceNormals();
             mesh.computeVertexNormals();
         }
         if (key == 'v') {
             voxelizeMesh();
+        }
+        if (key == 'n') {
+            showNormals = !showNormals;
         }
     }
 
@@ -216,10 +193,20 @@ public class SubdivTest extends PApplet {
     }
 
     private void voxelizeMesh() {
-        VolumetricSpace vol = new MeshVolume(mesh, 48, 48, 48);
+        int res = 128;
+        VolumetricSpaceArray vol =
+                (VolumetricSpaceArray) MeshVoxelizer.voxelizeMesh(mesh, res);
+        RoundBrush brush = new RoundBrush(vol, 1);
+        // MeshVoxelizer.solidifyVolume(vol);
+        brush.setMode(VolumetricBrush.MODE_REPLACE);
+        for (int i = 0; i < 0; i++) {
+            brush.setSize(random(10, 50));
+            brush.drawAtGridPos(random(res), random(res), random(res), 0);
+        }
         IsoSurface surface = new HashIsoSurface(vol);
         mesh =
                 (WETriangleMesh) surface.computeSurfaceMesh(
-                        new WETriangleMesh(), 0.2f);
+                        new WETriangleMesh(), 0.5f);
+        mesh.computeVertexNormals();
     }
 }
