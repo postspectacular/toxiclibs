@@ -618,6 +618,22 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         return false;
     }
 
+    public TriangleMesh perforateFace(Face f, float size) {
+        Vec3D centroid = f.getCentroid();
+        float d = 1 - size;
+        Vec3D a2 = f.a.interpolateTo(centroid, d);
+        Vec3D b2 = f.b.interpolateTo(centroid, d);
+        Vec3D c2 = f.c.interpolateTo(centroid, d);
+        removeFace(f);
+        addFace(f.a, b2, a2);
+        addFace(f.a, f.b, b2);
+        addFace(f.b, c2, b2);
+        addFace(f.b, f.c, c2);
+        addFace(f.c, a2, c2);
+        addFace(f.c, f.a, a2);
+        return this;
+    }
+
     /**
      * Rotates the mesh in such a way so that its "forward" axis is aligned with
      * the given direction. This version uses the positive Z-axis as default
@@ -646,6 +662,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
         return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
                 matrix), true);
+    }
+
+    public void removeFace(Face f) {
+        faces.remove(f);
     }
 
     public TriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
