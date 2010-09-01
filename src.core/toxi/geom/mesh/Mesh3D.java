@@ -71,8 +71,18 @@ public interface Mesh3D {
 
     /**
      * Computes the smooth vertex normals for the entire mesh.
+     * 
+     * @return itself
      */
     public Mesh3D computeVertexNormals();
+
+    /**
+     * Changes the vertex order of faces such that their normal is facing away
+     * from the mesh centroid.
+     * 
+     * @return itself
+     */
+    public Mesh3D faceOutwards();
 
     /**
      * Flips the vertex ordering between clockwise and anti-clockwise. Face
