@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import toxi.geom.Intersector3D;
 import toxi.geom.Line3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
@@ -20,7 +19,7 @@ import toxi.geom.Vec3D;
  * create smooth vertex normals. Vertices and faces are directly accessible for
  * speed & convenience.
  */
-public class WETriangleMesh extends TriangleMesh implements Intersector3D {
+public class WETriangleMesh extends TriangleMesh {
 
     /**
      * WEVertex buffer & lookup index when adding new faces
