@@ -15,8 +15,14 @@ public class SurfaceMeshBuilder {
         this.function = function;
     }
 
-    public TriangleMesh createMesh(int res, float size) {
-        TriangleMesh mesh = new TriangleMesh();
+    public Mesh3D createMesh(int res) {
+        return createMesh(null, res, 1);
+    }
+
+    public Mesh3D createMesh(Mesh3D mesh, int res, float size) {
+        if (mesh == null) {
+            mesh = new TriangleMesh();
+        }
         Vec3D p, q, pp = null, pq = null;
         int phiRes = function.getPhiResolutionLimit(res);
         float phiRange = function.getPhiRange();
@@ -42,6 +48,7 @@ public class SurfaceMeshBuilder {
                 pq = q;
             }
         }
+        mesh.faceOutwards();
         mesh.computeVertexNormals();
         return mesh;
     }
