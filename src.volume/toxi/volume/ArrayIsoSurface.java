@@ -12,8 +12,8 @@ import toxi.geom.mesh.TriangleMesh;
  */
 public class ArrayIsoSurface implements IsoSurface {
 
-    protected static final Logger logger = Logger
-            .getLogger(ArrayIsoSurface.class.getName());
+    protected static final Logger logger =
+            Logger.getLogger(ArrayIsoSurface.class.getName());
 
     protected Vec3D cellSize;
     protected Vec3D centreOffset;
@@ -68,19 +68,19 @@ public class ArrayIsoSurface implements IsoSurface {
                 float offsetX = centreOffset.x;
                 int offset = resX * y + sliceOffset;
                 for (int x = 0; x < resX1; x++) {
-                    final int cellIndex = getCellIndex(offset);
+                    final int cellIndex = getCellIndex(x, y, z);
                     if (cellIndex > 0 && cellIndex < 255) {
                         final int edgeFlags =
                                 MarchingCubesIndex.edgesToCompute[cellIndex];
                         if (edgeFlags > 0 && edgeFlags < 255) {
                             int edgeOffsetIndex = offset * 3;
-                            float offsetData = volume.getVoxelAt(offset);
+                            float offsetData = volume.getVoxelAt(x, y, z);
                             float isoDiff = isoValue - offsetData;
                             if ((edgeFlags & 1) > 0) {
                                 float t =
                                         isoDiff
-                                                / (volume
-                                                        .getVoxelAt(offset + 1) - offsetData);
+                                                / (volume.getVoxelAt(x + 1, y,
+                                                        z) - offsetData);
                                 edgeVertices[edgeOffsetIndex] =
                                         new Vec3D(offsetX + t * cellSize.x, y
                                                 * cellSize.y + centreOffset.y,
@@ -89,8 +89,8 @@ public class ArrayIsoSurface implements IsoSurface {
                             if ((edgeFlags & 2) > 0) {
                                 float t =
                                         isoDiff
-                                                / (volume.getVoxelAt(offset
-                                                        + resX) - offsetData);
+                                                / (volume.getVoxelAt(x, y + 1,
+                                                        z) - offsetData);
                                 edgeVertices[edgeOffsetIndex + 1] =
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, offsetY + t
@@ -100,8 +100,8 @@ public class ArrayIsoSurface implements IsoSurface {
                             if ((edgeFlags & 4) > 0) {
                                 float t =
                                         isoDiff
-                                                / (volume.getVoxelAt(offset
-                                                        + sliceRes) - offsetData);
+                                                / (volume.getVoxelAt(x, y,
+                                                        z + 1) - offsetData);
                                 edgeVertices[edgeOffsetIndex + 2] =
                                         new Vec3D(x * cellSize.x
                                                 + centreOffset.x, y
@@ -124,7 +124,7 @@ public class ArrayIsoSurface implements IsoSurface {
             for (int y = 0; y < resY1; y++) {
                 int offset = resX * y + sliceOffset;
                 for (int x = 0; x < resX1; x++) {
-                    final int cellIndex = getCellIndex(offset);
+                    final int cellIndex = getCellIndex(x, y, z);
                     if (cellIndex > 0 && cellIndex < 255) {
                         int n = 0;
                         int edgeIndex;
@@ -153,31 +153,31 @@ public class ArrayIsoSurface implements IsoSurface {
         return mesh;
     }
 
-    protected final int getCellIndex(int idx) {
+    protected final int getCellIndex(int x, int y, int z) {
         int cellIndex = 0;
-        if (volume.getVoxelAt(idx) < isoValue) {
+        if (volume.getVoxelAt(x, y, z) < isoValue) {
             cellIndex |= 0x01;
         }
-        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
+        if (volume.getVoxelAt(x, y, z + 1) < isoValue) {
             cellIndex |= 0x08;
         }
-        if (volume.getVoxelAt(idx + resX) < isoValue) {
+        if (volume.getVoxelAt(x, y + 1, z) < isoValue) {
             cellIndex |= 0x10;
         }
-        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
+        if (volume.getVoxelAt(x, y + 1, z + 1) < isoValue) {
             cellIndex |= 0x80;
         }
-        idx++;
-        if (volume.getVoxelAt(idx) < isoValue) {
+        x++;
+        if (volume.getVoxelAt(x, y, z) < isoValue) {
             cellIndex |= 0x02;
         }
-        if (volume.getVoxelAt(idx + sliceRes) < isoValue) {
+        if (volume.getVoxelAt(x, y, z + 1) < isoValue) {
             cellIndex |= 0x04;
         }
-        if (volume.getVoxelAt(idx + resX) < isoValue) {
+        if (volume.getVoxelAt(x, y + 1, z) < isoValue) {
             cellIndex |= 0x20;
         }
-        if (volume.getVoxelAt(idx + nextXY) < isoValue) {
+        if (volume.getVoxelAt(x, y + 1, z + 1) < isoValue) {
             cellIndex |= 0x40;
         }
         return cellIndex;
