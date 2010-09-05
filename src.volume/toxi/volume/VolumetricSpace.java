@@ -54,6 +54,8 @@ public abstract class VolumetricSpace {
         return scale.copy();
     }
 
+    public abstract float getVoxelAt(int index);
+
     public abstract float getVoxelAt(int x, int y, int z);
 
     /**
@@ -63,5 +65,15 @@ public abstract class VolumetricSpace {
     public final void setScale(Vec3D scale) {
         this.scale.set(scale);
         this.halfScale.set(scale.scale(0.5f));
+    }
+
+    public void setVoxelAt(int index, float value) {
+        throw new UnsupportedOperationException(
+                "This VolumetricSpace implementation does not support setVoxelAt()");
+    }
+
+    public void setVoxelAt(int x, int y, int z, float value) {
+        throw new UnsupportedOperationException(
+                "This VolumetricSpace implementation does not support setVoxelAt()");
     }
 }

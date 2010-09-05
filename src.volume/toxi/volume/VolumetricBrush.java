@@ -7,20 +7,20 @@ import toxi.math.MathUtils;
 
 public abstract class VolumetricBrush {
 
-    protected static final Logger logger = Logger
-            .getLogger(VolumetricBrush.class.getName());
+    protected static final Logger logger =
+            Logger.getLogger(VolumetricBrush.class.getName());
 
     public static final int MODE_ADDITIVE = 1;
     public static final int MODE_MULTIPLY = 2;
     public static final int MODE_REPLACE = 3;
 
-    protected VolumetricSpaceArray volume;
+    protected VolumetricSpace volume;
     protected int cellRadiusX, cellRadiusY, cellRadiusZ;
     protected float stretchY, stretchZ;
 
     protected int brushMode = MODE_ADDITIVE;
 
-    public VolumetricBrush(VolumetricSpaceArray volume) {
+    public VolumetricBrush(VolumetricSpace volume) {
         this.volume = volume;
     }
 
@@ -45,4 +45,20 @@ public abstract class VolumetricBrush {
     }
 
     public abstract void setSize(float radius);
+
+    protected final void updateVoxel(int x, int y, int z, float cellVal) {
+        int idx = volume.getIndexFor(x, y, z);
+        switch (brushMode) {
+            case MODE_ADDITIVE:
+            default:
+                volume.setVoxelAt(idx, volume.getVoxelAt(idx) + cellVal);
+                break;
+            case MODE_MULTIPLY:
+                volume.setVoxelAt(idx, volume.getVoxelAt(idx) * cellVal);
+                break;
+            case MODE_REPLACE:
+                volume.setVoxelAt(idx, cellVal);
+                break;
+        }
+    }
 }

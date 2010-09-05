@@ -29,6 +29,11 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         return data;
     }
 
+    @Override
+    public final float getVoxelAt(int index) {
+        return data[index];
+    }
+
     public final float getVoxelAt(int x, int y, int z) {
         return data[x + y * resX + z * sliceRes];
     }
@@ -77,10 +82,18 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         }
     }
 
+    @Override
+    public final void setVoxelAt(int index, float value) {
+        if (index >= 0 && index < data.length) {
+            data[index] = value;
+        }
+    }
+
     public final void setVoxelAt(int x, int y, int z, float value) {
         int idx = x + y * resX + z * sliceRes;
         if (idx >= 0 && idx < data.length) {
             data[idx] = value;
         }
     }
+
 }

@@ -16,7 +16,7 @@ public class RoundBrush extends VolumetricBrush {
      * @param radius
      *            radius in world units
      */
-    public RoundBrush(VolumetricSpaceArray volume, float radius) {
+    public RoundBrush(VolumetricSpace volume, float radius) {
         super(volume);
         setSize(radius);
     }
@@ -40,19 +40,7 @@ public class RoundBrush extends VolumetricBrush {
                     float d = (float) Math.sqrt(dx * dx + dyz);
                     if (d <= cellRadiusX) {
                         float cellVal = (1 - d / cellRadiusX) * density;
-                        int idx = volume.getIndexFor(x, y, z);
-                        switch (brushMode) {
-                            case MODE_ADDITIVE:
-                            default:
-                                volume.data[idx] += cellVal;
-                                break;
-                            case MODE_MULTIPLY:
-                                volume.data[idx] *= cellVal;
-                                break;
-                            case MODE_REPLACE:
-                                volume.data[idx] = cellVal;
-                                break;
-                        }
+                        updateVoxel(x, y, z, cellVal);
                     }
                 }
             }

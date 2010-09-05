@@ -4,12 +4,9 @@ import java.util.logging.Level;
 
 import toxi.math.MathUtils;
 
-/**
- *
- */
 public class BoxBrush extends VolumetricBrush {
 
-    public BoxBrush(VolumetricSpaceArray volume, float size) {
+    public BoxBrush(VolumetricSpace volume, float size) {
         super(volume);
         setSize(size);
     }
@@ -25,19 +22,7 @@ public class BoxBrush extends VolumetricBrush {
         for (int z = minZ; z < maxZ; z++) {
             for (int y = minY; y < maxY; y++) {
                 for (int x = minX; x < maxX; x++) {
-                    int idx = volume.getIndexFor(x, y, z);
-                    switch (brushMode) {
-                        case MODE_ADDITIVE:
-                        default:
-                            volume.data[idx] += density;
-                            break;
-                        case MODE_MULTIPLY:
-                            volume.data[idx] *= density;
-                            break;
-                        case MODE_REPLACE:
-                            volume.data[idx] = density;
-                            break;
-                    }
+                    updateVoxel(x, y, z, density);
                 }
             }
         }
