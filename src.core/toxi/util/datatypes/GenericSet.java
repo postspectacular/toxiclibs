@@ -25,11 +25,17 @@ public class GenericSet<T> implements Iterable<T> {
         for (int i = 0; i < obj.length; i++) {
             items.add(obj[i]);
         }
-        pickRandom();
+        if (items.size() > 0) {
+            pickRandom();
+        }
     }
 
     public boolean add(T obj) {
-        return items.add(obj);
+        boolean isAdded = items.add(obj);
+        if (items.size() == 1) {
+            pickRandom();
+        }
+        return isAdded;
     }
 
     public boolean addAll(Collection<T> coll) {
