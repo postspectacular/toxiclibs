@@ -7,8 +7,8 @@ import toxi.math.MathUtils;
 
 public abstract class VolumetricSpace {
 
-    protected static final Logger logger =
-            Logger.getLogger(VolumetricSpace.class.getName());
+    protected static final Logger logger = Logger
+            .getLogger(VolumetricSpace.class.getName());
 
     public final int resX, resY, resZ;
     public final int resX1, resY1, resZ1;
@@ -34,6 +34,11 @@ public abstract class VolumetricSpace {
         numCells = sliceRes * resZ;
         logger.info("new space of " + resX + "x" + resY + "x" + resZ
                 + " cells: " + numCells);
+    }
+
+    public void closeSides() {
+        throw new UnsupportedOperationException(
+                "This VolumetricSpace implementation does not support closeSides()");
     }
 
     public final int getIndexFor(int x, int y, int z) {
