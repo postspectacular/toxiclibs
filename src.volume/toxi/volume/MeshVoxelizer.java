@@ -5,7 +5,6 @@ import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.Mesh3D;
-import toxi.geom.mesh.WETriangleMesh;
 import toxi.math.ScaleMap;
 
 public class MeshVoxelizer {
@@ -34,6 +33,10 @@ public class MeshVoxelizer {
         return volume;
     }
 
+    public static VolumetricSpace voxelizeMesh(Mesh3D mesh, int res) {
+        return voxelizeMesh(mesh, res, res, res);
+    }
+
     public static VolumetricSpace voxelizeMesh(Mesh3D mesh, int resX, int resY,
             int resZ) {
         AABB box = mesh.getBoundingBox();
@@ -58,13 +61,13 @@ public class MeshVoxelizer {
             Vec3D min = bounds.getMin();
             Vec3D max = bounds.getMax();
             min =
-                    new Vec3D((int) wx.getClippedValueFor(min.x), (int) wy
-                            .getClippedValueFor(min.y), (int) wz
-                            .getClippedValueFor(min.z));
+                    new Vec3D((int) wx.getClippedValueFor(min.x),
+                            (int) wy.getClippedValueFor(min.y),
+                            (int) wz.getClippedValueFor(min.z));
             max =
-                    new Vec3D((int) wx.getClippedValueFor(max.x), (int) wy
-                            .getClippedValueFor(max.y), (int) wz
-                            .getClippedValueFor(max.z));
+                    new Vec3D((int) wx.getClippedValueFor(max.x),
+                            (int) wy.getClippedValueFor(max.y),
+                            (int) wz.getClippedValueFor(max.z));
             for (int z = (int) min.z; z <= max.z; z++) {
                 for (int y = (int) min.y; y <= max.y; y++) {
                     for (int x = (int) min.x; x <= max.x; x++) {
@@ -82,9 +85,5 @@ public class MeshVoxelizer {
             }
         }
         return volume;
-    }
-
-    public static VolumetricSpace voxelizeMesh(WETriangleMesh mesh, int res) {
-        return voxelizeMesh(mesh, res, res, res);
     }
 }
