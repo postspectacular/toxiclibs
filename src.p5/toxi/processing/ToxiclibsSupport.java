@@ -321,6 +321,10 @@ public class ToxiclibsSupport {
         }
     }
 
+    public void origin(int len) {
+        origin(Vec3D.ZERO, len);
+    }
+
     /**
      * Draws the major axes from the given point.
      * 
