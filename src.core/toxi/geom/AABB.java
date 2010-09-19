@@ -73,6 +73,15 @@ public class AABB extends Vec3D implements Shape3D {
     }
 
     /**
+     * Creates a new box of the given size at the world origin.
+     * 
+     * @param extent
+     */
+    public AABB(float extent) {
+        this(new Vec3D(), extent);
+    }
+
+    /**
      * Creates a new instance from centre point and uniform extent in all
      * directions.
      * 
@@ -274,7 +283,7 @@ public class AABB extends Vec3D implements Shape3D {
     public boolean intersectsTriangle(Triangle tri) {
         // use separating axis theorem to test overlap between triangle and box
         // need to test for overlap in these directions:
-        // 
+        //
         // 1) the {x,y,z}-directions (actually, since we use the AABB of the
         // triangle
         // we do not even need to test these)
