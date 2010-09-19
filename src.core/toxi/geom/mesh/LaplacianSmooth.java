@@ -5,7 +5,7 @@ import java.util.List;
 
 import toxi.geom.Vec3D;
 
-public class LaplacianSmooth implements FilterStrategy {
+public class LaplacianSmooth implements MeshFilterStrategy {
 
     public void filter(WETriangleMesh mesh, int numIterations) {
         HashMap<Vertex, Vec3D> filtered =

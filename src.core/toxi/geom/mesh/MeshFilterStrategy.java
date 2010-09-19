@@ -1,6 +1,6 @@
 package toxi.geom.mesh;
 
-public interface FilterStrategy {
+public interface MeshFilterStrategy {
 
     /**
      * Applies the vertex filter to the given mesh
