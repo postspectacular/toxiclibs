@@ -45,8 +45,8 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      */
     public static final int DEFAULT_STRIDE = 4;
 
-    protected static final Logger logger =
-            Logger.getLogger(TriangleMesh.class.getName());
+    protected static final Logger logger = Logger.getLogger(TriangleMesh.class
+            .getName());
 
     /**
      * Mesh name
@@ -70,6 +70,8 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
 
     protected Matrix4x4 matrix = new Matrix4x4();
     protected TriangleIntersector intersector = new TriangleIntersector();
+
+    protected int uniqueVertexID;
 
     public TriangleMesh() {
         this("untitled");
@@ -166,7 +168,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     private final Vertex checkVertex(Vec3D v) {
         Vertex vertex = vertices.get(v);
         if (vertex == null) {
-            vertex = createVertex(v, numVertices);
+            vertex = createVertex(v, uniqueVertexID++);
             vertices.put(vertex, vertex);
             numVertices++;
         }
@@ -618,7 +620,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         return false;
     }
 
-    public TriangleMesh perforateFace(Face f, float size) {
+    public Triangle perforateFace(Face f, float size) {
         Vec3D centroid = f.getCentroid();
         float d = 1 - size;
         Vec3D a2 = f.a.interpolateTo(centroid, d);
@@ -631,7 +633,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         addFace(f.b, f.c, c2);
         addFace(f.c, a2, c2);
         addFace(f.c, f.a, a2);
-        return this;
+        return new Triangle(a2, b2, c2);
     }
 
     /**
@@ -660,8 +662,9 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      * @return itself
      */
     public TriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
-        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
-                matrix), true);
+        return transform(
+                Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(matrix),
+                true);
     }
 
     public void removeFace(Face f) {
