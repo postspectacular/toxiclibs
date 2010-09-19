@@ -1,18 +1,18 @@
-package toxi.geom.mesh;
+package toxi.geom.mesh.subdiv;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.WingedEdge;
 
-public class MidpointDisplacementSubdivision extends MidpointSubdivision {
+public class MidpointDisplacementSubdivision extends DisplacementSubdivision {
 
-    private Vec3D centroid;
-    private float amp;
+    public Vec3D centroid;
 
     public MidpointDisplacementSubdivision(Vec3D centroid, float amount) {
+        super(amount);
         this.centroid = centroid;
-        this.amp = amount;
     }
 
     @Override

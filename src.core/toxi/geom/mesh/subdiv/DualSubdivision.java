@@ -1,9 +1,10 @@
-package toxi.geom.mesh;
+package toxi.geom.mesh.subdiv;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.WingedEdge;
 
 public class DualSubdivision extends SubdivisionStrategy {
 

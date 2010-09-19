@@ -1,14 +1,15 @@
-package toxi.geom.mesh;
+package toxi.geom.mesh.subdiv;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.WingedEdge;
 
 public class DualDisplacementSubdivision extends SubdivisionStrategy {
 
-    private Vec3D centroid;
-    private float ampA, ampB;
+    public Vec3D centroid;
+    public float ampA, ampB;
 
     public DualDisplacementSubdivision(Vec3D centroid, float ampA, float ampB) {
         this.centroid = centroid;

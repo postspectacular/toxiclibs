@@ -1,6 +1,8 @@
-package toxi.geom.mesh;
+package toxi.geom.mesh.subdiv;
 
 import java.util.Comparator;
+
+import toxi.geom.mesh.WingedEdge;
 
 public class EdgeLengthComparator implements Comparator<WingedEdge> {
 
