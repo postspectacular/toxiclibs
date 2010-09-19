@@ -39,6 +39,10 @@ public class WEVertex extends Vertex {
         return neighbors;
     }
 
+    public void removeEdge(WingedEdge e) {
+        edges.remove(e);
+    }
+
     public String toString() {
         return id + " {" + x + "," + y + "," + z + "}";
     }
