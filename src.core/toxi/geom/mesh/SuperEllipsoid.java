@@ -17,7 +17,7 @@ public class SuperEllipsoid implements SurfaceFunction {
         this.p2 = n2;
     }
 
-    public Vec3D computeVertexFor(float phi, float theta) {
+    public Vec3D computeVertexFor(Vec3D p, float phi, float theta) {
         phi -= MathUtils.HALF_PI;
         float cosPhi = MathUtils.cos(phi);
         float cosTheta = MathUtils.cos(theta);
@@ -27,7 +27,6 @@ public class SuperEllipsoid implements SurfaceFunction {
         float t =
                 MathUtils.sign(cosPhi)
                         * (float) Math.pow(MathUtils.abs(cosPhi), p1);
-        Vec3D p = new Vec3D();
         p.x =
                 t * MathUtils.sign(cosTheta)
                         * (float) Math.pow(MathUtils.abs(cosTheta), p2);

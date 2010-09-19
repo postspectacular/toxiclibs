@@ -11,7 +11,7 @@ import toxi.geom.Vec3D;
  */
 public interface SurfaceFunction {
 
-    public Vec3D computeVertexFor(float phi, float theta);
+    public Vec3D computeVertexFor(Vec3D p, float phi, float theta);
 
     public float getPhiRange();
 

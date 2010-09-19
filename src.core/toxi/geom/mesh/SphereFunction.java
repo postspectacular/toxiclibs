@@ -12,6 +12,13 @@ public class SphereFunction implements SurfaceFunction {
 
     public Sphere sphere;
 
+    protected float phiRange = MathUtils.PI;
+    protected float thetaRange = MathUtils.TWO_PI;
+
+    public SphereFunction() {
+        this(1);
+    }
+
     /**
      * Creates a new instance using a sphere of the given radius, located at the
      * world origin.
@@ -32,24 +39,40 @@ public class SphereFunction implements SurfaceFunction {
         this.sphere = s;
     }
 
-    public Vec3D computeVertexFor(float phi, float theta) {
-        return new Vec3D(sphere.radius, phi, theta).toCartesian().addSelf(
-                sphere);
+    public Vec3D computeVertexFor(Vec3D p, float phi, float theta) {
+        phi -= MathUtils.HALF_PI;
+        float cosPhi = MathUtils.cos(phi);
+        float cosTheta = MathUtils.cos(theta);
+        float sinPhi = MathUtils.sin(phi);
+        float sinTheta = MathUtils.sin(theta);
+        float t = MathUtils.sign(cosPhi) * MathUtils.abs(cosPhi);
+        p.x = t * MathUtils.sign(cosTheta) * MathUtils.abs(cosTheta);
+        p.y = MathUtils.sign(sinPhi) * MathUtils.abs(sinPhi);
+        p.z = t * MathUtils.sign(sinTheta) * MathUtils.abs(sinTheta);
+        return p.scaleSelf(sphere.radius).addSelf(sphere);
     }
 
     public float getPhiRange() {
-        return MathUtils.TWO_PI;
+        return phiRange;
     }
 
     public int getPhiResolutionLimit(int res) {
-        return res / 2;
+        return res;
     }
 
     public float getThetaRange() {
-        return MathUtils.TWO_PI;
+        return thetaRange;
     }
 
     public int getThetaResolutionLimit(int res) {
         return res;
+    }
+
+    public void setMaxPhi(float max) {
+        phiRange = MathUtils.min(max / 2, MathUtils.PI);
+    }
+
+    public void setMaxTheta(float max) {
+        thetaRange = MathUtils.min(max, MathUtils.TWO_PI);
     }
 }

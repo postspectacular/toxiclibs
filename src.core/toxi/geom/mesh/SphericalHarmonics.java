@@ -16,7 +16,7 @@ public class SphericalHarmonics implements SurfaceFunction {
     }
 
     // FIXME check where flipped vertex order is coming from sometimes
-    public Vec3D computeVertexFor(float phi, float theta) {
+    public Vec3D computeVertexFor(Vec3D p, float phi, float theta) {
         float r = 0;
         r += Math.pow(MathUtils.sin(m[0] * theta), m[1]);
         r += Math.pow(MathUtils.cos(m[2] * theta), m[3]);
@@ -24,7 +24,6 @@ public class SphericalHarmonics implements SurfaceFunction {
         r += Math.pow(MathUtils.cos(m[6] * phi), m[7]);
 
         float sinTheta = MathUtils.sin(theta);
-        Vec3D p = new Vec3D();
         p.x = r * sinTheta * MathUtils.cos(phi);
         p.y = r * MathUtils.cos(theta);
         p.z = r * sinTheta * MathUtils.sin(phi);
