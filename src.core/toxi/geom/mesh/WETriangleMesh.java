@@ -2,16 +2,20 @@ package toxi.geom.mesh;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import toxi.geom.AABB;
 import toxi.geom.Line3D;
 import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.subdiv.MidpointSubdivision;
+import toxi.geom.mesh.subdiv.SubdivisionStrategy;
 
 /**
  * A class to dynamically build, manipulate & export triangle meshes. Meshes are
@@ -27,6 +31,8 @@ public class WETriangleMesh extends TriangleMesh {
     public LinkedHashMap<Line3D, WingedEdge> edges;
 
     private final Line3D edgeCheck = new Line3D(new Vec3D(), new Vec3D());
+
+    private int uniqueEdgeID;
 
     public WETriangleMesh() {
         this("untitled");
@@ -110,10 +116,17 @@ public class WETriangleMesh extends TriangleMesh {
         return this;
     }
 
+    @Override
+    public AABB center(ReadonlyVec3D origin) {
+        super.center(origin);
+        rebuildIndex();
+        return bounds;
+    }
+
     private final WEVertex checkVertex(Vec3D v) {
         WEVertex vertex = (WEVertex) vertices.get(v);
         if (vertex == null) {
-            vertex = createVertex(v, numVertices);
+            vertex = createVertex(v, uniqueVertexID++);
             vertices.put(vertex, vertex);
             numVertices++;
         }
@@ -166,6 +179,10 @@ public class WETriangleMesh extends TriangleMesh {
 
     public WEVertex getClosestVertexToPoint(ReadonlyVec3D p) {
         return (WEVertex) super.getClosestVertexToPoint(p);
+    }
+
+    private int getNumEdges() {
+        return edges.size();
     }
 
     public WETriangleMesh getRotatedAroundAxis(Vec3D axis, float theta) {
@@ -236,8 +253,9 @@ public class WETriangleMesh extends TriangleMesh {
      * @return itself
      */
     public WETriangleMesh pointTowards(ReadonlyVec3D dir, ReadonlyVec3D forward) {
-        return transform(Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(
-                matrix), true);
+        return transform(
+                Quaternion.getAlignmentQuat(dir, forward).toMatrix4x4(matrix),
+                true);
     }
 
     public void rebuildIndex() {
@@ -257,22 +275,48 @@ public class WETriangleMesh extends TriangleMesh {
 
     protected void removeEdge(WingedEdge e) {
         e.remove();
+        WEVertex v = (WEVertex) e.a;
+        if (v.edges.size() == 0) {
+            vertices.remove(v);
+        }
+        v = (WEVertex) e.b;
+        if (v.edges.size() == 0) {
+            vertices.remove(v);
+        }
         for (WEFace f : e.faces) {
             removeFace(f);
         }
-        if (edges.remove(edgeCheck.set(e.a, e.b)) == e) {
-            logger.fine("removed edge: " + e);
-        } else {
+        WingedEdge removed = edges.remove(edgeCheck.set(e.a, e.b));
+        if (removed != e) {
             throw new IllegalStateException("can't remove edge");
         }
     }
 
-    public void removeFace(WEFace f) {
+    @Override
+    public void removeFace(Face f) {
         faces.remove(f);
-        for (WingedEdge e : f.edges) {
+        for (WingedEdge e : ((WEFace) f).edges) {
             e.faces.remove(f);
             if (e.faces.size() == 0) {
                 removeEdge(e);
+            }
+        }
+    }
+
+    // FIXME
+    public void removeUnusedVertices() {
+        for (Iterator<Vertex> i = vertices.values().iterator(); i.hasNext();) {
+            Vertex v = i.next();
+            boolean isUsed = false;
+            for (Face f : faces) {
+                if (f.a == v || f.b == v || f.c == v) {
+                    isUsed = true;
+                    break;
+                }
+            }
+            if (!isUsed) {
+                logger.info("removing vertex: " + v);
+                i.remove();
             }
         }
     }
@@ -355,7 +399,12 @@ public class WETriangleMesh extends TriangleMesh {
     }
 
     public void subdivide(SubdivisionStrategy subDiv, float minLength) {
-        List<WingedEdge> origEdges = new ArrayList<WingedEdge>(edges.values());
+        subdivideEdges(new ArrayList<WingedEdge>(edges.values()), subDiv,
+                minLength);
+    }
+
+    protected void subdivideEdges(List<WingedEdge> origEdges,
+            SubdivisionStrategy subDiv, float minLength) {
         Collections.sort(origEdges, subDiv.getEdgeOrdering());
         minLength *= minLength;
         for (WingedEdge e : origEdges) {
@@ -367,10 +416,23 @@ public class WETriangleMesh extends TriangleMesh {
         }
     }
 
+    public void subdivideFaceEdges(List<WEFace> faces,
+            SubdivisionStrategy subDiv, float minLength) {
+        List<WingedEdge> fedges = new ArrayList<WingedEdge>();
+        for (WEFace f : faces) {
+            for (WingedEdge e : f.edges) {
+                if (!fedges.contains(e)) {
+                    fedges.add(e);
+                }
+            }
+        }
+        subdivideEdges(fedges, subDiv, minLength);
+    }
+
     @Override
     public String toString() {
         return "WETriangleMesh: " + name + " vertices: " + getNumVertices()
-                + " faces: " + getNumFaces();
+                + " faces: " + getNumFaces() + " edges:" + getNumEdges();
     }
 
     /**
@@ -414,7 +476,7 @@ public class WETriangleMesh extends TriangleMesh {
         if (e != null) {
             e.addFace(f);
         } else {
-            e = new WingedEdge(va, vb, f, edges.size());
+            e = new WingedEdge(va, vb, f, uniqueEdgeID++);
             edges.put(e, e);
             va.addEdge(e);
             vb.addEdge(e);
