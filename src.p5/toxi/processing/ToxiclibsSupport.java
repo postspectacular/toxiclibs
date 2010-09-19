@@ -471,12 +471,12 @@ public class ToxiclibsSupport {
         this.gfx = gfx;
     }
 
-    // TODO replace with mesh drawing, blocked by issue #2
-    public final void sphere(Sphere sphere) {
-        gfx.pushMatrix();
-        gfx.translate(sphere.x, sphere.y, sphere.z);
-        gfx.sphere(sphere.radius);
-        gfx.popMatrix();
+    public final void sphere(Sphere sphere, int res) {
+        mesh(sphere.toMesh(res));
+    }
+
+    public final void sphere(Sphere sphere, int res, boolean smooth) {
+        mesh(sphere.toMesh(res), smooth);
     }
 
     public final void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
