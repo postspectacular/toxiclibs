@@ -18,11 +18,15 @@ public class IntegerSet {
     }
 
     public IntegerSet(Integer... items) {
-        this.items = new int[items.length];
-        for (int i = 0; i < items.length; i++) {
-            this.items[i] = items[i];
+        if (items.length > 0) {
+            this.items = new int[items.length];
+            for (int i = 0; i < items.length; i++) {
+                this.items[i] = items[i];
+            }
+            pickRandom();
+        } else {
+            throw new IllegalArgumentException("can't create empty IntegerSet");
         }
-        pickRandom();
     }
 
     public boolean contains(int value) {

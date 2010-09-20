@@ -262,7 +262,13 @@ public final class MathUtils {
      * @return sine
      */
     public static final double fastSin(double x) {
-        x = SIN_A * x * abs(x) + SIN_B * x;
+        // float B = 4/pi;
+        // float C = -4/(pi*pi);
+        //
+        // float y = B * x + C * x * abs(x);
+        // y = P * (y * abs(y) - y) + y;
+
+        x = SIN_B * x + SIN_A * x * abs(x);
         return SIN_P * (x * abs(x) - x) + x;
     }
 

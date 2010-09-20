@@ -15,33 +15,56 @@ public class SurfaceMeshBuilder {
         this.function = function;
     }
 
-    public TriangleMesh createMesh(int res, float size) {
-        TriangleMesh mesh = new TriangleMesh();
-        Vec3D p, q, pp = null, pq = null;
+    public Mesh3D createMesh(int res) {
+        return createMesh(null, res, 1);
+    }
+
+    public Mesh3D createMesh(Mesh3D mesh, int res, float size) {
+        return createMesh(mesh, res, size, true);
+    }
+
+    public Mesh3D createMesh(Mesh3D mesh, int res, float size, boolean isClosed) {
+        if (mesh == null) {
+            mesh = new TriangleMesh();
+        }
+        Vec3D a = new Vec3D();
+        Vec3D b = new Vec3D();
+        Vec3D pa = new Vec3D(), pb = new Vec3D();
+        Vec3D a0 = new Vec3D(), b0 = new Vec3D();
         int phiRes = function.getPhiResolutionLimit(res);
         float phiRange = function.getPhiRange();
         int thetaRes = function.getThetaResolutionLimit(res);
         float thetaRange = function.getThetaRange();
-        for (int j = 0; j < phiRes; j++) {
-            float phi = j * phiRange / res;
-            float phiNext = (j + 1) * phiRange / res;
-            for (int i = 0; i <= thetaRes; i++) {
+        float pres = 1f / (1 == res % 2 ? res - 0 : res);
+        for (int p = 0; p < phiRes; p++) {
+            float phi = p * phiRange * pres;
+            float phiNext = (p + 1) * phiRange * pres;
+            for (int t = 0; t <= thetaRes; t++) {
                 float theta;
-                if (i == 0 || i == thetaRes) {
-                    theta = 0;
+                theta = t * thetaRange / res;
+                a =
+                        function.computeVertexFor(a, phiNext, theta).scaleSelf(
+                                size);
+                b = function.computeVertexFor(b, phi, theta).scaleSelf(size);
+                if (b.distanceTo(a) < 0.0001) {
+                    b.set(a);
+                }
+                if (t > 0) {
+                    if (t == thetaRes && isClosed) {
+                        a.set(a0);
+                        b.set(b0);
+                    }
+                    mesh.addFace(pa, pb, a);
+                    mesh.addFace(pb, b, a);
                 } else {
-                    theta = i * thetaRange / res;
+                    a0.set(a);
+                    b0.set(b);
                 }
-                p = function.computeVertexFor(phiNext, theta).scaleSelf(size);
-                q = function.computeVertexFor(phi, theta).scaleSelf(size);
-                if (i > 0) {
-                    mesh.addFace(pp, pq, p);
-                    mesh.addFace(pq, q, p);
-                }
-                pp = p;
-                pq = q;
+                pa.set(a);
+                pb.set(b);
             }
         }
+        mesh.faceOutwards();
         mesh.computeVertexNormals();
         return mesh;
     }

@@ -73,6 +73,15 @@ public class AABB extends Vec3D implements Shape3D {
     }
 
     /**
+     * Creates a new box of the given size at the world origin.
+     * 
+     * @param extent
+     */
+    public AABB(float extent) {
+        this(new Vec3D(), extent);
+    }
+
+    /**
      * Creates a new instance from centre point and uniform extent in all
      * directions.
      * 
@@ -271,6 +280,141 @@ public class AABB extends Vec3D implements Shape3D {
         return d <= r * r;
     }
 
+    public boolean intersectsTriangle(Triangle tri) {
+        // use separating axis theorem to test overlap between triangle and box
+        // need to test for overlap in these directions:
+        //
+        // 1) the {x,y,z}-directions (actually, since we use the AABB of the
+        // triangle
+        // we do not even need to test these)
+        // 2) normal of the triangle
+        // 3) crossproduct(edge from tri, {x,y,z}-directin)
+        // this gives 3x3=9 more tests
+        Vec3D v0, v1, v2;
+        Vec3D normal, e0, e1, e2, f;
+
+        // move everything so that the boxcenter is in (0,0,0)
+        v0 = tri.a.sub(this);
+        v1 = tri.b.sub(this);
+        v2 = tri.c.sub(this);
+
+        // compute triangle edges
+        e0 = v1.sub(v0);
+        e1 = v2.sub(v1);
+        e2 = v0.sub(v2);
+
+        // test the 9 tests first (this was faster)
+        f = e0.getAbs();
+        if (testAxis(e0.z, -e0.y, f.z, f.y, v0.y, v0.z, v2.y, v2.z, extent.y,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(-e0.z, e0.x, f.z, f.x, v0.x, v0.z, v2.x, v2.z, extent.x,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(e0.y, -e0.x, f.y, f.x, v1.x, v1.y, v2.x, v2.y, extent.x,
+                extent.y)) {
+            return false;
+        }
+
+        f = e1.getAbs();
+        if (testAxis(e1.z, -e1.y, f.z, f.y, v0.y, v0.z, v2.y, v2.z, extent.y,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(-e1.z, e1.x, f.z, f.x, v0.x, v0.z, v2.x, v2.z, extent.x,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(e1.y, -e1.x, f.y, f.x, v0.x, v0.y, v1.x, v1.y, extent.x,
+                extent.y)) {
+            return false;
+        }
+
+        f = e2.getAbs();
+        if (testAxis(e2.z, -e2.y, f.z, f.y, v0.y, v0.z, v1.y, v1.z, extent.y,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(-e2.z, e2.x, f.z, f.x, v0.x, v0.z, v1.x, v1.z, extent.x,
+                extent.z)) {
+            return false;
+        }
+        if (testAxis(e2.y, -e2.x, f.y, f.x, v1.x, v1.y, v2.x, v2.y, extent.x,
+                extent.y)) {
+            return false;
+        }
+
+        // first test overlap in the {x,y,z}-directions
+        // find min, max of the triangle each direction, and test for overlap in
+        // that direction -- this is equivalent to testing a minimal AABB around
+        // the triangle against the AABB
+
+        // test in X-direction
+        if (MathUtils.min(v0.x, v1.x, v2.x) > extent.x
+                || MathUtils.max(v0.x, v1.x, v2.x) < -extent.x) {
+            return false;
+        }
+
+        // test in Y-direction
+        if (MathUtils.min(v0.y, v1.y, v2.y) > extent.y
+                || MathUtils.max(v0.y, v1.y, v2.y) < -extent.y) {
+            return false;
+        }
+
+        // test in Z-direction
+        if (MathUtils.min(v0.z, v1.z, v2.z) > extent.z
+                || MathUtils.max(v0.z, v1.z, v2.z) < -extent.z) {
+            return false;
+        }
+
+        // test if the box intersects the plane of the triangle
+        // compute plane equation of triangle: normal*x+d=0
+        normal = e0.cross(e1);
+        float d = -normal.dot(v0);
+        if (!planeBoxOverlap(normal, d, extent)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean planeBoxOverlap(Vec3D normal, float d, Vec3D maxbox) {
+        Vec3D vmin = new Vec3D();
+        Vec3D vmax = new Vec3D();
+
+        if (normal.x > 0.0f) {
+            vmin.x = -maxbox.x;
+            vmax.x = maxbox.x;
+        } else {
+            vmin.x = maxbox.x;
+            vmax.x = -maxbox.x;
+        }
+
+        if (normal.y > 0.0f) {
+            vmin.y = -maxbox.y;
+            vmax.y = maxbox.y;
+        } else {
+            vmin.y = maxbox.y;
+            vmax.y = -maxbox.y;
+        }
+
+        if (normal.z > 0.0f) {
+            vmin.z = -maxbox.z;
+            vmax.z = maxbox.z;
+        } else {
+            vmin.z = maxbox.z;
+            vmax.z = -maxbox.z;
+        }
+        if (normal.dot(vmin) + d > 0.0f) {
+            return false;
+        }
+        if (normal.dot(vmax) + d >= 0.0f) {
+            return true;
+        }
+        return false;
+    }
+
     public AABB set(AABB box) {
         extent.set(box.extent);
         return set((ReadonlyVec3D) box);
@@ -316,6 +460,22 @@ public class AABB extends Vec3D implements Shape3D {
         return updateBounds();
     }
 
+    private boolean testAxis(float a, float b, float fa, float fb, float va,
+            float vb, float wa, float wb, float ea, float eb) {
+        float p0 = a * va + b * vb;
+        float p2 = a * wa + b * wb;
+        float min, max;
+        if (p0 < p2) {
+            min = p0;
+            max = p2;
+        } else {
+            min = p2;
+            max = p0;
+        }
+        float rad = fa * ea + fb * eb;
+        return (min > rad || max < -rad);
+    }
+
     public TriangleMesh toMesh() {
         return toMesh("box");
     }
@@ -327,27 +487,27 @@ public class AABB extends Vec3D implements Shape3D {
         Vec3D b = new Vec3D(max.x, max.y, max.z);
         Vec3D c = new Vec3D(max.x, min.y, max.z);
         Vec3D d = new Vec3D(min.x, min.y, max.z);
-        mesh.addFace(a, b, d);
-        mesh.addFace(b, c, d);
+        mesh.addFace(a, b, d, null, null, null, null);
+        mesh.addFace(b, c, d, null, null, null, null);
         // back
         Vec3D e = new Vec3D(min.x, max.y, min.z);
         Vec3D f = new Vec3D(max.x, max.y, min.z);
         Vec3D g = new Vec3D(max.x, min.y, min.z);
         Vec3D h = new Vec3D(min.x, min.y, min.z);
-        mesh.addFace(f, e, g);
-        mesh.addFace(e, h, g);
+        mesh.addFace(f, e, g, null, null, null, null);
+        mesh.addFace(e, h, g, null, null, null, null);
         // top
-        mesh.addFace(e, f, a);
-        mesh.addFace(f, b, a);
+        mesh.addFace(e, f, a, null, null, null, null);
+        mesh.addFace(f, b, a, null, null, null, null);
         // bottom
-        mesh.addFace(g, h, d);
-        mesh.addFace(g, d, c);
+        mesh.addFace(g, h, d, null, null, null, null);
+        mesh.addFace(g, d, c, null, null, null, null);
         // left
-        mesh.addFace(e, a, h);
-        mesh.addFace(a, d, h);
+        mesh.addFace(e, a, h, null, null, null, null);
+        mesh.addFace(a, d, h, null, null, null, null);
         // right
-        mesh.addFace(b, f, g);
-        mesh.addFace(b, g, c);
+        mesh.addFace(b, f, g, null, null, null, null);
+        mesh.addFace(b, g, c, null, null, null, null);
         return mesh;
     }
 

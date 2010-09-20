@@ -14,6 +14,7 @@ import toxi.geom.Cone;
 import toxi.geom.Ellipse;
 import toxi.geom.Line2D;
 import toxi.geom.Line3D;
+import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
@@ -26,7 +27,10 @@ import toxi.geom.Triangle;
 import toxi.geom.Triangle2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
+import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
+import toxi.geom.mesh.Vertex;
 
 /**
  * In addition to providing new drawing commands, this class provides wrappers
@@ -41,6 +45,9 @@ public class ToxiclibsSupport {
 
     protected PApplet app;
     protected PGraphics gfx;
+
+    private Matrix4x4 normalMap = new Matrix4x4().translateSelf(128, 128, 128)
+            .scaleSelf(127);
 
     public ToxiclibsSupport(PApplet app) {
         this(app, app.g);
@@ -177,7 +184,7 @@ public class ToxiclibsSupport {
      * 
      * @param mesh
      */
-    public final void mesh(TriangleMesh mesh) {
+    public final void mesh(Mesh3D mesh) {
         mesh(mesh, false, 0);
     }
 
@@ -190,7 +197,7 @@ public class ToxiclibsSupport {
      *            should have been computed beforehand) or false for flat
      *            shading
      */
-    public final void mesh(TriangleMesh mesh, boolean smooth) {
+    public final void mesh(Mesh3D mesh, boolean smooth) {
         mesh(mesh, smooth, 0);
     }
 
@@ -206,10 +213,10 @@ public class ToxiclibsSupport {
      *            if >0 then face (or vertex) normals are rendered at this
      *            length
      */
-    public final void mesh(TriangleMesh mesh, boolean smooth, float normalLength) {
+    public final void mesh(Mesh3D mesh, boolean smooth, float normalLength) {
         gfx.beginShape(PConstants.TRIANGLES);
         if (smooth) {
-            for (TriangleMesh.Face f : mesh.faces) {
+            for (Face f : mesh.getFaces()) {
                 gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
                 gfx.vertex(f.a.x, f.a.y, f.a.z);
                 gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
@@ -218,7 +225,7 @@ public class ToxiclibsSupport {
                 gfx.vertex(f.c.x, f.c.y, f.c.z);
             }
         } else {
-            for (TriangleMesh.Face f : mesh.faces) {
+            for (Face f : mesh.getFaces()) {
                 gfx.normal(f.normal.x, f.normal.y, f.normal.z);
                 gfx.vertex(f.a.x, f.a.y, f.a.z);
                 gfx.vertex(f.b.x, f.b.y, f.b.z);
@@ -233,7 +240,7 @@ public class ToxiclibsSupport {
                 strokeCol = gfx.strokeColor;
             }
             if (smooth) {
-                for (TriangleMesh.Vertex v : mesh.vertices.values()) {
+                for (Vertex v : mesh.getVertices()) {
                     Vec3D w = v.add(v.normal.scale(normalLength));
                     Vec3D n = v.normal.scale(127);
                     gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
@@ -241,7 +248,7 @@ public class ToxiclibsSupport {
                 }
             } else {
                 float third = 1f / 3;
-                for (TriangleMesh.Face f : mesh.faces) {
+                for (Face f : mesh.getFaces()) {
                     Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(third);
                     Vec3D d = c.add(f.normal.scale(normalLength));
                     Vec3D n = f.normal.scale(127);
@@ -255,6 +262,67 @@ public class ToxiclibsSupport {
                 gfx.noStroke();
             }
         }
+    }
+
+    /**
+     * Draws the given mesh with each face or vertex tinted using its related
+     * normal vector as RGB color. Normals can also optionally be shown as
+     * lines.
+     * 
+     * @param mesh
+     * @param vertexNormals
+     *            true, if using vertex normals (else face normals only)
+     * @param normalLength
+     */
+    public final void meshNormalMapped(Mesh3D mesh, boolean vertexNormals,
+            float normalLength) {
+        gfx.beginShape(PConstants.TRIANGLES);
+        if (vertexNormals) {
+            for (Face f : mesh.getFaces()) {
+                Vec3D n = normalMap.applyTo(f.a.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                n = normalMap.applyTo(f.b.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                n = normalMap.applyTo(f.c.normal);
+                gfx.fill(n.x, n.y, n.z);
+                gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        } else {
+            for (Face f : mesh.getFaces()) {
+                gfx.normal(f.normal.x, f.normal.y, f.normal.z);
+                gfx.vertex(f.a.x, f.a.y, f.a.z);
+                gfx.vertex(f.b.x, f.b.y, f.b.z);
+                gfx.vertex(f.c.x, f.c.y, f.c.z);
+            }
+        }
+        gfx.endShape();
+        if (normalLength > 0) {
+            if (vertexNormals) {
+                for (Vertex v : mesh.getVertices()) {
+                    Vec3D w = v.add(v.normal.scale(normalLength));
+                    Vec3D n = v.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
+                }
+            } else {
+                for (Face f : mesh.getFaces()) {
+                    Vec3D c = f.getCentroid();
+                    Vec3D d = c.add(f.normal.scale(normalLength));
+                    Vec3D n = f.normal.scale(127);
+                    gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
+                    gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
+                }
+            }
+        }
+    }
+
+    public void origin(int len) {
+        origin(Vec3D.ZERO, len);
     }
 
     /**
@@ -403,19 +471,19 @@ public class ToxiclibsSupport {
         this.gfx = gfx;
     }
 
-    // TODO replace with mesh drawing, blocked by issue #2
-    public final void sphere(Sphere sphere) {
-        gfx.pushMatrix();
-        gfx.translate(sphere.x, sphere.y, sphere.z);
-        gfx.sphere(sphere.radius);
-        gfx.popMatrix();
+    public final void sphere(Sphere sphere, int res) {
+        mesh(sphere.toMesh(res));
+    }
+
+    public final void sphere(Sphere sphere, int res, boolean smooth) {
+        mesh(sphere.toMesh(res), smooth);
     }
 
     public final void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
         gfx.beginShape(PConstants.TRIANGLES);
         gfx.texture(tex);
         if (smooth) {
-            for (TriangleMesh.Face f : mesh.faces) {
+            for (Face f : mesh.faces) {
                 if (f.uvA != null && f.uvB != null && f.uvC != null) {
                     gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
                     gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
@@ -430,7 +498,7 @@ public class ToxiclibsSupport {
                 }
             }
         } else {
-            for (TriangleMesh.Face f : mesh.faces) {
+            for (Face f : mesh.faces) {
                 gfx.normal(f.normal.x, f.normal.y, f.normal.z);
                 if (f.uvA != null && f.uvB != null && f.uvC != null) {
                     gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);

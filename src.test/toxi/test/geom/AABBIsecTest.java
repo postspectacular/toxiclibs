@@ -2,9 +2,19 @@ package toxi.test.geom;
 
 import junit.framework.TestCase;
 import toxi.geom.AABB;
+import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
 
 public class AABBIsecTest extends TestCase {
+
+    public void testAABBTri() {
+        AABB box = new AABB(new Vec3D(), new Vec3D(100, 100, 100));
+        Vec3D a = new Vec3D(-90, 0, 0);
+        Vec3D b = new Vec3D(-110, -200, 0);
+        Vec3D c = new Vec3D(-110, 200, 0);
+        Triangle tri = new Triangle(a, b, c);
+        System.out.println(box.intersectsTriangle(tri));
+    }
 
     public void testInclude() {
         AABB box = AABB.fromMinMax(new Vec3D(), new Vec3D(100, 100, 100));

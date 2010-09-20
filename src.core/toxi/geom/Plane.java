@@ -102,6 +102,18 @@ public class Plane extends Vec3D implements Shape3D {
         }
     }
 
+    public Vec3D getProjectedPoint(Vec3D p) {
+        Vec3D dir;
+        if (normal.dot(sub(p)) < 0) {
+            dir = normal.getInverted();
+        } else {
+            dir = normal;
+        }
+        Vec3D proj =
+                new Ray3D(p, dir).getPointAtDistance(getDistanceToPoint(p));
+        return proj;
+    }
+
     /**
      * Calculates the distance of the vector to the given plane in the specified
      * direction. A plane is specified by a 3D point and a normal vector
@@ -145,8 +157,8 @@ public class Plane extends Vec3D implements Shape3D {
         Vec3D c = this.sub(n).subSelf(m);
         Vec3D d = this.sub(n).addSelf(m);
         TriangleMesh mesh = new TriangleMesh("plane", 4, 2);
-        mesh.addFace(a, d, b);
-        mesh.addFace(b, d, c);
+        mesh.addFace(a, d, b, null, null, null, null);
+        mesh.addFace(b, d, c, null, null, null, null);
         return mesh;
     }
 

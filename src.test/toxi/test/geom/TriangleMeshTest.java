@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
-import toxi.geom.mesh.TriangleMesh.Face;
-import toxi.geom.mesh.TriangleMesh.Vertex;
+import toxi.geom.mesh.Vertex;
 
 public class TriangleMeshTest extends TestCase {
 
@@ -35,7 +35,9 @@ public class TriangleMeshTest extends TestCase {
         int numIter = 100;
         for (int i = 0; i < numIter; i++) {
             long t = System.nanoTime();
-            mesh = new STLReader().loadBinary("test/test.stl");
+            mesh =
+                    (TriangleMesh) new STLReader().loadBinary("test/test.stl",
+                            STLReader.TRIANGLEMESH);
             total += (System.nanoTime() - t);
         }
         System.out.println("avg. mesh construction time: " + total * 1e-6
@@ -58,8 +60,8 @@ public class TriangleMeshTest extends TestCase {
 
     public void testVertexNormals() {
         mesh.computeVertexNormals();
-        TriangleMesh.Vertex[] verts = null;
-        for (TriangleMesh.Face f : mesh.faces) {
+        Vertex[] verts = null;
+        for (Face f : mesh.faces) {
             verts = f.getVertices(verts);
             System.out.println(f);
         }

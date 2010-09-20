@@ -24,6 +24,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import toxi.geom.mesh.Mesh3D;
+import toxi.geom.mesh.SphereFunction;
+import toxi.geom.mesh.SurfaceMeshBuilder;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Sphere extends Vec3D implements Shape3D {
 
@@ -123,14 +127,13 @@ public class Sphere extends Vec3D implements Shape3D {
      * @return a unit normal vector to the tangent plane of the ellipsoid in the
      *         point.
      */
-    // FIXME this method is totally broken for ages
     public Vec3D tangentPlaneNormalAt(ReadonlyVec3D q) {
-        // Vec3D p = this.sub(q);
-        // float xr2 = eR.x * eR.x;
-        // float yr2 = eR.y * eR.y;
-        // float zr2 = eR.z * eR.z;
-        // float r2 = 1f / (radius * radius);
-        // return p.scaleSelf(r2).normalize();
         return sub(q).normalize();
+    }
+
+    public Mesh3D toMesh(int res) {
+        SurfaceMeshBuilder builder =
+                new SurfaceMeshBuilder(new SphereFunction(this));
+        return builder.createMesh(null, res, 1);
     }
 }

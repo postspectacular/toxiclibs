@@ -10,6 +10,16 @@ import toxi.math.MathUtils;
 
 public class DoubleRange {
 
+    public static DoubleRange fromSamples(List<Double> samples) {
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+        for (double s : samples) {
+            min = MathUtils.min(min, s);
+            max = MathUtils.max(max, s);
+        }
+        return new DoubleRange(min, max);
+    }
+
     @XmlAttribute
     public double min, max;
 

@@ -15,6 +15,10 @@ import toxi.util.FileUtils;
  */
 public class STLReader {
 
+    public static final Class<? extends Mesh3D> TRIANGLEMESH =
+            TriangleMesh.class;
+    public static final Class<? extends Mesh3D> WEMESH = WETriangleMesh.class;
+
     private static final int DEFAULT_BUFFER_SIZE = 0x8000;
 
     private byte[] buf = new byte[12];
@@ -41,8 +45,9 @@ public class STLReader {
      * @param meshName
      * @return mesh instance or null if unsuccessful
      */
-    public TriangleMesh loadBinary(InputStream stream, String meshName) {
-        return loadBinary(stream, meshName, DEFAULT_BUFFER_SIZE);
+    public Mesh3D loadBinary(InputStream stream, String meshName,
+            Class<? extends Mesh3D> meshClass) {
+        return loadBinary(stream, meshName, DEFAULT_BUFFER_SIZE, meshClass);
     }
 
     /**
@@ -56,9 +61,9 @@ public class STLReader {
      *            size of the stream buffer
      * @return mesh instance or null if unsuccessful
      */
-    public TriangleMesh loadBinary(InputStream stream, String meshName,
-            int bufSize) {
-        TriangleMesh mesh = null;
+    public Mesh3D loadBinary(InputStream stream, String meshName, int bufSize,
+            Class<? extends Mesh3D> meshClass) {
+        Mesh3D mesh = null;
         try {
             DataInputStream ds =
                     new DataInputStream(
@@ -70,7 +75,8 @@ public class STLReader {
             // read num faces
             ds.read(buf, 0, 4);
             int numFaces = bufferToInt();
-            mesh = new TriangleMesh(meshName, numFaces, numFaces);
+            mesh = meshClass.newInstance();
+            mesh.init(meshName, numFaces, numFaces);
             Vec3D a = new Vec3D();
             Vec3D b = new Vec3D();
             Vec3D c = new Vec3D();
@@ -88,12 +94,16 @@ public class STLReader {
             mesh.computeVertexNormals();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         return mesh;
     }
 
-    public TriangleMesh loadBinary(String fileName) {
-        return loadBinary(fileName, DEFAULT_BUFFER_SIZE);
+    public Mesh3D loadBinary(String fileName, Class<? extends Mesh3D> meshClass) {
+        return loadBinary(fileName, DEFAULT_BUFFER_SIZE, meshClass);
     }
 
     /**
@@ -105,13 +115,14 @@ public class STLReader {
      *            file path to read model from
      * @return mesh instance or null if unsuccessful
      */
-    public TriangleMesh loadBinary(String fileName, int bufSize) {
-        TriangleMesh mesh = null;
+    public Mesh3D loadBinary(String fileName, int bufSize,
+            Class<? extends Mesh3D> meshClass) {
+        Mesh3D mesh = null;
         try {
             mesh =
                     loadBinary(FileUtils.createInputStream(new File(fileName)),
                             fileName.substring(fileName.lastIndexOf('/') + 1),
-                            bufSize);
+                            bufSize, meshClass);
         } catch (IOException e) {
             e.printStackTrace();
         }
