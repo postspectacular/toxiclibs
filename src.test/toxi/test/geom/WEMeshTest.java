@@ -4,11 +4,11 @@ import junit.framework.TestCase;
 import toxi.geom.Triangle;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
-import toxi.geom.mesh.MidpointSubdivision;
 import toxi.geom.mesh.WEFace;
 import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WEVertex;
 import toxi.geom.mesh.WingedEdge;
+import toxi.geom.mesh.subdiv.MidpointSubdivision;
 
 public class WEMeshTest extends TestCase {
 
@@ -47,6 +47,21 @@ public class WEMeshTest extends TestCase {
         for (Face f : m.faces) {
             assertEquals(3, ((WEFace) f).edges.size());
         }
+    }
+
+    public void testPerforate() {
+        m.removeFace((WEFace) m.getFaces().get(0));
+        WEFace f = (WEFace) m.getFaces().get(0);
+        m.perforateFace(f, 0.5f);
+        System.out.println(m.edges.size() + " edges");
+    }
+
+    public void testRemoveFace() {
+        assertEquals(5, m.edges.size());
+        WEFace f = (WEFace) m.getFaces().get(0);
+        m.removeFace(f);
+        assertEquals(3, m.edges.size());
+        assertEquals(3, m.vertices.size());
     }
 
     public void testSplitEdge() {

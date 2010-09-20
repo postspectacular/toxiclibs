@@ -3,6 +3,7 @@ package toxi.test;
 import junit.framework.TestCase;
 import toxi.geom.Vec3D;
 import toxi.volume.RoundBrush;
+import toxi.volume.VolumetricBrush;
 import toxi.volume.VolumetricSpaceArray;
 
 public class VolumetricTest extends TestCase {
@@ -16,7 +17,7 @@ public class VolumetricTest extends TestCase {
 	}
 
 	public void testBrush() {
-		RoundBrush b = new RoundBrush(vol, 90);
+		VolumetricBrush b = new RoundBrush(vol, 90);
 		b.drawAtAbsolutePos(new Vec3D(), 1);
 	}
 }
