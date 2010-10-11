@@ -225,6 +225,22 @@ public class Line3D {
         return a.hashCode() + b.hashCode();
     }
 
+    public Line3D offsetAndGrowBy(float offset, float scale, Vec3D ref) {
+        Vec3D m = getMidPoint();
+        Vec3D d = getDirection();
+        Vec3D n = a.cross(d).normalize();
+        if (ref != null && m.sub(ref).dot(n) < 0) {
+            n.invert();
+        }
+        n.normalizeTo(offset);
+        a.addSelf(n);
+        b.addSelf(n);
+        d.scaleSelf(scale);
+        a.subSelf(d);
+        b.addSelf(d);
+        return this;
+    }
+
     public Line3D set(ReadonlyVec3D a, ReadonlyVec3D b) {
         this.a = a.copy();
         this.b = b.copy();

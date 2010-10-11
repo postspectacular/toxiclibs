@@ -205,6 +205,30 @@ public class Line2D {
         return isec;
     }
 
+    public Line2D offsetAndGrowBy(float offset, float scale, Vec2D ref) {
+        Vec2D m = getMidPoint();
+        Vec2D d = getDirection();
+        Vec2D n = d.getPerpendicular();
+        if (ref != null && m.sub(ref).dot(n) < 0) {
+            n.invert();
+        }
+        n.normalizeTo(offset);
+        a.addSelf(n);
+        b.addSelf(n);
+        d.scaleSelf(scale);
+        a.subSelf(d);
+        b.addSelf(d);
+        return this;
+    }
+
+    public Line2D scale(float scale) {
+        float delta = (1 - scale) * 0.5f;
+        Vec2D newA = a.interpolateTo(b, delta);
+        b.interpolateToSelf(a, delta);
+        a.set(newA);
+        return this;
+    }
+
     public Line2D set(Vec2D a, Vec2D b) {
         this.a = a;
         this.b = b;
