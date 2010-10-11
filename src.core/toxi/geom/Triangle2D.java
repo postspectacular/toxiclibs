@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import toxi.geom.Line2D.LineIntersection.Type;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -59,6 +60,28 @@ public class Triangle2D implements Shape2D {
         this.c = c.copy();
     }
 
+    public Triangle2D adjustTriangleSizeBy(float offset) {
+        return adjustTriangleSizeBy(offset, offset, offset);
+    }
+
+    public Triangle2D adjustTriangleSizeBy(float offAB, float offBC, float offCA) {
+        computeCentroid();
+        Line2D ab =
+                new Line2D(a.copy(), b.copy()).offsetAndGrowBy(offAB, 100000,
+                        centroid);
+        Line2D bc =
+                new Line2D(b.copy(), c.copy()).offsetAndGrowBy(offBC, 100000,
+                        centroid);
+        Line2D ca =
+                new Line2D(c.copy(), a.copy()).offsetAndGrowBy(offCA, 100000,
+                        centroid);
+        a = ab.intersectLine(ca).getPos();
+        b = ab.intersectLine(bc).getPos();
+        c = bc.intersectLine(ca).getPos();
+        computeCentroid();
+        return this;
+    }
+
     public Vec2D computeCentroid() {
         centroid = a.add(b).addSelf(c).scaleSelf(1f / 3);
         return centroid;
@@ -83,8 +106,24 @@ public class Triangle2D implements Shape2D {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.01f);
     }
 
+    public Triangle2D copy() {
+        return new Triangle2D(a.copy(), b.copy(), c.copy());
+    }
+
+    public Triangle2D flipVertexOrder() {
+        Vec2D t = a;
+        a = c;
+        c = t;
+        return this;
+    }
+
     public float getArea() {
         return b.sub(a).cross(c.sub(a)) * 0.5f;
+    }
+
+    public Rect getBounds() {
+        return new Rect(Vec2D.min(Vec2D.min(a, b), c), Vec2D.max(
+                Vec2D.max(a, b), c));
     }
 
     public Circle getCircumCircle() {
@@ -138,6 +177,32 @@ public class Triangle2D implements Shape2D {
         return result;
     }
 
+    public boolean intersectsTriangle(Triangle2D tri) {
+        if (containsPoint(tri.a) || containsPoint(tri.b)
+                || containsPoint(tri.c)) {
+            return true;
+        }
+        if (tri.containsPoint(a) || tri.containsPoint(b)
+                || tri.containsPoint(c)) {
+            return true;
+        }
+        Line2D[] ea =
+                new Line2D[] { new Line2D(a, b), new Line2D(b, c),
+                        new Line2D(c, a) };
+        Line2D[] eb =
+                new Line2D[] { new Line2D(tri.a, tri.b),
+                        new Line2D(tri.b, tri.c), new Line2D(tri.c, tri.a) };
+        for (Line2D la : ea) {
+            for (Line2D lb : eb) {
+                Type type = la.intersectLine(lb).getType();
+                if (type != Type.NON_INTERSECTING && type != Type.PARALLEL) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isClockwise() {
         return Triangle2D.isClockwise(a, b, c);
     }
@@ -165,4 +230,5 @@ public class Triangle2D implements Shape2D {
     public String toString() {
         return "Triangle2D: " + a + "," + b + "," + c;
     }
+
 }
