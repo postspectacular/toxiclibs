@@ -1286,6 +1286,30 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
+    public Vec3D shuffle(int iterations) {
+        float t;
+        for (int i = 0; i < iterations; i++) {
+            switch (MathUtils.random(3)) {
+                case 0:
+                    t = x;
+                    x = y;
+                    y = t;
+                    break;
+                case 1:
+                    t = x;
+                    x = z;
+                    z = t;
+                    break;
+                case 2:
+                    t = y;
+                    y = z;
+                    z = t;
+                    break;
+            }
+        }
+        return this;
+    }
+
     /**
      * Replaces all vector components with the signum of their original values.
      * In other words if a components value was negative its new value will be
