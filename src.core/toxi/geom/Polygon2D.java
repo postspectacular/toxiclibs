@@ -21,6 +21,12 @@ public class Polygon2D implements Shape2D {
         }
     }
 
+    public Polygon2D(Vec2D... points) {
+        for (Vec2D p : points) {
+            add(p.copy());
+        }
+    }
+
     /**
      * Adds a new vertex to the polygon (builder pattern).
      * 
@@ -52,6 +58,16 @@ public class Polygon2D implements Shape2D {
             j = i;
         }
         return oddNodes;
+    }
+
+    /**
+     * Flips the ordering of the polygon's vertices.
+     * 
+     * @return itself
+     */
+    public Polygon2D flipVertexOrder() {
+        Collections.reverse(vertices);
+        return this;
     }
 
     /**
@@ -124,14 +140,9 @@ public class Polygon2D implements Shape2D {
         return false;
     }
 
-    /**
-     * Flips the ordering of the polygon's vertices.
-     * 
-     * @return itself
-     */
+    @Deprecated
     public Polygon2D reverseOrientation() {
-        Collections.reverse(vertices);
-        return this;
+        return flipVertexOrder();
     }
 
     public String toString() {
