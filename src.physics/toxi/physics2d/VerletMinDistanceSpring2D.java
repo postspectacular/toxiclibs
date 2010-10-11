@@ -10,18 +10,10 @@ package toxi.physics2d;
  */
 public class VerletMinDistanceSpring2D extends VerletSpring2D {
 
-    private float restLengthSquared;
-
     public VerletMinDistanceSpring2D(VerletParticle2D a, VerletParticle2D b,
             float len, float str) {
         super(a, b, len, str);
         setRestLength(len);
-    }
-
-    public VerletSpring2D setRestLength(float len) {
-        restLength = len;
-        restLengthSquared = len * len;
-        return this;
     }
 
     protected void update(boolean applyConstraints) {

@@ -52,13 +52,13 @@ public class VerletSpring {
     /**
      * Spring rest length to which it always wants to return too
      */
-    public float restLength;
+    protected float restLength, restLengthSquared;
 
     /**
      * Spring strength, possible value range depends on engine configuration
      * (time step, drag)
      */
-    public float strength;
+    protected float strength;
 
     /**
      * Flag, if either particle is locked in space (only within the scope of
@@ -83,6 +83,14 @@ public class VerletSpring {
         strength = str;
     }
 
+    public final float getRestLength() {
+        return restLength;
+    }
+
+    public final float getStrength() {
+        return strength;
+    }
+
     /**
      * (Un)Locks the 1st end point of the spring. <b>NOTE: this acts purely
      * within the scope of this spring instance and does NOT call
@@ -105,6 +113,17 @@ public class VerletSpring {
 
     public VerletSpring lockB(boolean s) {
         isBLocked = s;
+        return this;
+    }
+
+    public VerletSpring setRestLength(float len) {
+        restLength = len;
+        restLengthSquared = len * len;
+        return this;
+    }
+
+    public VerletSpring setStrength(float strength) {
+        this.strength = strength;
         return this;
     }
 

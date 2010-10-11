@@ -52,7 +52,7 @@ public class VerletSpring2D {
     /**
      * Spring rest length to which it always wants to return too
      */
-    protected float restLength;
+    protected float restLength, restLengthSquared;
 
     /**
      * Spring strength, possible value range depends on engine configuration
@@ -119,6 +119,7 @@ public class VerletSpring2D {
 
     public VerletSpring2D setRestLength(float len) {
         restLength = len;
+        restLengthSquared = len * len;
         return this;
     }
 

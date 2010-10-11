@@ -237,7 +237,7 @@ public class VerletParticle2D extends Vec2D {
         return this;
     }
 
-    protected void update(ReadonlyVec2D force) {
+    public void update(ReadonlyVec2D force) {
         if (!isLocked) {
             // TODO pos += (curr-prev) + force * timestep * timestep ?
             temp.set(this);

@@ -239,7 +239,7 @@ public class VerletParticle extends Vec3D {
         return this;
     }
 
-    protected void update(Vec3D force) {
+    public void update(Vec3D force) {
         if (!isLocked) {
             // TODO pos += (curr-prev) + force * timestep * timestep ?
             temp.set(this);

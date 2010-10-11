@@ -45,7 +45,6 @@ public class ParticleString2D {
                 physics.addSpring(s);
             }
             prev = p;
-
         }
     }
 

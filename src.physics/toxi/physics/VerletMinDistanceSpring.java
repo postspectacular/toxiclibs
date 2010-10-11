@@ -16,7 +16,7 @@ public class VerletMinDistanceSpring extends VerletSpring {
     }
 
     public void update(boolean applyConstraints) {
-        if (b.distanceToSquared(a) < restLength * restLength) {
+        if (b.distanceToSquared(a) < restLengthSquared) {
             super.update(applyConstraints);
         }
     }
