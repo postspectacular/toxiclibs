@@ -38,6 +38,10 @@ public class Sphere extends Vec3D implements Shape3D {
         this(new Vec3D(), 1);
     }
 
+    public Sphere(float radius) {
+        this(new Vec3D(), radius);
+    }
+
     public Sphere(ReadonlyVec3D v, float r) {
         super(v);
         radius = r;
