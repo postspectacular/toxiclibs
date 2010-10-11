@@ -192,6 +192,19 @@ public class Triangle implements Shape3D {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
     }
 
+    public Triangle flipVertexOrder() {
+        Vec3D t = a;
+        a = c;
+        c = t;
+        return this;
+    }
+
+    public Vec3D fromBarycentric(ReadonlyVec3D p) {
+        return new Vec3D(a.x * p.x() + b.x * p.y() + c.x * p.z(), a.y * p.x()
+                + b.y * p.y() + c.y * p.z(), a.z * p.x() + b.z * p.y() + c.z
+                * p.z());
+    }
+
     public AABB getBoundingBox() {
         Vec3D min = Vec3D.min(Vec3D.min(a, b), c);
         Vec3D max = Vec3D.max(Vec3D.max(a, b), c);
@@ -247,6 +260,28 @@ public class Triangle implements Shape3D {
         a = a2;
         b = b2;
         c = c2;
+    }
+
+    public Vec3D toBarycentric(ReadonlyVec3D p) {
+        Vec3D e = b.sub(a).cross(c.sub(a));
+        Vec3D n = e.getNormalized();
+
+        // Compute twice area of triangle ABC
+        float areaABC = n.dot(e);
+        // Compute lambda1
+        float areaPBC = n.dot(b.sub(p).cross(c.sub(p)));
+        float l1 = areaPBC / areaABC;
+
+        // Compute lambda2
+        float areaPCA = n.dot(c.sub(p).cross(a.sub(p)));
+        float l2 = areaPCA / areaABC;
+
+        // Compute lambda3
+        float l3 = 1.0f - l1 - l2;
+
+        return new Vec3D(l1, l2, l3);
+        // return new Vec3D(a.x * l1 + b.x * l2 + c.x * l3, a.y * l1 + b.y * l2
+        // + c.y * l3, a.z * l1 + b.z * l2 + c.z * l3);
     }
 
     public String toString() {
