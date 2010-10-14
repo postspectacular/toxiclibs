@@ -233,8 +233,8 @@ public class Terrain {
             mesh.addFace(getVertexAtCell(0, z), b, a);
             // right
             a.x = b.x = maxX;
-            mesh.addFace(getVertexAtCell(width - 1, z), getVertexAtCell(
-                    width - 1, z - 1), b);
+            mesh.addFace(getVertexAtCell(width - 1, z),
+                    getVertexAtCell(width - 1, z - 1), b);
             mesh.addFace(getVertexAtCell(width - 1, z - 1), a, b);
         }
         for (int x = 1; x < width; x++) {
@@ -245,15 +245,29 @@ public class Terrain {
             mesh.addFace(getVertexAtCell(x - 1, 0), a, b);
             // front
             a.z = b.z = maxZ;
-            mesh.addFace(getVertexAtCell(x - 1, depth - 1), getVertexAtCell(x,
-                    depth - 1), a);
+            mesh.addFace(getVertexAtCell(x - 1, depth - 1),
+                    getVertexAtCell(x, depth - 1), a);
             mesh.addFace(getVertexAtCell(x, depth - 1), b, a);
         }
         // bottom plane
-        mesh.addFace(new Vec3D(minX, groundLevel, minZ), new Vec3D(minX,
-                groundLevel, maxZ), new Vec3D(maxX, groundLevel, minZ));
-        mesh.addFace(new Vec3D(maxX, groundLevel, minZ), new Vec3D(minX,
-                groundLevel, maxZ), new Vec3D(maxZ, groundLevel, maxZ));
+        for (int z = 1; z < depth; z++) {
+            for (int x = 1; x < width; x++) {
+                Vec3D a = getVertexAtCell(x - 1, z - 1);
+                Vec3D b = getVertexAtCell(x, z - 1);
+                Vec3D c = getVertexAtCell(x - 1, z);
+                Vec3D d = getVertexAtCell(x, z);
+                a.y = groundLevel;
+                b.y = groundLevel;
+                c.y = groundLevel;
+                d.y = groundLevel;
+                mesh.addFace(a, c, d);
+                mesh.addFace(a, d, b);
+            }
+        }
+        // mesh.addFace(new Vec3D(minX, groundLevel, minZ), new Vec3D(minX,
+        // groundLevel, maxZ), new Vec3D(maxX, groundLevel, minZ));
+        // mesh.addFace(new Vec3D(maxX, groundLevel, minZ), new Vec3D(minX,
+        // groundLevel, maxZ), new Vec3D(maxX, groundLevel, maxZ));
         return mesh;
     }
 }
