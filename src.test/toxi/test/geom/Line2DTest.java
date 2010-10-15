@@ -33,4 +33,19 @@ public class Line2DTest extends TestCase {
                 .getType());
     }
 
+    public void testOrientation() {
+        Line2D l = new Line2D(new Vec2D(0, 0), new Vec2D(100, 0));
+        System.out.println(l.getDirection().angleBetween(Vec2D.Y_AXIS, true));
+    }
+
+    public void testScale() {
+        Line2D l = new Line2D(new Vec2D(200, 200), new Vec2D(100, 100));
+        float len = l.getLength();
+        l.scale(0.9f);
+        assertEquals(0.9f * len, l.getLength());
+        l = new Line2D(new Vec2D(100, 200), new Vec2D(200, 100));
+        len = l.getLength();
+        l.scale(3f);
+        assertEquals(3f * len, l.getLength());
+    }
 }

@@ -1,3 +1,19 @@
+2010-10-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.physics/toxi/physics/PullBackString.java,
+	src.physics/toxi/physics/VerletMinDistanceSpring.java,
+	src.physics/toxi/physics/VerletParticle.java,
+	src.physics/toxi/physics/VerletSpring.java,
+	src.physics/toxi/physics2d/ParticleString2D.java,
+	src.physics/toxi/physics2d/PullBackString2D.java,
+	src.physics/toxi/physics2d/VerletMinDistanceSpring2D.java,
+	src.physics/toxi/physics2d/VerletParticle2D.java,
+	src.physics/toxi/physics2d/VerletSpring2D.java:
+	adding PullBackSpring classes and refactoring all other springs to
+	use setters/getters for strength and rest length settings, also
+	changed visibility of VerletParticle.updateParticle() to public
+	[6a940e677187] <toxiclibs>
+
 2010-05-20  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Polygon2D.java,

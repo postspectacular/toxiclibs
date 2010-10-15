@@ -7,14 +7,27 @@ import toxi.geom.Vec3D;
 
 public class TriangleTest extends TestCase {
 
+    public void testBarycentric() {
+        Vec3D a = new Vec3D(-100, -100, 0);
+        Vec3D c = new Vec3D(100, 0, 0);
+        Vec3D b = new Vec3D(-100, 100, 0);
+        Triangle t = new Triangle(a, b, c);
+        assertTrue(a.equalsWithTolerance(t.fromBarycentric(t.toBarycentric(a)),
+                0.01f));
+        assertTrue(b.equalsWithTolerance(t.fromBarycentric(t.toBarycentric(b)),
+                0.01f));
+        assertTrue(c.equalsWithTolerance(t.fromBarycentric(t.toBarycentric(c)),
+                0.01f));
+    }
+
     public void testCentroid() {
         Vec3D a = new Vec3D(100, 0, 0);
         Vec3D b = new Vec3D(0, 100, 0);
         Vec3D c = new Vec3D(0, 0, 100);
         Triangle t = new Triangle(a, b, c);
         ReadonlyVec3D centroid = t.computeCentroid();
-        assertTrue("incorrect centroid", centroid.equals(new Vec3D(100, 100,
-                100).scaleSelf(1f / 3)));
+        assertTrue("incorrect centroid",
+                centroid.equals(new Vec3D(100, 100, 100).scaleSelf(1f / 3)));
     }
 
     public void testClockwise() {

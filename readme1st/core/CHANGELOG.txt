@@ -1,3 +1,377 @@
+2010-10-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/WeightedRandomEntry.java,
+	src.core/toxi/util/datatypes/WeightedRandomSet.java:
+	adding weighted-random distribution set (WeightedRandomSet) to
+	toxi.util.datatypes
+	[9246de0d9e1e] [tip] <toxiclibs>
+
+	* src.core/toxi/geom/Vec3D.java:
+	adding shuffle() to Vec3D
+	[ea16d7aef4dd] <toxiclibs>
+
+	* src.core/toxi/geom/Triangle2D.java:
+	adding adjustTriangleSizeBy(), copy(), flipVertexOrder(),
+	getBounds() & intersectsTriangle()
+	[3c5fcf642bfd] <toxiclibs>
+
+	* src.core/toxi/geom/Triangle.java:
+	adding flipVertexOrder() and adding support for barycentric
+	coordinate conversion
+	[b753e7798fbc] <toxiclibs>
+
+	* src.core/toxi/geom/Sphere.java:
+	added radius only constructor to Sphere class
+	[d56a2e09db72] <toxiclibs>
+
+	* src.core/toxi/geom/Polygon2D.java:
+	added varargs constructor to Polygon2D, deprecated
+	reverseOrientation, added flipVertexOrder()
+	[13f9f23b49bb] <toxiclibs>
+
+	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Line3D.java:
+	added offsetAndGrowBy() to Line2D/3D
+	[873aee17a1fe] <toxiclibs>
+
+2010-09-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/DualDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/DualSubdivision.java,
+	src.core/toxi/geom/mesh/EdgeLengthComparator.java,
+	src.core/toxi/geom/mesh/FaceCountComparator.java,
+	src.core/toxi/geom/mesh/MidpointDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/MidpointSubdivision.java,
+	src.core/toxi/geom/mesh/SubdivisionStrategy.java,
+	src.core/toxi/geom/mesh/TriSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/DisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/DualDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/DualSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/EdgeLengthComparator.java,
+	src.core/toxi/geom/mesh/subdiv/FaceCountComparator.java,
+	src.core/toxi/geom/mesh/subdiv/MidpointDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/MidpointSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/NormalDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/subdiv/SubdivisionStrategy.java,
+	src.core/toxi/geom/mesh/subdiv/TriSubdivision.java:
+	moving all subdivision classes into new package
+	toxi.geom.mesh.subdiv, adding new abstract class
+	DisplacementSubdivision with amplitude accessors
+	[33ec568e109e] <wemesh>
+
+	* src.core/toxi/geom/mesh/WEVertex.java:
+	adding removeEdge() to WEVertex
+	[189fadcbc22b] <wemesh>
+
+	* src.core/toxi/geom/mesh/WETriangleMesh.java:
+	adding uniqueEdgeID counter, adding getEdges(), adding
+	subdivideFaceEdges(), removing removeUnusedVertices() by fixing bugs
+	when removing faces/edges, fixed bug in removeFace() which would
+	still use method in TriangleMesh parent class only
+	[4f5dca803afc] <wemesh>
+
+	* src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding uniqueVertexID counter and updating perforateFace() to return
+	new inner triangle
+	[d0456b4f3873] <wemesh>
+
+	* src.core/toxi/geom/mesh/FilterStrategy.java,
+	src.core/toxi/geom/mesh/LaplacianSmooth.java,
+	src.core/toxi/geom/mesh/MeshFilterStrategy.java:
+	renamed FilterStrategy into MeshFilterStrategy, updated
+	LaplacianSmooth
+	[7841082ed018] <wemesh>
+
+	* src.core/toxi/geom/mesh/SphereFunction.java,
+	src.core/toxi/geom/mesh/SphericalHarmonics.java,
+	src.core/toxi/geom/mesh/SuperEllipsoid.java,
+	src.core/toxi/geom/mesh/SurfaceFunction.java,
+	src.core/toxi/geom/mesh/SurfaceMeshBuilder.java:
+	adding SphereFunction and minor refactoring to SurfaceMeshBuilder
+	(reusing vectors, adding support for closed/open meshes)
+	[26a77121d36d] <wemesh>
+
+	* src.core/toxi/geom/AABB.java:
+	added size-only constructor
+	[e4619278bb19] <wemesh>
+
+2010-09-10  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/BezierPatch.java:
+	adding initial BezierPatch from SPOD project with toMesh() support,
+	needs refactoring
+	[0e0eb868470c] <wemesh>
+
+	* src.core/toxi/math/MathUtils.java:
+	updating fastSin()
+	[982723209a8a] <wemesh>
+
+2010-09-08  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/GenericSet.java,
+	src.core/toxi/util/datatypes/IntegerSet.java:
+	adding handling of empty set creation for GenericSet and IntegerSet
+	[c3fb2c3c3c7b] <wemesh>
+
+2010-09-01  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/WETriangleMesh.java:
+	removed obsolete interface import from WETriangleMesh
+	[98d04ef636c5] <wemesh>
+
+	* src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding perforateFace() to TriangleMesh
+	[05998e7a2f45] <wemesh>
+
+	* src.core/toxi/geom/Sphere.java:
+	adding toMesh() method to Sphere class
+	[9ee48983d1cf] <wemesh>
+
+	* src.core/toxi/geom/mesh/SphereFunction.java:
+	adding SphereFunction functor to be used by the SurfaceMeshBuilder
+	class
+	[dbbee434658e] <wemesh>
+
+	* src.core/toxi/geom/mesh/SurfaceMeshBuilder.java:
+	adding call to mesh.faceOutwards() at the end of
+	SurfaceMeshBuilder.createMesh() for safety
+	[0299bf3285c7] <wemesh>
+
+	* src.core/toxi/geom/mesh/Mesh3D.java:
+	adding faceOutwards() to Mesh3D
+	[cd590dd6a48a] <wemesh>
+
+2010-08-31  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AABB.java:
+	refactored AABB.intersectsTriangle() and replaced 6 testAxis()
+	methods with a single one
+	[f80abf6c64cb] <wemesh>
+
+	* src.core/toxi/geom/AABB.java:
+	adding intersectsTriangle() to AABB class
+	[a852f67dada6] <wemesh>
+
+	* src.core/toxi/geom/Triangle.java:
+	adding getBoundingBox() to Triangle class
+	[6340052ec6fb] <wemesh>
+
+	* src.core/toxi/geom/Plane.java:
+	adding getProjectedPoint() to Plane class
+	[e3182128053f] <wemesh>
+
+2010-08-14  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/DoubleRange.java,
+	src.core/toxi/util/datatypes/FloatRange.java,
+	src.core/toxi/util/datatypes/IntegerRange.java:
+	adding static factory method: fromSamples() to create ranges from a
+	list of values supplied
+	[86daab0b4b84] <wemesh>
+
+	* src.core/toxi/geom/mesh/STLWriter.java:
+	wrapping DataOutputStream in BufferedOutputStream for MUCH better
+	performance (saving 1m polygons in approx. 1sec), adding optional
+	constructor to specify buffer size
+	[063592120b39] <wemesh>
+
+2010-08-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java:
+	moving getVertexForID() into TriangleMesh, adding javadocs
+	[f712f1d8201d] <wemesh>
+
+	* src.core/toxi/geom/mesh/Mesh3D.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding getFaces() & getVertices() to Mesh3D
+	[e8f25f5f23f2] <wemesh>
+
+	* src.core/toxi/geom/mesh/Mesh3D.java,
+	src.core/toxi/geom/mesh/STLReader.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java:
+	refactoring STLReader to directly parse into either TriangleMesh or
+	WETriangleMesh implementations, adding addMesh() to Mesh3D
+	[1240d5a1b61a] <wemesh>
+
+	* src.core/toxi/geom/mesh/LaplacianSmooth.java,
+	src.core/toxi/geom/mesh/Mesh3D.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java:
+	more refactoring and bug fixing overridden transform op's in WEMesh
+	[7dd4978b1c5f] <wemesh>
+
+	* src.core/toxi/geom/mesh/LaplacianSmooth.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java:
+	removed vertices & faces list from WETriangleMesh, reusing the ones
+	from parent class
+	[beb64742f519] <wemesh>
+
+	* src.core/toxi/geom/AABB.java, src.core/toxi/geom/Cone.java,
+	src.core/toxi/geom/Plane.java, src.core/toxi/geom/mesh/Face.java,
+	src.core/toxi/geom/mesh/Mesh3D.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/Vertex.java,
+	src.core/toxi/geom/mesh/WEFace.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java,
+	src.core/toxi/geom/mesh/WEVertex.java:
+	refactoring mesh classes by extracting Mesh3D interface, turning
+	WETriangleMesh into subclass of TriangleMesh, creating standalone
+	Vertex & Face classes and making WEVertex and WEFace subclasses
+	[f837532bfc01] <wemesh>
+
+	* src.core/toxi/geom/mesh/DualDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/DualSubdivision.java,
+	src.core/toxi/geom/mesh/FaceCountComparator.java,
+	src.core/toxi/geom/mesh/MidpointDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/MidpointSubdivision.java,
+	src.core/toxi/geom/mesh/SubdivisionStrategy.java,
+	src.core/toxi/geom/mesh/TriSubdivision.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java:
+	refactoring SubdivisionStrategy into an abstract class, extracted
+	edge ordering into standalone Comparator implementations
+	(EdgeLengthComparator & FaceCountComparator), added
+	DualDisplacementSubdivision
+	[00f9ea5bf727] <wemesh>
+
+2010-08-10  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AABB.java, src.core/toxi/geom/Cone.java,
+	src.core/toxi/geom/Line3D.java, src.core/toxi/geom/Plane.java,
+	src.core/toxi/geom/mesh/DualSubdivision.java,
+	src.core/toxi/geom/mesh/EdgeLengthComparator.java,
+	src.core/toxi/geom/mesh/MidpointDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/MidpointSubdivision.java,
+	src.core/toxi/geom/mesh/SubdivisionStrategy.java,
+	src.core/toxi/geom/mesh/TriSubdivision.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java,
+	src.test/toxi/test/LatticeTest.java,
+	src.test/toxi/test/SubdivTest.java:
+	refactoring SubdivisionStrategies to return a list of split points
+	for each edge, simplifying WEMesh.splitFace() by adding new version
+	of addFace() taking a reference normal vector which then defines
+	vertex ordering for that face, adding same to normal TriangleMesh,
+	updating toMesh() functions for types in geom package, adding Dual &
+	TriSubdivision, adding EdgeLengthComparator
+	[efc834503da8] <wemesh>
+
+2010-08-09  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/mesh/FilterStrategy.java,
+	src.core/toxi/geom/mesh/LaplacianSmooth.java,
+	src.core/toxi/geom/mesh/MidpointDisplacementSubdivision.java,
+	src.core/toxi/geom/mesh/MidpointSubdivision.java,
+	src.core/toxi/geom/mesh/SubdivisionStrategy.java,
+	src.core/toxi/geom/mesh/TriangleMesh.java,
+	src.core/toxi/geom/mesh/WEFace.java,
+	src.core/toxi/geom/mesh/WETriangleMesh.java,
+	src.core/toxi/geom/mesh/WEVertex.java,
+	src.core/toxi/geom/mesh/WingedEdge.java:
+	adding initial winged-edge mesh architecture to toxi.geom.mesh
+	package (WE classes, subdivision and filter strategies)
+	[6b2698dc69cf] <wemesh>
+
+2010-07-30  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/AABB.java,
+	src.test/toxi/test/geom/AABBIsecTest.java:
+	adding AABB.includePoint() and test case
+	[2dba35f332e9] <toxiclibs>
+
+	* src.core/toxi/geom/ReadonlyVec2D.java,
+	src.core/toxi/geom/ReadonlyVec3D.java,
+	src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java:
+	adding isMajorAxis() to ReadonlyVec2D/3D, adding toArray4() to Vec3D
+	[12eaa924d96e] <toxiclibs>
+
+2010-07-27  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Line3D.java:
+	added closestLineTo() method to compute intersection line between 2
+	given line segments, intersection result is encapsulated as a
+	Line3D.LineIntersection instance, which can be queried further
+	[0b1781eca96a] <toxiclibs>
+
+	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Line3D.java:
+	adding getLengthSquared() and hasEndPoint() to Line2D/3D
+	[24aee632bbe0] <toxiclibs>
+
+2010-07-25  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Vec2D.java, src.core/toxi/geom/Vec3D.java:
+	adding roundToAxis() to Vec2D/Vec3D
+	[a2f445c8148d] <toxiclibs>
+
+2010-07-23  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/FileUtils.java:
+	minor updates to stream creators
+	[2699938d41c1] <toxiclibs>
+
+	* src.core/toxi/geom/mesh/TriangleMesh.java:
+	adding getFaceNormalsAsArray() and adding default stride constant,
+	changing default stride to 4 for getXXXAsArray() methods
+	[07e49312b5e1] <toxiclibs>
+
+	* src.core/toxi/geom/mesh/STLReader.java:
+	major performance update (8x-10x faster) for loadBinary, now using
+	BufferedInputStream and supporting configurable buffer sizes,
+	loadBinary(String) now using FileUtils.createInputStream and
+	supports gzipped files
+	[5d62168976d2] <toxiclibs>
+
+	* src.core/toxi/geom/Line2D.java, src.core/toxi/geom/Line3D.java,
+	src.test/toxi/test/geom/Line2DTest.java,
+	src.test/toxi/test/geom/Line3DTest.java:
+	adding hashCode() & equals() methods to Line2D/3D, updating/adding
+	test cases
+	[032525a9eeb5] <toxiclibs>
+
+2010-07-22  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/math/Interpolation2D.java,
+	src.test/toxi/test/BilinearTest.java:
+	bug fix in Vec2D arg version of Interpolation2D.bilinear(),
+	corrected point order and updated test case
+	[1c5efe07afb1] <toxiclibs>
+
+2010-07-21  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/math/BezierInterpolation.java:
+	updating javadocs
+	[2572b96dc069] <toxiclibs>
+
+	* src.core/toxi/math/BezierInterpolation.java,
+	src.test/toxi/test/BezierTest.java:
+	adding BezierInterpolation and test applet
+	[22d2ddfbcf83] <toxiclibs>
+
+2010-07-20  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/geom/Rect.java:
+	fixed issue in Rect.intersectsRect() which didn't catch the case
+	when the checked rect is fully contained in a larger one it is
+	intersected with
+	[05436b5e3a0f] <toxiclibs>
+
+2010-07-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.core/toxi/util/datatypes/GenericSet.java,
+	src.core/toxi/util/datatypes/IntegerSet.java,
+	src.test/toxi/test/ArrayUtilTest.java:
+	adding varargs constructors to IntegerSet and GenericSet, updating
+	test case in ArrayUtilsTest
+	[6861db2ec9c4] <toxiclibs>
+
+	* src.core/toxi/util/DateUtils.java,
+	src.core/toxi/util/FileUtils.java:
+	updating/improving flexibility of file name analysis in
+	FileUtils.getFileSequenceDescriptor() method, adding separator
+	dashes for time component in DateUtils.timeStamp()
+	[4b22cde81b25] <toxiclibs>
+
 2010-07-12  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.core/toxi/util/datatypes/SingletonRegistry.java:

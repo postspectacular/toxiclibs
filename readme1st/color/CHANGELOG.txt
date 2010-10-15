@@ -1,3 +1,10 @@
+2010-07-20  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.color/toxi/color/ColorList.java,
+	src.color/toxi/color/Histogram.java:
+	adding Histogram class and minor update to ColorList javadocs
+	[8b524f9178d0] <toxiclibs>
+
 2010-07-12  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.color/toxi/color/TColorAdapter.java:

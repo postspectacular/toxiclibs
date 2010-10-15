@@ -1,3 +1,36 @@
+2010-09-19  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	updated sphere() function in ToxiclibsSupport to use Sphere.toMesh()
+	functionality
+	[818e56ce6e0d] <wemesh>
+
+2010-09-10  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding origin(len) as shorthand to draw coordinate axes at world
+	origin
+	[b1ce8ddac957] <wemesh>
+
+2010-08-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding meshNormalMapped() to ToxiclibsSupport
+	[9853ee1f01a7] <wemesh>
+
+2010-08-11  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	refactoring mesh() methods in ToxiclibsSupport to work with Mesh3D
+	interface instead of TriangleMesh only
+	[ab61d87e38b6] <wemesh>
+
+2010-08-09  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.p5/toxi/processing/ToxiclibsSupport.java:
+	adding WEMesh support to ToxiclibsSupport
+	[4c93b4ec997e] <wemesh>
+
 2010-07-12  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.p5/toxi/processing/ToxiclibsSupport.java:

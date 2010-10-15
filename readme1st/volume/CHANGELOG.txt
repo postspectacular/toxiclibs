@@ -1,3 +1,163 @@
+2010-09-21  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.test/toxi/test/AxisRoundTest.java,
+	src.test/toxi/test/BezierTest.java,
+	src.test/toxi/test/CircumCircleTest.java,
+	src.test/toxi/test/ClassicWolfram.java,
+	src.test/toxi/test/ColorGradientVisuals.java,
+	src.test/toxi/test/ColorTestVisuals.java,
+	src.test/toxi/test/ColorThemeVisuals.java,
+	src.test/toxi/test/DLATest.java,
+	src.test/toxi/test/ExtrudeTest.java,
+	src.test/toxi/test/ImplicitVolume.java,
+	src.test/toxi/test/LatticeTest.java,
+	src.test/toxi/test/Line3DIsecTest.java,
+	src.test/toxi/test/MeshBuilderTest.java,
+	src.test/toxi/test/RunnableImplObject.java,
+	src.test/toxi/test/SplineTestApplet.java,
+	src.test/toxi/test/SubdivHoles.java,
+	src.test/toxi/test/SubdivTest.java,
+	src.test/toxi/test/TerrainTest.java,
+	src.test/toxi/test/TriIntersectionTest.java,
+	src.test/toxi/test/VolumetricTest.java,
+	src.test/toxi/test/VoronoiTest.java,
+	src.test/toxi/test/WEPhysics.java,
+	src.test/toxi/test/WolframTest.java,
+	src.test/toxi/test/geom/Line3DTest.java,
+	src.test/toxi/test/geom/WEMeshTest.java,
+	src.volume/toxi/volume/MeshLatticeBuilder.java, toxiclibs.xmind:
+	adding MeshLatticeBuilder to toxi.volume package, removing various
+	old test apps, removing outdated XMind project overview file (will
+	replace with graphviz auto-generated map soon)
+	[80f0ff412cb9] <wemesh>
+
+2010-09-10  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/VolumetricHashMap.java:
+	adding VolumetricHashMap as implementation of VolumetricSpace for
+	sparse voxel volumes, the expected density ratio can be specified in
+	the constructor to avoid rehashing operations
+	[8492d71b323c] <wemesh>
+
+	* src.volume/toxi/volume/MeshVoxelizer.java:
+	updated voxelizeMesh() to just take a generic Mesh3D instance (was
+	WETriangleMesh, but not needed)
+	[2282dffdca45] <wemesh>
+
+	* src.volume/toxi/volume/VolumetricSpace.java:
+	adding closeSides() to the abstract VolumetricSpace class, throwing
+	an UnsupportedOperation exception by default (if not overwritten by
+	an implementation)
+	[18555d3981bd] <wemesh>
+
+2010-09-05  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/MeshVoxelizer.java:
+	resolving scaling issues/clipping in MeshVoxelizer
+	[30864735e9be] <wemesh>
+
+	* src.volume/toxi/volume/BoxBrush.java,
+	src.volume/toxi/volume/RoundBrush.java,
+	src.volume/toxi/volume/VolumetricBrush.java,
+	src.volume/toxi/volume/VolumetricSpace.java,
+	src.volume/toxi/volume/VolumetricSpaceArray.java:
+	adding VolumetricHashMap class for sparse volumes. Also refactoring
+	VolumetricBrush implementations to work not just with existing
+	VolumetricSpaceArray by adding a setVoxelAt() method to
+	VolumetricSpace base class. This method throws
+	UnsupportedOperationException by default, but can & is being
+	overwritten/implemented by both array and hashmap based
+	implementations...
+	[592ce9bed617] <wemesh>
+
+2010-09-01  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/ArrayIsoSurface.java,
+	src.volume/toxi/volume/HashIsoSurface.java:
+	updating IsoSurface implementations to use getVoxelAt(x,y,z)
+	versions
+	[dd155dcf71c1] <wemesh>
+
+	* src.volume/toxi/volume/MeshVoxelizer.java:
+	adding ultrabasic version of solidifyVolume() to MeshVoxelizer
+	class. This doesn't currently work with any kind of convexness in
+	the volume space and further voxel-mesh collision tests are needed
+	to figure out if a voxel is within the model or not (check normal of
+	triangle intersecting a voxel)
+	[a95d66f5776d] <wemesh>
+
+	* src.volume/toxi/volume/VolumetricSpace.java,
+	src.volume/toxi/volume/VolumetricSpaceArray.java:
+	removed getVoxelAt(int) and only using getVoxelAt(x,y,z) now, added
+	setVoxelAt() to VolumetricSpaceArray
+	[6be8837fc68f] <wemesh>
+
+	* src.volume/toxi/volume/MeshVoxelizer.java:
+	refactored/optimized MeshVoxelizer to iterate over mesh faces only
+	once in the outer loop and only check voxels within the bounding box
+	of each triangle
+	[6347a0b7a05c] <wemesh>
+
+2010-08-31  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/MeshVoxelizer.java:
+	adding initial version of MeshVoxelizer
+	[d50b3729e928] <wemesh>
+
+2010-08-27  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/HashIsoSurface.java:
+	adding log level check
+	[84d7aa817c99] <wemesh>
+
+2010-08-16  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/ArrayIsoSurface.java,
+	src.volume/toxi/volume/BoxBrush.java,
+	src.volume/toxi/volume/HashIsoSurface.java,
+	src.volume/toxi/volume/RoundBrush.java,
+	src.volume/toxi/volume/VolumetricBrush.java,
+	src.volume/toxi/volume/VolumetricSpace.java,
+	src.volume/toxi/volume/VolumetricSpaceArray.java:
+	refactored VolumetricSpace into abstract class with existing
+	implementation renamed into VolumetricSpaceArray. The new structure
+	allows for non-array based volume descriptions (e.g. implicit
+	functions), but currently implementations need to ensure the volume
+	is closed on all sides (some issue with recent IsoSurface changes)
+	[3f22154c05fa] <wemesh>
+
+2010-08-15  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/ArrayIsoSurface.java:
+	added upper bounds check for edgeFlags
+	[044d4885de3f] <wemesh>
+
+	* src.volume/toxi/volume/HashIsoSurface.java:
+	added upper bounds check for edgeFlags
+	[410286c5874d] <wemesh>
+
+2010-08-14  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/ArrayIsoSurface.java,
+	src.volume/toxi/volume/HashIsoSurface.java,
+	src.volume/toxi/volume/IsoSurface.java:
+	refactored IsoSurface into interface with new ArrayIsoSurface &
+	HashIsoSurface implementations, added javadocs
+	[25610b1c7b59] <wemesh>
+
+2010-08-13  Karsten Schmidt  <k@postspectacular.com>
+
+	* src.volume/toxi/volume/IsoSurface.java:
+	further refactoring & memory optimizations, now using a growing
+	HashMap to store vertices instead of a huge, pre-allocated array
+	[08487f695fa3] <wemesh>
+
+	* src.volume/toxi/volume/IsoSurface.java:
+	refactored IsoSurface to be much more RAM efficient & faster,
+	removed plain computeSurface() (triangle soup) method (only
+	computeSurfaceMesh() is available)
+	[921fcfc42539] <wemesh>
+
 2010-05-20  Karsten Schmidt  <k@postspectacular.com>
 
 	* src.color/toxi/color/TColor.java, src.core/toxi/geom/AABB.java,

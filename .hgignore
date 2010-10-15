@@ -5,6 +5,7 @@ docs
 dist
 blog
 metrics
+patches
 
 .DS_Store
 
