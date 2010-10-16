@@ -12,8 +12,8 @@ import toxi.geom.mesh.TriangleMesh;
  */
 public class ArrayIsoSurface implements IsoSurface {
 
-    protected static final Logger logger =
-            Logger.getLogger(ArrayIsoSurface.class.getName());
+    protected static final Logger logger = Logger
+            .getLogger(ArrayIsoSurface.class.getName());
 
     protected Vec3D cellSize;
     protected Vec3D centreOffset;
@@ -141,9 +141,12 @@ public class ArrayIsoSurface implements IsoSurface {
                             n++;
                         }
                         for (int i = 0; i < n; i += 3) {
-                            mesh.addFace(edgeVertices[face[i + 1]],
-                                    edgeVertices[face[i + 2]],
-                                    edgeVertices[face[i]]);
+                            final Vec3D va = edgeVertices[face[i + 1]];
+                            final Vec3D vb = edgeVertices[face[i + 2]];
+                            final Vec3D vc = edgeVertices[face[i]];
+                            if (va != null && vb != null && vc != null) {
+                                mesh.addFace(va, vb, vc);
+                            }
                         }
                     }
                     offset++;

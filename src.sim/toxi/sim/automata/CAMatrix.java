@@ -53,18 +53,22 @@ public class CAMatrix implements EvolvableMatrix {
      * @return itself
      */
     public CAMatrix addNoise(float probability, int minState, int maxState) {
-        minState = MathUtils.clip(minState, 0, rule.getStateCount());
-        maxState = MathUtils.clip(maxState, 0, rule.getStateCount());
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (Math.random() < probability) {
-                    int idx = y * width + x;
-                    swap[idx] =
-                            matrix[idx] = MathUtils.random(minState, maxState);
+        if (rule != null) {
+            minState = MathUtils.clip(minState, 0, rule.getStateCount());
+            maxState = MathUtils.clip(maxState, 0, rule.getStateCount());
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (Math.random() < probability) {
+                        int idx = y * width + x;
+                        swap[idx] =
+                                matrix[idx] =
+                                        MathUtils.random(minState, maxState);
+                    }
                 }
             }
+            return this;
         }
-        return this;
+        throw new IllegalStateException("CA rule not yet initialized");
     }
 
     /**
