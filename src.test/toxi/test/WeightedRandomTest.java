@@ -3,6 +3,7 @@ package toxi.test;
 import java.util.HashMap;
 
 import junit.framework.TestCase;
+import toxi.util.datatypes.WeightedRandomEntry;
 import toxi.util.datatypes.WeightedRandomSet;
 
 public class WeightedRandomTest extends TestCase {
@@ -27,11 +28,25 @@ public class WeightedRandomTest extends TestCase {
         assertEquals(null, set.getRandom());
     }
 
+    public void testOrder() {
+        WeightedRandomSet<String> set = new WeightedRandomSet<String>();
+        set.add("bar", 2);
+        set.add("foo", 1);
+        set.add("toxi", 4);
+        set.add("bollox", 1);
+        int i = 0;
+        for (WeightedRandomEntry<String> e : set.getElements()) {
+            System.out.println(i + ":" + e);
+            i++;
+        }
+    }
+
     public void testRandom() {
         WeightedRandomSet<String> set = new WeightedRandomSet<String>();
         set.add("bar", 2);
         set.add("toxi", 4);
         set.add("foo", 1);
+        set.add("bollox", 1);
         checkDistribution(set);
     }
 

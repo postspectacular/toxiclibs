@@ -1,7 +1,7 @@
 package toxi.util.datatypes;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import toxi.math.MathUtils;
 
@@ -16,8 +16,8 @@ import toxi.math.MathUtils;
  */
 public class WeightedRandomSet<T> {
 
-    protected TreeSet<WeightedRandomEntry<T>> elements =
-            new TreeSet<WeightedRandomEntry<T>>();
+    protected List<WeightedRandomEntry<T>> elements =
+            new ArrayList<WeightedRandomEntry<T>>();
 
     protected int totalWeight;
 
@@ -30,7 +30,21 @@ public class WeightedRandomSet<T> {
      * @return
      */
     public WeightedRandomSet<T> add(T item, int weight) {
-        elements.add(new WeightedRandomEntry<T>(item, weight));
+        WeightedRandomEntry<T> e = new WeightedRandomEntry<T>(item, weight);
+        int num = elements.size();
+        boolean isInserted = false;
+        if (num > 0) {
+            for (int i = 0; i < num; i++) {
+                if (weight < elements.get(i).weight) {
+                    elements.add(i, e);
+                    isInserted = true;
+                    break;
+                }
+            }
+        }
+        if (!isInserted) {
+            elements.add(e);
+        }
         totalWeight += weight;
         return this;
     }
@@ -38,7 +52,7 @@ public class WeightedRandomSet<T> {
     /**
      * @return the elements
      */
-    public Set<WeightedRandomEntry<T>> getElements() {
+    public List<WeightedRandomEntry<T>> getElements() {
         return elements;
     }
 
