@@ -1,6 +1,7 @@
 package toxi.geom.mesh;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -319,6 +320,18 @@ public class WETriangleMesh extends TriangleMesh {
                 i.remove();
             }
         }
+    }
+
+    public void removeVertices(Collection<Vertex> selection) {
+        for (Vertex v : selection) {
+            WEVertex wv = (WEVertex) v;
+            for (WingedEdge e : new ArrayList<WingedEdge>(wv.edges)) {
+                for (Face f : new ArrayList<Face>(e.faces)) {
+                    removeFace(f);
+                }
+            }
+        }
+        // rebuildIndex();
     }
 
     public WETriangleMesh rotateAroundAxis(Vec3D axis, float theta) {
