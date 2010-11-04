@@ -1,6 +1,6 @@
 package toxi.geom;
 
-import toxi.geom.mesh.TriangleMesh;
+import toxi.geom.mesh.Mesh3D;
 
 public abstract class AxisAlignedCylinder implements Shape3D {
 
@@ -81,7 +81,7 @@ public abstract class AxisAlignedCylinder implements Shape3D {
      * 
      * @return mesh instance
      */
-    public TriangleMesh toMesh() {
+    public Mesh3D toMesh() {
         return toMesh(12, 0);
     }
 
@@ -93,8 +93,12 @@ public abstract class AxisAlignedCylinder implements Shape3D {
      * @param thetaOffset
      * @return mesh
      */
-    public TriangleMesh toMesh(int steps, float thetaOffset) {
+    public Mesh3D toMesh(int steps, float thetaOffset) {
+        return toMesh(null, steps, thetaOffset);
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, int steps, float thetaOffset) {
         return new Cone(pos, getMajorAxis().getVector(), radius, radius, length)
-                .toMesh("cylinder", steps, thetaOffset, true, true);
+                .toMesh(mesh, steps, thetaOffset, true, true);
     }
 }
