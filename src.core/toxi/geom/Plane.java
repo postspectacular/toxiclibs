@@ -22,7 +22,7 @@ public class Plane extends Vec3D implements Shape3D {
      * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
      */
     public enum Classifier {
-        PLANE_FRONT, PLANE_BACK, ON_PLANE;
+        FRONT, BACK, ON_PLANE;
     }
 
     public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
@@ -50,15 +50,15 @@ public class Plane extends Vec3D implements Shape3D {
      * Classifies the relative position of the given point to the plane using
      * the given tolerance.
      * 
-     * @return One of the 3 classification types: PLANE_FRONT, PLANE_BACK,
+     * @return One of the 3 classification types: FRONT, BACK,
      *         ON_PLANE
      */
     public Classifier classifyPoint(ReadonlyVec3D p, float tolerance) {
         float d = this.sub(p).normalize().dot(normal);
         if (d < -tolerance) {
-            return Classifier.PLANE_FRONT;
+            return Classifier.FRONT;
         } else if (d > tolerance) {
-            return Classifier.PLANE_BACK;
+            return Classifier.BACK;
         }
         return Classifier.ON_PLANE;
     }
