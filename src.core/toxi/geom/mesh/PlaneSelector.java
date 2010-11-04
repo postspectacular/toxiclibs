@@ -1,8 +1,5 @@
 package toxi.geom.mesh;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import toxi.geom.Plane;
 import toxi.geom.Plane.Classifier;
 
@@ -21,15 +18,13 @@ public class PlaneSelector extends VertexSelector {
     }
 
     @Override
-    public Collection<Vertex> selectVertices() {
-        if (selection == null) {
-            selection = new HashSet<Vertex>();
-        }
+    public VertexSelector selectVertices() {
+        clearSelection();
         for (Vertex v : mesh.getVertices()) {
             if (plane.classifyPoint(v, tolerance) == classifier) {
                 selection.add(v);
             }
         }
-        return selection;
+        return this;
     }
 }

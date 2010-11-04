@@ -13,11 +13,12 @@ public abstract class VertexSelector {
 
     public VertexSelector(Mesh3D mesh) {
         this.mesh = mesh;
+        this.selection = new HashSet<Vertex>();
     }
 
-    public Collection<Vertex> addSelection(Collection<Vertex> sel2) {
+    public VertexSelector addSelection(Collection<Vertex> sel2) {
         selection.addAll(sel2);
-        return selection;
+        return this;
     }
 
     public VertexSelector clearSelection() {
@@ -25,14 +26,15 @@ public abstract class VertexSelector {
         return this;
     }
 
+    public Mesh3D getMesh() {
+        return mesh;
+    }
+
     public Collection<Vertex> getSelection() {
-        if (selection == null) {
-            selection = new HashSet<Vertex>();
-        }
         return selection;
     }
 
-    public Collection<Vertex> invertSelection() {
+    public VertexSelector invertSelection() {
         HashSet<Vertex> newSel =
                 new HashSet<Vertex>(mesh.getNumVertices() - selection.size());
         for (Vertex v : mesh.getVertices()) {
@@ -41,23 +43,20 @@ public abstract class VertexSelector {
             }
         }
         selection = newSel;
-        return selection;
+        return this;
     }
 
-    public Collection<Vertex> selectSimilar(Collection<? extends Vec3D> sel2) {
-        if (selection == null) {
-            selection = new HashSet<Vertex>(sel2.size());
-        }
+    public VertexSelector selectSimilar(Collection<? extends Vec3D> sel2) {
         for (Vec3D v : sel2) {
             selection.add(mesh.getClosestVertexToPoint(v));
         }
-        return selection;
+        return this;
     }
 
-    public abstract Collection<Vertex> selectVertices();
+    public abstract VertexSelector selectVertices();
 
-    public Collection<Vertex> subtractSelection(Collection<Vertex> sel2) {
+    public VertexSelector subtractSelection(Collection<Vertex> sel2) {
         selection.removeAll(sel2);
-        return selection;
+        return this;
     }
 }

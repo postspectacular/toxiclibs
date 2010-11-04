@@ -1,11 +1,9 @@
 package toxi.geom.mesh;
 
-import java.util.Collection;
 
 public interface WEMeshFilterStrategy {
 
-    public void filter(WETriangleMesh mesh, Collection<Vertex> selection,
-            int numIterations);
+    public void filter(VertexSelector selector, int numIterations);
 
     /**
      * Applies the vertex filter to the given mesh

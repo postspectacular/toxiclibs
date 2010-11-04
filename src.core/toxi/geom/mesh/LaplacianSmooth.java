@@ -12,20 +12,20 @@ import toxi.geom.Vec3D;
  */
 public class LaplacianSmooth implements WEMeshFilterStrategy {
 
-    public void filter(WETriangleMesh mesh, Collection<Vertex> selection,
-            int numIterations) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void filter(WETriangleMesh mesh, int numIterations) {
-        HashMap<Vertex, Vec3D> filtered =
-                new HashMap<Vertex, Vec3D>(mesh.vertices.size());
+    public void filter(VertexSelector selector, int numIterations) {
+        final Collection<Vertex> selection = selector.getSelection();
+        if (!(selector.getMesh() instanceof WETriangleMesh)) {
+            throw new IllegalArgumentException(
+                    "This filter requires a WETriangleMesh");
+        }
+        final WETriangleMesh mesh = (WETriangleMesh) selector.getMesh();
+        final HashMap<Vertex, Vec3D> filtered =
+                new HashMap<Vertex, Vec3D>(selection.size());
         for (int i = 0; i < numIterations; i++) {
             filtered.clear();
-            for (Vertex v : mesh.vertices.values()) {
-                Vec3D laplacian = new Vec3D();
-                List<WEVertex> neighbours = ((WEVertex) v).getNeighbors();
+            for (Vertex v : selection) {
+                final Vec3D laplacian = new Vec3D();
+                final List<WEVertex> neighbours = ((WEVertex) v).getNeighbors();
                 for (WEVertex n : neighbours) {
                     laplacian.addSelf(n);
                 }
@@ -39,5 +39,9 @@ public class LaplacianSmooth implements WEMeshFilterStrategy {
         }
         mesh.computeFaceNormals();
         mesh.computeVertexNormals();
+    }
+
+    public void filter(WETriangleMesh mesh, int numIterations) {
+        filter(new DefaultSelector(mesh).selectVertices(), numIterations);
     }
 }

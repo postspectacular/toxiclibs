@@ -23,10 +23,10 @@ import toxi.geom.Vec3D;
 import toxi.math.MathUtils;
 
 /**
- * A class to dynamically build, manipulate & export triangle meshes. Meshes are
- * build face by face. The class automatically re-uses existing vertices and can
- * create smooth vertex normals. Vertices and faces are directly accessible for
- * speed & convenience.
+ * An extensible class to dynamically build, manipulate & export triangle
+ * meshes. Meshes are built face by face. This implementation automatically
+ * re-uses existing vertices and can generate smooth vertex normals. Vertice and
+ * face lists are directly accessible for speed & convenience.
  */
 public class TriangleMesh implements Mesh3D, Intersector3D {
 
