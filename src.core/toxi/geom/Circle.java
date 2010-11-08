@@ -4,9 +4,63 @@ import toxi.math.MathUtils;
 
 /**
  * This class overrides {@link Ellipse} to define a 2D circle and provides
- * several utility methods for it.
+ * several utility methods for it, including factory methods to construct
+ * circles from points.
  */
 public class Circle extends Ellipse {
+
+    /**
+     * Factory method to construct a circle which has the two given points lying
+     * on its perimeter. If the points are coincident, the circle will have a
+     * radius of zero.
+     * 
+     * @param p1
+     * @param p2
+     * @return new circle instance
+     */
+    public static Circle from2Points(Vec2D p1, Vec2D p2) {
+        Vec2D m = p1.interpolateTo(p2, 0.5f);
+        return new Circle(m, m.distanceTo(p1));
+    }
+
+    /**
+     * Factory method to construct a circle which has the three given points
+     * lying on its perimeter. The function returns null, if the 3 points are
+     * co-linear (in which case it's impossible to find a circle).
+     * 
+     * @param p1
+     * @param p2
+     * @param p3
+     * @return new circle instance or null
+     */
+    public static Circle from3Points(Vec2D p1, Vec2D p2, Vec2D p3) {
+        Circle circle = null;
+        Vec2D deltaA = p2.sub(p1);
+        Vec2D deltaB = p3.sub(p2);
+        if (MathUtils.abs(deltaA.x) <= 0.0000001f
+                && MathUtils.abs(deltaB.y) <= 0.0000001f) {
+            Vec2D centroid =
+                    new Vec2D(p2.x + p3.x, p1.y + p2.y).scaleSelf(0.5f);
+            float radius = centroid.distanceTo(p1);
+            circle = new Circle(centroid, radius);
+        } else {
+            float aSlope = deltaA.y / deltaA.x;
+            float bSlope = deltaB.y / deltaB.x;
+            if (MathUtils.abs(aSlope - bSlope) > 0.0000001f) {
+                float x =
+                        (aSlope * bSlope * (p1.y - p3.y) + bSlope
+                                * (p1.x + p2.x) - aSlope * (p2.x + p3.x))
+                                / (2 * (bSlope - aSlope));
+                float y =
+                        -1 * (x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y)
+                                / 2;
+                Vec2D centroid = new Vec2D(x, y);
+                float radius = centroid.distanceTo(p1);
+                circle = new Circle(centroid, radius);
+            }
+        }
+        return circle;
+    }
 
     public Circle() {
         this(new Vec2D(), 1);
