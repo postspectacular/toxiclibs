@@ -1,5 +1,6 @@
 package toxi.geom.mesh;
 
+import toxi.geom.Triangle;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
@@ -54,5 +55,16 @@ public class Face {
 
     public String toString() {
         return getClass().getName() + " " + a + ", " + b + ", " + c;
+    }
+
+    /**
+     * Creates a generic {@link Triangle} instance using this face's vertices.
+     * The new instance is made up of copies of the original vertices and
+     * manipulating them will not impact the originals.
+     * 
+     * @return triangle copy of this mesh face
+     */
+    public Triangle toTriangle() {
+        return new Triangle(a.copy(), b.copy(), c.copy());
     }
 }

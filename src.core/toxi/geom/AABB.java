@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.math.MathUtils;
 
@@ -476,24 +477,26 @@ public class AABB extends Vec3D implements Shape3D {
         return (min > rad || max < -rad);
     }
 
-    public TriangleMesh toMesh() {
-        return toMesh("box");
+    public Mesh3D toMesh() {
+        return toMesh(null);
     }
 
-    public TriangleMesh toMesh(String name) {
-        TriangleMesh mesh = new TriangleMesh(name, 8, 12);
-        // front
+    public Mesh3D toMesh(Mesh3D mesh) {
+        if (mesh == null) {
+            mesh = new TriangleMesh("aabb", 8, 12);
+        }
         Vec3D a = new Vec3D(min.x, max.y, max.z);
         Vec3D b = new Vec3D(max.x, max.y, max.z);
         Vec3D c = new Vec3D(max.x, min.y, max.z);
         Vec3D d = new Vec3D(min.x, min.y, max.z);
-        mesh.addFace(a, b, d, null, null, null, null);
-        mesh.addFace(b, c, d, null, null, null, null);
-        // back
         Vec3D e = new Vec3D(min.x, max.y, min.z);
         Vec3D f = new Vec3D(max.x, max.y, min.z);
         Vec3D g = new Vec3D(max.x, min.y, min.z);
         Vec3D h = new Vec3D(min.x, min.y, min.z);
+        // front
+        mesh.addFace(a, b, d, null, null, null, null);
+        mesh.addFace(b, c, d, null, null, null, null);
+        // back
         mesh.addFace(f, e, g, null, null, null, null);
         mesh.addFace(e, h, g, null, null, null, null);
         // top

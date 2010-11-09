@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.math.MathUtils;
 
@@ -17,24 +18,16 @@ import toxi.math.MathUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Plane extends Vec3D implements Shape3D {
 
+    /**
+     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
+     */
+    public enum Classifier {
+        PLANE_FRONT, PLANE_BACK, ON_PLANE;
+    }
+
     public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
     public static final Plane XZ = new Plane(new Vec3D(), Vec3D.Y_AXIS);
     public static final Plane YZ = new Plane(new Vec3D(), Vec3D.X_AXIS);
-
-    /**
-     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
-     */
-    public static final int PLANE_FRONT = -1;
-
-    /**
-     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
-     */
-    public static final int PLANE_BACK = 1;
-
-    /**
-     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
-     */
-    public static final int ON_PLANE = 0;
 
     @XmlElement(required = true)
     public Vec3D normal;
@@ -54,23 +47,24 @@ public class Plane extends Vec3D implements Shape3D {
     }
 
     /**
-     * Classifies the relative position of the given point to the plane.
+     * Classifies the relative position of the given point to the plane using
+     * the given tolerance.
      * 
-     * @return One of the 3 integer classification codes: PLANE_FRONT,
-     *         PLANE_BACK, ON_PLANE
+     * @return One of the 3 classification types: PLANE_FRONT, PLANE_BACK,
+     *         ON_PLANE
      */
-    public int classifyPoint(ReadonlyVec3D p) {
-        float d = this.sub(p).dot(normal);
-        if (d < -MathUtils.EPS) {
-            return PLANE_FRONT;
-        } else if (d > MathUtils.EPS) {
-            return PLANE_BACK;
+    public Classifier classifyPoint(ReadonlyVec3D p, float tolerance) {
+        float d = this.sub(p).normalize().dot(normal);
+        if (d < -tolerance) {
+            return Classifier.PLANE_FRONT;
+        } else if (d > tolerance) {
+            return Classifier.PLANE_BACK;
         }
-        return ON_PLANE;
+        return Classifier.ON_PLANE;
     }
 
     public boolean containsPoint(ReadonlyVec3D p) {
-        return classifyPoint(p) == ON_PLANE;
+        return classifyPoint(p, MathUtils.EPS) == Classifier.ON_PLANE;
     }
 
     /**
@@ -145,7 +139,14 @@ public class Plane extends Vec3D implements Shape3D {
      *            desired edge length
      * @return mesh
      */
-    public TriangleMesh toMesh(float size) {
+    public Mesh3D toMesh(float size) {
+        return toMesh(null, size);
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, float size) {
+        if (mesh == null) {
+            mesh = new TriangleMesh("plane", 4, 2);
+        }
         ReadonlyVec3D p =
                 equalsWithTolerance(Vec3D.ZERO, 0.01f) ? add(0.01f, 0.01f,
                         0.01f) : this;
@@ -156,7 +157,6 @@ public class Plane extends Vec3D implements Shape3D {
         Vec3D b = this.add(n).subSelf(m);
         Vec3D c = this.sub(n).subSelf(m);
         Vec3D d = this.sub(n).addSelf(m);
-        TriangleMesh mesh = new TriangleMesh("plane", 4, 2);
         mesh.addFace(a, d, b, null, null, null, null);
         mesh.addFace(b, d, c, null, null, null, null);
         return mesh;

@@ -1,36 +1,32 @@
 package toxi.geom.mesh;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
-import toxi.geom.Polygon2D;
-import toxi.geom.Vec3D;
-import toxi.geom.Vec3D.Axis;
-import toxi.math.MathUtils;
+import toxi.geom.Plane;
+import toxi.geom.Plane.Classifier;
 
-public class PlaneSelector implements VertexSelector {
+public class PlaneSelector extends VertexSelector {
 
-    public Vec3D.Axis axis;
-    public float axisValue;
+    public Plane plane;
     public float tolerance;
+    public Classifier classifier;
 
-    public PlaneSelector(Axis axis, float axisValue, float tolerance) {
-        this.axis = axis;
-        this.axisValue = axisValue;
+    public PlaneSelector(Mesh3D mesh, Plane plane, float tolerance,
+            Plane.Classifier classifier) {
+        super(mesh);
+        this.plane = plane;
         this.tolerance = tolerance;
+        this.classifier = classifier;
     }
 
-    public List<Polygon2D> getConnectedShapes() {
-        List<Polygon2D> shapes = new ArrayList<Polygon2D>();
-        return shapes;
-    }
-
-    public List<Vertex> selectVertices(Mesh3D mesh, List<Vertex> selection) {
+    @Override
+    public Collection<Vertex> selectVertices() {
         if (selection == null) {
-            selection = new ArrayList<Vertex>();
+            selection = new HashSet<Vertex>();
         }
         for (Vertex v : mesh.getVertices()) {
-            if (MathUtils.abs(v.getComponent(axis) - axisValue) < tolerance) {
+            if (plane.classifyPoint(v, tolerance) == classifier) {
                 selection.add(v);
             }
         }

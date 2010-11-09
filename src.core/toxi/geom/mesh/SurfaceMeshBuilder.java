@@ -64,8 +64,6 @@ public class SurfaceMeshBuilder {
                 pb.set(b);
             }
         }
-        mesh.faceOutwards();
-        mesh.computeVertexNormals();
         return mesh;
     }
 

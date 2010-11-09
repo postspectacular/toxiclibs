@@ -63,7 +63,7 @@ public class ToxiclibsSupport {
     }
 
     public final void box(AABB box, boolean smooth) {
-        TriangleMesh mesh = box.toMesh();
+        Mesh3D mesh = box.toMesh();
         if (smooth) {
             mesh.computeVertexNormals();
         }
@@ -71,11 +71,11 @@ public class ToxiclibsSupport {
     }
 
     public final void cone(Cone cone) {
-        mesh(cone.toMesh("cone", 6, 0, true, true), false, 0);
+        mesh(cone.toMesh(null, 6, 0, true, true), false, 0);
     }
 
     public final void cone(Cone cone, boolean topClosed, boolean bottomClosed) {
-        mesh(cone.toMesh("cone", 6, 0, topClosed, bottomClosed), false, 0);
+        mesh(cone.toMesh(null, 6, 0, topClosed, bottomClosed), false, 0);
     }
 
     public final void cone(Cone cone, int res, boolean smooth) {
@@ -84,7 +84,7 @@ public class ToxiclibsSupport {
 
     public final void cone(Cone cone, int res, boolean topClosed,
             boolean bottomClosed, boolean smooth) {
-        TriangleMesh mesh = cone.toMesh(res);
+        Mesh3D mesh = cone.toMesh(res);
         if (smooth) {
             mesh.computeVertexNormals();
         }
@@ -97,7 +97,7 @@ public class ToxiclibsSupport {
 
     public final void cylinder(AxisAlignedCylinder cylinder, int res,
             boolean smooth) {
-        TriangleMesh mesh = cylinder.toMesh(res, 0);
+        Mesh3D mesh = cylinder.toMesh(res, 0);
         if (smooth) {
             mesh.computeVertexNormals();
         }

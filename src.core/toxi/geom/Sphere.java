@@ -136,8 +136,12 @@ public class Sphere extends Vec3D implements Shape3D {
     }
 
     public Mesh3D toMesh(int res) {
+        return toMesh(null, res);
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, int res) {
         SurfaceMeshBuilder builder =
                 new SurfaceMeshBuilder(new SphereFunction(this));
-        return builder.createMesh(null, res, 1);
+        return builder.createMesh(mesh, res, 1);
     }
 }
