@@ -23,7 +23,6 @@ import java.util.Random;
 
 import toxi.math.SinCosLUT;
 
-
 public class PerlinNoise {
 	// ////////////////////////////////////////////////////////////
 	// PERLIN NOISE taken from the
@@ -96,22 +95,26 @@ public class PerlinNoise {
 			// [toxi 031112]
 			// noise broke due to recent change of cos table in PGraphics
 			// this will take care of it
-			perlin_cosTable = SinCosLUT.cosLUT;
-			perlin_TWOPI = perlin_PI = SinCosLUT.SC_PERIOD;
+			perlin_cosTable = SinCosLUT.getDefaultInstance().getSinLUT();
+			perlin_TWOPI = perlin_PI = SinCosLUT.getDefaultInstance()
+					.getPeriod();
 			perlin_PI >>= 1;
 		}
 
-		if (x < 0)
+		if (x < 0) {
 			x = -x;
-		if (y < 0)
+		}
+		if (y < 0) {
 			y = -y;
-		if (z < 0)
+		}
+		if (z < 0) {
 			z = -z;
+		}
 
 		int xi = (int) x, yi = (int) y, zi = (int) z;
-		float xf = (float) (x - xi);
-		float yf = (float) (y - yi);
-		float zf = (float) (z - zi);
+		float xf = (x - xi);
+		float yf = (y - yi);
+		float zf = (z - zi);
 		float rxf, ryf;
 
 		float r = 0;
@@ -142,10 +145,12 @@ public class PerlinNoise {
 
 			r += n1 * ampl;
 			ampl *= perlin_amp_falloff;
-			
+
 			// break if amp has no more impact
-			if (ampl<PERLIN_MIN_AMPLITUDE) break;
-			
+			if (ampl < PERLIN_MIN_AMPLITUDE) {
+				break;
+			}
+
 			xi <<= 1;
 			xf *= 2;
 			yi <<= 1;
@@ -174,7 +179,7 @@ public class PerlinNoise {
 	// the new variables, defined above
 	private float noise_fsc(float i) {
 		// using bagel's cosine table instead
-		return 0.5f * (1.0f - perlin_cosTable[(int) (i * perlin_PI)
+		return 0.5f * (1.0f - perlin_cosTable[(int) ((i + 0.5f) * perlin_PI)
 				% perlin_TWOPI]);
 	}
 
@@ -184,20 +189,24 @@ public class PerlinNoise {
 	// smoother results as higher octaves are surpressed
 
 	public void noiseDetail(int lod) {
-		if (lod > 0)
+		if (lod > 0) {
 			perlin_octaves = lod;
+		}
 	}
 
 	public void noiseDetail(int lod, float falloff) {
-		if (lod > 0)
+		if (lod > 0) {
 			perlin_octaves = lod;
-		if (falloff > 0)
+		}
+		if (falloff > 0) {
 			perlin_amp_falloff = falloff;
+		}
 	}
 
 	public void noiseSeed(long what) {
-		if (perlinRandom == null)
+		if (perlinRandom == null) {
 			perlinRandom = new Random();
+		}
 		perlinRandom.setSeed(what);
 		perlin = null;
 	}
