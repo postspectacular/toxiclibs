@@ -5,7 +5,7 @@ import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
-public class RectConstraint implements Particle2DConstraint {
+public class RectConstraint implements ParticleConstraint2D {
 
     protected Rect rect;
     protected Ray2D intersectRay;

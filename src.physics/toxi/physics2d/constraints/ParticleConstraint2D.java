@@ -12,7 +12,7 @@ import toxi.physics2d.VerletParticle2D;
  * 
  * @author toxi
  */
-public interface Particle2DConstraint {
+public interface ParticleConstraint2D {
 	/**
 	 * Applies the constraint to the passed in particle. The method is assumed
 	 * to manipulate the given instance directly.

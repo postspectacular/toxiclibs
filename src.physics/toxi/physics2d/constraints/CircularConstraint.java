@@ -4,7 +4,7 @@ import toxi.geom.Circle;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
-public class CircularConstraint implements Particle2DConstraint {
+public class CircularConstraint implements ParticleConstraint2D {
 
     public Circle circle;
 

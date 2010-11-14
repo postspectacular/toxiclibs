@@ -11,7 +11,7 @@ import toxi.physics2d.VerletParticle2D;
  * Constrains a particle's movement by locking a given axis to a fixed value.
  */
 
-public class AxisConstraint implements Particle2DConstraint {
+public class AxisConstraint implements ParticleConstraint2D {
 
     public float constraint;
     public Axis axis;

@@ -4,7 +4,7 @@ import toxi.geom.Vec2D;
 import toxi.math.MathUtils;
 import toxi.physics2d.VerletParticle2D;
 
-public class AngularConstraint implements Particle2DConstraint {
+public class AngularConstraint implements ParticleConstraint2D {
 
 	public Vec2D rootPos;
 	public float theta;
