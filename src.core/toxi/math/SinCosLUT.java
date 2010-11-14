@@ -26,64 +26,49 @@ package toxi.math;
  * methods are static and can be used with both positive and negative input
  * angles.
  */
-public class SinCosLUT {
+public final class SinCosLUT {
 
 	/**
-	 * set table precision to 0.25 degrees
+	 * default precision
 	 */
-	public static final float SC_PRECISION = 0.25f;
+	public static final float DEFAULT_PRECISION = 0.25f;
 
-	/**
-	 * calculate reciprocal for conversions
-	 */
-	public static final float SC_INV_PREC = 1.0f / SC_PRECISION;
+	private static SinCosLUT DEFAULT_INSTANCE;
 
-	/**
-	 * compute required table length
-	 */
-	public static final int SC_PERIOD = (int) (360f * SC_INV_PREC);
-
-	/**
-	 * LUT for sine values
-	 */
-	public static final float[] sinLUT = new float[SC_PERIOD];
-
-	/**
-	 * LUT for cosine values
-	 */
-	public static final float[] cosLUT = new float[SC_PERIOD];
-
-	/**
-	 * Pre-multiplied degrees -> radians
-	 */
-	private static final float DEG_TO_RAD = (float) (Math.PI / 180.0)
-			* SC_PRECISION;
-
-	/**
-	 * Pre-multiplied radians - degrees
-	 */
-	private static final float RAD_TO_DEG = (float) (180.0 / Math.PI)
-			/ SC_PRECISION;
-
-	// init sin/cos tables with values
-	static {
-		for (int i = 0; i < SC_PERIOD; i++) {
-			sinLUT[i] = (float) Math.sin(i * DEG_TO_RAD);
-			cosLUT[i] = (float) Math.cos(i * DEG_TO_RAD);
+	public static final SinCosLUT getDefaultInstance() {
+		if (DEFAULT_INSTANCE == null) {
+			DEFAULT_INSTANCE = new SinCosLUT();
 		}
+		return DEFAULT_INSTANCE;
 	}
 
 	/**
-	 * Calculates sine for the passed angle in radians.
-	 * 
-	 * @param theta
-	 * @return sine value for theta
+	 * Lookup table for sine values
 	 */
-	public static final float sin(float theta) {
-		while (theta < 0) {
-			theta += MathUtils.TWO_PI;
+	private final float[] sinLUT;
+
+	private final float precision;
+
+	private final int period;
+	private final int quadrant;
+
+	private final float deg2rad;
+	private final float rad2deg;
+
+	public SinCosLUT() {
+		this(DEFAULT_PRECISION);
+	}
+
+	public SinCosLUT(float precision) {
+		this.precision = precision;
+		this.period = (int) (360 / precision);
+		this.quadrant = period >> 2;
+		this.deg2rad = (float) (Math.PI / 180.0) * precision;
+		this.rad2deg = (float) (180.0 / Math.PI) / precision;
+		this.sinLUT = new float[period];
+		for (int i = 0; i < period; i++) {
+			sinLUT[i] = (float) Math.sin(i * deg2rad);
 		}
-		return sinLUT[(int) (theta * RAD_TO_DEG) % SC_PERIOD];
 	}
 
 	/**
@@ -92,10 +77,35 @@ public class SinCosLUT {
 	 * @param theta
 	 * @return cosine value for theta
 	 */
-	public static final float cos(float theta) {
+	public final float cos(float theta) {
 		while (theta < 0) {
 			theta += MathUtils.TWO_PI;
 		}
-		return cosLUT[(int) (theta * RAD_TO_DEG) % SC_PERIOD];
+		return sinLUT[((int) (theta * rad2deg) + quadrant) % period];
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
+	public float getPrecision() {
+		return precision;
+	}
+
+	public float[] getSinLUT() {
+		return sinLUT;
+	}
+
+	/**
+	 * Calculates sine for the passed angle in radians.
+	 * 
+	 * @param theta
+	 * @return sine value for theta
+	 */
+	public final float sin(float theta) {
+		while (theta < 0) {
+			theta += MathUtils.TWO_PI;
+		}
+		return sinLUT[(int) (theta * rad2deg) % period];
 	}
 }

@@ -3,7 +3,7 @@ package toxi.physics2d.constraints;
 import toxi.geom.Vec2D.Axis;
 import toxi.physics2d.VerletParticle2D;
 
-public class MinConstraint implements Particle2DConstraint {
+public class MinConstraint implements ParticleConstraint2D {
 
     public Axis axis;
     public float threshold;

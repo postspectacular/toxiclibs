@@ -11,10 +11,9 @@ import toxi.physics.VerletParticle;
  * constraints will be applied directly after each spring update. Constraints
  * are only applied to particles they've been assigned to and which are not
  * locked.
- * 
- * @author toxi
  */
 public interface ParticleConstraint {
+
 	/**
 	 * Applies the constraint to the passed in particle. The method is assumed
 	 * to manipulate the given instance directly.
