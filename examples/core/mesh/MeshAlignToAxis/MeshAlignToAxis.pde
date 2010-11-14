@@ -28,21 +28,25 @@ import processing.opengl.*;
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
+import toxi.processing.*;
 
 Vec3D BOX_SIZE = new Vec3D(5,5,50);
 float SCALE=200;
 
 TriangleMesh[] boxes=new TriangleMesh[600];
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(600,600,OPENGL);
+  gfx=new ToxiclibsSupport(this);
   for(int i=0; i<boxes.length; i++) {
     // create a new direction vector for each box
     Vec3D dir=new Vec3D(cos(i*TWO_PI/75),sin(i*TWO_PI/50),sin(i*TWO_PI/25)).normalize();
     // create a position on a sphere, using the direction vector
     Vec3D pos=dir.scale(SCALE);
     // create a box mesh at the origin
-    TriangleMesh b=new AABB(new Vec3D(), BOX_SIZE).toMesh();
+    TriangleMesh b=(TriangleMesh)new AABB(new Vec3D(), BOX_SIZE).toMesh();
     // align the Z axis of the box with the direction vector
     b.pointTowards(dir);
     // move the box to the correct position
@@ -59,21 +63,6 @@ void draw() {
   rotateY(mouseX * 0.01f);
   noStroke();
   for(int i=0; i<boxes.length; i++) {
-    drawMesh(boxes[i]);
+    gfx.mesh(boxes[i]);
   }
 }
-
-void drawMesh(TriangleMesh mesh) {
-  beginShape(TRIANGLES);
-  for(Iterator i=mesh.faces.iterator(); i.hasNext();) {
-    TriangleMesh.Face f=(TriangleMesh.Face)i.next();
-    Vec3D n=f.normal;
-    normal(n.x,n.y,n.z);
-    vertex(f.a.x,f.a.y,f.a.z);
-    vertex(f.b.x,f.b.y,f.b.z);
-    vertex(f.c.x,f.c.y,f.c.z);
-  }
-  endShape();
-}
-
-

@@ -56,6 +56,18 @@ public class Ray2D extends Vec2D {
         return dir.copy();
     }
 
+    /**
+     * Calculates the distance between the given point and the infinite line
+     * coinciding with this ray.
+     * 
+     * @param p
+     * @return
+     */
+    public float getDistanceToPoint(Vec2D p) {
+        Vec2D sp = p.sub(this);
+        return sp.distanceTo(dir.scale(sp.dot(dir)));
+    }
+
     public Vec2D getPointAtDistance(float dist) {
         return add(dir.scale(dist));
     }

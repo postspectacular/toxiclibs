@@ -1,7 +1,7 @@
 import toxi.math.*;
 
-InterpolateStrategy tween=new SigmoidInterpolation(1.2);
-//InterpolateStrategy tween=new BezierInterpolation(3,-3);
+//InterpolateStrategy tween=new SigmoidInterpolation(1.2);
+InterpolateStrategy tween=new BezierInterpolation(3,-3);
 
 void setup() {
   size(400,400);

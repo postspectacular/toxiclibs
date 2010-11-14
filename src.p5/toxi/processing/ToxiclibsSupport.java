@@ -70,6 +70,10 @@ public class ToxiclibsSupport {
         mesh(mesh, smooth, 0);
     }
 
+    public final void circle(Vec2D p, float radius) {
+        gfx.ellipse(p.x, p.y, radius, radius);
+    }
+
     public final void cone(Cone cone) {
         mesh(cone.toMesh(null, 6, 0, true, true), false, 0);
     }

@@ -28,6 +28,9 @@ public class Circle extends Ellipse {
      * lying on its perimeter. The function returns null, if the 3 points are
      * co-linear (in which case it's impossible to find a circle).
      * 
+     * Based on CPP code by Paul Bourke:
+     * http://local.wasp.uwa.edu.au/~pbourke/geometry/circlefrom3/
+     * 
      * @param p1
      * @param p2
      * @param p3
@@ -51,9 +54,7 @@ public class Circle extends Ellipse {
                         (aSlope * bSlope * (p1.y - p3.y) + bSlope
                                 * (p1.x + p2.x) - aSlope * (p2.x + p3.x))
                                 / (2 * (bSlope - aSlope));
-                float y =
-                        -1 * (x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y)
-                                / 2;
+                float y = -(x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y) / 2;
                 Vec2D centroid = new Vec2D(x, y);
                 float radius = centroid.distanceTo(p1);
                 circle = new Circle(centroid, radius);

@@ -57,6 +57,18 @@ public class Ray3D extends Vec3D {
     }
 
     /**
+     * Calculates the distance between the given point and the infinite line
+     * coinciding with this ray.
+     * 
+     * @param p
+     * @return
+     */
+    public float getDistanceToPoint(Vec3D p) {
+        Vec3D sp = p.sub(this);
+        return sp.distanceTo(dir.scale(sp.dot(dir)));
+    }
+
+    /**
      * Returns the point at the given distance on the ray. The distance can be
      * any real number.
      * 
