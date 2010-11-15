@@ -5,34 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class Histogram {
-
-    /**
-     * A single histogram entry, a coupling of color & frequency. Implements a
-     * comparator to sort histogram entries based on freq.
-     */
-    public class HistEntry implements Comparable<HistEntry> {
-
-        private float freq;
-        private TColor col;
-
-        HistEntry(TColor c) {
-            col = c;
-            freq = 1;
-        }
-
-        public int compareTo(HistEntry e) {
-            return -(int) (freq - e.freq);
-        }
-
-        public TColor getColor() {
-            return col;
-        }
-
-        public float getFrequency() {
-            return freq;
-        }
-    }
+public class Histogram implements Iterable<HistEntry> {
 
     /**
      * Creates a new histogram of color samples taken from the given ARGB array
@@ -70,13 +43,11 @@ public class Histogram {
      * @return sorted histogram as List of HistEntry
      */
     List<HistEntry> compute(float tolerance, boolean blendCols) {
-        entries = new ArrayList<HistEntry>();
+        entries = new ArrayList<HistEntry>(palette.size() / 4);
         float maxFreq = 1;
-        for (Iterator<TColor> i = palette.iterator(); i.hasNext();) {
-            TColor c = i.next();
+        for (TColor c : palette) {
             HistEntry existing = null;
-            for (Iterator<HistEntry> j = entries.iterator(); j.hasNext();) {
-                HistEntry e = j.next();
+            for (HistEntry e : entries) {
                 if (e.col.distanceToRGB(c) < tolerance) {
                     if (blendCols) {
                         e.col.blend(c, 1f / (e.freq + 1));
@@ -114,6 +85,10 @@ public class Histogram {
      */
     public ColorList getPalette() {
         return palette;
+    }
+
+    public Iterator<HistEntry> iterator() {
+        return entries.iterator();
     }
 
     /**
