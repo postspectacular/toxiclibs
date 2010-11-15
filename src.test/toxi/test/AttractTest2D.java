@@ -13,66 +13,67 @@ import toxi.processing.ToxiclibsSupport;
 
 public class AttractTest2D extends PApplet {
 
-	public static void main(String[] args) {
-		PApplet.main(new String[] { "toxi.test.AttractTest2D" });
-	}
+    public static void main(String[] args) {
+        PApplet.main(new String[] { "toxi.test.AttractTest2D" });
+    }
 
-	ToxiclibsSupport gfx;
+    ToxiclibsSupport gfx;
 
-	int NUM_PARTICLES = 1000;
+    int NUM_PARTICLES = 1000;
 
-	VerletPhysics2D physics;
+    VerletPhysics2D physics;
 
-	private Vec2D mousePos;
+    private Vec2D mousePos;
 
-	private AttractionBehavior mouseAttractor;
+    private AttractionBehavior mouseAttractor;
 
-	private void addParticle() {
-		VerletParticle2D p = new VerletParticle2D(Vec2D.randomVector().scale(5)
-				.addSelf(width / 2, height / 2));
-		physics.addParticle(p);
-		for (int j = 0; j < physics.particles.size(); j++) {
-			physics.particles.get(j).addBehavior(
-					new AttractionBehavior(p, 20, -0.95f, 0.01f),
-					physics.getTimeStep());
-		}
-	}
+    private void addParticle() {
+        VerletParticle2D p =
+                new VerletParticle2D(Vec2D.randomVector().scale(5)
+                        .addSelf(width / 2, height / 2));
+        physics.addParticle(p);
+        for (int j = 0; j < physics.particles.size(); j++) {
+            physics.particles.get(j).addBehavior(
+                    new AttractionBehavior(p, 20, -1.2f, 0.01f),
+                    physics.getTimeStep());
+        }
+    }
 
-	public void draw() {
-		background(0);
-		noStroke();
-		fill(255);
-		if (physics.particles.size() < NUM_PARTICLES) {
-			addParticle();
-		}
-		physics.update();
-		for (Iterator<VerletParticle2D> i = physics.particles.iterator(); i
-				.hasNext();) {
-			VerletParticle2D p = i.next();
-			ellipse(p.x, p.y, 5, 5);
-		}
-	}
+    public void draw() {
+        background(0);
+        noStroke();
+        fill(255);
+        if (physics.particles.size() < NUM_PARTICLES) {
+            addParticle();
+        }
+        physics.update();
+        for (Iterator<VerletParticle2D> i = physics.particles.iterator(); i
+                .hasNext();) {
+            VerletParticle2D p = i.next();
+            ellipse(p.x, p.y, 5, 5);
+        }
+    }
 
-	public void mouseDragged() {
-		mousePos.set(mouseX, mouseY);
-	}
+    public void mouseDragged() {
+        mousePos.set(mouseX, mouseY);
+    }
 
-	public void mousePressed() {
-		mousePos = new Vec2D(mouseX, mouseY);
-		mouseAttractor = new AttractionBehavior(mousePos, 500, 0.9f);
-		physics.addBehavior(mouseAttractor);
-	}
+    public void mousePressed() {
+        mousePos = new Vec2D(mouseX, mouseY);
+        mouseAttractor = new AttractionBehavior(mousePos, 500, 0.9f);
+        physics.addBehavior(mouseAttractor);
+    }
 
-	public void mouseReleased() {
-		physics.removeBehavior(mouseAttractor);
-	}
+    public void mouseReleased() {
+        physics.removeBehavior(mouseAttractor);
+    }
 
-	public void setup() {
-		size(1024, 768, OPENGL);
-		gfx = new ToxiclibsSupport(this);
-		physics = new VerletPhysics2D();
-		physics.setDrag(0.1f);
-		physics.setWorldBounds(new Rect(0, 0, width, height));
-		physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.15f)));
-	}
+    public void setup() {
+        size(1024, 640, OPENGL);
+        gfx = new ToxiclibsSupport(this);
+        physics = new VerletPhysics2D();
+        physics.setDrag(0.15f);
+        physics.setWorldBounds(new Rect(0, 0, width, height));
+        physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.15f)));
+    }
 }
