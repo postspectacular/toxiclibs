@@ -2,16 +2,15 @@ package toxi.physics2d.behaviors;
 
 import toxi.geom.Vec2D;
 
-public class GravityBehavior extends ForceBehavior {
+public class GravityBehavior extends ConstantForceBehavior {
 
-	protected Vec2D gravity;
+    public GravityBehavior(Vec2D gravity) {
+        super(gravity);
+    }
 
-	public GravityBehavior(Vec2D gravity) {
-		this.gravity = gravity;
-	}
-
-	@Override
-	public void configure(float timeStep) {
-		force.set(gravity.scale(timeStep * timeStep));
-	}
+    @Override
+    public void configure(float timeStep) {
+        this.timeStep = timeStep;
+        scaledForce = force.scale(timeStep * timeStep);
+    }
 }
