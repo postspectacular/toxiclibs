@@ -60,7 +60,8 @@ void draw() {
   gfx.cylinder(cyl,3,false);
 
   SurfaceFunction f=new SuperEllipsoid(0.3,0.3);
-  mesh=new SurfaceMeshBuilder(f).createMesh(40,50);
+  mesh=(TriangleMesh)new SurfaceMeshBuilder(f).createMesh(null,40,50);
+  mesh.computeVertexNormals();
   mesh.transform(new Matrix4x4().translate(0,0,200));
   gfx.mesh(mesh,true,10);
 
@@ -68,7 +69,7 @@ void draw() {
   gfx.box(cube);
 
   ball=new Sphere(new Vec3D(-200,0,0),50);
-  gfx.sphere(ball);
+  gfx.sphere(ball,20);
   
   stroke(255,255,0);
   Ray3D ray=new Ray3D(new Vec3D(),Vec3D.Y_AXIS);
@@ -83,7 +84,7 @@ void draw() {
   
   stroke(0,255,255);
   Spline3D spline=new Spline3D();
-  spline.add(cube).add(ball).add(cone).add(cyl.getPosition()).add(mesh.getCentroid());
+  spline.add(cube).add(ball).add(cone).add(cyl.getPosition()).add(mesh.computeCentroid());
   gfx.lineStrip3D(spline.computeVertices(16));
 }
 

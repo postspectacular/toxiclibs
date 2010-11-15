@@ -3,7 +3,7 @@
 // in the correct order using springs
 void initPhysics() {
   physics=new VerletPhysics();
-  physics.setGravity(new Vec3D(0,0.1,0));
+  physics.addBehavior(new GravityBehavior(new Vec3D(0,0.1,0)));
   spheres.add(new SphereConstraint(new Sphere(new Vec3D(0,-100,0),100),false));
   spheres.add(new SphereConstraint(new Sphere(new Vec3D(-50,50,0),150),false));
   spheres.add(new SphereConstraint(new Sphere(new Vec3D(-250,200,0),100),false));

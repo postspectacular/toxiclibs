@@ -25,6 +25,7 @@
  */
 
 import toxi.physics2d.*;
+import toxi.physics2d.behaviors.*;
 import toxi.geom.*;
 
 // Reference to physics world
@@ -40,7 +41,7 @@ void setup() {
 
   // Initialize the physics
   physics=new VerletPhysics2D();
-  physics.setGravity(new Vec2D(0,0.5));
+  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.5)));
 
   // This is the center of the world
   Vec2D center = new Vec2D(width/2,height/2);

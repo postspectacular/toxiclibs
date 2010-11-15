@@ -27,6 +27,7 @@
 
 import toxi.geom.*;
 import toxi.physics2d.*;
+import toxi.physics2d.behaviors.*;
 
 // Reference to physics world
 VerletPhysics2D physics;

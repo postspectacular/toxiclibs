@@ -33,6 +33,7 @@
 import processing.opengl.*;
 
 import toxi.physics.constraints.*;
+import toxi.physics.behaviors.*;
 import toxi.physics.*;
 
 import toxi.geom.*;
@@ -52,7 +53,7 @@ void setup() {
   ParticleConstraint sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);
   physics=new VerletPhysics();
   // weak gravity along Y axis
-  physics.setGravity(Vec3D.Y_AXIS.scale(0.01));
+  physics.addBehavior(new GravityBehavior(new Vec3D(0,0.01,0)));
   // set bounding box to 110% of sphere radius
   physics.setWorldBounds(new AABB(new Vec3D(),new Vec3D(SPHERE_RADIUS,SPHERE_RADIUS,SPHERE_RADIUS).scaleSelf(1.1)));
   VerletParticle prev=null;

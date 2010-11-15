@@ -32,6 +32,7 @@ import processing.opengl.*;
 
 import toxi.geom.*;
 import toxi.physics.*;
+import toxi.physics.behaviors.*;
 import toxi.physics.constraints.*;
 
 VisibleBoxConstraint[] boxes=new VisibleBoxConstraint[2];
@@ -78,7 +79,7 @@ void draw() {
 void initPhysics() {
   // setup physics engine
   physics=new VerletPhysics();
-  physics.setGravity(Vec3D.Y_AXIS.scale(0.05));
+  physics.addBehavior(new GravityBehavior(Vec3D.Y_AXIS.scale(0.05)));
   // string start position & direction
   Vec3D startPos=new Vec3D(-NUM_PARTICLES/2*REST_LENGTH, -110, 0);
   Vec3D dir=new Vec3D(REST_LENGTH,0,0);

@@ -36,9 +36,9 @@
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.math.*;
-import toxi.physics.constraints.*;
 import toxi.physics.*;
-
+import toxi.physics.behaviors.*;
+import toxi.physics.constraints.*;
 import toxi.processing.*;
 
 int DIM=30;
@@ -88,7 +88,7 @@ void draw() {
       // in order to avoid rendering artifacts
       Sphere s=new Sphere(i.next().sphere);
       s.radius*=0.99;
-      gfx.sphere(s);
+      gfx.sphere(s,12);
     }
   }
 }

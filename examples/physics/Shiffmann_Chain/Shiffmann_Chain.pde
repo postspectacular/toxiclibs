@@ -25,6 +25,7 @@
  */
  
 import toxi.physics2d.*;
+import toxi.physics2d.behaviors.*;
 import toxi.geom.*;
 
 // Reference to physics "world" (2D)
@@ -39,7 +40,7 @@ void setup() {
 
   // Initialize the physics world
   physics=new VerletPhysics2D();
-  physics.setGravity(new Vec2D(0,0.1));
+  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.1)));
   physics.setWorldBounds(new Rect(0,0,width,height));
 
   // Initialize the chain

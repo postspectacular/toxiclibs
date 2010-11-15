@@ -28,7 +28,7 @@
 
 import processing.opengl.*;
 
-import toxi.physics2d.constraints.*;
+import toxi.physics2d.behaviors.*;
 import toxi.physics2d.*;
 
 import toxi.geom.*;
@@ -46,7 +46,7 @@ void setup() {
   size(1280,720,OPENGL);
   smooth();
   physics=new VerletPhysics2D();
-  physics.setGravity(new Vec2D(0,0.1));
+  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.1)));
   physics.setWorldBounds(new Rect(0,0,width,height));
   for(int y=0,idx=0; y<DIM; y++) {
     for(int x=0; x<DIM; x++) {

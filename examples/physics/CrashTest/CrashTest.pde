@@ -32,6 +32,7 @@
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.physics.*;
+import toxi.physics.behaviors.*;
 import toxi.processing.*;
 import processing.opengl.*;
 
@@ -48,7 +49,7 @@ void setup() {
 void draw() {
     physics.update();
     // update mesh vertices based on the current particle positions
-    for (WEVertex v : box.vertices.values()) {
+    for (Vertex v : box.vertices.values()) {
         v.set(physics.particles.get(v.id));
     }
     // update mesh normals
@@ -60,7 +61,7 @@ void draw() {
     specular(255);
     shininess(16);
     // point camera at mesh centroid
-    Vec3D c = box.getCentroid();
+    Vec3D c = box.computeCentroid();
     camera(-100, -50, 80, c.x, c.y, c.z, 0, 1, 0);
     // draw coordinate system
     gfx.origin(new Vec3D(), 50);
@@ -76,7 +77,7 @@ void draw() {
 
 void initPhysics() {
     physics = new VerletPhysics();
-    box = new WETriangleMesh().addMesh(new STLReader().loadBinary(openStream("audi.stl"),"car"));
+    box = new WETriangleMesh().addMesh(new STLReader().loadBinary(openStream("audi.stl"),"car",STLReader.WEMESH));
     // properly orient and scale mesh
     box.rotateX(HALF_PI);
     box.scale(8);
@@ -89,9 +90,9 @@ void initPhysics() {
     physics.setWorldBounds(AABB.fromMinMax(min, max));
     box.translate(new Vec3D(ext.scale(3, 2, 0)));
     // set gravity along negative X axis with slight downward
-    physics.setGravity(new Vec3D(-0.1f, 0.001f, 0));
+    physics.addBehavior(new GravityBehavior(new Vec3D(-0.1f, 0.001f, 0)));
     // turn mesh vertices into physics particles
-    for (WEVertex v : box.vertices.values()) {
+    for (Vertex v : box.vertices.values()) {
         physics.addParticle(new VerletParticle(v));
     }
     // turn mesh edges into springs

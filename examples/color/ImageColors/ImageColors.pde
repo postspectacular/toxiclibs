@@ -8,102 +8,47 @@
 import toxi.color.*;
 import toxi.math.*;
 
+PImage img,workImg;
+
+float tolerance=0.2;
+  
 void setup() {
-  size(1280,640);
+  size(1000,500);
   background(255);
   noStroke();
-  PImage img=loadImage("test.jpg");
-  image(img,0,0);
-  ArrayList hist=createHistogramFromImage(img.pixels, img.pixels.length, 0.25, true);
-  TColor col=TColor.newGray(0);
+  img=loadImage("test.jpg");
+  workImg=new PImage(img.width,img.height,ARGB);
+  // create a color histogram of image, using only 10% of its pixels and the given tolerance
+  Histogram hist=Histogram.newFromARGBArray(img.pixels, img.pixels.length/10, tolerance, true);
+  // now snap the color of each pixel to the closest color of the histogram palette
+  // (that's really a posterization/quantization effect)
+  TColor col=TColor.BLACK.copy();
   for(int i=0; i<img.pixels.length; i++) {
     col.setARGB(img.pixels[i]);
     TColor closest=col;
     float minD=1;
-    for(int j=hist.size()-1; j>=0; j--) {
-      HistEntry e=(HistEntry)hist.get(j);
-      float d=col.distanceToRGB(e.col);
+    for(HistEntry e : hist) {
+      float d=col.distanceToRGB(e.getColor());
       if (d<minD) {
         minD=d;
-        closest=e.col;
+        closest=e.getColor();
       }
     }
-    img.pixels[i]=closest.toARGB();
+    workImg.pixels[i]=closest.toARGB();
   }
-  img.updatePixels();
-  image(img,img.width,0);
+  workImg.updatePixels();
+  // display original and posterized images
+  image(img,0,0);
+  image(workImg,workImg.width,0);
+  // display power curve distribution of histogram colors as bar chart
   float x=0;
-  float w=(float)width/hist.size();
+  int w=width/hist.getEntries().size();
   for(Iterator<HistEntry> i=hist.iterator(); i.hasNext() && x<width;) {
     HistEntry e=i.next();
-    println(e.col.toHex()+": "+e.freq);
-    fill(e.col.toARGB());
-    float h=e.freq*height;
+    println(e.getColor().toHex()+": "+e.getFrequency());
+    fill(e.getColor().toARGB());
+    float h=e.getFrequency()*height;
     rect(x,height-h,w,h);
     x+=w;
   }  
 }
-
-/**
- * @param img
- *    pixel array to create histogram for
- * @param numSamples
- *    number pixels to be sampled in image
- * @param tolerance
- *    color tolerance used to merge similar colors
- *    (based on RGB distance)
- * @param blendCols
- *    switch to enable color blending of binned colors
- * @return sorted histogram as ArrayList
- */
-ArrayList createHistogramFromImage(int[] img, int numSamples, float tolerance, boolean blendCols) {
-  ColorList srcCols=ColorList.createFromARGBArray(img,numSamples,false);
-  ArrayList hist=new ArrayList();
-  float maxFreq=1;
-  for(Iterator<TColor> i=srcCols.iterator(); i.hasNext();) {
-    TColor c=i.next();
-    HistEntry existing=null;
-    for(Iterator<HistEntry> j=hist.iterator(); j.hasNext();) {
-      HistEntry e=j.next();
-      if (e.col.distanceToRGB(c)<tolerance) {
-        if (blendCols) e.col.blend(c,1f/(e.freq+1));
-        existing=e;
-        break;
-      }
-    }
-    if (existing!=null) {
-      existing.freq++;
-      if (existing.freq>maxFreq) maxFreq=existing.freq;
-    } 
-    else {
-      hist.add(new HistEntry(c));
-    }
-  }
-  Collections.sort(hist);
-  maxFreq=1f/srcCols.size();
-  for(Iterator i=hist.iterator(); i.hasNext();) {
-    HistEntry e=(HistEntry)i.next();
-    e.freq*=maxFreq;
-  }
-  return hist;
-}
-
-/**
- * A single histogram entry, a coupling of color & frequency
- * Implements a comparator to sort histogram entries based on freq.
- */
-class HistEntry implements Comparable {
-  float freq;
-  TColor col;
-
-  HistEntry(TColor c) {
-    col=c;
-    freq=1;
-  }
-
-  int compareTo(Object e) {
-    return -(int)(freq-((HistEntry)e).freq);
-  }
-}
-
-

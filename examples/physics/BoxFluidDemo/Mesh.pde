@@ -30,7 +30,7 @@ void drawFilledMesh() {
   int num=mesh.getNumFaces();
   mesh.computeVertexNormals();
   for(int i=0; i<num; i++) {
-    TriangleMesh.Face f=mesh.faces.get(i);
+    Face f=mesh.faces.get(i);
     Vec3D col=f.a.add(colAmp).scaleSelf(0.5);
     fill(col.x,col.y,col.z);
     normal(f.a.normal);
@@ -50,7 +50,7 @@ void drawWireMesh() {
   noFill();
   int num=mesh.getNumFaces();
   for(int i=0; i<num; i++) {
-    TriangleMesh.Face f=mesh.faces.get(i);
+    Face f=mesh.faces.get(i);
     Vec3D col=f.a.add(colAmp).scaleSelf(0.5);
     stroke(col.x,col.y,col.z);
     vertex(f.a);
