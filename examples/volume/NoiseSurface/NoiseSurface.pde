@@ -33,9 +33,9 @@
  */
 import toxi.geom.*;
 import toxi.geom.mesh.*;
-
 import toxi.volume.*;
 import toxi.math.noise.*;
+import toxi.processing.*;
 
 import processing.opengl.*;
 
@@ -53,17 +53,19 @@ TriangleMesh mesh;
 boolean isWireframe=false;
 float currScale=1;
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(1024,768,OPENGL);
   hint(ENABLE_OPENGL_4X_SMOOTH);
+  gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
-  VolumetricSpace volume=new VolumetricSpace(SCALE,DIMX,DIMY,DIMZ);
-  float[] volumeData=volume.getData();
+  VolumetricSpace volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);
   // fill volume with noise
-  for(int z=0,index=0; z<DIMZ; z++) {
+  for(int z=0; z<DIMZ; z++) {
     for(int y=0; y<DIMY; y++) {
       for(int x=0; x<DIMX; x++) {
-        volumeData[index++]=(float)SimplexNoise.noise(x*NS,y*NS,z*NS)*0.5;
+        volume.setVoxelAt(x,y,z,(float)SimplexNoise.noise(x*NS,y*NS,z*NS)*0.5);
       } 
     } 
   }
@@ -71,10 +73,10 @@ void setup() {
   long t0=System.nanoTime();
   // store in IsoSurface and compute surface mesh for the given threshold value
   mesh=new TriangleMesh("iso");
-  surface=new IsoSurface(volume);
+  surface=new HashIsoSurface(volume,0.333333);
   surface.computeSurfaceMesh(mesh,ISO_THRESHOLD);
   float timeTaken=(System.nanoTime()-t0)*1e-6;
-  println(timeTaken+"ms to compute "+surface.getNumFaces()+" faces");
+  println(timeTaken+"ms to compute "+mesh.getNumFaces()+" faces");
 }
 
 void draw() {
@@ -97,15 +99,7 @@ void draw() {
     noStroke();
     fill(255);
   }
-  // draw all faces of the computed mesh
-  int num=mesh.getNumFaces();
-  for(int i=0; i<num; i++) {
-    TriangleMesh.Face f=mesh.faces.get(i);
-    vertex(f.a);
-    vertex(f.b);
-    vertex(f.c);
-  }
-  endShape();
+  gfx.mesh(mesh);
 }
 
 void normal(Vec3D v) {
@@ -124,6 +118,6 @@ void keyPressed() {
   if(key=='=') currScale=min(currScale+0.1,10);
   if (key=='s') {
     // save mesh as STL or OBJ file
-    surface.saveAsSTL(sketchPath("noise.stl"));
+    mesh.saveAsSTL(sketchPath("noise.stl"));
   }
 }

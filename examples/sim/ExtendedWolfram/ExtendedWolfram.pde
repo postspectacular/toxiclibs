@@ -58,6 +58,7 @@ void setup() {
   //wolfram = new CAWolfram1D(3, 64, true).setRuleID(new BigInteger("225d6860faadc2bb",16));
   wolfram = new CAWolfram1D(3, 64, true).setRuleID(new BigInteger("bf84ad5bb384155868430599fa5f0ecb",16));
   //wolfram = new CAWolfram1D(3, 64, true).setRuleID(new BigInteger("ffd2c2662b56188989f57b309df74a55",16));
+  //wolfram = new CAWolfram1D(3, 64, true).setRuleID(new BigInteger("f685d79c2bf29178d5d9f01aede49424",16));
   wolfram.setAutoExpire(true);
   println(wolfram.getNumRuleBits());
   ca.setRule(wolfram);

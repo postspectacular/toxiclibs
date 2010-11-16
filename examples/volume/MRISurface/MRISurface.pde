@@ -40,21 +40,24 @@ import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.volume.*;
 import toxi.math.noise.*;
+import toxi.processing.*;
 
 import processing.opengl.*;
 
 int DIM=128;
-float ISO_THRESHOLD = 0.2;
+float ISO_THRESHOLD = 0.1;
 Vec3D SCALE=new Vec3D(DIM,DIM,DIM).scaleSelf(8);
 
 IsoSurface surface;
 TriangleMesh mesh;
+ToxiclibsSupport gfx;
 
 boolean isWireframe=false;
 
 void setup() {
   size(1024,768,OPENGL);
   hint(ENABLE_OPENGL_4X_SMOOTH);
+  gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
   // convert MRI scan data into floats
   // MRI data is 256 x 256 x 256 voxels @ 8bit/voxel
@@ -62,7 +65,7 @@ void setup() {
   // scale factor to normalize 8bit to the 0.0 - 1.0 interval
   float mriNormalize=1/255.0;
   // setup lower resolution grid for IsoSurface
-  VolumetricSpace volume=new VolumetricSpace(SCALE,DIM,DIM,DIM);
+  VolumetricSpaceArray volume=new VolumetricSpaceArray(SCALE,DIM,DIM,DIM);
   float[] cloud=volume.getData();
   int stride=256/DIM;
   for(int z=0,idx=0; z<256; z+=stride) {
@@ -75,11 +78,11 @@ void setup() {
     }
   }
   long t0=System.nanoTime();
-  // store in IsoSurface and compute surface mesh for the given threshold value
-  surface=new IsoSurface(volume);
-  mesh=surface.computeSurfaceMesh(null,ISO_THRESHOLD);
+  // create IsoSurface and compute surface mesh for the given iso threshold value
+  surface=new HashIsoSurface(volume,0.15);
+  mesh=(TriangleMesh)surface.computeSurfaceMesh(null,ISO_THRESHOLD);
   float timeTaken=(System.nanoTime()-t0)*1e-6;
-  println(timeTaken+"ms to compute "+surface.getNumFaces()+" faces");
+  println(timeTaken+"ms to compute "+mesh.getNumFaces()+" faces");
 }
 
 void draw() {
@@ -92,7 +95,6 @@ void draw() {
   directionalLight(255,255,255,0,-0.5,-1);
   specular(255,255,255);
   shininess(16.0);
-  beginShape(TRIANGLES);
   if (isWireframe) {
     stroke(255);
     noFill();
@@ -101,15 +103,7 @@ void draw() {
     noStroke();
     fill(255);
   }
-  // draw all faces of the computed mesh
-  int num=mesh.getNumFaces();
-  for(int i=0; i<num; i++) {
-    TriangleMesh.Face f=mesh.faces.get(i);
-    vertex(f.a);
-    vertex(f.b);
-    vertex(f.c);
-  }
-  endShape();
+  gfx.mesh(mesh);
 }
 
 void normal(Vec3D v) {
@@ -127,7 +121,7 @@ void mousePressed() {
 void keyPressed() {
   if (key=='s') {
     // save mesh as STL or OBJ file
-    surface.saveAsSTL(sketchPath("noise.stl"));
+    mesh.saveAsSTL(sketchPath("mri.stl"));
   }
 }
 

@@ -64,16 +64,14 @@
             <zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
             <zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
             <zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
-            <zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
-            <zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
+            <zipfileset dir="${readme.dir}" includes="*.txt,*.log" prefix="${project.name}" />
         </zip>
         <zip destfile="${release.src.zip}" comment="${lib.zip.comment} - Source code release">
             <zipfileset dir="${src.dir}" prefix="${project.name}/src" />
             <zipfileset dir="${release.examples.dir}" prefix="${project.name}/examples" />
             <zipfileset dir="${release.javadoc.dir}" prefix="${project.name}/docs" />
             <zipfileset dir=".." includes="LICENSE.txt" prefix="${project.name}" />
-            <zipfileset dir="${readme.dir}" includes="README.txt" prefix="${project.name}" />
-            <zipfileset dir="${readme.dir}" includes="CHANGELOG.txt" prefix="${project.name}" />
+            <zipfileset dir="${readme.dir}" includes="*.txt,*.log" prefix="${project.name}" />
         </zip>
     </target>
 

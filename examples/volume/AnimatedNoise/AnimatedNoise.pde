@@ -33,15 +33,15 @@
  */
 import toxi.geom.*;
 import toxi.geom.mesh.*;
-
 import toxi.volume.*;
 import toxi.math.noise.*;
+import toxi.processing.*;
 
 import processing.opengl.*;
 
-int DIMX=64;
-int DIMY=64;
-int DIMZ=64;
+int DIMX=48;
+int DIMY=48;
+int DIMZ=48;
 
 float ISO_THRESHOLD = 0.1;
 float NS=0.03;
@@ -50,12 +50,15 @@ Vec3D SCALE=new Vec3D(1,1,1).scaleSelf(300);
 boolean isWireframe=false;
 float currScale=1;
 
-VolumetricSpace volume=new VolumetricSpace(SCALE,DIMX,DIMY,DIMZ);
-IsoSurface surface=new IsoSurface(volume);
+VolumetricSpaceArray volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);
+IsoSurface surface=new ArrayIsoSurface(volume);
 TriangleMesh mesh;
+
+ToxiclibsSupport gfx;
 
 void setup() {
   size(1024,576,OPENGL);
+  gfx=new ToxiclibsSupport(this);
 }
 
 void draw() {
@@ -72,9 +75,9 @@ void draw() {
   long t0=System.nanoTime();
   // store in IsoSurface and compute surface mesh for the given threshold value
   surface.reset();
-  mesh=surface.computeSurfaceMesh(mesh, ISO_THRESHOLD);
+  mesh=(TriangleMesh)surface.computeSurfaceMesh(mesh, ISO_THRESHOLD);
   float timeTaken=(System.nanoTime()-t0)*1e-6;
-  println(timeTaken+"ms to compute "+surface.getNumFaces()+" faces");
+  println(timeTaken+"ms to compute "+mesh.getNumFaces()+" faces");
   background(128);
   translate(width/2,height/2,0);
   rotateX(mouseY*0.01);
@@ -85,7 +88,6 @@ void draw() {
   directionalLight(255,255,255,0,-0.5,-1);
   specular(255,255,255);
   shininess(16.0);
-  beginShape(TRIANGLES);
   if (isWireframe) {
     stroke(255);
     noFill();
@@ -94,15 +96,7 @@ void draw() {
     noStroke();
     fill(255);
   }
-  // draw all faces of the computed mesh
-  int num=mesh.getNumFaces();
-  for(int i=0; i<num; i++) {
-    TriangleMesh.Face f=mesh.faces.get(i);
-    vertex(f.a);
-    vertex(f.b);
-    vertex(f.c);
-  }
-  endShape();
+  gfx.mesh(mesh,true);
 }
 
 void normal(Vec3D v) {
@@ -122,7 +116,7 @@ void keyPressed() {
   if (key=='s') {
     // save mesh as STL or OBJ file
     //surface.saveAsÒBJ(sketchPath("noise.obj"));
-    surface.saveAsSTL(sketchPath("noise.stl"));
+    mesh.saveAsSTL(sketchPath("noise.stl"));
   }
 }
 

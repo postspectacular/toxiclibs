@@ -37,8 +37,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import toxi.geom.*;
+import toxi.geom.mesh.*;
 import toxi.volume.*;
 import toxi.math.waves.*;
+import toxi.processing.*;
 
 import processing.opengl.*;
 
@@ -53,6 +55,7 @@ Vec3D SCALE=new Vec3D(256,256,384);
 VolumetricSpace volume;
 VolumetricBrush brush;
 IsoSurface surface;
+TriangleMesh mesh;
 
 AbstractWave brushSize;
 
@@ -65,21 +68,24 @@ float spin=8;
 float currZ=0;
 float Z_STEP=0.005;
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(1024,768,OPENGL);
   hint(ENABLE_OPENGL_4X_SMOOTH);
+  gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
-  volume=new VolumetricSpace(SCALE,DIMX,DIMY,DIMZ);
+  volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);
   brush=new RoundBrush(volume,SCALE.x/2);
   brushSize=new SineWave(-HALF_PI,2*TWO_PI*Z_STEP,SCALE.x*0.03,SCALE.x*0.06);
-  surface=new IsoSurface(volume);
+  surface=new ArrayIsoSurface(volume);
+  mesh=new TriangleMesh();
 }
 
 void draw() {
   brush.setSize(brushSize.update());
   float offsetZ=-SCALE.z+currZ*SCALE.z*2.6666;
   float currRadius=SCALE.x*0.4*sin(currZ*PI);
-  println(currZ+" "+currRadius);
   for(float t=0; t<TWO_PI; t+=TWO_PI/6) {
     brush.drawAtAbsolutePos(new Vec3D(currRadius*cos(t+currZ*spin),currRadius*sin(t+currZ*spin),offsetZ),density);
     brush.drawAtAbsolutePos(new Vec3D(currRadius*cos(t-currZ*spin),currRadius*sin(t-currZ*spin),offsetZ),density);
@@ -87,10 +93,10 @@ void draw() {
   currZ+=Z_STEP;
   volume.closeSides();
   surface.reset();
-  surface.computeSurface(ISO_THRESHOLD);
+  surface.computeSurfaceMesh(mesh,ISO_THRESHOLD);
   if (doSave) {
     // save mesh as STL or OBJ file
-    surface.saveAsSTL(sketchPath("scribble"+(System.currentTimeMillis()/1000)+".stl"));
+    mesh.saveAsSTL(sketchPath("cup"+(System.currentTimeMillis()/1000)+".stl"));
     doSave=false;
     System.exit(1);
   }
@@ -102,25 +108,8 @@ void draw() {
   rotateX(-0.4);
   rotateY(frameCount*0.05);
   scale(currScale);
-  beginShape(TRIANGLES);
-  if (isWireframe) {
-    stroke(255);
-    noFill();
-  } 
-  else {
-    noStroke();
-    fill(255);
-  }
-  // draw all faces of the computed mesh
-  int num=surface.getNumFaces(); 
-  Vec3D[] verts=null;
-  for(int i=0; i<num; i++) {
-    verts=surface.getVerticesForFace(i,verts);
-    vertex(verts[2].x,verts[2].y,verts[2].z);
-    vertex(verts[1].x,verts[1].y,verts[1].z);
-    vertex(verts[0].x,verts[0].y,verts[0].z);
-  }
-  endShape();
+  noStroke();
+  gfx.mesh(mesh);
 }
 
 void keyPressed() {

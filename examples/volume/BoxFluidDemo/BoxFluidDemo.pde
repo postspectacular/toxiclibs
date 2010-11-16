@@ -46,8 +46,9 @@
 
 import processing.opengl.*;
 
-import toxi.physics.constraints.*;
 import toxi.physics.*;
+import toxi.physics.behaviors.*;
+import toxi.physics.constraints.*;
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.math.*;
@@ -67,8 +68,9 @@ float isoThreshold=3;
 int numP;
 VerletPhysics physics;
 ParticleConstraint boundingSphere;
+GravityBehavior gravity;
 
-VolumetricSpace volume;
+VolumetricSpaceArray volume;
 IsoSurface surface;
 
 TriangleMesh mesh=new TriangleMesh("fluid");
@@ -85,8 +87,8 @@ void setup() {
   smooth();
   initPhysics();
   initGUI();
-  volume=new VolumetricSpace(SCALE,GRID,GRID,GRID);
-  surface=new IsoSurface(volume);
+  volume=new VolumetricSpaceArray(SCALE,GRID,GRID,GRID);
+  surface=new ArrayIsoSurface(volume);
   textFont(createFont("SansSerif",12));
 }
 

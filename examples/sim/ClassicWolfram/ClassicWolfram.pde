@@ -58,7 +58,8 @@ void setup() {
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x96);
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x65);
   //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x89);
-  // wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x6d);
+  //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x6d);
+  //wolfram = new CAWolfram1D(1, 2, true).setRuleID(0x78);
   ca.setRule(wolfram);
   seedPattern();
   toneMap = new ToneMap(0, 1, TColor.BLACK, TColor.WHITE);
@@ -96,3 +97,4 @@ void keyPressed() {
 void seedPattern() {
   ca.setStateAt(width/2,0,1);
 }
+

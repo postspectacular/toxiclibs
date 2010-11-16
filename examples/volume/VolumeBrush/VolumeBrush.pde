@@ -35,14 +35,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import toxi.geom.*;
+import toxi.geom.mesh.*;
 import toxi.volume.*;
 import toxi.math.waves.*;
+import toxi.processing.*;
 
 import processing.opengl.*;
 
-int DIMX=96;
-int DIMY=96;
-int DIMZ=96;
+int DIMX=64;
+int DIMY=64;
+int DIMZ=64;
 
 float ISO_THRESHOLD = 0.1;
 Vec3D SCALE=new Vec3D(1,1,1).scaleSelf(100);
@@ -50,36 +52,43 @@ Vec3D SCALE=new Vec3D(1,1,1).scaleSelf(100);
 VolumetricSpace volume;
 VolumetricBrush brush;
 IsoSurface surface;
+TriangleMesh mesh;
 
 AbstractWave brushSize;
 
 boolean isWireframe=false;
-boolean doSave=true;
+boolean doSave=false;
 
 float currScale=4;
 float density=0.5;
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(1024,768,OPENGL);
   hint(ENABLE_OPENGL_4X_SMOOTH);
+  gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
-  volume=new VolumetricSpace(SCALE,DIMX,DIMY,DIMZ);
+  volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);
   brush=new RoundBrush(volume,SCALE.x/2);
   brushSize=new SineWave(0,0.1,SCALE.x*0.07,SCALE.x*0.1);
-  surface=new IsoSurface(volume);
+  surface=new ArrayIsoSurface(volume);
+  mesh=new TriangleMesh();
 }
 
 void draw() {
   brush.setSize(brushSize.update());
   Vec3D mousePos=new Vec3D((mouseX-width/2)*0.5,(mouseY-height/2)*0.5,sin(frameCount*0.05)*SCALE.z*0.5);
-  if (mousePressed) brush.drawAtAbsolutePos(mousePos,density);
-  volume.closeSides();  
-  surface.reset();
-  surface.computeSurface(ISO_THRESHOLD);
-  if (doSave) {
-    // save mesh as STL or OBJ file
-    surface.saveAsSTL(sketchPath("scribble"+(System.currentTimeMillis()/1000)+".stl"));
-    doSave=false;
+  if (mousePressed) {
+    brush.drawAtAbsolutePos(mousePos,density);
+    volume.closeSides();  
+    surface.reset();
+    surface.computeSurfaceMesh(mesh,ISO_THRESHOLD);
+    if (doSave) {
+      // save mesh as STL or OBJ file
+      mesh.saveAsSTL(sketchPath("scribble"+(System.currentTimeMillis()/1000)+".stl"));
+      doSave=false;
+    }
   }
   background(128);
   translate(width/2,height/2,0);
@@ -98,22 +107,10 @@ void draw() {
     noStroke();
     fill(255);
   }
-  // draw all faces of the computed mesh
-  int num=surface.getNumFaces(); 
-  Vec3D[] verts=null;
-  for(int i=0; i<num; i++) {
-    verts=surface.getVerticesForFace(i,verts);
-    vertex(verts[2].x,verts[2].y,verts[2].z);
-    vertex(verts[1].x,verts[1].y,verts[1].z);
-    vertex(verts[0].x,verts[0].y,verts[0].z);
-  }
-  endShape();
-  pushMatrix();
-  translate(mousePos.x,mousePos.y,mousePos.z);
+  gfx.mesh(mesh);
   noFill();
   stroke(255,0,0);
-  sphere(brushSize.value);
-  popMatrix();
+  gfx.sphere(new Sphere(mousePos,brushSize.value),20);
 }
 
 void keyPressed() {
@@ -121,11 +118,11 @@ void keyPressed() {
   if(key=='=') currScale=min(currScale+0.1,10);
   if(key=='w') { 
     isWireframe=!isWireframe; 
-    return; 
+    return;
   }
   if(key=='s') { 
     doSave=true; 
-    return; 
+    return;
   }
   if (key>='1' && key<='9') {
     density=-0.5+(key-'1')*0.1;
@@ -134,3 +131,4 @@ void keyPressed() {
   if (key=='0') density=0.5;
   if (key>='a' && key<='z') ISO_THRESHOLD=(key-'a')*0.019+0.01;
 }
+
