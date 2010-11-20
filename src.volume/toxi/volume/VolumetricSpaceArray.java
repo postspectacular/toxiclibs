@@ -15,6 +15,7 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         data = new float[resX * resY * resZ];
     }
 
+    @Override
     public void clear() {
         for (int i = 0; i < data.length; i++) {
             data[i] = 0;
