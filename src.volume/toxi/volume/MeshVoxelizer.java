@@ -91,6 +91,10 @@ public class MeshVoxelizer {
         return volume;
     }
 
+    public VolumetricSpace voxelizeMesh(Mesh3D mesh) {
+        return voxelizeMesh(mesh, 1f);
+    }
+
     public VolumetricSpace voxelizeMesh(Mesh3D mesh, float iso) {
         AABB box = mesh.getBoundingBox();
         Vec3D bmin = box.getMin();
