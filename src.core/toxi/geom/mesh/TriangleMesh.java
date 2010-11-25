@@ -865,4 +865,14 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     public TriangleMesh translate(Vec3D trans) {
         return transform(matrix.identity().translateSelf(trans));
     }
+
+    public TriangleMesh updateVertex(Vec3D orig, Vec3D newPos) {
+        Vertex v = vertices.get(orig);
+        if (v != null) {
+            vertices.remove(v);
+            v.set(newPos);
+            vertices.put(v, v);
+        }
+        return this;
+    }
 }
