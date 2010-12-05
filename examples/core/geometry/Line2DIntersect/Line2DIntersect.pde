@@ -1,15 +1,36 @@
-import toxi.processing.*;
+/**
+ * <p>
+ * In this example we calculate the intersection point of two lines, one of which
+ * can be moved by user interactively.
+ * </p>
+ *
+ * <p><strong>Usage:</strong><ul>
+ * <li>move mouse to move endpoint of line</li>
+ * </ul></p>
+ */
 
-import toxi.math.conversion.*;
-import toxi.geom.*;
-import toxi.math.*;
-import toxi.geom.mesh2d.*;
-import toxi.util.datatypes.*;
-import toxi.util.events.*;
-import toxi.geom.mesh.*;
-import toxi.math.waves.*;
-import toxi.util.*;
-import toxi.math.noise.*;
+/* 
+ * Copyright (c) 2010 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+import toxi.geom.*; 
+import toxi.processing.*;
 
 ToxiclibsSupport gfx;
 

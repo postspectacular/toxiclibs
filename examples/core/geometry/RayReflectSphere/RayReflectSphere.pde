@@ -113,7 +113,7 @@ void draw() {
 
   // show sphere
   stroke(0,20);
-  gfx.sphere(reflector.getSphere());
+  gfx.sphere(reflector.getSphere(),20);
 
   // ray origin
   stroke(255,0,0);
@@ -123,7 +123,3 @@ void draw() {
   stroke(0,255,255);
   gfx.box(new AABB(target,2));
 }
-
-
-
-

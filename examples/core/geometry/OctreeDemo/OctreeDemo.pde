@@ -100,7 +100,7 @@ void draw() {
   endShape();
   // show particles within the specific clip radius
   noStroke();
-  long t0=System.currentTimeMillis();
+  long t0=System.nanoTime();
   ArrayList points=null;
   if (useSphere) {
     points=octree.getPointsWithinSphere(cursor,RADIUS);
@@ -108,7 +108,7 @@ void draw() {
   else {
     points=octree.getPointsWithinBox(new AABB(cursor,new Vec3D(RADIUS,RADIUS,RADIUS)));
   }
-  long dt=System.currentTimeMillis()-t0;
+  float dt=(float)((System.nanoTime()-t0)*1e-6);
   int numClipped=0;
   if (points!=null) {
     numClipped=points.size();
@@ -129,11 +129,10 @@ void draw() {
   popMatrix();
   fill(0);
   text("total: "+numParticles,10,30);
-  text("clipped: "+numClipped+" (time: "+dt+"ms)",10,50);
+  text("clipped: "+numClipped+" (time: "+nf(dt,1,4)+"ms)",10,50);
 }
 
 void keyPressed() {
-  key|=0x20;
   if (key==' ') {
     // add NUM new particles within a sphere of radius DIM2
     for(int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));

@@ -50,9 +50,3 @@ void draw() {
   stroke(0,224,255);
   gfx.ellipse(t.getCircumCircle()); 
 }
-
-
-
-
-
-
