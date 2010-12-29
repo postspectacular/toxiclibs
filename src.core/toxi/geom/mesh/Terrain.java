@@ -252,10 +252,10 @@ public class Terrain {
         // bottom plane
         for (int z = 1; z < depth; z++) {
             for (int x = 1; x < width; x++) {
-                Vec3D a = getVertexAtCell(x - 1, z - 1);
-                Vec3D b = getVertexAtCell(x, z - 1);
-                Vec3D c = getVertexAtCell(x - 1, z);
-                Vec3D d = getVertexAtCell(x, z);
+                Vec3D a = getVertexAtCell(x - 1, z - 1).copy();
+                Vec3D b = getVertexAtCell(x, z - 1).copy();
+                Vec3D c = getVertexAtCell(x - 1, z).copy();
+                Vec3D d = getVertexAtCell(x, z).copy();
                 a.y = groundLevel;
                 b.y = groundLevel;
                 c.y = groundLevel;
@@ -264,10 +264,6 @@ public class Terrain {
                 mesh.addFace(a, d, b);
             }
         }
-        // mesh.addFace(new Vec3D(minX, groundLevel, minZ), new Vec3D(minX,
-        // groundLevel, maxZ), new Vec3D(maxX, groundLevel, minZ));
-        // mesh.addFace(new Vec3D(maxX, groundLevel, minZ), new Vec3D(minX,
-        // groundLevel, maxZ), new Vec3D(maxX, groundLevel, maxZ));
         return mesh;
     }
 }
