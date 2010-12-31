@@ -39,7 +39,7 @@ void setup() {
 void draw() {
   ColorGradient grad=new ColorGradient();
   // use alternative interpolation function when mouse is pressed
-  if (mousePressed) {
+  if (!mousePressed) {
     grad.setInterpolator(new CosineInterpolation());
   }
   grad.addColorAt(0,TColor.BLACK);

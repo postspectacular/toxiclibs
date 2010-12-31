@@ -34,7 +34,7 @@ import toxi.processing.*;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(400, 400);
+  size(680, 382);
   gfx = new ToxiclibsSupport(this);
   noFill();
 }
@@ -48,5 +48,5 @@ void draw() {
   stroke(255,0,0);
   gfx.triangle(t, true);
   stroke(0,224,255);
-  gfx.ellipse(t.getCircumCircle()); 
+  gfx.ellipse(t.getCircumCircle());
 }

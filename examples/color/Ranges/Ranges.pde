@@ -80,7 +80,6 @@ void draw() {
   ArrayList strategies=ColorTheoryRegistry.getRegisteredStrategies();
   for (Iterator i = strategies.iterator(); i.hasNext();) {
     ColorTheoryStrategy s = (ColorTheoryStrategy) i.next();
-    System.out.println(s);
     sorted = ColorList.createUsingStrategy(s, col);
     sorted = sorted.sortByDistance(false);
     swatches(sorted, 900, yoff);

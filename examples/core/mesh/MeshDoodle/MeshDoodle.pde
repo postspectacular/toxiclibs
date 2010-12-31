@@ -56,7 +56,7 @@ void draw() {
   beginShape(TRIANGLES);
   // iterate over all faces/triangles of the mesh
   for(Iterator i=mesh.faces.iterator(); i.hasNext();) {
-    TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+    Face f=(Face)i.next();
     // create vertices for each corner point
     vertex(f.a);
     vertex(f.b);

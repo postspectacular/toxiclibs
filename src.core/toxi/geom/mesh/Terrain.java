@@ -187,15 +187,27 @@ public class Terrain {
         return this;
     }
 
+    public Mesh3D toMesh() {
+        return toMesh(null);
+    }
+
+    public Mesh3D toMesh(float groundLevel) {
+        return toMesh(null, groundLevel);
+    }
+
     /**
-     * Creates a {@link TriangleMesh} instance of the terrain surface.
+     * Creates a {@link TriangleMesh} instance of the terrain surface or adds
+     * its geometry to an existing mesh.
      * 
-     * @return mesh
+     * @param mesh
+     * @return mesh instance
      */
-    public TriangleMesh toMesh() {
-        TriangleMesh mesh =
-                new TriangleMesh("terrain", vertices.length,
-                        vertices.length * 2);
+    public Mesh3D toMesh(Mesh3D mesh) {
+        if (mesh == null) {
+            mesh =
+                    new TriangleMesh("terrain", vertices.length,
+                            vertices.length * 2);
+        }
         for (int z = 1; z < depth; z++) {
             for (int x = 1; x < width; x++) {
                 mesh.addFace(vertices[(z - 1) * width + (x - 1)],
@@ -215,11 +227,13 @@ public class Terrain {
      * created at the given ground level (can also be negative) and the sides
      * are extended downward to that level too.
      * 
+     * @param mesh
+     *            existing mesh or null
      * @param groundLevel
      * @return mesh
      */
-    public TriangleMesh toMesh(float groundLevel) {
-        TriangleMesh mesh = toMesh();
+    public Mesh3D toMesh(Mesh3D mesh, float groundLevel) {
+        mesh = toMesh(mesh);
         Vec3D offset = new Vec3D(width, 0, depth).scaleSelf(0.5f);
         float minX = -offset.x * scale;
         float minZ = -offset.z * scale;

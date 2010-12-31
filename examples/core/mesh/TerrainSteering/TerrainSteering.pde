@@ -45,7 +45,7 @@ int DIM=80;
 
 Terrain terrain;
 ToxiclibsSupport gfx;
-TriangleMesh mesh;
+Mesh3D mesh;
 Car car;
 
 Vec3D camOffset = new Vec3D(0, 100, 300);
@@ -64,7 +64,7 @@ void setup() {
   }
   terrain.setElevation(el);
   // create mesh
-  mesh = terrain.toMesh(0);
+  mesh = terrain.toMesh();
   // create car
   car = new Car(0, 0);
   // attach drawing utils
@@ -107,7 +107,4 @@ void draw() {
   gfx.mesh(mesh, false);
   car.draw();
 }
-
-
-
 

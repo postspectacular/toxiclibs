@@ -21,7 +21,7 @@ class Car extends Vec2D {
 
   public void draw() {
     // create an axis aligned box and convert to mesh
-    TriangleMesh box = new AABB(new Vec3D(), new Vec3D(20, 10, 10)).toMesh();
+    TriangleMesh box = (TriangleMesh)new AABB(new Vec3D(), new Vec3D(20, 10, 10)).toMesh();
     // align to terrain normal
     box.pointTowards(currNormal);
     // rotate into direction of movement

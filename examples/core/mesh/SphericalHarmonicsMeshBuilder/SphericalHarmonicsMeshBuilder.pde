@@ -95,7 +95,7 @@ void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean s
   Vec3D max=bounds.getMax();
   if (vertexNormals) {
     for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-      TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+      Face f=(Face)i.next();
       Vec3D n = normalMap.applyTo(f.a.normal);
       gfx.fill(n.x, n.y, n.z);
       gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
@@ -112,7 +112,7 @@ void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean s
   } 
   else {
     for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-      TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+      Face f=(Face)i.next();
       gfx.normal(f.normal.x, f.normal.y, f.normal.z);
       gfx.vertex(f.a.x, f.a.y, f.a.z);
       gfx.vertex(f.b.x, f.b.y, f.b.z);
@@ -123,7 +123,7 @@ void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean s
   if (showNormals) {
     if (vertexNormals) {
       for (Iterator i=mesh.vertices.values().iterator(); i.hasNext();) {
-        TriangleMesh.Vertex v=(TriangleMesh.Vertex)i.next();
+        Vertex v=(Vertex)i.next();
         Vec3D w = v.add(v.normal.scale(10));
         Vec3D n = v.normal.scale(127);
         gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
@@ -132,7 +132,7 @@ void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean s
     } 
     else {
       for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-        TriangleMesh.Face f=(TriangleMesh.Face)i.next();
+        Face f=(Face)i.next();
         Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
         Vec3D d = c.add(f.normal.scale(20));
         Vec3D n = f.normal.scale(127);
@@ -167,5 +167,5 @@ void randomizeMesh() {
     m[i]=(int)random(9);
   }
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(new SphericalHarmonics(m));
-  mesh = b.createMesh(80, 60);
+  mesh = (TriangleMesh)b.createMesh(null,80, 60);
 }

@@ -99,14 +99,6 @@ void draw() {
   gfx.mesh(mesh,true);
 }
 
-void normal(Vec3D v) {
-  normal(v.x,v.y,v.z);
-}
-
-void vertex(Vec3D v) {
-  vertex(v.x,v.y,v.z);
-}
-
 void mousePressed() {
   isWireframe=!isWireframe;
 }

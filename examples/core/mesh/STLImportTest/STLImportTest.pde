@@ -1,10 +1,10 @@
 /**
  * <p>Tiny demo showing usage of STLReader class to load binary STL files
  * and display them (with face normals). There're 2 example meshes provided
- * with one of them being exported using a flipped Y axis. The TriangleMesh
+ * with one of them having been exported using a flipped Y axis. The TriangleMesh
  * class has a convenient method to reorient all faces.</p>
  */
- 
+
 /* 
  * Copyright (c) 2010 Karsten Schmidt
  * 
@@ -35,8 +35,8 @@ ToxiclibsSupport gfx;
 
 void setup() {
   size(600,600,P3D);
-  mesh=new STLReader().loadBinary(sketchPath("mesh.stl"));
-  //mesh=new STLReader().loadBinary(sketchPath("mesh-flipped.stl")).flipYAxis();
+  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh.stl"),STLReader.TRIANGLEMESH);
+  //mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
   gfx=new ToxiclibsSupport(this);
 }
 

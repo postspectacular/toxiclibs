@@ -37,13 +37,11 @@
 
 import processing.opengl.*;
 
-import toxi.util.datatypes.*;
-import toxi.math.noise.*;
-import toxi.math.waves.*;
 import toxi.geom.*;
-import toxi.math.*;
-import toxi.math.conversion.*;
 import toxi.geom.mesh.*;
+import toxi.math.*;
+import toxi.math.waves.*;
+import toxi.processing.*;
 
 TriangleMesh mesh = new TriangleMesh();
 
@@ -52,22 +50,26 @@ AbstractWave modX, modY;
 boolean isWireFrame;
 boolean showNormals;
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(1024,576, OPENGL);
   modX = new SineWave(0, 0.01f, 2.5f, 2.5f);
   modY = new SineWave(PI, 0.017f, 2.5f, 2.5f);
+  gfx=new ToxiclibsSupport(this);
 }
 
 void draw() {
   SurfaceFunction functor=new SuperEllipsoid(modX.update(), modY.update());
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(functor);
-  mesh = b.createMesh(80, 80);
+  mesh = (TriangleMesh)b.createMesh(null,80, 80);
+  mesh.computeVertexNormals();
   background(0);
   lights();
   translate(width / 2, height / 2, 0);
   rotateX(mouseY * 0.01f);
   rotateY(mouseX * 0.01f);
-  drawAxes(300);
+  gfx.origin(300);
   if (isWireFrame) {
     noFill();
     stroke(255);
@@ -77,63 +79,9 @@ void draw() {
     noStroke();
   }
   scale(2);
-  drawMesh(g, mesh, !isWireFrame, showNormals);
+  gfx.mesh(mesh, !isWireFrame, showNormals ? 10 : 0);
 }
 
-void drawAxes(float l) {
-  stroke(255, 0, 0);
-  line(0, 0, 0, l, 0, 0);
-  stroke(0, 255, 0);
-  line(0, 0, 0, 0, l, 0);
-  stroke(0, 0, 255);
-  line(0, 0, 0, 0, 0, l);
-}
-
-void drawMesh(PGraphics gfx, TriangleMesh mesh, boolean vertexNormals, boolean showNormals) {
-  gfx.beginShape(PConstants.TRIANGLES);
-  if (vertexNormals) {
-    for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-      TriangleMesh.Face f=(TriangleMesh.Face)i.next();
-      gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
-      gfx.vertex(f.a.x, f.a.y, f.a.z);
-      gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
-      gfx.vertex(f.b.x, f.b.y, f.b.z);
-      gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
-      gfx.vertex(f.c.x, f.c.y, f.c.z);
-    }
-  } 
-  else {
-    for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-      TriangleMesh.Face f=(TriangleMesh.Face)i.next();
-      gfx.normal(f.normal.x, f.normal.y, f.normal.z);
-      gfx.vertex(f.a.x, f.a.y, f.a.z);
-      gfx.vertex(f.b.x, f.b.y, f.b.z);
-      gfx.vertex(f.c.x, f.c.y, f.c.z);
-    }
-  }
-  gfx.endShape();
-  if (showNormals) {
-    if (vertexNormals) {
-      for (Iterator i=mesh.vertices.values().iterator(); i.hasNext();) {
-        TriangleMesh.Vertex v=(TriangleMesh.Vertex)i.next();
-        Vec3D w = v.add(v.normal.scale(10));
-        Vec3D n = v.normal.scale(127);
-        gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
-        gfx.line(v.x, v.y, v.z, w.x, w.y, w.z);
-      }
-    } 
-    else {
-      for (Iterator i=mesh.faces.iterator(); i.hasNext();) {
-        TriangleMesh.Face f=(TriangleMesh.Face)i.next();
-        Vec3D c = f.a.add(f.b).addSelf(f.c).scaleSelf(1f / 3);
-        Vec3D d = c.add(f.normal.scale(10));
-        Vec3D n = f.normal.scale(127);
-        gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
-        gfx.line(c.x, c.y, c.z, d.x, d.y, d.z);
-      }
-    }
-  }
-}
 
 void keyPressed() {
   if (key == 'w') {

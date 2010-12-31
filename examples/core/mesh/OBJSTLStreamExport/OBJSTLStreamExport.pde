@@ -34,13 +34,13 @@ void setup() {
   SurfaceFunction functor=new SuperEllipsoid(0.3,0.3);
   SurfaceMeshBuilder b = new SurfaceMeshBuilder(functor);
   // execute the mesh (resolution=80, radius=100)
-  TriangleMesh mesh = b.createMesh(80, 100);
+  TriangleMesh mesh = (TriangleMesh)b.createMesh(null, 80, 100);
   // attempt to create a FileOutputStream and save to it 
   try {
     String fileID="superellipsoid-"+(System.currentTimeMillis()/1000);
     FileOutputStream fs;
     fs=new FileOutputStream(sketchPath(fileID+".stl"));
-    mesh.saveAsSTL(fs,false);
+    mesh.saveAsSTL(fs);
     fs=new FileOutputStream(sketchPath(fileID+".obj"));
     mesh.saveAsOBJ(fs);
   } 

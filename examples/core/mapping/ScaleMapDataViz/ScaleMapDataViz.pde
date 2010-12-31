@@ -61,8 +61,8 @@ int minClickDuration = 30;
 int clickTolerance = 250;
 
 void setup() {
-  size(1024, 256);
-  textFont(createFont("SansSerif", 12));
+  size(680, 256);
+  textFont(createFont("SansSerif", 10));
   long now = System.currentTimeMillis();
   timeMap = new ScaleMap(now - historyLength, now, 0, width);
   timeMap.setMapFunction(zoomLens);

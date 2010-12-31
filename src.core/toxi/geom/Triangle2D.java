@@ -117,6 +117,11 @@ public class Triangle2D implements Shape2D {
         return this;
     }
 
+    public Vec2D fromBarycentric(ReadonlyVec3D p) {
+        return new Vec2D(a.x * p.x() + b.x * p.y() + c.x * p.z(), a.y * p.x()
+                + b.y * p.y() + c.y * p.z());
+    }
+
     public float getArea() {
         return b.sub(a).cross(c.sub(a)) * 0.5f;
     }
@@ -230,5 +235,4 @@ public class Triangle2D implements Shape2D {
     public String toString() {
         return "Triangle2D: " + a + "," + b + "," + c;
     }
-
 }

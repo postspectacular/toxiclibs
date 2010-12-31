@@ -1,6 +1,7 @@
 /**
  * <p>
  * This example shows how to easily create & render dashed and dotted lines.
+ * UPDATE: 2010-12-29 added marching ants effect to animate lines
  * </p>
  *
  * <p><strong>Usage:</strong><ul>
@@ -35,9 +36,11 @@ List<Line3D> edges = new ArrayList<Line3D>();
 // cube radius
 float s=100;
 // step size between points on each edge
-float step=10;
+float step=5;
+// marching ants animation phase (will count from 0.0 ... 1.0)
+float phase;
 
-boolean isDashed=true;
+boolean isDashed=false;
 
 void setup() {
   size(400,400,P3D);
@@ -59,16 +62,18 @@ void draw() {
   rotateX(mouseY*0.01);
   rotateY(mouseX*0.01);
   stroke(255);
+  phase=(phase+0.05)%1;
   for(Line3D l : edges) {
     if (isDashed) {
-      drawDashedLine(l);
+      drawDashedLine(l,phase);
     } else {
-      drawDottedLine(l);
+      drawDottedLine(l,phase);
     }
   }
 }
 
-void drawDashedLine(Line3D l) {
+void drawDashedLine(Line3D l, float phase) {
+  l=new Line3D(l.a.add(l.getDirection().normalizeTo(phase*step)),l.b);
   // compute inbetween points every "STEP" units and iterate over them
   List<Vec3D> points=l.splitIntoSegments(null,step,true);
   for(int i=0, num=points.size()-1; i<num; i+=2) {
@@ -78,7 +83,8 @@ void drawDashedLine(Line3D l) {
   }
 }
 
-void drawDottedLine(Line3D l) {
+void drawDottedLine(Line3D l, float phase) {
+  l=new Line3D(l.a.add(l.getDirection().normalizeTo(phase*step)),l.b);
   // compute inbetween points every "STEP" units and iterate over them
   for(Vec3D p : l.splitIntoSegments(null,step,true)) {
     point(p.x,p.y,p.z);

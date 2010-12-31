@@ -14,7 +14,6 @@
  *
  * Controls:
  * Click mouse button to toggle rendering style between shaded/wireframe.
- * Press 's' to save mesh as STL file
  */
 
 /* 
@@ -49,7 +48,7 @@ float ISO_THRESHOLD = 0.1;
 Vec3D SCALE=new Vec3D(DIM,DIM,DIM).scaleSelf(8);
 
 IsoSurface surface;
-TriangleMesh mesh;
+Mesh3D mesh;
 ToxiclibsSupport gfx;
 
 boolean isWireframe=false;
@@ -80,7 +79,7 @@ void setup() {
   long t0=System.nanoTime();
   // create IsoSurface and compute surface mesh for the given iso threshold value
   surface=new HashIsoSurface(volume,0.15);
-  mesh=(TriangleMesh)surface.computeSurfaceMesh(null,ISO_THRESHOLD);
+  mesh=surface.computeSurfaceMesh(null,ISO_THRESHOLD);
   float timeTaken=(System.nanoTime()-t0)*1e-6;
   println(timeTaken+"ms to compute "+mesh.getNumFaces()+" faces");
 }
@@ -118,10 +117,4 @@ void mousePressed() {
   isWireframe=!isWireframe;
 }
 
-void keyPressed() {
-  if (key=='s') {
-    // save mesh as STL or OBJ file
-    mesh.saveAsSTL(sketchPath("mri.stl"));
-  }
-}
 

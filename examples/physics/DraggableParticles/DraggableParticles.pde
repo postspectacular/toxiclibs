@@ -42,7 +42,7 @@ void setup() {
   physics.setWorldBounds(new Rect(0,0,width,height));
   // create 10 particle strings of 20 particles each
   for(int i=0; i<10; i++) {
-    ParticleString2D s=new ParticleString2D(physics,new Vec2D(width/2,height/2),Vec2D.randomVector().scaleSelf(10),20,1,0.5);
+    ParticleString2D s=new ParticleString2D(physics,new Vec2D(width/2,height/2),Vec2D.fromTheta(i*0.1*TWO_PI).scaleSelf(10),20,1,0.5);
   }
 }
 

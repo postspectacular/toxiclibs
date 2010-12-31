@@ -6,6 +6,11 @@
  * this string.</p>
  * 
  * <p>Usage: Press 'r' to restart the simulation</p>
+ *
+ * <p>UPDATES:
+ * <ul>
+ * <li>2010-12-30: updated gravity handling to use behaviours</li>
+ * </ul></p>
  */
 
 /* 

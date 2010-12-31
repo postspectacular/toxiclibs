@@ -35,7 +35,7 @@ import toxi.processing.*;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(400,400);
+  size(680,382);
   smooth();
   textSize(9);
   gfx=new ToxiclibsSupport(this);
@@ -43,16 +43,16 @@ void setup() {
 
 void draw() {
   background(255);
-  Line2D l=new Line2D(new Vec2D(50,50), new Vec2D(350,350));
-  Line2D m=new Line2D(new Vec2D(350,200), new Vec2D(mouseX,mouseY));
-  Line2D.LineIntersection i=l.intersectLine(m);
-  if (i.getType()!=Line2D.LineIntersection.Type.NON_INTERSECTING) {
-    Vec2D isec=i.getPos();
+  Line2D l=new Line2D(new Vec2D(250,50), new Vec2D(450,350));
+  Line2D m=new Line2D(new Vec2D(450,200), new Vec2D(mouseX,mouseY));
+  Line2D.LineIntersection isec=l.intersectLine(m);
+  if (isec.getType()==Line2D.LineIntersection.Type.INTERSECTING) {
+    Vec2D pos=isec.getPos();
     stroke(255,0,192);
     fill(255,0,192);
-    ellipse(isec.x,isec.y,5,5);
-    textAlign(isec.x>width/2 ? RIGHT : LEFT);
-    text(isec.toString(),isec.x,isec.y-10);
+    ellipse(pos.x,pos.y,5,5);
+    textAlign(pos.x>width/2 ? RIGHT : LEFT);
+    text(pos.toString(),pos.x,pos.y-10);
   } else {
     stroke(0);
   }

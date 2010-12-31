@@ -47,7 +47,7 @@ float transition, transTarget;
 InterpolateStrategy is=new SigmoidInterpolation(3);
 
 void setup() {
-  size(600,600,P3D);
+  size(680,382,P3D);
 }
 
 void draw() {

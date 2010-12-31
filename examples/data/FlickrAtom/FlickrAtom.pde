@@ -1,10 +1,15 @@
 /**
  * <p>This little demo shows how to use the datautils Atom parser to read
- * a Flickr atom feed an display the enclosed images in a simple slide show.
+ * a Flickr Atom feed and display the enclosed images in a simple slide show.
  * For each item, the title and author name are displayed.</p>
  *
  * <p>If you want to display a different Atom feed, simply edit the atomURL
  * variable.</p>
+ *
+ * <p>UPDATES:
+ * <ul>
+ * <li>2010-10-30: scale images to always fit screen</li>
+ * </ul></p>
  */
 
 /* 
@@ -54,16 +59,22 @@ void draw() {
     println("loading image: "+imgURL);
     // load the image & display
     PImage img=loadImage(imgURL);
-    image(img,0,0);
-    // show image info
-    fill(0);
-    textSize(18);
-    text(entry.title,20,40);
-    textSize(12);
-    text("by "+entry.author.name,20,60);
-    delay(2000);
+    if (img!=null) {
+      if (img.width>img.height) {
+        image(img,0,0,width,width/((float)img.width/img.height));
+      } 
+      else {
+        image(img,0,0,height*((float)img.width/img.height),height);
+      }
+      // show image info
+      fill(0);
+      textSize(18);
+      text(entry.title,20,40);
+      textSize(12);
+      text("by "+entry.author.name,20,60);
+      delay(2000);
+    }
   }
   // cycle over all entries
   entryID=(entryID+1) % feed.entries.size();
 }
-

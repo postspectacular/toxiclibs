@@ -37,22 +37,22 @@ ZoomLensInterpolation zoomLens = new ZoomLensInterpolation();
 float smoothStep=0.15;
 
 void setup() {
-  size(800, 400);
+  size(680, 382);
 }
 
 void draw() {
   background(255);
-  zoomLens.setLensPos((float) mouseX / 400,smoothStep);
+  zoomLens.setLensPos((float) mouseX / 340,smoothStep);
   zoomLens.setLensStrength((mouseY - height * 0.5f) / (height * 0.5f),smoothStep);
-  for (float x = 0; x < 400; x++) {
-    float t = x / 400;
-    float y = zoomLens.interpolate(0, 400, t);
+  for (float x = 0; x < 340; x++) {
+    float t = x / 340;
+    float y = zoomLens.interpolate(0, 340, t);
     // draw lines at regular interval (but displaced by lens)
     if (0 == x % 10) {
       line(y, 0, y, height);
     }
     // draw displacement curve for each pixel
-    point(y + 400, x);
+    point(y + 340, x);
   }
 }
 

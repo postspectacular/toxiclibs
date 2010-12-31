@@ -1,19 +1,39 @@
 /**
- * Mesh face extrusion with toxiclibs-0019 or later
+ * <p>Manual mesh face extrusion</p>
  *
- * Usage:
- * f - toggle filled/wireframe display
- * a/d - move extruded face along X axis
- * w/s - moved face along Y
- * z/x - move face along Z
- *
- * (c) 2010 Karsten Schmidt // LGPL licensed
+ * <p><strong>Usage:</strong>
+ * <ul>
+ * <li>f - toggle filled/wireframe display</li>
+ * <li>a/d - move extruded face along X axis</li>
+ * <li>w/s - moved face along Y</li>
+ * <li>z/x - move face along Z</li>
+ * </ul></p>
  */
+
+/* 
+ * Copyright (c) 2010 Karsten Schmidt
+ * 
+ * This demo & library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+ 
 import toxi.processing.*;
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
-import toxi.geom.mesh.TriangleMesh.Face;
 
 TriangleMesh mesh;
 boolean isFilled = true;
@@ -24,7 +44,7 @@ void setup() {
   size(680, 382, P3D);
   gfx = new ToxiclibsSupport(this);
   // create a mesh from the axis-aligned bounding box (AABB)
-  mesh = new AABB(new Vec3D(), 100).toMesh();
+  mesh = (TriangleMesh)new AABB(new Vec3D(), 100).toMesh();
   // get first face/triangle of mesh
   Face f = mesh.faces.get(0);
   // extrude along positive Z axis and shrink to 25% of original size
@@ -56,8 +76,8 @@ void setup() {
 
 void draw() {
   background(0);
-  lights();
   camera(width / 2 - mouseX, height / 2 - mouseY, 400, 0, 0, 0, 0, 1, 0);
+  lights();
   if (!isFilled) {
     noFill();
     stroke(255);
@@ -66,7 +86,7 @@ void draw() {
   else {
     fill(255);
     stroke(255);
-    gfx.mesh(mesh, true, 10);
+    gfx.mesh(mesh, false, 10);
   }
 }
 

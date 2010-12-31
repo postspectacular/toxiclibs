@@ -2,6 +2,11 @@
  * <p>The ToxiclibsSupport class of the toxi.processing package provides various
  * shortcuts to directly use toxiclibs geometry datatypes with Processing style
  * drawing operations. Most of these are demonstrated in this example.</p>
+ *
+ * <p>UPDATES:
+ * <ul>
+ * <li>2010-12-30: added sphere/cylinder resolution modulation</li>
+ * </ul></p>
  */
  
 /* 
@@ -26,11 +31,14 @@
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
+import toxi.math.waves.*;
 import toxi.processing.*;
 
 import processing.opengl.*;
 
 ToxiclibsSupport gfx;
+
+AbstractWave sphereRes=new SineWave(0,0.02,15,18);
 
 void setup() {
   size(680,382,OPENGL);
@@ -44,6 +52,8 @@ void draw() {
   Sphere ball;
   TriangleMesh mesh;
 
+  int res=(int)sphereRes.update();
+  
   background(0);
   lights();
   translate(width/2,height/2,0);
@@ -57,7 +67,7 @@ void draw() {
   gfx.cone(cone2,20,true);
 
   cyl=new XAxisCylinder(new Vec3D(200,0,0),20,100);
-  gfx.cylinder(cyl,3,false);
+  gfx.cylinder(cyl,res,false);
 
   SurfaceFunction f=new SuperEllipsoid(0.3,0.3);
   mesh=(TriangleMesh)new SurfaceMeshBuilder(f).createMesh(null,40,50);
@@ -69,7 +79,7 @@ void draw() {
   gfx.box(cube);
 
   ball=new Sphere(new Vec3D(-200,0,0),50);
-  gfx.sphere(ball,20);
+  gfx.sphere(ball,res);
   
   stroke(255,255,0);
   Ray3D ray=new Ray3D(new Vec3D(),Vec3D.Y_AXIS);

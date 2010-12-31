@@ -67,7 +67,7 @@ public class MeshVoxelizer {
         return this;
     }
 
-    protected VolumetricSpace solidifyVolume(VolumetricSpaceArray volume) {
+    private VolumetricSpace solidifyVolume(VolumetricSpaceArray volume) {
         for (int z = 0; z < volume.resZ; z++) {
             for (int y = 0; y < volume.resY; y++) {
                 boolean isFilled = false;
