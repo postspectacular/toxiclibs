@@ -467,6 +467,26 @@ public class ToxiclibsSupport {
         }
     }
 
+    public final void rotate(float theta, ReadonlyVec3D v) {
+        gfx.rotate(theta, v.x(), v.y(), v.z());
+    }
+
+    public final void scale(ReadonlyVec2D v) {
+        gfx.scale(v.x(), v.y());
+    }
+
+    public final void scale(ReadonlyVec3D v) {
+        gfx.scale(v.x(), v.y(), v.z());
+    }
+
+    public final void scale(Vec2D v) {
+        gfx.scale(v.x, v.y);
+    }
+
+    public final void scale(Vec3D v) {
+        gfx.scale(v.x, v.y, v.z);
+    }
+
     /**
      * @param gfx
      *            the gfx to set
@@ -516,6 +536,22 @@ public class ToxiclibsSupport {
             }
         }
         gfx.endShape();
+    }
+
+    public final void translate(ReadonlyVec2D v) {
+        gfx.translate(v.x(), v.y());
+    }
+
+    public final void translate(ReadonlyVec3D v) {
+        gfx.translate(v.x(), v.y(), v.z());
+    }
+
+    public final void translate(Vec2D v) {
+        gfx.translate(v.x, v.y);
+    }
+
+    public final void translate(Vec3D v) {
+        gfx.translate(v.x, v.y, v.z);
     }
 
     public final void triangle(Triangle tri) {
