@@ -61,7 +61,7 @@ public class Ray3D extends Vec3D {
      * coinciding with this ray.
      * 
      * @param p
-     * @return
+     * @return distance
      */
     public float getDistanceToPoint(Vec3D p) {
         Vec3D sp = p.sub(this);

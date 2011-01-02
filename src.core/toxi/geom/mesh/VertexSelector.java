@@ -58,7 +58,7 @@ public abstract class VertexSelector {
     /**
      * Clears the current selection.
      * 
-     * @return
+     * @return itself
      */
     public VertexSelector clearSelection() {
         selection.clear();
@@ -68,7 +68,7 @@ public abstract class VertexSelector {
     /**
      * Returns the associated mesh for this selector.
      * 
-     * @return
+     * @return itself
      */
     public Mesh3D getMesh() {
         return mesh;

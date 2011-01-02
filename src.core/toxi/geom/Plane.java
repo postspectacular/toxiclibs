@@ -19,7 +19,7 @@ import toxi.math.MathUtils;
 public class Plane extends Vec3D implements Shape3D {
 
     /**
-     * Classifier constant for {@link #classifyPoint(ReadonlyVec3D)}
+     * Classifier constant for {@link Plane#classifyPoint(ReadonlyVec3D, float)}
      */
     public enum Classifier {
         FRONT, BACK, ON_PLANE;
@@ -50,8 +50,7 @@ public class Plane extends Vec3D implements Shape3D {
      * Classifies the relative position of the given point to the plane using
      * the given tolerance.
      * 
-     * @return One of the 3 classification types: FRONT, BACK,
-     *         ON_PLANE
+     * @return One of the 3 classification types: FRONT, BACK, ON_PLANE
      */
     public Classifier classifyPoint(ReadonlyVec3D p, float tolerance) {
         float d = this.sub(p).normalize().dot(normal);

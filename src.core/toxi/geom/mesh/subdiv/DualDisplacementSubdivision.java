@@ -6,6 +6,23 @@ import java.util.List;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.WingedEdge;
 
+/**
+ * This subdivision strategy splits an edge in three equal parts using two split
+ * points at 33% and 66% of the edge. The split points themselves are being
+ * displaced, however, in the direction of the vector going from the configured
+ * reference point (often the mesh centroid is used) towards each split point.
+ * The displacement amount is configurable as fraction of the original edge
+ * length. So given that:
+ * 
+ * <pre>
+ * S = edge split point
+ * R = reference point
+ * l = edge length
+ * a = displacement amplification factor
+ * 
+ * S' = S + (S-R) * a * l
+ * </pre>
+ */
 public class DualDisplacementSubdivision extends SubdivisionStrategy {
 
     public Vec3D centroid;

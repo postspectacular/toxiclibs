@@ -4,8 +4,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.WETriangleMesh;
 import toxi.geom.mesh.WingedEdge;
 
+/**
+ * This is the abstract parent class for all subdivision strategies. Each of its
+ * implementations defines a concrete solution to split a single edge of a
+ * {@link WETriangleMesh}.
+ */
 public abstract class SubdivisionStrategy {
 
     public static final Comparator<? super WingedEdge> DEFAULT_ORDERING =
@@ -19,7 +25,7 @@ public abstract class SubdivisionStrategy {
      * 
      * @param edge
      *            edge to split
-     * @return
+     * @return list of split points
      */
     public abstract List<Vec3D> computeSplitPoints(WingedEdge edge);
 

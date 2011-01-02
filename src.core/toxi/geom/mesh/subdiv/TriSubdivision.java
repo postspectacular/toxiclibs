@@ -6,6 +6,10 @@ import java.util.List;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.WingedEdge;
 
+/**
+ * This subdivision strategy splits an edge in four equal parts using three
+ * split points at 25%, 50% and 75% of the edge.
+ */
 public class TriSubdivision extends SubdivisionStrategy {
 
     public List<Vec3D> computeSplitPoints(WingedEdge edge) {

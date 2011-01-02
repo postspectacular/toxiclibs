@@ -411,6 +411,10 @@ public class WETriangleMesh extends TriangleMesh {
         subdivide(new MidpointSubdivision(), minLength);
     }
 
+    public void subdivide(SubdivisionStrategy subDiv) {
+        subdivide(subDiv, 0);
+    }
+
     public void subdivide(SubdivisionStrategy subDiv, float minLength) {
         subdivideEdges(new ArrayList<WingedEdge>(edges.values()), subDiv,
                 minLength);

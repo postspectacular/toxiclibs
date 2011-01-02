@@ -15,7 +15,7 @@ public class Histogram implements Iterable<HistEntry> {
      * @param numSamples
      * @param tolerance
      * @param blendCols
-     * @return
+     * @return histogram instance
      */
     public static Histogram newFromARGBArray(int[] pixels, int numSamples,
             float tolerance, boolean blendCols) {

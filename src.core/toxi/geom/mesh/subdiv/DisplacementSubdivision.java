@@ -1,5 +1,10 @@
 package toxi.geom.mesh.subdiv;
 
+/**
+ * Abstract parent class for all displacement subdivision strategies. It adds
+ * common support for the displacement amplification value, which subclasses can
+ * utilize.
+ */
 public abstract class DisplacementSubdivision extends SubdivisionStrategy {
 
     protected float amp;
@@ -28,7 +33,7 @@ public abstract class DisplacementSubdivision extends SubdivisionStrategy {
     /**
      * @param amp
      *            the amp to set
-     * @return
+     * @return itself
      */
     public DisplacementSubdivision setAmp(float amp) {
         this.amp = amp;

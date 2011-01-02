@@ -8,6 +8,9 @@ import toxi.geom.Sphere;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
+/**
+ * Common interface for 3D (triangle) mesh containers.
+ */
 public interface Mesh3D {
 
     /**
@@ -31,7 +34,7 @@ public interface Mesh3D {
      * @param uvA
      * @param uvB
      * @param uvC
-     * @return
+     * @return itself
      */
     public Mesh3D addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uvA, Vec2D uvB,
             Vec2D uvC);
