@@ -1,14 +1,19 @@
-This is a separate release of a subset of the available classes in the toxiclibs library.
+This is a module of the toxiclibs library release.
 
-Only the following package is included:
+Only the following packages are included:
 
-toxi.physics.*
+toxi.physics
+toxi.physics.behaviors
+toxi.physics.constraints
+toxi.physics2d
+toxi.physics2d.behaviors
+toxi.physics2d.constraints
 
-This library also depends on the following other packages,
-get them via: http://hg.postspectacular.com/toxiclibs/downloads/
+from toxiclibscore:
+(get it via: http://hg.postspectacular.com/toxiclibs/downloads/)
 
-toxi.geom (toxiclibscore-0016 release or later)
-toxi.math (toxiclibscore-0016 release or later)
+toxi.geom
+toxi.math
 
 If you're going to use these classes for Processing projects,
 first drop the "verletphysics" folder into the "libraries" folder of your
@@ -16,17 +21,19 @@ Processing sketchbook and ensure the above listed dependent libraries
 are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
 
-Source code is available via SVN, instructions over here:
+Source code is available via Hg, instructions over here:
 http://hg.postspectacular.com/toxiclibs/source/
 
-JavaDocs are available in the "docs" folder of each download.
+JavaDocs are available in the "docs" folder of each download and online.
 
-http://toxiclibs.org/
+http://toxiclibs.org/javadocs/
+
+toxiclibs is a PostSpectacular production:
 http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2010 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2006-2011 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

@@ -1,32 +1,39 @@
-This is a separate release of a subset of the available classes in the toxiclibs library.
+This is the core module of the toxiclibs library release.
 
-Only the following packages are included. These form the core functionality of the libraries
-and are required for all other downloadable packages:
+Only the following packages are included. These form the core
+functionality of the libraries and are required for all other
+downloadable packages:
 
 toxi.geom
-toxi.geom.util
+toxi.geom.mesh
+toxi.geom.mesh.subdiv
+toxi.geom.mesh2d
 toxi.math
 toxi.math.conversion
 toxi.math.noise
 toxi.math.waves
+toxi.util
 toxi.util.datatypes
+toxi.util.events
 
 If you're going to use these classes for Processing projects,
 first drop the entire "toxiclibscore" folder into the "libraries" folder
 of your Processing sketchbook. You'll then need to restart Processing
 in order for it to find this new library.
 
-Source code is available via SVN, instructions over here:
+Source code is available via Hg, instructions over here:
 http://hg.postspectacular.com/toxiclibs/source/
 
-JavaDocs are available in the "docs" folder of each download.
+JavaDocs are available in the "docs" folder of each download and online.
 
-http://toxiclibs.org/
+http://toxiclibs.org/javadocs/
+
+toxiclibs is a PostSpectacular production:
 http://postspectacular.com/
 
 Have fun!
 
-Copyright (c) 2010 Karsten Schmidt <info at postspectacular.com>
+Copyright (c) 2006-2011 Karsten Schmidt <info at postspectacular.com>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
