@@ -22,9 +22,6 @@ package toxi.color;
 
 /**
  * Compares 2 colors by one of their RGB component values.
- * 
- * @author toxi
- * 
  */
 public class RGBAccessor extends AccessCriteria {
 

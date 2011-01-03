@@ -33,8 +33,6 @@ import toxi.physics.constraints.ParticleConstraint;
  * An individual 3D particle for use by the VerletPhysics and VerletSpring
  * classes. A particle has weight, can be locked in space and its position
  * constrained inside an (optional) axis-aligned bounding box.
- * 
- * @author toxi
  */
 public class VerletParticle extends Vec3D {
 

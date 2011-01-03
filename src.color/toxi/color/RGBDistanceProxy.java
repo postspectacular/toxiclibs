@@ -23,9 +23,6 @@ package toxi.color;
 /**
  * Implements the {@link DistanceProxy} interface to sort colors by RGB distance
  * (used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}).
- * 
- * @author toxi
- * 
  */
 public class RGBDistanceProxy implements DistanceProxy {
 

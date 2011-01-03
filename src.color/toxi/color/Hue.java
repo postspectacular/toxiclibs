@@ -35,9 +35,6 @@ import toxi.math.MathUtils;
  * This class defines color hues and allows them to be access by name. There are
  * also methods to check if a hue is one of the 7 primary hues (rainbow) or to
  * find the closest defined hue for a given color.
- * 
- * @author toxi
- * 
  */
 public class Hue {
 

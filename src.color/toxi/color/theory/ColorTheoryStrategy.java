@@ -33,9 +33,6 @@ import toxi.color.ReadonlyTColor;
  * A simple interface for implementing rules used to create color palettes. The
  * library currently comes with 10 default implementations realising different
  * color theory approaches.
- * 
- * @author toxi
- * 
  */
 public interface ColorTheoryStrategy {
 

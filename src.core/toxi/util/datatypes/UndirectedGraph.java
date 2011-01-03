@@ -32,7 +32,6 @@ import java.util.Set;
  *         Delaunay/Voronoi code.
  * @author toxi Updated July 2010, minor API changes to be better suited for
  *         toxiclibs
- * 
  */
 public class UndirectedGraph<N> {
 

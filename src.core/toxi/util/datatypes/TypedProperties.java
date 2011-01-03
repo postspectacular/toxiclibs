@@ -28,18 +28,14 @@ import java.util.logging.Logger;
 
 /**
  * Convenience wrapper providing typed access to Java {@link Properties} files.
- * 
- * @author toxi
- * 
  */
-
 @SuppressWarnings("serial")
 public class TypedProperties extends Properties {
 
     public static final String DELIM = "\t\n\r\f\u00A0,";
 
-    private static final Logger logger =
-            Logger.getLogger(TypedProperties.class.getName());
+    private static final Logger logger = Logger.getLogger(TypedProperties.class
+            .getName());
 
     /**
      * Returns a property as boolean.
@@ -154,8 +150,8 @@ public class TypedProperties extends Properties {
      * @return prop value
      */
     public int getHexInt(String id, int defaultValue) {
-        return Integer.parseInt(getProperty(id, Integer
-                .toHexString(defaultValue)), 16);
+        return Integer.parseInt(
+                getProperty(id, Integer.toHexString(defaultValue)), 16);
     }
 
     /**

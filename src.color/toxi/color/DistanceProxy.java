@@ -23,9 +23,6 @@ package toxi.color;
 /**
  * A proxy interface to support the sorting of colors in different color spaces.
  * Used by {@link ColorList#sortByDistance(DistanceProxy, boolean)}.
- * 
- * @author toxi
- * 
  */
 public interface DistanceProxy {
 

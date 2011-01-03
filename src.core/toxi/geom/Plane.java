@@ -11,9 +11,6 @@ import toxi.math.MathUtils;
 /**
  * Class to describe and work with infinite generic 3D planes. Useful for
  * intersection problems and classifying points.
- * 
- * @author Karsten Schmidt
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Plane extends Vec3D implements Shape3D {

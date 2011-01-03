@@ -22,9 +22,6 @@ package toxi.color;
 
 /**
  * Compares 2 colors by one of their CMYK component values.
- * 
- * @author toxi
- * 
  */
 public class CMYKAccessor extends AccessCriteria {
 

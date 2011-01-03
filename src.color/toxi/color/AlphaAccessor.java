@@ -22,9 +22,6 @@ package toxi.color;
 
 /**
  * Compares 2 colors by their alpha value.
- * 
- * @author toxi
- * 
  */
 public class AlphaAccessor extends AccessCriteria {
 

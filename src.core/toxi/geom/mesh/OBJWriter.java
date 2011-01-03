@@ -34,7 +34,6 @@ import toxi.geom.Vec3D;
  * 
  * Needs to get some more TLC in future versions.
  * 
- * @author toxi
  * @see TriangleMesh#saveAsOBJ(OBJWriter)
  */
 public class OBJWriter {

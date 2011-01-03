@@ -27,7 +27,6 @@ import processing.core.PImage;
  * grayscale images in Processing PImage format. All filters are implemented as
  * static methods so no instance is needed.
  * 
- * @author Karsten Schmidt < i n f o [ a t ] t o x i . co . u k >
  * @version 0.1
  */
 public class Filter8bit {

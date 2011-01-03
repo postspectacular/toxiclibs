@@ -34,9 +34,6 @@ import toxi.color.ReadonlyTColor;
  * "http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#split-complementary"
  * >split-complementary color scheme</a> to create 2 compatible colors for the
  * given one.
- * 
- * @author toxi
- * 
  */
 public class SplitComplementaryStrategy implements ColorTheoryStrategy {
 

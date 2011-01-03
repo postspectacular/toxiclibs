@@ -39,9 +39,6 @@ import toxi.color.TColor;
  * <li>the complement and</li>
  * <li>a light supporting variant.</li>
  * </ul>
- * 
- * @author toxi
- * 
  */
 public class ComplementaryStrategy implements ColorTheoryStrategy {
 

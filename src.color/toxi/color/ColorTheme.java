@@ -41,9 +41,6 @@ import toxi.math.MathUtils;
  * to the weights of other theme parts. For example: Theme part A with a weight
  * of 0.5 will only have 1/20 of the weight of theme part B with a weight of
  * 5.0...
- * 
- * @author toxi
- * 
  */
 public class ColorTheme {
 

@@ -40,9 +40,6 @@ import toxi.geom.Vec3D;
  * faces in RAM and so is able to easily export models with millions of faces.
  * 
  * http://en.wikipedia.org/wiki/STL_(file_format)
- * 
- * @author kschmidt
- * 
  */
 public class STLWriter {
 

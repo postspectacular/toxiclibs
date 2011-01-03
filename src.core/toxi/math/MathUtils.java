@@ -25,10 +25,6 @@ import java.util.Random;
 /**
  * Miscellaneous math utilities.
  */
-/**
- * @author toxi
- * 
- */
 public final class MathUtils {
 
     /**

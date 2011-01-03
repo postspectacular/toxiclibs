@@ -30,8 +30,6 @@ import toxi.math.MathUtils;
 /**
  * Comprehensive 3D vector class with additional basic intersection and
  * collision detection features.
- * 
- * @author Karsten Schmidt
  */
 public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 

@@ -45,8 +45,6 @@ import toxi.util.datatypes.GenericSet;
  * 
  * {@link ColorRange}s are a key ingredient for defining {@link ColorTheme}s but
  * can also be used individually.
- * 
- * @author toxi
  */
 public class ColorRange {
 

@@ -26,9 +26,6 @@ import toxi.geom.Vec3D;
  * Implements a spring whose maximum relaxation distance at every time step can
  * be limited to achieve better (if physically incorrect) stability of the whole
  * spring system.
- * 
- * @author toxi
- * 
  */
 public class VerletConstrainedSpring extends VerletSpring {
 

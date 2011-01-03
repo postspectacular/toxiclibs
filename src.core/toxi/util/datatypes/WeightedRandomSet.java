@@ -31,6 +31,8 @@ import toxi.math.MathUtils;
  * {@link #getRandom()} method to retrieve objects. The frequency of returned
  * elements is based on their relative weight. This makes it easy to provide
  * biased preferences.
+ * 
+ * http://www.electricmonk.nl/log/2009/12/23/weighted-random-distribution/
  */
 public class WeightedRandomSet<T> {
 

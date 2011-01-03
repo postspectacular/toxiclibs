@@ -31,10 +31,6 @@ import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 import toxi.math.MathUtils;
 
-/**
- * @author toxi
- * 
- */
 public class CompoundTheoryStrategy implements ColorTheoryStrategy {
 
     public static final String NAME = "compound";

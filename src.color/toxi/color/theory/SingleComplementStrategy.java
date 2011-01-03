@@ -34,9 +34,6 @@ import toxi.color.ReadonlyTColor;
  * "http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#complementary"
  * >single complementary color scheme</a> to create a compatible color for the
  * given one.
- * 
- * @author toxi
- * 
  */
 public class SingleComplementStrategy implements ColorTheoryStrategy {
 

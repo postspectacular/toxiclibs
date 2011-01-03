@@ -26,12 +26,8 @@ package toxi.math.noise;
  * 
  * @author Stefan Gustavson, Linkping University, Sweden (stegu at itn dot liu
  *         dot se)
- * 
- *         Slight optimizations & restructuring by
- * @author Karsten Schmidt (info at toxi dot co dot uk)
- * 
+ * @author Karsten Schmidt (slight optimizations & restructuring)
  */
-
 public class SimplexNoise {
 
     private static final double SQRT3 = Math.sqrt(3.0);

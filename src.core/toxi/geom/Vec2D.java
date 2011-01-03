@@ -30,9 +30,6 @@ import toxi.math.MathUtils;
 /**
  * Comprehensive 2D vector class with additional basic intersection and
  * collision detection features.
- * 
- * @author Karsten Schmidt
- * 
  */
 public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
 

@@ -30,10 +30,6 @@ import toxi.color.ColorList;
 import toxi.color.ReadonlyTColor;
 import toxi.color.TColor;
 
-/**
- * @author toxi
- * 
- */
 public class LeftSplitComplementaryStrategy implements ColorTheoryStrategy {
 
     /*

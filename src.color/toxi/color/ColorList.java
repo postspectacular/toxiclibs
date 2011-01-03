@@ -45,9 +45,6 @@ import toxi.math.MathUtils;
  * 
  * @see ColorRange
  * @see AccessCriteria
- * 
- * @author toxi
- * 
  */
 public class ColorList implements Iterable<TColor> {
 
