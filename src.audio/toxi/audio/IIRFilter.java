@@ -1,9 +1,40 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 package toxi.audio;
 
 import toxi.math.MathUtils;
 import toxi.math.SinCosLUT;
 
-public class FIRFilter {
+/**
+ * This class provides a simple IIR filter implementation with one of lowpass,
+ * highpass or bandpass characteristics. The class can filter individual samples
+ * or entire signal buffers. The filter function always has this form:
+ * 
+ * <pre>
+ * y = 1 / a0 * (b0 * x0 + b1 * x1 + b2 * x2 - a1 * q1 - a2 * q2)
+ * </pre>
+ * 
+ * http://en.wikipedia.org/wiki/Infinite_impulse_response
+ */
+public class IIRFilter {
 
     public enum Type {
         LOWPASS, HIGHPASS, BANDPASS;
@@ -25,7 +56,7 @@ public class FIRFilter {
      * @param type
      * @param sampleRate
      */
-    public FIRFilter(Type type, float sampleRate) {
+    public IIRFilter(Type type, float sampleRate) {
         this.type = type;
         this.sampleRate = sampleRate;
         sampleRateRadians = MathUtils.TWO_PI / sampleRate;
@@ -42,8 +73,9 @@ public class FIRFilter {
         float amp = 0;
         for (int i = 0; i < in.length; i++) {
             final float yn =
-                    (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2)
-                            / a0;
+                    a0
+                            * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2
+                                    * out2);
             in2 = in1;
             in1 = in[i];
             out2 = out1;
@@ -57,7 +89,7 @@ public class FIRFilter {
         return amp;
     }
 
-    public FIRFilter clear() {
+    public IIRFilter clear() {
         in1 = in2 = 0;
         out1 = out2 = 0;
         return this;
@@ -71,7 +103,7 @@ public class FIRFilter {
      */
     public float filter(float in) {
         final float yn =
-                (b0 * in + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2) / a0;
+                a0 * (b0 * in + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2);
         in2 = in1;
         in1 = in;
         out2 = out1;
@@ -90,8 +122,9 @@ public class FIRFilter {
         float amp = 0;
         for (int i = 0; i < in.length; i++) {
             final float yn =
-                    (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2)
-                            / a0;
+                    a0
+                            * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2
+                                    * out2);
             in2 = in1;
             in1 = in[i];
             out2 = out1;
@@ -123,31 +156,27 @@ public class FIRFilter {
      * @param q
      * @return itself
      */
-    public FIRFilter init(final float freq, float q) {
+    public IIRFilter init(final float freq, float q) {
         float theta = sampleRateRadians * freq;
         float si = sinTable.sin(theta);
         float co = sinTable.cos(theta);
         alpha = si / q;
-        a0 = 1f + alpha;
+        a0 = 1f / (1 + alpha);
+        a1 = -2 * co;
+        a2 = 1 - alpha;
         switch (type) {
             case LOWPASS:
-                b0 = b2 = (1.0f - co) * 0.5f;
-                b1 = 1.0f - co;
-                a1 = -2.0f * co;
-                a2 = 1.0f - alpha;
+                b0 = b2 = (1f - co) * 0.5f;
+                b1 = 1f - co;
                 break;
             case HIGHPASS:
-                b0 = b2 = (1.0f + co) * 0.5f;
-                b1 = -(1.0f + co);
-                a1 = -2.0f * co;
-                a2 = 1.0f - alpha;
+                b0 = b2 = (1f + co) * 0.5f;
+                b1 = -(1f + co);
                 break;
             case BANDPASS:
                 b0 = si * 0.5f;
-                b1 = 0.0f;
-                b2 = -si / 2;
-                a1 = -2.0f * co;
-                a2 = 1.0f - alpha;
+                b1 = 0;
+                b2 = -si * 0.5f;
                 break;
         }
         return this;
@@ -158,7 +187,7 @@ public class FIRFilter {
      *            the decay to set
      * @return itself
      */
-    public FIRFilter setDecay(float decay) {
+    public IIRFilter setDecay(float decay) {
         this.decay = decay;
         return this;
     }

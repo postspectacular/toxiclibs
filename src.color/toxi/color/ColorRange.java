@@ -4,8 +4,8 @@
  * of Nodebox.net.
  * 
  * http://nodebox.net/code/index.php/Colors
- * 
- * Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+ *
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
 package toxi.color;
@@ -58,87 +58,77 @@ public class ColorRange {
     /**
      * Shade definition: saturation 30-70%, brightness: 90-100%
      */
-    public static final ColorRange LIGHT =
-            new ColorRange(null, new FloatRange(0.3f, 0.7f), new FloatRange(
-                    0.9f, 1.0f), null, new FloatRange(0.15f, 0.30f), null,
-                    "light");
+    public static final ColorRange LIGHT = new ColorRange(null, new FloatRange(
+            0.3f, 0.7f), new FloatRange(0.9f, 1.0f), null, new FloatRange(
+            0.15f, 0.30f), null, "light");
 
     /**
      * Shade definition: saturation 70-100%, brightness: 15-40%
      */
-    public static final ColorRange DARK =
-            new ColorRange(null, new FloatRange(0.7f, 1.0f), new FloatRange(
-                    0.15f, 0.4f), null, null, new FloatRange(0.5f, 0.75f),
-                    "dark");
+    public static final ColorRange DARK = new ColorRange(null, new FloatRange(
+            0.7f, 1.0f), new FloatRange(0.15f, 0.4f), null, null,
+            new FloatRange(0.5f, 0.75f), "dark");
 
     /**
      * Shade definition: saturation 80-100%, brightness: 80-100%
      */
-    public static final ColorRange BRIGHT =
-            new ColorRange(null, new FloatRange(0.8f, 1.0f), new FloatRange(
-                    0.8f, 1.0f), "bright");
+    public static final ColorRange BRIGHT = new ColorRange(null,
+            new FloatRange(0.8f, 1.0f), new FloatRange(0.8f, 1.0f), "bright");
 
     /**
      * Shade definition: saturation 15-30%, brightness: 70-100%
      */
-    public static final ColorRange WEAK =
-            new ColorRange(null, new FloatRange(0.15f, 0.3f), new FloatRange(
-                    0.7f, 1.0f), null, new FloatRange(0.2f, 0.2f), null, "weak");
+    public static final ColorRange WEAK = new ColorRange(null, new FloatRange(
+            0.15f, 0.3f), new FloatRange(0.7f, 1.0f), null, new FloatRange(
+            0.2f, 0.2f), null, "weak");
 
     /**
      * Shade definition: saturation 25-35%, brightness: 30-70%
      */
-    public static final ColorRange NEUTRAL =
-            new ColorRange(null, new FloatRange(0.25f, 0.35f), new FloatRange(
-                    0.3f, 0.7f), null, new FloatRange(0.15f, 0.15f),
-                    new FloatRange(0.9f, 1), "neutral");
+    public static final ColorRange NEUTRAL = new ColorRange(null,
+            new FloatRange(0.25f, 0.35f), new FloatRange(0.3f, 0.7f), null,
+            new FloatRange(0.15f, 0.15f), new FloatRange(0.9f, 1), "neutral");
 
     /**
      * Shade definition: saturation 40-80%, brightness: 80-100%
      */
-    public static final ColorRange FRESH =
-            new ColorRange(null, new FloatRange(0.4f, 0.8f), new FloatRange(
-                    0.8f, 1.0f), null, new FloatRange(0.05f, 0.3f),
-                    new FloatRange(0.8f, 1.0f), "fresh");
+    public static final ColorRange FRESH = new ColorRange(null, new FloatRange(
+            0.4f, 0.8f), new FloatRange(0.8f, 1.0f), null, new FloatRange(
+            0.05f, 0.3f), new FloatRange(0.8f, 1.0f), "fresh");
 
     /**
      * Shade definition: saturation 20-30%, brightness: 60-90%
      */
-    public static final ColorRange SOFT =
-            new ColorRange(null, new FloatRange(0.2f, 0.3f), new FloatRange(
-                    0.6f, 0.9f), null, new FloatRange(0.05f, 0.15f),
-                    new FloatRange(0.6f, 0.9f), "soft");
+    public static final ColorRange SOFT = new ColorRange(null, new FloatRange(
+            0.2f, 0.3f), new FloatRange(0.6f, 0.9f), null, new FloatRange(
+            0.05f, 0.15f), new FloatRange(0.6f, 0.9f), "soft");
 
     /**
      * Shade definition: saturation 90-100%, brightness: 40-100%
      */
-    public static final ColorRange HARD =
-            new ColorRange(null, new FloatRange(0.9f, 1.0f), new FloatRange(
-                    0.4f, 1.0f), "hard");
+    public static final ColorRange HARD = new ColorRange(null, new FloatRange(
+            0.9f, 1.0f), new FloatRange(0.4f, 1.0f), "hard");
 
     /**
      * Shade definition: saturation 60-90%, brightness: 40-90%
      */
-    public static final ColorRange WARM =
-            new ColorRange(null, new FloatRange(0.6f, 0.9f), new FloatRange(
-                    0.4f, 0.9f), null, new FloatRange(0.2f, 0.2f),
-                    new FloatRange(0.8f, 1.0f), "warm");
+    public static final ColorRange WARM = new ColorRange(null, new FloatRange(
+            0.6f, 0.9f), new FloatRange(0.4f, 0.9f), null, new FloatRange(0.2f,
+            0.2f), new FloatRange(0.8f, 1.0f), "warm");
 
     /**
      * Shade definition: saturation 5-20%, brightness: 90-100%
      */
-    public static final ColorRange COOL =
-            new ColorRange(null, new FloatRange(0.05f, 0.2f), new FloatRange(
-                    0.9f, 1.0f), null, null, new FloatRange(0.95f, 1.0f),
-                    "cool");
+    public static final ColorRange COOL = new ColorRange(null, new FloatRange(
+            0.05f, 0.2f), new FloatRange(0.9f, 1.0f), null, null,
+            new FloatRange(0.95f, 1.0f), "cool");
 
     /**
      * Shade definition: saturation 90-100%, brightness: 20-35% or 80-100%
      */
-    public static final ColorRange INTENSE =
-            new ColorRange(null, new FloatRange(0.9f, 1.0f), new FloatRange(
-                    0.2f, 0.35f), "intense").addBrightnessRange(new FloatRange(
-                    0.8f, 1.0f));
+    public static final ColorRange INTENSE = new ColorRange(null,
+            new FloatRange(0.9f, 1.0f), new FloatRange(0.2f, 0.35f), "intense")
+            .addBrightnessRange(new FloatRange(0.8f, 1.0f));
 
     /**
      * List of ColorRange presets.
@@ -508,8 +498,8 @@ public class ColorRange {
             range.hueConstraint =
                     new GenericSet<FloatRange>(new FloatRange(hue, hue));
             range.alphaConstraint =
-                    new GenericSet<FloatRange>(new FloatRange(c.alpha(), c
-                            .alpha()));
+                    new GenericSet<FloatRange>(new FloatRange(c.alpha(),
+                            c.alpha()));
         } else {
             range.hueConstraint = hueConstraint.copy();
             range.alphaConstraint = alphaConstraint.copy();
@@ -564,8 +554,11 @@ public class ColorRange {
                         .newHSVA(c.hue(), 0, white.pickRandom(), c.alpha());
             }
             if (c.isGrey()) {
-                return TColor.newHSVA(c.hue(), 0, MathUtils.flipCoin() ? black
-                        .pickRandom() : white.pickRandom(), c.alpha());
+                return TColor.newHSVA(
+                        c.hue(),
+                        0,
+                        MathUtils.flipCoin() ? black.pickRandom() : white
+                                .pickRandom(), c.alpha());
             }
             h = c.hue() + variance * MathUtils.normalizedRandom();
             a = c.alpha();

@@ -1,7 +1,7 @@
 package toxi.test.geom;
 
 import junit.framework.TestCase;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.WEFace;
@@ -71,7 +71,7 @@ public class WEMeshTest extends TestCase {
         assertEquals(8, m.edges.size());
         m.computeVertexNormals();
         for (Face f : m.faces) {
-            System.out.println(Triangle.isClockwiseInXY(f.a, f.b, f.c) + " "
+            System.out.println(Triangle3D.isClockwiseInXY(f.a, f.b, f.c) + " "
                     + f);
         }
         assertEquals(3, ((WEVertex) m.faces.get(0).a).edges.size());

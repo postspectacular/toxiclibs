@@ -29,11 +29,8 @@ import toxi.geom.Vec2D;
  * as an array of Pnts. Uses simplices; a simplex is represented as an array of
  * Pnts.
  * 
- * @author Paul Chew
- * 
- *         Created July 2005. Derived from an earlier, messier version.
- * 
- *         Modified Novemeber 2007. Minor clean up.
+ * @author Paul Chew Created July 2005. Derived from an earlier, messier
+ *         version. Modified Novemeber 2007. Minor clean up.
  */
 public class DelaunayVertex {
 

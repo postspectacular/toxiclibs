@@ -2,14 +2,14 @@ package toxi.test.geom;
 
 import junit.framework.TestCase;
 import toxi.geom.Plane;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec3D;
 
 public class PlaneTest extends TestCase {
 
     public void testContainment() {
-        Triangle t =
-                new Triangle(new Vec3D(-100, 0, 0), new Vec3D(0, 0, -100),
+        Triangle3D t =
+                new Triangle3D(new Vec3D(-100, 0, 0), new Vec3D(0, 0, -100),
                         new Vec3D(0, 0, 100));
         Plane pl = new Plane(t.computeCentroid(), t.computeNormal());
     }

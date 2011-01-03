@@ -1,17 +1,37 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.geom;
 
 import toxi.math.MathUtils;
 
 public class TriangleIntersector implements Intersector3D {
 
-    public Triangle triangle;
+    public Triangle3D triangle;
     private IsectData3D isectData;
 
     public TriangleIntersector() {
-        this(new Triangle());
+        this(new Triangle3D());
     }
 
-    public TriangleIntersector(Triangle t) {
+    public TriangleIntersector(Triangle3D t) {
         this.triangle = t;
         this.isectData = new IsectData3D();
     }
@@ -23,7 +43,7 @@ public class TriangleIntersector implements Intersector3D {
     /**
      * @return the triangle
      */
-    public Triangle getTriangle() {
+    public Triangle3D getTriangle() {
         return triangle;
     }
 
@@ -71,7 +91,7 @@ public class TriangleIntersector implements Intersector3D {
      * @param tri
      *            the triangle to set
      */
-    public TriangleIntersector setTriangle(Triangle tri) {
+    public TriangleIntersector setTriangle(Triangle3D tri) {
         this.triangle = tri;
         return this;
     }

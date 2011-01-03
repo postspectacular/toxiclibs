@@ -4,8 +4,8 @@
  * of Nodebox.net.
  * 
  * http://nodebox.net/code/index.php/Colors
- * 
- * Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+ *
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
 package toxi.color;
@@ -43,18 +43,15 @@ public class TColor implements ReadonlyTColor {
     protected static final float INV8BIT = 1f / 255;
     protected static final double EPS = .001;
 
-    protected static final Vec2D[] RYB_WHEEL =
-            new Vec2D[] { new Vec2D(0, 0), new Vec2D(15, 8), new Vec2D(30, 17),
-                    new Vec2D(45, 26), new Vec2D(60, 34), new Vec2D(75, 41),
-                    new Vec2D(90, 48), new Vec2D(105, 54), new Vec2D(120, 60),
-                    new Vec2D(135, 81), new Vec2D(150, 103),
-                    new Vec2D(165, 123), new Vec2D(180, 138),
-                    new Vec2D(195, 155), new Vec2D(210, 171),
-                    new Vec2D(225, 187), new Vec2D(240, 204),
-                    new Vec2D(255, 219), new Vec2D(270, 234),
-                    new Vec2D(285, 251), new Vec2D(300, 267),
-                    new Vec2D(315, 282), new Vec2D(330, 298),
-                    new Vec2D(345, 329), new Vec2D(360, 0) };
+    protected static final Vec2D[] RYB_WHEEL = new Vec2D[] { new Vec2D(0, 0),
+            new Vec2D(15, 8), new Vec2D(30, 17), new Vec2D(45, 26),
+            new Vec2D(60, 34), new Vec2D(75, 41), new Vec2D(90, 48),
+            new Vec2D(105, 54), new Vec2D(120, 60), new Vec2D(135, 81),
+            new Vec2D(150, 103), new Vec2D(165, 123), new Vec2D(180, 138),
+            new Vec2D(195, 155), new Vec2D(210, 171), new Vec2D(225, 187),
+            new Vec2D(240, 204), new Vec2D(255, 219), new Vec2D(270, 234),
+            new Vec2D(285, 251), new Vec2D(300, 267), new Vec2D(315, 282),
+            new Vec2D(330, 298), new Vec2D(345, 329), new Vec2D(360, 0) };
 
     /**
      * Maximum rgb component value for a color to be classified as black.
@@ -345,8 +342,8 @@ public class TColor implements ReadonlyTColor {
      * @return random color
      */
     public static final TColor newRandom() {
-        return newRGBA(MathUtils.random(1f), MathUtils.random(1f), MathUtils
-                .random(1f), 1);
+        return newRGBA(MathUtils.random(1f), MathUtils.random(1f),
+                MathUtils.random(1f), 1);
     }
 
     /**
@@ -652,8 +649,9 @@ public class TColor implements ReadonlyTColor {
     }
 
     public TColor differenceTo(TColor c) {
-        return TColor.newRGB(MathUtils.abs(rgb[0] - c.rgb[0]), MathUtils
-                .abs(rgb[1] - c.rgb[1]), MathUtils.abs(rgb[2] - c.rgb[2]));
+        return TColor.newRGB(MathUtils.abs(rgb[0] - c.rgb[0]),
+                MathUtils.abs(rgb[1] - c.rgb[1]),
+                MathUtils.abs(rgb[2] - c.rgb[2]));
     }
 
     /*
@@ -682,8 +680,8 @@ public class TColor implements ReadonlyTColor {
                 new Vec3D((MathUtils.cos(hue) * hsv[1]),
                         (MathUtils.sin(hue) * hsv[1]), hsv[2]);
         Vec3D v2 =
-                new Vec3D((MathUtils.cos(hue2) * c.saturation()), (MathUtils
-                        .sin(hue2) * c.saturation()), c.brightness());
+                new Vec3D((MathUtils.cos(hue2) * c.saturation()),
+                        (MathUtils.sin(hue2) * c.saturation()), c.brightness());
         return v1.distanceTo(v2);
     }
 

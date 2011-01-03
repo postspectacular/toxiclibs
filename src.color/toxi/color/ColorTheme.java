@@ -4,8 +4,8 @@
  * of Nodebox.net.
  * 
  * http://nodebox.net/code/index.php/Colors
- * 
- * Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+ *
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,9 @@
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
+
 package toxi.color;
 
 import java.util.ArrayList;
@@ -46,88 +47,89 @@ import toxi.math.MathUtils;
  */
 public class ColorTheme {
 
-	static class ThemePart {
-		ColorRange range;
-		ReadonlyTColor col;
-		float weight;
+    static class ThemePart {
 
-		ThemePart(ColorRange range, ReadonlyTColor col, float weight) {
-			this.range = range;
-			this.col = col;
-			this.weight = weight;
-		}
+        ColorRange range;
+        ReadonlyTColor col;
+        float weight;
 
-		public TColor getColor() {
-			return range.getColor(col, ColorRange.DEFAULT_VARIANCE);
-		}
-	}
+        ThemePart(ColorRange range, ReadonlyTColor col, float weight) {
+            this.range = range;
+            this.col = col;
+            this.weight = weight;
+        }
 
-	protected String name;
-	protected ArrayList<ThemePart> parts = new ArrayList<ThemePart>();
+        public TColor getColor() {
+            return range.getColor(col, ColorRange.DEFAULT_VARIANCE);
+        }
+    }
 
-	protected float weightedSum;
+    protected String name;
+    protected ArrayList<ThemePart> parts = new ArrayList<ThemePart>();
 
-	public ColorTheme(String name) {
-		this.name = name;
-	}
+    protected float weightedSum;
 
-	public ColorTheme addRange(ColorRange range, ReadonlyTColor col,
-			float weight) {
-		parts.add(new ThemePart(range, col, weight));
-		weightedSum += weight;
-		return this;
-	}
+    public ColorTheme(String name) {
+        this.name = name;
+    }
 
-	public ColorTheme addRange(String descriptor, float weight) {
-		StringTokenizer st = new StringTokenizer(descriptor, " ,");
-		ReadonlyTColor col = null;
-		ColorRange range = null;
-		while (st.hasMoreTokens()) {
-			String item = st.nextToken();
-			if (ColorRange.getPresetForName(item) != null) {
-				range = ColorRange.getPresetForName(item);
-			} else if (NamedColor.getForName(item) != null) {
-				col = NamedColor.getForName(item);
-			}
-		}
-		if (range != null) {
-			addRange(range, col, weight);
-		}
-		return this;
-	}
+    public ColorTheme addRange(ColorRange range, ReadonlyTColor col,
+            float weight) {
+        parts.add(new ThemePart(range, col, weight));
+        weightedSum += weight;
+        return this;
+    }
 
-	public TColor getColor() {
-		float rnd = MathUtils.random(1f);
-		for (ThemePart t : parts) {
-			float currWeight = t.weight / weightedSum;
-			if (currWeight >= rnd) {
-				return t.getColor();
-			}
-			rnd -= currWeight;
-		}
-		return null;
-	}
+    public ColorTheme addRange(String descriptor, float weight) {
+        StringTokenizer st = new StringTokenizer(descriptor, " ,");
+        ReadonlyTColor col = null;
+        ColorRange range = null;
+        while (st.hasMoreTokens()) {
+            String item = st.nextToken();
+            if (ColorRange.getPresetForName(item) != null) {
+                range = ColorRange.getPresetForName(item);
+            } else if (NamedColor.getForName(item) != null) {
+                col = NamedColor.getForName(item);
+            }
+        }
+        if (range != null) {
+            addRange(range, col, weight);
+        }
+        return this;
+    }
 
-	/**
-	 * Creates a {@link ColorList} of {@link TColor}s based on the theme's
-	 * ranges and balance defined by their weights
-	 * 
-	 * @param num
-	 *            number of colors to create
-	 * @return new list
-	 */
-	public ColorList getColors(int num) {
-		ColorList list = new ColorList();
-		for (int i = 0; i < num; i++) {
-			list.add(getColor());
-		}
-		return list;
-	}
+    public TColor getColor() {
+        float rnd = MathUtils.random(1f);
+        for (ThemePart t : parts) {
+            float currWeight = t.weight / weightedSum;
+            if (currWeight >= rnd) {
+                return t.getColor();
+            }
+            rnd -= currWeight;
+        }
+        return null;
+    }
 
-	/**
-	 * @return the theme's name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Creates a {@link ColorList} of {@link TColor}s based on the theme's
+     * ranges and balance defined by their weights
+     * 
+     * @param num
+     *            number of colors to create
+     * @return new list
+     */
+    public ColorList getColors(int num) {
+        ColorList list = new ColorList();
+        for (int i = 0; i < num; i++) {
+            list.add(getColor());
+        }
+        return list;
+    }
+
+    /**
+     * @return the theme's name
+     */
+    public String getName() {
+        return name;
+    }
 }

@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.physics;
 
 import java.util.ArrayList;
@@ -15,53 +35,53 @@ import toxi.geom.Vec3D;
  */
 public class ParticlePath extends Spline3D {
 
-	List<VerletParticle> particles = new ArrayList<VerletParticle>();
+    List<VerletParticle> particles = new ArrayList<VerletParticle>();
 
-	public ParticlePath() {
-		super();
-	}
+    public ParticlePath() {
+        super();
+    }
 
-	public ParticlePath(List<Vec3D> points) {
-		super(points);
-	}
+    public ParticlePath(List<Vec3D> points) {
+        super(points);
+    }
 
-	/**
-	 * Creates particles along the spline at the fixed interval given. The
-	 * precision of this interval will largely depend on the number of
-	 * subdivision vertices created, but can be adjusted via the related
-	 * parameter.
-	 * 
-	 * @param physics
-	 *            physics instance
-	 * @param subDiv
-	 *            number spline segment subdivisions
-	 * @param step
-	 *            desired rest length between particles
-	 * @param mass
-	 *            desired particle mass
-	 * @return list of particles
-	 */
-	public List<VerletParticle> createParticles(VerletPhysics physics,
-			int subDiv, float step, float mass) {
-		particles.clear();
-		computeVertices(subDiv);
-		for (Vec3D v : getDecimatedVertices(step, true)) {
-			VerletParticle p = createSingleParticle(v, mass);
-			particles.add(p);
-			physics.addParticle(p);
-		}
-		return particles;
-	}
+    /**
+     * Creates particles along the spline at the fixed interval given. The
+     * precision of this interval will largely depend on the number of
+     * subdivision vertices created, but can be adjusted via the related
+     * parameter.
+     * 
+     * @param physics
+     *            physics instance
+     * @param subDiv
+     *            number spline segment subdivisions
+     * @param step
+     *            desired rest length between particles
+     * @param mass
+     *            desired particle mass
+     * @return list of particles
+     */
+    public List<VerletParticle> createParticles(VerletPhysics physics,
+            int subDiv, float step, float mass) {
+        particles.clear();
+        computeVertices(subDiv);
+        for (Vec3D v : getDecimatedVertices(step, true)) {
+            VerletParticle p = createSingleParticle(v, mass);
+            particles.add(p);
+            physics.addParticle(p);
+        }
+        return particles;
+    }
 
-	/**
-	 * Extension point for creating a custom/sub-classed VerletParticle
-	 * instance.
-	 * 
-	 * @param pos
-	 * @param mass
-	 * @return particle
-	 */
-	protected VerletParticle createSingleParticle(Vec3D pos, float mass) {
-		return new VerletParticle(pos, mass);
-	}
+    /**
+     * Extension point for creating a custom/sub-classed VerletParticle
+     * instance.
+     * 
+     * @param pos
+     * @param mass
+     * @return particle
+     */
+    protected VerletParticle createSingleParticle(Vec3D pos, float mass) {
+        return new VerletParticle(pos, mass);
+    }
 }

@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.processing;
 
 import java.util.Iterator;
@@ -23,8 +43,8 @@ import toxi.geom.ReadonlyVec2D;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Rect;
 import toxi.geom.Sphere;
-import toxi.geom.Triangle;
 import toxi.geom.Triangle2D;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
@@ -554,24 +574,6 @@ public class ToxiclibsSupport {
         gfx.translate(v.x, v.y, v.z);
     }
 
-    public final void triangle(Triangle tri) {
-        triangle(tri, true);
-    }
-
-    public final void triangle(Triangle tri, boolean isFullShape) {
-        if (isFullShape) {
-            gfx.beginShape(PConstants.TRIANGLES);
-        }
-        Vec3D n = tri.computeNormal();
-        gfx.normal(n.x, n.y, n.z);
-        gfx.vertex(tri.a.x, tri.a.y, tri.a.z);
-        gfx.vertex(tri.b.x, tri.b.y, tri.b.z);
-        gfx.vertex(tri.c.x, tri.c.y, tri.c.z);
-        if (isFullShape) {
-            gfx.endShape();
-        }
-    }
-
     public final void triangle(Triangle2D tri) {
         triangle(tri, true);
     }
@@ -583,6 +585,24 @@ public class ToxiclibsSupport {
         gfx.vertex(tri.a.x, tri.a.y);
         gfx.vertex(tri.b.x, tri.b.y);
         gfx.vertex(tri.c.x, tri.c.y);
+        if (isFullShape) {
+            gfx.endShape();
+        }
+    }
+
+    public final void triangle(Triangle3D tri) {
+        triangle(tri, true);
+    }
+
+    public final void triangle(Triangle3D tri, boolean isFullShape) {
+        if (isFullShape) {
+            gfx.beginShape(PConstants.TRIANGLES);
+        }
+        Vec3D n = tri.computeNormal();
+        gfx.normal(n.x, n.y, n.z);
+        gfx.vertex(tri.a.x, tri.a.y, tri.a.z);
+        gfx.vertex(tri.b.x, tri.b.y, tri.b.z);
+        gfx.vertex(tri.c.x, tri.c.y, tri.c.z);
         if (isFullShape) {
             gfx.endShape();
         }

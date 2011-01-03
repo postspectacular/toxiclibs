@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.sim.grayscott;
 
 import toxi.geom.Rect;
@@ -246,8 +266,7 @@ public class GrayScott {
                 float d2 = currU * currV * currV;
                 u[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         currU
                                                 + t
                                                 * ((dU
@@ -257,8 +276,7 @@ public class GrayScott {
                                                         * (1.0f - currU)));
                 v[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         currV
                                                 + t
                                                 * ((dV
@@ -284,8 +302,7 @@ public class GrayScott {
                 float d = cu * cv * cv;
                 u[x] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cu
                                                 + t
                                                 * ((dU
@@ -295,8 +312,7 @@ public class GrayScott {
                                                         * (1.0f - cu)));
                 v[x] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cv
                                                 + t
                                                 * ((dV
@@ -307,8 +323,7 @@ public class GrayScott {
                 d = cui * cvi * cvi;
                 u[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cui
                                                 + t
                                                 * ((dU
@@ -320,8 +335,7 @@ public class GrayScott {
                                                         * (1.0f - cui)));
                 v[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cvi
                                                 + t
                                                 * ((dU
@@ -346,8 +360,7 @@ public class GrayScott {
                 int down = (y == h1 ? 0 : y + 1) * width;
                 u[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cu
                                                 + t
                                                 * ((dU
@@ -356,8 +369,7 @@ public class GrayScott {
                                                         * (1.0f - cu)));
                 v[idx] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cv
                                                 + t
                                                 * ((dV
@@ -367,8 +379,7 @@ public class GrayScott {
                 d = cui * cvi * cvi;
                 u[idxW1] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cui
                                                 + t
                                                 * ((dU
@@ -378,8 +389,7 @@ public class GrayScott {
                                                         * (1.0f - cui)));
                 v[idxW1] =
                         MathUtils
-                                .max(
-                                        0,
+                                .max(0,
                                         cvi
                                                 + t
                                                 * ((dV

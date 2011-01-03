@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.sim.dla;
 
 import java.io.BufferedWriter;
@@ -17,8 +37,8 @@ import toxi.math.MathUtils;
 
 public class DLA {
 
-    protected static final Logger logger =
-            Logger.getLogger(DLA.class.getName());
+    protected static final Logger logger = Logger
+            .getLogger(DLA.class.getName());
 
     protected int numParticles;
     protected DLAParticle currParticle;
@@ -116,8 +136,8 @@ public class DLA {
         if (p.sub(currCurvePoint).magSquared() < config
                 .getCurveAttachDistanceSquared()) {
             parts =
-                    octreeGuides.getPointsWithinSphere(p, config
-                            .getCurveAttachDistance());
+                    octreeGuides.getPointsWithinSphere(p,
+                            config.getCurveAttachDistance());
             if (parts != null) {
                 for (int i = parts.size(); i > 0; i--) {
                     if (Math.random() < stickiness) {
@@ -272,8 +292,8 @@ public class DLA {
                         .hasNext();) {
                     Vec3D p = i.next();
                     StringBuilder sb = new StringBuilder(36);
-                    sb.append(p.x).append(',').append(p.y).append(',').append(
-                            p.z).append("\n");
+                    sb.append(p.x).append(',').append(p.y).append(',')
+                            .append(p.z).append("\n");
                     out.write(sb.toString());
                 }
                 out.close();
@@ -310,8 +330,8 @@ public class DLA {
                     currCurvePoint.add(spawnPos.scale(MathUtils.random(config
                             .getSpawnRadius())));
             currParticle =
-                    new DLAParticle(spawnPos, config.getEscapeRadius(), config
-                            .getParticleSpeed(), config.getSearchSpeed());
+                    new DLAParticle(spawnPos, config.getEscapeRadius(),
+                            config.getParticleSpeed(), config.getSearchSpeed());
         }
         currParticle.update(currCurvePoint);
         if (checkParticle(currParticle)) {

@@ -1,7 +1,27 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.volume;
 
 import toxi.geom.AABB;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.Mesh3D;
@@ -106,7 +126,7 @@ public class MeshVoxelizer {
         ScaleMap gy = new ScaleMap(1, volume.resY - 2, bmin.y, bmax.y);
         ScaleMap gz = new ScaleMap(1, volume.resZ - 2, bmin.z, bmax.z);
         volume.setScale(box.getExtent().scale(2f));
-        Triangle tri = new Triangle();
+        Triangle3D tri = new Triangle3D();
         AABB voxel = new AABB(new Vec3D(), volume.voxelSize.scale(0.5f));
         for (Face f : mesh.getFaces()) {
             tri.a = f.a;

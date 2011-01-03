@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.geom;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -9,7 +29,6 @@ import toxi.math.MathUtils;
 
 /**
  * Quaternion implementation with SLERP based on http://is.gd/2n9s
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Quaternion {
@@ -85,10 +104,16 @@ public class Quaternion {
         return q;
     }
 
+    /**
+     * Creates a quaternion from a rotation matrix. The algorithm used is from
+     * Allan and Mark Watt's "Advanced Animation and Rendering Techniques" (ACM
+     * Press 1992).
+     * 
+     * @param m
+     *            rotation matrix
+     * @return quaternion
+     */
     public static Quaternion createFromMatrix(Matrix4x4 m) {
-        // Creates a quaternion from a rotation matrix.
-        // The algorithm used is from Allan and Mark Watt's "Advanced
-        // Animation and Rendering Techniques" (ACM Press 1992).
 
         double s = 0.0f;
         double[] q = new double[4];
@@ -116,8 +141,7 @@ public class Quaternion {
             j = nxt[i];
             k = nxt[j];
             s =
-                    Math
-                            .sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
+                    Math.sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
 
             q[i] = s * 0.5f;
             s = 0.5f / s;
@@ -130,6 +154,14 @@ public class Quaternion {
                 (float) q[2]);
     }
 
+    /**
+     * Constructs a quaternion that rotates the vector given by the "forward"
+     * param into the direction given by the "dir" param.
+     * 
+     * @param dir
+     * @param forward
+     * @return quaternion
+     */
     public static Quaternion getAlignmentQuat(ReadonlyVec3D dir,
             ReadonlyVec3D forward) {
         Vec3D target = dir.getNormalized();
@@ -235,7 +267,8 @@ public class Quaternion {
     }
 
     /**
-     * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
+     * Spherical interpolation to target quaternion (code ported from <a href=
+     * "http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
      * >GamaSutra</a>)
      * 
      * @param target
@@ -260,7 +293,8 @@ public class Quaternion {
     }
 
     /**
-     * Spherical interpolation to target quaternion (code ported from <a href="http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
+     * Spherical interpolation to target quaternion (code ported from <a href=
+     * "http://www.gamasutra.com/view/feature/3278/rotating_objects_using_quaternions.php"
      * >GamaSutra</a>)
      * 
      * @param target

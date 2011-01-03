@@ -1,6 +1,26 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.geom.mesh;
 
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
@@ -58,13 +78,13 @@ public class Face {
     }
 
     /**
-     * Creates a generic {@link Triangle} instance using this face's vertices.
+     * Creates a generic {@link Triangle3D} instance using this face's vertices.
      * The new instance is made up of copies of the original vertices and
      * manipulating them will not impact the originals.
      * 
      * @return triangle copy of this mesh face
      */
-    public Triangle toTriangle() {
-        return new Triangle(a.copy(), b.copy(), c.copy());
+    public Triangle3D toTriangle() {
+        return new Triangle3D(a.copy(), b.copy(), c.copy());
     }
 }

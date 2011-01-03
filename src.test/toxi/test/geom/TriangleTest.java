@@ -2,7 +2,7 @@ package toxi.test.geom;
 
 import junit.framework.TestCase;
 import toxi.geom.ReadonlyVec3D;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec3D;
 
 public class TriangleTest extends TestCase {
@@ -11,7 +11,7 @@ public class TriangleTest extends TestCase {
         Vec3D a = new Vec3D(-100, -100, 0);
         Vec3D c = new Vec3D(100, 0, 0);
         Vec3D b = new Vec3D(-100, 100, 0);
-        Triangle t = new Triangle(a, b, c);
+        Triangle3D t = new Triangle3D(a, b, c);
         assertTrue(a.equalsWithTolerance(t.fromBarycentric(t.toBarycentric(a)),
                 0.01f));
         assertTrue(b.equalsWithTolerance(t.fromBarycentric(t.toBarycentric(b)),
@@ -24,7 +24,7 @@ public class TriangleTest extends TestCase {
         Vec3D a = new Vec3D(100, 0, 0);
         Vec3D b = new Vec3D(0, 100, 0);
         Vec3D c = new Vec3D(0, 0, 100);
-        Triangle t = new Triangle(a, b, c);
+        Triangle3D t = new Triangle3D(a, b, c);
         ReadonlyVec3D centroid = t.computeCentroid();
         assertTrue("incorrect centroid",
                 centroid.equals(new Vec3D(100, 100, 100).scaleSelf(1f / 3)));
@@ -34,16 +34,16 @@ public class TriangleTest extends TestCase {
         Vec3D a = new Vec3D(0, 100, 0);
         Vec3D b = new Vec3D(100, 0, -50);
         Vec3D c = new Vec3D(-100, -100, 100);
-        assertTrue("not clockwiseXY", Triangle.isClockwiseInXY(a, b, c));
-        assertTrue("not clockwiseXZ", Triangle.isClockwiseInXY(a, b, c));
-        assertTrue("not clockwiseYZ", Triangle.isClockwiseInXY(a, b, c));
+        assertTrue("not clockwiseXY", Triangle3D.isClockwiseInXY(a, b, c));
+        assertTrue("not clockwiseXZ", Triangle3D.isClockwiseInXY(a, b, c));
+        assertTrue("not clockwiseYZ", Triangle3D.isClockwiseInXY(a, b, c));
     }
 
     public void testContainment() {
         Vec3D a = new Vec3D(100, 0, 0);
         Vec3D b = new Vec3D(0, 100, 0);
         Vec3D c = new Vec3D(0, 0, 100);
-        Triangle t = new Triangle(a, b, c);
+        Triangle3D t = new Triangle3D(a, b, c);
         assertTrue(t.containsPoint(a));
         assertTrue(t.containsPoint(b));
         assertTrue(t.containsPoint(c));
@@ -52,8 +52,8 @@ public class TriangleTest extends TestCase {
     }
 
     public void testEquilateral() {
-        Triangle t =
-                Triangle.createEquilateralFrom(new Vec3D(-100, 0, 0),
+        Triangle3D t =
+                Triangle3D.createEquilateralFrom(new Vec3D(-100, 0, 0),
                         new Vec3D(100, 0, 0));
 
     }
@@ -62,7 +62,7 @@ public class TriangleTest extends TestCase {
         Vec3D a = new Vec3D(0, 100, 0);
         Vec3D b = new Vec3D(100, 0, 0);
         Vec3D c = new Vec3D(-100, -100, 0);
-        Triangle t = new Triangle(a, b, c);
+        Triangle3D t = new Triangle3D(a, b, c);
         ReadonlyVec3D n = t.computeNormal();
         assertTrue("normal wrong", n.equals(new Vec3D(0, 0, 1)));
     }

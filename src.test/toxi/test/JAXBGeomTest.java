@@ -17,7 +17,7 @@ import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.Spline2D;
 import toxi.geom.Spline3D;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
@@ -57,7 +57,7 @@ public class JAXBGeomTest {
             test.ray = new Ray3D();
             test.rect = new Rect(0, 0, 100, 200);
             test.sphere = new Sphere();
-            test.tri = new Triangle(new Vec3D(), new Vec3D(), new Vec3D());
+            test.tri = new Triangle3D(new Vec3D(), new Vec3D(), new Vec3D());
             List<Vec2D> points2d = new ArrayList<Vec2D>();
             points2d.add(new Vec2D());
             points2d.add(new Vec2D());
@@ -100,7 +100,7 @@ public class JAXBGeomTest {
     Plane plane;
 
     @XmlElement
-    Triangle tri;
+    Triangle3D tri;
 
     @XmlElement
     Rect rect;

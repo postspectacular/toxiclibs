@@ -1,5 +1,5 @@
-/* 
- * Copyright (c) 2007 Karsten Schmidt
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +15,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
 package toxi.geom;
@@ -25,25 +25,27 @@ package toxi.geom;
  */
 public interface Reflector3D extends Intersector3D {
 
-	/**
-	 * Reflects given ray on the entity's surface
-	 * 
-	 * @param ray incident ray
-	 * @return reflected ray starting from intersection point
-	 */
-	public Ray3D reflectRay(Ray3D ray);
+    /**
+     * Returns the point on the reflected ray at given distance from the
+     * intersection point
+     * 
+     * @param dist
+     *            distance from isect position
+     * @return point on reflected ray
+     */
+    public ReadonlyVec3D getReflectedRayPointAtDistance(float dist);
 
-	/**
-	 * @return angle between incident ray and surface normal
-	 */
-	public float getReflectionAngle();
+    /**
+     * @return angle between incident ray and surface normal
+     */
+    public float getReflectionAngle();
 
-	/**
-	 * Returns the point on the reflected ray at given distance from the
-	 * intersection point
-	 * 
-	 * @param dist distance from isect position
-	 * @return point on reflected ray
-	 */
-	public ReadonlyVec3D getReflectedRayPointAtDistance(float dist);
+    /**
+     * Reflects given ray on the entity's surface
+     * 
+     * @param ray
+     *            incident ray
+     * @return reflected ray starting from intersection point
+     */
+    public Ray3D reflectRay(Ray3D ray);
 }

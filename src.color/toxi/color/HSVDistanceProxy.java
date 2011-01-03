@@ -1,11 +1,5 @@
 /*
- * Some classes in this package have been partly inspired by & bits ported from
- * Python code written by Tom De Smedt & Frederik De Bleser for the "colors" library
- * of Nodebox.net.
- * 
- * http://nodebox.net/code/index.php/Colors
- * 
- * Copyright (c) 2006-2008 Karsten Schmidt <info at postspectacular.com>
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
 package toxi.color;
 
 /**
@@ -34,7 +29,7 @@ package toxi.color;
  */
 public class HSVDistanceProxy implements DistanceProxy {
 
-	public float distanceBetween(ReadonlyTColor a, ReadonlyTColor b) {
-		return a.distanceToHSV(b);
-	}
+    public float distanceBetween(ReadonlyTColor a, ReadonlyTColor b) {
+        return a.distanceToHSV(b);
+    }
 }

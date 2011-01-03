@@ -1,8 +1,28 @@
+/*
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.geom.mesh;
 
 import toxi.geom.IsectData3D;
 import toxi.geom.Ray3D;
-import toxi.geom.Triangle;
+import toxi.geom.Triangle3D;
 import toxi.geom.TriangleIntersector;
 import toxi.geom.Vec3D;
 import toxi.math.Interpolation2D;
@@ -140,11 +160,11 @@ public class Terrain {
             Vec3D d = getVertexAtCell((int) xx, z2);
             Ray3D r = new Ray3D(new Vec3D(x, 10000, z), new Vec3D(0, -1, 0));
             TriangleIntersector i =
-                    new TriangleIntersector(new Triangle(a, b, d));
+                    new TriangleIntersector(new Triangle3D(a, b, d));
             if (i.intersectsRay(r)) {
                 isec = i.getIntersectionData();
             } else {
-                i.setTriangle(new Triangle(b, c, d));
+                i.setTriangle(new Triangle3D(b, c, d));
                 i.intersectsRay(r);
                 isec = i.getIntersectionData();
             }

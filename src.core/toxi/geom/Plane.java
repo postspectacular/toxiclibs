@@ -37,7 +37,7 @@ public class Plane extends Vec3D implements Shape3D {
         normal = Vec3D.Y_AXIS.copy();
     }
 
-    public Plane(Triangle t) {
+    public Plane(Triangle3D t) {
         this(t.computeCentroid(), t.computeNormal());
     }
 

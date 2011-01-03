@@ -1,21 +1,21 @@
 /*
- * Copyright (c) 2006-2008 Karsten Schmidt
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  * 
  * http://creativecommons.org/licenses/LGPL/2.1/
  * 
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
 package toxi.geom;
@@ -28,14 +28,14 @@ import javax.xml.bind.annotation.XmlTransient;
 import toxi.math.MathUtils;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Triangle implements Shape3D {
+public class Triangle3D implements Shape3D {
 
-    public static Triangle createEquilateralFrom(Vec3D a, Vec3D b) {
+    public static Triangle3D createEquilateralFrom(Vec3D a, Vec3D b) {
         Vec3D c = a.interpolateTo(b, 0.5f);
         Vec3D dir = b.sub(a);
         Vec3D n = a.cross(dir.normalize());
         c.addSelf(n.normalizeTo(dir.magnitude() * MathUtils.SQRT3 / 2));
-        return new Triangle(a, b, c);
+        return new Triangle3D(a, b, c);
     }
 
     public static boolean isClockwiseInXY(Vec3D a, Vec3D b, Vec3D c) {
@@ -62,10 +62,10 @@ public class Triangle implements Shape3D {
     @XmlTransient
     public Vec3D centroid;
 
-    public Triangle() {
+    public Triangle3D() {
     }
 
-    public Triangle(Vec3D a, Vec3D b, Vec3D c) {
+    public Triangle3D(Vec3D a, Vec3D b, Vec3D c) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -192,7 +192,7 @@ public class Triangle implements Shape3D {
         return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
     }
 
-    public Triangle flipVertexOrder() {
+    public Triangle3D flipVertexOrder() {
         Vec3D t = a;
         a = c;
         c = t;
@@ -245,15 +245,15 @@ public class Triangle implements Shape3D {
     }
 
     public boolean isClockwiseInXY() {
-        return Triangle.isClockwiseInXY(a, b, c);
+        return Triangle3D.isClockwiseInXY(a, b, c);
     }
 
     public boolean isClockwiseInXZ() {
-        return Triangle.isClockwiseInXY(a, b, c);
+        return Triangle3D.isClockwiseInXY(a, b, c);
     }
 
     public boolean isClockwiseInYZ() {
-        return Triangle.isClockwiseInXY(a, b, c);
+        return Triangle3D.isClockwiseInXY(a, b, c);
     }
 
     public void set(Vec3D a2, Vec3D b2, Vec3D c2) {
@@ -285,6 +285,6 @@ public class Triangle implements Shape3D {
     }
 
     public String toString() {
-        return "Triangle: " + a + "," + b + "," + c;
+        return "Triangle3D: " + a + "," + b + "," + c;
     }
 }

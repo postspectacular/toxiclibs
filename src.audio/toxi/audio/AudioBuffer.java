@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2008 Karsten Schmidt
+ * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,9 +29,6 @@ import net.java.games.joal.AL;
 /**
  * A wrapper for the actual sample data byte buffer in memory. The buffer can be
  * queried to find out more information about the underlying audio data.
- * 
- * @author toxi
- * 
  */
 public class AudioBuffer {
 
