@@ -51,7 +51,7 @@ void setup() {
   // shrinking is done by moving vertices towards centroid of the face
   // before extruding
   float shrink=0.25;
-  Vec3D centroid = new Triangle(f.a, f.b, f.c).computeCentroid();
+  Vec3D centroid = new Triangle3D(f.a, f.b, f.c).computeCentroid();
   Vec3D extrude = new Vec3D(0, 0, 100);
   Vec3D a = f.a.interpolateTo(centroid, 1-shrink).add(extrude);
   Vec3D b = f.b.interpolateTo(centroid, 1-shrink).add(extrude);
