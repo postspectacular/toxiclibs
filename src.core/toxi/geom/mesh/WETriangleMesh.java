@@ -202,7 +202,11 @@ public class WETriangleMesh extends TriangleMesh {
         return (WEVertex) super.getClosestVertexToPoint(p);
     }
 
-    private int getNumEdges() {
+    public Collection<WingedEdge> getEdges() {
+        return edges.values();
+    }
+
+    public int getNumEdges() {
         return edges.size();
     }
 

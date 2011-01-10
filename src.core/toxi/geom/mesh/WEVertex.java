@@ -21,7 +21,9 @@
 package toxi.geom.mesh;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
@@ -36,6 +38,10 @@ public class WEVertex extends Vertex {
 
     public void addEdge(WingedEdge e) {
         edges.add(e);
+    }
+
+    public List<WingedEdge> getEdges() {
+        return edges;
     }
 
     public WEVertex getNeighborInDirection(ReadonlyVec3D dir, float tolerance) {
@@ -57,6 +63,19 @@ public class WEVertex extends Vertex {
             neighbors.add(e.getOtherEndFor(this));
         }
         return neighbors;
+    }
+
+    /**
+     * Returns a list of all faces this vertex belongs to.
+     * 
+     * @return face list
+     */
+    public List<WEFace> getRelatedFaces() {
+        Set<WEFace> faces = new HashSet<WEFace>(edges.size() * 2);
+        for (WingedEdge e : edges) {
+            faces.addAll(e.faces);
+        }
+        return new ArrayList<WEFace>(faces);
     }
 
     public void removeEdge(WingedEdge e) {
