@@ -27,6 +27,8 @@ import java.util.Random;
  */
 public final class MathUtils {
 
+    public static final float THIRD = 1f / 3;
+
     /**
      * Square root of 2
      */
@@ -98,12 +100,12 @@ public final class MathUtils {
     public static final float RAD2DEG = 180 / PI;
 
     private static final float SHIFT23 = 1 << 23;
-    private static final float INV_SHIFT23 = 1.0f / SHIFT23;
 
+    private static final float INV_SHIFT23 = 1.0f / SHIFT23;
     private final static double SIN_A = -4d / (PI * PI);
+
     private final static double SIN_B = 4d / PI;
     private final static double SIN_P = 9d / 40;
-
     /**
      * Default random number generator used by random methods of this class
      * which don't use a passed in {@link Random} instance.
@@ -196,6 +198,12 @@ public final class MathUtils {
 
     public static final float degrees(float radians) {
         return radians * RAD2DEG;
+    }
+
+    public static double dualSign(double a, double b) {
+        double x;
+        x = (a >= 0 ? a : -a);
+        return (b >= 0 ? x : -x);
     }
 
     /**
@@ -319,6 +327,10 @@ public final class MathUtils {
         return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
     }
 
+    public static final double max(double[] values) {
+        return max(values[0], values[1], values[2]);
+    }
+
     public static final float max(float a, float b) {
         return a > b ? a : b;
     }
@@ -335,6 +347,10 @@ public final class MathUtils {
         return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
     }
 
+    public static final float max(float[] values) {
+        return max(values[0], values[1], values[2]);
+    }
+
     public static final int max(int a, int b) {
         return a > b ? a : b;
     }
@@ -349,6 +365,10 @@ public final class MathUtils {
      */
     public static final int max(int a, int b, int c) {
         return (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+    }
+
+    public static final int max(int[] values) {
+        return max(values[0], values[1], values[2]);
     }
 
     public static final double min(double a, double b) {
