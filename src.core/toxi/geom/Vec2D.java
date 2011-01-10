@@ -170,6 +170,11 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         this.y = y;
     }
 
+    public Vec2D(float[] v) {
+        this.x = v[0];
+        this.y = v[1];
+    }
+
     /**
      * Creates a new vector with the coordinates of the given vector
      * 
@@ -262,7 +267,12 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         if (x == v.x() && y == v.y()) {
             return 0;
         }
-        return (int) (magSquared() - v.magSquared());
+        float a = magSquared();
+        float b = v.magSquared();
+        if (a < b) {
+            return -1;
+        }
+        return +1;
     }
 
     /**
@@ -322,22 +332,63 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return x * v.x() + y * v.y();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ReadonlyVec2D) {
-            final ReadonlyVec2D v = (ReadonlyVec2D) obj;
-            return x == v.x() && y == v.y();
+    /**
+     * Returns true if the Object v is of type ReadonlyVec2D and all of the data
+     * members of v are equal to the corresponding data members in this vector.
+     * 
+     * @param v
+     *            the object with which the comparison is made
+     * @return true or false
+     */
+    public boolean equals(Object v) {
+        try {
+            ReadonlyVec2D vv = (ReadonlyVec2D) v;
+            return (x == vv.x() && y == vv.y());
+        } catch (NullPointerException e) {
+            return false;
+        } catch (ClassCastException e) {
+            return false;
         }
-        return false;
+
+    }
+
+    /**
+     * Returns true if all of the data members of ReadonlyVec2D v are equal to
+     * the corresponding data members in this vector.
+     * 
+     * @param v
+     *            the vector with which the comparison is made
+     * @return true or false
+     */
+    public boolean equals(ReadonlyVec2D v) {
+        try {
+            return (x == v.x() && y == v.y());
+        } catch (NullPointerException e) {
+            return false;
+        }
+
     }
 
     public boolean equalsWithTolerance(ReadonlyVec2D v, float tolerance) {
-        if (MathUtils.abs(x - v.x()) < tolerance) {
-            if (MathUtils.abs(y - v.y()) < tolerance) {
-                return true;
+        try {
+            float diff = x - v.x();
+            if (Float.isNaN(diff)) {
+                return false;
             }
+            if ((diff < 0 ? -diff : diff) > tolerance) {
+                return false;
+            }
+            diff = y - v.y();
+            if (Float.isNaN(diff)) {
+                return false;
+            }
+            if ((diff < 0 ? -diff : diff) > tolerance) {
+                return false;
+            }
+            return true;
+        } catch (NullPointerException e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -440,14 +491,19 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     }
 
     /**
-     * Returns a unique code for this vector object based on it's values. If two
-     * vectors are logically equivalent, they will return the same hash code
-     * value.
+     * Returns a hash code value based on the data values in this object. Two
+     * different Vec2D objects with identical data values (i.e., Vec2D.equals
+     * returns true) will return the same hash code value. Two objects with
+     * different data members may return the same hash value, although this is
+     * not likely.
      * 
      * @return the hash code value of this vector.
      */
     public int hashCode() {
-        return 37 * Float.floatToIntBits(x) + Float.floatToIntBits(y);
+        long bits = 1L;
+        bits = 31L * bits + VecMathUtil.floatToIntBits(x);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(y);
+        return (int) (bits ^ (bits >> 32));
     }
 
     public final float heading() {

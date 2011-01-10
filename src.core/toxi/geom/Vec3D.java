@@ -213,6 +213,12 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         this.z = z;
     }
 
+    public Vec3D(float[] v) {
+        this.x = v[0];
+        this.y = v[1];
+        this.z = v[2];
+    }
+
     /**
      * Creates a new vector with the coordinates of the given vector.
      * 
@@ -261,10 +267,17 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public final ReadonlyVec3D addSelf(float a, float b, float c) {
+    public final Vec3D addSelf(float a, float b, float c) {
         x += a;
         y += b;
         z += c;
+        return this;
+    }
+
+    public final Vec3D addSelf(ReadonlyVec3D v) {
+        x += v.x();
+        y += v.y();
+        z += v.z();
         return this;
     }
 
@@ -311,7 +324,12 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         if (x == v.x() && y == v.y() && z == v.z()) {
             return 0;
         }
-        return (int) (magSquared() - v.magSquared());
+        float a = magSquared();
+        float b = v.magSquared();
+        if (a < b) {
+            return -1;
+        }
+        return +1;
     }
 
     /**
@@ -414,24 +432,68 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ReadonlyVec3D) {
-            final ReadonlyVec3D v = (ReadonlyVec3D) obj;
-            return x == v.x() && y == v.y() && z == v.z();
+    /**
+     * Returns true if the Object v is of type ReadonlyVec3D and all of the data
+     * members of v are equal to the corresponding data members in this vector.
+     * 
+     * @param v
+     *            the Object with which the comparison is made
+     * @return true or false
+     */
+    public boolean equals(Object v) {
+        try {
+            ReadonlyVec3D vv = (ReadonlyVec3D) v;
+            return (x == vv.x() && y == vv.y() && z == vv.z());
+        } catch (NullPointerException e) {
+            return false;
+        } catch (ClassCastException e) {
+            return false;
         }
-        return false;
+    }
+
+    /**
+     * Returns true if the Object v is of type ReadonlyVec3D and all of the data
+     * members of v are equal to the corresponding data members in this vector.
+     * 
+     * @param v
+     *            the vector with which the comparison is made
+     * @return true or false
+     */
+    public boolean equals(ReadonlyVec3D v) {
+        try {
+            return (x == v.x() && y == v.y() && z == v.z());
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     public boolean equalsWithTolerance(ReadonlyVec3D v, float tolerance) {
-        if (MathUtils.abs(x - v.x()) < tolerance) {
-            if (MathUtils.abs(y - v.y()) < tolerance) {
-                if (MathUtils.abs(z - v.z()) < tolerance) {
-                    return true;
-                }
+        try {
+            float diff = x - v.x();
+            if (Float.isNaN(diff)) {
+                return false;
             }
+            if ((diff < 0 ? -diff : diff) > tolerance) {
+                return false;
+            }
+            diff = y - v.y();
+            if (Float.isNaN(diff)) {
+                return false;
+            }
+            if ((diff < 0 ? -diff : diff) > tolerance) {
+                return false;
+            }
+            diff = z - v.z();
+            if (Float.isNaN(diff)) {
+                return false;
+            }
+            if ((diff < 0 ? -diff : diff) > tolerance) {
+                return false;
+            }
+            return true;
+        } catch (NullPointerException e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -613,17 +675,20 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     /**
-     * Returns a unique code for this vector object based on it's values. If two
-     * vectors are logically equivalent, they will return the same hash code
-     * value.
+     * Returns a hash code value based on the data values in this object. Two
+     * different Vec3D objects with identical data values (i.e., Vec3D.equals
+     * returns true) will return the same hash code value. Two objects with
+     * different data members may return the same hash value, although this is
+     * not likely.
      * 
-     * @return the hash code value of this vector.
+     * @return the integer hash code value
      */
     public int hashCode() {
-        int hash = Float.floatToIntBits(x);
-        hash += 37 * hash + Float.floatToIntBits(y);
-        hash += 37 * hash + Float.floatToIntBits(z);
-        return hash;
+        long bits = 1L;
+        bits = 31L * bits + VecMathUtil.floatToIntBits(x);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(y);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(z);
+        return (int) (bits ^ (bits >> 32));
     }
 
     /*
@@ -787,11 +852,6 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#isZeroVector()
-     */
     public final boolean isZeroVector() {
         return MathUtils.abs(x) < MathUtils.EPS
                 && MathUtils.abs(y) < MathUtils.EPS
@@ -875,20 +935,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#magnitude()
-     */
     public final float magnitude() {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.geom.ReadonlyVec3D#magSquared()
-     */
     public final float magSquared() {
         return x * x + y * y + z * z;
     }
