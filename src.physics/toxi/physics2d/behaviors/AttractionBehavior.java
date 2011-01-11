@@ -105,7 +105,7 @@ public class AttractionBehavior implements ParticleBehavior2D {
         this.jitter = jitter;
     }
 
-    private void setRadius(float r) {
+    public void setRadius(float r) {
         this.radius = r;
         this.radiusSquared = r * r;
     }
