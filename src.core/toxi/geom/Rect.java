@@ -127,6 +127,10 @@ public class Rect implements Shape2D {
         return y + height;
     }
 
+    public Vec2D getBottomLeft() {
+        return new Vec2D(x, y + height);
+    }
+
     public final Vec2D getBottomRight() {
         return new Vec2D(x + width, y + height);
     }
@@ -209,6 +213,28 @@ public class Rect implements Shape2D {
 
     public final Vec2D getTopLeft() {
         return new Vec2D(x, y);
+    }
+
+    public Vec2D getTopRight() {
+        return new Vec2D(x + width, y);
+    }
+
+    public Rect growToContainPoint(ReadonlyVec2D p) {
+        if (!containsPoint(p)) {
+            if (p.x() < x) {
+                width = getRight() - p.x();
+                x = p.x();
+            } else if (p.x() > getRight()) {
+                width = p.x() - x;
+            }
+            if (p.y() < y) {
+                height = getBottom() - p.y();
+                y = p.y();
+            } else if (p.y() > getBottom()) {
+                height = p.y() - y;
+            }
+        }
+        return this;
     }
 
     /**
