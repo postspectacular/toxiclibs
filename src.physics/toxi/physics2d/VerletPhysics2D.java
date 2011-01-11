@@ -105,12 +105,12 @@ public class VerletPhysics2D {
             float timeStep) {
         particles = new ArrayList<VerletParticle2D>();
         springs = new ArrayList<VerletSpring2D>();
-        if (gravity != null) {
-            addBehavior(new GravityBehavior(gravity));
-        }
         this.numIterations = numIterations;
         this.timeStep = timeStep;
         setDrag(drag);
+        if (gravity != null) {
+            addBehavior(new GravityBehavior(gravity));
+        }
     }
 
     public void addBehavior(ParticleBehavior2D behavior) {

@@ -104,12 +104,12 @@ public class VerletPhysics {
             float timeStep) {
         particles = new ArrayList<VerletParticle>();
         springs = new ArrayList<VerletSpring>();
-        if (gravity != null) {
-            addBehavior(new GravityBehavior(gravity));
-        }
         this.numIterations = numIterations;
         this.timeStep = timeStep;
         setDrag(drag);
+        if (gravity != null) {
+            addBehavior(new GravityBehavior(gravity));
+        }
     }
 
     public void addBehavior(ParticleBehavior behavior) {
