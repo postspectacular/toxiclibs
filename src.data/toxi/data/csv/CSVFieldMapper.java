@@ -20,6 +20,10 @@
 
 package toxi.data.csv;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -61,8 +65,13 @@ import java.util.HashMap;
  */
 public class CSVFieldMapper {
 
+    public static final SimpleDateFormat DEFAULT_DATE_FORMAT =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     protected HashMap<String, String> fieldNames;
     protected HashMap<String, Integer> fieldOrder;
+
+    protected DateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
     public CSVFieldMapper(HashMap<String, String> cols) {
         fieldNames = cols;
@@ -87,6 +96,37 @@ public class CSVFieldMapper {
         return value;
     }
 
+    public Date getDate(String id, String[] fields) {
+        try {
+            return dateFormat.parse(get(id, fields));
+        } catch (ParseException e) {
+        }
+        return null;
+    }
+
+    /**
+     * @return the dateFormat
+     */
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public float getFloat(String id, String[] fields, float defaultValue) {
+        try {
+            return Float.parseFloat(get(id, fields));
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    public int getInt(String id, String[] fields, int defaultValue) {
+        try {
+            return Integer.parseInt(get(id, fields));
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
     public int getMappedFieldCount() {
         return fieldNames.size();
     }
@@ -107,5 +147,13 @@ public class CSVFieldMapper {
             }
         }
         return true;
+    }
+
+    /**
+     * @param dateFormat
+     *            the dateFormat to set
+     */
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
     }
 }

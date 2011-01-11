@@ -24,6 +24,11 @@ import java.util.ArrayList;
 
 import toxi.util.events.EventDispatcher;
 
+/**
+ * An event-based CSV data parser with support for field aliases. Parse events
+ * are generated for single rows and total completion (or failures). This allows
+ * the parsing to function asynchronously in its own thread.
+ */
 public class CSVParser {
 
     protected String lines[];
@@ -34,11 +39,18 @@ public class CSVParser {
 
     protected CSVFieldMapper mapper;
 
-    protected EventDispatcher<CSVListener> dispatcher =
+    protected final EventDispatcher<CSVListener> dispatcher =
             new EventDispatcher<CSVListener>();
 
     public CSVParser(CSVFieldMapper mapper) {
         this.mapper = mapper;
+    }
+
+    /**
+     * @return the dispatcher
+     */
+    public EventDispatcher<CSVListener> getDispatcher() {
+        return dispatcher;
     }
 
     /**
@@ -57,6 +69,15 @@ public class CSVParser {
         }
     }
 
+    /**
+     * Parses the given String array of CSV text lines and emits parse events
+     * for clients to process individual rows. The first row (1st array index)
+     * is assumed to contain the fieldnames, just as it would be the case with a
+     * standard CSV file.
+     * 
+     * @param lines
+     *            array of CSV formatted lines of text
+     */
     public void parse(String[] lines) {
         this.lines = lines;
         this.currLineIndex = -1;
