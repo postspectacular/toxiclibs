@@ -115,8 +115,7 @@ public class ControlNet {
      * @param cp
      *            ControlPoint to set at the indexed position
      */
-    public void set(int u, int v, Vec4D cp) { // TODO copy values or
-                                              // set ref?
+    public void set(int u, int v, Vec4D cp) {
         cps[u][v].set(cp);
     }
 

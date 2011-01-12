@@ -116,8 +116,7 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
         for (int k = 0; k <= grade; k++) {
             Vec4D cw = new Vec4D();
             for (int j = 0; j <= degree; j++) {
-                cw.addSelf(cpoly[(span - degree) + j]
-                        .scaleSelf(dersValues[k][j]));
+                cw.addSelf(cpoly[(span - degree) + j].scale(dersValues[k][j]));
             }
             ders[k] = cw.to3D();
         }

@@ -56,7 +56,7 @@ public class CurveCreator {
      * 
      * @param cp
      *            Controlpoint to add with weight one.
-     * @return the curve NurbsCurve if any exists, or null otherwise (to less
+     * @return the actual NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve addControlPoint(Vec3D cp) {
@@ -68,7 +68,7 @@ public class CurveCreator {
      * 
      * @param cp
      *            ControlPoint to add.
-     * @return the curve NurbsCurve if any exists, or null otherwise (to less
+     * @return the actual NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve addControlPoint(Vec4D cp) {
@@ -102,7 +102,7 @@ public class CurveCreator {
     /**
      * Get the curve NurbsCurve of the CurveCreator
      * 
-     * @return the curve NurbsCurve if any exists, or null otherwise (to less
+     * @return the actual NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve getCurve() {
