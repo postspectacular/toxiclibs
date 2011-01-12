@@ -111,15 +111,11 @@ public class BasicNurbsSurface implements NurbsSurface {
     }
 
     public Vec3D pointOnSurface(double u, double v) {
-        Vec3D res = new Vec3D();
-        pointOnSurface((float) u, (float) v, res);
-        return res;
+        return pointOnSurface((float) u, (float) v, new Vec3D());
     }
 
     public Vec3D pointOnSurface(float u, float v) {
-        Vec3D res = new Vec3D();
-        pointOnSurface(u, v, res);
-        return res;
+        return pointOnSurface(u, v, new Vec3D());
     }
 
     public Vec3D pointOnSurface(float u, float v, Vec3D out) {
@@ -145,8 +141,7 @@ public class BasicNurbsSurface implements NurbsSurface {
         }
         Vec4D sw = new Vec4D();
         for (int l = 0; l <= q; l++) {
-            tmp[l].scaleSelf((float) bfv[l]);
-            sw.addSelf(tmp[l]);
+            sw.addSelf(tmp[l].scaleSelf((float) bfv[l]));
         }
         return sw.unweightInto(out);
     }
@@ -168,8 +163,9 @@ public class BasicNurbsSurface implements NurbsSurface {
             for (int idxu = 0; idxu < cpnet.uLength(); idxu++) {
                 ucps[idxu] = cps[idxu][j];
             }
-            BasicNurbsCurve bnc = new BasicNurbsCurve(ucps, uKnots);
-            Vec4D[][] tmp = bnc.curveDerivCpts(du, r1, r2);
+            Vec4D[][] tmp =
+                    new BasicNurbsCurve(ucps, uKnots)
+                            .curveDerivCpts(du, r1, r2);
             for (int k = 0; k <= du; k++) {
                 final Vec4D[][] resk0 = result[k][0];
                 for (int i = 0; i <= (r - k); i++) {
@@ -179,20 +175,22 @@ public class BasicNurbsSurface implements NurbsSurface {
         }
 
         for (int k = 0; k <= du; k++) {
-            final Vec4D[][] resk0 = result[k][0];
             for (int i = 0; i <= (r - k); i++) {
-                int length = resk0[i].length;
+                int length = result[k][0][i].length;
+                final Vec4D[] resk0i = result[k][0][i];
                 Vec4D[] vcps = new Vec4D[length];
                 for (int idx = 0; idx < length; idx++) {
-                    vcps[idx] = resk0[i][idx];
+                    vcps[idx] = resk0i[idx];
                 }
                 int dd = (d - k) < dv ? (d - k) : dv;
-                BasicNurbsCurve bnc = new BasicNurbsCurve(vcps, vKnots);
-                Vec4D[][] tmp = bnc.curveDerivCpts(dd, 0, s);
+                Vec4D[][] tmp =
+                        new BasicNurbsCurve(vcps, vKnots).curveDerivCpts(dd, 0,
+                                s);
                 for (int l = 1; l <= dd; l++) {
-                    final Vec4D[][] reskl = result[k][l];
+                    final Vec4D[] reskli = result[k][l][i];
+                    final Vec4D[] tmpL = tmp[l];
                     for (int j = 0; j <= (s - 1); j++) {
-                        reskl[i][j] = tmp[l][j];
+                        reskli[j] = tmpL[j];
                     }
                 }
             }

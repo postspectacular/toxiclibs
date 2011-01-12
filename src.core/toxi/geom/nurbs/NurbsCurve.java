@@ -48,7 +48,7 @@ public interface NurbsCurve {
 
     public abstract Vec3D[] derivativesOnCurve(float u, int d);
 
-    public abstract void derivativesOnCurve(float u, int d, Vec3D[] ders);
+    public abstract Vec3D[] derivativesOnCurve(float u, int d, Vec3D[] ders);
 
     /**
      * Get the ControlPoints of this curve

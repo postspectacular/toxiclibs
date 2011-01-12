@@ -19,6 +19,8 @@
  */
 package toxi.geom.nurbs;
 
+import toxi.geom.ReadonlyVec3D;
+import toxi.geom.Vec3D;
 import toxi.geom.Vec4D;
 
 /**
@@ -60,6 +62,27 @@ public class ControlNet {
         cps = cpnet;
     }
 
+    public void center(ReadonlyVec3D origin) {
+        Vec3D centroid = computeCentroid();
+        Vec3D delta =
+                origin != null ? origin.sub(centroid) : centroid.getInverted();
+        for (int i = 0; i < nU; i++) {
+            for (int j = 0; j < nV; j++) {
+                cps[i][j].addXYZSelf(delta);
+            }
+        }
+    }
+
+    public Vec3D computeCentroid() {
+        Vec4D centroid = new Vec4D();
+        for (int i = 0; i < nU; i++) {
+            for (int j = 0; j < nV; j++) {
+                centroid.addSelf(cps[i][j]);
+            }
+        }
+        return centroid.scaleSelf(1f / (nU * nV)).to3D();
+    }
+
     /**
      * Get the ControlPoint at the position u,v
      * 
@@ -94,7 +117,7 @@ public class ControlNet {
      */
     public void set(int u, int v, Vec4D cp) { // TODO copy values or
                                               // set ref?
-        cps[u][v] = cp;
+        cps[u][v].set(cp);
     }
 
     /**

@@ -96,14 +96,10 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
     }
 
     public Vec3D[] derivativesOnCurve(float u, int grade) {
-
-        Vec3D[] res = new Vec3D[grade + 1];
-        derivativesOnCurve(u, grade, res);
-        return res;
-
+        return derivativesOnCurve(u, grade, new Vec3D[grade + 1]);
     }
 
-    public void derivativesOnCurve(float u, int grade, Vec3D[] ders) {
+    public Vec3D[] derivativesOnCurve(float u, int grade, Vec3D[] ders) {
 
         int span = uKnots.findSpan(u);
         int degree = uKnots.getDegree();
@@ -120,10 +116,12 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
         for (int k = 0; k <= grade; k++) {
             Vec4D cw = new Vec4D();
             for (int j = 0; j <= degree; j++) {
-                cw.addSelf(cpoly[(span - degree) + j].scale(dersValues[k][j]));
+                cw.addSelf(cpoly[(span - degree) + j]
+                        .scaleSelf(dersValues[k][j]));
             }
             ders[k] = cw.to3D();
         }
+        return ders;
     }
 
     public Vec4D[] getControlPoints() {
@@ -161,14 +159,11 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
         }
 
         double bf[] = uKnots.basisFunctions(span, u);
-        Vec4D cw = new Vec4D(0.0F, 0.0F, 0.0F, 0.0F);
+        Vec4D cw = new Vec4D();
         for (int i = 0; i <= degree; i++) {
-            Vec4D tmp = (Vec4D) cpoly[(span - degree) + i].clone();
-            tmp.weight();
-            tmp.scaleSelf((float) bf[i]);
-            cw.addSelf(tmp);
+            cw.addSelf(cpoly[(span - degree) + i].getWeighted().scaleSelf(
+                    (float) bf[i]));
         }
-
         return cw.unweightInto(out);
     }
 }

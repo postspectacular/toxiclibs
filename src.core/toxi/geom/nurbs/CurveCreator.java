@@ -33,10 +33,11 @@ import toxi.geom.Vec4D;
  */
 public class CurveCreator {
 
+    private List<Vec4D> cps = new LinkedList<Vec4D>();
+    private NurbsCurve curve = null;
+
     private int p;
     private int incp = 0;
-    private List<Vec4D> cps = new LinkedList<Vec4D>();
-    private NurbsCurve actual = null;
 
     /**
      * Create a new CurveCretor object which can create Curves from the given
@@ -55,7 +56,7 @@ public class CurveCreator {
      * 
      * @param cp
      *            Controlpoint to add with weight one.
-     * @return the actual NurbsCurve if any exists, or null otherwise (to less
+     * @return the curve NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve addControlPoint(Vec3D cp) {
@@ -67,7 +68,7 @@ public class CurveCreator {
      * 
      * @param cp
      *            ControlPoint to add.
-     * @return the actual NurbsCurve if any exists, or null otherwise (to less
+     * @return the curve NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve addControlPoint(Vec4D cp) {
@@ -84,7 +85,6 @@ public class CurveCreator {
 
         float u[] = new float[np + tmp + 1];
         for (int i = 0; i <= tmp; i++) {
-            u[i] = 0;
             u[u.length - 1 - i] = 1;
         }
         if (np > p + 1) {
@@ -95,20 +95,18 @@ public class CurveCreator {
                 val += step;
             }
         }
-        Vec4D ctrlp[] = new Vec4D[cps.size()];
-        cps.toArray(ctrlp);
-        actual = new BasicNurbsCurve(ctrlp, u, tmp);
-        return actual;
+        curve = new BasicNurbsCurve(cps.toArray(new Vec4D[cps.size()]), u, tmp);
+        return curve;
     }
 
     /**
-     * Get the actual NurbsCurve of the CurveCreator
+     * Get the curve NurbsCurve of the CurveCreator
      * 
-     * @return the actual NurbsCurve if any exists, or null otherwise (to less
+     * @return the curve NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
     public NurbsCurve getCurve() {
-        return actual;
+        return curve;
     }
 
 }
