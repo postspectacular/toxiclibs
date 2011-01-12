@@ -526,6 +526,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return new Vec3D(this).abs();
     }
 
+    public Vec3D getCartesian() {
+        return copy().toCartesian();
+    }
+
     public final float getComponent(Axis id) {
         switch (id) {
             case X:
@@ -672,6 +676,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      */
     public final Vec3D getSignum() {
         return new Vec3D(this).signum();
+    }
+
+    public Vec3D getSpherical() {
+        return copy().toSpherical();
     }
 
     /**
@@ -1232,6 +1240,13 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
+    public Vec3D scaleSelf(ReadonlyVec3D s) {
+        x *= s.x();
+        y *= s.y();
+        z *= s.z();
+        return this;
+    }
+
     /**
      * Scales vector non-uniformly by vector v and overrides coordinates with
      * result.
@@ -1320,6 +1335,11 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
+    public Vec3D setX(float x) {
+        this.x = x;
+        return this;
+    }
+
     /**
      * Overrides XY coordinates with the ones of the given 2D vector.
      * 
@@ -1331,6 +1351,16 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     public Vec3D setXY(Vec2D v) {
         x = v.x;
         y = v.y;
+        return this;
+    }
+
+    public Vec3D setY(float y) {
+        this.y = y;
+        return this;
+    }
+
+    public Vec3D setZ(float z) {
+        this.z = z;
         return this;
     }
 
@@ -1403,6 +1433,13 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
+    public final Vec3D subSelf(ReadonlyVec3D v) {
+        x -= v.x();
+        y -= v.y();
+        z -= v.z();
+        return this;
+    }
+
     /**
      * Subtracts vector v and overrides coordinates with result.
      * 
@@ -1428,6 +1465,14 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public final Vec2D to2DYZ() {
         return new Vec2D(y, z);
+    }
+
+    public Vec4D to4D() {
+        return new Vec4D(x, y, z, 1);
+    }
+
+    public Vec4D to4D(float w) {
+        return new Vec4D(x, y, z, w);
     }
 
     public float[] toArray() {

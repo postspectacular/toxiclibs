@@ -40,6 +40,10 @@ public class Axis3D {
         this(new Vec3D(x, y, z));
     }
 
+    public Axis3D(Ray3D ray) {
+        this(ray, ray.getDirection());
+    }
+
     /**
      * Creates a new Axis3D from the world origin in the given direction.
      * 

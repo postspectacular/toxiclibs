@@ -187,6 +187,13 @@ public interface ReadonlyVec3D {
      */
     public Vec3D getAbs();
 
+    /**
+     * Converts the spherical vector back into cartesian coordinates.
+     * 
+     * @return new vector
+     */
+    public Vec3D getCartesian();
+
     public float getComponent(Axis id);
 
     public float getComponent(int id);
@@ -311,6 +318,19 @@ public interface ReadonlyVec3D {
      * @return result vector
      */
     public Vec3D getSignum();
+
+    /**
+     * Converts the vector into spherical coordinates. After the conversion the
+     * vector components are to be interpreted as:
+     * <ul>
+     * <li>x = radius</li>
+     * <li>y = azimuth</li>
+     * <li>z = theta</li>
+     * </ul>
+     * 
+     * @return new vector
+     */
+    public Vec3D getSpherical();
 
     /**
      * Computes the vector's direction in the XY plane (for example for 2D
@@ -499,32 +519,29 @@ public interface ReadonlyVec3D {
      */
     public Vec2D to2DYZ();
 
+    /**
+     * Creates a Vec4D instance of this vector with the w component set to 1.0
+     * 
+     * @return 4d vector
+     */
+    public Vec4D to4D();
+
+    /**
+     * Creates a Vec4D instance of this vector with it w component set to the
+     * given value.
+     * 
+     * @param w
+     * @return weighted 4d vector
+     */
+    public Vec4D to4D(float w);
+
     public float[] toArray();
 
-    /**
-     * Converts the spherical vector back into cartesian coordinates.
-     * 
-     * @return itself
-     */
-    public Vec3D toCartesian();
-
-    /**
-     * Converts the vector into spherical coordinates. After the conversion the
-     * vector components are to be interpreted as:
-     * <ul>
-     * <li>x = radius</li>
-     * <li>y = azimuth</li>
-     * <li>z = theta</li>
-     * </ul>
-     * 
-     * @return itself
-     */
-    public Vec3D toSpherical();
+    public float[] toArray4(float w);
 
     public float x();
 
     public float y();
 
     public float z();
-
 }

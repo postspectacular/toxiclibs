@@ -20,6 +20,13 @@ public class Origin3D {
         this(new Vec3D(x, y, z));
     }
 
+    public Origin3D(Matrix4x4 mat) {
+        this.origin = mat.applyToSelf(new Vec3D());
+        this.xAxis = mat.applyTo(Vec3D.X_AXIS).subSelf(origin).normalize();
+        this.yAxis = mat.applyTo(Vec3D.Y_AXIS).subSelf(origin).normalize();
+        zAxis = xAxis.crossInto(yAxis, new Vec3D());
+    }
+
     /**
      * Creates a new origin at the given origin using the standard XYZ axes
      * 

@@ -419,6 +419,10 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return new Vec2D(this).abs();
     }
 
+    public Vec2D getCartesian() {
+        return copy().toCartesian();
+    }
+
     public float getComponent(Axis id) {
         switch (id) {
             case X:
@@ -472,6 +476,10 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
 
     public final Vec2D getPerpendicular() {
         return new Vec2D(this).perpendicular();
+    }
+
+    public Vec2D getPolar() {
+        return copy().toPolar();
     }
 
     public final Vec2D getReciprocal() {
@@ -911,6 +919,16 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
                 throw new IllegalArgumentException(
                         "component id needs to be 0 or 1");
         }
+        return this;
+    }
+
+    public Vec2D setX(float x) {
+        this.x = x;
+        return this;
+    }
+
+    public Vec2D setY(float y) {
+        this.y = y;
         return this;
     }
 

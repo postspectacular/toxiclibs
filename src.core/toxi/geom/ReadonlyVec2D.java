@@ -161,6 +161,14 @@ public interface ReadonlyVec2D {
 
     public Vec2D getAbs();
 
+    /**
+     * Converts the vector from polar to Cartesian space. Assumes this order:
+     * x=radius, y=theta
+     * 
+     * @return new vector
+     */
+    public Vec2D getCartesian();
+
     public float getComponent(Axis id);
 
     public float getComponent(int id);
@@ -225,6 +233,15 @@ public interface ReadonlyVec2D {
     public Vec2D getNormalizedTo(float len);
 
     public Vec2D getPerpendicular();
+
+    /**
+     * Converts the current vector into polar coordinates. After the conversion
+     * the x component of the vector contains the radius (magnitude) and y the
+     * rotation angle.
+     * 
+     * @return new vector
+     */
+    public Vec2D getPolar();
 
     public Vec2D getReciprocal();
 
@@ -465,23 +482,6 @@ public interface ReadonlyVec2D {
      * @see toxi.geom.DimensionalVector#toArray()
      */
     public float[] toArray();
-
-    /**
-     * Converts the vector from polar to Cartesian space. Assumes this order:
-     * x=radius, y=theta
-     * 
-     * @return itself as Cartesian vector
-     */
-    public Vec2D toCartesian();
-
-    /**
-     * Converts the current vector into polar coordinates. After the conversion
-     * the x component of the vector contains the radius (magnitude) and y the
-     * rotation angle.
-     * 
-     * @return itself as polar vector
-     */
-    public Vec2D toPolar();
 
     public float x();
 
