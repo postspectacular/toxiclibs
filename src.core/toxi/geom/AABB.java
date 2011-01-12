@@ -20,6 +20,8 @@
 
 package toxi.geom;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -51,6 +53,22 @@ public class AABB extends Vec3D implements Shape3D {
         Vec3D a = Vec3D.min(min, max);
         Vec3D b = Vec3D.max(min, max);
         return new AABB(a.interpolateTo(b, 0.5f), b.sub(a).scaleSelf(0.5f));
+    }
+
+    /**
+     * Factory method, computes & returns the bounding box for the given list of
+     * points.
+     * 
+     * @param points
+     * @return bounding rect
+     */
+    public static final AABB getBoundingBox(List<? extends Vec3D> points) {
+        final Vec3D first = points.get(0);
+        final AABB bounds = new AABB(first, 0);
+        for (int i = 1, num = points.size(); i < num; i++) {
+            bounds.growToContainPoint(points.get(i));
+        }
+        return bounds;
     }
 
     @XmlElement(required = true)
@@ -158,7 +176,7 @@ public class AABB extends Vec3D implements Shape3D {
      *            point to include
      * @return itself
      */
-    public AABB includePoint(ReadonlyVec3D p) {
+    public AABB growToContainPoint(ReadonlyVec3D p) {
         min.minSelf(p);
         max.maxSelf(p);
         set(min.interpolateTo(max, 0.5f));

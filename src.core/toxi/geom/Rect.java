@@ -20,6 +20,8 @@
 
 package toxi.geom;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -39,6 +41,22 @@ public class Rect implements Shape2D {
      */
     public static final Rect fromCenterExtent(ReadonlyVec2D center, Vec2D extent) {
         return new Rect(center.sub(extent), center.add(extent));
+    }
+
+    /**
+     * Factory method, computes & returns the bounding rect for the given list
+     * of points.
+     * 
+     * @param points
+     * @return bounding rect
+     */
+    public static final Rect getBoundingRect(List<? extends Vec2D> points) {
+        final Vec2D first = points.get(0);
+        final Rect bounds = new Rect(first.x, first.y, 0, 0);
+        for (int i = 1, num = points.size(); i < num; i++) {
+            bounds.growToContainPoint(points.get(i));
+        }
+        return bounds;
     }
 
     @XmlAttribute(required = true)
