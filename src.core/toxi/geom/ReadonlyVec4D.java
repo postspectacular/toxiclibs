@@ -169,6 +169,48 @@ public interface ReadonlyVec4D {
      */
     public Vec4D getNormalizedTo(float len);
 
+    /**
+     * Gets the rotated around axis.
+     * 
+     * @param axis
+     *            the axis
+     * @param theta
+     *            the theta
+     * 
+     * @return new result vector
+     */
+    public Vec4D getRotatedAroundAxis(ReadonlyVec3D axis, float theta);
+
+    /**
+     * Creates a new vector rotated by the given angle around the X axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return rotated vector
+     */
+    public Vec4D getRotatedX(float theta);
+
+    /**
+     * Creates a new vector rotated by the given angle around the Y axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return rotated vector
+     */
+    public Vec4D getRotatedY(float theta);
+
+    /**
+     * Creates a new vector rotated by the given angle around the Z axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return rotated vector
+     */
+    public Vec4D getRotatedZ(float theta);
+
     public Vec4D getWeighted();
 
     /**
@@ -290,5 +332,4 @@ public interface ReadonlyVec4D {
     public float y();
 
     public float z();
-
 }

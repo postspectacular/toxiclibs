@@ -256,6 +256,22 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         return copy().normalizeTo(len);
     }
 
+    public Vec4D getRotatedAroundAxis(ReadonlyVec3D axis, float theta) {
+        return copy().rotateAroundAxis(axis, theta);
+    }
+
+    public Vec4D getRotatedX(float theta) {
+        return copy().rotateX(theta);
+    }
+
+    public Vec4D getRotatedY(float theta) {
+        return copy().rotateY(theta);
+    }
+
+    public Vec4D getRotatedZ(float theta) {
+        return copy().rotateZ(theta);
+    }
+
     public Vec4D getWeighted() {
         return copy().weight();
     }
@@ -361,6 +377,100 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
             z *= mag;
             w *= mag;
         }
+        return this;
+    }
+
+    /**
+     * Rotates the vector around the giving axis.
+     * 
+     * @param axis
+     *            rotation axis vector
+     * @param theta
+     *            rotation angle (in radians)
+     * 
+     * @return itself
+     */
+    public final Vec4D rotateAroundAxis(ReadonlyVec3D axis, float theta) {
+        final float ax = axis.x();
+        final float ay = axis.y();
+        final float az = axis.z();
+        final float ux = ax * x;
+        final float uy = ax * y;
+        final float uz = ax * z;
+        final float vx = ay * x;
+        final float vy = ay * y;
+        final float vz = ay * z;
+        final float wx = az * x;
+        final float wy = az * y;
+        final float wz = az * z;
+        final double si = Math.sin(theta);
+        final double co = Math.cos(theta);
+        float xx =
+                (float) (ax * (ux + vy + wz)
+                        + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
+                        * si);
+        float yy =
+                (float) (ay * (ux + vy + wz)
+                        + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
+                        * si);
+        float zz =
+                (float) (az * (ux + vy + wz)
+                        + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
+                        * si);
+        x = xx;
+        y = yy;
+        z = zz;
+        return this;
+    }
+
+    /**
+     * Rotates the vector by the given angle around the X axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return itself
+     */
+    public final Vec4D rotateX(float theta) {
+        final float co = (float) Math.cos(theta);
+        final float si = (float) Math.sin(theta);
+        final float zz = co * z - si * y;
+        y = si * z + co * y;
+        z = zz;
+        return this;
+    }
+
+    /**
+     * Rotates the vector by the given angle around the Y axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return itself
+     */
+    public final Vec4D rotateY(float theta) {
+        final float co = (float) Math.cos(theta);
+        final float si = (float) Math.sin(theta);
+        final float xx = co * x - si * z;
+        z = si * x + co * z;
+        x = xx;
+        return this;
+    }
+
+    /**
+     * Rotates the vector by the given angle around the Z axis.
+     * 
+     * @param theta
+     *            the theta
+     * 
+     * @return itself
+     */
+    public final Vec4D rotateZ(float theta) {
+        final float co = (float) Math.cos(theta);
+        final float si = (float) Math.sin(theta);
+        final float xx = co * x - si * y;
+        y = si * x + co * y;
+        x = xx;
         return this;
     }
 
