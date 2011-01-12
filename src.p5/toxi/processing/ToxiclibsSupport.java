@@ -28,6 +28,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import toxi.color.ReadonlyTColor;
 import toxi.geom.AABB;
 import toxi.geom.AxisAlignedCylinder;
 import toxi.geom.Cone;
@@ -92,6 +93,17 @@ public class ToxiclibsSupport {
         mesh(mesh, smooth, 0);
     }
 
+    public final void chooseStrokeFill(boolean isWireframe,
+            ReadonlyTColor stroke, ReadonlyTColor fill) {
+        if (isWireframe) {
+            gfx.noFill();
+            gfx.stroke(stroke.toARGB());
+        } else {
+            gfx.noStroke();
+            gfx.fill(fill.toARGB());
+        }
+    }
+
     public final void circle(Vec2D p, float radius) {
         gfx.ellipse(p.x, p.y, radius, radius);
     }
@@ -148,6 +160,10 @@ public class ToxiclibsSupport {
         }
     }
 
+    public final void fill(ReadonlyTColor col) {
+        gfx.fill(col.toARGB());
+    }
+
     /**
      * @return the gfx
      */
@@ -200,6 +216,13 @@ public class ToxiclibsSupport {
         gfx.fill = isFilled;
     }
 
+    public final void lineStrip2D(List<? extends Vec2D> points, float scale) {
+        boolean isFilled = gfx.fill;
+        gfx.fill = false;
+        processVertices2D(points.iterator(), PConstants.POLYGON, false, scale);
+        gfx.fill = isFilled;
+    }
+
     /**
      * Draws a 3D line strip using all points in the given list of vectors.
      * 
@@ -210,6 +233,13 @@ public class ToxiclibsSupport {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices3D(points.iterator(), PConstants.POLYGON, false);
+        gfx.fill = isFilled;
+    }
+
+    public final void lineStrip3D(List<? extends Vec3D> points, float scale) {
+        boolean isFilled = gfx.fill;
+        gfx.fill = false;
+        processVertices3D(points.iterator(), PConstants.POLYGON, false, scale);
         gfx.fill = isFilled;
     }
 
@@ -224,6 +254,13 @@ public class ToxiclibsSupport {
         boolean isFilled = gfx.fill;
         gfx.fill = false;
         processVertices4D(points.iterator(), PConstants.POLYGON, false);
+        gfx.fill = isFilled;
+    }
+
+    public final void lineStrip4D(List<? extends Vec4D> points, float scale) {
+        boolean isFilled = gfx.fill;
+        gfx.fill = false;
+        processVertices4D(points.iterator(), PConstants.POLYGON, false, scale);
         gfx.fill = isFilled;
     }
 
@@ -447,6 +484,10 @@ public class ToxiclibsSupport {
         processVertices2D(points.iterator(), PConstants.POINTS, false);
     }
 
+    public final void points2D(List<? extends Vec2D> points, float scale) {
+        processVertices2D(points.iterator(), PConstants.POINTS, false, scale);
+    }
+
     public final void points3D(Iterator<? extends Vec3D> iterator) {
         processVertices3D(iterator, PConstants.POINTS, false);
     }
@@ -455,12 +496,20 @@ public class ToxiclibsSupport {
         processVertices3D(points.iterator(), PConstants.POINTS, false);
     }
 
+    public final void points3D(List<? extends Vec3D> points, float scale) {
+        processVertices3D(points.iterator(), PConstants.POINTS, false, scale);
+    }
+
     public final void points4D(Iterator<? extends Vec4D> iterator) {
         processVertices4D(iterator, PConstants.POINTS, false);
     }
 
     public final void points4D(List<? extends Vec4D> points) {
         processVertices4D(points.iterator(), PConstants.POINTS, false);
+    }
+
+    public final void points4D(List<? extends Vec4D> points, float scale) {
+        processVertices4D(points.iterator(), PConstants.POINTS, false, scale);
     }
 
     public final void polygon2D(Polygon2D poly) {
@@ -473,6 +522,20 @@ public class ToxiclibsSupport {
         while (iterator.hasNext()) {
             Vec2D v = iterator.next();
             gfx.vertex(v.x, v.y);
+        }
+        if (closed) {
+            gfx.endShape(PConstants.CLOSE);
+        } else {
+            gfx.endShape();
+        }
+    }
+
+    public final void processVertices2D(Iterator<? extends Vec2D> iterator,
+            int shapeID, boolean closed, float scale) {
+        gfx.beginShape(shapeID);
+        while (iterator.hasNext()) {
+            Vec2D v = iterator.next();
+            gfx.vertex(v.x * scale, v.y * scale);
         }
         if (closed) {
             gfx.endShape(PConstants.CLOSE);
@@ -495,12 +558,40 @@ public class ToxiclibsSupport {
         }
     }
 
+    public final void processVertices3D(Iterator<? extends Vec3D> iterator,
+            int shapeID, boolean closed, float scale) {
+        gfx.beginShape(shapeID);
+        while (iterator.hasNext()) {
+            Vec3D v = iterator.next();
+            gfx.vertex(v.x * scale, v.y * scale, v.z * scale);
+        }
+        if (closed) {
+            gfx.endShape(PConstants.CLOSE);
+        } else {
+            gfx.endShape();
+        }
+    }
+
     public final void processVertices4D(Iterator<? extends Vec4D> iterator,
             int shapeID, boolean closed) {
         gfx.beginShape(shapeID);
         while (iterator.hasNext()) {
             Vec4D v = iterator.next();
             gfx.vertex(v.x, v.y, v.z);
+        }
+        if (closed) {
+            gfx.endShape(PConstants.CLOSE);
+        } else {
+            gfx.endShape();
+        }
+    }
+
+    public final void processVertices4D(Iterator<? extends Vec4D> iterator,
+            int shapeID, boolean closed, float scale) {
+        gfx.beginShape(shapeID);
+        while (iterator.hasNext()) {
+            Vec4D v = iterator.next();
+            gfx.vertex(v.x * scale, v.y * scale, v.z * scale);
         }
         if (closed) {
             gfx.endShape(PConstants.CLOSE);
@@ -575,6 +666,10 @@ public class ToxiclibsSupport {
 
     public final void sphere(Sphere sphere, int res, boolean smooth) {
         mesh(sphere.toMesh(res), smooth);
+    }
+
+    public final void stroke(ReadonlyTColor col) {
+        gfx.stroke(col.toARGB());
     }
 
     public final void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
