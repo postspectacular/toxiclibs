@@ -22,7 +22,6 @@ package toxi.geom.nurbs;
 import toxi.geom.Axis3D;
 import toxi.geom.GMatrix;
 import toxi.geom.GVector;
-import toxi.geom.InterpolationException;
 import toxi.geom.Origin3D;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.SingularMatrixException;
@@ -522,6 +521,7 @@ public final class NurbsCreator {
         Vec4D[] cpTraj = traj.getControlPoints();
 
         // The NURBS Book, Piegl, p.455,456
+        // http://books.google.co.uk/books?id=7dqY5dyAwWkC&pg=PA455&lpg=PA455
         // fixed Z handling (was wrong in original jgeom version)
         Vec4D[][] cps = new Vec4D[cpProj.length][cpTraj.length];
         for (int i = 0; i < cpProj.length; i++) {
