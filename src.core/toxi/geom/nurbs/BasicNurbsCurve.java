@@ -68,16 +68,10 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.jgeom.nurbs.NurbsCurve#curveDerivCpts(int, int, int)
-     */
     public Vec4D[][] curveDerivCpts(int d, int r1, int r2) {
 
         Vec4D[][] result = new Vec4D[d + 1][r2 - r1 + 1];
 
-        // int n = uKnots.getN(); //n+1= no. control points
         int degree = uKnots.getDegree();
 
         // k=0 => control points

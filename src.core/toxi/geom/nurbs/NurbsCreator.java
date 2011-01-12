@@ -468,7 +468,6 @@ public final class NurbsCreator {
                     P0.set(P2);
                     T0.set(T2);
                 }
-
             }
         }
         ControlNet cnet = new ControlNet(pij);
@@ -502,18 +501,35 @@ public final class NurbsCreator {
         return new BasicNurbsCurve(cp, u, 2);
     }
 
-    public static NurbsSurface createSwungSurface(NurbsCurve traj,
-            NurbsCurve proj) {
+    /**
+     * Creates a {@link NurbsSurface} by swinging a profile {@link NurbsCurve}
+     * in the XZ plane around a trajectory curve in the XY plane. Both curves
+     * MUST be offset from the major axes (i.e. their control points should have
+     * non-zero coordinates for the Y coordinates of the profile curve and the Z
+     * coordinates of the trajectory).
+     * 
+     * @param proj
+     *            profile curve in XZ
+     * @param traj
+     *            trajectory curve in XY
+     * @param alpha
+     *            scale factor
+     * @return 3D NURBS surface
+     */
+    public static NurbsSurface createSwungSurface(NurbsCurve proj,
+            NurbsCurve traj, float alpha) {
         Vec4D[] cpProj = proj.getControlPoints();
         Vec4D[] cpTraj = traj.getControlPoints();
 
+        // The NURBS Book, Piegl, p.455,456
+        // fixed Z handling (was wrong in original jgeom version)
         Vec4D[][] cps = new Vec4D[cpProj.length][cpTraj.length];
         for (int i = 0; i < cpProj.length; i++) {
             for (int j = 0; j < cpTraj.length; j++) {
                 Vec4D cp = new Vec4D();
-                cp.x = cpProj[i].x * cpTraj[j].x;
-                cp.y = cpProj[i].y * cpTraj[j].y;
-                cp.z = cpProj[i].z * cpTraj[j].z;
+                cp.x = cpProj[i].x * cpTraj[j].x * alpha;
+                cp.y = cpProj[i].y * cpTraj[j].y * alpha;
+                cp.z = cpProj[i].z;
                 cp.w = cpProj[i].w * cpTraj[j].w;
                 cps[i][j] = cp;
             }
@@ -521,6 +537,49 @@ public final class NurbsCreator {
         return new BasicNurbsSurface(new ControlNet(cps), proj.getKnots(),
                 traj.getKnots(), proj.getDegree(), traj.getDegree());
 
+    }
+
+    /**
+     * Perform a linear extrusion of the given {@link NurbsCurve} along the
+     * supplied vector to produce a new {@link NurbsSurface}. The extrusion
+     * length is the length of the vector given.
+     * 
+     * @oaram extrude a extrusion vector
+     * @return a NurbsSurface.
+     */
+    public static NurbsSurface extrudeCurve(NurbsCurve curve, Vec3D extrude) {
+        //
+        // Curve and Surface Construction using Rational B-splines
+        // Piegl and Tiller CAD Vol 19 #9 November 1987 pp 485-498
+        //
+        KnotVector vKnot = new KnotVector(new float[] { 0f, 0f, 1f, 1f }, 1);
+
+        Vec4D[][] cpoints = new Vec4D[curve.getControlPoints().length][2];
+        for (int i = 0; i < cpoints.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                cpoints[i][j] = new Vec4D();
+            }
+        }
+
+        Vec4D[] curvePoints = curve.getControlPoints();
+        for (int i = 0; i < cpoints.length; i++) {
+            for (int j = 0; j < 2; j++) {
+
+                /*
+                 * Change added 11/02/90 Steve Larkin : Have multiplied the term
+                 * wcoord to the extrusion vector before adding to the curve
+                 * coordinates. Not really sure this is the correct fix, but it
+                 * works !
+                 */
+                cpoints[i][j].x = curvePoints[i].x + j * extrude.x;
+                cpoints[i][j].y = curvePoints[i].y + j * extrude.y;
+                cpoints[i][j].z = curvePoints[i].z + j * extrude.z;
+                cpoints[i][j].w = curvePoints[i].w;
+            }
+        }
+        ControlNet cnet = new ControlNet(cpoints);
+        return new BasicNurbsSurface(cnet, curve.getKnots(), vKnot.get(),
+                curve.getDegree(), vKnot.getDegree());
     }
 
     /**
@@ -756,5 +815,4 @@ public final class NurbsCreator {
 
     private NurbsCreator() {
     }
-
 }

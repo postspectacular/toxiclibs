@@ -107,7 +107,7 @@ public class CurveCreator {
      * @return the actual NurbsCurve if any exists, or null otherwise (to less
      *         control for the given degree).
      */
-    public NurbsCurve getActual() {
+    public NurbsCurve getCurve() {
         return actual;
     }
 

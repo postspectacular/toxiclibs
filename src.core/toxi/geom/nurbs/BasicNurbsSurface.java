@@ -37,8 +37,8 @@ public class BasicNurbsSurface implements NurbsSurface {
     // private List<TrimCurve> trimms = new LinkedList<TrimCurve>();
 
     /**
-     * Create a Nurbs Surface form the given Controlnet and the knot values of
-     * degree p in u direction and of degree q in v direction.
+     * Create a Nurbs Surface from the given {@link ControlNet} and the knot
+     * values of degree p in u direction and of degree q in v direction.
      * 
      * @param cps
      *            ControlNet of the Nurbs
@@ -151,12 +151,6 @@ public class BasicNurbsSurface implements NurbsSurface {
         return sw.unweightInto(out);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.jgeom.nurbs.NurbsSurface#surfaceDerivCpts(int, int, int, int,
-     * int)
-     */
     public Vec4D[][][][] surfaceDerivCpts(int d, int r1, int r2, int s1, int s2) {
 
         Vec4D[][][][] result =
