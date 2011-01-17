@@ -256,6 +256,15 @@ public interface ReadonlyVec2D {
     public Vec2D getRotated(float theta);
 
     /**
+     * Creates a new vector with its coordinates rounded to the given precision
+     * (grid alignment).
+     * 
+     * @param prec
+     * @return grid aligned vector
+     */
+    public Vec2D getRoundedTo(float prec);
+
+    /**
      * Creates a new vector in which all components are replaced with the signum
      * of their original values. In other words if a components value was
      * negative its new value will be -1, if zero => 0, if positive => +1

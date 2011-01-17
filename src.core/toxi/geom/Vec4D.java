@@ -272,6 +272,10 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         return copy().rotateZ(theta);
     }
 
+    public Vec4D getRoundedXYZTo(float prec) {
+        return copy().roundXYZTo(prec);
+    }
+
     public Vec4D getWeighted() {
         return copy().weight();
     }
@@ -471,6 +475,13 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         final float xx = co * x - si * y;
         y = si * x + co * y;
         x = xx;
+        return this;
+    }
+
+    public Vec4D roundXYZTo(float prec) {
+        x = MathUtils.roundTo(x, prec);
+        y = MathUtils.roundTo(y, prec);
+        z = MathUtils.roundTo(z, prec);
         return this;
     }
 

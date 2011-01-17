@@ -669,6 +669,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return new Vec3D(this).rotateZ(theta);
     }
 
+    public Vec3D getRoundedTo(float prec) {
+        return copy().roundTo(prec);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -1161,31 +1165,10 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         return this;
     }
 
-    /**
-     * Rounds the vector to the closest major axis. Assumes the vector is
-     * normalized.
-     * 
-     * @return itself
-     */
-    public final Vec3D roundToAxis() {
-        if (MathUtils.abs(x) < 0.5f) {
-            x = 0;
-        } else {
-            x = x < 0 ? -1 : 1;
-            y = z = 0;
-        }
-        if (MathUtils.abs(y) < 0.5f) {
-            y = 0;
-        } else {
-            y = y < 0 ? -1 : 1;
-            x = z = 0;
-        }
-        if (MathUtils.abs(z) < 0.5f) {
-            z = 0;
-        } else {
-            z = z < 0 ? -1 : 1;
-            x = y = 0;
-        }
+    public Vec3D roundTo(float prec) {
+        x = MathUtils.roundTo(x, prec);
+        y = MathUtils.roundTo(y, prec);
+        z = MathUtils.roundTo(z, prec);
         return this;
     }
 
@@ -1399,6 +1382,34 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         x = (x < 0 ? -1 : x == 0 ? 0 : 1);
         y = (y < 0 ? -1 : y == 0 ? 0 : 1);
         z = (z < 0 ? -1 : z == 0 ? 0 : 1);
+        return this;
+    }
+
+    /**
+     * Rounds the vector to the closest major axis. Assumes the vector is
+     * normalized.
+     * 
+     * @return itself
+     */
+    public final Vec3D snapToAxis() {
+        if (MathUtils.abs(x) < 0.5f) {
+            x = 0;
+        } else {
+            x = x < 0 ? -1 : 1;
+            y = z = 0;
+        }
+        if (MathUtils.abs(y) < 0.5f) {
+            y = 0;
+        } else {
+            y = y < 0 ? -1 : 1;
+            x = z = 0;
+        }
+        if (MathUtils.abs(z) < 0.5f) {
+            z = 0;
+        } else {
+            z = z < 0 ? -1 : 1;
+            x = y = 0;
+        }
         return this;
     }
 

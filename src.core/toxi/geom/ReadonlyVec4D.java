@@ -211,6 +211,15 @@ public interface ReadonlyVec4D {
      */
     public Vec4D getRotatedZ(float theta);
 
+    /**
+     * Creates a new vector with its XYZ coordinates rounded to the given
+     * precision (grid alignment). The weight component remains unmodified.
+     * 
+     * @param prec
+     * @return grid aligned vector
+     */
+    public Vec4D getRoundedXYZTo(float prec);
+
     public Vec4D getWeighted();
 
     /**

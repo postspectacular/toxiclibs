@@ -494,6 +494,10 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return new Vec2D(this).rotate(theta);
     }
 
+    public Vec2D getRoundedTo(float prec) {
+        return copy().roundTo(prec);
+    }
+
     public Vec2D getSignum() {
         return new Vec2D(this).signum();
     }
@@ -781,25 +785,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return this;
     }
 
-    /**
-     * Rounds the vector to the closest major axis. Assumes the vector is
-     * normalized.
-     * 
-     * @return itself
-     */
-    public final Vec2D roundToAxis() {
-        if (MathUtils.abs(x) < 0.5f) {
-            x = 0;
-        } else {
-            x = x < 0 ? -1 : 1;
-            y = 0;
-        }
-        if (MathUtils.abs(y) < 0.5f) {
-            y = 0;
-        } else {
-            y = y < 0 ? -1 : 1;
-            x = 0;
-        }
+    public Vec2D roundTo(float prec) {
+        x = MathUtils.roundTo(x, prec);
+        y = MathUtils.roundTo(y, prec);
         return this;
     }
 
@@ -942,6 +930,28 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     public final Vec2D signum() {
         x = (x < 0 ? -1 : x == 0 ? 0 : 1);
         y = (y < 0 ? -1 : y == 0 ? 0 : 1);
+        return this;
+    }
+
+    /**
+     * Rounds the vector to the closest major axis. Assumes the vector is
+     * normalized.
+     * 
+     * @return itself
+     */
+    public final Vec2D snapToAxis() {
+        if (MathUtils.abs(x) < 0.5f) {
+            x = 0;
+        } else {
+            x = x < 0 ? -1 : 1;
+            y = 0;
+        }
+        if (MathUtils.abs(y) < 0.5f) {
+            y = 0;
+        } else {
+            y = y < 0 ? -1 : 1;
+            x = 0;
+        }
         return this;
     }
 
