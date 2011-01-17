@@ -31,6 +31,14 @@ import toxi.geom.mesh.SurfaceMeshBuilder;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Sphere extends Vec3D implements Shape3D {
 
+    /**
+     * Earth's mean radius in km
+     * 
+     * @see http://en.wikipedia.org/wiki/Earth_radius#Mean_radii
+     */
+    public static final float EARTH_RADIUS =
+            (float) ((2 * 6378.1370 + 6356.752314245) / 3.0);
+
     @XmlAttribute(required = true)
     public float radius;
 
@@ -121,6 +129,33 @@ public class Sphere extends Vec3D implements Shape3D {
         // center to Vec3D p is less than the (squared) sphere radius
         ReadonlyVec3D v = result.sub(this);
         return v.magSquared() <= radius * radius;
+    }
+
+    /**
+     * Computes the surface distance on this sphere between two points given as
+     * lon/lat coordinates. The x component of each vector needs to contain the
+     * longitude and the y component the latitude (both in radians).
+     * 
+     * Algorithm from: http://www.csgnetwork.com/gpsdistcalc.html
+     * 
+     * @param p
+     * @param q
+     * @return distance on the sphere surface
+     */
+    public double surfaceDistanceBetween(Vec2D p, Vec2D q) {
+        double t1 = Math.sin(p.y) * Math.sin(q.y);
+        double t2 = Math.cos(p.y) * Math.cos(q.y);
+        double t3 = Math.cos(p.x - q.x);
+        double t4 = t2 * t3;
+        double t5 = t1 + t4;
+        double dist =
+                Math.atan(-t5 / Math.sqrt(-t5 * t5 + 1)) + 2 * Math.atan(1);
+        if (Double.isNaN(dist)) {
+            dist = 0;
+        } else {
+            dist *= radius;
+        }
+        return dist;
     }
 
     /**
