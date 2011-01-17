@@ -141,7 +141,7 @@ public class CARule2D implements CARule {
     protected byte[] randomArray(double chance) {
         List<Byte> rules = new ArrayList<Byte>();
         for (byte i = 0; i < 9; i++) {
-            if (Math.random() < chance) {
+            if (MathUtils.random(1f) < chance) {
                 rules.add(i);
             }
         }
@@ -171,6 +171,9 @@ public class CARule2D implements CARule {
     }
 
     protected void setRuleArray(byte[] seed, boolean[] kernel) {
+        for (int i = 0; i < kernel.length; i++) {
+            kernel[i] = false;
+        }
         for (int i = 0; i < seed.length; i++) {
             byte id = seed[i];
             if (id >= 0 && id < kernel.length) {
