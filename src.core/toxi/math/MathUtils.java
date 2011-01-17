@@ -218,14 +218,6 @@ public final class MathUtils {
     }
 
     /**
-     * @deprecated renamed into {@link #floor(float)}
-     */
-    @Deprecated
-    public static final int fastFloor(float x) {
-        return floor(x);
-    }
-
-    /**
      * @deprecated
      */
     @Deprecated
@@ -269,24 +261,22 @@ public final class MathUtils {
     public static final double fastSin(double x) {
         // float B = 4/pi;
         // float C = -4/(pi*pi);
-        //
         // float y = B * x + C * x * abs(x);
         // y = P * (y * abs(y) - y) + y;
-
         x = SIN_B * x + SIN_A * x * abs(x);
         return SIN_P * (x * abs(x) - x) + x;
     }
 
     public static final boolean flipCoin() {
-        return Math.random() < 0.5;
+        return RND.nextBoolean();
     }
 
     public static final boolean flipCoin(Random rnd) {
         return rnd.nextBoolean();
     }
 
-    public static final int floor(double x) {
-        int y = (int) x;
+    public static final long floor(double x) {
+        long y = (long) x;
         if (x < 0 && x != y) {
             y--;
         }
@@ -505,6 +495,39 @@ public final class MathUtils {
             theta = PI - theta;
         }
         return theta;
+    }
+
+    /**
+     * Rounds a double precision value to the given precision.
+     * 
+     * @param val
+     * @param prec
+     * @return
+     */
+    public static final double roundTo(double val, double prec) {
+        return floor(val / prec + 0.5) * prec;
+    }
+
+    /**
+     * Rounds a single precision value to the given precision.
+     * 
+     * @param val
+     * @param prec
+     * @return
+     */
+    public static final float roundTo(float val, float prec) {
+        return floor(val / prec + 0.5f) * prec;
+    }
+
+    /**
+     * Rounds an integer value to the given precision.
+     * 
+     * @param val
+     * @param prec
+     * @return
+     */
+    public static final int roundTo(int val, int prec) {
+        return floor((float) val / prec + 0.5f) * prec;
     }
 
     /**
