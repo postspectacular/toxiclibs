@@ -464,6 +464,22 @@ public final class MathUtils {
         return (int) (rnd.nextDouble() * (max - min)) + min;
     }
 
+    public static final boolean randomChance(double chance) {
+        return RND.nextDouble() < chance;
+    }
+
+    public static final boolean randomChance(float chance) {
+        return RND.nextFloat() < chance;
+    }
+
+    public static final boolean randomChance(Random rnd, double chance) {
+        return rnd.nextDouble() < chance;
+    }
+
+    public static final boolean randomChance(Random rnd, float chance) {
+        return rnd.nextFloat() < chance;
+    }
+
     public static final double reduceAngle(double theta) {
         theta %= TWO_PI;
         if (abs(theta) > PI) {
