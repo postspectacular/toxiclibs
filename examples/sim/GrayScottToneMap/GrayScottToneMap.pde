@@ -7,6 +7,10 @@
  * <li>click + drag mouse to draw dots used as simulation seed</li>
  * <li>press any key to reset</li>
  * </ul></p>
+ *
+ * <p>UPDATES:<ul>
+ * <li>2011-01-18 using ToneMap.getToneMappedArray()</li>
+ * </ul></p>
  */
 
 /* 
@@ -70,9 +74,7 @@ void draw() {
   }
   // read out the V result array
   // and use tone map to render colours
-  for(int i=0; i<gs.v.length; i++) {
-    pixels[i]=toneMap.getARGBToneFor(gs.v[i]);
-  }
+  toneMap.getToneMappedArray(gs.v,pixels);
   updatePixels();
 }
 

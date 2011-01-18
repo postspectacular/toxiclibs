@@ -11,6 +11,10 @@
  * <li>press 1-9 to adjust the F parameter of the simulation</li> 
  * <li>press any other key to reset</li>
  * </ul>
+ *
+ * <p>UPDATES:<ul>
+ * <li>2011-01-18 using ToneMap.getToneMappedArray()</li>
+ * </ul></p>
  */
 
 /* 
@@ -58,9 +62,7 @@ void draw() {
   for(int i=0; i<10; i++) gs.update(1);
   // read out the V result array
   // and use tone map to render colours
-  for(int i=0; i<gs.v.length; i++) {
-    pixels[i]=toneMap.getARGBToneFor(gs.v[i]);
-  }
+  toneMap.getToneMappedArray(gs.v,pixels);
   updatePixels();
 }
 

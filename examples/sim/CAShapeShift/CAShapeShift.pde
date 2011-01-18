@@ -1,11 +1,10 @@
 /**
- * <p>HelloCA demo shows the basic usage pattern for the 2D cellular automata implementation
- * in combination with a tone map to render its current state. The CA simulation can be
- * configured with birth and survival rules to create all the complete set of rules with a
- * 3x3 cell evaluation kernel.</p>
+ * <p>The demo uses a 2D cellular automata to slowly deform stroke marks
+ * left by the user in the simulation space. The CA tends to slowly fill
+ * and thicken curved strokes, but shapes eventually turn into blobs...</p>
  *
  * <p><strong>Usage:</strong><ul>
- * <li>click + drag mouse to disturb the CA matrix</li>
+ * <li>click + drag mouse to draw</li>
  * <li>press any key to restart simulation</li>
  * </ul></p>
  */
@@ -43,19 +42,18 @@ void setup() {
   // the numbers refer to the amount of ACTIVE neighbour cells allowed,
   // their order is irrelevant
   byte[] birthRules=new byte[] { 
-    2,5 };
+    4,5,6,7,8 };
   // survival rules specify the possible numbers of allowed or required
   // ACTIVE neighbour cells in order for a cell to stay alive
   byte[] survivalRules=new byte[] { 
-    3,4,6,7 };
+    3,4,6,7,8 };
   // setup cellular automata matrix
   ca=new CAMatrix(width,height);
   // assign the rules to the matrix
   // unlike traditional CA's only supporting binary cell states
   // this implementation supports a flexible number of states (cell age)
-  // in this demo cell states reach from 0 - 63
+  // in this demo cell states reach from 0 - 128
   CARule rule=new CARule2D(birthRules,survivalRules,128,true);
-  rule.setAutoExpire(true);
   ca.setRule(rule);
   // create a gradient for rendering/mapping the CA
   ColorGradient grad=new ColorGradient();
@@ -63,19 +61,16 @@ void setup() {
   // see javadocs for list of names:
   // http://toxiclibs.org/docs/colorutils/toxi/color/NamedColor.html
   grad.addColorAt(0,NamedColor.WHITE);
-  grad.addColorAt(64,NamedColor.YELLOW);
-  grad.addColorAt(128,NamedColor.LIMEGREEN);
-  grad.addColorAt(192,NamedColor.CYAN);
-  grad.addColorAt(240,NamedColor.RED);
-  grad.addColorAt(255,NamedColor.WHITE);
+  grad.addColorAt(128,NamedColor.RED);
   // the tone map will map cell states/ages to a gradient color
   toneMap=new ToneMap(0,rule.getStateCount()-1,grad);
+  frameRate(999);
 }
 
 void draw() {
   loadPixels();
   if (mousePressed) {
-    ca.drawBoxAt(mouseX,mouseY,10,1);
+    ca.drawBoxAt(mouseX,mouseY,19,1);
   }
   ca.update();
   int[] m=ca.getMatrix();

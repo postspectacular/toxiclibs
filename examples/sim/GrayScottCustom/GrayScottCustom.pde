@@ -9,6 +9,10 @@
  * <li>click + drag mouse to draw dots used as simulation seed</li>
  * <li>press any key to reset</li>
  * </ul></p>
+ *
+ * <p>UPDATES:<ul>
+ * <li>2011-01-18 using ToneMap.getToneMappedArray()</li>
+ * </ul></p>
  */
 
 /* 
@@ -73,9 +77,7 @@ void draw() {
   }
   // read out the V result array
   // and use tone map to render colours
-  for(int i=0; i<gs.v.length; i++) {
-    pixels[i]=toneMap.getARGBToneFor(gs.v[i]);
-  }
+  toneMap.getToneMappedArray(gs.v,pixels);
   updatePixels();
 }
 
@@ -83,20 +85,23 @@ void keyPressed() {
   gs.reset();
 }
 
+// using inheritance and overwriting of 2 supplied adapter methods,
+// we can customize the standard homogenous behaviour and create new outcomes.
 class PatternedGrayScott extends GrayScott {
   public PatternedGrayScott(int w, int h, boolean tiling) {
     super(w,h,tiling);
   }
 
+  // we use the x position to divide the simulation space into columns
+  // of alternating behaviors
   public float getFCoeffAt(int x, int y) {
     x/=32;
     return 0==x%2 ? f : f-0.005;
   }
 
+  // we use the y position to create a gradient of varying values for
+  // the simulation's K coefficient
   public float getKCoeffAt(int x, int y) {
     return k-y*0.00004;
-  } 
+  }
 }
-
-
-
