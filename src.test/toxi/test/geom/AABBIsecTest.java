@@ -20,7 +20,7 @@ public class AABBIsecTest extends TestCase {
         AABB box = AABB.fromMinMax(new Vec3D(), new Vec3D(100, 100, 100));
         System.out.println(box);
         Vec3D p = new Vec3D(-150, -50, 110);
-        box.includePoint(p);
+        box.growToContainPoint(p);
         System.out.println(box.getMin() + " " + box.getMax());
         assertTrue(box.containsPoint(p));
     }

@@ -16,6 +16,10 @@
  * <li>p: reset seed pattern</li>
  * <li>n: add noise to pattern</li>
  * </ul></p>
+ *
+ * <p>UPDATES:<ul>
+ * <li>2011-01-18 using ToneMap.getToneMappedArray()</li>
+ * </ul></p>
  */
 
 /* 
@@ -68,10 +72,7 @@ void setup() {
 void draw() {
   loadPixels();
   ca.update();
-  int[] m = ca.getMatrix();
-  for (int i = 0, idx = y * width; i < m.length; i++) {
-    pixels[idx + i] = toneMap.getARGBToneFor(m[i]);
-  }
+  toneMap.getToneMappedArray(ca.getMatrix(),pixels,y * width);
   updatePixels();
   y = (y + 1) % height;
 }

@@ -16,6 +16,10 @@ Processing sketchbook and ensure the above listed dependent libraries
 are installed there too. You'll then need to restart Processing in order
 for it to find this new library.
 
+Please note that some examples are using syntax which is only
+supported since Processing 1.2. If you're getting strange compile errors,
+please ensure it has not to do with your version of Processing.
+
 Source code is available via Hg, instructions over here:
 http://hg.postspectacular.com/toxiclibs/source/
 

@@ -129,7 +129,8 @@ public class ScaleMap {
     }
 
     /**
-     * Overrides the mapping function used for the scale conversion.
+     * Overrides the mapping function used for the scale conversion. By default
+     * a linear mapping is used: {@link LinearInterpolation}.
      * 
      * @param func
      *            interpolate strategy implementation
