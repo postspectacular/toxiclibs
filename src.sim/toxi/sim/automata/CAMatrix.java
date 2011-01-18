@@ -78,7 +78,7 @@ public class CAMatrix implements EvolvableMatrix {
             maxState = MathUtils.clip(maxState, 0, rule.getStateCount());
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    if (Math.random() < probability) {
+                    if (MathUtils.randomChance(probability)) {
                         int idx = y * width + x;
                         swap[idx] =
                                 matrix[idx] =
@@ -108,7 +108,7 @@ public class CAMatrix implements EvolvableMatrix {
     public CAMatrix drawBoxAt(int x, int y, int w, int state) {
         for (int i = y - w / 2; i < y + w / 2; i++) {
             for (int j = x - w / 2; j < x + w / 2; j++) {
-                if (j >= 0 && j < height && i >= 0 && i < width) {
+                if (j >= 0 && j < width && i >= 0 && i < height) {
                     int idx = j + i * width;
                     swap[idx] = matrix[idx] = state;
                 }
@@ -146,11 +146,6 @@ public class CAMatrix implements EvolvableMatrix {
         return x + y * width;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.sim.automata.EvolvableMatrix#getMatrix()
-     */
     public final int[] getMatrix() {
         return matrix;
     }
@@ -162,20 +157,10 @@ public class CAMatrix implements EvolvableMatrix {
         return rule;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.sim.automata.EvolvableMatrix#getSwapBuffer()
-     */
     public final int[] getSwapBuffer() {
         return swap;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see toxi.sim.automata.EvolvableMatrix#getWidth()
-     */
     public final int getWidth() {
         return width;
     }
@@ -205,15 +190,16 @@ public class CAMatrix implements EvolvableMatrix {
      * @return itself
      */
     public CAMatrix seedImage(int[] pixels, int imgWidth, int imgHeight) {
-        int xo = MathUtils.clip((width - imgWidth) / 2, 0, width - 1);
-        int yo = MathUtils.clip((height - imgHeight) / 2, 0, height - 1);
+        final int xo = MathUtils.clip((width - imgWidth) / 2, 0, width - 1);
+        final int yo = MathUtils.clip((height - imgHeight) / 2, 0, height - 1);
         imgWidth = MathUtils.min(imgWidth, width);
         imgHeight = MathUtils.min(imgHeight, height);
         for (int y = 0; y < imgHeight; y++) {
-            int i = y * imgWidth;
+            final int i = y * imgWidth;
+            final int yoIndex = (yo + y) * width;
             for (int x = 0; x < imgWidth; x++) {
                 if (0 < (pixels[i + x] & 0xff)) {
-                    int idx = (yo + y) * width + xo + x;
+                    int idx = yoIndex + xo + x;
                     matrix[idx] = 1;
                 }
             }
