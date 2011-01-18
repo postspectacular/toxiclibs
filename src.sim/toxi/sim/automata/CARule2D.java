@@ -24,8 +24,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import toxi.math.MathUtils;
+import toxi.util.datatypes.ArrayUtil;
 
 public class CARule2D implements CARule {
+
+    public static final byte[] booleanToByteArray(boolean[] kernel) {
+        List<Byte> buf = new ArrayList<Byte>(kernel.length);
+        for (byte i = 0; i < kernel.length; i++) {
+            if (kernel[i]) {
+                buf.add(i);
+            }
+        }
+        return byteListToArray(buf);
+    }
+
+    public static final byte[] byteListToArray(List<Byte> rules) {
+        byte[] r = new byte[rules.size()];
+        for (int i = rules.size() - 1; i >= 0; i--) {
+            r[i] = rules.get(i);
+        }
+        return r;
+    }
 
     protected boolean[] survivalRules;
     protected boolean[] birthRules;
@@ -74,51 +93,45 @@ public class CARule2D implements CARule {
                 int currVal = matrix[centre + x];
                 int newVal = currVal;
                 int sum = 0;
-                if (currVal > 1) {
-                    if (isAutoExpire) {
-                        newVal = (newVal + 1) % stateCount;
+                if (matrix[up + left] > 0) {
+                    sum++; // top left
+                }
+                if (matrix[up + x] > 0) {
+                    sum++; // top
+                }
+                if (matrix[up + right] > 0) {
+                    sum++; // top right
+                }
+                if (matrix[centre + left] > 0) {
+                    sum++; // left
+                }
+                if (matrix[centre + right] > 0) {
+                    sum++; // right
+                }
+                if (matrix[down + left] > 0) {
+                    sum++; // bottom left
+                }
+                if (matrix[down + x] > 0) {
+                    sum++; // bottom
+                }
+                if (matrix[down + right] > 0) {
+                    sum++; // bottom right
+                }
+                if (currVal > 0) {
+                    // if alive, check survival...
+                    if (survivalRules[sum]) {
+                        if (isAutoExpire) {
+                            newVal = (newVal + 1) % stateCount;
+                        } else {
+                            newVal = MathUtils.min(newVal + 1, maxState);
+                        }
                     } else {
-                        newVal = MathUtils.min(newVal + 1, maxState);
+                        newVal = 0;
                     }
                 } else {
-                    if (matrix[up + left] == 1) {
-                        sum++; // top left
-                    }
-                    if (matrix[up + x] == 1) {
-                        sum++; // top
-                    }
-                    if (matrix[up + right] == 1) {
-                        sum++; // top right
-                    }
-                    if (matrix[centre + left] == 1) {
-                        sum++; // left
-                    }
-                    if (matrix[centre + right] == 1) {
-                        sum++; // right
-                    }
-                    if (matrix[down + left] == 1) {
-                        sum++; // bottom left
-                    }
-                    if (matrix[down + x] == 1) {
-                        sum++; // bottom
-                    }
-                    if (matrix[down + right] == 1) {
-                        sum++; // bottom right
-                    }
-                    if (currVal != 0) { // centre
-                        if (survivalRules[sum]) {
-                            newVal = 1;
-                        } else {
-                            if (isAutoExpire) {
-                                newVal = (newVal + 1) % stateCount;
-                            } else {
-                                newVal = MathUtils.min(newVal + 1, maxState);
-                            }
-                        }
-                    } else {
-                        if (birthRules[sum]) {
-                            newVal = 1;
-                        }
+                    // else check birth rules...
+                    if (birthRules[sum]) {
+                        newVal = 1;
                     }
                 }
                 temp[centre + x] = newVal;
@@ -126,8 +139,16 @@ public class CARule2D implements CARule {
         }
     }
 
+    public byte[] getBirthRules() {
+        return booleanToByteArray(birthRules);
+    }
+
     public int getStateCount() {
         return stateCount;
+    }
+
+    public byte[] getSurvivalRules() {
+        return booleanToByteArray(survivalRules);
     }
 
     public boolean isAutoExpire() {
@@ -141,15 +162,14 @@ public class CARule2D implements CARule {
     protected byte[] randomArray(double chance) {
         List<Byte> rules = new ArrayList<Byte>();
         for (byte i = 0; i < 9; i++) {
-            if (MathUtils.random(1f) < chance) {
+            if (MathUtils.randomChance(chance)) {
                 rules.add(i);
             }
         }
-        byte[] r = new byte[rules.size()];
-        for (int i = rules.size() - 1; i >= 0; i--) {
-            r[i] = rules.get(i);
+        if (rules.size() == 0) {
+            rules.add((byte) MathUtils.random(9));
         }
-        return r;
+        return byteListToArray(rules);
     }
 
     public void randomize() {
@@ -195,5 +215,10 @@ public class CARule2D implements CARule {
 
     public void setTiling(boolean state) {
         isTiling = state;
+    }
+
+    public String toString() {
+        return "births: " + ArrayUtil.toString(getBirthRules()) + " survivals:"
+                + ArrayUtil.toString(getSurvivalRules());
     }
 }
