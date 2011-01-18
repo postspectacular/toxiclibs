@@ -281,4 +281,69 @@ public class ArrayUtil {
             array[r] = swap;
         }
     }
+
+    public static String toString(byte[] array) {
+        StringBuilder s = new StringBuilder();
+        s.append('{');
+        final int max = array.length - 1;
+        for (int i = 0; i < array.length; i++) {
+            s.append(array[i]);
+            if (i < max) {
+                s.append(',');
+            }
+        }
+        return s.append('}').toString();
+    }
+
+    public static String toString(double[] array) {
+        StringBuilder s = new StringBuilder();
+        s.append('{');
+        final int max = array.length - 1;
+        for (int i = 0; i < array.length; i++) {
+            s.append(array[i]);
+            if (i < max) {
+                s.append(',');
+            }
+        }
+        return s.append('}').toString();
+    }
+
+    public static String toString(float[] array) {
+        StringBuilder s = new StringBuilder();
+        s.append('{');
+        final int max = array.length - 1;
+        for (int i = 0; i < array.length; i++) {
+            s.append(array[i]);
+            if (i < max) {
+                s.append(',');
+            }
+        }
+        return s.append('}').toString();
+    }
+
+    public static String toString(int[] array) {
+        StringBuilder s = new StringBuilder();
+        s.append('{');
+        final int max = array.length - 1;
+        for (int i = 0; i < array.length; i++) {
+            s.append(array[i]);
+            if (i < max) {
+                s.append(',');
+            }
+        }
+        return s.append('}').toString();
+    }
+
+    public static <T> String toString(T[] array) {
+        StringBuilder s = new StringBuilder();
+        s.append('{');
+        final int max = array.length - 1;
+        for (int i = 0; i < array.length; i++) {
+            s.append(array[i]);
+            if (i < max) {
+                s.append(',');
+            }
+        }
+        return s.append('}').toString();
+    }
 }
