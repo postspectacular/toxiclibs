@@ -50,11 +50,11 @@ public class ToneMap {
         map = new ScaleMap(min, max, 0, colors.size() - 1);
     }
 
-    public int getARGBToneFor(float t) {
+    public final int getARGBToneFor(float t) {
         return getToneFor(t).toARGB();
     }
 
-    public ReadonlyTColor getToneFor(float t) {
+    public final ReadonlyTColor getToneFor(float t) {
         int idx;
         if (colors.size() > 2) {
             idx = (int) (map.getClippedValueFor(t) + 0.5);
@@ -64,6 +64,85 @@ public class ToneMap {
         return colors.get(idx);
     }
 
+    /**
+     * Applies the tonemap to all elements in the given source array of single
+     * precision values and places the resulting ARGB color in the corresponding
+     * index of the target pixel buffer. If the target buffer is null, a new one
+     * will be created automatically.
+     * 
+     * @param src
+     *            source array of values to be tone mapped
+     * @param pixels
+     *            target pixel buffer
+     * @return pixel array
+     */
+    public int[] getToneMappedArray(float[] src, int[] pixels) {
+        if (pixels == null) {
+            pixels = new int[src.length];
+        } else if (src.length != pixels.length) {
+            throw new IllegalArgumentException(
+                    "pixel array need to be the same size as source array");
+        }
+        for (int i = 0; i < src.length; i++) {
+            pixels[i] = getToneFor(src[i]).toARGB();
+        }
+        return pixels;
+    }
+
+    public int[] getToneMappedArray(float[] src, int[] pixels, int offset) {
+        if (offset < 0 || offset + src.length > pixels.length) {
+            throw new IllegalArgumentException(
+                    "offset into target pixel buffer is negative or too large");
+        }
+        for (int i = 0; i < src.length; i++) {
+            pixels[offset++] = getToneFor(src[i]).toARGB();
+        }
+        return pixels;
+    }
+
+    /**
+     * Applies the tonemap to all elements in the given source array of integers
+     * and places the resulting ARGB color in the corresponding index of the
+     * target pixel buffer. If the target buffer is null, a new one will be
+     * created automatically.
+     * 
+     * @param src
+     *            source array of values to be tone mapped
+     * @param pixels
+     *            target pixel buffer
+     * @return pixel array
+     */
+    public int[] getToneMappedArray(int[] src, int[] pixels) {
+        if (pixels == null) {
+            pixels = new int[src.length];
+        } else if (src.length != pixels.length) {
+            throw new IllegalArgumentException(
+                    "pixel array need to be the same size as source array");
+        }
+        for (int i = 0; i < src.length; i++) {
+            pixels[i] = getToneFor(src[i]).toARGB();
+        }
+        return pixels;
+    }
+
+    public int[] getToneMappedArray(int[] src, int[] pixels, int offset) {
+        if (offset < 0 || offset + src.length > pixels.length) {
+            throw new IllegalArgumentException(
+                    "offset into target pixel buffer is negative or too large");
+        }
+        for (int i = 0; i < src.length; i++) {
+            pixels[offset++] = getToneFor(src[i]).toARGB();
+        }
+        return pixels;
+    }
+
+    /**
+     * Sets the interpolation function for the underlying {@link ScaleMap}
+     * instance of this {@link ToneMap}.
+     * 
+     * @param func
+     * @see ScaleMap#setMapFunction(InterpolateStrategy)
+     */
     public void setMapFunction(InterpolateStrategy func) {
         map.setMapFunction(func);
     }
