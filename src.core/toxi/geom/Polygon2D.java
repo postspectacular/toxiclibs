@@ -25,6 +25,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import toxi.geom.mesh.Mesh3D;
+import toxi.geom.mesh.TriangleMesh;
+
 /**
  * Container type for convex polygons. Implements {@link Shape2D}.
  */
@@ -204,6 +207,19 @@ public class Polygon2D implements Shape2D {
         vertices.clear();
         vertices.addAll(filtered);
         return this;
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh) {
+        if (mesh == null) {
+            mesh = new TriangleMesh();
+        }
+        final int num = vertices.size();
+        final Vec3D centroid = getCentroid().to3DXY();
+        for (int i = 1; i <= num; i++) {
+            mesh.addFace(centroid, vertices.get(i % num).to3DXY(), vertices
+                    .get(i - 1).to3DXY());
+        }
+        return mesh;
     }
 
     public String toString() {
