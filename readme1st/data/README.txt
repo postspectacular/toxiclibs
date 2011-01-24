@@ -6,7 +6,9 @@ toxi.data.csv
 toxi.data.feeds
 toxi.data.feeds.util
 
-This library doesn't depend no other packages.
+This library also depends on an JAXB implementation (JSR-222), which is 
+available by default since Java SE 6. For the older Java 1.5 version you'll
+need to download & install JAXB manually from here: http://jaxb.java.net/  
 
 If you're going to use these classes for Processing projects,
 first drop the "datautils" folder into the "libraries" folder of your
