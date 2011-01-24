@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import toxi.geom.AABB;
+import toxi.geom.Line3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.WETriangleMesh;
@@ -73,6 +74,9 @@ public class MeshLatticeBuilder {
     private VolumetricSpace volume;
 
     private float drawStep = 0.5f;
+    private ScaleMap bboxToVoxelX;
+    private ScaleMap bboxToVoxelY;
+    private ScaleMap bboxToVoxelZ;
 
     public MeshLatticeBuilder(Vec3D scale, int res, float stroke) {
         this(scale, res, res, res, new FloatRange(stroke, stroke));
@@ -104,15 +108,7 @@ public class MeshLatticeBuilder {
 
     public VolumetricSpace buildVolume(WETriangleMesh mesh) {
         logger.info("creating lattice...");
-        AABB box = mesh.getBoundingBox();
-        Vec3D bmin = box.getMin();
-        Vec3D bmax = box.getMax();
-        ScaleMap wx =
-                new ScaleMap(bmin.x, bmax.x, voxRangeX.min, voxRangeX.max);
-        ScaleMap wy =
-                new ScaleMap(bmin.y, bmax.y, voxRangeY.min, voxRangeY.max);
-        ScaleMap wz =
-                new ScaleMap(bmin.z, bmax.z, voxRangeZ.min, voxRangeZ.max);
+        setMesh(mesh);
         VolumetricBrush brush = new RoundBrush(volume, 1);
         List<Float> edgeLengths = new ArrayList<Float>(mesh.edges.size());
         for (WingedEdge e : mesh.edges.values()) {
@@ -122,17 +118,21 @@ public class MeshLatticeBuilder {
         ScaleMap brushSize =
                 new ScaleMap(range.min, range.max, stroke.min, stroke.max);
         for (WingedEdge e : mesh.edges.values()) {
-            List<Vec3D> points = e.splitIntoSegments(null, drawStep, true);
             brush.setSize((float) brushSize.getClippedValueFor(e.getLength()));
-            for (Vec3D p : points) {
-                float x = (float) wx.getClippedValueFor(p.x);
-                float y = (float) wy.getClippedValueFor(p.y);
-                float z = (float) wz.getClippedValueFor(p.z);
-                brush.drawAtGridPos(x, y, z, 1);
-            }
+            createLattice(brush, e, drawStep);
         }
         volume.closeSides();
         return volume;
+    }
+
+    public void createLattice(VolumetricBrush brush, Line3D l, float drawStep) {
+        List<Vec3D> points = l.splitIntoSegments(null, drawStep, true);
+        for (Vec3D p : points) {
+            float x = (float) bboxToVoxelX.getClippedValueFor(p.x);
+            float y = (float) bboxToVoxelY.getClippedValueFor(p.y);
+            float z = (float) bboxToVoxelZ.getClippedValueFor(p.z);
+            brush.drawAtGridPos(x, y, z, 1);
+        }
     }
 
     /**
@@ -140,6 +140,29 @@ public class MeshLatticeBuilder {
      */
     public float getDrawStep() {
         return drawStep;
+    }
+
+    /**
+     * Sets the distance between {@link VolumetricBrush} positions when tracing
+     * mesh edges.
+     * 
+     * @param drawStep
+     *            the drawStep to set
+     */
+    public void setDrawStepLength(float len) {
+        this.drawStep = len;
+    }
+
+    public void setMesh(WETriangleMesh mesh) {
+        AABB box = mesh.getBoundingBox();
+        Vec3D bmin = box.getMin();
+        Vec3D bmax = box.getMax();
+        bboxToVoxelX =
+                new ScaleMap(bmin.x, bmax.x, voxRangeX.min, voxRangeX.max);
+        bboxToVoxelY =
+                new ScaleMap(bmin.y, bmax.y, voxRangeY.min, voxRangeY.max);
+        bboxToVoxelZ =
+                new ScaleMap(bmin.z, bmax.z, voxRangeZ.min, voxRangeZ.max);
     }
 
     protected void setRangeMinMax(IntegerRange range, int min, int max,
@@ -156,17 +179,6 @@ public class MeshLatticeBuilder {
         }
         range.min = min;
         range.max = max;
-    }
-
-    /**
-     * Sets the distance between {@link VolumetricBrush} positions when tracing
-     * mesh edges.
-     * 
-     * @param drawStep
-     *            the drawStep to set
-     */
-    public void setDrawStepLength(float len) {
-        this.drawStep = len;
     }
 
     public MeshLatticeBuilder setVoxelRangeX(int min, int max) {
