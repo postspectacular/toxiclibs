@@ -91,7 +91,7 @@ public class BasicNurbsSurface implements NurbsSurface {
     }
 
     public float[] getUKnots() {
-        return uKnots.get();
+        return uKnots.getArray();
     }
 
     public KnotVector getUKnotVector() {
@@ -103,7 +103,7 @@ public class BasicNurbsSurface implements NurbsSurface {
     }
 
     public float[] getVKnots() {
-        return vKnots.get();
+        return vKnots.getArray();
     }
 
     public KnotVector getVKnotVector() {

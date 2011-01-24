@@ -529,7 +529,7 @@ public final class NurbsCreator {
                 Vec4D cp = new Vec4D();
                 cp.x = cpProj[i].x * cpTraj[j].x * alpha;
                 cp.y = cpProj[i].y * cpTraj[j].y * alpha;
-                cp.z = cpProj[i].z;
+                cp.z = (cpProj[i].z + cpTraj[j].z) * alpha;
                 cp.w = cpProj[i].w * cpTraj[j].w;
                 cps[i][j] = cp;
             }
@@ -548,37 +548,31 @@ public final class NurbsCreator {
      * @return a NurbsSurface.
      */
     public static NurbsSurface extrudeCurve(NurbsCurve curve, Vec3D extrude) {
-        //
+
         // Curve and Surface Construction using Rational B-splines
         // Piegl and Tiller CAD Vol 19 #9 November 1987 pp 485-498
-        //
         KnotVector vKnot = new KnotVector(new float[] { 0f, 0f, 1f, 1f }, 1);
 
         Vec4D[][] cpoints = new Vec4D[curve.getControlPoints().length][2];
-        for (int i = 0; i < cpoints.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                cpoints[i][j] = new Vec4D();
-            }
-        }
-
         Vec4D[] curvePoints = curve.getControlPoints();
         for (int i = 0; i < cpoints.length; i++) {
             for (int j = 0; j < 2; j++) {
-
                 /*
                  * Change added 11/02/90 Steve Larkin : Have multiplied the term
                  * wcoord to the extrusion vector before adding to the curve
                  * coordinates. Not really sure this is the correct fix, but it
                  * works !
                  */
-                cpoints[i][j].x = curvePoints[i].x + j * extrude.x;
-                cpoints[i][j].y = curvePoints[i].y + j * extrude.y;
-                cpoints[i][j].z = curvePoints[i].z + j * extrude.z;
-                cpoints[i][j].w = curvePoints[i].w;
+                Vec4D cp = new Vec4D();
+                cp.x = curvePoints[i].x + j * extrude.x;
+                cp.y = curvePoints[i].y + j * extrude.y;
+                cp.z = curvePoints[i].z + j * extrude.z;
+                cp.w = curvePoints[i].w;
+                cpoints[i][j] = cp;
             }
         }
         ControlNet cnet = new ControlNet(cpoints);
-        return new BasicNurbsSurface(cnet, curve.getKnots(), vKnot.get(),
+        return new BasicNurbsSurface(cnet, curve.getKnots(), vKnot.getArray(),
                 curve.getDegree(), vKnot.getDegree());
     }
 
@@ -630,22 +624,20 @@ public final class NurbsCreator {
             }
 
             // y-ccordinate
-            b = new GVector(n + 1);
             for (int j = 0; j <= n; j++) {
                 b.setElement(j, points[j].y);
             }
-            sol = new GVector(n + 1);
+            sol.zero();
             sol.LUDBackSolve(lu, b, perm);
             for (int j = 0; j <= n; j++) {
                 cps[j].y = (float) sol.getElement(j);
             }
 
             // z-ccordinate
-            b = new GVector(n + 1);
             for (int j = 0; j <= n; j++) {
                 b.setElement(j, points[j].z);
             }
-            sol = new GVector(n + 1);
+            sol.zero();
             sol.LUDBackSolve(lu, b, perm);
             for (int j = 0; j <= n; j++) {
                 cps[j].z = (float) sol.getElement(j);

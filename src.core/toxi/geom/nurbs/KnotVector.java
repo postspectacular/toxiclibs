@@ -27,7 +27,7 @@ package toxi.geom.nurbs;
  */
 public class KnotVector {
 
-    private boolean open;
+    private boolean isOpen;
     private float knots[];
     private int degree;
     private int n;
@@ -57,15 +57,15 @@ public class KnotVector {
         int m = knots.length - 1;
 
         // Check if it is an open knot vector
-        this.open = true;
-        for (int k = 0; k < degree && this.open == true; k++) {
+        isOpen = true;
+        for (int k = 0; k < degree && isOpen; k++) {
             if (knots[k] != knots[k + 1]) {
-                this.open = false;
+                isOpen = false;
             }
         }
-        for (int k = m; k > m - degree && this.open == true; k--) {
+        for (int k = m; k > m - degree && isOpen; k--) {
             if (knots[k] != knots[k - 1]) {
-                this.open = false;
+                isOpen = false;
             }
         }
 
@@ -242,17 +242,7 @@ public class KnotVector {
             }
             mid = (low + high) / 2;
         }
-
         return mid;
-    }
-
-    /**
-     * get the knot values as float array
-     * 
-     * @return the knot values
-     */
-    public float[] get() {
-        return knots;
     }
 
     /**
@@ -264,6 +254,15 @@ public class KnotVector {
      */
     public float get(int i) {
         return knots[i];
+    }
+
+    /**
+     * get the knot values as float array
+     * 
+     * @return the knot values
+     */
+    public float[] getArray() {
+        return knots;
     }
 
     /**
@@ -297,7 +296,7 @@ public class KnotVector {
     }
 
     public synchronized boolean isOpen() {
-        return open;
+        return isOpen;
     }
 
     public int length() {

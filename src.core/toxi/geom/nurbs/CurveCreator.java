@@ -36,7 +36,7 @@ public class CurveCreator {
     private List<Vec4D> cps = new LinkedList<Vec4D>();
     private NurbsCurve curve = null;
 
-    private int p;
+    private int degree;
     private int incp = 0;
 
     /**
@@ -47,7 +47,7 @@ public class CurveCreator {
      *            Degree the created NurbsCurve will have.
      */
     public CurveCreator(int degree) {
-        p = degree;
+        this.degree = degree;
     }
 
     /**
@@ -74,8 +74,8 @@ public class CurveCreator {
     public NurbsCurve addControlPoint(Vec4D cp) {
         cps.add(cp);
         int np = cps.size();
-        int tmp = p;
-        if (np <= p) {
+        int tmp = degree;
+        if (np <= degree) {
             if (incp == 0) {
                 incp++;
                 return null;
@@ -87,10 +87,10 @@ public class CurveCreator {
         for (int i = 0; i <= tmp; i++) {
             u[u.length - 1 - i] = 1;
         }
-        if (np > p + 1) {
-            float val = 1.0f / (np - p);
+        if (np > degree + 1) {
+            float val = 1.0f / (np - degree);
             float step = val;
-            for (int i = p + 1; i < u.length - 1 - p; i++) {
+            for (int i = degree + 1; i < u.length - 1 - degree; i++) {
                 u[i] = val;
                 val += step;
             }

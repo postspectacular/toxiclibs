@@ -132,7 +132,7 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
     }
 
     public float[] getKnots() {
-        return uKnots.get();
+        return uKnots.getArray();
     }
 
     public KnotVector getKnotVector() {

@@ -3,6 +3,7 @@ package toxi.geom.nurbs;
 import java.util.LinkedList;
 
 import toxi.geom.Vec4D;
+import toxi.math.MathUtils;
 
 /**
  * @author sg
@@ -92,14 +93,14 @@ public final class CurveUtils {
         int[] bint = binomials(t, t);
         for (int i = 1; i <= ph2; i++) {
             float inv = 1f / binph[i];
-            int mpi = Math.min(p, i);
-            for (int j = Math.max(0, i - t); j <= mpi; j++) {
+            int mpi = MathUtils.min(p, i);
+            for (int j = MathUtils.max(0, i - t); j <= mpi; j++) {
                 bezalfs[i][j] = inv * binp[j] * bint[i - j];
             }
         }
         for (int i = ph2 + 1; i < ph; i++) {
-            double mpi = Math.min(p, i);
-            for (int j = Math.max(0, i - t); j <= mpi; j++) {
+            double mpi = MathUtils.min(p, i);
+            for (int j = MathUtils.max(0, i - t); j <= mpi; j++) {
                 bezalfs[i][j] = bezalfs[ph - i][p - j];
             }
         }
@@ -150,8 +151,8 @@ public final class CurveUtils {
             }
             for (i = lbz; i <= ph; i++) {
                 ebpts[i] = new Vec4D();
-                int mpi = Math.min(p, i);
-                for (int j = Math.max(0, i - t); j <= mpi; j++) {
+                int mpi = MathUtils.min(p, i);
+                for (int j = MathUtils.max(0, i - t); j <= mpi; j++) {
                     ebpts[i].addScaledSelf(bpts[j], bezalfs[i][j]);
                 }
             }
