@@ -52,6 +52,12 @@ public class IntegerRange {
     }
 
     public IntegerRange(int min, int max) {
+        // swap if necessary...
+        if (min > max) {
+            max ^= min;
+            min ^= max;
+            max ^= min;
+        }
         this.min = min;
         this.max = max;
         this.currValue = min;

@@ -53,6 +53,12 @@ public class FloatRange {
     }
 
     public FloatRange(float min, float max) {
+        // swap if necessary...
+        if (min > max) {
+            float t = max;
+            max = min;
+            min = t;
+        }
         this.min = min;
         this.max = max;
         this.currValue = min;
