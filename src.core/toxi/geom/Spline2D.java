@@ -219,7 +219,7 @@ public class Spline2D {
                 vertices.add(new Vec2D(x, y));
             }
         }
-        vertices.add(points[points.length - 1]);
+        vertices.add(points[points.length - 1].copy());
         return vertices;
     }
 
@@ -246,17 +246,6 @@ public class Spline2D {
      * by the given step distance.
      * 
      * @param step
-     * @return point list
-     */
-    public List<Vec2D> getDecimatedVertices(float step) {
-        return getDecimatedVertices(step, true);
-    }
-
-    /**
-     * Computes a list of points along the spline which are uniformly separated
-     * by the given step distance.
-     * 
-     * @param step
      * @param doAddFinalVertex
      *            true, if the last vertex computed by
      *            {@link #computeVertices(int)} should be added regardless of
@@ -267,46 +256,8 @@ public class Spline2D {
         if (vertices == null || vertices.size() < 2) {
             computeVertices(DEFAULT_RES);
         }
-        float arcLen = getEstimatedArcLength();
-        ArrayList<Vec2D> uniform = new ArrayList<Vec2D>();
-        double delta = step / arcLen;
-        int currIdx = 0;
-        for (double t = 0; t < 1.0; t += delta) {
-            double currT = t * arcLen;
-            while (currT >= arcLenIndex[currIdx]) {
-                currIdx++;
-            }
-            ReadonlyVec2D p = vertices.get(currIdx - 1);
-            Vec2D q = vertices.get(currIdx);
-            float frac =
-                    (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
-            Vec2D i = p.interpolateTo(q, frac);
-            uniform.add(i);
-        }
-        if (doAddFinalVertex) {
-            uniform.add(vertices.get(vertices.size() - 1));
-        }
-        return uniform;
-    }
-
-    /**
-     * @return estimated arc length based on summing the individual lengths of
-     *         the line segments computed with {@link #computeVertices(int)}.
-     */
-    public float getEstimatedArcLength() {
-        if (arcLenIndex == null
-                || (arcLenIndex != null && arcLenIndex.length != vertices
-                        .size())) {
-            arcLenIndex = new float[vertices.size()];
-        }
-        float arcLen = 0;
-        for (int i = 1; i < arcLenIndex.length; i++) {
-            ReadonlyVec2D p = vertices.get(i - 1);
-            Vec2D q = vertices.get(i);
-            arcLen += p.distanceTo(q);
-            arcLenIndex[i] = arcLen;
-        }
-        return arcLen;
+        return new LineStrip2D(vertices).getDecimatedVertices(step,
+                doAddFinalVertex);
     }
 
     /**
