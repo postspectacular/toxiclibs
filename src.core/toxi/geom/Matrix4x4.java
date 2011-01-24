@@ -29,6 +29,151 @@ public class Matrix4x4 {
 
     private static final Matrix4x4 TEMP = new Matrix4x4();
 
+    /**
+     * Given a MxM array "matrix0", this function replaces it with the LU
+     * decomposition of a row-wise permutation of itself. The input parameters
+     * are "matrix0" and "dimen". The array "matrix0" is also an output
+     * parameter. The vector "row_perm[4]" is an output parameter that contains
+     * the row permutations resulting from partial pivoting. The output
+     * parameter "even_row_xchg" is 1 when the number of row exchanges is even,
+     * or -1 otherwise. Assumes data type is always double.
+     * 
+     * This function is similar to luDecomposition, except that it is tuned
+     * specifically for 4x4 matrices.
+     * 
+     * Reference: Press, Flannery, Teukolsky, Vetterling,
+     * _Numerical_Recipes_in_C_, Cambridge University Press, 1988, pp 40-45.
+     * 
+     * @param matrix0
+     * @param row_perm
+     * @param width
+     * @return true if the matrix is nonsingular, or false otherwise.
+     */
+    static boolean LUDecomposition(double[] matrix0, int[] row_perm, int width) {
+        double row_scale[] = new double[width];
+        // Determine implicit scaling information by looping over rows
+        {
+            int i, j;
+            int ptr, rs;
+            double big, temp;
+
+            ptr = 0;
+            rs = 0;
+
+            // For each row ...
+            i = width;
+            while (i-- != 0) {
+                big = 0.0;
+
+                // For each column, find the largest element in the row
+                j = width;
+                while (j-- != 0) {
+                    temp = matrix0[ptr++];
+                    temp = Math.abs(temp);
+                    if (temp > big) {
+                        big = temp;
+                    }
+                }
+                // Is the matrix singular?
+                if (big == 0.0) {
+                    return false;
+                }
+                row_scale[rs++] = 1.0 / big;
+            }
+        }
+
+        {
+            int j;
+            int mtx = 0;
+
+            // For all columns, execute Crout's method
+            for (j = 0; j < width; j++) {
+                int i, imax, k;
+                int target, p1, p2;
+                double sum, big, temp;
+
+                // Determine elements of upper diagonal matrix U
+                for (i = 0; i < j; i++) {
+                    target = mtx + (width * i) + j;
+                    sum = matrix0[target];
+                    k = i;
+                    p1 = mtx + (width * i);
+                    p2 = mtx + j;
+                    while (k-- != 0) {
+                        sum -= matrix0[p1] * matrix0[p2];
+                        p1++;
+                        p2 += width;
+                    }
+                    matrix0[target] = sum;
+                }
+
+                // Search for largest pivot element and calculate
+                // intermediate elements of lower diagonal matrix L.
+                big = 0.0;
+                imax = -1;
+                for (i = j; i < width; i++) {
+                    target = mtx + (width * i) + j;
+                    sum = matrix0[target];
+                    k = j;
+                    p1 = mtx + (width * i);
+                    p2 = mtx + j;
+                    while (k-- != 0) {
+                        sum -= matrix0[p1] * matrix0[p2];
+                        p1++;
+                        p2 += width;
+                    }
+                    matrix0[target] = sum;
+
+                    // Is this the best pivot so far?
+                    if ((temp = row_scale[i] * Math.abs(sum)) >= big) {
+                        big = temp;
+                        imax = i;
+                    }
+                }
+
+                if (imax < 0) {
+                    throw new RuntimeException();
+                }
+
+                // Is a row exchange necessary?
+                if (j != imax) {
+                    // Yes: exchange rows
+                    k = width;
+                    p1 = mtx + (width * imax);
+                    p2 = mtx + (width * j);
+                    while (k-- != 0) {
+                        temp = matrix0[p1];
+                        matrix0[p1++] = matrix0[p2];
+                        matrix0[p2++] = temp;
+                    }
+
+                    // Record change in scale factor
+                    row_scale[imax] = row_scale[j];
+                }
+
+                // Record row permutation
+                row_perm[j] = imax;
+
+                // Is the matrix singular
+                if (matrix0[(mtx + (width * j) + j)] == 0.0) {
+                    return false;
+                }
+
+                // Divide elements of lower diagonal matrix L by pivot
+                if (j != width - 1) {
+                    temp = 1.0 / (matrix0[(mtx + (width * j) + j)]);
+                    target = mtx + (width * (j + 1)) + j;
+                    i = (width - 1) - j;
+                    while (i-- != 0) {
+                        matrix0[target] *= temp;
+                        target += width;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public double[][] matrix;
     protected double[] temp = new double[4];
 
