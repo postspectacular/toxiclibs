@@ -34,29 +34,44 @@ public class Line2D {
         }
 
         private final Type type;
-        private final ReadonlyVec2D pos;
+        private final ReadonlyVec2D pos, posAlt;
 
-        public LineIntersection(Type type, ReadonlyVec2D pos) {
+        public LineIntersection(Type type, ReadonlyVec2D pos,
+                ReadonlyVec2D posAlt) {
             this.type = type;
             this.pos = pos;
+            this.posAlt = posAlt;
         }
 
         /**
-         * @return the pos
+         * Returns copy of alternative intersection point.
+         * 
+         * @return point
+         */
+        public Vec2D getAltPos() {
+            return posAlt != null ? posAlt.copy() : null;
+        }
+
+        /**
+         * Returns copy of intersection point.
+         * 
+         * @return point
          */
         public Vec2D getPos() {
-            return pos.copy();
+            return pos != null ? pos.copy() : null;
         }
 
         /**
-         * @return the type
+         * Returns intersection type enum.
+         * 
+         * @return type
          */
         public Type getType() {
             return type;
         }
 
         public String toString() {
-            return "type: " + type + " pos: " + pos;
+            return "type: " + type + " pos: " + pos + " alt: " + posAlt;
         }
     }
 
@@ -187,7 +202,11 @@ public class Line2D {
     /**
      * Computes intersection between this and the given line. The returned value
      * is a {@link LineIntersection} instance and contains both the type of
-     * intersection as well as the intersection point (if existing).
+     * intersection as well as the intersection points (if existing). The
+     * intersection points are ALWAYS computed for the types INTERSECTING and
+     * NON_INTERSECTING. In the latter case the points will lie outside the two
+     * given line segments and constitute the intersections of the infinite
+     * versions of each line.
      * 
      * Based on: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
      * 
@@ -208,18 +227,18 @@ public class Line2D {
         if (denom != 0.0) {
             float ua = na / denom;
             float ub = nb / denom;
+            final Vec2D i = a.interpolateTo(b, ua);
+            final Vec2D j = a.interpolateTo(b, ub);
             if (ua >= 0.0f && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
-                isec =
-                        new LineIntersection(Type.INTERSECTING,
-                                a.interpolateTo(b, ua));
+                isec = new LineIntersection(Type.INTERSECTING, i, j);
             } else {
-                isec = new LineIntersection(Type.NON_INTERSECTING, null);
+                isec = new LineIntersection(Type.NON_INTERSECTING, i, j);
             }
         } else {
             if (na == 0.0 && nb == 0.0) {
-                isec = new LineIntersection(Type.COINCIDENT, null);
+                isec = new LineIntersection(Type.COINCIDENT, null, null);
             } else {
-                isec = new LineIntersection(Type.COINCIDENT, null);
+                isec = new LineIntersection(Type.PARALLEL, null, null);
             }
         }
         return isec;
