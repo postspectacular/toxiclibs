@@ -25,8 +25,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import toxi.geom.Line2D.LineIntersection;
+import toxi.geom.Line2D.LineIntersection.Type;
 import toxi.geom.mesh.Mesh3D;
 import toxi.geom.mesh.TriangleMesh;
+import toxi.math.MathUtils;
 
 /**
  * Container type for convex polygons. Implements {@link Shape2D}.
@@ -163,9 +166,106 @@ public class Polygon2D implements Shape2D {
         return false;
     }
 
-    @Deprecated
-    public Polygon2D reverseOrientation() {
-        return flipVertexOrder();
+    /**
+     * Given the sequentially connected points p1, p2, p3, this function returns
+     * a bevel-offset replacement for point p2.
+     * 
+     * Note: If vectors p1->p2 and p2->p3 are exactly 180 degrees opposed, or if
+     * either segment is zero then no offset will be applied.
+     * 
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param x3
+     * @param y3
+     * @param distance
+     * @param out
+     * 
+     * @see http://alienryderflex.com/polygon_inset/
+     */
+    protected void offsetCorner(float x1, float y1, float x2, float y2,
+            float x3, float y3, float distance, Vec2D out) {
+
+        float c1 = x2, d1 = y2, c2 = x2, d2 = y2;
+        float dx1, dy1, dist1, dx2, dy2, dist2, insetX, insetY;
+
+        dx1 = x2 - x1;
+        dy1 = y2 - y1;
+        dist1 = (float) Math.sqrt(dx1 * dx1 + dy1 * dy1);
+        dx2 = x3 - x2;
+        dy2 = y3 - y2;
+        dist2 = (float) Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+        if (dist1 < MathUtils.EPS || dist2 < MathUtils.EPS) {
+            return;
+        }
+        dist1 = distance / dist1;
+        dist2 = distance / dist2;
+
+        insetX = dy1 * dist1;
+        insetY = -dx1 * dist1;
+        x1 += insetX;
+        c1 += insetX;
+        y1 += insetY;
+        d1 += insetY;
+        insetX = dy2 * dist2;
+        insetY = -dx2 * dist2;
+        x3 += insetX;
+        c2 += insetX;
+        y3 += insetY;
+        d2 += insetY;
+
+        if (c1 == c2 && d1 == d2) {
+            out.set(c1, d1);
+            return;
+        }
+
+        Line2D l1 = new Line2D(new Vec2D(x1, y1), new Vec2D(c1, d1));
+        Line2D l2 = new Line2D(new Vec2D(c2, d2), new Vec2D(x3, y3));
+        LineIntersection isec = l1.intersectLine(l2);
+        final Vec2D ipos = isec.getPos();
+        if (ipos != null) {
+            out.set(ipos);
+        }
+    }
+
+    /**
+     * Moves each line segment of the polygon in/outward perpendicular by the
+     * given distance. New line segments and polygon vertices are created by
+     * computing the intersection points of the displaced segments. Choosing an
+     * too large displacement amount will result in deformation/undefined
+     * behavior with various self intersections. Should that happen, please try
+     * to clean up the shape using the {@link #toOutline()} method.
+     * 
+     * @param distance
+     *            offset/inset distance (negative for inset)
+     * @return itself
+     */
+    public Polygon2D offsetShape(float distance) {
+        int corners = vertices.size();
+        if (corners > 2) {
+            int i;
+            float a, b, c, d, e, f;
+            float startX = vertices.get(0).x;
+            float startY = vertices.get(0).y;
+
+            c = vertices.get(corners - 1).x;
+            d = vertices.get(corners - 1).y;
+            e = startX;
+            f = startY;
+            for (i = 0; i < corners - 1; i++) {
+                a = c;
+                b = d;
+                c = e;
+                d = f;
+                e = vertices.get(i + 1).x;
+                f = vertices.get(i + 1).y;
+                offsetCorner(a, b, c, d, e, f, distance, vertices.get(i));
+            }
+            offsetCorner(c, d, e, f, startX, startY, distance, vertices.get(i));
+        }
+        return this;
     }
 
     /**
@@ -220,6 +320,143 @@ public class Polygon2D implements Shape2D {
                     .get(i - 1).to3DXY());
         }
         return mesh;
+    }
+
+    /**
+     * Attempts to remove all internal self-intersections and creates a new
+     * polygon only consisting of perimeter vertices.
+     * 
+     * @return true, if process completed succcessfully.
+     * 
+     * @see http://alienryderflex.com/polygon_perimeter/
+     */
+    public boolean toOutline() {
+        List<Vec2D> newVerts = new ArrayList<Vec2D>();
+        int corners = vertices.size();
+        int maxSegs = corners * 3;
+        Vec2D[] segments = new Vec2D[maxSegs];
+        Vec2D[] segEnds = new Vec2D[maxSegs];
+        float[] segAngles = new float[maxSegs];
+        Vec2D start = vertices.get(0).copy();
+        float lastAngle = MathUtils.PI;
+        float a, b, c, d, e, f, angleDif, bestAngleDif;
+        int i, j = corners - 1, segs = 0;
+
+        if (corners > maxSegs) {
+            return false;
+        }
+
+        // 1,3. Reformulate the polygon as a set of line segments, and choose a
+        // starting point that must be on the perimeter.
+        for (i = 0; i < corners; i++) {
+            Vec2D pi = vertices.get(i);
+            Vec2D pj = vertices.get(j);
+            if (!pi.equals(pj)) {
+                segments[segs] = pi;
+                segEnds[segs++] = pj;
+            }
+            j = i;
+            if (pi.y > start.y || (pi.y == start.y && pi.x < start.x)) {
+                start.set(pi);
+            }
+        }
+        if (segs == 0) {
+            return false;
+        }
+
+        // 2. Break the segments up at their intersection points.
+        for (i = 0; i < segs - 1; i++) {
+            for (j = i + 1; j < segs; j++) {
+                Line2D li = new Line2D(segments[i], segEnds[i]);
+                Line2D lj = new Line2D(segments[j], segEnds[j]);
+                LineIntersection isec = li.intersectLine(lj);
+                if (isec.getType() == Type.INTERSECTING) {
+                    Vec2D ipos = isec.getPos();
+                    if (!ipos.equals(segments[i]) && !ipos.equals(segEnds[i])) {
+                        if (segs == maxSegs) {
+                            return false;
+                        }
+                        segments[segs] = segments[i].copy();
+                        segEnds[segs++] = ipos.copy();
+                        segments[i] = ipos.copy();
+                    }
+                    if (!ipos.equals(segments[j]) && !ipos.equals(segEnds[j])) {
+                        if (segs == maxSegs) {
+                            return false;
+                        }
+                        segments[segs] = segments[j].copy();
+                        segEnds[segs++] = ipos.copy();
+                        segments[j] = ipos.copy();
+                    }
+                }
+            }
+        }
+
+        // Calculate the angle of each segment.
+        for (i = 0; i < segs; i++) {
+            segAngles[i] = segEnds[i].sub(segments[i]).positiveHeading();
+        }
+
+        // 4. Build the perimeter polygon.
+        c = start.x;
+        d = start.y;
+        a = c - 1;
+        b = d;
+        e = 0;
+        f = 0;
+        newVerts.add(new Vec2D(c, d));
+        corners = 1;
+        while (true) {
+            bestAngleDif = MathUtils.TWO_PI;
+            for (i = 0; i < segs; i++) {
+                if (segments[i].x == c && segments[i].y == d
+                        && (segEnds[i].x != a || segEnds[i].y != b)) {
+                    angleDif = lastAngle - segAngles[i];
+                    while (angleDif >= MathUtils.TWO_PI) {
+                        angleDif -= MathUtils.TWO_PI;
+                    }
+                    while (angleDif < 0) {
+                        angleDif += MathUtils.TWO_PI;
+                    }
+                    if (angleDif < bestAngleDif) {
+                        bestAngleDif = angleDif;
+                        e = segEnds[i].x;
+                        f = segEnds[i].y;
+                    }
+                }
+                if (segEnds[i].x == c && segEnds[i].y == d
+                        && (segments[i].x != a || segments[i].y != b)) {
+                    angleDif = lastAngle - segAngles[i] + MathUtils.PI;
+                    while (angleDif >= MathUtils.TWO_PI) {
+                        angleDif -= MathUtils.TWO_PI;
+                    }
+                    while (angleDif < 0) {
+                        angleDif += MathUtils.TWO_PI;
+                    }
+                    if (angleDif < bestAngleDif) {
+                        bestAngleDif = angleDif;
+                        e = segments[i].x;
+                        f = segments[i].y;
+                    }
+                }
+            }
+            if (corners > 1 && c == newVerts.get(0).x && d == newVerts.get(0).y
+                    && e == newVerts.get(1).x && f == newVerts.get(1).y) {
+                corners--;
+                vertices = newVerts;
+                return true;
+            }
+            if (bestAngleDif == MathUtils.TWO_PI || corners == maxSegs) {
+                return false;
+            }
+            lastAngle -= bestAngleDif + MathUtils.PI;
+            newVerts.add(new Vec2D(e, f));
+            corners++;
+            a = c;
+            b = d;
+            c = e;
+            d = f;
+        }
     }
 
     public String toString() {
