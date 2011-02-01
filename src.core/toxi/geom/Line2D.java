@@ -1,4 +1,11 @@
 /*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
  * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
@@ -34,22 +41,11 @@ public class Line2D {
         }
 
         private final Type type;
-        private final ReadonlyVec2D pos, posAlt;
+        private final ReadonlyVec2D pos;
 
-        public LineIntersection(Type type, ReadonlyVec2D pos,
-                ReadonlyVec2D posAlt) {
+        public LineIntersection(Type type, ReadonlyVec2D pos) {
             this.type = type;
             this.pos = pos;
-            this.posAlt = posAlt;
-        }
-
-        /**
-         * Returns copy of alternative intersection point.
-         * 
-         * @return point
-         */
-        public Vec2D getAltPos() {
-            return posAlt != null ? posAlt.copy() : null;
         }
 
         /**
@@ -71,7 +67,7 @@ public class Line2D {
         }
 
         public String toString() {
-            return "type: " + type + " pos: " + pos + " alt: " + posAlt;
+            return "type: " + type + " pos: " + pos;
         }
     }
 
@@ -118,6 +114,11 @@ public class Line2D {
     }
 
     public Vec2D a, b;
+
+    public Line2D(float x1, float y1, float x2, float y2) {
+        this.a = new Vec2D(x1, y1);
+        this.b = new Vec2D(x2, y2);
+    }
 
     public Line2D(ReadonlyVec2D a, ReadonlyVec2D b) {
         this.a = a.copy();
@@ -228,17 +229,16 @@ public class Line2D {
             float ua = na / denom;
             float ub = nb / denom;
             final Vec2D i = a.interpolateTo(b, ua);
-            final Vec2D j = a.interpolateTo(b, ub);
             if (ua >= 0.0f && ua <= 1.0 && ub >= 0.0 && ub <= 1.0) {
-                isec = new LineIntersection(Type.INTERSECTING, i, j);
+                isec = new LineIntersection(Type.INTERSECTING, i);
             } else {
-                isec = new LineIntersection(Type.NON_INTERSECTING, i, j);
+                isec = new LineIntersection(Type.NON_INTERSECTING, i);
             }
         } else {
             if (na == 0.0 && nb == 0.0) {
-                isec = new LineIntersection(Type.COINCIDENT, null, null);
+                isec = new LineIntersection(Type.COINCIDENT, null);
             } else {
-                isec = new LineIntersection(Type.PARALLEL, null, null);
+                isec = new LineIntersection(Type.PARALLEL, null);
             }
         }
         return isec;
@@ -260,7 +260,7 @@ public class Line2D {
         return this;
     }
 
-    public Line2D scale(float scale) {
+    public Line2D scaleLength(float scale) {
         float delta = (1 - scale) * 0.5f;
         Vec2D newA = a.interpolateTo(b, delta);
         b.interpolateToSelf(a, delta);
@@ -280,6 +280,10 @@ public class Line2D {
     }
 
     public Ray2D toRay2D() {
-        return new Ray2D(a.copy(), b.sub(a).normalize());
+        return new Ray2D(a.copy(), getDirection());
+    }
+
+    public String toString() {
+        return a.toString() + " -> " + b.toString();
     }
 }
