@@ -1,4 +1,11 @@
 /*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
  * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
@@ -124,6 +131,11 @@ public class Line3D {
 
     public Vec3D a, b;
 
+    public Line3D(float x1, float y1, float z1, float x2, float y2, float z2) {
+        this.a = new Vec3D(x1, y1, z1);
+        this.b = new Vec3D(x2, y2, z2);
+    }
+
     public Line3D(ReadonlyVec3D a, ReadonlyVec3D b) {
         this.a = a.copy();
         this.b = b.copy();
@@ -148,7 +160,6 @@ public class Line3D {
      * </p>
      */
     public LineIntersection closestLineTo(Line3D l) {
-
         Vec3D p43 = l.a.sub(l.b);
         if (p43.isZeroVector()) {
             return new LineIntersection(Type.NON_INTERSECTING);
@@ -159,19 +170,19 @@ public class Line3D {
         }
         Vec3D p13 = a.sub(l.a);
 
-        float d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
-        float d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
-        float d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
-        float d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
-        float d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
+        double d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
+        double d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
+        double d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
+        double d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
+        double d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
-        float denom = d2121 * d4343 - d4321 * d4321;
+        double denom = d2121 * d4343 - d4321 * d4321;
         if (MathUtils.abs(denom) < MathUtils.EPS) {
             return new LineIntersection(Type.NON_INTERSECTING);
         }
-        float numer = d1343 * d4321 - d1321 * d4343;
-        float mua = numer / denom;
-        float mub = (d1343 + d4321 * mua) / d4343;
+        double numer = d1343 * d4321 - d1321 * d4343;
+        float mua = (float) (numer / denom);
+        float mub = (float) ((d1343 + d4321 * mua) / d4343);
 
         Vec3D pa = a.add(p21.scaleSelf(mua));
         Vec3D pb = l.a.add(p43.scaleSelf(mub));
@@ -261,6 +272,14 @@ public class Line3D {
         return this;
     }
 
+    public Line3D scaleLength(float scale) {
+        float delta = (1 - scale) * 0.5f;
+        Vec3D newA = a.interpolateTo(b, delta);
+        b.interpolateToSelf(a, delta);
+        a.set(newA);
+        return this;
+    }
+
     public Line3D set(ReadonlyVec3D a, ReadonlyVec3D b) {
         this.a = a.copy();
         this.b = b.copy();
@@ -279,7 +298,7 @@ public class Line3D {
     }
 
     public Ray3D toRay3D() {
-        return new Ray3D(a.copy(), b.sub(a).normalize());
+        return new Ray3D(a.copy(), getDirection());
     }
 
     public String toString() {
