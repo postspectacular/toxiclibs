@@ -1,4 +1,11 @@
 /*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
  * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
@@ -758,6 +765,15 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         x = -y;
         y = t;
         return this;
+    }
+
+    public final float positiveHeading() {
+        double dist = Math.sqrt(x * x + y * y);
+        if (y >= 0) {
+            return (float) Math.acos(x / dist);
+        } else {
+            return (float) (Math.acos(-x / dist) + MathUtils.PI);
+        }
     }
 
     public final Vec2D reciprocal() {

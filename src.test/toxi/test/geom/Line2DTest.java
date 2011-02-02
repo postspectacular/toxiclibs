@@ -31,6 +31,9 @@ public class Line2DTest extends TestCase {
         k = new Line2D(new Vec2D(-100, -100), new Vec2D(100, 50));
         assertEquals(LineIntersection.Type.NON_INTERSECTING, l.intersectLine(k)
                 .getType());
+        k = new Line2D(new Vec2D(200, -100), new Vec2D(400, 100));
+        assertEquals(LineIntersection.Type.PARALLEL, l.intersectLine(k)
+                .getType());
     }
 
     public void testOrientation() {
@@ -41,11 +44,11 @@ public class Line2DTest extends TestCase {
     public void testScale() {
         Line2D l = new Line2D(new Vec2D(200, 200), new Vec2D(100, 100));
         float len = l.getLength();
-        l.scale(0.9f);
+        l.scaleLength(0.9f);
         assertEquals(0.9f * len, l.getLength());
         l = new Line2D(new Vec2D(100, 200), new Vec2D(200, 100));
         len = l.getLength();
-        l.scale(3f);
+        l.scaleLength(3f);
         assertEquals(3f * len, l.getLength());
     }
 }

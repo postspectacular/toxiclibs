@@ -1,4 +1,11 @@
 /*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
  * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
@@ -59,7 +66,8 @@ import toxi.geom.mesh.Vertex;
  * In addition to providing new drawing commands, this class provides wrappers
  * for using datatypes of the toxiclibs core package directly with Processing's
  * drawing commands. The class can be configured to work with any PGraphics
- * instance (incl. offscreen buffers).
+ * instance (incl. offscreen buffers) using a constructor argument or the
+ * {@link #setGraphics(PGraphics)} method.
  */
 public class ToxiclibsSupport {
 
