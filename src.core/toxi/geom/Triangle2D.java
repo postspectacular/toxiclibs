@@ -49,7 +49,7 @@ public class Triangle2D implements Shape2D {
 
     public static boolean isClockwise(Vec2D a, Vec2D b, Vec2D c) {
         float determ = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
-        return (determ < 0.0);
+        return (determ > 0.0);
     }
 
     @XmlElement(required = true)
@@ -95,22 +95,25 @@ public class Triangle2D implements Shape2D {
     }
 
     /**
-     * Checks if point vector is inside the triangle created by the points a, b
-     * and c. These points will create a plane and the point checked will have
-     * to be on this plane in the region between a,b,c.
-     * 
-     * Note: The triangle must be defined in clockwise order a,b,c
+     * Checks if the given point is inside the triangle created by the points a,
+     * b and c. The triangle vertices are inclusive themselves.
      * 
      * @return true, if point is in triangle.
      */
     public boolean containsPoint(ReadonlyVec2D p) {
-        Vec2D v1 = p.sub(a).normalize();
-        Vec2D v2 = p.sub(b).normalize();
-        Vec2D v3 = p.sub(c).normalize();
+        Vec2D v1 = p.sub(a);
+        Vec2D v2 = p.sub(b);
+        Vec2D v3 = p.sub(c);
+        if (v1.isZeroVector() || v2.isZeroVector() || v3.isZeroVector()) {
+            return true;
+        }
+        v1.normalize();
+        v2.normalize();
+        v3.normalize();
         double total_angles = Math.acos(v1.dot(v2));
         total_angles += Math.acos(v2.dot(v3));
         total_angles += Math.acos(v3.dot(v1));
-        return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.01f);
+        return (MathUtils.abs(total_angles - MathUtils.TWO_PI) <= 0.001);
     }
 
     public Triangle2D copy() {
@@ -189,6 +192,13 @@ public class Triangle2D implements Shape2D {
         return result;
     }
 
+    /**
+     * Checks if this triangle intersects the given one. The check handles both
+     * partial and total containment as well as intersections of all edges.
+     * 
+     * @param tri
+     * @return true, if intersecting
+     */
     public boolean intersectsTriangle(Triangle2D tri) {
         if (containsPoint(tri.a) || containsPoint(tri.b)
                 || containsPoint(tri.c)) {
@@ -223,6 +233,21 @@ public class Triangle2D implements Shape2D {
         a = a2;
         b = b2;
         c = c2;
+    }
+
+    /**
+     * Produces the barycentric coordinates of the given point within this
+     * triangle. These coordinates can then be used to re-project the point into
+     * a different triangle using its {@link #fromBarycentric(ReadonlyVec3D)}
+     * method.
+     * 
+     * @param p
+     *            point in world space
+     * @return barycentric coords as {@link Vec3D}
+     */
+    public Vec3D toBarycentric(ReadonlyVec2D p) {
+        return new Triangle3D(a.to3DXY(), b.to3DXY(), c.to3DXY())
+                .toBarycentric(p.to3DXY());
     }
 
     /**
