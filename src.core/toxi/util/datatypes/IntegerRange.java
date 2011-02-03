@@ -89,6 +89,10 @@ public class IntegerRange {
         return (min + max) / 2;
     }
 
+    public int getRange() {
+        return max - min;
+    }
+
     public boolean isValueInRange(int val) {
         return val >= min && val < max;
     }

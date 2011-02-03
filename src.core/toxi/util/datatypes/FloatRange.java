@@ -90,6 +90,10 @@ public class FloatRange {
         return (min + max) * 0.5f;
     }
 
+    public float getRange() {
+        return max - min;
+    }
+
     public boolean isValueInRange(float val) {
         return val >= min && val <= max;
     }

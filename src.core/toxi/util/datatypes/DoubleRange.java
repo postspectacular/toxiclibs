@@ -90,6 +90,10 @@ public class DoubleRange {
         return (min + max) * 0.5f;
     }
 
+    public double getRange() {
+        return max - min;
+    }
+
     public boolean isValueInRange(float val) {
         return val >= min && val <= max;
     }
