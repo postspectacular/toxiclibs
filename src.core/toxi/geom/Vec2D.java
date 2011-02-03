@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
+import toxi.math.ScaleMap;
 
 /**
  * Comprehensive 2D vector class with additional basic intersection and
@@ -471,6 +472,11 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
             return getNormalizedTo(lim);
         }
         return new Vec2D(this);
+    }
+
+    public Vec2D getMapped(ScaleMap map) {
+        return new Vec2D((float) map.getClippedValueFor(x),
+                (float) map.getClippedValueFor(y));
     }
 
     public final Vec2D getNormalized() {

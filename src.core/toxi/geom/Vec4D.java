@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
+import toxi.math.ScaleMap;
 
 public class Vec4D implements ReadonlyVec4D, Cloneable {
 
@@ -273,6 +274,19 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
 
     public final Vec4D getInvertedXYZ() {
         return copy().invertXYZ();
+    }
+
+    public Vec4D getMapped(ScaleMap map) {
+        return new Vec4D((float) map.getClippedValueFor(x),
+                (float) map.getClippedValueFor(y),
+                (float) map.getClippedValueFor(z),
+                (float) map.getClippedValueFor(w));
+    }
+
+    public Vec4D getMappedXYZ(ScaleMap map) {
+        return new Vec4D((float) map.getClippedValueFor(x),
+                (float) map.getClippedValueFor(y),
+                (float) map.getClippedValueFor(z), w);
     }
 
     public Vec4D getNormalized() {

@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
+import toxi.math.ScaleMap;
 
 /**
  * Comprehensive 3D vector class with additional basic intersection and
@@ -607,6 +608,12 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
             return getNormalizedTo(lim);
         }
         return new Vec3D(this);
+    }
+
+    public Vec3D getMapped(ScaleMap map) {
+        return new Vec3D((float) map.getClippedValueFor(x),
+                (float) map.getClippedValueFor(y),
+                (float) map.getClippedValueFor(z));
     }
 
     /*

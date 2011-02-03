@@ -30,6 +30,7 @@ package toxi.geom;
 import toxi.geom.Vec2D.Axis;
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
+import toxi.math.ScaleMap;
 
 /**
  * Readonly, immutable interface wrapper for Vec2D instances. Used throughout
@@ -221,6 +222,15 @@ public interface ReadonlyVec2D {
      * @return result as new vector
      */
     public Vec2D getLimited(float lim);
+
+    /**
+     * Produces a new vector with its coordinates passed through the given
+     * {@link ScaleMap}.
+     * 
+     * @param map
+     * @return mapped vector
+     */
+    public Vec2D getMapped(ScaleMap map);
 
     /**
      * Produces the normalized version as a new vector

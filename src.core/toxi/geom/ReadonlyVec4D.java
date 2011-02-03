@@ -29,6 +29,7 @@ package toxi.geom;
 
 import toxi.math.InterpolateStrategy;
 import toxi.math.MathUtils;
+import toxi.math.ScaleMap;
 
 /**
  * Readonly, immutable interface wrapper for Vec3D instances. Used throughout
@@ -158,6 +159,26 @@ public interface ReadonlyVec4D {
      * @return result as new vector
      */
     public Vec4D getInvertedXYZ();
+
+    /**
+     * Produces a new vector with all of its coordinates passed through the
+     * given {@link ScaleMap}. This version also maps the w coordinate. For
+     * mapping only XYZ use the {@link #getMappedXYZ(ScaleMap)} version.
+     * 
+     * @param map
+     * @return mapped vector
+     */
+    public Vec4D getMapped(ScaleMap map);
+
+    /**
+     * Produces a new vector with only its XYZ coordinates passed through the
+     * given {@link ScaleMap}. This version keeps the original w coordinate. For
+     * mapping all XYZW, use the {@link #getMapped(ScaleMap)} version.
+     * 
+     * @param map
+     * @return mapped vector
+     */
+    public Vec4D getMappedXYZ(ScaleMap map);
 
     /**
      * Produces the normalized version as a new vector.
