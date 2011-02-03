@@ -30,4 +30,11 @@ public class QuaternionTest extends TestCase {
             System.out.println(f);
         }
     }
+
+    public void testSlerp() {
+        Quaternion a = new Quaternion(0, new Vec3D(0, 0, -1));
+        Quaternion b = new Quaternion(0, new Vec3D(0, 0, 1));
+        Quaternion c = a.interpolateTo(b, 0.05f);
+        System.out.println(c);
+    }
 }
