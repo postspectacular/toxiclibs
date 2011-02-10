@@ -114,9 +114,15 @@ public class MeshLatticeBuilder {
     }
 
     public VolumetricSpace buildVolume(WETriangleMesh mesh) {
+        VolumetricBrush brush = new RoundBrush(volume, 1);
+        brush.setMode(VolumetricBrush.MODE_PEAK);
+        return buildVolume(mesh, brush);
+    }
+
+    public VolumetricSpace buildVolume(final WETriangleMesh mesh,
+            final VolumetricBrush brush) {
         logger.info("creating lattice...");
         setMesh(mesh);
-        VolumetricBrush brush = new RoundBrush(volume, 1);
         List<Float> edgeLengths = new ArrayList<Float>(mesh.edges.size());
         for (WingedEdge e : mesh.edges.values()) {
             edgeLengths.add(e.getLength());
@@ -156,8 +162,8 @@ public class MeshLatticeBuilder {
      * @param drawStep
      *            the drawStep to set
      */
-    public void setDrawStepLength(float len) {
-        this.drawStep = len;
+    public void setDrawStepLength(float drawStep) {
+        this.drawStep = drawStep;
     }
 
     public void setMesh(WETriangleMesh mesh) {

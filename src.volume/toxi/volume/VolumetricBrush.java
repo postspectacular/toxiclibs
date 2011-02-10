@@ -37,15 +37,16 @@ public abstract class VolumetricBrush {
     protected static final Logger logger = Logger
             .getLogger(VolumetricBrush.class.getName());
 
-    public static final int MODE_ADDITIVE = 1;
-    public static final int MODE_MULTIPLY = 2;
-    public static final int MODE_REPLACE = 3;
+    public static final BrushMode MODE_ADDITIVE = new AdditiveBrush();
+    public static final BrushMode MODE_MULTIPLY = new MultiplyBrush();
+    public static final BrushMode MODE_REPLACE = new ReplaceBrush();
+    public static final BrushMode MODE_PEAK = new PeakBrush();
 
     protected VolumetricSpace volume;
     protected int cellRadiusX, cellRadiusY, cellRadiusZ;
     protected float stretchY, stretchZ;
 
-    protected int brushMode = MODE_ADDITIVE;
+    protected BrushMode brushMode = MODE_ADDITIVE;
 
     public VolumetricBrush(VolumetricSpace volume) {
         this.volume = volume;
@@ -67,7 +68,7 @@ public abstract class VolumetricBrush {
     public abstract void drawAtGridPos(float cx, float cy, float cz,
             float density);
 
-    public void setMode(int mode) {
+    public void setMode(BrushMode mode) {
         brushMode = mode;
     }
 
@@ -75,17 +76,6 @@ public abstract class VolumetricBrush {
 
     protected final void updateVoxel(int x, int y, int z, float cellVal) {
         int idx = volume.getIndexFor(x, y, z);
-        switch (brushMode) {
-            case MODE_ADDITIVE:
-            default:
-                volume.setVoxelAt(idx, volume.getVoxelAt(idx) + cellVal);
-                break;
-            case MODE_MULTIPLY:
-                volume.setVoxelAt(idx, volume.getVoxelAt(idx) * cellVal);
-                break;
-            case MODE_REPLACE:
-                volume.setVoxelAt(idx, cellVal);
-                break;
-        }
+        volume.setVoxelAt(idx, brushMode.apply(volume.getVoxelAt(idx), cellVal));
     }
 }
