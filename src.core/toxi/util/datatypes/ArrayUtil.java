@@ -152,6 +152,27 @@ public class ArrayUtil {
     }
 
     /**
+     * Returns the index of the element where the given value is found in the
+     * array. The comparison uses {@link Object#equals(Object)}.
+     * 
+     * @param needle
+     *            number to find
+     * @param stack
+     *            array to search
+     * @param maxLen
+     *            number of elements to search
+     * @return array index or -1 if value couldn't be found in array
+     */
+    public static int indexInArray(Object needle, Object[] stack, int maxLen) {
+        for (int i = 0; i < maxLen; i++) {
+            if (stack[i].equals(needle)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Normalizes the values in the given array to the new absolute target
      * value. The original values are overridden.
      * 
