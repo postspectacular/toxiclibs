@@ -82,6 +82,21 @@ public class FloatRange {
         return range;
     }
 
+    /**
+     * Returns the value at the normalized position (0.0 = min ... 1.0 =
+     * max-EPS) within the range. Since the max value is exclusive, the value
+     * returned for position 1.0 is the range max value minus
+     * {@link MathUtils#EPS}. Also note the given position is not being clipped
+     * to the 0.0-1.0 interval, so when passing in values outside that interval
+     * will produce out-of-range values too.
+     * 
+     * @param perc
+     * @return value within the range
+     */
+    public final float getAt(float perc) {
+        return min + (max - min - MathUtils.EPS) * perc;
+    }
+
     public float getCurrent() {
         return currValue;
     }

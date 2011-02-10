@@ -81,19 +81,34 @@ public class IntegerRange {
         return range;
     }
 
-    public int getCurrent() {
+    /**
+     * Returns the value at the normalized position
+     * <code>(0.0 = min ... 1.0 = max-1)</code> within the range. Since the max
+     * value is exclusive, the value returned for position 1.0 is the range max
+     * value minus 1. Also note the given position is not being clipped to the
+     * 0.0-1.0 interval, so when passing in values outside that interval will
+     * produce out-of-range values too.
+     * 
+     * @param perc
+     * @return value within the range
+     */
+    public final int getAt(float perc) {
+        return (int) (min + (max - min - 1) * perc);
+    }
+
+    public final int getCurrent() {
         return currValue;
     }
 
-    public int getMedian() {
+    public final int getMedian() {
         return (min + max) / 2;
     }
 
-    public int getRange() {
+    public final int getRange() {
         return max - min;
     }
 
-    public boolean isValueInRange(int val) {
+    public final boolean isValueInRange(int val) {
         return val >= min && val < max;
     }
 
