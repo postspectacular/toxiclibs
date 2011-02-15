@@ -44,7 +44,7 @@ package toxi.sim.fluids;
  *         </ul>
  *         </p>
  **/
-public class FluidSolver {
+public class FluidSolver2D {
 
     protected int numIterations = 10;
 
@@ -73,7 +73,7 @@ public class FluidSolver {
      *            matrix height
      * @param timeStep
      */
-    public FluidSolver(int w, int h, float timeStep) {
+    public FluidSolver2D(int w, int h, float timeStep) {
         this.width = w;
         this.height = h;
         this.totalWidth = w + 2;
