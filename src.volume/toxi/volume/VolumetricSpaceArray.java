@@ -42,6 +42,12 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         data = new float[resX * resY * resZ];
     }
 
+    public VolumetricSpaceArray(Vec3D scale, int resX, int resY, int resZ,
+            float[] data) {
+        super(scale, resX, resY, resZ);
+        setData(data);
+    }
+
     @Override
     public void clear() {
         for (int i = 0; i < data.length; i++) {
@@ -88,6 +94,20 @@ public class VolumetricSpaceArray extends VolumetricSpace {
         }
     }
 
+    public void setData(float[] data) {
+        if (data != null) {
+            if (this.data == null || this.data.length == data.length) {
+                this.data = data;
+            } else {
+                throw new IllegalArgumentException(
+                        "new volume data must have same resolution as current data");
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "given data array must not be null");
+        }
+    }
+
     public void setVolumeSidesTo(float density) {
         // close left/right & top/bottom
         for (int z = resZ1; z > 0; z--) {
@@ -123,5 +143,4 @@ public class VolumetricSpaceArray extends VolumetricSpace {
             data[idx] = value;
         }
     }
-
 }
