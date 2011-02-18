@@ -721,6 +721,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      * @param obj
      */
     public void saveAsOBJ(OBJWriter obj) {
+        saveAsOBJ(obj, true);
+    }
+
+    public void saveAsOBJ(OBJWriter obj, boolean saveNormals) {
         int vOffset = obj.getCurrVertexOffset() + 1;
         int nOffset = obj.getCurrNormalOffset() + 1;
         logger.info("writing OBJMesh: " + this.toString());
@@ -729,15 +733,21 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         for (Vertex v : vertices.values()) {
             obj.vertex(v);
         }
-        // normals
-        for (Vertex v : vertices.values()) {
-            obj.normal(v.normal);
-        }
         // faces
-        for (Face f : faces) {
-            obj.faceWithNormals(f.b.id + vOffset, f.a.id + vOffset, f.c.id
-                    + vOffset, f.b.id + nOffset, f.a.id + nOffset, f.c.id
-                    + nOffset);
+        if (saveNormals) {
+            // normals
+            for (Vertex v : vertices.values()) {
+                obj.normal(v.normal);
+            }
+            for (Face f : faces) {
+                obj.faceWithNormals(f.b.id + vOffset, f.a.id + vOffset, f.c.id
+                        + vOffset, f.b.id + nOffset, f.a.id + nOffset, f.c.id
+                        + nOffset);
+            }
+        } else {
+            for (Face f : faces) {
+                obj.face(f.b.id + vOffset, f.a.id + vOffset, f.c.id + vOffset);
+            }
         }
     }
 
@@ -761,9 +771,13 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      * @param path
      */
     public void saveAsOBJ(String path) {
+        saveAsOBJ(path, true);
+    }
+
+    public void saveAsOBJ(String path, boolean saveNormals) {
         OBJWriter obj = new OBJWriter();
         obj.beginSave(path);
-        saveAsOBJ(obj);
+        saveAsOBJ(obj, saveNormals);
         obj.endSave();
     }
 
