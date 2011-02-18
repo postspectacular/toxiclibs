@@ -197,7 +197,10 @@ public class Line2D {
 
     @Override
     public int hashCode() {
-        return a.hashCode() + b.hashCode();
+        long bits = 1L;
+        bits = 31L * bits + a.hashCode();
+        bits = 31L * bits + b.hashCode();
+        return (int) (bits ^ (bits >> 32));
     }
 
     /**

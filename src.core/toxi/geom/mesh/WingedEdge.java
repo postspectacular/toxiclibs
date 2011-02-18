@@ -65,6 +65,11 @@ public class WingedEdge extends Line3D {
         return null;
     }
 
+    @Override
+    public int hashCode() {
+        return a.hashCode() + b.hashCode();
+    }
+
     public void remove() {
         for (WEFace f : faces) {
             f.edges.remove(this);
