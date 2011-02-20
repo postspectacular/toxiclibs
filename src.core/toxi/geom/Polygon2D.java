@@ -1,4 +1,11 @@
 /*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
  * Copyright (c) 2006-2011 Karsten Schmidt
  * 
  * This library is free software; you can redistribute it and/or
@@ -86,6 +93,10 @@ public class Polygon2D implements Shape2D {
         return oddNodes;
     }
 
+    public Polygon2D copy() {
+        return new Polygon2D(vertices);
+    }
+
     /**
      * Flips the ordering of the polygon's vertices.
      * 
@@ -154,16 +165,49 @@ public class Polygon2D implements Shape2D {
 
     /**
      * Checks if the vertices of this polygon are in clockwise ordering by
-     * examining the first 3.
+     * examining all vertices as a sequence of triangles. Only works if triangle
+     * is convex.
      * 
      * @return true, if clockwise
      */
     public boolean isClockwise() {
-        if (vertices.size() > 2) {
-            return Triangle2D.isClockwise(vertices.get(0), vertices.get(1),
-                    vertices.get(2));
+        boolean isClockwise = true;
+        final int num = vertices.size() - 2;
+        if (num > 0) {
+            for (int i = 0; i < num; i++) {
+                if (!Triangle2D.isClockwise(vertices.get(i),
+                        vertices.get(i + 1), vertices.get(i + 2))) {
+                    isClockwise = false;
+                    break;
+                }
+            }
+        } else {
+            isClockwise = false;
         }
-        return false;
+        return isClockwise;
+    }
+
+    /**
+     * Checks if the polygon is convex.
+     * 
+     * @return true, if convex.
+     */
+    public boolean isConvex() {
+        boolean isPositive = false;
+        int num = vertices.size();
+        for (int i = 0; i < num; i++) {
+            int prev = (i == 0) ? num - 1 : i - 1;
+            int next = (i == num - 1) ? 0 : i + 1;
+            Vec2D d0 = vertices.get(i).sub(vertices.get(prev));
+            Vec2D d1 = vertices.get(next).sub(vertices.get(i));
+            boolean newIsP = (d0.cross(d1) > 0);
+            if (i == 0) {
+                isPositive = newIsP;
+            } else if (isPositive != newIsP) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -264,6 +308,39 @@ public class Polygon2D implements Shape2D {
                 offsetCorner(a, b, c, d, e, f, distance, vertices.get(i));
             }
             offsetCorner(c, d, e, f, startX, startY, distance, vertices.get(i));
+        }
+        return this;
+    }
+
+    public Polygon2D setNumVertices(int max) {
+        int num = vertices.size();
+        if (num < max) {
+            while (num < max) {
+                // find longest edge
+                int longestID = 0;
+                float maxD = 0;
+                for (int i = 0; i < num; i++) {
+                    float d =
+                            vertices.get(i).distanceToSquared(
+                                    vertices.get((i + 1) % num));
+                    if (d > maxD) {
+                        longestID = i;
+                        maxD = d;
+                    }
+                }
+                // insert mid point of longest segment in vertex list
+                Vec2D m =
+                        vertices.get(longestID)
+                                .add(vertices.get((longestID + 1) % num))
+                                .scaleSelf(0.5f);
+                vertices.add(longestID + 1, m);
+                num++;
+            }
+        } else {
+            // TODO only works for increasing vert count so far, need to handle
+            // reduction too
+            throw new UnsupportedOperationException(
+                    "Polygon vertex reduction not yet implemented.");
         }
         return this;
     }
@@ -469,4 +546,5 @@ public class Polygon2D implements Shape2D {
         }
         return buf.toString();
     }
+
 }
