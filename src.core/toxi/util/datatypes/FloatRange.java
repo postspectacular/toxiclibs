@@ -83,9 +83,9 @@ public class FloatRange {
     }
 
     /**
-     * Returns the value at the normalized position (0.0 = min ... 1.0 =
-     * max-EPS) within the range. Since the max value is exclusive, the value
-     * returned for position 1.0 is the range max value minus
+     * Returns the value at the normalized position <code>(0.0 = min ... 1.0 =
+     * max-EPS)</code> within the range. Since the max value is exclusive, the
+     * value returned for position 1.0 is the range max value minus
      * {@link MathUtils#EPS}. Also note the given position is not being clipped
      * to the 0.0-1.0 interval, so when passing in values outside that interval
      * will produce out-of-range values too.

@@ -44,4 +44,11 @@ public class PolygonTest extends TestCase {
         assertTrue(p.containsPoint(p.vertices.get(0)));
         assertFalse(p.containsPoint(p.vertices.get(3).scale(1.01f)));
     }
+
+    public void testIncreaseVertcount() {
+        final Vec2D origin = new Vec2D(100, 100);
+        Polygon2D p = new Circle(origin, 50).toPolygon2D(3);
+        p.setNumVertices(6);
+        assertEquals(6, p.getNumPoints());
+    }
 }
