@@ -42,7 +42,6 @@ import toxi.geom.Cone;
 import toxi.geom.Ellipse;
 import toxi.geom.Line2D;
 import toxi.geom.Line3D;
-import toxi.geom.Matrix4x4;
 import toxi.geom.Plane;
 import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
@@ -76,9 +75,6 @@ public class ToxiclibsSupport {
 
     protected PApplet app;
     protected PGraphics gfx;
-
-    private Matrix4x4 normalMap = new Matrix4x4().translateSelf(128, 128, 128)
-            .scaleSelf(127);
 
     public ToxiclibsSupport(PApplet app) {
         this(app, app.g);
@@ -365,30 +361,30 @@ public class ToxiclibsSupport {
      * @param mesh
      * @param vertexNormals
      *            true, if using vertex normals (else face normals only)
-     * @param normalLength
      */
     public final void meshNormalMapped(Mesh3D mesh, boolean vertexNormals) {
-        final boolean isFilled = gfx.fill;
+        meshNormalMapped(mesh, new XYZNormalMapper(), vertexNormals);
+    }
+
+    public final void meshNormalMapped(Mesh3D mesh, NormalMapper mapper,
+            boolean vertexNormals) {
+        final boolean isWireframe = gfx.stroke;
         gfx.beginShape(PConstants.TRIANGLES);
         if (vertexNormals) {
             for (Face f : mesh.getFaces()) {
-                Vec3D n = normalMap.applyTo(f.a.normal);
-                setStrokeFill(isFilled, n.x, n.y, n.z);
+                setStrokeFill(isWireframe, mapper.getRGBForNormal(f.a.normal));
                 gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
                 gfx.vertex(f.a.x, f.a.y, f.a.z);
-                n = normalMap.applyTo(f.b.normal);
-                setStrokeFill(isFilled, n.x, n.y, n.z);
+                setStrokeFill(isWireframe, mapper.getRGBForNormal(f.b.normal));
                 gfx.normal(f.b.normal.x, f.b.normal.y, f.b.normal.z);
                 gfx.vertex(f.b.x, f.b.y, f.b.z);
-                n = normalMap.applyTo(f.c.normal);
-                setStrokeFill(isFilled, n.x, n.y, n.z);
+                setStrokeFill(isWireframe, mapper.getRGBForNormal(f.c.normal));
                 gfx.normal(f.c.normal.x, f.c.normal.y, f.c.normal.z);
                 gfx.vertex(f.c.x, f.c.y, f.c.z);
             }
         } else {
             for (Face f : mesh.getFaces()) {
-                Vec3D n = normalMap.applyTo(f.normal);
-                setStrokeFill(isFilled, n.x, n.y, n.z);
+                setStrokeFill(isWireframe, mapper.getRGBForNormal(f.normal));
                 gfx.normal(f.normal.x, f.normal.y, f.normal.z);
                 gfx.vertex(f.a.x, f.a.y, f.a.z);
                 gfx.vertex(f.b.x, f.b.y, f.b.z);
