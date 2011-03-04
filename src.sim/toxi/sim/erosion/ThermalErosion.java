@@ -59,4 +59,7 @@ public class ThermalErosion extends ErosionFunction {
         }
     }
 
+    public String toString() {
+        return getClass().getName();
+    }
 }

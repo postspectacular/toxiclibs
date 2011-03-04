@@ -98,4 +98,8 @@ public class TalusAngleErosion extends ErosionFunction {
             }
         }
     }
+
+    public String toString() {
+        return getClass().getName() + ": theta=" + theta + " amount=" + amount;
+    }
 }

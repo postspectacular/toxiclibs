@@ -48,15 +48,17 @@ public abstract class ErosionFunction {
      * @param width
      * @param height
      */
-    public void erode(float[] elevation, int width, int height) {
+    public void erode(float[] elevation, final int width, final int height) {
         this.elevation = elevation;
         this.width = width;
         this.height = height;
+        final int w1 = width - 1;
+        final int h1 = height - 1;
         off =
-                new int[] { -width - 1, -width, -width + 1, -1, 0, 1,
-                        width - 1, width, width + 1 };
-        for (int y = 1; y < height - 1; y++) {
-            for (int x = 1; x < width - 1; x++) {
+                new int[] { -width - 1, -width, -width + 1, -1, 0, 1, w1,
+                        width, width + 1 };
+        for (int y = 1; y < h1; y++) {
+            for (int x = 1; x < w1; x++) {
                 erodeAt(x, y);
             }
         }
