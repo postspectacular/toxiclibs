@@ -124,7 +124,7 @@ public class Terrain {
      * @param z
      * @return array index
      */
-    protected int getIndex(int x, int z) {
+    protected final int getIndex(int x, int z) {
         int idx = z * width + x;
         if (idx < 0 || idx > elevation.length) {
             throw new IndexOutOfBoundsException(
@@ -230,21 +230,7 @@ public class Terrain {
      * @return mesh instance
      */
     public Mesh3D toMesh(Mesh3D mesh) {
-        if (mesh == null) {
-            mesh =
-                    new TriangleMesh("terrain", vertices.length,
-                            vertices.length * 2);
-        }
-        for (int z = 1; z < depth; z++) {
-            for (int x = 1; x < width; x++) {
-                mesh.addFace(vertices[(z - 1) * width + (x - 1)],
-                        vertices[(z - 1) * width + x], vertices[z * width
-                                + (x - 1)]);
-                mesh.addFace(vertices[(z - 1) * width + x], vertices[z * width
-                        + x], vertices[z * width + (x - 1)]);
-            }
-        }
-        return mesh;
+        return toMesh(mesh, 0, 0, width, depth);
     }
 
     /**
@@ -260,39 +246,73 @@ public class Terrain {
      * @return mesh
      */
     public Mesh3D toMesh(Mesh3D mesh, float groundLevel) {
-        mesh = toMesh(mesh);
+        return toMesh(mesh, 0, 0, width, depth, groundLevel);
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, int minX, int minZ, int maxX, int maxZ) {
+        if (mesh == null) {
+            mesh =
+                    new TriangleMesh("terrain", vertices.length,
+                            vertices.length * 2);
+        }
+        minX = MathUtils.clip(minX, 0, width - 1);
+        maxX = MathUtils.clip(maxX, 0, width);
+        minZ = MathUtils.clip(minZ, 0, depth - 1);
+        maxZ = MathUtils.clip(maxZ, 0, depth);
+        minX++;
+        minZ++;
+        for (int z = minZ, idx = minX * width; z < maxZ; z++, idx += width) {
+            for (int x = minX; x < maxX; x++) {
+                mesh.addFace(vertices[idx - width + x - 1], vertices[idx
+                        - width + x], vertices[idx + x - 1]);
+                mesh.addFace(vertices[idx - width + x], vertices[idx + x],
+                        vertices[idx + x - 1]);
+            }
+        }
+        return mesh;
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, int mix, int miz, int mxx, int mxz,
+            float groundLevel) {
+        mesh = toMesh(mesh, mix, miz, mxx, mxz);
+        mix = MathUtils.clip(mix, 0, width - 1);
+        mxx = MathUtils.clip(mxx, 0, width);
+        miz = MathUtils.clip(miz, 0, depth - 1);
+        mxz = MathUtils.clip(mxz, 0, depth);
         Vec3D offset = new Vec3D(width, 0, depth).scaleSelf(0.5f);
-        float minX = -offset.x * scale;
-        float minZ = -offset.z * scale;
-        float maxX = (width - 1 - offset.x) * scale;
-        float maxZ = (depth - 1 - offset.z) * scale;
-        for (int z = 1; z < depth; z++) {
+        float minX = (mix - offset.x) * scale;
+        float minZ = (miz - offset.z) * scale;
+        float maxX = (mxx - offset.x) * scale;
+        float maxZ = (mxz - offset.z) * scale;
+        for (int z = miz + 1; z < mxz; z++) {
             Vec3D a = new Vec3D(minX, groundLevel, (z - 1 - offset.z) * scale);
             Vec3D b = new Vec3D(minX, groundLevel, (z - offset.z) * scale);
             // left
-            mesh.addFace(getVertexAtCell(0, z - 1), getVertexAtCell(0, z), a);
-            mesh.addFace(getVertexAtCell(0, z), b, a);
+            mesh.addFace(getVertexAtCell(mix, z - 1), getVertexAtCell(mix, z),
+                    a);
+            mesh.addFace(getVertexAtCell(mix, z), b, a);
             // right
-            a.x = b.x = maxX;
-            mesh.addFace(getVertexAtCell(width - 1, z),
-                    getVertexAtCell(width - 1, z - 1), b);
-            mesh.addFace(getVertexAtCell(width - 1, z - 1), a, b);
+            a.x = b.x = maxX - scale;
+            mesh.addFace(getVertexAtCell(mxx - 1, z),
+                    getVertexAtCell(mxx - 1, z - 1), b);
+            mesh.addFace(getVertexAtCell(mxx - 1, z - 1), a, b);
         }
-        for (int x = 1; x < width; x++) {
+        for (int x = mix + 1; x < mxx; x++) {
             Vec3D a = new Vec3D((x - 1 - offset.x) * scale, groundLevel, minZ);
             Vec3D b = new Vec3D((x - offset.x) * scale, groundLevel, minZ);
             // back
-            mesh.addFace(getVertexAtCell(x, 0), getVertexAtCell(x - 1, 0), b);
-            mesh.addFace(getVertexAtCell(x - 1, 0), a, b);
+            mesh.addFace(getVertexAtCell(x, miz), getVertexAtCell(x - 1, miz),
+                    b);
+            mesh.addFace(getVertexAtCell(x - 1, miz), a, b);
             // front
-            a.z = b.z = maxZ;
-            mesh.addFace(getVertexAtCell(x - 1, depth - 1),
-                    getVertexAtCell(x, depth - 1), a);
-            mesh.addFace(getVertexAtCell(x, depth - 1), b, a);
+            a.z = b.z = maxZ - scale;
+            mesh.addFace(getVertexAtCell(x - 1, mxz - 1),
+                    getVertexAtCell(x, mxz - 1), a);
+            mesh.addFace(getVertexAtCell(x, mxz - 1), b, a);
         }
         // bottom plane
-        for (int z = 1; z < depth; z++) {
-            for (int x = 1; x < width; x++) {
+        for (int z = miz + 1; z < mxz; z++) {
+            for (int x = mix + 1; x < mxx; x++) {
                 Vec3D a = getVertexAtCell(x - 1, z - 1).copy();
                 Vec3D b = getVertexAtCell(x, z - 1).copy();
                 Vec3D c = getVertexAtCell(x - 1, z).copy();
