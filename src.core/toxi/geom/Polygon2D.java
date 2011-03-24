@@ -467,6 +467,34 @@ public class Polygon2D implements Shape2D {
 		return this;
 	}
 
+	/**
+	 * Removes duplicate vertices from the polygon. Only successive points are
+	 * recognized as duplicates.
+	 * 
+	 * @param tolerance
+	 *            snap distance for finding duplicates
+	 * @return itself
+	 */
+	public Polygon2D removeDuplicates(float tolerance) {
+		Vec2D prev = null;
+		for (Iterator<Vec2D> iv = vertices.iterator(); iv.hasNext();) {
+			Vec2D p = iv.next();
+			if (p.equalsWithTolerance(prev, tolerance)) {
+				iv.remove();
+			} else {
+				prev = p;
+			}
+		}
+		int num = vertices.size();
+		if (num > 0) {
+			Vec2D last = vertices.get(num - 1);
+			if (last.equalsWithTolerance(vertices.get(0), tolerance)) {
+				vertices.remove(last);
+			}
+		}
+		return this;
+	}
+
 	public Polygon2D rotate(float theta) {
 		for (Vec2D v : vertices) {
 			v.rotate(theta);
