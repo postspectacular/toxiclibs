@@ -225,6 +225,16 @@ public class Polygon2D implements Shape2D {
 	}
 
 	/**
+	 * Returns the polygon's bounding rect.
+	 * 
+	 * @return bounding rect
+	 * @see toxi.geom.Shape2D#getBounds()
+	 */
+	public Rect getBounds() {
+		return Rect.getBoundingRect(vertices);
+	}
+
+	/**
 	 * Computes the polygon's centre of mass. Code ported from:
 	 * http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/
 	 * 
