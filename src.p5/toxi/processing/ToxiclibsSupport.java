@@ -58,7 +58,6 @@ import toxi.geom.Vec3D;
 import toxi.geom.Vec4D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.Mesh3D;
-import toxi.geom.mesh.TriangleMesh;
 import toxi.geom.mesh.Vertex;
 
 /**
@@ -205,6 +204,18 @@ public class ToxiclibsSupport {
 
     public final void line(Vec4D a, Vec4D b) {
         gfx.line(a.x, a.y, a.z, b.x, b.y, b.z);
+    }
+
+    public final void lines2D(List<? extends Line2D> lines) {
+        for (Line2D l : lines) {
+            gfx.line(l.a.x, l.a.y, l.b.x, l.b.y);
+        }
+    }
+
+    public final void lines3D(List<? extends Line3D> lines) {
+        for (Line3D l : lines) {
+            gfx.line(l.a.x, l.a.y, l.a.z, l.b.x, l.b.y, l.b.z);
+        }
     }
 
     /**
@@ -678,11 +689,11 @@ public class ToxiclibsSupport {
         gfx.stroke(col.toARGB());
     }
 
-    public final void texturedMesh(TriangleMesh mesh, PImage tex, boolean smooth) {
+    public final void texturedMesh(Mesh3D mesh, PImage tex, boolean smooth) {
         gfx.beginShape(PConstants.TRIANGLES);
         gfx.texture(tex);
         if (smooth) {
-            for (Face f : mesh.faces) {
+            for (Face f : mesh.getFaces()) {
                 if (f.uvA != null && f.uvB != null && f.uvC != null) {
                     gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
                     gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
@@ -697,7 +708,7 @@ public class ToxiclibsSupport {
                 }
             }
         } else {
-            for (Face f : mesh.faces) {
+            for (Face f : mesh.getFaces()) {
                 gfx.normal(f.normal.x, f.normal.y, f.normal.z);
                 if (f.uvA != null && f.uvB != null && f.uvC != null) {
                     gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
