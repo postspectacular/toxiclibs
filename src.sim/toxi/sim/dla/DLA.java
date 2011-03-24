@@ -56,11 +56,9 @@ public class DLA {
     protected Vec3D minBounds, maxBounds;
 
     protected DLAGuideLines guidelines;
-    protected ArrayList<DLASegment> activeSegments =
-            new ArrayList<DLASegment>();
+    protected ArrayList<DLASegment> activeSegments = new ArrayList<DLASegment>();
 
-    protected List<DLAEventListener> listeners =
-            new ArrayList<DLAEventListener>();
+    protected List<DLAEventListener> listeners = new ArrayList<DLAEventListener>();
 
     protected int numActiveSegments = 0;
 
@@ -68,8 +66,8 @@ public class DLA {
 
     public DLA(float size) {
         octree = createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size), size);
-        octreeGuides =
-                createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size), size);
+        octreeGuides = createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size),
+                size);
         minBounds = Vec3D.MAX_VALUE.copy();
         maxBounds = Vec3D.MIN_VALUE.copy();
     }
@@ -120,8 +118,8 @@ public class DLA {
      * @return true, if particle attached.
      */
     protected boolean checkParticle(DLAParticle p) {
-        ArrayList<Vec3D> parts =
-                octree.getPointsWithinSphere(p, config.snapDistance);
+        ArrayList<Vec3D> parts = octree.getPointsWithinSphere(p,
+                config.snapDistance);
         float stickiness = config.getStickiness();
         if (parts != null) {
             float minDist = Integer.MAX_VALUE;
@@ -142,9 +140,8 @@ public class DLA {
         }
         if (p.sub(currCurvePoint).magSquared() < config
                 .getCurveAttachDistanceSquared()) {
-            parts =
-                    octreeGuides.getPointsWithinSphere(p,
-                            config.getCurveAttachDistance());
+            parts = octreeGuides.getPointsWithinSphere(p,
+                    config.getCurveAttachDistance());
             if (parts != null) {
                 for (int i = parts.size(); i > 0; i--) {
                     if (Math.random() < stickiness) {
@@ -260,8 +257,8 @@ public class DLA {
                 RandomAccessFile file = new RandomAccessFile(fname, "rw");
                 FileChannel channel = file.getChannel();
                 int size = parts.size() * 4 * 3;
-                MappedByteBuffer buffer =
-                        channel.map(FileChannel.MapMode.READ_WRITE, 0, size);
+                MappedByteBuffer buffer = channel.map(
+                        FileChannel.MapMode.READ_WRITE, 0, size);
                 if (isCentered) {
                     for (Vec3D p : parts) {
                         p = p.sub(origin);
@@ -333,12 +330,10 @@ public class DLA {
     public void update() {
         if (currParticle == null) {
             Vec3D spawnPos = Vec3D.randomVector();
-            spawnPos =
-                    currCurvePoint.add(spawnPos.scale(MathUtils.random(config
-                            .getSpawnRadius())));
-            currParticle =
-                    new DLAParticle(spawnPos, config.getEscapeRadius(),
-                            config.getParticleSpeed(), config.getSearchSpeed());
+            spawnPos = currCurvePoint.add(spawnPos.scale(MathUtils
+                    .random(config.getSpawnRadius())));
+            currParticle = new DLAParticle(spawnPos, config.getEscapeRadius(),
+                    config.getParticleSpeed(), config.getSearchSpeed());
         }
         currParticle.update(currCurvePoint);
         if (checkParticle(currParticle)) {
@@ -356,14 +351,12 @@ public class DLA {
     protected void updateCurvePoint() {
         if (Math.random() < config.getContinuousGrowthRatio()
                 && numActiveSegments > 0) {
-            DLASegment segment =
-                    activeSegments
-                            .get((int) (config.getContinuousGrowthCoeff() * (numActiveSegments - 1)));
+            DLASegment segment = activeSegments.get((int) (config
+                    .getContinuousGrowthCoeff() * (numActiveSegments - 1)));
             float currT = MathUtils.random(1f);
             dirCurvePoint = segment.getDirectionAt(currT);
-            currCurvePoint =
-                    segment.a.add(dirCurvePoint.scale(segment.getLength()
-                            * currT));
+            currCurvePoint = segment.a.add(dirCurvePoint.scale(segment
+                    .getLength() * currT));
         } else {
             DLASegment s = guidelines.updatePoint(config.getCurveSpeed());
             if (!activeSegments.contains(s)) {

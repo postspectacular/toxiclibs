@@ -40,17 +40,13 @@ public class VolumetricHashMap extends VolumetricSpace {
             float density) {
         super(scale, resX, resY, resZ);
         this.density = density;
-        data =
-                new HashMap<Integer, Float>(
-                        (int) (resX * resY * resZ * density));
+        data = new HashMap<Integer, Float>((int) (resX * resY * resZ * density));
     }
 
     @Override
     public void clear() {
         data.clear();
-        data =
-                new HashMap<Integer, Float>(
-                        (int) (resX * resY * resZ * density));
+        data = new HashMap<Integer, Float>((int) (resX * resY * resZ * density));
     }
 
     public void closeSides() {

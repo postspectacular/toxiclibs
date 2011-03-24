@@ -116,8 +116,8 @@ public abstract class VertexSelector {
      * @return itself
      */
     public VertexSelector invertSelection() {
-        final int size =
-                MathUtils.max(0, mesh.getNumVertices() - selection.size());
+        final int size = MathUtils.max(0,
+                mesh.getNumVertices() - selection.size());
         HashSet<Vertex> newSel = new HashSet<Vertex>(size);
         for (Vertex v : mesh.getVertices()) {
             if (!selection.contains(v)) {

@@ -55,15 +55,14 @@ public class MultiTimbralManager {
         }
 
         boolean updateStatus() {
-            isActive =
-                    isActive
-                            && (src.isLooping() || src.getBuffersProcessed() == 0);
+            isActive = isActive
+                    && (src.isLooping() || src.getBuffersProcessed() == 0);
             return isActive;
         }
     }
 
-    private static final Logger logger =
-            Logger.getLogger(MultiTimbralManager.class.getName());
+    private static final Logger logger = Logger
+            .getLogger(MultiTimbralManager.class.getName());
     protected SourceState[] pool;
     protected int maxSources;
 

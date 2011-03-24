@@ -34,138 +34,138 @@ import toxi.math.MathUtils;
  */
 public class Ellipse extends Vec2D implements Shape2D {
 
-	protected Vec2D radius = new Vec2D();
-	protected float focus;
+    protected Vec2D radius = new Vec2D();
+    protected float focus;
 
-	public Ellipse() {
-		this(0, 0, 1);
+    public Ellipse() {
+        this(0, 0, 1);
 
-	}
+    }
 
-	public Ellipse(float rx, float ry) {
-		this(0, 0, rx, ry);
-	}
+    public Ellipse(float rx, float ry) {
+        this(0, 0, rx, ry);
+    }
 
-	public Ellipse(float x, float y, float r) {
-		this(x, y, r, r);
+    public Ellipse(float x, float y, float r) {
+        this(x, y, r, r);
 
-	}
+    }
 
-	public Ellipse(float x, float y, float rx, float ry) {
-		super(x, y);
-		setRadii(rx, ry);
-	}
+    public Ellipse(float x, float y, float rx, float ry) {
+        super(x, y);
+        setRadii(rx, ry);
+    }
 
-	public Ellipse(ReadonlyVec2D v, float r) {
-		this(v.x(), v.y(), r, r);
-	}
+    public Ellipse(ReadonlyVec2D v, float r) {
+        this(v.x(), v.y(), r, r);
+    }
 
-	public Ellipse(ReadonlyVec2D v, ReadonlyVec2D r) {
-		this(v.x(), v.y(), r.x(), r.y());
-	}
+    public Ellipse(ReadonlyVec2D v, ReadonlyVec2D r) {
+        this(v.x(), v.y(), r.x(), r.y());
+    }
 
-	public boolean containsPoint(ReadonlyVec2D p) {
-		Vec2D[] foci = getFoci();
-		return p.distanceTo(foci[0]) + p.distanceTo(foci[1]) < 2 * MathUtils
-				.max(radius.x, radius.y);
-	}
+    public boolean containsPoint(ReadonlyVec2D p) {
+        Vec2D[] foci = getFoci();
+        return p.distanceTo(foci[0]) + p.distanceTo(foci[1]) < 2 * MathUtils
+                .max(radius.x, radius.y);
+    }
 
-	/**
-	 * Computes the area covered by the ellipse.
-	 * 
-	 * @return area
-	 */
-	public float getArea() {
-		return MathUtils.PI * radius.x * radius.y;
-	}
+    /**
+     * Computes the area covered by the ellipse.
+     * 
+     * @return area
+     */
+    public float getArea() {
+        return MathUtils.PI * radius.x * radius.y;
+    }
 
-	/**
-	 * Returns the ellipse's bounding rect.
-	 * 
-	 * @return bounding rect
-	 * @see toxi.geom.Shape2D#getBounds()
-	 */
-	public Rect getBounds() {
-		return new Rect(sub(radius), add(radius));
-	}
+    /**
+     * Returns the ellipse's bounding rect.
+     * 
+     * @return bounding rect
+     * @see toxi.geom.Shape2D#getBounds()
+     */
+    public Rect getBounds() {
+        return new Rect(sub(radius), add(radius));
+    }
 
-	/**
-	 * Computes the approximate circumference of the ellipse, using this
-	 * equation: <code>2 * PI * sqrt(1/2 * (rx*rx+ry*ry))</code>.
-	 * 
-	 * The precise value is an infinite series elliptical integral, but the
-	 * approximation comes sufficiently close. See Wikipedia for more details:
-	 * 
-	 * http://en.wikipedia.org/wiki/Ellipse
-	 * 
-	 * @return circumference
-	 */
-	public float getCircumference() {
-		// wikipedia solution:
-		// return (float) (MathUtils.PI * (3 * (radius.x + radius.y) - Math
-		// .sqrt((3 * radius.x + radius.y) * (radius.x + 3 * radius.y))));
-		return (float) Math.sqrt(0.5 * radius.magSquared()) * MathUtils.TWO_PI;
-	}
+    /**
+     * Computes the approximate circumference of the ellipse, using this
+     * equation: <code>2 * PI * sqrt(1/2 * (rx*rx+ry*ry))</code>.
+     * 
+     * The precise value is an infinite series elliptical integral, but the
+     * approximation comes sufficiently close. See Wikipedia for more details:
+     * 
+     * http://en.wikipedia.org/wiki/Ellipse
+     * 
+     * @return circumference
+     */
+    public float getCircumference() {
+        // wikipedia solution:
+        // return (float) (MathUtils.PI * (3 * (radius.x + radius.y) - Math
+        // .sqrt((3 * radius.x + radius.y) * (radius.x + 3 * radius.y))));
+        return (float) Math.sqrt(0.5 * radius.magSquared()) * MathUtils.TWO_PI;
+    }
 
-	/**
-	 * @return the focus
-	 */
-	public Vec2D[] getFoci() {
-		Vec2D[] foci = new Vec2D[2];
-		if (radius.x > radius.y) {
-			foci[0] = sub(focus, 0);
-			foci[1] = add(focus, 0);
-		} else {
-			foci[0] = sub(0, focus);
-			foci[1] = add(0, focus);
-		}
-		return foci;
-	}
+    /**
+     * @return the focus
+     */
+    public Vec2D[] getFoci() {
+        Vec2D[] foci = new Vec2D[2];
+        if (radius.x > radius.y) {
+            foci[0] = sub(focus, 0);
+            foci[1] = add(focus, 0);
+        } else {
+            foci[0] = sub(0, focus);
+            foci[1] = add(0, focus);
+        }
+        return foci;
+    }
 
-	/**
-	 * @return the 2 radii of the ellipse as a Vec2D
-	 */
-	public Vec2D getRadii() {
-		return radius.copy();
-	}
+    /**
+     * @return the 2 radii of the ellipse as a Vec2D
+     */
+    public Vec2D getRadii() {
+        return radius.copy();
+    }
 
-	/**
-	 * Sets the radii of the ellipse to the new values.
-	 * 
-	 * @param rx
-	 * @param ry
-	 * @return itself
-	 */
-	public Ellipse setRadii(float rx, float ry) {
-		radius.set(rx, ry);
-		focus = radius.magnitude();
-		return this;
-	}
+    /**
+     * Sets the radii of the ellipse to the new values.
+     * 
+     * @param rx
+     * @param ry
+     * @return itself
+     */
+    public Ellipse setRadii(float rx, float ry) {
+        radius.set(rx, ry);
+        focus = radius.magnitude();
+        return this;
+    }
 
-	/**
-	 * Sets the radii of the ellipse to the values given by the vector.
-	 * 
-	 * @param r
-	 * @return itself
-	 */
-	public Ellipse setRadii(ReadonlyVec3D r) {
-		return setRadii(r.x(), r.y());
-	}
+    /**
+     * Sets the radii of the ellipse to the values given by the vector.
+     * 
+     * @param r
+     * @return itself
+     */
+    public Ellipse setRadii(ReadonlyVec3D r) {
+        return setRadii(r.x(), r.y());
+    }
 
-	/**
-	 * Creates a {@link Polygon2D} instance of the ellipse sampling it at the
-	 * given resolution.
-	 * 
-	 * @param res
-	 *            number of steps
-	 * @return ellipse as polygon
-	 */
-	public Polygon2D toPolygon2D(int res) {
-		Polygon2D poly = new Polygon2D();
-		float step = MathUtils.TWO_PI / res;
-		for (int i = 0; i < res; i++) {
-			poly.add(Vec2D.fromTheta(i * step).scaleSelf(radius).addSelf(this));
-		}
-		return poly;
-	}
+    /**
+     * Creates a {@link Polygon2D} instance of the ellipse sampling it at the
+     * given resolution.
+     * 
+     * @param res
+     *            number of steps
+     * @return ellipse as polygon
+     */
+    public Polygon2D toPolygon2D(int res) {
+        Polygon2D poly = new Polygon2D();
+        float step = MathUtils.TWO_PI / res;
+        for (int i = 0; i < res; i++) {
+            poly.add(Vec2D.fromTheta(i * step).scaleSelf(radius).addSelf(this));
+        }
+        return poly;
+    }
 }

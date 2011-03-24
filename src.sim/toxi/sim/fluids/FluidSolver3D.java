@@ -100,16 +100,14 @@ public class FluidSolver3D {
                     final int ix = IX(i0, j0, k0);
                     d[idx] =
 
-                            s0
-                                    * (t0 * (u0 * d0[ix] + u1 * d0[ix + size2]) + (t1 * (u0
-                                            * d0[ix + size] + u1
-                                            * d0[ix + size + size2])))
-                                    + s1
-                                    * (t0
-                                            * (u0 * d0[ix + 1] + u1
-                                                    * d0[ix + 1 + size2]) + (t1 * (u0
-                                            * d0[ix + 1 + size] + u1
-                                            * d0[ix + 1 + size + size2])));
+                    s0
+                            * (t0 * (u0 * d0[ix] + u1 * d0[ix + size2]) + (t1 * (u0
+                                    * d0[ix + size] + u1
+                                    * d0[ix + size + size2])))
+                            + s1
+                            * (t0 * (u0 * d0[ix + 1] + u1 * d0[ix + 1 + size2]) + (t1 * (u0
+                                    * d0[ix + 1 + size] + u1
+                                    * d0[ix + 1 + size + size2])));
                 }
             }
         }
@@ -154,13 +152,11 @@ public class FluidSolver3D {
             for (int m = 1; m < sm1; m++) {
                 for (int j = 1, idx = m * size2 + size + 1; j < sm1; j++) {
                     for (int i = 1; i < sm1; i++) {
-                        x[idx] =
-                                (x0[idx] + a
-                                        * (x[idx + 1] + x[idx - 1]
-                                                + x[idx + size] + x[idx - size]
-                                                + x[idx + size2] + x[idx
-                                                - size2]))
-                                        * cRecip;
+                        x[idx] = (x0[idx] + a
+                                * (x[idx + 1] + x[idx - 1] + x[idx + size]
+                                        + x[idx - size] + x[idx + size2] + x[idx
+                                        - size2]))
+                                * cRecip;
                         idx++;
                     }
                 }
@@ -176,11 +172,10 @@ public class FluidSolver3D {
             for (int j = 1; j < sm1; j++) {
                 for (int i = 1; i < sm1; i++) {
                     final int idx = IX(i, j, k);
-                    div[idx] =
-                            (velocX[idx + 1] - velocX[idx - 1]
-                                    + velocY[idx + size] - velocY[idx - size]
-                                    + velocZ[idx + size2] - velocZ[idx - size2])
-                                    * invSize;
+                    div[idx] = (velocX[idx + 1] - velocX[idx - 1]
+                            + velocY[idx + size] - velocY[idx - size]
+                            + velocZ[idx + size2] - velocZ[idx - size2])
+                            * invSize;
                     p[idx] = 0;
                 }
             }
@@ -210,16 +205,16 @@ public class FluidSolver3D {
             for (int i = 1; i < sm1; i++) {
                 final int idx = IX(i, j, 0);
                 x[idx] = b == 3 ? -x[idx + size2] : x[idx + size2];
-                x[idx + sm1 * size2] =
-                        b == 3 ? -x[idx + sm2 * size2] : x[idx + sm2 * size2];
+                x[idx + sm1 * size2] = b == 3 ? -x[idx + sm2 * size2] : x[idx
+                        + sm2 * size2];
             }
         }
         for (int k = 1; k < sm1; k++) {
             for (int i = 1; i < sm1; i++) {
                 final int idx = IX(i, 0, k);
                 x[idx] = b == 2 ? -x[idx + size] : x[idx + size];
-                x[idx + sm1 * size] =
-                        b == 2 ? -x[idx + size * sm2] : x[idx + size * sm2];
+                x[idx + sm1 * size] = b == 2 ? -x[idx + size * sm2] : x[idx
+                        + size * sm2];
             }
         }
         for (int k = 1; k < sm1; k++) {
@@ -231,24 +226,20 @@ public class FluidSolver3D {
         }
 
         x[0] = 0.33f * (x[IX(1, 0, 0)] + x[IX(0, 1, 0)] + x[IX(0, 0, 1)]);
-        x[IX(0, sm1, 0)] =
-                0.33f * (x[IX(1, sm1, 0)] + x[IX(0, sm2, 0)] + x[IX(0, sm1, 1)]);
-        x[IX(0, 0, sm1)] =
-                0.33f * (x[IX(1, 0, sm1)] + x[IX(0, 1, sm1)] + x[IX(0, 0, sm1)]);
-        x[IX(0, sm1, sm1)] =
-                0.33f * (x[IX(1, sm1, sm1)] + x[IX(0, sm2, sm1)] + x[IX(0, sm1,
-                        sm2)]);
-        x[IX(sm1, 0, 0)] =
-                0.33f * (x[IX(sm2, 0, 0)] + x[IX(sm1, 1, 0)] + x[IX(sm1, 0, 1)]);
-        x[IX(sm1, sm1, 0)] =
-                0.33f * (x[IX(sm2, sm1, 0)] + x[IX(sm1, sm2, 0)] + x[IX(sm1,
-                        sm1, 1)]);
-        x[IX(sm1, 0, sm1)] =
-                0.33f * (x[IX(sm2, 0, sm1)] + x[IX(sm1, 1, sm1)] + x[IX(sm1, 0,
-                        sm2)]);
-        x[IX(sm1, sm1, sm1)] =
-                0.33f * (x[IX(sm2, sm1, sm1)] + x[IX(sm1, sm2, sm1)] + x[IX(
-                        sm1, sm1, sm2)]);
+        x[IX(0, sm1, 0)] = 0.33f * (x[IX(1, sm1, 0)] + x[IX(0, sm2, 0)] + x[IX(
+                0, sm1, 1)]);
+        x[IX(0, 0, sm1)] = 0.33f * (x[IX(1, 0, sm1)] + x[IX(0, 1, sm1)] + x[IX(
+                0, 0, sm1)]);
+        x[IX(0, sm1, sm1)] = 0.33f * (x[IX(1, sm1, sm1)] + x[IX(0, sm2, sm1)] + x[IX(
+                0, sm1, sm2)]);
+        x[IX(sm1, 0, 0)] = 0.33f * (x[IX(sm2, 0, 0)] + x[IX(sm1, 1, 0)] + x[IX(
+                sm1, 0, 1)]);
+        x[IX(sm1, sm1, 0)] = 0.33f * (x[IX(sm2, sm1, 0)] + x[IX(sm1, sm2, 0)] + x[IX(
+                sm1, sm1, 1)]);
+        x[IX(sm1, 0, sm1)] = 0.33f * (x[IX(sm2, 0, sm1)] + x[IX(sm1, 1, sm1)] + x[IX(
+                sm1, 0, sm2)]);
+        x[IX(sm1, sm1, sm1)] = 0.33f * (x[IX(sm2, sm1, sm1)]
+                + x[IX(sm1, sm2, sm1)] + x[IX(sm1, sm1, sm2)]);
     }
 
     public void setAt(int x, int y, int z, float dens, ReadonlyVec3D vel) {

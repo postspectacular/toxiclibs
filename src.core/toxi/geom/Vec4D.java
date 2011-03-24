@@ -450,18 +450,15 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         final float wz = az * z;
         final double si = Math.sin(theta);
         final double co = Math.cos(theta);
-        float xx =
-                (float) (ax * (ux + vy + wz)
-                        + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
-                        * si);
-        float yy =
-                (float) (ay * (ux + vy + wz)
-                        + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
-                        * si);
-        float zz =
-                (float) (az * (ux + vy + wz)
-                        + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
-                        * si);
+        float xx = (float) (ax * (ux + vy + wz)
+                + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
+                * si);
+        float yy = (float) (ay * (ux + vy + wz)
+                + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
+                * si);
+        float zz = (float) (az * (ux + vy + wz)
+                + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
+                * si);
         x = xx;
         y = yy;
         z = zz;

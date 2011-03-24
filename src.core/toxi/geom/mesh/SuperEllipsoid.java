@@ -51,18 +51,14 @@ public class SuperEllipsoid implements SurfaceFunction {
         float sinPhi = MathUtils.sin(phi);
         float sinTheta = MathUtils.sin(theta);
 
-        float t =
-                MathUtils.sign(cosPhi)
-                        * (float) Math.pow(MathUtils.abs(cosPhi), p1);
-        p.x =
-                t * MathUtils.sign(cosTheta)
-                        * (float) Math.pow(MathUtils.abs(cosTheta), p2);
-        p.y =
-                MathUtils.sign(sinPhi)
-                        * (float) Math.pow(MathUtils.abs(sinPhi), p1);
-        p.z =
-                t * MathUtils.sign(sinTheta)
-                        * (float) Math.pow(MathUtils.abs(sinTheta), p2);
+        float t = MathUtils.sign(cosPhi)
+                * (float) Math.pow(MathUtils.abs(cosPhi), p1);
+        p.x = t * MathUtils.sign(cosTheta)
+                * (float) Math.pow(MathUtils.abs(cosTheta), p2);
+        p.y = MathUtils.sign(sinPhi)
+                * (float) Math.pow(MathUtils.abs(sinPhi), p1);
+        p.z = t * MathUtils.sign(sinTheta)
+                * (float) Math.pow(MathUtils.abs(sinTheta), p2);
         return p;
     }
 

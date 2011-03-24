@@ -79,10 +79,8 @@ public class IIRFilter {
     public float calculateAmplitude(float[] in) {
         float amp = 0;
         for (int i = 0; i < in.length; i++) {
-            final float yn =
-                    a0
-                            * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2
-                                    * out2);
+            final float yn = a0
+                    * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2);
             in2 = in1;
             in1 = in[i];
             out2 = out1;
@@ -109,8 +107,8 @@ public class IIRFilter {
      * @return filtered sample
      */
     public float filter(float in) {
-        final float yn =
-                a0 * (b0 * in + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2);
+        final float yn = a0
+                * (b0 * in + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2);
         in2 = in1;
         in1 = in;
         out2 = out1;
@@ -128,10 +126,8 @@ public class IIRFilter {
     public float filter(float[] in) {
         float amp = 0;
         for (int i = 0; i < in.length; i++) {
-            final float yn =
-                    a0
-                            * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2
-                                    * out2);
+            final float yn = a0
+                    * (b0 * in[i] + b1 * in1 + b2 * in2 - a1 * out1 - a2 * out2);
             in2 = in1;
             in1 = in[i];
             out2 = out1;

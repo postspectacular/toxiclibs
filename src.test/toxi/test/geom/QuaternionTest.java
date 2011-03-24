@@ -20,9 +20,8 @@ public class QuaternionTest extends TestCase {
     }
 
     public void testEuler() {
-        Quaternion q =
-                Quaternion.createFromEuler(MathUtils.QUARTER_PI,
-                        MathUtils.QUARTER_PI, 0);
+        Quaternion q = Quaternion.createFromEuler(MathUtils.QUARTER_PI,
+                MathUtils.QUARTER_PI, 0);
         System.out.println(q);
         float[] reverse = q.toAxisAngle();
         System.out.println("toAxisAngle():");

@@ -145,13 +145,12 @@ public class PointOctree extends AABB implements Shape3D {
                 }
                 int octant = getOctantID(plocal);
                 if (children[octant] == null) {
-                    Vec3D off =
-                            offset.add(new Vec3D((octant & 1) != 0
-                                    ? halfSize
-                                    : 0, (octant & 2) != 0 ? halfSize : 0,
-                                    (octant & 4) != 0 ? halfSize : 0));
-                    children[octant] =
-                            new PointOctree(this, off, halfSize * 0.5f);
+                    Vec3D off = offset.add(new Vec3D(
+                            (octant & 1) != 0 ? halfSize : 0,
+                            (octant & 2) != 0 ? halfSize : 0,
+                            (octant & 4) != 0 ? halfSize : 0));
+                    children[octant] = new PointOctree(this, off,
+                            halfSize * 0.5f);
                     numChildren++;
                 }
                 return children[octant].addPoint(p);
@@ -301,8 +300,8 @@ public class PointOctree extends AABB implements Shape3D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < 8; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec3D> points =
-                                children[i].getPointsWithinBox(b);
+                        ArrayList<Vec3D> points = children[i]
+                                .getPointsWithinBox(b);
                         if (points != null) {
                             if (results == null) {
                                 results = new ArrayList<Vec3D>();
@@ -338,8 +337,8 @@ public class PointOctree extends AABB implements Shape3D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < 8; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec3D> points =
-                                children[i].getPointsWithinSphere(s);
+                        ArrayList<Vec3D> points = children[i]
+                                .getPointsWithinSphere(s);
                         if (points != null) {
                             if (results == null) {
                                 results = new ArrayList<Vec3D>();

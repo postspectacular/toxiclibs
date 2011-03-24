@@ -31,7 +31,6 @@
 
 package toxi.geom;
 
-
 /**
  * A double precision, general, dynamically-resizable, one-dimensional vector
  * class. Index numbering begins with zero.
@@ -355,7 +354,7 @@ public class GVector implements java.io.Serializable, Cloneable {
      *            the index of the element to retrieve (zero indexed)
      * @return the value at the indexed element
      */
-    public final double getElement(int index) {
+    public final double get(int index) {
         return values[index];
     }
 
@@ -364,7 +363,7 @@ public class GVector implements java.io.Serializable, Cloneable {
      * 
      * @return number of elements in this vector
      */
-    public final int getSize() {
+    public final int size() {
         return values.length;
     }
 
@@ -451,14 +450,14 @@ public class GVector implements java.io.Serializable, Cloneable {
 
         double[] temp = new double[size];
         double[] result = new double[size];
-        int[] row_perm = new int[b.getSize()];
+        int[] row_perm = new int[b.size()];
         int i, j;
 
-        if (LU.nRow != b.getSize()) {
+        if (LU.nRow != b.size()) {
             throw new MatrixSizeException();
         }
 
-        if (LU.nRow != permutation.getSize()) {
+        if (LU.nRow != permutation.size()) {
             throw new MatrixSizeException();
         }
 
@@ -907,7 +906,7 @@ public class GVector implements java.io.Serializable, Cloneable {
      *            The b vector in the linear equation Ax = b
      */
     public final void SVDBackSolve(GMatrix U, GMatrix W, GMatrix V, GVector b) {
-        if (!(U.nRow == b.getSize() && U.nRow == U.nCol && U.nRow == W.nRow)) {
+        if (!(U.nRow == b.size() && U.nRow == U.nCol && U.nRow == W.nRow)) {
             throw new MatrixSizeException();
         }
 

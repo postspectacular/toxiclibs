@@ -63,8 +63,8 @@ public class PointCloud implements Iterable<Vec3D> {
         min.minSelf(p);
         max.maxSelf(p);
         centroid.set(min.add(max).scaleSelf(0.5f));
-        radiusSquared =
-                MathUtils.max(radiusSquared, p.distanceToSquared(centroid));
+        radiusSquared = MathUtils.max(radiusSquared,
+                p.distanceToSquared(centroid));
         return this;
     }
 
@@ -103,8 +103,8 @@ public class PointCloud implements Iterable<Vec3D> {
      */
     public PointCloud center(ReadonlyVec3D origin) {
         getCentroid();
-        Vec3D delta =
-                origin != null ? origin.sub(centroid) : centroid.getInverted();
+        Vec3D delta = origin != null ? origin.sub(centroid) : centroid
+                .getInverted();
         for (Vec3D p : points) {
             p.addSelf(delta);
         }
@@ -197,8 +197,8 @@ public class PointCloud implements Iterable<Vec3D> {
         centroid.set(min.add(max).scaleSelf(0.5f));
         radiusSquared = 0;
         for (ReadonlyVec3D p : points) {
-            radiusSquared =
-                    MathUtils.max(radiusSquared, p.distanceToSquared(centroid));
+            radiusSquared = MathUtils.max(radiusSquared,
+                    p.distanceToSquared(centroid));
         }
         return this;
     }

@@ -183,8 +183,8 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
 
     public AABB center(ReadonlyVec3D origin) {
         computeCentroid();
-        Vec3D delta =
-                origin != null ? origin.sub(centroid) : centroid.getInverted();
+        Vec3D delta = origin != null ? origin.sub(centroid) : centroid
+                .getInverted();
         for (Vertex v : vertices.values()) {
             v.addSelf(delta);
         }
@@ -257,8 +257,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
      * @return new mesh instance
      */
     public TriangleMesh copy() {
-        TriangleMesh m =
-                new TriangleMesh(name + "-copy", numVertices, numFaces);
+        TriangleMesh m = new TriangleMesh(name + "-copy", numVertices, numFaces);
         for (Face f : faces) {
             m.addFace(f.a, f.b, f.c, f.normal, f.uvA, f.uvB, f.uvC);
         }

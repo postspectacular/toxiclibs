@@ -45,9 +45,8 @@ public class MeshVoxelizer {
     }
 
     public MeshVoxelizer(int resX, int resY, int resZ) {
-        volume =
-                new VolumetricHashMap(new Vec3D(1, 1, 1), resX, resY, resZ,
-                        0.1f);
+        volume = new VolumetricHashMap(new Vec3D(1, 1, 1), resX, resY, resZ,
+                0.1f);
     }
 
     public MeshVoxelizer clear() {
@@ -142,14 +141,12 @@ public class MeshVoxelizer {
             AABB bounds = tri.getBoundingBox();
             Vec3D min = bounds.getMin();
             Vec3D max = bounds.getMax();
-            min =
-                    new Vec3D((int) wx.getClippedValueFor(min.x),
-                            (int) wy.getClippedValueFor(min.y),
-                            (int) wz.getClippedValueFor(min.z));
-            max =
-                    new Vec3D((int) wx.getClippedValueFor(max.x),
-                            (int) wy.getClippedValueFor(max.y),
-                            (int) wz.getClippedValueFor(max.z));
+            min = new Vec3D((int) wx.getClippedValueFor(min.x),
+                    (int) wy.getClippedValueFor(min.y),
+                    (int) wz.getClippedValueFor(min.z));
+            max = new Vec3D((int) wx.getClippedValueFor(max.x),
+                    (int) wy.getClippedValueFor(max.y),
+                    (int) wz.getClippedValueFor(max.z));
             for (int z = (int) min.z; z <= max.z; z++) {
                 for (int y = (int) min.y; y <= max.y; y++) {
                     for (int x = (int) min.x; x <= max.x; x++) {

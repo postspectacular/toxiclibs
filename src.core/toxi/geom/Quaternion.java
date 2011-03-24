@@ -147,8 +147,7 @@ public class Quaternion {
 
             j = nxt[i];
             k = nxt[j];
-            s =
-                    Math.sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
+            s = Math.sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
 
             q[i] = s * 0.5f;
             s = 0.5f / s;

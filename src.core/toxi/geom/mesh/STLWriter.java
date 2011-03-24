@@ -57,8 +57,8 @@ public class STLWriter {
 
     public static final STLColorModel DEFAULT = new DefaultSTLColorModel();
 
-    public static final STLColorModel MATERIALISE =
-            new MaterialiseSTLColorModel(0xffffffff);
+    public static final STLColorModel MATERIALISE = new MaterialiseSTLColorModel(
+            0xffffffff);
 
     public static final int DEFAULT_BUFFER = 0x10000;
 
@@ -83,9 +83,8 @@ public class STLWriter {
     public void beginSave(OutputStream stream, int numFaces) {
         logger.info("starting to save STL data to output stream...");
         try {
-            ds =
-                    new BufferedOutputStream(new DataOutputStream(stream),
-                            bufferSize);
+            ds = new BufferedOutputStream(new DataOutputStream(stream),
+                    bufferSize);
             writeHeader(numFaces);
         } catch (Exception e) {
             e.printStackTrace();

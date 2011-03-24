@@ -62,8 +62,8 @@ public class BiasedIntegerRange extends IntegerRange {
     }
 
     public BiasedIntegerRange copy() {
-        BiasedIntegerRange r =
-                new BiasedIntegerRange(min, max, bias, standardDeviation * 2);
+        BiasedIntegerRange r = new BiasedIntegerRange(min, max, bias,
+                standardDeviation * 2);
         r.currValue = currValue;
         return r;
     }
@@ -85,9 +85,8 @@ public class BiasedIntegerRange extends IntegerRange {
     @Override
     public int pickRandom() {
         do {
-            currValue =
-                    (int) (random.nextGaussian() * standardDeviation * (max - min))
-                            + bias;
+            currValue = (int) (random.nextGaussian() * standardDeviation * (max - min))
+                    + bias;
         } while (currValue < min || currValue >= max);
         return currValue;
     }

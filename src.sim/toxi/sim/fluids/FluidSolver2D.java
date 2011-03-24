@@ -154,12 +154,8 @@ public class FluidSolver2D {
             t0 = 1 - t1;
 
             int idx0 = i0 + j0 * totalWidth;
-            d[idx] =
-                    s0
-                            * (t0 * d0[idx0] + t1 * d0[idx0 + totalWidth])
-                            + s1
-                            * (t0 * d0[idx0 + 1] + t1
-                                    * d0[idx0 + totalWidth + 1]);
+            d[idx] = s0 * (t0 * d0[idx0] + t1 * d0[idx0 + totalWidth]) + s1
+                    * (t0 * d0[idx0 + 1] + t1 * d0[idx0 + totalWidth + 1]);
 
             if (i < width) {
                 i++;
@@ -211,8 +207,8 @@ public class FluidSolver2D {
         // for each cell compute buoyancy force
         for (int i = 1, idx = 1 + totalWidth, j = 1; j <= height;) {
             float currD = d[idx];
-            buoy[idx] =
-                    buoyancyA * currD - buoyancyB * (currD - avgTemperature);
+            buoy[idx] = buoyancyA * currD - buoyancyB
+                    * (currD - avgTemperature);
             if (i < width) {
                 i++;
                 idx++;
@@ -300,12 +296,10 @@ public class FluidSolver2D {
         c = 1f / c;
         for (int k = 0; k < numIterations; k++) {
             for (int i = 1, idx = 1 + totalWidth, j = 1; j <= height;) {
-                x[idx] =
-                        (a
-                                * (x[idx - 1] + x[idx + 1]
-                                        + x[idx - totalWidth] + x[idx
-                                        + totalWidth]) + x0[idx])
-                                * c;
+                x[idx] = (a
+                        * (x[idx - 1] + x[idx + 1] + x[idx - totalWidth] + x[idx
+                                + totalWidth]) + x0[idx])
+                        * c;
                 if (i < width) {
                     i++;
                     idx++;
@@ -344,10 +338,9 @@ public class FluidSolver2D {
     protected void project(float[] x, float[] y, float[] p, float[] div) {
         float fact = -0.5f / width;
         for (int i = 1, idx = 1 + totalWidth, j = 1; j <= height;) {
-            div[idx] =
-                    (x[idx + 1] - x[idx - 1] + y[idx + totalWidth] - y[idx
-                            - totalWidth])
-                            * fact;
+            div[idx] = (x[idx + 1] - x[idx - 1] + y[idx + totalWidth] - y[idx
+                    - totalWidth])
+                    * fact;
             p[idx] = 0;
             if (i < width) {
                 i++;
@@ -410,8 +403,8 @@ public class FluidSolver2D {
         x[0] = 0.5f * (x[1] + x[totalWidth]);
         x[idn + totalWidth] = 0.5f * (x[1 + totalWidth + idn] + x[idn]);
         x[width + 1] = 0.5f * (x[width] + x[width + 1 + totalWidth]);
-        x[width + 1 + totalWidth + idn] =
-                0.5f * (x[width + totalWidth + idn] + x[width + 1 + idn]);
+        x[width + 1 + totalWidth + idn] = 0.5f * (x[width + totalWidth + idn] + x[width
+                + 1 + idn]);
     }
 
     /**
@@ -515,8 +508,7 @@ public class FluidSolver2D {
 
             // Calculate vector length. (|n|)
             // Add small factor to prevent divide by zeros.
-            length =
-                    1f / ((float) Math.sqrt(dw_dx * dw_dx + dw_dy * dw_dy) + 0.000001f);
+            length = 1f / ((float) Math.sqrt(dw_dx * dw_dx + dw_dy * dw_dy) + 0.000001f);
 
             // N = ( n/|n| )
             dw_dx *= length;

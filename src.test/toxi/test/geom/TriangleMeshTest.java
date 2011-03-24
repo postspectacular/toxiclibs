@@ -35,9 +35,8 @@ public class TriangleMeshTest extends TestCase {
         int numIter = 100;
         for (int i = 0; i < numIter; i++) {
             long t = System.nanoTime();
-            mesh =
-                    (TriangleMesh) new STLReader().loadBinary("test/test.stl",
-                            STLReader.TRIANGLEMESH);
+            mesh = (TriangleMesh) new STLReader().loadBinary("test/test.stl",
+                    STLReader.TRIANGLEMESH);
             total += (System.nanoTime() - t);
         }
         System.out.println("avg. mesh construction time: " + total * 1e-6

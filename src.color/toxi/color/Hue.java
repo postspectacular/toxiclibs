@@ -38,8 +38,7 @@ import toxi.math.MathUtils;
  */
 public class Hue {
 
-    protected static final HashMap<String, Hue> namedHues =
-            new HashMap<String, Hue>();
+    protected static final HashMap<String, Hue> namedHues = new HashMap<String, Hue>();
     protected static final ArrayList<Hue> primaryHues = new ArrayList<Hue>();
 
     public static final Hue RED = new Hue("red", 0, true);
@@ -76,9 +75,8 @@ public class Hue {
         Hue closest = null;
         Iterable<Hue> hues = (primaryOnly ? primaryHues : namedHues.values());
         for (Hue h : hues) {
-            float d =
-                    MathUtils.min(MathUtils.abs(h.hue - hue),
-                            MathUtils.abs(1 + h.hue - hue));
+            float d = MathUtils.min(MathUtils.abs(h.hue - hue),
+                    MathUtils.abs(1 + h.hue - hue));
             if (d < dist) {
                 dist = d;
                 closest = h;

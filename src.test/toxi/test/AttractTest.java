@@ -48,9 +48,8 @@ public class AttractTest extends PApplet {
         physics.addBehavior(new GravityBehavior(new Vec3D(0, 0.2f, 0)));
         physics.addBehavior(new AttractionBehavior(new Vec3D(), 500, 0.1f));
         for (int i = 0; i < NUM_PARTICLES; i++) {
-            VerletParticle p =
-                    new VerletParticle(random(-250, 250), random(-250, 250),
-                            random(-250, 250));
+            VerletParticle p = new VerletParticle(random(-250, 250), random(
+                    -250, 250), random(-250, 250));
             physics.addParticle(p);
             for (int j = 0; j < i; j++) {
                 physics.particles.get(j).addBehavior(

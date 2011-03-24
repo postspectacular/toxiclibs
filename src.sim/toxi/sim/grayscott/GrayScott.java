@@ -271,26 +271,22 @@ public class GrayScott {
                 float currU = uu[idx];
                 float currV = vv[idx];
                 float d2 = currU * currV * currV;
-                u[idx] =
-                        MathUtils
-                                .max(0,
-                                        currU
-                                                + t
-                                                * ((dU
-                                                        * ((uu[right]
-                                                                + uu[left]
-                                                                + uu[bottom] + uu[top]) - 4 * currU) - d2) + currF
-                                                        * (1.0f - currU)));
-                v[idx] =
-                        MathUtils
-                                .max(0,
-                                        currV
-                                                + t
-                                                * ((dV
-                                                        * ((vv[right]
-                                                                + vv[left]
-                                                                + vv[bottom] + vv[top]) - 4 * currV) + d2) - currK
-                                                        * currV));
+                u[idx] = MathUtils
+                        .max(0,
+                                currU
+                                        + t
+                                        * ((dU
+                                                * ((uu[right] + uu[left]
+                                                        + uu[bottom] + uu[top]) - 4 * currU) - d2) + currF
+                                                * (1.0f - currU)));
+                v[idx] = MathUtils
+                        .max(0,
+                                currV
+                                        + t
+                                        * ((dV
+                                                * ((vv[right] + vv[left]
+                                                        + vv[bottom] + vv[top]) - 4 * currV) + d2) - currK
+                                                * currV));
             }
         }
 
@@ -307,51 +303,41 @@ public class GrayScott {
                 float cui = uu[idx];
                 float cvi = vv[idx];
                 float d = cu * cv * cv;
-                u[x] =
-                        MathUtils
-                                .max(0,
-                                        cu
-                                                + t
-                                                * ((dU
-                                                        * ((uu[right]
-                                                                + uu[left]
-                                                                + uu[width + x] + cui) - 4 * cu) - d) + f
-                                                        * (1.0f - cu)));
-                v[x] =
-                        MathUtils
-                                .max(0,
-                                        cv
-                                                + t
-                                                * ((dV
-                                                        * ((vv[right]
-                                                                + vv[left]
-                                                                + vv[width + x] + cvi) - 4 * cv) + d) - k
-                                                        * cv));
+                u[x] = MathUtils
+                        .max(0,
+                                cu
+                                        + t
+                                        * ((dU
+                                                * ((uu[right] + uu[left]
+                                                        + uu[width + x] + cui) - 4 * cu) - d) + f
+                                                * (1.0f - cu)));
+                v[x] = MathUtils
+                        .max(0,
+                                cv
+                                        + t
+                                        * ((dV
+                                                * ((vv[right] + vv[left]
+                                                        + vv[width + x] + cvi) - 4 * cv) + d) - k
+                                                * cv));
                 d = cui * cvi * cvi;
-                u[idx] =
-                        MathUtils
-                                .max(0,
-                                        cui
-                                                + t
-                                                * ((dU
-                                                        * ((uu[idxH1 + right]
-                                                                + uu[idxH1
-                                                                        + left]
-                                                                + cu + uu[idxH2
-                                                                + x]) - 4 * cui) - d) + f
-                                                        * (1.0f - cui)));
-                v[idx] =
-                        MathUtils
-                                .max(0,
-                                        cvi
-                                                + t
-                                                * ((dU
-                                                        * ((vv[idxH1 + right]
-                                                                + vv[idxH1
-                                                                        + left]
-                                                                + cv + vv[idxH2
-                                                                + x]) - 4 * cvi) + d) - k
-                                                        * cvi));
+                u[idx] = MathUtils
+                        .max(0,
+                                cui
+                                        + t
+                                        * ((dU
+                                                * ((uu[idxH1 + right]
+                                                        + uu[idxH1 + left] + cu + uu[idxH2
+                                                        + x]) - 4 * cui) - d) + f
+                                                * (1.0f - cui)));
+                v[idx] = MathUtils
+                        .max(0,
+                                cvi
+                                        + t
+                                        * ((dU
+                                                * ((vv[idxH1 + right]
+                                                        + vv[idxH1 + left] + cv + vv[idxH2
+                                                        + x]) - 4 * cvi) + d) - k
+                                                * cvi));
             }
 
             for (int y = 0; y < height; y++) {
@@ -365,45 +351,41 @@ public class GrayScott {
                 float d = cu * cv * cv;
                 int up = (y == 0 ? h1 : y - 1) * width;
                 int down = (y == h1 ? 0 : y + 1) * width;
-                u[idx] =
-                        MathUtils
-                                .max(0,
-                                        cu
-                                                + t
-                                                * ((dU
-                                                        * ((uu[idx + 1] + cui
-                                                                + uu[down] + uu[up]) - 4 * cu) - d) + f
-                                                        * (1.0f - cu)));
-                v[idx] =
-                        MathUtils
-                                .max(0,
-                                        cv
-                                                + t
-                                                * ((dV
-                                                        * ((vv[idx + 1] + cvi
-                                                                + vv[down] + vv[up]) - 4 * cv) + d) - k
-                                                        * cv));
+                u[idx] = MathUtils
+                        .max(0,
+                                cu
+                                        + t
+                                        * ((dU
+                                                * ((uu[idx + 1] + cui
+                                                        + uu[down] + uu[up]) - 4 * cu) - d) + f
+                                                * (1.0f - cu)));
+                v[idx] = MathUtils
+                        .max(0,
+                                cv
+                                        + t
+                                        * ((dV
+                                                * ((vv[idx + 1] + cvi
+                                                        + vv[down] + vv[up]) - 4 * cv) + d) - k
+                                                * cv));
                 d = cui * cvi * cvi;
-                u[idxW1] =
-                        MathUtils
-                                .max(0,
-                                        cui
-                                                + t
-                                                * ((dU
-                                                        * ((cu + uu[idxW2]
-                                                                + uu[down + w1] + uu[up
-                                                                + w1]) - 4 * cui) - d) + f
-                                                        * (1.0f - cui)));
-                v[idxW1] =
-                        MathUtils
-                                .max(0,
-                                        cvi
-                                                + t
-                                                * ((dV
-                                                        * ((cv + vv[idxW2]
-                                                                + vv[down + w1] + vv[up
-                                                                + w1]) - 4 * cvi) + d) - k
-                                                        * cvi));
+                u[idxW1] = MathUtils
+                        .max(0,
+                                cui
+                                        + t
+                                        * ((dU
+                                                * ((cu + uu[idxW2]
+                                                        + uu[down + w1] + uu[up
+                                                        + w1]) - 4 * cui) - d) + f
+                                                * (1.0f - cui)));
+                v[idxW1] = MathUtils
+                        .max(0,
+                                cvi
+                                        + t
+                                        * ((dV
+                                                * ((cv + vv[idxW2]
+                                                        + vv[down + w1] + vv[up
+                                                        + w1]) - 4 * cvi) + d) - k
+                                                * cvi));
             }
         }
         System.arraycopy(u, 0, uu, 0, u.length);

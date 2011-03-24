@@ -399,12 +399,10 @@ public class TColor implements ReadonlyTColor {
      * @return hex string
      */
     public static final String rgbToHex(float r, float g, float b) {
-        String hex =
-                Integer.toHexString((int) (MathUtils.clip(r, 0, 1) * 0xff))
-                        + Integer
-                                .toHexString((int) (MathUtils.clip(g, 0, 1) * 0xff))
-                        + Integer
-                                .toHexString((int) (MathUtils.clip(b, 0, 1) * 0xff));
+        String hex = Integer
+                .toHexString((int) (MathUtils.clip(r, 0, 1) * 0xff))
+                + Integer.toHexString((int) (MathUtils.clip(g, 0, 1) * 0xff))
+                + Integer.toHexString((int) (MathUtils.clip(b, 0, 1) * 0xff));
         return hex;
     }
 
@@ -676,12 +674,10 @@ public class TColor implements ReadonlyTColor {
     public float distanceToHSV(ReadonlyTColor c) {
         float hue = hsv[0] * MathUtils.TWO_PI;
         float hue2 = c.hue() * MathUtils.TWO_PI;
-        ReadonlyVec3D v1 =
-                new Vec3D((MathUtils.cos(hue) * hsv[1]),
-                        (MathUtils.sin(hue) * hsv[1]), hsv[2]);
-        Vec3D v2 =
-                new Vec3D((MathUtils.cos(hue2) * c.saturation()),
-                        (MathUtils.sin(hue2) * c.saturation()), c.brightness());
+        ReadonlyVec3D v1 = new Vec3D((MathUtils.cos(hue) * hsv[1]),
+                (MathUtils.sin(hue) * hsv[1]), hsv[2]);
+        Vec3D v2 = new Vec3D((MathUtils.cos(hue2) * c.saturation()),
+                (MathUtils.sin(hue2) * c.saturation()), c.brightness());
         return v1.distanceTo(v2);
     }
 

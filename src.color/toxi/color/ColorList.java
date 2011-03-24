@@ -50,7 +50,9 @@ public class ColorList implements Iterable<TColor> {
 
     /**
      * Factory method. Creates a new ColorList of colors sampled from the given
-     * ARGB image array.
+     * ARGB image array. If the number of samples equals or exceeds the number
+     * of pixels in the image and no unique colors are required, the function
+     * will simply return the same as {@link #ColorList(int[])}.
      * 
      * @param pixels
      *            int array of ARGB pixels
@@ -68,8 +70,11 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Factory method. Creates a new ColorList of colors sampled from the given
-     * ARGB image array.
+     * Factory method. Creates a new ColorList of colors randomly sampled from
+     * the given ARGB image array. If the number of samples equals or exceeds
+     * the number of pixels in the source image and no unique colors are
+     * required, the function will simply return the same as
+     * {@link #ColorList(int[])}.
      * 
      * @param pixels
      *            int array of ARGB pixels
@@ -80,12 +85,16 @@ public class ColorList implements Iterable<TColor> {
      *            flag if only unique samples are to be taken (doesn't guarantee
      *            unique colors though)
      * @param maxIterations
-     *            max number of attempts to find a unique color
-     * @return new color list
+     *            max number of attempts to find a unique color. If no more
+     *            unique colors can be found the search is terminated.
+     * @return new color list of samples
      */
     public static final ColorList createFromARGBArray(int[] pixels, int num,
             boolean uniqueOnly, int maxIterations) {
         num = MathUtils.min(num, pixels.length);
+        if (!uniqueOnly && num == pixels.length) {
+            return new ColorList(pixels);
+        }
         List<TColor> colors = new ArrayList<TColor>();
         TColor temp = TColor.BLACK.copy();
         for (int i = 0; i < num; i++) {
@@ -98,7 +107,7 @@ public class ColorList implements Iterable<TColor> {
                     temp.setARGB(pixels[idx]);
                     isUnique = !colors.contains(temp);
                 } while (!isUnique && ++numTries < maxIterations);
-                if (numTries < 100) {
+                if (numTries < maxIterations) {
                     colors.add(temp.copy());
                 } else {
                     break;
@@ -113,7 +122,8 @@ public class ColorList implements Iterable<TColor> {
 
     /**
      * Factory method. Creates a new ColorList based on the given
-     * {@link ColorTheoryStrategy} instance and the given source color.
+     * {@link ColorTheoryStrategy} instance and the given source color. The
+     * number of colors returned will vary with the strategy chosen.
      * 
      * @param strategy
      * @param c
@@ -125,17 +135,18 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Factory method. Creates a ColorList based on the
-     * {@link ColorTheoryStrategy} name and the given source color.
+     * Factory method. Creates a ColorList based on the name of a
+     * {@link ColorTheoryStrategy} and the given source color.
      * 
      * @param name
+     *            strategy name
      * @param c
      * @return new color list or null, if the supplied strategy name is not
      *         mapped to a registered implementation.
      */
     public static final ColorList createUsingStrategy(String name, TColor c) {
-        ColorTheoryStrategy strategy =
-                ColorTheoryRegistry.getStrategyForName(name);
+        ColorTheoryStrategy strategy = ColorTheoryRegistry
+                .getStrategyForName(name);
         ColorList list = null;
         if (strategy != null) {
             list = strategy.createListFromColor(c);
@@ -163,11 +174,11 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Creates a deep copy of the given ColorList. Manipulating the new list
-     * does NOT change the colors of the original.
+     * Creates a deep copy of the given ColorList. Manipulating the new list or
+     * its color entries does NOT change the colors of the original.
      * 
      * @param list
-     *            source list
+     *            source list to copy
      */
     public ColorList(ColorList list) {
         for (TColor c : list) {
@@ -176,7 +187,8 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Creates a new color list from the array of ARGB int values.
+     * Creates a new color list from the array of ARGB int values. In most cases
+     * this will be the pixel buffer of an image.
      * 
      * @param argbArray
      */
@@ -187,8 +199,20 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Creates new ColorList from the given number of colors. Copies of the
-     * given colors are created (shallow copy only).
+     * Creates new ColorList from the given colors. Copies of the given colors
+     * are created. This is a varargs constructor allowing these two parameter
+     * formats:
+     * 
+     * <pre>
+     * // individual parameters
+     * ColorList cols=new ColorList(TColor.BLACK,TColor.WHITE,TColor.newRGB(1,0,0));
+     * 
+     * // or array of colors
+     * ReadonlyTColor[] colArray=new ReadonlyTColor[] {
+     *   TColor.BLACK,TColor.WHITE,TColor.newRGB(1,0,0);
+     * };
+     * ColorList cols=new ColorList(colArray);
+     * </pre>
      * 
      * @param colorArray
      */
@@ -199,7 +223,7 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Adds the given color to the list
+     * Adds a copy of the given color to the list
      * 
      * @param c
      * @return itself

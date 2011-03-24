@@ -42,8 +42,7 @@ public class QuantizedTimeProvider extends Thread {
     protected int ticksPerBar;
     protected int beatsPerBar;
 
-    protected final EventDispatcher<QuantizedTimeHandler> dispatcher =
-            new EventDispatcher<QuantizedTimeHandler>();
+    protected final EventDispatcher<QuantizedTimeHandler> dispatcher = new EventDispatcher<QuantizedTimeHandler>();
 
     public QuantizedTimeProvider(double tempo, int beats, int ticks) {
         this.bpm = tempo;
@@ -143,8 +142,7 @@ public class QuantizedTimeProvider extends Thread {
                 bpm += (targetBPM - bpm) * tempoChangeSpeed;
                 setTempo((float) bpm);
                 // calculate real time until next beat
-                long delay =
-                        (long) (interval - (System.nanoTime() - previousTime) * 1.0e-6);
+                long delay = (long) (interval - (System.nanoTime() - previousTime) * 1.0e-6);
                 previousTime = System.nanoTime();
                 if (delay > 0) {
                     Thread.sleep(delay);

@@ -148,8 +148,7 @@ public class BasicNurbsSurface implements NurbsSurface {
 
     public Vec4D[][][][] surfaceDerivCpts(int d, int r1, int r2, int s1, int s2) {
 
-        Vec4D[][][][] result =
-                new Vec4D[d + 1][d + 1][r2 - r1 + 1][s2 - s1 + 1];
+        Vec4D[][][][] result = new Vec4D[d + 1][d + 1][r2 - r1 + 1][s2 - s1 + 1];
         int degreeU = uKnots.getDegree();
         int degreeV = vKnots.getDegree();
 
@@ -163,9 +162,8 @@ public class BasicNurbsSurface implements NurbsSurface {
             for (int idxu = 0; idxu < cpnet.uLength(); idxu++) {
                 ucps[idxu] = cps[idxu][j];
             }
-            Vec4D[][] tmp =
-                    new BasicNurbsCurve(ucps, uKnots)
-                            .curveDerivCpts(du, r1, r2);
+            Vec4D[][] tmp = new BasicNurbsCurve(ucps, uKnots).curveDerivCpts(
+                    du, r1, r2);
             for (int k = 0; k <= du; k++) {
                 final Vec4D[][] resk0 = result[k][0];
                 for (int i = 0; i <= (r - k); i++) {
@@ -183,9 +181,8 @@ public class BasicNurbsSurface implements NurbsSurface {
                     vcps[idx] = resk0i[idx];
                 }
                 int dd = (d - k) < dv ? (d - k) : dv;
-                Vec4D[][] tmp =
-                        new BasicNurbsCurve(vcps, vKnots).curveDerivCpts(dd, 0,
-                                s);
+                Vec4D[][] tmp = new BasicNurbsCurve(vcps, vKnots)
+                        .curveDerivCpts(dd, 0, s);
                 for (int l = 1; l <= dd; l++) {
                     final Vec4D[] reskli = result[k][l][i];
                     final Vec4D[] tmpL = tmp[l];

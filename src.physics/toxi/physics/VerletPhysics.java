@@ -83,8 +83,8 @@ public class VerletPhysics {
      */
     protected AABB worldBounds;
 
-    public final List<ParticleBehavior> behaviors =
-            new ArrayList<ParticleBehavior>(1);
+    public final List<ParticleBehavior> behaviors = new ArrayList<ParticleBehavior>(
+            1);
 
     protected float drag;
 
@@ -171,10 +171,8 @@ public class VerletPhysics {
     }
 
     public AABB getCurrentBounds() {
-        Vec3D min =
-                new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
-        Vec3D max =
-                new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
+        Vec3D min = new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
+        Vec3D max = new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
         for (Iterator<VerletParticle> i = particles.iterator(); i.hasNext();) {
             VerletParticle p = i.next();
             min.minSelf(p);

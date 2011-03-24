@@ -46,8 +46,8 @@ public class LaplacianSmooth implements WEMeshFilterStrategy {
                     "This filter requires a WETriangleMesh");
         }
         final WETriangleMesh mesh = (WETriangleMesh) selector.getMesh();
-        final HashMap<Vertex, Vec3D> filtered =
-                new HashMap<Vertex, Vec3D>(selection.size());
+        final HashMap<Vertex, Vec3D> filtered = new HashMap<Vertex, Vec3D>(
+                selection.size());
         for (int i = 0; i < numIterations; i++) {
             filtered.clear();
             for (Vertex v : selection) {

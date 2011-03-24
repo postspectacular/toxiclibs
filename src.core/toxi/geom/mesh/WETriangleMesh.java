@@ -177,8 +177,8 @@ public class WETriangleMesh extends TriangleMesh {
      * @return new mesh instance
      */
     public WETriangleMesh copy() {
-        WETriangleMesh m =
-                new WETriangleMesh(name + "-copy", numVertices, numFaces);
+        WETriangleMesh m = new WETriangleMesh(name + "-copy", numVertices,
+                numFaces);
         for (Face f : faces) {
             m.addFace(f.a, f.b, f.c, f.normal, f.uvA, f.uvB, f.uvC);
         }
@@ -291,14 +291,14 @@ public class WETriangleMesh extends TriangleMesh {
     }
 
     public void rebuildIndex() {
-        LinkedHashMap<Vec3D, Vertex> newV =
-                new LinkedHashMap<Vec3D, Vertex>(vertices.size());
+        LinkedHashMap<Vec3D, Vertex> newV = new LinkedHashMap<Vec3D, Vertex>(
+                vertices.size());
         for (Vertex v : vertices.values()) {
             newV.put(v, v);
         }
         vertices = newV;
-        LinkedHashMap<Line3D, WingedEdge> newE =
-                new LinkedHashMap<Line3D, WingedEdge>(edges.size());
+        LinkedHashMap<Line3D, WingedEdge> newE = new LinkedHashMap<Line3D, WingedEdge>(
+                edges.size());
         for (WingedEdge e : edges.values()) {
             newE.put(e, e);
         }

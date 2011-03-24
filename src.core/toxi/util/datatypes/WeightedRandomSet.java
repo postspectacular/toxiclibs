@@ -43,8 +43,7 @@ import toxi.math.MathUtils;
  */
 public class WeightedRandomSet<T> {
 
-    protected List<WeightedRandomEntry<T>> elements =
-            new ArrayList<WeightedRandomEntry<T>>();
+    protected List<WeightedRandomEntry<T>> elements = new ArrayList<WeightedRandomEntry<T>>();
 
     protected int totalWeight;
 

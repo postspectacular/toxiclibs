@@ -42,8 +42,8 @@ public class LeftSplitComplementaryStrategy implements ColorTheoryStrategy {
 
     public ColorList createListFromColor(ReadonlyTColor src) {
         ReadonlyTColor left = src.getComplement().rotateRYB(-30).lighten(0.1f);
-        ColorList colors =
-                ColorTheoryRegistry.COMPLEMENTARY.createListFromColor(src);
+        ColorList colors = ColorTheoryRegistry.COMPLEMENTARY
+                .createListFromColor(src);
         for (int i = 3; i < 6; i++) {
             TColor c = colors.get(i);
             c.setHue(left.hue());

@@ -60,10 +60,8 @@ public class TriangleIntersector implements Intersector3D {
         float dotprod = n.dot(ray.dir);
         if (dotprod < 0) {
             Vec3D rt = ray.sub(triangle.a);
-            float t =
-                    -(n.x * rt.x + n.y * rt.y + n.z * rt.z)
-                            / (n.x * ray.dir.x + n.y * ray.dir.y + n.z
-                                    * ray.dir.z);
+            float t = -(n.x * rt.x + n.y * rt.y + n.z * rt.z)
+                    / (n.x * ray.dir.x + n.y * ray.dir.y + n.z * ray.dir.z);
             if (t >= MathUtils.EPS) {
                 Vec3D pos = ray.getPointAtDistance(t);
                 // TODO commented out orientation check since it seems

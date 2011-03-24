@@ -214,18 +214,12 @@ public class Spline3D {
             deltaP.set(delta[i]).addSelf(p);
             deltaQ.set(q).subSelf(delta[i + 1]);
             for (int k = 0; k < res; k++) {
-                float x =
-                        p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
-                                + deltaQ.x * bernstein.b2[k] + q.x
-                                * bernstein.b3[k];
-                float y =
-                        p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
-                                + deltaQ.y * bernstein.b2[k] + q.y
-                                * bernstein.b3[k];
-                float z =
-                        p.z * bernstein.b0[k] + deltaP.z * bernstein.b1[k]
-                                + deltaQ.z * bernstein.b2[k] + q.z
-                                * bernstein.b3[k];
+                float x = p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
+                        + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
+                float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
+                        + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
+                float z = p.z * bernstein.b0[k] + deltaP.z * bernstein.b1[k]
+                        + deltaQ.z * bernstein.b2[k] + q.z * bernstein.b3[k];
                 vertices.add(new Vec3D(x, y, z));
             }
         }
@@ -292,8 +286,7 @@ public class Spline3D {
             }
             ReadonlyVec3D p = vertices.get(currIdx - 1);
             Vec3D q = vertices.get(currIdx);
-            float frac =
-                    (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
+            float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
             Vec3D i = p.interpolateTo(q, frac);
             uniform.add(i);
         }

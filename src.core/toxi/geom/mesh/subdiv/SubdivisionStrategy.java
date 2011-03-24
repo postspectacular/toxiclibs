@@ -41,8 +41,7 @@ import toxi.geom.mesh.WingedEdge;
  */
 public abstract class SubdivisionStrategy {
 
-    public static final Comparator<? super WingedEdge> DEFAULT_ORDERING =
-            new EdgeLengthComparator();
+    public static final Comparator<? super WingedEdge> DEFAULT_ORDERING = new EdgeLengthComparator();
 
     protected Comparator<? super WingedEdge> order = DEFAULT_ORDERING;
 

@@ -61,7 +61,8 @@ class DelaunayTriangle extends ArraySet<DelaunayVertex> {
         super(collection);
         idNumber = idGenerator++;
         if (this.size() != 3) {
-            throw new IllegalArgumentException("DelaunayTriangle must have 3 vertices");
+            throw new IllegalArgumentException(
+                    "DelaunayTriangle must have 3 vertices");
         }
     }
 
@@ -107,7 +108,8 @@ class DelaunayTriangle extends ArraySet<DelaunayVertex> {
      */
     public DelaunayVertex getCircumcenter() {
         if (circumcenter == null) {
-            circumcenter = DelaunayVertex.circumcenter(this.toArray(new DelaunayVertex[0]));
+            circumcenter = DelaunayVertex.circumcenter(this
+                    .toArray(new DelaunayVertex[0]));
         }
         return circumcenter;
     }
@@ -162,7 +164,8 @@ class DelaunayTriangle extends ArraySet<DelaunayVertex> {
     public Iterator<DelaunayVertex> iterator() {
         return new Iterator<DelaunayVertex>() {
 
-            private Iterator<DelaunayVertex> it = DelaunayTriangle.super.iterator();
+            private Iterator<DelaunayVertex> it = DelaunayTriangle.super
+                    .iterator();
 
             public boolean hasNext() {
                 return it.hasNext();

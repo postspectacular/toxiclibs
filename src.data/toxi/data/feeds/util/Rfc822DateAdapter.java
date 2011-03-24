@@ -40,16 +40,15 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
 
 public class Rfc822DateAdapter extends XmlAdapter<String, XMLGregorianCalendar> {
 
-    public static final SimpleDateFormat[] RFC822_FORMATS =
-            new SimpleDateFormat[] {
-                    new SimpleDateFormat("EEE, d MMM yy HH:mm:ss z"),
-                    new SimpleDateFormat("EEE, d MMM yy HH:mm z"),
-                    new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z"),
-                    new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"),
-                    new SimpleDateFormat("d MMM yy HH:mm z"),
-                    new SimpleDateFormat("d MMM yy HH:mm:ss z"),
-                    new SimpleDateFormat("d MMM yyyy HH:mm z"),
-                    new SimpleDateFormat("d MMM yyyy HH:mm:ss z"), };
+    public static final SimpleDateFormat[] RFC822_FORMATS = new SimpleDateFormat[] {
+            new SimpleDateFormat("EEE, d MMM yy HH:mm:ss z"),
+            new SimpleDateFormat("EEE, d MMM yy HH:mm z"),
+            new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z"),
+            new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"),
+            new SimpleDateFormat("d MMM yy HH:mm z"),
+            new SimpleDateFormat("d MMM yy HH:mm:ss z"),
+            new SimpleDateFormat("d MMM yyyy HH:mm z"),
+            new SimpleDateFormat("d MMM yyyy HH:mm:ss z"), };
 
     @Override
     public String marshal(XMLGregorianCalendar date) throws Exception {

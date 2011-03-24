@@ -62,8 +62,8 @@ public class BiasedFloatRange extends FloatRange {
     }
 
     public BiasedFloatRange copy() {
-        BiasedFloatRange r =
-                new BiasedFloatRange(min, max, bias, standardDeviation * 2);
+        BiasedFloatRange r = new BiasedFloatRange(min, max, bias,
+                standardDeviation * 2);
         r.currValue = currValue;
         return r;
     }
@@ -85,9 +85,8 @@ public class BiasedFloatRange extends FloatRange {
     @Override
     public float pickRandom() {
         do {
-            currValue =
-                    (float) (random.nextGaussian() * standardDeviation * (max - min))
-                            + bias;
+            currValue = (float) (random.nextGaussian() * standardDeviation * (max - min))
+                    + bias;
         } while (currValue < min || currValue >= max);
         return currValue;
     }

@@ -126,8 +126,8 @@ public class Plane extends Vec3D implements Shape3D {
         } else {
             dir = normal;
         }
-        Vec3D proj =
-                new Ray3D(p, dir).getPointAtDistance(getDistanceToPoint(p));
+        Vec3D proj = new Ray3D(p, dir)
+                .getPointAtDistance(getDistanceToPoint(p));
         return proj;
     }
 
@@ -170,9 +170,8 @@ public class Plane extends Vec3D implements Shape3D {
         if (mesh == null) {
             mesh = new TriangleMesh("plane", 4, 2);
         }
-        ReadonlyVec3D p =
-                equalsWithTolerance(Vec3D.ZERO, 0.01f) ? add(0.01f, 0.01f,
-                        0.01f) : this;
+        ReadonlyVec3D p = equalsWithTolerance(Vec3D.ZERO, 0.01f) ? add(0.01f,
+                0.01f, 0.01f) : this;
         size *= 0.5f;
         Vec3D n = p.cross(normal).normalizeTo(size);
         Vec3D m = n.cross(normal).normalizeTo(size);

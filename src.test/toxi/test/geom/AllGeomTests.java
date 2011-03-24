@@ -3,12 +3,11 @@ package toxi.test.geom;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-
 public class AllGeomTests {
 
     public static Test suite() {
         TestSuite suite = new TestSuite(AllGeomTests.class.getName());
-        //$JUnit-BEGIN$
+        // $JUnit-BEGIN$
         suite.addTestSuite(PolygonTest.class);
         suite.addTestSuite(TriangleMeshTest.class);
         suite.addTestSuite(Line2DTest.class);
@@ -25,7 +24,7 @@ public class AllGeomTests {
         suite.addTestSuite(WEMeshTest.class);
         suite.addTestSuite(Vec3DTest.class);
         suite.addTestSuite(AABBTest.class);
-        //$JUnit-END$
+        // $JUnit-END$
         return suite;
     }
 

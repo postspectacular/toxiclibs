@@ -131,8 +131,7 @@ public class ColorRange {
     /**
      * List of ColorRange presets.
      */
-    public static final HashMap<String, ColorRange> PRESETS =
-            new HashMap<String, ColorRange>();
+    public static final HashMap<String, ColorRange> PRESETS = new HashMap<String, ColorRange>();
 
     private static int UNTITLED_ID = 1;
 
@@ -212,19 +211,14 @@ public class ColorRange {
     public ColorRange(FloatRange hue, FloatRange sat, FloatRange bri,
             FloatRange alpha, FloatRange black, FloatRange white, String name) {
         super();
-        hueConstraint =
-                new GenericSet<FloatRange>(hue != null ? hue : new FloatRange(
-                        0, 1));
-        saturationConstraint =
-                new GenericSet<FloatRange>(sat != null ? sat : new FloatRange(
-                        0, 1));
-        brightnessConstraint =
-                new GenericSet<FloatRange>(bri != null ? bri : new FloatRange(
-                        0, 1));
-        alphaConstraint =
-                new GenericSet<FloatRange>(alpha != null
-                        ? alpha
-                        : new FloatRange(1, 1));
+        hueConstraint = new GenericSet<FloatRange>(hue != null ? hue
+                : new FloatRange(0, 1));
+        saturationConstraint = new GenericSet<FloatRange>(sat != null ? sat
+                : new FloatRange(0, 1));
+        brightnessConstraint = new GenericSet<FloatRange>(bri != null ? bri
+                : new FloatRange(0, 1));
+        alphaConstraint = new GenericSet<FloatRange>(alpha != null ? alpha
+                : new FloatRange(1, 1));
         if (black == null) {
             this.black = new FloatRange(0, 0);
         } else {
@@ -493,11 +487,10 @@ public class ColorRange {
 
         if (c != null) {
             float hue = c.hue() + variance * MathUtils.normalizedRandom();
-            range.hueConstraint =
-                    new GenericSet<FloatRange>(new FloatRange(hue, hue));
-            range.alphaConstraint =
-                    new GenericSet<FloatRange>(new FloatRange(c.alpha(),
-                            c.alpha()));
+            range.hueConstraint = new GenericSet<FloatRange>(new FloatRange(
+                    hue, hue));
+            range.alphaConstraint = new GenericSet<FloatRange>(new FloatRange(
+                    c.alpha(), c.alpha()));
         } else {
             range.hueConstraint = hueConstraint.copy();
             range.alphaConstraint = alphaConstraint.copy();

@@ -43,8 +43,8 @@ public class AudioBuffer {
      * Format descriptor
      */
     public enum Format {
-        MONO8(AL.AL_FORMAT_MONO8, 8, 1), MONO16(AL.AL_FORMAT_MONO16, 16, 1),
-        STEREO8(AL.AL_FORMAT_STEREO8, 8, 2), STEREO16(AL.AL_FORMAT_STEREO16,
+        MONO8(AL.AL_FORMAT_MONO8, 8, 1), MONO16(AL.AL_FORMAT_MONO16, 16, 1), STEREO8(
+                AL.AL_FORMAT_STEREO8, 8, 2), STEREO16(AL.AL_FORMAT_STEREO16,
                 16, 2);
 
         public static Format getForID(int id) {

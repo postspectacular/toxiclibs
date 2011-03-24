@@ -52,9 +52,8 @@ public class AtomTest extends TestCase {
 
     public void testIso8601Format() {
         Iso8601DateAdapter format = new Iso8601DateAdapter();
-        String[] dates =
-                new String[] { "2009-07-16T15:45:07Z",
-                        "2009-07-22T21:13:45-07:00" };
+        String[] dates = new String[] { "2009-07-16T15:45:07Z",
+                "2009-07-22T21:13:45-07:00" };
         for (String dateString : dates) {
             XMLGregorianCalendar date = null;
             try {

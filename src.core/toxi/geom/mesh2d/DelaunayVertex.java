@@ -167,9 +167,8 @@ public class DelaunayVertex {
                 continue;
             }
             columns[col] = false;
-            sum +=
-                    sign * matrix[row].coordinates[col]
-                            * determinant(matrix, row + 1, columns);
+            sum += sign * matrix[row].coordinates[col]
+                    * determinant(matrix, row + 1, columns);
             columns[col] = true;
             sign = -sign;
         }

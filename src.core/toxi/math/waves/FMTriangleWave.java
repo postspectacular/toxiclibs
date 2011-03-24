@@ -84,9 +84,8 @@ public class FMTriangleWave extends AbstractWave {
 
     @Override
     public float update() {
-        value =
-                2 * amp * (MathUtils.abs(PI - phase) * MathUtils.INV_PI - 0.5f)
-                        + offset;
+        value = 2 * amp * (MathUtils.abs(PI - phase) * MathUtils.INV_PI - 0.5f)
+                + offset;
         cyclePhase(frequency + fmod.update());
         return value;
     }

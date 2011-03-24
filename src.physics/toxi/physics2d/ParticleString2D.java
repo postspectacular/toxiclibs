@@ -66,8 +66,8 @@ public class ParticleString2D {
         for (VerletParticle2D p : particles) {
             physics.addParticle(p);
             if (prev != null) {
-                VerletSpring2D s =
-                        createSpring(prev, p, prev.distanceTo(p), strength);
+                VerletSpring2D s = createSpring(prev, p, prev.distanceTo(p),
+                        strength);
                 links.add(s);
                 physics.addSpring(s);
             }

@@ -181,9 +181,8 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @return a new random normalized unit vector.
      */
     public static final Vec3D randomVector(Random rnd) {
-        Vec3D v =
-                new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1,
-                        rnd.nextFloat() * 2 - 1);
+        Vec3D v = new Vec3D(rnd.nextFloat() * 2 - 1, rnd.nextFloat() * 2 - 1,
+                rnd.nextFloat() * 2 - 1);
         return v.normalize();
     }
 
@@ -1110,18 +1109,15 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
         final float wz = az * z;
         final double si = Math.sin(theta);
         final double co = Math.cos(theta);
-        float xx =
-                (float) (ax * (ux + vy + wz)
-                        + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
-                        * si);
-        float yy =
-                (float) (ay * (ux + vy + wz)
-                        + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
-                        * si);
-        float zz =
-                (float) (az * (ux + vy + wz)
-                        + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
-                        * si);
+        float xx = (float) (ax * (ux + vy + wz)
+                + (x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz)
+                * si);
+        float yy = (float) (ay * (ux + vy + wz)
+                + (y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz)
+                * si);
+        float zz = (float) (az * (ux + vy + wz)
+                + (z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy)
+                * si);
         x = xx;
         y = yy;
         z = zz;

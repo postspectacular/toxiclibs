@@ -58,9 +58,8 @@ public class ArrayIsoSurface implements IsoSurface {
 
     public ArrayIsoSurface(VolumetricSpace volume) {
         this.volume = volume;
-        cellSize =
-                new Vec3D(volume.scale.x / volume.resX1, volume.scale.y
-                        / volume.resY1, volume.scale.z / volume.resZ1);
+        cellSize = new Vec3D(volume.scale.x / volume.resX1, volume.scale.y
+                / volume.resY1, volume.scale.z / volume.resZ1);
 
         resX = volume.resX;
         resY = volume.resY;
@@ -97,49 +96,41 @@ public class ArrayIsoSurface implements IsoSurface {
                 for (int x = 0; x < resX1; x++) {
                     final int cellIndex = getCellIndex(x, y, z);
                     if (cellIndex > 0 && cellIndex < 255) {
-                        final int edgeFlags =
-                                MarchingCubesIndex.edgesToCompute[cellIndex];
+                        final int edgeFlags = MarchingCubesIndex.edgesToCompute[cellIndex];
                         if (edgeFlags > 0 && edgeFlags < 255) {
                             int edgeOffsetIndex = offset * 3;
                             float offsetData = volume.getVoxelAt(offset);
                             float isoDiff = isoValue - offsetData;
                             if ((edgeFlags & 1) > 0) {
                                 if (edgeVertices[edgeOffsetIndex] == null) {
-                                    float t =
-                                            isoDiff
-                                                    / (volume
-                                                            .getVoxelAt(offset + 1) - offsetData);
-                                    edgeVertices[edgeOffsetIndex] =
-                                            new Vec3D(offsetX + t * cellSize.x,
-                                                    y * cellSize.y
-                                                            + centreOffset.y, z
-                                                            * cellSize.z
-                                                            + centreOffset.z);
+                                    float t = isoDiff
+                                            / (volume.getVoxelAt(offset + 1) - offsetData);
+                                    edgeVertices[edgeOffsetIndex] = new Vec3D(
+                                            offsetX + t * cellSize.x, y
+                                                    * cellSize.y
+                                                    + centreOffset.y, z
+                                                    * cellSize.z
+                                                    + centreOffset.z);
                                 }
                             }
                             if ((edgeFlags & 2) > 0) {
                                 if (edgeVertices[edgeOffsetIndex + 1] == null) {
-                                    float t =
-                                            isoDiff
-                                                    / (volume.getVoxelAt(offset
-                                                            + resX) - offsetData);
-                                    edgeVertices[edgeOffsetIndex + 1] =
-                                            new Vec3D(x * cellSize.x
-                                                    + centreOffset.x, offsetY
-                                                    + t * cellSize.y, z
+                                    float t = isoDiff
+                                            / (volume.getVoxelAt(offset + resX) - offsetData);
+                                    edgeVertices[edgeOffsetIndex + 1] = new Vec3D(
+                                            x * cellSize.x + centreOffset.x,
+                                            offsetY + t * cellSize.y, z
                                                     * cellSize.z
                                                     + centreOffset.z);
                                 }
                             }
                             if ((edgeFlags & 4) > 0) {
                                 if (edgeVertices[edgeOffsetIndex + 2] == null) {
-                                    float t =
-                                            isoDiff
-                                                    / (volume.getVoxelAt(offset
-                                                            + sliceRes) - offsetData);
-                                    edgeVertices[edgeOffsetIndex + 2] =
-                                            new Vec3D(x * cellSize.x
-                                                    + centreOffset.x, y
+                                    float t = isoDiff
+                                            / (volume.getVoxelAt(offset
+                                                    + sliceRes) - offsetData);
+                                    edgeVertices[edgeOffsetIndex + 2] = new Vec3D(
+                                            x * cellSize.x + centreOffset.x, y
                                                     * cellSize.y
                                                     + centreOffset.y, offsetZ
                                                     + t * cellSize.z);
@@ -165,16 +156,13 @@ public class ArrayIsoSurface implements IsoSurface {
                     if (cellIndex > 0 && cellIndex < 255) {
                         int n = 0;
                         int edgeIndex;
-                        final int[] cellTriangles =
-                                MarchingCubesIndex.cellTriangles[cellIndex];
+                        final int[] cellTriangles = MarchingCubesIndex.cellTriangles[cellIndex];
                         while ((edgeIndex = cellTriangles[n]) != -1) {
-                            int[] edgeOffsetInfo =
-                                    MarchingCubesIndex.edgeOffsets[edgeIndex];
-                            face[n] =
-                                    ((x + edgeOffsetInfo[0]) + resX
-                                            * (y + edgeOffsetInfo[1]) + sliceRes
-                                            * (z + edgeOffsetInfo[2]))
-                                            * 3 + edgeOffsetInfo[3];
+                            int[] edgeOffsetInfo = MarchingCubesIndex.edgeOffsets[edgeIndex];
+                            face[n] = ((x + edgeOffsetInfo[0]) + resX
+                                    * (y + edgeOffsetInfo[1]) + sliceRes
+                                    * (z + edgeOffsetInfo[2]))
+                                    * 3 + edgeOffsetInfo[3];
                             n++;
                         }
                         for (int i = 0; i < n; i += 3) {

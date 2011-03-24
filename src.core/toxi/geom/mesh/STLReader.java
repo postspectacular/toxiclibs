@@ -42,8 +42,7 @@ import toxi.util.FileUtils;
  */
 public class STLReader {
 
-    public static final Class<? extends Mesh3D> TRIANGLEMESH =
-            TriangleMesh.class;
+    public static final Class<? extends Mesh3D> TRIANGLEMESH = TriangleMesh.class;
     public static final Class<? extends Mesh3D> WEMESH = WETriangleMesh.class;
 
     private static final int DEFAULT_BUFFER_SIZE = 0x8000;
@@ -92,9 +91,8 @@ public class STLReader {
             Class<? extends Mesh3D> meshClass) {
         Mesh3D mesh = null;
         try {
-            DataInputStream ds =
-                    new DataInputStream(
-                            new BufferedInputStream(stream, bufSize));
+            DataInputStream ds = new DataInputStream(new BufferedInputStream(
+                    stream, bufSize));
             // read header, ignore color model
             for (int i = 0; i < 80; i++) {
                 ds.read();
@@ -146,10 +144,9 @@ public class STLReader {
             Class<? extends Mesh3D> meshClass) {
         Mesh3D mesh = null;
         try {
-            mesh =
-                    loadBinary(FileUtils.createInputStream(new File(fileName)),
-                            fileName.substring(fileName.lastIndexOf('/') + 1),
-                            bufSize, meshClass);
+            mesh = loadBinary(FileUtils.createInputStream(new File(fileName)),
+                    fileName.substring(fileName.lastIndexOf('/') + 1), bufSize,
+                    meshClass);
         } catch (IOException e) {
             e.printStackTrace();
         }

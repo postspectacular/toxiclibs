@@ -121,8 +121,7 @@ public class DelaunayTriangulation extends AbstractSet<DelaunayTriangle> {
     private Set<DelaunayTriangle> getCavity(DelaunayVertex site,
             DelaunayTriangle triangle) {
         Set<DelaunayTriangle> encroached = new HashSet<DelaunayTriangle>();
-        Queue<DelaunayTriangle> toBeChecked =
-                new LinkedList<DelaunayTriangle>();
+        Queue<DelaunayTriangle> toBeChecked = new LinkedList<DelaunayTriangle>();
         Set<DelaunayTriangle> marked = new HashSet<DelaunayTriangle>();
         toBeChecked.add(triangle);
         marked.add(triangle);
@@ -173,8 +172,8 @@ public class DelaunayTriangulation extends AbstractSet<DelaunayTriangle> {
             }
             visited.add(triangle);
             // Corner opposite point
-            DelaunayVertex corner =
-                    point.isOutside(triangle.toArray(new DelaunayVertex[0]));
+            DelaunayVertex corner = point.isOutside(triangle
+                    .toArray(new DelaunayVertex[0]));
             if (corner == null) {
                 return triangle;
             }

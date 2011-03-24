@@ -116,13 +116,11 @@ public class DLAGuideLines {
     }
 
     public Vec3D getPoint() {
-        workDir =
-                currSegment.getDirection().interpolateToSelf(
-                        currSegment.getNextDirection(), (float) currT);
+        workDir = currSegment.getDirection().interpolateToSelf(
+                currSegment.getNextDirection(), (float) currT);
         workDir.normalize();
-        Vec3D v =
-                currPoint.add(workDir.scale(currSegment.getLength()
-                        * (float) currT));
+        Vec3D v = currPoint.add(workDir.scale(currSegment.getLength()
+                * (float) currT));
         return v;
     }
 

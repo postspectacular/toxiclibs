@@ -365,9 +365,8 @@ public class Matrix4x4 {
     }
 
     private final void init() {
-        matrix =
-                new double[][] { new double[4], new double[4], new double[4],
-                        new double[4] };
+        matrix = new double[][] { new double[4], new double[4], new double[4],
+                new double[4] };
     }
 
     /**
@@ -471,9 +470,8 @@ public class Matrix4x4 {
         dst[15] = tmp[10] * src2 + tmp[4] * src0 + tmp[9] * src1;
         dst[15] -= tmp[8] * src1 + tmp[11] * src2 + tmp[5] * src0;
 
-        double det =
-                1.0 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3]
-                        * dst[3]);
+        double det = 1.0 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3]
+                * dst[3]);
 
         for (int i = 0, k = 0; i < 4; i++) {
             double[] m = matrix[i];
@@ -523,9 +521,8 @@ public class Matrix4x4 {
         for (int i = 0; i < 4; i++) {
             double[] m = matrix[i];
             for (int j = 0; j < 4; j++) {
-                temp[j] =
-                        m[0] * mm0[j] + m[1] * mm1[j] + m[2] * mm2[j] + m[3]
-                                * mm3[j];
+                temp[j] = m[0] * mm0[j] + m[1] * mm1[j] + m[2] * mm2[j] + m[3]
+                        * mm3[j];
             }
             m[0] = temp[0];
             m[1] = temp[1];

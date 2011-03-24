@@ -99,8 +99,8 @@ public class PerlinNoise {
             // noise broke due to recent change of cos table in PGraphics
             // this will take care of it
             perlin_cosTable = SinCosLUT.getDefaultInstance().getSinLUT();
-            perlin_TWOPI =
-                    perlin_PI = SinCosLUT.getDefaultInstance().getPeriod();
+            perlin_TWOPI = perlin_PI = SinCosLUT.getDefaultInstance()
+                    .getPeriod();
             perlin_PI >>= 1;
         }
 

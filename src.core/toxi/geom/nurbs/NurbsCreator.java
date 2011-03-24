@@ -199,9 +199,8 @@ public final class NurbsCreator {
         cp[1] = new Vec4D(o.yAxis.add(o.xAxis).scaleSelf(r), 0.5f);
         cp[4] = cp[1].getInvertedXYZ();
 
-        cp[2] =
-                new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r),
-                        0.5f);
+        cp[2] = new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r),
+                0.5f);
         cp[5] = cp[2].getInvertedXYZ();
 
         for (int i = 0; i < 7; i++) {
@@ -236,16 +235,15 @@ public final class NurbsCreator {
         cp[2] = new Vec4D(o.yAxis.scale(r), 1);
         cp[6] = cp[2].getInvertedXYZ();
 
-        cp[3] =
-                new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r),
-                        w);
+        cp[3] = new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r),
+                w);
         cp[7] = cp[3].getInvertedXYZ();
 
         for (int i = 0; i < 9; i++) {
             cp[i].addXYZSelf(o.origin);
         }
-        float uQ9[] =
-                { 0, 0, 0, 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f, 1, 1, 1 };
+        float uQ9[] = { 0, 0, 0, 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f, 1, 1,
+                1 };
         return new BasicNurbsCurve(cp, uQ9, 2);
     }
 
@@ -489,12 +487,10 @@ public final class NurbsCreator {
         cp[3] = cp[0].getInvertedXYZ();
         cp[0].addXYZSelf(o.origin);
         cp[3].addXYZSelf(o.origin);
-        cp[1] =
-                new Vec4D(o.xAxis.add(o.yAxis).scaleSelf(r).addSelf(o.origin),
-                        0.5f);
-        cp[2] =
-                new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r)
-                        .addSelf(o.origin), 0.5f);
+        cp[1] = new Vec4D(o.xAxis.add(o.yAxis).scaleSelf(r).addSelf(o.origin),
+                0.5f);
+        cp[2] = new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r)
+                .addSelf(o.origin), 0.5f);
 
         float u[] = { 0, 0, 0, 0.5f, 1, 1, 1 };
         return new BasicNurbsCurve(cp, u, 2);
@@ -620,7 +616,7 @@ public final class NurbsCreator {
             GVector sol = new GVector(n + 1);
             sol.LUDBackSolve(lu, b, perm);
             for (int j = 0; j <= n; j++) {
-                cps[j].x = (float) sol.getElement(j);
+                cps[j].x = (float) sol.get(j);
             }
 
             // y-ccordinate
@@ -630,7 +626,7 @@ public final class NurbsCreator {
             sol.zero();
             sol.LUDBackSolve(lu, b, perm);
             for (int j = 0; j <= n; j++) {
-                cps[j].y = (float) sol.getElement(j);
+                cps[j].y = (float) sol.get(j);
             }
 
             // z-ccordinate
@@ -640,7 +636,7 @@ public final class NurbsCreator {
             sol.zero();
             sol.LUDBackSolve(lu, b, perm);
             for (int j = 0; j <= n; j++) {
-                cps[j].z = (float) sol.getElement(j);
+                cps[j].z = (float) sol.get(j);
             }
             return new BasicNurbsCurve(cps, uKnots);
         } catch (SingularMatrixException ex) {

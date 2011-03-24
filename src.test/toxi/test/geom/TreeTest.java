@@ -22,12 +22,11 @@ public class TreeTest extends TestCase {
         assertNotSame(leaf1, leaf2);
         assertEquals(t.addPoint(new Vec3D(0, 100, 0)), true);
         assertEquals(t.addPoint(new Vec3D(101, 0, 0)), false);
-        ArrayList<Vec3D> points =
-                t.getPointsWithinSphere(new Sphere(new Vec3D(50, 0, 0), 50));
+        ArrayList<Vec3D> points = t.getPointsWithinSphere(new Sphere(new Vec3D(
+                50, 0, 0), 50));
         assertEquals(points.size() == 2, true);
-        points =
-                t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50), new Vec3D(
-                        50, 50, 50)));
+        points = t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50),
+                new Vec3D(50, 50, 50)));
         assertEquals(points.size() == 3, true);
     }
 

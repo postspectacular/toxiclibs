@@ -52,9 +52,8 @@ public class TriangleTest extends TestCase {
     }
 
     public void testEquilateral() {
-        Triangle3D t =
-                Triangle3D.createEquilateralFrom(new Vec3D(-100, 0, 0),
-                        new Vec3D(100, 0, 0));
+        Triangle3D t = Triangle3D.createEquilateralFrom(new Vec3D(-100, 0, 0),
+                new Vec3D(100, 0, 0));
 
     }
 

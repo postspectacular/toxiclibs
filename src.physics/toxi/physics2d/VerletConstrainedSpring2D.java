@@ -70,9 +70,8 @@ public class VerletConstrainedSpring2D extends VerletSpring2D {
         Vec2D delta = b.sub(a);
         // add minute offset to avoid div-by-zero errors
         float dist = delta.magnitude() + EPS;
-        float normDistStrength =
-                (dist - restLength) / (dist * (a.invWeight + b.invWeight))
-                        * strength;
+        float normDistStrength = (dist - restLength)
+                / (dist * (a.invWeight + b.invWeight)) * strength;
         if (!a.isLocked && !isALocked) {
             a.addSelf(delta.scale(normDistStrength * a.invWeight).limit(limit));
             if (applyConstraints) {

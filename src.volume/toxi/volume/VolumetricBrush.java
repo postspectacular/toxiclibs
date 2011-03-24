@@ -53,15 +53,12 @@ public abstract class VolumetricBrush {
     }
 
     public void drawAtAbsolutePos(Vec3D pos, float density) {
-        float cx =
-                MathUtils.clip((pos.x + volume.halfScale.x) / volume.scale.x
-                        * volume.resX1, 0, volume.resX1);
-        float cy =
-                MathUtils.clip((pos.y + volume.halfScale.y) / volume.scale.y
-                        * volume.resY1, 0, volume.resY1);
-        float cz =
-                MathUtils.clip((pos.z + volume.halfScale.z) / volume.scale.z
-                        * volume.resZ1, 0, volume.resZ1);
+        float cx = MathUtils.clip((pos.x + volume.halfScale.x) / volume.scale.x
+                * volume.resX1, 0, volume.resX1);
+        float cy = MathUtils.clip((pos.y + volume.halfScale.y) / volume.scale.y
+                * volume.resY1, 0, volume.resY1);
+        float cz = MathUtils.clip((pos.z + volume.halfScale.z) / volume.scale.z
+                * volume.resZ1, 0, volume.resZ1);
         drawAtGridPos(cx, cy, cz, density);
     }
 

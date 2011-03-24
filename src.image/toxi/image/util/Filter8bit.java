@@ -100,8 +100,8 @@ public class Filter8bit {
     public static PImage adaptiveThreshold(PImage img, int ks, int c) {
         PImage img2 = new PImage(img.width, img.height);
         img2.format = img.format;
-        img2.pixels =
-                adaptiveThreshold(img.pixels, img.width, img.height, ks, c);
+        img2.pixels = adaptiveThreshold(img.pixels, img.width, img.height, ks,
+                c);
         return img2;
     }
 
@@ -242,8 +242,7 @@ public class Filter8bit {
     public static PImage erodePixels(PImage img, boolean isInverted) {
         PImage img2 = new PImage(img.width, img.height);
         img2.format = img.format;
-        img2.pixels =
-                erodePixels(img.pixels, img.width, img.height, isInverted);
+        img2.pixels = erodePixels(img.pixels, img.width, img.height, isInverted);
         return img2;
     }
 

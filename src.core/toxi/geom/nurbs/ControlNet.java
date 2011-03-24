@@ -64,8 +64,8 @@ public class ControlNet {
 
     public void center(ReadonlyVec3D origin) {
         Vec3D centroid = computeCentroid();
-        Vec3D delta =
-                origin != null ? origin.sub(centroid) : centroid.getInverted();
+        Vec3D delta = origin != null ? origin.sub(centroid) : centroid
+                .getInverted();
         for (int i = 0; i < nU; i++) {
             for (int j = 0; j < nV; j++) {
                 cps[i][j].addXYZSelf(delta);

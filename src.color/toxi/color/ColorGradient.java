@@ -166,9 +166,9 @@ public class ColorGradient {
                 }
             }
             if (currPoint != activeGradient.last()) {
-                float ditheredFrac =
-                        MathUtils.clip(frac + MathUtils.normalizedRandom()
-                                * maxDither, 0f, 1f);
+                float ditheredFrac = MathUtils
+                        .clip(frac + MathUtils.normalizedRandom() * maxDither,
+                                0f, 1f);
                 ditheredFrac = interpolator.interpolate(0, 1, ditheredFrac);
                 result.add(currPoint.color.getBlended(nextPoint.color,
                         ditheredFrac));

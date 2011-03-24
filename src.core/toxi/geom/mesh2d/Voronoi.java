@@ -49,10 +49,9 @@ public class Voronoi {
     }
 
     public Voronoi(float size) {
-        initialTriangle =
-                new DelaunayTriangle(new DelaunayVertex(-size, -size),
-                        new DelaunayVertex(size, -size), new DelaunayVertex(0,
-                                size));
+        initialTriangle = new DelaunayTriangle(
+                new DelaunayVertex(-size, -size), new DelaunayVertex(size,
+                        -size), new DelaunayVertex(0, size));
         this.delaunay = new DelaunayTriangulation(initialTriangle);
     }
 
@@ -69,16 +68,16 @@ public class Voronoi {
 
     public List<Polygon2D> getRegions() {
         List<Polygon2D> regions = new LinkedList<Polygon2D>();
-        HashSet<DelaunayVertex> done =
-                new HashSet<DelaunayVertex>(initialTriangle);
+        HashSet<DelaunayVertex> done = new HashSet<DelaunayVertex>(
+                initialTriangle);
         for (DelaunayTriangle triangle : delaunay) {
             for (DelaunayVertex site : triangle) {
                 if (done.contains(site)) {
                     continue;
                 }
                 done.add(site);
-                List<DelaunayTriangle> list =
-                        delaunay.surroundingTriangles(site, triangle);
+                List<DelaunayTriangle> list = delaunay.surroundingTriangles(
+                        site, triangle);
                 Polygon2D poly = new Polygon2D();
                 for (DelaunayTriangle tri : list) {
                     DelaunayVertex circumeter = tri.getCircumcenter();

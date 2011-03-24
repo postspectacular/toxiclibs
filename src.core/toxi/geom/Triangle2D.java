@@ -73,15 +73,12 @@ public class Triangle2D implements Shape2D {
 
     public Triangle2D adjustTriangleSizeBy(float offAB, float offBC, float offCA) {
         computeCentroid();
-        Line2D ab =
-                new Line2D(a.copy(), b.copy()).offsetAndGrowBy(offAB, 100000,
-                        centroid);
-        Line2D bc =
-                new Line2D(b.copy(), c.copy()).offsetAndGrowBy(offBC, 100000,
-                        centroid);
-        Line2D ca =
-                new Line2D(c.copy(), a.copy()).offsetAndGrowBy(offCA, 100000,
-                        centroid);
+        Line2D ab = new Line2D(a.copy(), b.copy()).offsetAndGrowBy(offAB,
+                100000, centroid);
+        Line2D bc = new Line2D(b.copy(), c.copy()).offsetAndGrowBy(offBC,
+                100000, centroid);
+        Line2D ca = new Line2D(c.copy(), a.copy()).offsetAndGrowBy(offCA,
+                100000, centroid);
         a = ab.intersectLine(ca).getPos();
         b = ab.intersectLine(bc).getPos();
         c = bc.intersectLine(ca).getPos();
@@ -147,12 +144,11 @@ public class Triangle2D implements Shape2D {
         float sa = a.distanceTo(b);
         float sb = b.distanceTo(c);
         float sc = c.distanceTo(a);
-        float radius =
-                sa
-                        * sb
-                        * sc
-                        / (float) Math.sqrt((sa + sb + sc) * (-sa + sb + sc)
-                                * (sa - sb + sc) * (sa + sb - sc));
+        float radius = sa
+                * sb
+                * sc
+                / (float) Math.sqrt((sa + sb + sc) * (-sa + sb + sc)
+                        * (sa - sb + sc) * (sa + sb - sc));
         return new Circle(circ, radius);
     }
 
@@ -208,12 +204,10 @@ public class Triangle2D implements Shape2D {
                 || tri.containsPoint(c)) {
             return true;
         }
-        Line2D[] ea =
-                new Line2D[] { new Line2D(a, b), new Line2D(b, c),
-                        new Line2D(c, a) };
-        Line2D[] eb =
-                new Line2D[] { new Line2D(tri.a, tri.b),
-                        new Line2D(tri.b, tri.c), new Line2D(tri.c, tri.a) };
+        Line2D[] ea = new Line2D[] { new Line2D(a, b), new Line2D(b, c),
+                new Line2D(c, a) };
+        Line2D[] eb = new Line2D[] { new Line2D(tri.a, tri.b),
+                new Line2D(tri.b, tri.c), new Line2D(tri.c, tri.a) };
         for (Line2D la : ea) {
             for (Line2D lb : eb) {
                 Type type = la.intersectLine(lb).getType();

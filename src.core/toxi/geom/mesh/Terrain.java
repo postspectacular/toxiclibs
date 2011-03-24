@@ -66,8 +66,8 @@ public class Terrain {
         Vec3D offset = new Vec3D(width, 0, depth).scaleSelf(0.5f);
         for (int z = 0, i = 0; z < depth; z++) {
             for (int x = 0; x < width; x++) {
-                vertices[i++] =
-                        new Vec3D(x, 0, z).subSelf(offset).scaleSelf(scale);
+                vertices[i++] = new Vec3D(x, 0, z).subSelf(offset).scaleSelf(
+                        scale);
             }
         }
     }
@@ -109,9 +109,8 @@ public class Terrain {
             float b = getHeightAtCell(x2, (int) zz);
             float c = getHeightAtCell((int) xx, z2);
             float d = getHeightAtCell(x2, z2);
-            y =
-                    Interpolation2D.bilinear(xx, zz, (int) xx, (int) zz, x2,
-                            z2, a, b, c, d);
+            y = Interpolation2D.bilinear(xx, zz, (int) xx, (int) zz, x2, z2, a,
+                    b, c, d);
         }
         return y;
     }
@@ -166,8 +165,8 @@ public class Terrain {
             Vec3D c = getVertexAtCell(x2, z2);
             Vec3D d = getVertexAtCell((int) xx, z2);
             Ray3D r = new Ray3D(new Vec3D(x, 10000, z), new Vec3D(0, -1, 0));
-            TriangleIntersector i =
-                    new TriangleIntersector(new Triangle3D(a, b, d));
+            TriangleIntersector i = new TriangleIntersector(new Triangle3D(a,
+                    b, d));
             if (i.intersectsRay(r)) {
                 isec = i.getIntersectionData();
             } else {
@@ -251,9 +250,8 @@ public class Terrain {
 
     public Mesh3D toMesh(Mesh3D mesh, int minX, int minZ, int maxX, int maxZ) {
         if (mesh == null) {
-            mesh =
-                    new TriangleMesh("terrain", vertices.length,
-                            vertices.length * 2);
+            mesh = new TriangleMesh("terrain", vertices.length,
+                    vertices.length * 2);
         }
         minX = MathUtils.clip(minX, 0, width - 1);
         maxX = MathUtils.clip(maxX, 0, width);

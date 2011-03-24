@@ -32,31 +32,31 @@ package toxi.geom;
  */
 public interface Shape2D {
 
-	/**
-	 * Checks if the point is within the given shape.
-	 * 
-	 * @return true, if inside
-	 */
-	boolean containsPoint(ReadonlyVec2D p);
+    /**
+     * Checks if the point is within the given shape.
+     * 
+     * @return true, if inside
+     */
+    boolean containsPoint(ReadonlyVec2D p);
 
-	/**
-	 * Computes the area of the shape.
-	 * 
-	 * @return area
-	 */
-	float getArea();
+    /**
+     * Computes the area of the shape.
+     * 
+     * @return area
+     */
+    float getArea();
 
-	/**
-	 * Returns the shape's axis-aligned bounding rect.
-	 * 
-	 * @return bounding rect
-	 */
-	Rect getBounds();
+    /**
+     * Returns the shape's axis-aligned bounding rect.
+     * 
+     * @return bounding rect
+     */
+    Rect getBounds();
 
-	/**
-	 * Computes the shape's circumference.
-	 * 
-	 * @return circumference
-	 */
-	float getCircumference();
+    /**
+     * Computes the shape's circumference.
+     * 
+     * @return circumference
+     */
+    float getCircumference();
 }

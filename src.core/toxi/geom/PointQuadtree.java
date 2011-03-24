@@ -138,10 +138,9 @@ public class PointQuadtree extends Rect implements Shape2D {
                 }
                 int quadrant = getQuadrantID(plocal);
                 if (children[quadrant] == null) {
-                    Vec2D off =
-                            offset.add(new Vec2D((quadrant & 1) != 0
-                                    ? halfSize
-                                    : 0, (quadrant & 2) != 0 ? halfSize : 0));
+                    Vec2D off = offset.add(new Vec2D(
+                            (quadrant & 1) != 0 ? halfSize : 0,
+                            (quadrant & 2) != 0 ? halfSize : 0));
                     children[quadrant] = new PointQuadtree(this, off, halfSize);
                     numChildren++;
                 }
@@ -280,8 +279,8 @@ public class PointQuadtree extends Rect implements Shape2D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < children.length; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec2D> points =
-                                children[i].getPointsWithinRect(r);
+                        ArrayList<Vec2D> points = children[i]
+                                .getPointsWithinRect(r);
                         if (points != null) {
                             if (results == null) {
                                 results = new ArrayList<Vec2D>();

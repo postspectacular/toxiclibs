@@ -30,8 +30,8 @@ public class JAXBGeomTest {
         try {
             JAXBContext context = JAXBContext.newInstance(JAXBGeomTest.class);
             File file = new File(XML_FILE);
-            JAXBGeomTest test =
-                    (JAXBGeomTest) context.createUnmarshaller().unmarshal(file);
+            JAXBGeomTest test = (JAXBGeomTest) context.createUnmarshaller()
+                    .unmarshal(file);
             return test;
         } catch (JAXBException e) {
             e.printStackTrace();

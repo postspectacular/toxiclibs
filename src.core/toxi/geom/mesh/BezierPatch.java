@@ -71,47 +71,44 @@ public class BezierPatch {
         final Vec3D[] p2 = points[2];
         final Vec3D[] p3 = points[3];
 
-        final float x =
-                u1cubed
-                        * (p0[0].x * v1cubed + p0[1].x * v1sqv + p0[2].x
-                                * v1vsq + p0[3].x * vcubed)
-                        + u1squared
-                        * (p1[0].x * v1cubed + p1[1].x * v1sqv + p1[2].x
-                                * v1vsq + p1[3].x * vcubed)
-                        + u1usq
-                        * (p2[0].x * v1cubed + p2[1].x * v1sqv + p2[2].x
-                                * v1vsq + p2[3].x * vcubed)
-                        + usqu
-                        * (p3[0].x * v1cubed + p3[1].x * v1sqv + p3[2].x
-                                * v1vsq + p3[3].x * vcubed);
+        final float x = u1cubed
+                * (p0[0].x * v1cubed + p0[1].x * v1sqv + p0[2].x * v1vsq + p0[3].x
+                        * vcubed)
+                + u1squared
+                * (p1[0].x * v1cubed + p1[1].x * v1sqv + p1[2].x * v1vsq + p1[3].x
+                        * vcubed)
+                + u1usq
+                * (p2[0].x * v1cubed + p2[1].x * v1sqv + p2[2].x * v1vsq + p2[3].x
+                        * vcubed)
+                + usqu
+                * (p3[0].x * v1cubed + p3[1].x * v1sqv + p3[2].x * v1vsq + p3[3].x
+                        * vcubed);
 
-        final float y =
-                u1cubed
-                        * (p0[0].y * v1cubed + p0[1].y * v1sqv + p0[2].y
-                                * v1vsq + p0[3].y * vcubed)
-                        + u1squared
-                        * (p1[0].y * v1cubed + p1[1].y * v1sqv + p1[2].y
-                                * v1vsq + p1[3].y * vcubed)
-                        + u1usq
-                        * (p2[0].y * v1cubed + p2[1].y * v1sqv + p2[2].y
-                                * v1vsq + p2[3].y * vcubed)
-                        + usqu
-                        * (p3[0].y * v1cubed + p3[1].y * v1sqv + p3[2].y
-                                * v1vsq + p3[3].y * vcubed);
+        final float y = u1cubed
+                * (p0[0].y * v1cubed + p0[1].y * v1sqv + p0[2].y * v1vsq + p0[3].y
+                        * vcubed)
+                + u1squared
+                * (p1[0].y * v1cubed + p1[1].y * v1sqv + p1[2].y * v1vsq + p1[3].y
+                        * vcubed)
+                + u1usq
+                * (p2[0].y * v1cubed + p2[1].y * v1sqv + p2[2].y * v1vsq + p2[3].y
+                        * vcubed)
+                + usqu
+                * (p3[0].y * v1cubed + p3[1].y * v1sqv + p3[2].y * v1vsq + p3[3].y
+                        * vcubed);
 
-        final float z =
-                u1cubed
-                        * (p0[0].z * v1cubed + p0[1].z * v1sqv + p0[2].z
-                                * v1vsq + p0[3].z * vcubed)
-                        + u1squared
-                        * (p1[0].z * v1cubed + p1[1].z * v1sqv + p1[2].z
-                                * v1vsq + p1[3].z * vcubed)
-                        + u1usq
-                        * (p2[0].z * v1cubed + p2[1].z * v1sqv + p2[2].z
-                                * v1vsq + p2[3].z * vcubed)
-                        + usqu
-                        * (p3[0].z * v1cubed + p3[1].z * v1sqv + p3[2].z
-                                * v1vsq + p3[3].z * vcubed);
+        final float z = u1cubed
+                * (p0[0].z * v1cubed + p0[1].z * v1sqv + p0[2].z * v1vsq + p0[3].z
+                        * vcubed)
+                + u1squared
+                * (p1[0].z * v1cubed + p1[1].z * v1sqv + p1[2].z * v1vsq + p1[3].z
+                        * vcubed)
+                + u1usq
+                * (p2[0].z * v1cubed + p2[1].z * v1sqv + p2[2].z * v1vsq + p2[3].z
+                        * vcubed)
+                + usqu
+                * (p3[0].z * v1cubed + p3[1].z * v1sqv + p3[2].z * v1vsq + p3[3].z
+                        * vcubed);
 
         return new Vec3D(x, y, z);
     }

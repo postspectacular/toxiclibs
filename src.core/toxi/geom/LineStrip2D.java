@@ -102,8 +102,7 @@ public class LineStrip2D {
             }
             ReadonlyVec2D p = vertices.get(currIdx - 1);
             ReadonlyVec2D q = vertices.get(currIdx);
-            float frac =
-                    (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
+            float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
             Vec2D i = p.interpolateTo(q, frac);
             uniform.add(i);
         }

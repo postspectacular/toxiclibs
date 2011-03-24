@@ -24,10 +24,10 @@ public class Line3DTest extends TestCase {
     }
 
     public void testHashing() {
-        Line3D l1 =
-                new Line3D(new Vec3D(100, 420, -50), new Vec3D(-888, 230, 2999));
-        Line3D l2 =
-                new Line3D(new Vec3D(-888, 230, 2999), new Vec3D(100, 420, -50));
+        Line3D l1 = new Line3D(new Vec3D(100, 420, -50), new Vec3D(-888, 230,
+                2999));
+        Line3D l2 = new Line3D(new Vec3D(-888, 230, 2999), new Vec3D(100, 420,
+                -50));
         assertTrue(l1.equals(l2));
         assertEquals(l1.hashCode(), l2.hashCode());
         l2.a = new Vec3D();

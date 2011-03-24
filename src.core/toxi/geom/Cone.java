@@ -92,9 +92,8 @@ public class Cone extends Vec3D {
             north[i] = nr.scale(radiusNorth).addSelf(q);
         }
         int numV = steps * 2 + 2;
-        int numF =
-                steps * 2 + (topClosed ? steps : 0)
-                        + (bottomClosed ? steps : 0);
+        int numF = steps * 2 + (topClosed ? steps : 0)
+                + (bottomClosed ? steps : 0);
         if (mesh == null) {
             mesh = new TriangleMesh("cone", numV, numF);
         }

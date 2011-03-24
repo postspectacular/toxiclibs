@@ -19,11 +19,10 @@ public class SphereTest extends TestCase {
     }
 
     public void testReflectRay() {
-        SphereIntersectorReflector si =
-                new SphereIntersectorReflector(new Vec3D(0, 0, 0), 10);
-        Ray3D r =
-                si.reflectRay(new Ray3D(new Vec3D(100, 100, 0), new Vec3D(-1,
-                        -1, 0)));
+        SphereIntersectorReflector si = new SphereIntersectorReflector(
+                new Vec3D(0, 0, 0), 10);
+        Ray3D r = si.reflectRay(new Ray3D(new Vec3D(100, 100, 0), new Vec3D(-1,
+                -1, 0)));
         float absDiff = r.getDirection().angleBetween(new Vec3D(1, 1, 0), true);
         System.out.println(r + " diff: " + absDiff);
         assertEquals(absDiff < 0.002, true);

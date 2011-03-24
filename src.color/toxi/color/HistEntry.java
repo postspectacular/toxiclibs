@@ -28,27 +28,43 @@
 package toxi.color;
 
 /**
- * A single histogram entry, a coupling of color & frequency. Implements a
- * comparator to sort histogram entries based on freq.
+ * This class constitutes a single histogram entry, a coupling of color &
+ * frequency. Also implements a comparator to sort histogram entries based on
+ * frequency.
  */
 public class HistEntry implements Comparable<HistEntry> {
 
     protected float freq;
     protected TColor col;
 
-    HistEntry(TColor c) {
+    public HistEntry(TColor c) {
         col = c;
         freq = 1;
     }
 
+    /**
+     * Comparator implementation used to sort entries by frequency (descending
+     * order).
+     */
     public int compareTo(HistEntry e) {
         return (int) (e.freq - freq);
     }
 
+    /**
+     * Returns the color of this histogram entry.
+     * 
+     * @return color
+     */
     public TColor getColor() {
         return col;
     }
 
+    /**
+     * Returns the normalized frequency associated with this entry. Values will
+     * always be within the 0.0 ... 1.0 range.
+     * 
+     * @return frequency
+     */
     public float getFrequency() {
         return freq;
     }

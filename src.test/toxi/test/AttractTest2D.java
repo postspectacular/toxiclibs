@@ -28,9 +28,8 @@ public class AttractTest2D extends PApplet {
     private AttractionBehavior mouseAttractor;
 
     private void addParticle() {
-        VerletParticle2D p =
-                new VerletParticle2D(Vec2D.randomVector().scale(5)
-                        .addSelf(width / 2, 0));
+        VerletParticle2D p = new VerletParticle2D(Vec2D.randomVector().scale(5)
+                .addSelf(width / 2, 0));
         physics.addParticle(p);
         for (int j = 0; j < physics.particles.size(); j++) {
             physics.particles.get(j).addBehavior(
@@ -70,6 +69,7 @@ public class AttractTest2D extends PApplet {
 
     public void setup() {
         size(1024, 640, OPENGL);
+        frameRate(999);
         gfx = new ToxiclibsSupport(this);
         physics = new VerletPhysics2D();
         physics.setDrag(0.1f);

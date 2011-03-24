@@ -216,9 +216,8 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
                     if (mm == 0.) {
 
                         if (l == 0.) {
-                            t =
-                                    MathUtils.dualSign(c_b3, ft)
-                                            * MathUtils.dualSign(c_b4, gt);
+                            t = MathUtils.dualSign(c_b3, ft)
+                                    * MathUtils.dualSign(c_b4, gt);
                         } else {
                             t = gt / MathUtils.dualSign(d, ft) + m / t;
                         }
@@ -245,27 +244,23 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
             }
 
             if (pmax == 1) {
-                tsign =
-                        MathUtils.dualSign(c_b4, csr[0])
-                                * MathUtils.dualSign(c_b4, csl[0])
-                                * MathUtils.dualSign(c_b4, f);
+                tsign = MathUtils.dualSign(c_b4, csr[0])
+                        * MathUtils.dualSign(c_b4, csl[0])
+                        * MathUtils.dualSign(c_b4, f);
             }
             if (pmax == 2) {
-                tsign =
-                        MathUtils.dualSign(c_b4, snr[0])
-                                * MathUtils.dualSign(c_b4, csl[0])
-                                * MathUtils.dualSign(c_b4, g);
+                tsign = MathUtils.dualSign(c_b4, snr[0])
+                        * MathUtils.dualSign(c_b4, csl[0])
+                        * MathUtils.dualSign(c_b4, g);
             }
             if (pmax == 3) {
-                tsign =
-                        MathUtils.dualSign(c_b4, snr[0])
-                                * MathUtils.dualSign(c_b4, snl[0])
-                                * MathUtils.dualSign(c_b4, h);
+                tsign = MathUtils.dualSign(c_b4, snr[0])
+                        * MathUtils.dualSign(c_b4, snl[0])
+                        * MathUtils.dualSign(c_b4, h);
             }
             single_values[index] = MathUtils.dualSign(ssmax, tsign);
-            d__1 =
-                    tsign * MathUtils.dualSign(c_b4, f)
-                            * MathUtils.dualSign(c_b4, h);
+            d__1 = tsign * MathUtils.dualSign(c_b4, f)
+                    * MathUtils.dualSign(c_b4, h);
             single_values[index + 1] = MathUtils.dualSign(ssmin, d__1);
 
         }
@@ -300,9 +295,8 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 
         for (k = 0; k < MAX_INTERATIONS && !converged; k++) {
             shift = compute_shift(s[1], e[1], s[2]);
-            f =
-                    (Math.abs(s[0]) - shift)
-                            * (MathUtils.dualSign(c_b48, s[0]) + shift / s[0]);
+            f = (Math.abs(s[0]) - shift)
+                    * (MathUtils.dualSign(c_b48, s[0]) + shift / s[0]);
             g = e[0];
             r = compute_rot(f, g, sinr, cosr, 0, first);
             f = cosr[0] * s[0] + sinr[0] * e[0];
@@ -543,9 +537,8 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
                     at = (fhmx - fhmn) / fhmx;
                     d__1 = as * au;
                     d__2 = at * au;
-                    c =
-                            1. / (Math.sqrt(d__1 * d__1 + 1.) + Math.sqrt(d__2
-                                    * d__2 + 1.));
+                    c = 1. / (Math.sqrt(d__1 * d__1 + 1.) + Math.sqrt(d__2
+                            * d__2 + 1.));
                     ssmin = fhmn * c * au;
                     ssmin += ssmin;
                 }
@@ -907,17 +900,15 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
             matrix2[cv + 3 * 2] /= matrix1[rv + 2];
 
             rv -= 3;
-            matrix2[cv + 3 * 1] =
-                    (matrix2[cv + 3 * 1] - matrix1[rv + 2]
-                            * matrix2[cv + 3 * 2])
-                            / matrix1[rv + 1];
+            matrix2[cv + 3 * 1] = (matrix2[cv + 3 * 1] - matrix1[rv + 2]
+                    * matrix2[cv + 3 * 2])
+                    / matrix1[rv + 1];
 
             rv -= 3;
-            matrix2[cv + 4 * 0] =
-                    (matrix2[cv + 3 * 0] - matrix1[rv + 1]
-                            * matrix2[cv + 3 * 1] - matrix1[rv + 2]
-                            * matrix2[cv + 3 * 2])
-                            / matrix1[rv + 0];
+            matrix2[cv + 4 * 0] = (matrix2[cv + 3 * 0] - matrix1[rv + 1]
+                    * matrix2[cv + 3 * 1] - matrix1[rv + 2]
+                    * matrix2[cv + 3 * 2])
+                    / matrix1[rv + 0];
         }
     }
 
@@ -945,10 +936,9 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     static void print_det(double[] mat) {
         double det;
 
-        det =
-                mat[0] * mat[4] * mat[8] + mat[1] * mat[5] * mat[6] + mat[2]
-                        * mat[3] * mat[7] - mat[2] * mat[4] * mat[6] - mat[0]
-                        * mat[5] * mat[7] - mat[1] * mat[3] * mat[8];
+        det = mat[0] * mat[4] * mat[8] + mat[1] * mat[5] * mat[6] + mat[2]
+                * mat[3] * mat[7] - mat[2] * mat[4] * mat[6] - mat[0] * mat[5]
+                * mat[7] - mat[1] * mat[3] * mat[8];
         System.out.println("det= " + det);
     }
 
@@ -1412,12 +1402,9 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     public final double determinant() {
         double total;
 
-        total =
-                this.m00 * (this.m11 * this.m22 - this.m12 * this.m21)
-                        + this.m01
-                        * (this.m12 * this.m20 - this.m10 * this.m22)
-                        + this.m02
-                        * (this.m10 * this.m21 - this.m11 * this.m20);
+        total = this.m00 * (this.m11 * this.m22 - this.m12 * this.m21)
+                + this.m01 * (this.m12 * this.m20 - this.m10 * this.m22)
+                + this.m02 * (this.m10 * this.m21 - this.m11 * this.m20);
         return total;
     }
 
@@ -2421,16 +2408,14 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
      *            Provides the matrix values to be normalized
      */
     public final void normalizeCP(Matrix3d m1) {
-        double mag =
-                1.0 / Math.sqrt(m1.m00 * m1.m00 + m1.m10 * m1.m10 + m1.m20
-                        * m1.m20);
+        double mag = 1.0 / Math.sqrt(m1.m00 * m1.m00 + m1.m10 * m1.m10 + m1.m20
+                * m1.m20);
         m00 = m1.m00 * mag;
         m10 = m1.m10 * mag;
         m20 = m1.m20 * mag;
 
-        mag =
-                1.0 / Math.sqrt(m1.m01 * m1.m01 + m1.m11 * m1.m11 + m1.m21
-                        * m1.m21);
+        mag = 1.0 / Math.sqrt(m1.m01 * m1.m01 + m1.m11 * m1.m11 + m1.m21
+                * m1.m21);
         m01 = m1.m01 * mag;
         m11 = m1.m11 * mag;
         m21 = m1.m21 * mag;

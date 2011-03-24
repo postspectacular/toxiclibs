@@ -45,10 +45,8 @@ public class NurbsMeshCreator {
             for (int v = 0; v <= resV; v++) {
                 Vec3D vert = null;
                 if (isClosed) {
-                    vert =
-                            u < resU
-                                    ? surf.pointOnSurface(u * iresU, v * iresV)
-                                    : first[v];
+                    vert = u < resU ? surf.pointOnSurface(u * iresU, v * iresV)
+                            : first[v];
                 } else {
                     vert = surf.pointOnSurface(u * iresU, v * iresV);
                 }

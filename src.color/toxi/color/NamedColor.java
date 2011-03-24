@@ -322,8 +322,7 @@ public class NamedColor {
     public static final ReadonlyTColor YELLOWGREEN = TColor.newRGB(0.60f,
             0.80f, 0.20f);
 
-    protected static final HashMap<String, ReadonlyTColor> namedColorMap =
-            new HashMap<String, ReadonlyTColor>();
+    protected static final HashMap<String, ReadonlyTColor> namedColorMap = new HashMap<String, ReadonlyTColor>();
 
     static {
         Field[] fields = NamedColor.class.getDeclaredFields();

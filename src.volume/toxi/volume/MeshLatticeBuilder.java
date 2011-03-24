@@ -55,9 +55,8 @@ public class MeshLatticeBuilder {
             FloatRange stroke) {
         VolumetricSpace volume = buildVolume(mesh, res, stroke);
         IsoSurface surface = new HashIsoSurface(volume);
-        mesh =
-                (WETriangleMesh) surface.computeSurfaceMesh(new WETriangleMesh(
-                        "iso", 300000, 900000), 0.2f);
+        mesh = (WETriangleMesh) surface.computeSurfaceMesh(new WETriangleMesh(
+                "iso", 300000, 900000), 0.2f);
         logger.info("created lattice mesh: " + mesh);
         return mesh;
     }
@@ -69,9 +68,8 @@ public class MeshLatticeBuilder {
 
     public static VolumetricSpace buildVolume(WETriangleMesh mesh, int res,
             FloatRange stroke) {
-        MeshLatticeBuilder builder =
-                new MeshLatticeBuilder(mesh.getBoundingBox().getExtent()
-                        .scale(2), res, res, res, stroke);
+        MeshLatticeBuilder builder = new MeshLatticeBuilder(mesh
+                .getBoundingBox().getExtent().scale(2), res, res, res, stroke);
         return builder.buildVolume(mesh);
     }
 
@@ -107,9 +105,8 @@ public class MeshLatticeBuilder {
             targetMesh = new WETriangleMesh();
         }
         IsoSurface surface = new HashIsoSurface(volume);
-        mesh =
-                (WETriangleMesh) surface.computeSurfaceMesh(targetMesh,
-                        isoValue);
+        mesh = (WETriangleMesh) surface
+                .computeSurfaceMesh(targetMesh, isoValue);
         return mesh;
     }
 
@@ -128,8 +125,8 @@ public class MeshLatticeBuilder {
             edgeLengths.add(e.getLength());
         }
         FloatRange range = FloatRange.fromSamples(edgeLengths);
-        ScaleMap brushSize =
-                new ScaleMap(range.min, range.max, stroke.min, stroke.max);
+        ScaleMap brushSize = new ScaleMap(range.min, range.max, stroke.min,
+                stroke.max);
         for (WingedEdge e : mesh.edges.values()) {
             brush.setSize((float) brushSize.getClippedValueFor(e.getLength()));
             createLattice(brush, e, drawStep);
@@ -170,12 +167,12 @@ public class MeshLatticeBuilder {
         AABB box = mesh.getBoundingBox();
         Vec3D bmin = box.getMin();
         Vec3D bmax = box.getMax();
-        bboxToVoxelX =
-                new ScaleMap(bmin.x, bmax.x, voxRangeX.min, voxRangeX.max);
-        bboxToVoxelY =
-                new ScaleMap(bmin.y, bmax.y, voxRangeY.min, voxRangeY.max);
-        bboxToVoxelZ =
-                new ScaleMap(bmin.z, bmax.z, voxRangeZ.min, voxRangeZ.max);
+        bboxToVoxelX = new ScaleMap(bmin.x, bmax.x, voxRangeX.min,
+                voxRangeX.max);
+        bboxToVoxelY = new ScaleMap(bmin.y, bmax.y, voxRangeY.min,
+                voxRangeY.max);
+        bboxToVoxelZ = new ScaleMap(bmin.z, bmax.z, voxRangeZ.min,
+                voxRangeZ.max);
     }
 
     protected void setRangeMinMax(IntegerRange range, int min, int max,

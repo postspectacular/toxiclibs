@@ -72,8 +72,8 @@ import java.util.HashMap;
  */
 public class CSVFieldMapper {
 
-    public static final SimpleDateFormat DEFAULT_DATE_FORMAT =
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss");
 
     protected HashMap<String, String> fieldNames;
     protected HashMap<String, Integer> fieldOrder;

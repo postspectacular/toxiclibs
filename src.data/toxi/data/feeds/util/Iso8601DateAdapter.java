@@ -41,10 +41,9 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
 public class Iso8601DateAdapter extends
         XmlAdapter<String, XMLGregorianCalendar> {
 
-    public static final SimpleDateFormat[] ISO8601_FORMATS =
-            new SimpleDateFormat[] {
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'") };
+    public static final SimpleDateFormat[] ISO8601_FORMATS = new SimpleDateFormat[] {
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'") };
 
     @Override
     public String marshal(XMLGregorianCalendar date) throws Exception {
@@ -69,8 +68,8 @@ public class Iso8601DateAdapter extends
             String timeZone = dateString.substring(dateString.length() - 6);
             dateString = dateString.substring(0, dateString.length() - 6);
             try {
-                Date d =
-                        ISO8601_FORMATS[0].parse(dateString + "GMT" + timeZone);
+                Date d = ISO8601_FORMATS[0]
+                        .parse(dateString + "GMT" + timeZone);
                 cal.setTime(d);
                 calendar = dataType.newXMLGregorianCalendar(cal);
             } catch (ParseException e) {

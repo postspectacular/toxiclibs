@@ -73,9 +73,8 @@ public class Triangle2DTest extends TestCase {
     }
 
     public void testEquilateral() {
-        Triangle2D t =
-                Triangle2D.createEquilateralFrom(new Vec2D(-100, 0), new Vec2D(
-                        100, 0));
+        Triangle2D t = Triangle2D.createEquilateralFrom(new Vec2D(-100, 0),
+                new Vec2D(100, 0));
         assertEquals(new Vec2D(0, -57.735027f), t.computeCentroid());
     }
 

@@ -215,14 +215,10 @@ public class Spline2D {
             deltaP.set(delta[i]).addSelf(p);
             deltaQ.set(q).subSelf(delta[i + 1]);
             for (int k = 0; k < res; k++) {
-                float x =
-                        p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
-                                + deltaQ.x * bernstein.b2[k] + q.x
-                                * bernstein.b3[k];
-                float y =
-                        p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
-                                + deltaQ.y * bernstein.b2[k] + q.y
-                                * bernstein.b3[k];
+                float x = p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
+                        + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
+                float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
+                        + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
                 vertices.add(new Vec2D(x, y));
             }
         }

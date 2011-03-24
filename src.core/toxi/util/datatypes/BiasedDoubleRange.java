@@ -62,8 +62,8 @@ public class BiasedDoubleRange extends DoubleRange {
     }
 
     public BiasedDoubleRange copy() {
-        BiasedDoubleRange r =
-                new BiasedDoubleRange(min, max, bias, standardDeviation * 2);
+        BiasedDoubleRange r = new BiasedDoubleRange(min, max, bias,
+                standardDeviation * 2);
         r.currValue = currValue;
         return r;
     }
@@ -85,9 +85,8 @@ public class BiasedDoubleRange extends DoubleRange {
     @Override
     public double pickRandom() {
         do {
-            currValue =
-                    (random.nextGaussian() * standardDeviation * (max - min))
-                            + bias;
+            currValue = (random.nextGaussian() * standardDeviation * (max - min))
+                    + bias;
         } while (currValue < min || currValue >= max);
         return currValue;
     }

@@ -69,18 +69,17 @@ public class Circle extends Ellipse {
         Vec2D deltaB = p3.sub(p2);
         if (MathUtils.abs(deltaA.x) <= 0.0000001f
                 && MathUtils.abs(deltaB.y) <= 0.0000001f) {
-            Vec2D centroid =
-                    new Vec2D(p2.x + p3.x, p1.y + p2.y).scaleSelf(0.5f);
+            Vec2D centroid = new Vec2D(p2.x + p3.x, p1.y + p2.y)
+                    .scaleSelf(0.5f);
             float radius = centroid.distanceTo(p1);
             circle = new Circle(centroid, radius);
         } else {
             float aSlope = deltaA.y / deltaA.x;
             float bSlope = deltaB.y / deltaB.x;
             if (MathUtils.abs(aSlope - bSlope) > 0.0000001f) {
-                float x =
-                        (aSlope * bSlope * (p1.y - p3.y) + bSlope
-                                * (p1.x + p2.x) - aSlope * (p2.x + p3.x))
-                                / (2 * (bSlope - aSlope));
+                float x = (aSlope * bSlope * (p1.y - p3.y) + bSlope
+                        * (p1.x + p2.x) - aSlope * (p2.x + p3.x))
+                        / (2 * (bSlope - aSlope));
                 float y = -(x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y) / 2;
                 Vec2D centroid = new Vec2D(x, y);
                 float radius = centroid.distanceTo(p1);

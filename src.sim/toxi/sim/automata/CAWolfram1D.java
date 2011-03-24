@@ -88,8 +88,8 @@ public class CAWolfram1D implements CARule {
             if (isAutoexpire) {
                 nextgen[i] = rules[sum] ? (cells[i] + 1) % stateCount : 0;
             } else {
-                nextgen[i] =
-                        rules[sum] ? MathUtils.min(cells[i] + 1, maxState) : 0;
+                nextgen[i] = rules[sum] ? MathUtils.min(cells[i] + 1, maxState)
+                        : 0;
             }
         }
     }

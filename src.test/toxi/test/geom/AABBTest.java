@@ -64,8 +64,8 @@ public class AABBTest extends TestCase {
 
     public void testIsec() {
         AABB box = AABB.fromMinMax(new Vec3D(), new Vec3D(100, 100, 100));
-        AABB box2 =
-                AABB.fromMinMax(new Vec3D(10, 10, 10), new Vec3D(80, 80, 80));
+        AABB box2 = AABB.fromMinMax(new Vec3D(10, 10, 10),
+                new Vec3D(80, 80, 80));
         assertTrue(box.intersectsBox(box2));
         assertTrue(box2.intersectsBox(box));
     }

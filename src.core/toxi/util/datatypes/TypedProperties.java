@@ -76,8 +76,8 @@ public class TypedProperties extends Properties {
      * @return prop values as array
      */
     public byte[] getByteArray(String id, byte[] defaultArray) {
-        StringTokenizer tokenizer =
-                new StringTokenizer(getProperty(id, ""), DELIM);
+        StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+                DELIM);
         byte[] pieces = new byte[tokenizer.countTokens()];
         int index = 0;
         while (tokenizer.hasMoreTokens()) {
@@ -127,8 +127,8 @@ public class TypedProperties extends Properties {
      * @return prop items as array
      */
     public float[] getFloatArray(String id, float[] defaultArray) {
-        StringTokenizer tokenizer =
-                new StringTokenizer(getProperty(id, ""), DELIM);
+        StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+                DELIM);
         float pieces[] = new float[tokenizer.countTokens()];
         int index = 0;
         while (tokenizer.hasMoreTokens()) {
@@ -193,8 +193,8 @@ public class TypedProperties extends Properties {
      * @return prop items as array
      */
     public int[] getIntArray(String id, int[] defaultArray) {
-        StringTokenizer tokenizer =
-                new StringTokenizer(getProperty(id, ""), DELIM);
+        StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+                DELIM);
         int pieces[] = new int[tokenizer.countTokens()];
         int index = 0;
         while (tokenizer.hasMoreTokens()) {
@@ -219,8 +219,8 @@ public class TypedProperties extends Properties {
     }
 
     public String[] getStringArray(String id, String[] defaultArray) {
-        StringTokenizer tokenizer =
-                new StringTokenizer(getProperty(id, ""), DELIM);
+        StringTokenizer tokenizer = new StringTokenizer(getProperty(id, ""),
+                DELIM);
         int index = 0;
         String[] pieces = null;
         while (tokenizer.hasMoreTokens()) {

@@ -45,111 +45,111 @@ import toxi.volume.VolumetricSpaceArray;
 
 public class VolumetricTest extends PApplet {
 
-	public static void main(String[] args) {
-		PApplet.main(new String[] { "toxi.test.VolumetricTest" });
-	}
+    public static void main(String[] args) {
+        PApplet.main(new String[] { "toxi.test.VolumetricTest" });
+    }
 
-	int DIMX = 320;
-	int DIMY = 320;
-	int DIMZ = 320;
+    int DIMX = 320;
+    int DIMY = 320;
+    int DIMZ = 320;
 
-	float ISO_THRESHOLD = 0.25f;
-	float NS = 0.03f;
-	Vec3D SCALE = new Vec3D(3, 1, 1).scaleSelf(320);
+    float ISO_THRESHOLD = 0.25f;
+    float NS = 0.03f;
+    Vec3D SCALE = new Vec3D(3, 1, 1).scaleSelf(320);
 
-	IsoSurface surface;
-	TriangleMesh mesh;
+    IsoSurface surface;
+    TriangleMesh mesh;
 
-	boolean isWireframe = false;
-	float currScale = 1;
+    boolean isWireframe = false;
+    float currScale = 1;
 
-	public void draw() {
-		background(128);
-		translate(width / 2, height / 2, 0);
-		rotateX(mouseY * 0.01f);
-		rotateY(mouseX * 0.01f);
-		scale(currScale);
-		ambientLight(48, 48, 48);
-		lightSpecular(230, 230, 230);
-		directionalLight(255, 255, 255, 0, -0.5f, -1);
-		specular(255, 255, 255);
-		shininess(16);
-		beginShape(TRIANGLES);
-		if (isWireframe) {
-			stroke(255);
-			noFill();
-		} else {
-			noStroke();
-			fill(255);
-		}
-		// draw all faces of the computed mesh
-		int num = mesh.getNumFaces();
-		for (int i = 0; i < num; i++) {
-			Face f = mesh.faces.get(i);
-			vertex(f.a);
-			vertex(f.b);
-			vertex(f.c);
-		}
-		endShape();
-	}
+    public void draw() {
+        background(128);
+        translate(width / 2, height / 2, 0);
+        rotateX(mouseY * 0.01f);
+        rotateY(mouseX * 0.01f);
+        scale(currScale);
+        ambientLight(48, 48, 48);
+        lightSpecular(230, 230, 230);
+        directionalLight(255, 255, 255, 0, -0.5f, -1);
+        specular(255, 255, 255);
+        shininess(16);
+        beginShape(TRIANGLES);
+        if (isWireframe) {
+            stroke(255);
+            noFill();
+        } else {
+            noStroke();
+            fill(255);
+        }
+        // draw all faces of the computed mesh
+        int num = mesh.getNumFaces();
+        for (int i = 0; i < num; i++) {
+            Face f = mesh.faces.get(i);
+            vertex(f.a);
+            vertex(f.b);
+            vertex(f.c);
+        }
+        endShape();
+    }
 
-	public void keyPressed() {
-		if (key == '-') {
-			currScale = max(currScale - 0.1f, 0.5f);
-		}
-		if (key == '=') {
-			currScale = min(currScale + 0.1f, 10);
-		}
-		if (key == 's') {
-			// save mesh as STL or OBJ file
-			mesh.saveAsSTL(sketchPath("noise.stl"));
-		}
-	}
+    public void keyPressed() {
+        if (key == '-') {
+            currScale = max(currScale - 0.1f, 0.5f);
+        }
+        if (key == '=') {
+            currScale = min(currScale + 0.1f, 10);
+        }
+        if (key == 's') {
+            // save mesh as STL or OBJ file
+            mesh.saveAsSTL(sketchPath("noise.stl"));
+        }
+    }
 
-	public void mousePressed() {
-		isWireframe = !isWireframe;
-	}
+    public void mousePressed() {
+        isWireframe = !isWireframe;
+    }
 
-	void normal(Vec3D v) {
-		normal(v.x, v.y, v.z);
-	}
+    void normal(Vec3D v) {
+        normal(v.x, v.y, v.z);
+    }
 
-	public void setup() {
-		size(100, 100);
-		// size(1024, 768, OPENGL);
-		// hint(ENABLE_OPENGL_4X_SMOOTH);
-		strokeWeight(0.5f);
-		VolumetricSpace volume = new VolumetricSpaceArray(SCALE, DIMX, DIMY,
-				DIMZ);
-		// fill volume with noise
-		for (int z = 0, index = 0; z < DIMZ; z++) {
-			println(z);
-			for (int y = 0; y < DIMY; y++) {
-				for (int x = 0; x < DIMX; x++) {
-					volume.setVoxelAt(
-							x,
-							y,
-							z,
-							(float) SimplexNoise.noise(x * NS, y * NS, z * NS) * 0.5f);
-				}
-			}
-		}
-		println("noise done");
-		volume.closeSides();
-		long t0 = System.nanoTime();
-		// store in IsoSurface and compute surface mesh for the given threshold
-		// value
-		mesh = new TriangleMesh("iso", 4000000, 12000000);
-		surface = new HashIsoSurface(volume, 0.33f);
-		// surface.reset();
-		surface.computeSurfaceMesh(mesh, ISO_THRESHOLD);
-		float timeTaken = (System.nanoTime() - t0) * 1e-6f;
-		println(timeTaken + "ms to compute " + mesh.getNumFaces() + " faces");
-		mesh.saveAsSTL(sketchPath("noise.stl"));
-		System.exit(0);
-	}
+    public void setup() {
+        size(100, 100);
+        // size(1024, 768, OPENGL);
+        // hint(ENABLE_OPENGL_4X_SMOOTH);
+        strokeWeight(0.5f);
+        VolumetricSpace volume = new VolumetricSpaceArray(SCALE, DIMX, DIMY,
+                DIMZ);
+        // fill volume with noise
+        for (int z = 0, index = 0; z < DIMZ; z++) {
+            println(z);
+            for (int y = 0; y < DIMY; y++) {
+                for (int x = 0; x < DIMX; x++) {
+                    volume.setVoxelAt(
+                            x,
+                            y,
+                            z,
+                            (float) SimplexNoise.noise(x * NS, y * NS, z * NS) * 0.5f);
+                }
+            }
+        }
+        println("noise done");
+        volume.closeSides();
+        long t0 = System.nanoTime();
+        // store in IsoSurface and compute surface mesh for the given threshold
+        // value
+        mesh = new TriangleMesh("iso", 4000000, 12000000);
+        surface = new HashIsoSurface(volume, 0.33f);
+        // surface.reset();
+        surface.computeSurfaceMesh(mesh, ISO_THRESHOLD);
+        float timeTaken = (System.nanoTime() - t0) * 1e-6f;
+        println(timeTaken + "ms to compute " + mesh.getNumFaces() + " faces");
+        mesh.saveAsSTL(sketchPath("noise.stl"));
+        System.exit(0);
+    }
 
-	void vertex(Vec3D v) {
-		vertex(v.x, v.y, v.z);
-	}
+    void vertex(Vec3D v) {
+        vertex(v.x, v.y, v.z);
+    }
 }

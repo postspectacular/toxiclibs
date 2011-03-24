@@ -56,9 +56,8 @@ public class AttractionBehavior implements ParticleBehavior2D {
         Vec2D delta = attractor.sub(p);
         float dist = delta.magSquared();
         if (dist < radiusSquared) {
-            Vec2D f =
-                    delta.normalizeTo((1.0f - dist / radiusSquared))
-                            .jitter(jitter).scaleSelf(attrStrength);
+            Vec2D f = delta.normalizeTo((1.0f - dist / radiusSquared))
+                    .jitter(jitter).scaleSelf(attrStrength);
             p.addForce(f);
         }
     }

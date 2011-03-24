@@ -247,9 +247,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
                     if (mm == 0.0) {
                         if (l == 0.0) {
-                            t =
-                                    MathUtils.dualSign(c_b3, ft)
-                                            * MathUtils.dualSign(c_b4, gt);
+                            t = MathUtils.dualSign(c_b3, ft)
+                                    * MathUtils.dualSign(c_b4, gt);
                         } else {
                             t = gt / MathUtils.dualSign(d, ft) + m / t;
                         }
@@ -277,28 +276,24 @@ public class GMatrix implements java.io.Serializable, Cloneable {
             }
 
             if (pmax == 1) {
-                tsign =
-                        MathUtils.dualSign(c_b4, csr[0])
-                                * MathUtils.dualSign(c_b4, csl[0])
-                                * MathUtils.dualSign(c_b4, f);
+                tsign = MathUtils.dualSign(c_b4, csr[0])
+                        * MathUtils.dualSign(c_b4, csl[0])
+                        * MathUtils.dualSign(c_b4, f);
             }
             if (pmax == 2) {
-                tsign =
-                        MathUtils.dualSign(c_b4, snr[0])
-                                * MathUtils.dualSign(c_b4, csl[0])
-                                * MathUtils.dualSign(c_b4, g);
+                tsign = MathUtils.dualSign(c_b4, snr[0])
+                        * MathUtils.dualSign(c_b4, csl[0])
+                        * MathUtils.dualSign(c_b4, g);
             }
             if (pmax == 3) {
-                tsign =
-                        MathUtils.dualSign(c_b4, snr[0])
-                                * MathUtils.dualSign(c_b4, snl[0])
-                                * MathUtils.dualSign(c_b4, h);
+                tsign = MathUtils.dualSign(c_b4, snr[0])
+                        * MathUtils.dualSign(c_b4, snl[0])
+                        * MathUtils.dualSign(c_b4, h);
             }
 
             single_values[index] = MathUtils.dualSign(ssmax, tsign);
-            d__1 =
-                    tsign * MathUtils.dualSign(c_b4, f)
-                            * MathUtils.dualSign(c_b4, h);
+            d__1 = tsign * MathUtils.dualSign(c_b4, f)
+                    * MathUtils.dualSign(c_b4, h);
             single_values[index + 1] = MathUtils.dualSign(ssmin, d__1);
         }
 
@@ -340,10 +335,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
                     shift = compute_shift(s[sl - 1], e[end], s[sl]);
 
-                    f =
-                            (MathUtils.abs(s[i]) - shift)
-                                    * (MathUtils.dualSign(c_b48, s[i]) + shift
-                                            / s[i]);
+                    f = (MathUtils.abs(s[i]) - shift)
+                            * (MathUtils.dualSign(c_b48, s[i]) + shift / s[i]);
                     g = e[i];
                 }
 
@@ -529,9 +522,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                     at = (fhmx - fhmn) / fhmx;
                     d__1 = as * au;
                     d__2 = at * au;
-                    c =
-                            1.0 / (Math.sqrt(d__1 * d__1 + 1.0) + Math
-                                    .sqrt(d__2 * d__2 + 1.0));
+                    c = 1.0 / (Math.sqrt(d__1 * d__1 + 1.0) + Math.sqrt(d__2
+                            * d__2 + 1.0));
                     ssmin = fhmn * c * au;
                     ssmin += ssmin;
                 }
@@ -596,9 +588,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 if (m.values[si][si] == 0.0) {
                     vec[0] = mag;
                 } else {
-                    vec[0] =
-                            m.values[si][si]
-                                    + MathUtils.dualSign(mag, m.values[si][si]);
+                    vec[0] = m.values[si][si]
+                            + MathUtils.dualSign(mag, m.values[si][si]);
                 }
 
                 for (i = 1; i < nr; i++) {
@@ -673,10 +664,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 if (m.values[si][si + 1] == 0.0) {
                     vec[0] = mag;
                 } else {
-                    vec[0] =
-                            m.values[si][si + 1]
-                                    + MathUtils.dualSign(mag,
-                                            m.values[si][si + 1]);
+                    vec[0] = m.values[si][si + 1]
+                            + MathUtils.dualSign(mag, m.values[si][si + 1]);
                 }
 
                 for (i = 1; i < nc - 1; i++) {
@@ -692,8 +681,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 scale = 2.0 / scale;
                 for (j = si + 1; j < nc; j++) {
                     for (k = si + 1; k < m.nCol; k++) {
-                        v.values[j][k] =
-                                -scale * vec[j - si - 1] * vec[k - si - 1];
+                        v.values[j][k] = -scale * vec[j - si - 1]
+                                * vec[k - si - 1];
                     }
                 }
 
@@ -846,8 +835,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 for (j = 1; j <= i; j++) {
                     tt += matrix1[rv + dim - j] * matrix2[cv + dim * (dim - j)];
                 }
-                matrix2[cv + dim * ri] =
-                        (matrix2[cv + dim * ri] - tt) / matrix1[rv + ri];
+                matrix2[cv + dim * ri] = (matrix2[cv + dim * ri] - tt)
+                        / matrix1[rv + ri];
             }
         }
     }
@@ -1066,10 +1055,10 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         for (j = 0; j < u.nCol; j++) {
             utemp = u.values[index][j];
-            u.values[index][j] =
-                    cosl[0] * utemp + sinl[0] * u.values[index + 1][j];
-            u.values[index + 1][j] =
-                    -sinl[0] * utemp + cosl[0] * u.values[index + 1][j];
+            u.values[index][j] = cosl[0] * utemp + sinl[0]
+                    * u.values[index + 1][j];
+            u.values[index + 1][j] = -sinl[0] * utemp + cosl[0]
+                    * u.values[index + 1][j];
         }
     }
 
@@ -1080,10 +1069,10 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         for (j = 0; j < u.nCol; j++) {
             utemp = u.values[topr][j];
-            u.values[topr][j] =
-                    cosl[0] * utemp - sinl[0] * u.values[bottomr][j];
-            u.values[bottomr][j] =
-                    sinl[0] * utemp + cosl[0] * u.values[bottomr][j];
+            u.values[topr][j] = cosl[0] * utemp - sinl[0]
+                    * u.values[bottomr][j];
+            u.values[bottomr][j] = sinl[0] * utemp + cosl[0]
+                    * u.values[bottomr][j];
         }
 
         checkMatrix(m);
@@ -1099,10 +1088,10 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         for (j = 0; j < v.nRow; j++) {
             vtemp = v.values[j][index];
-            v.values[j][index] =
-                    cosr[0] * vtemp + sinr[0] * v.values[j][index + 1];
-            v.values[j][index + 1] =
-                    -sinr[0] * vtemp + cosr[0] * v.values[j][index + 1];
+            v.values[j][index] = cosr[0] * vtemp + sinr[0]
+                    * v.values[j][index + 1];
+            v.values[j][index + 1] = -sinr[0] * vtemp + cosr[0]
+                    * v.values[j][index + 1];
         }
     }
 
@@ -1113,10 +1102,10 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         for (j = 0; j < v.nRow; j++) {
             vtemp = v.values[j][topr];
-            v.values[j][topr] =
-                    cosr[0] * vtemp - sinr[0] * v.values[j][bottomr];
-            v.values[j][bottomr] =
-                    sinr[0] * vtemp + cosr[0] * v.values[j][bottomr];
+            v.values[j][topr] = cosr[0] * vtemp - sinr[0]
+                    * v.values[j][bottomr];
+            v.values[j][bottomr] = sinr[0] * vtemp + cosr[0]
+                    * v.values[j][bottomr];
         }
 
         checkMatrix(m);
@@ -1329,8 +1318,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         if (this != target) {
             for (i = 0; i < numRow; i++) {
                 for (j = 0; j < numCol; j++) {
-                    target.values[rowDest + i][colDest + j] =
-                            values[rowSource + i][colSource + j];
+                    target.values[rowDest + i][colDest + j] = values[rowSource
+                            + i][colSource + j];
                 }
             }
         } else {
@@ -1655,7 +1644,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
      *            the vector into which the column values will be placed
      */
     public final void getColumn(int col, GVector vector) {
-        if (vector.getSize() < nRow) {
+        if (vector.size() < nRow) {
             vector.setSize(nRow);
         }
 
@@ -1718,7 +1707,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
      *            the vector into which the row values will be placed
      */
     public final void getRow(int row, GVector vector) {
-        if (vector.getSize() < nCol) {
+        if (vector.size() < nCol) {
             vector.setSize(nCol);
         }
 
@@ -1886,7 +1875,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
             throw new MatrixSizeException();
         }
 
-        if (LU.nRow != permutation.getSize()) {
+        if (LU.nRow != permutation.size()) {
             throw new MatrixSizeException();
         }
 
@@ -1987,16 +1976,16 @@ public class GMatrix implements java.io.Serializable, Cloneable {
     public final void mul(GVector v1, GVector v2) {
         int i, j;
 
-        if (nRow < v1.getSize()) {
+        if (nRow < v1.size()) {
             throw new MatrixSizeException();
         }
 
-        if (nCol < v2.getSize()) {
+        if (nCol < v2.size()) {
             throw new MatrixSizeException();
         }
 
-        for (i = 0; i < v1.getSize(); i++) {
-            for (j = 0; j < v2.getSize(); j++) {
+        for (i = 0; i < v1.size(); i++) {
+            for (j = 0; j < v2.size(); j++) {
                 values[i][j] = v1.values[i] * v2.values[j];
             }
         }

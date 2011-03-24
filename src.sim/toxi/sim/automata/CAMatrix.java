@@ -87,9 +87,8 @@ public class CAMatrix implements EvolvableMatrix {
                 for (int y = 0; y < height; y++) {
                     if (MathUtils.randomChance(probability)) {
                         int idx = y * width + x;
-                        swap[idx] =
-                                matrix[idx] =
-                                        MathUtils.random(minState, maxState);
+                        swap[idx] = matrix[idx] = MathUtils.random(minState,
+                                maxState);
                     }
                 }
             }

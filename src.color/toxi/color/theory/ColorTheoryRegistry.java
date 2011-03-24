@@ -25,10 +25,10 @@
  */
 
 package toxi.color.theory;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 /**
  * Registry & object factory for default {@link ColorTheoryStrategy}
@@ -36,26 +36,18 @@ import java.util.HashMap;
  */
 public class ColorTheoryRegistry {
 
-    private static final HashMap<String, ColorTheoryStrategy> implementations =
-            new HashMap<String, ColorTheoryStrategy>();
+    private static final HashMap<String, ColorTheoryStrategy> implementations = new HashMap<String, ColorTheoryStrategy>();
 
-    public static final ColorTheoryStrategy SINGLE_COMPLEMENT =
-            new SingleComplementStrategy();
-    public static final ColorTheoryStrategy COMPLEMENTARY =
-            new ComplementaryStrategy();
-    public static final ColorTheoryStrategy SPLIT_COMPLEMENTARY =
-            new SplitComplementaryStrategy();
-    public static final ColorTheoryStrategy LEFT_SPLIT_COMPLEMENTARY =
-            new LeftSplitComplementaryStrategy();
-    public static final ColorTheoryStrategy RIGHT_SPLIT_COMPLEMENTARY =
-            new RightSplitComplementaryStrategy();
+    public static final ColorTheoryStrategy SINGLE_COMPLEMENT = new SingleComplementStrategy();
+    public static final ColorTheoryStrategy COMPLEMENTARY = new ComplementaryStrategy();
+    public static final ColorTheoryStrategy SPLIT_COMPLEMENTARY = new SplitComplementaryStrategy();
+    public static final ColorTheoryStrategy LEFT_SPLIT_COMPLEMENTARY = new LeftSplitComplementaryStrategy();
+    public static final ColorTheoryStrategy RIGHT_SPLIT_COMPLEMENTARY = new RightSplitComplementaryStrategy();
     public static final ColorTheoryStrategy ANALOGOUS = new AnalogousStrategy();
-    public static final ColorTheoryStrategy MONOCHROME =
-            new MonochromeTheoryStrategy();
+    public static final ColorTheoryStrategy MONOCHROME = new MonochromeTheoryStrategy();
     public static final ColorTheoryStrategy TRIAD = new TriadTheoryStrategy();
     public static final ColorTheoryStrategy TETRAD = new TetradTheoryStrategy();
-    public static final ColorTheoryStrategy COMPOUND =
-            new CompoundTheoryStrategy();
+    public static final ColorTheoryStrategy COMPOUND = new CompoundTheoryStrategy();
 
     static {
         Field[] fields = ColorTheoryRegistry.class.getDeclaredFields();

@@ -127,21 +127,18 @@ public class SphereIntersectorReflector implements Intersector3D, Reflector3D {
             // compute the normal vector of the sphere at the intersection
             // position
             // compute the reflection angle
-            reflectTheta =
-                    isectData.dir.angleBetween(isectData.normal, true) * 2
-                            + MathUtils.PI;
+            reflectTheta = isectData.dir.angleBetween(isectData.normal, true)
+                    * 2 + MathUtils.PI;
             // then form a perpendicular vector standing on the plane spanned by
             // isectDir and sphereNormal
             // this vector will be used to mirror the ray around the
             // intersection point
-            Vec3D reflectNormal =
-                    isectData.dir.getNormalized().cross(isectData.normal)
-                            .normalize();
+            Vec3D reflectNormal = isectData.dir.getNormalized()
+                    .cross(isectData.normal).normalize();
             if (!reflectNormal.isZeroVector()) {
                 // compute the reflected ray direction
-                reflectedDir =
-                        isectData.dir.getNormalized().rotateAroundAxis(
-                                reflectNormal, reflectTheta);
+                reflectedDir = isectData.dir.getNormalized().rotateAroundAxis(
+                        reflectNormal, reflectTheta);
             } else {
                 reflectedDir = isectData.dir.getInverted();
             }

@@ -92,8 +92,8 @@ public class TalusAngleErosion extends ErosionFunction {
             elevation[idx] -= (maxD - (n * maxD * theta / sumD));
             for (int i = 0; i < 9; i++) {
                 if (d[i] > theta) {
-                    elevation[idx + off[i]] =
-                            h[i] + amount * (maxD - theta) * (d[i] / sumD);
+                    elevation[idx + off[i]] = h[i] + amount * (maxD - theta)
+                            * (d[i] / sumD);
                 }
             }
         }

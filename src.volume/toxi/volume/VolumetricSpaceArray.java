@@ -81,8 +81,7 @@ public class VolumetricSpaceArray extends VolumetricSpace {
     public void saveData(String fn) {
         logger.info("saving volume data...");
         try {
-            DataOutputStream ds =
-                    new DataOutputStream(new FileOutputStream(fn));
+            DataOutputStream ds = new DataOutputStream(new FileOutputStream(fn));
             // ds.writeInt(volumeData.length);
             for (float element : data) {
                 ds.writeFloat(element);

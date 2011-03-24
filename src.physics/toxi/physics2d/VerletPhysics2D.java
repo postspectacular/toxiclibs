@@ -84,8 +84,8 @@ public class VerletPhysics2D {
      */
     protected Rect worldBounds;
 
-    public final List<ParticleBehavior2D> behaviors =
-            new ArrayList<ParticleBehavior2D>(1);
+    public final List<ParticleBehavior2D> behaviors = new ArrayList<ParticleBehavior2D>(
+            1);
 
     protected float drag;
 
