@@ -43,15 +43,17 @@ public class TColor implements ReadonlyTColor {
     protected static final float INV8BIT = 1f / 255;
     protected static final double EPS = .001;
 
-    protected static final Vec2D[] RYB_WHEEL = new Vec2D[] { new Vec2D(0, 0),
-            new Vec2D(15, 8), new Vec2D(30, 17), new Vec2D(45, 26),
-            new Vec2D(60, 34), new Vec2D(75, 41), new Vec2D(90, 48),
-            new Vec2D(105, 54), new Vec2D(120, 60), new Vec2D(135, 81),
-            new Vec2D(150, 103), new Vec2D(165, 123), new Vec2D(180, 138),
-            new Vec2D(195, 155), new Vec2D(210, 171), new Vec2D(225, 187),
-            new Vec2D(240, 204), new Vec2D(255, 219), new Vec2D(270, 234),
-            new Vec2D(285, 251), new Vec2D(300, 267), new Vec2D(315, 282),
-            new Vec2D(330, 298), new Vec2D(345, 329), new Vec2D(360, 0) };
+    protected static final Vec2D[] RYB_WHEEL = new Vec2D[] {
+            new Vec2D(0, 0), new Vec2D(15, 8), new Vec2D(30, 17),
+            new Vec2D(45, 26), new Vec2D(60, 34), new Vec2D(75, 41),
+            new Vec2D(90, 48), new Vec2D(105, 54), new Vec2D(120, 60),
+            new Vec2D(135, 81), new Vec2D(150, 103), new Vec2D(165, 123),
+            new Vec2D(180, 138), new Vec2D(195, 155), new Vec2D(210, 171),
+            new Vec2D(225, 187), new Vec2D(240, 204), new Vec2D(255, 219),
+            new Vec2D(270, 234), new Vec2D(285, 251), new Vec2D(300, 267),
+            new Vec2D(315, 282), new Vec2D(330, 298), new Vec2D(345, 329),
+            new Vec2D(360, 0)
+    };
 
     /**
      * Maximum rgb component value for a color to be classified as black.
@@ -278,13 +280,15 @@ public class TColor implements ReadonlyTColor {
     public static final TColor newCMYKA(float c, float m, float y, float k,
             float a) {
         TColor col = new TColor();
-        col.setCMYK(new float[] { c, m, y, k });
+        col.setCMYK(new float[] {
+                c, m, y, k
+        });
         col.alpha = MathUtils.clip(a, 0, 1);
         return col;
     }
 
     /**
-     * Factory method. Creates a new shade of gray + alpha.
+     * Factory method. Creates a new shade of gray with alpha set to 100%.
      * 
      * @param gray
      * @return new color.
@@ -293,9 +297,18 @@ public class TColor implements ReadonlyTColor {
         return newGrayAlpha(gray, 1);
     }
 
+    /**
+     * Factory method. Creates a new shade of gray + alpha.
+     * 
+     * @param gray
+     * @param alpha
+     * @return new color.
+     */
     public static final TColor newGrayAlpha(float gray, float alpha) {
         TColor c = new TColor();
-        c.setRGB(new float[] { gray, gray, gray });
+        c.setRGB(new float[] {
+                gray, gray, gray
+        });
         c.alpha = alpha;
         return c;
     }
@@ -360,7 +373,9 @@ public class TColor implements ReadonlyTColor {
 
     public static final TColor newRGBA(float r, float g, float b, float a) {
         TColor c = new TColor();
-        c.setRGB(new float[] { r, g, b });
+        c.setRGB(new float[] {
+                r, g, b
+        });
         c.alpha = MathUtils.clip(a, 0, 1);
         return c;
     }
@@ -453,6 +468,10 @@ public class TColor implements ReadonlyTColor {
     protected float[] hsv;
     public float alpha;
 
+    /**
+     * Only for internal use. Color instances should be created with factory
+     * methods.
+     */
     protected TColor() {
         rgb = new float[3];
         hsv = new float[3];
@@ -467,9 +486,18 @@ public class TColor implements ReadonlyTColor {
     public TColor(ReadonlyTColor c) {
         this();
         float[] buffer = c.toCMYKAArray(null);
-        System.arraycopy(buffer, 0, cmyk, 0, 4);
-        System.arraycopy(c.toHSVAArray(buffer), 0, hsv, 0, 3);
-        System.arraycopy(c.toRGBAArray(buffer), 0, rgb, 0, 3);
+        cmyk[0] = buffer[0];
+        cmyk[1] = buffer[1];
+        cmyk[2] = buffer[2];
+        cmyk[3] = buffer[3];
+        c.toHSVAArray(buffer);
+        hsv[0] = buffer[0];
+        hsv[1] = buffer[1];
+        hsv[2] = buffer[2];
+        c.toRGBAArray(buffer);
+        rgb[0] = buffer[0];
+        rgb[1] = buffer[1];
+        rgb[2] = buffer[2];
         this.alpha = c.alpha();
     }
 
@@ -492,7 +520,7 @@ public class TColor implements ReadonlyTColor {
      * @param amount
      * @return itself
      */
-    public ReadonlyTColor adjustConstrast(float amount) {
+    public TColor adjustConstrast(float amount) {
         return hsv[2] < 0.5 ? darken(amount) : lighten(amount);
     }
 
@@ -505,8 +533,10 @@ public class TColor implements ReadonlyTColor {
      * @param v
      * @return itself
      */
-    public ReadonlyTColor adjustHSV(float h, float s, float v) {
-        return setHSV(new float[] { hsv[0] + h, hsv[1] + s, hsv[2] + v });
+    public TColor adjustHSV(float h, float s, float v) {
+        return setHSV(new float[] {
+                hsv[0] + h, hsv[1] + s, hsv[2] + v
+        });
     }
 
     /**
@@ -518,8 +548,10 @@ public class TColor implements ReadonlyTColor {
      * @param b
      * @return itself
      */
-    public ReadonlyTColor adjustRGB(float r, float g, float b) {
-        return setRGB(new float[] { rgb[0] + r, rgb[1] + g, rgb[2] + b });
+    public TColor adjustRGB(float r, float g, float b) {
+        return setRGB(new float[] {
+                rgb[0] + r, rgb[1] + g, rgb[2] + b
+        });
     }
 
     /*
@@ -559,7 +591,7 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#black()
      */
     public float black() {
-        return cmyk[0];
+        return cmyk[3];
     }
 
     /**
@@ -631,8 +663,7 @@ public class TColor implements ReadonlyTColor {
      * @return itself
      */
     public TColor darken(float step) {
-        hsv[2] = MathUtils.clip(hsv[2] - step, 0, 1);
-        return setHSV(hsv);
+        return setBrightness(hsv[2] - step);
     }
 
     /**
@@ -642,8 +673,7 @@ public class TColor implements ReadonlyTColor {
      * @return itself
      */
     public TColor desaturate(float step) {
-        hsv[1] = MathUtils.clip(hsv[1] - step, 0, 1);
-        return setHSV(hsv);
+        return setSaturation(hsv[1] - step);
     }
 
     public TColor differenceTo(TColor c) {
@@ -926,8 +956,7 @@ public class TColor implements ReadonlyTColor {
      * @return itself
      */
     public TColor lighten(float step) {
-        hsv[2] = MathUtils.clip(hsv[2] + step, 0, 1);
-        return setHSV(hsv);
+        return setBrightness(hsv[2] + step);
     }
 
     /*
@@ -945,7 +974,7 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#magenta()
      */
     public float magenta() {
-        return cmyk[0];
+        return cmyk[1];
     }
 
     /*
@@ -1013,8 +1042,7 @@ public class TColor implements ReadonlyTColor {
      * @return itself
      */
     public TColor saturate(float step) {
-        hsv[1] = MathUtils.clip(hsv[1] + step, 0, 1);
-        return setHSV(hsv);
+        return setSaturation(hsv[1] + step);
     }
 
     /*
@@ -1046,18 +1074,24 @@ public class TColor implements ReadonlyTColor {
     }
 
     public TColor setBlack(float val) {
-        cmyk[3] = val;
-        return setCMYK(cmyk);
+        cmyk[3] = MathUtils.clip(val, 0f, 1f);
+        cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setBlue(float blue) {
-        rgb[2] = blue;
-        return setRGB(rgb);
+        rgb[2] = MathUtils.clip(blue, 0f, 1f);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setBrightness(float brightness) {
         hsv[2] = MathUtils.clip(brightness, 0, 1);
-        return setHSV(hsv);
+        hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        return this;
     }
 
     public TColor setCMYK(float c, float m, float y, float k) {
@@ -1093,13 +1127,17 @@ public class TColor implements ReadonlyTColor {
     }
 
     public TColor setCyan(float val) {
-        cmyk[0] = val;
-        return setCMYK(cmyk);
+        cmyk[0] = MathUtils.clip(val, 0f, 1f);
+        cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setGreen(float green) {
-        rgb[1] = green;
-        return setRGB(rgb);
+        rgb[1] = MathUtils.clip(green, 0f, 1f);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setHSV(float h, float s, float v) {
@@ -1121,23 +1159,29 @@ public class TColor implements ReadonlyTColor {
         return this;
     }
 
-    public void setHue(float hue) {
+    public TColor setHue(float hue) {
         hue %= 1.0;
         if (hue < 0.0) {
             hue++;
         }
         hsv[0] = hue;
-        setHSV(hsv);
+        hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        return this;
     }
 
     public TColor setMagenta(float val) {
-        cmyk[1] = val;
-        return setCMYK(cmyk);
+        cmyk[1] = MathUtils.clip(val, 0f, 1f);
+        cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setRed(float red) {
-        rgb[0] = red;
-        return setRGB(rgb);
+        rgb[0] = MathUtils.clip(red, 0f, 1f);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor setRGB(float r, float g, float b) {
@@ -1158,12 +1202,16 @@ public class TColor implements ReadonlyTColor {
 
     public TColor setSaturation(float saturation) {
         hsv[1] = MathUtils.clip(saturation, 0, 1);
-        return setHSV(hsv);
+        hsvToRGB(hsv[0], hsv[1], hsv[2], rgb);
+        rgbToCMYK(rgb[0], rgb[1], rgb[2], cmyk);
+        return this;
     }
 
     public TColor setYellow(float val) {
-        cmyk[2] = val;
-        return setCMYK(cmyk);
+        cmyk[2] = MathUtils.clip(val, 0f, 1f);
+        cmykToRGB(cmyk[0], cmyk[1], cmyk[2], cmyk[3], rgb);
+        rgbToHSV(rgb[0], rgb[1], rgb[2], hsv);
+        return this;
     }
 
     public TColor sub(TColor c) {
@@ -1193,13 +1241,14 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#toCMYKAArray(float[])
      */
     public float[] toCMYKAArray(float[] cmyka) {
-        if (cmyka == null) {
-            cmyka = new float[4];
+        if (cmyka == null || cmyka.length < 5) {
+            cmyka = new float[5];
         }
         cmyka[0] = cmyk[0];
         cmyka[1] = cmyk[1];
         cmyka[2] = cmyk[2];
-        cmyka[3] = alpha;
+        cmyka[3] = cmyk[3];
+        cmyka[4] = alpha;
         return cmyka;
     }
 
@@ -1222,7 +1271,7 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#toHSVAArray(float[])
      */
     public float[] toHSVAArray(float[] hsva) {
-        if (hsva == null) {
+        if (hsva == null || hsva.length < 4) {
             hsva = new float[4];
         }
         hsva[0] = hsv[0];
@@ -1247,7 +1296,7 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#toRGBAArray(float[], int)
      */
     public float[] toRGBAArray(float[] rgba, int offset) {
-        if (rgba == null) {
+        if (rgba == null || rgba.length < offset + 4) {
             rgba = new float[4];
             offset = 0;
         }
@@ -1272,6 +1321,6 @@ public class TColor implements ReadonlyTColor {
      * @see toxi.color.ReadonlyTColor#yellow()
      */
     public float yellow() {
-        return cmyk[0];
+        return cmyk[2];
     }
 }

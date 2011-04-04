@@ -17,22 +17,44 @@ import toxi.math.MathUtils;
 
 public class ColorTest extends TestCase {
 
+    public void testCMYK() {
+        ReadonlyTColor c = TColor.newHex("00ffff");
+        assertEquals(1f, c.cyan());
+        assertEquals(0f, c.magenta());
+        assertEquals(0f, c.yellow());
+        assertEquals(0f, c.black());
+        assertEquals(0f, TColor.WHITE.black());
+        assertEquals(1f, TColor.BLACK.black());
+        assertEquals(1f, TColor.YELLOW.yellow());
+        assertEquals(0f, TColor.YELLOW.cyan());
+        assertEquals(1f, TColor.MAGENTA.magenta());
+        // rgb conversion
+        assertEquals(0f, TColor.GREEN.magenta());
+        assertEquals(1f, TColor.GREEN.cyan());
+        assertEquals(1f, TColor.GREEN.yellow());
+        assertEquals(1f, TColor.RED.magenta());
+        assertEquals(1f, TColor.RED.yellow());
+        assertEquals(0f, TColor.RED.cyan());
+        c = TColor.RED.getDarkened(0.25f);
+        assertEquals(0.75f, c.magenta());
+        assertEquals(0.25f, c.black());
+    }
+
     public void testColor() {
         ReadonlyTColor c = TColor.newHex("00ffff");
-        System.out.println(c);
         assertEquals(0.5, c.hue(), 0.001);
         assertEquals(1.0, c.brightness(), 0.001);
         TColor d = TColor.newCMYK(1.0f, 0, 0, 0);
-        System.out.println(d);
         float delta = c.distanceToHSV(d);
         assertEquals(0.0f, delta);
     }
 
     public void testColorList() {
         ColorList list = new ColorList();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++) {
             list.add(TColor.newHSV(MathUtils.random(1f), MathUtils.random(1f),
                     MathUtils.random(1f)));
+        }
         AccessCriteria criteria = AccessCriteria.RED;
         ColorList sorted = list.sortByCriteria(criteria, false);
         ReadonlyTColor prev = null;
@@ -58,6 +80,22 @@ public class ColorTest extends TestCase {
         list.add(TColor.GREEN);
         list.add(TColor.BLUE);
         assertEquals(true, list.contains(TColor.newRGB(0, 0, 1f)));
+    }
+
+    public void testCopy() {
+        TColor c = TColor.newRandom();
+        TColor d = c.copy();
+        assertEquals(c.red(), d.red());
+        assertEquals(c.green(), d.green());
+        assertEquals(c.blue(), d.blue());
+        assertEquals(c.hue(), d.hue());
+        assertEquals(c.saturation(), d.saturation());
+        assertEquals(c.brightness(), d.brightness());
+        assertEquals(c.cyan(), d.cyan());
+        assertEquals(c.magenta(), d.magenta());
+        assertEquals(c.yellow(), d.yellow());
+        assertEquals(c.black(), d.black());
+        assertEquals(c.alpha(), d.alpha());
     }
 
     public void testHues() {
