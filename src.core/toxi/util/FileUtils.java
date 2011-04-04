@@ -106,7 +106,7 @@ public class FileUtils {
             isr = new InputStreamReader(input, encoding);
         } catch (UnsupportedEncodingException e) {
         }
-        return new BufferedReader(isr);
+        return new BufferedReader(isr, 0x10000);
     }
 
     public static PrintWriter createWriter(File file) throws IOException {
