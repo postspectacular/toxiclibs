@@ -43,7 +43,7 @@ import toxi.util.datatypes.ArraySet;
  *         triangle.
  * 
  */
-class DelaunayTriangle extends ArraySet<DelaunayVertex> {
+public class DelaunayTriangle extends ArraySet<DelaunayVertex> {
 
     private int idNumber; // The id number
     private DelaunayVertex circumcenter = null; // The triangle's circumcenter
