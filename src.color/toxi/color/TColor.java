@@ -314,15 +314,21 @@ public class TColor implements ReadonlyTColor {
     }
 
     /**
-     * Factory method. New color from hex string.
+     * Factory method. Creates a new color from hex string. Supports standard 6
+     * digit RGB colors or 8 digit ARGB.
      * 
      * @param hexRGB
      * @return new color
      */
     public static final TColor newHex(String hexRGB) {
         TColor c = new TColor();
-        c.setRGB(hexToRGB(hexRGB));
-        c.alpha = 1;
+        if (hexRGB.length() <= 6) {
+            c.setRGB(hexToRGB(hexRGB));
+            c.alpha = 1;
+        } else if (hexRGB.length() == 8) {
+            c.setRGB(hexToRGB(hexRGB.substring(2)));
+            c.setAlpha(Integer.parseInt(hexRGB.substring(0, 2), 16) * INV8BIT);
+        }
         return c;
     }
 

@@ -42,7 +42,8 @@ public class TColorAdapter extends XmlAdapter<String, TColor> {
 
     @Override
     public TColor unmarshal(String hex) throws Exception {
-        if (hex.length() > 0) {
+        int len = hex.length();
+        if (len > 0 && len <= 8) {
             return TColor.newHex(hex);
         } else {
             return null;
