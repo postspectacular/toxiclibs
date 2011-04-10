@@ -31,13 +31,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class LineStrip2D {
 
-    public List<Vec2D> vertices;
+    @XmlElement(name = "v")
+    public List<Vec2D> vertices = new ArrayList<Vec2D>();
+
     protected float[] arcLenIndex;
 
     public LineStrip2D() {
-        this.vertices = new ArrayList<Vec2D>();
     }
 
     public LineStrip2D(Collection<? extends Vec2D> vertices) {
