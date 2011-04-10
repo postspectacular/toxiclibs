@@ -285,6 +285,9 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
             Vertex t = f.a;
             f.a = f.b;
             f.b = t;
+            Vec2D tuv = f.uvA;
+            f.uvA = f.uvB;
+            f.uvB = tuv;
             f.normal.invert();
         }
         return this;
