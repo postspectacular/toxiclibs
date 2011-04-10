@@ -128,6 +128,9 @@ public class TColor implements ReadonlyTColor {
 
     public static final float[] hexToRGB(String hexRGB, float[] rgb) {
         try {
+            if (hexRGB.length() > 6) {
+                hexRGB = hexRGB.substring(hexRGB.length() - 6);
+            }
             int rgbInt = Integer.parseInt(hexRGB, 16);
             rgb[0] = ((rgbInt >> 16) & 0xff) * INV8BIT;
             rgb[1] = ((rgbInt >> 8) & 0xff) * INV8BIT;
@@ -326,7 +329,7 @@ public class TColor implements ReadonlyTColor {
             c.setRGB(hexToRGB(hexRGB));
             c.alpha = 1;
         } else if (hexRGB.length() == 8) {
-            c.setRGB(hexToRGB(hexRGB.substring(2)));
+            c.setRGB(hexToRGB(hexRGB));
             c.setAlpha(Integer.parseInt(hexRGB.substring(0, 2), 16) * INV8BIT);
         }
         return c;
