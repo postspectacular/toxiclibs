@@ -1,8 +1,46 @@
+/*
+ *   __               .__       .__  ._____.           
+ * _/  |_  _______  __|__| ____ |  | |__\_ |__   ______
+ * \   __\/  _ \  \/  /  |/ ___\|  | |  || __ \ /  ___/
+ *  |  | (  <_> >    <|  \  \___|  |_|  || \_\ \\___ \ 
+ *  |__|  \____/__/\_ \__|\___  >____/__||___  /____  >
+ *                   \/       \/             \/     \/ 
+ *
+ * Copyright (c) 2006-2011 Karsten Schmidt
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+
 package toxi.geom;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A more generic version of the Sutherland-Hodgeman algorithm to limit 2D
+ * polygons to convex clipping regions. Uses the clipping region's centroid and
+ * {@link Line2D#classifyPoint(ReadonlyVec2D)} to identify if an edge needs to
+ * be clipped or not.
+ * 
+ * More information: http://en.wikipedia.org/wiki/Sutherland-Hodgman_algorithm
+ * 
+ * @see SutherlandHodgemanClipper
+ * @since 0021
+ */
 public class ConvexPolygonClipper implements PolygonClipper2D {
 
     protected Polygon2D bounds;

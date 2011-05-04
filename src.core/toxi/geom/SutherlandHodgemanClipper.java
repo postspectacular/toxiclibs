@@ -31,11 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simplified, rectangle-only version of the Sutherland-Hodgeman polygon
- * clipping algorithm to clip 2D polygons.
+ * A version of the Sutherland-Hodgeman algorithm to clip 2D polygons optimized
+ * for rectangular clipping regions.
  * 
  * More information: http://en.wikipedia.org/wiki/Sutherland-Hodgman_algorithm
  * 
+ * @see ConvexPolygonClipper
  */
 public class SutherlandHodgemanClipper implements PolygonClipper2D {
 
