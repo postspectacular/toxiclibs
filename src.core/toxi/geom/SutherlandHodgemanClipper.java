@@ -74,9 +74,8 @@ public class SutherlandHodgemanClipper implements PolygonClipper2D {
             List<Vec2D> t = points;
             points = clipped;
             clipped = t;
-            clipped.clear();
         }
-        return new Polygon2D(points);
+        return new Polygon2D(points).removeDuplicates(0.001f);
     }
 
     /**
@@ -121,6 +120,15 @@ public class SutherlandHodgemanClipper implements PolygonClipper2D {
             default:
                 return false;
         }
+    }
+
+    protected boolean isKnownVertex(List<Vec2D> list, Vec2D q) {
+        for (Vec2D p : list) {
+            if (p.equalsWithTolerance(q, 0.0001f)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
