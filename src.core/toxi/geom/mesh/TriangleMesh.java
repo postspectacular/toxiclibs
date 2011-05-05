@@ -495,6 +495,17 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         return verts;
     }
 
+    public float[] getNormalsForUniqueVerticesAsArray() {
+        float[] normals = new float[numVertices * 3];
+        int i = 0;
+        for (Vertex v : vertices.values()) {
+            normals[i++] = v.normal.x;
+            normals[i++] = v.normal.y;
+            normals[i++] = v.normal.z;
+        }
+        return normals;
+    }
+
     public int getNumFaces() {
         return numFaces;
     }
