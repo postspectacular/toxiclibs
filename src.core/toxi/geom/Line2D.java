@@ -39,7 +39,10 @@ public class Line2D {
     public static class LineIntersection {
 
         public static enum Type {
-            COINCIDENT, PARALLEL, NON_INTERSECTING, INTERSECTING
+            COINCIDENT,
+            PARALLEL,
+            NON_INTERSECTING,
+            INTERSECTING
         }
 
         private final Type type;
@@ -224,25 +227,32 @@ public class Line2D {
     }
 
     /**
-     * Computes the hash code for this instance. The behavior of this function
-     * has changed with the 0021 release and now takes into account the
-     * direction of a line. A->B will now produce a different hashcode than
-     * B->A. If directionality is not required or desired use the
-     * {@link #hashCodeIgnoreDirection()} method.
+     * Computes a hash code ignoring the directionality of the line.
+     * 
+     * @return hash code
      * 
      * @see java.lang.Object#hashCode()
-     * @see #hashCodeIgnoreDirection()
+     * @see #hashCodeWithDirection()
      */
-    @Override
     public int hashCode() {
+        return a.hashCode() + b.hashCode();
+    }
+
+    /**
+     * Computes the hash code for this instance taking directionality into
+     * account. A->B will produce a different hash code than B->A. If
+     * directionality is not required or desired use the default
+     * {@link #hashCode()} method.
+     * 
+     * @return hash code
+     * 
+     * @see #hashCode()
+     */
+    public int hashCodeWithDirection() {
         long bits = 1L;
         bits = 31L * bits + a.hashCode();
         bits = 31L * bits + b.hashCode();
         return (int) (bits ^ (bits >> 32));
-    }
-
-    public int hashCodeIgnoreDirection() {
-        return a.hashCode() + b.hashCode();
     }
 
     /**

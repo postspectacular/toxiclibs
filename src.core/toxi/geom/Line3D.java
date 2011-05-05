@@ -40,7 +40,8 @@ public class Line3D {
     public static class LineIntersection {
 
         public static enum Type {
-            NON_INTERSECTING, INTERSECTING
+            NON_INTERSECTING,
+            INTERSECTING
         }
 
         private final Type type;
@@ -54,7 +55,9 @@ public class Line3D {
         private LineIntersection(Type type, Line3D line, float mua, float mub) {
             this.type = type;
             this.line = line;
-            this.coeff = new float[] { mua, mub };
+            this.coeff = new float[] {
+                    mua, mub
+            };
         }
 
         public float[] getCoefficients() {
@@ -268,34 +271,32 @@ public class Line3D {
     }
 
     /**
-     * Computes the hash code for this instance. The behavior of this function
-     * has changed with the 0021 release and now takes into account the
-     * direction of a line. A->B will now produce a different hash code than
-     * B->A. If directionality is not required or desired use the
-     * {@link #hashCodeIgnoreDirection()} method.
+     * Computes a hash code ignoring the directionality of the line.
      * 
      * @return hash code
      * 
      * @see java.lang.Object#hashCode()
-     * @see #hashCodeIgnoreDirection()
+     * @see #hashCodeWithDirection()
      */
-    @Override
     public int hashCode() {
-        long bits = 1L;
-        bits = 31L * bits + a.hashCode();
-        bits = 31L * bits + b.hashCode();
-        return (int) (bits ^ (bits >> 32));
+        return a.hashCode() + b.hashCode();
     }
 
     /**
-     * Computes a hash code ignoring the directionality of the line.
+     * Computes the hash code for this instance taking directionality into
+     * account. A->B will produce a different hash code than B->A. If
+     * directionality is not required or desired use the default
+     * {@link #hashCode()} method.
      * 
      * @return hash code
      * 
      * @see #hashCode()
      */
-    public int hashCodeIgnoreDirection() {
-        return a.hashCode() + b.hashCode();
+    public int hashCodeWithDirection() {
+        long bits = 1L;
+        bits = 31L * bits + a.hashCode();
+        bits = 31L * bits + b.hashCode();
+        return (int) (bits ^ (bits >> 32));
     }
 
     public Line3D offsetAndGrowBy(float offset, float scale, Vec3D ref) {
