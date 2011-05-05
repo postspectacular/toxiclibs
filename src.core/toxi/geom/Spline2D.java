@@ -70,7 +70,7 @@ public class Spline2D {
 
     public static final int DEFAULT_RES = 16;
 
-    @XmlElement
+    @XmlTransient
     protected Vec2D[] points;
 
     @XmlElement(name = "p")
@@ -96,12 +96,6 @@ public class Spline2D {
 
     @XmlTransient
     protected float invTightness;
-
-    @XmlTransient
-    protected int numP;
-
-    @XmlTransient
-    private float[] arcLenIndex;
 
     /**
      * Constructs an empty spline container with default curve tightness. You
@@ -162,7 +156,7 @@ public class Spline2D {
     }
 
     /**
-     * Adds the given point to the list of control points.
+     * Adds a copy of the given point to the list of control points.
      * 
      * @param p
      * @return itself
@@ -209,7 +203,7 @@ public class Spline2D {
         Vec2D deltaP = new Vec2D();
         Vec2D deltaQ = new Vec2D();
         res--;
-        for (int i = 0; i < numP - 1; i++) {
+        for (int i = 0, numP = getNumPoints(); i < numP - 1; i++) {
             Vec2D p = points[i];
             Vec2D q = points[i + 1];
             deltaP.set(delta[i]).addSelf(p);
@@ -230,6 +224,7 @@ public class Spline2D {
         bi[1] = -tightness;
         coeffA[1].set((points[2].x - points[0].x - delta[0].x) * tightness,
                 (points[2].y - points[0].y - delta[0].y) * tightness);
+        final int numP = getNumPoints();
         for (int i = 2; i < numP - 1; i++) {
             bi[i] = -1 / (invTightness + bi[i - 1]);
             coeffA[i].set(
@@ -242,6 +237,17 @@ public class Spline2D {
             delta[i].set(coeffA[i].x + delta[i + 1].x * bi[i], coeffA[i].y
                     + delta[i + 1].y * bi[i]);
         }
+    }
+
+    /**
+     * Computes a list of points along the spline which are uniformly separated
+     * by the given step distance.
+     * 
+     * @param step
+     * @return point list
+     */
+    public List<Vec2D> getDecimatedVertices(float step) {
+        return getDecimatedVertices(step, true);
     }
 
     /**
@@ -268,8 +274,8 @@ public class Spline2D {
      * 
      * @return the numP
      */
-    public int getNumPoints() {
-        return numP;
+    public final int getNumPoints() {
+        return pointList.size();
     }
 
     /**
@@ -292,12 +298,13 @@ public class Spline2D {
      * Overrides the current control points with the given list.
      * 
      * @param plist
+     *            the pointList to set
      * @return itself
      */
     public Spline2D setPointList(List<Vec2D> plist) {
         pointList.clear();
         for (ReadonlyVec2D p : plist) {
-            add(p);
+            pointList.add(p.copy());
         }
         return this;
     }
@@ -321,7 +328,7 @@ public class Spline2D {
     }
 
     public void updateCoefficients() {
-        numP = pointList.size();
+        final int numP = getNumPoints();
         if (points == null || (points != null && points.length != numP)) {
             coeffA = new Vec2D[numP];
             delta = new Vec2D[numP];
@@ -330,8 +337,8 @@ public class Spline2D {
                 coeffA[i] = new Vec2D();
                 delta[i] = new Vec2D();
             }
-            setTightness(tightness);
         }
-        points = pointList.toArray(new Vec2D[0]);
+        setTightness(tightness);
+        points = pointList.toArray(new Vec2D[numP]);
     }
 }

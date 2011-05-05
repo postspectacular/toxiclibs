@@ -67,9 +67,10 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Spline3D {
 
     public static final float DEFAULT_TIGHTNESS = 0.25f;
+
     public static final int DEFAULT_RES = 16;
 
-    @XmlElement
+    @XmlTransient
     protected Vec3D[] points;
 
     @XmlElement(name = "p")
@@ -95,12 +96,6 @@ public class Spline3D {
 
     @XmlTransient
     protected float invTightness;
-
-    @XmlTransient
-    protected int numP;
-
-    @XmlTransient
-    protected float[] arcLenIndex;
 
     /**
      * Constructs an empty spline container with default curve tightness. You
@@ -208,7 +203,7 @@ public class Spline3D {
         Vec3D deltaP = new Vec3D();
         Vec3D deltaQ = new Vec3D();
         res--;
-        for (int i = 0; i < numP - 1; i++) {
+        for (int i = 0, numP = getNumPoints(); i < numP - 1; i++) {
             Vec3D p = points[i];
             Vec3D q = points[i + 1];
             deltaP.set(delta[i]).addSelf(p);
@@ -223,7 +218,7 @@ public class Spline3D {
                 vertices.add(new Vec3D(x, y, z));
             }
         }
-        vertices.add(points[points.length - 1]);
+        vertices.add(points[points.length - 1].copy());
         return vertices;
     }
 
@@ -232,6 +227,7 @@ public class Spline3D {
         coeffA[1].set((points[2].x - points[0].x - delta[0].x) * tightness,
                 (points[2].y - points[0].y - delta[0].y) * tightness,
                 (points[2].z - points[0].z - delta[0].z) * tightness);
+        final int numP = getNumPoints();
         for (int i = 2; i < numP - 1; i++) {
             bi[i] = -1 / (invTightness + bi[i - 1]);
             coeffA[i].set(
@@ -275,45 +271,8 @@ public class Spline3D {
         if (vertices == null || vertices.size() < 2) {
             computeVertices(DEFAULT_RES);
         }
-        float arcLen = getEstimatedArcLength();
-        ArrayList<Vec3D> uniform = new ArrayList<Vec3D>();
-        double delta = step / arcLen;
-        int currIdx = 0;
-        for (double t = 0; t < 1.0; t += delta) {
-            double currT = t * arcLen;
-            while (currT >= arcLenIndex[currIdx]) {
-                currIdx++;
-            }
-            ReadonlyVec3D p = vertices.get(currIdx - 1);
-            Vec3D q = vertices.get(currIdx);
-            float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
-            Vec3D i = p.interpolateTo(q, frac);
-            uniform.add(i);
-        }
-        if (doAddFinalVertex) {
-            uniform.add(vertices.get(vertices.size() - 1));
-        }
-        return uniform;
-    }
-
-    /**
-     * @return estimated arc length based on summing the individual lengths of
-     *         the line segments computed with {@link #computeVertices(int)}.
-     */
-    public float getEstimatedArcLength() {
-        if (arcLenIndex == null
-                || (arcLenIndex != null && arcLenIndex.length != vertices
-                        .size())) {
-            arcLenIndex = new float[vertices.size()];
-        }
-        float arcLen = 0;
-        for (int i = 1; i < arcLenIndex.length; i++) {
-            ReadonlyVec3D p = vertices.get(i - 1);
-            Vec3D q = vertices.get(i);
-            arcLen += p.distanceTo(q);
-            arcLenIndex[i] = arcLen;
-        }
-        return arcLen;
+        return new LineStrip3D(vertices).getDecimatedVertices(step,
+                doAddFinalVertex);
     }
 
     /**
@@ -321,8 +280,8 @@ public class Spline3D {
      * 
      * @return the numP
      */
-    public int getNumPoints() {
-        return numP;
+    public final int getNumPoints() {
+        return pointList.size();
     }
 
     /**
@@ -342,6 +301,8 @@ public class Spline3D {
     }
 
     /**
+     * Overrides the current control points with the given list.
+     * 
      * @param plist
      *            the pointList to set
      * @return itself
@@ -349,7 +310,7 @@ public class Spline3D {
     public Spline3D setPointList(List<Vec3D> plist) {
         pointList.clear();
         for (ReadonlyVec3D p : plist) {
-            add(p);
+            pointList.add(p.copy());
         }
         return this;
     }
@@ -374,7 +335,7 @@ public class Spline3D {
     }
 
     public void updateCoefficients() {
-        numP = pointList.size();
+        final int numP = getNumPoints();
         if (points == null || (points != null && points.length != numP)) {
             coeffA = new Vec3D[numP];
             delta = new Vec3D[numP];
@@ -383,8 +344,8 @@ public class Spline3D {
                 coeffA[i] = new Vec3D();
                 delta[i] = new Vec3D();
             }
-            setTightness(tightness);
         }
-        points = pointList.toArray(new Vec3D[0]);
+        setTightness(tightness);
+        points = pointList.toArray(new Vec3D[numP]);
     }
 }
