@@ -31,6 +31,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import toxi.util.datatypes.*;
+import toxi.color.*;
 
 TypedProperties config;
 
@@ -51,8 +52,8 @@ void setup() {
 }
 
 void draw() {
-  background(config.getHexInt("color.bg",0xffffff));
-  fill(config.getHexInt("color.text",0xff0000)|0xff<<24);
+  background(TColor.newHex(config.getProperty("color.bg","ffffff")).toARGB());
+  fill(TColor.newHex(config.getProperty("color.text","ff0000")).toARGB());
   String msg=config.getProperty("msg.text","hello world");
   float pos=-offset;
   float w=textWidth(msg)+100;
