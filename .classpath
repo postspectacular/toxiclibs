@@ -11,7 +11,6 @@
 	<classpathentry including="../src.core/toxi/**/*.java|toxi/**/*.java" kind="src" path="src.sim"/>
 	<classpathentry including="**/*.java|../lib/core.jar|../src.audio/**/*.java|../src.color/**/*.java|../src.core/**/*.java|../src.data/**/*.java|../src.image/**/*.java|../src.p5/**/*.java" kind="src" path="src.test"/>
 	<classpathentry including="../src.core/**/*.java|toxi/**/*.java" kind="src" path="src.volume"/>
-	<classpathentry kind="src" path="src.video"/>
 	<classpathentry including="**/*.java|../lib/core.jar|../src.core/toxi/**/*.java" kind="src" path="src.p5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
