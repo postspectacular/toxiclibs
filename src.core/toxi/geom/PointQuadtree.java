@@ -150,6 +150,21 @@ public class PointQuadtree extends Rect implements Shape2D {
         return false;
     }
 
+    /**
+     * Applies the given {@link OctreeVisitor} implementation to this node and
+     * all of its children.
+     */
+    public void applyVisitor(QuadtreeVisitor visitor) {
+        visitor.visitNode(this);
+        if (numChildren > 0) {
+            for (PointQuadtree c : children) {
+                if (c != null) {
+                    c.applyVisitor(visitor);
+                }
+            }
+        }
+    }
+
     public boolean containsPoint(ReadonlyVec2D p) {
         return p.isInRectangle(this);
     }
@@ -164,9 +179,12 @@ public class PointQuadtree extends Rect implements Shape2D {
      * @return a copy of the child nodes array
      */
     public PointQuadtree[] getChildren() {
-        PointQuadtree[] clones = new PointQuadtree[4];
-        System.arraycopy(children, 0, clones, 0, 4);
-        return clones;
+        if (children != null) {
+            PointQuadtree[] clones = new PointQuadtree[4];
+            System.arraycopy(children, 0, clones, 0, 4);
+            return clones;
+        }
+        return null;
     }
 
     /**

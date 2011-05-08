@@ -159,6 +159,21 @@ public class PointOctree extends AABB implements Shape3D {
         return false;
     }
 
+    /**
+     * Applies the given {@link OctreeVisitor} implementation to this node and
+     * all of its children.
+     */
+    public void applyVisitor(OctreeVisitor visitor) {
+        visitor.visitNode(this);
+        if (numChildren > 0) {
+            for (PointOctree c : children) {
+                if (c != null) {
+                    c.applyVisitor(visitor);
+                }
+            }
+        }
+    }
+
     public boolean containsPoint(ReadonlyVec3D p) {
         return p.isInAABB(this);
     }
@@ -173,9 +188,12 @@ public class PointOctree extends AABB implements Shape3D {
      * @return a copy of the child nodes array
      */
     public PointOctree[] getChildren() {
-        PointOctree[] clones = new PointOctree[8];
-        System.arraycopy(children, 0, clones, 0, 8);
-        return clones;
+        if (children != null) {
+            PointOctree[] clones = new PointOctree[8];
+            System.arraycopy(children, 0, clones, 0, 8);
+            return clones;
+        }
+        return null;
     }
 
     /**
