@@ -558,14 +558,28 @@ public class Polygon2D implements Shape2D {
     }
 
     public Mesh3D toMesh(Mesh3D mesh) {
+        return toMesh(mesh, null, 0);
+    }
+
+    public Mesh3D toMesh(Mesh3D mesh, Vec2D centroid2D, float extrude) {
         if (mesh == null) {
             mesh = new TriangleMesh();
         }
         final int num = vertices.size();
-        final Vec3D centroid = getCentroid().to3DXY();
+        if (centroid2D == null) {
+            centroid2D = getCentroid();
+        }
+        Vec3D centroid = centroid2D.to3DXY();
+        centroid.z = extrude;
+        Rect bounds = getBounds();
+        Vec2D boundScale = new Vec2D(1f / bounds.width, 1f / bounds.height);
+        Vec2D uvC = centroid2D.sub(bounds.getTopLeft()).scaleSelf(boundScale);
         for (int i = 1; i <= num; i++) {
-            mesh.addFace(centroid, vertices.get(i % num).to3DXY(), vertices
-                    .get(i - 1).to3DXY());
+            Vec2D a = vertices.get(i % num);
+            Vec2D b = vertices.get(i - 1);
+            Vec2D uvA = a.sub(bounds.getTopLeft()).scaleSelf(boundScale);
+            Vec2D uvB = b.sub(bounds.getTopLeft()).scaleSelf(boundScale);
+            mesh.addFace(centroid, a.to3DXY(), b.to3DXY(), uvC, uvA, uvB);
         }
         return mesh;
     }
