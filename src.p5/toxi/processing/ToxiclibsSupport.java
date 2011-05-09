@@ -178,12 +178,21 @@ public class ToxiclibsSupport {
         gfx.line(line.a.x, line.a.y, line.b.x, line.b.y);
     }
 
+    public final void line(Line2D l, Line2DRenderModifier modifier) {
+        modifier.apply(this, l.a, l.b);
+    }
+
     public final void line(Line3D line) {
         gfx.line(line.a.x, line.a.y, line.a.z, line.b.x, line.b.y, line.b.z);
     }
 
     public final void line(ReadonlyVec2D a, ReadonlyVec2D b) {
         gfx.line(a.x(), a.y(), b.x(), b.y());
+    }
+
+    public final void line(ReadonlyVec2D a, ReadonlyVec2D b,
+            Line2DRenderModifier modifier) {
+        modifier.apply(this, a, b);
     }
 
     public final void line(ReadonlyVec3D a, ReadonlyVec3D b) {
