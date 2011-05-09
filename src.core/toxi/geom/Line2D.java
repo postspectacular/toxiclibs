@@ -141,7 +141,7 @@ public class Line2D {
      * perpendicular line direction. If the result is negative
      * 
      * @param p
-     * @return
+     * @return classifier float
      */
     public float classifyPoint(ReadonlyVec2D p) {
         Vec2D normal = b.sub(a).perpendicular();

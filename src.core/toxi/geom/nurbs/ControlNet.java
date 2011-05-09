@@ -99,7 +99,7 @@ public class ControlNet {
     /**
      * Get all the control points
      * 
-     * @return
+     * @return 2D array
      */
     public Vec4D[][] getControlPoints() {
         return cps;

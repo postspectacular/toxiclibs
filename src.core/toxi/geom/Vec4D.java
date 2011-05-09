@@ -639,7 +639,9 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
     }
 
     public float[] toArray() {
-        return new float[] { x, y, z, w };
+        return new float[] {
+                x, y, z, w
+        };
     }
 
     public String toString() {
@@ -684,7 +686,7 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
      * Multiplies the weight with each coordinate and sets the coordinate to the
      * newly calculatd ones.
      * 
-     * @return
+     * @return itself
      */
     public final Vec4D weight() {
         x *= w;

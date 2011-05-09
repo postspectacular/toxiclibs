@@ -206,7 +206,9 @@ public final class NurbsCreator {
         for (int i = 0; i < 7; i++) {
             cp[i].addXYZSelf(o.origin);
         }
-        float uQ7[] = { 0, 0, 0, 0.25f, 0.5f, 0.5f, 0.75f, 1, 1, 1 };
+        float uQ7[] = {
+                0, 0, 0, 0.25f, 0.5f, 0.5f, 0.75f, 1, 1, 1
+        };
         return new BasicNurbsCurve(cp, uQ7, 2);
     }
 
@@ -242,8 +244,9 @@ public final class NurbsCreator {
         for (int i = 0; i < 9; i++) {
             cp[i].addXYZSelf(o.origin);
         }
-        float uQ9[] = { 0, 0, 0, 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f, 1, 1,
-                1 };
+        float uQ9[] = {
+                0, 0, 0, 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f, 1, 1, 1
+        };
         return new BasicNurbsCurve(cp, uQ9, 2);
     }
 
@@ -492,7 +495,9 @@ public final class NurbsCreator {
         cp[2] = new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r)
                 .addSelf(o.origin), 0.5f);
 
-        float u[] = { 0, 0, 0, 0.5f, 1, 1, 1 };
+        float u[] = {
+                0, 0, 0, 0.5f, 1, 1, 1
+        };
         return new BasicNurbsCurve(cp, u, 2);
     }
 
@@ -540,14 +545,19 @@ public final class NurbsCreator {
      * supplied vector to produce a new {@link NurbsSurface}. The extrusion
      * length is the length of the vector given.
      * 
-     * @oaram extrude a extrusion vector
+     * @param curve
+     *            NURBS curve instance
+     * @param extrude
+     *            a extrusion vector
      * @return a NurbsSurface.
      */
     public static NurbsSurface extrudeCurve(NurbsCurve curve, Vec3D extrude) {
 
         // Curve and Surface Construction using Rational B-splines
         // Piegl and Tiller CAD Vol 19 #9 November 1987 pp 485-498
-        KnotVector vKnot = new KnotVector(new float[] { 0f, 0f, 1f, 1f }, 1);
+        KnotVector vKnot = new KnotVector(new float[] {
+                0f, 0f, 1f, 1f
+        }, 1);
 
         Vec4D[][] cpoints = new Vec4D[curve.getControlPoints().length][2];
         Vec4D[] curvePoints = curve.getControlPoints();

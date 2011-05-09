@@ -67,7 +67,7 @@ public interface ReadonlyVec4D {
      * Returns the (4-space) angle in radians between this vector and the vector
      * parameter; the return value is constrained to the range [0,PI].
      * 
-     * @param v1
+     * @param v
      *            the other vector
      * @return the angle in radians in the range [0,PI]
      */

@@ -40,8 +40,7 @@ public class Sphere extends Vec3D implements Shape3D {
 
     /**
      * Earth's mean radius in km
-     * 
-     * @see http://en.wikipedia.org/wiki/Earth_radius#Mean_radii
+     * (http://en.wikipedia.org/wiki/Earth_radius#Mean_radii)
      */
     public static final float EARTH_RADIUS = (float) ((2 * 6378.1370 + 6356.752314245) / 3.0);
 
@@ -110,7 +109,9 @@ public class Sphere extends Vec3D implements Shape3D {
                     }
                 }
             }
-            result = new float[] { a, b };
+            result = new float[] {
+                    a, b
+            };
         }
         return result;
     }

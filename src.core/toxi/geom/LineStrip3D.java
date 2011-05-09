@@ -77,9 +77,8 @@ public class LineStrip3D {
      * 
      * @param step
      * @param doAddFinalVertex
-     *            true, if the last vertex computed by
-     *            {@link #computeVertices(int)} should be added regardless of
-     *            its distance.
+     *            true, if the last vertex computed should be added regardless
+     *            of its distance.
      * @return point list
      */
     public List<Vec3D> getDecimatedVertices(float step, boolean doAddFinalVertex) {

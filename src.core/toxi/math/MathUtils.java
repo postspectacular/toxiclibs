@@ -525,7 +525,7 @@ public final class MathUtils {
      * 
      * @param val
      * @param prec
-     * @return
+     * @return rounded value
      */
     public static final double roundTo(double val, double prec) {
         return floor(val / prec + 0.5) * prec;
@@ -536,7 +536,7 @@ public final class MathUtils {
      * 
      * @param val
      * @param prec
-     * @return
+     * @return rounded value
      */
     public static final float roundTo(float val, float prec) {
         return floor(val / prec + 0.5f) * prec;
@@ -547,7 +547,7 @@ public final class MathUtils {
      * 
      * @param val
      * @param prec
-     * @return
+     * @return rounded value
      */
     public static final int roundTo(int val, int prec) {
         return floor((float) val / prec + 0.5f) * prec;

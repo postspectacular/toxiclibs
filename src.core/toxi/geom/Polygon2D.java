@@ -194,11 +194,9 @@ public class Polygon2D implements Shape2D {
 
     /**
      * Computes the length of this polygon's apothem. This will only be valid if
-     * the polygon is regular.
+     * the polygon is regular. More info: http://en.wikipedia.org/wiki/Apothem
      * 
      * @return apothem length
-     * 
-     * @see http://en.wikipedia.org/wiki/Apothem
      */
     public float getApothem() {
         return vertices.get(0).interpolateTo(vertices.get(1), 0.5f)
@@ -586,11 +584,10 @@ public class Polygon2D implements Shape2D {
 
     /**
      * Attempts to remove all internal self-intersections and creates a new
-     * polygon only consisting of perimeter vertices.
+     * polygon only consisting of perimeter vertices. Ported from:
+     * http://alienryderflex.com/polygon_perimeter/
      * 
      * @return true, if process completed succcessfully.
-     * 
-     * @see http://alienryderflex.com/polygon_perimeter/
      */
     public boolean toOutline() {
         List<Vec2D> newVerts = new ArrayList<Vec2D>();
