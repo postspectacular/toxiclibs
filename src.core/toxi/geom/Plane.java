@@ -46,7 +46,9 @@ public class Plane extends Vec3D implements Shape3D {
      * Classifier constant for {@link Plane#classifyPoint(ReadonlyVec3D, float)}
      */
     public enum Classifier {
-        FRONT, BACK, ON_PLANE;
+        FRONT,
+        BACK,
+        ON_PLANE;
     }
 
     public static final Plane XY = new Plane(new Vec3D(), Vec3D.Z_AXIS);
@@ -61,13 +63,13 @@ public class Plane extends Vec3D implements Shape3D {
         normal = Vec3D.Y_AXIS.copy();
     }
 
-    public Plane(Triangle3D t) {
-        this(t.computeCentroid(), t.computeNormal());
-    }
-
-    public Plane(Vec3D origin, ReadonlyVec3D norm) {
+    public Plane(ReadonlyVec3D origin, ReadonlyVec3D norm) {
         super(origin);
         normal = norm.getNormalized();
+    }
+
+    public Plane(Triangle3D t) {
+        this(t.computeCentroid(), t.computeNormal());
     }
 
     /**
@@ -88,6 +90,10 @@ public class Plane extends Vec3D implements Shape3D {
 
     public boolean containsPoint(ReadonlyVec3D p) {
         return classifyPoint(p, MathUtils.EPS) == Classifier.ON_PLANE;
+    }
+
+    public float getDCoeff() {
+        return this.dot(normal);
     }
 
     /**
@@ -152,6 +158,39 @@ public class Plane extends Vec3D implements Shape3D {
         }
 
         return -(numer / denom);
+    }
+
+    /**
+     * Computes the intersection ray between this plane and the given one. If
+     * the planes are parallel or coincident the method returns null. If the
+     * planes are intersecting, the returned {@link Ray3D} will start at a point
+     * lying on both planes and point along the infinite intersection line
+     * between them.
+     * 
+     * Code ported from:
+     * http://forums.create.msdn.com/forums/p/39074/234178.aspx#234178
+     * 
+     * @param plane
+     *            intersection partner
+     * @return intersection ray or null
+     */
+    public Ray3D intersectsPlane(Plane plane) {
+        float d = getDCoeff();
+        float d2 = plane.getDCoeff();
+
+        if (normal.equalsWithTolerance(plane.normal, 0.0001f) || d == d2) {
+            return null;
+        }
+
+        float offDiagonal = normal.dot(plane.normal);
+        double det = 1.0 / (1 - offDiagonal * offDiagonal);
+        double a = (d - d2 * offDiagonal) * det;
+        double b = (d2 - d * offDiagonal) * det;
+        Vec3D anchor = normal.scale((float) a).addSelf(
+                plane.normal.scale((float) b));
+        Vec3D dir = normal.cross(plane.normal);
+
+        return new Ray3D(anchor, dir);
     }
 
     /**
