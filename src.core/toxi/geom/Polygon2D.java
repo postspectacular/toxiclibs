@@ -306,26 +306,23 @@ public class Polygon2D implements Shape2D {
      */
     public Polygon2D increaseVertexCount(int count) {
         int num = vertices.size();
-        if (num < count) {
-            while (num < count) {
-                // find longest edge
-                int longestID = 0;
-                float maxD = 0;
-                for (int i = 0; i < num; i++) {
-                    float d = vertices.get(i).distanceToSquared(
-                            vertices.get((i + 1) % num));
-                    if (d > maxD) {
-                        longestID = i;
-                        maxD = d;
-                    }
+        while (num < count) {
+            // find longest edge
+            int longestID = 0;
+            float maxD = 0;
+            for (int i = 0; i < num; i++) {
+                float d = vertices.get(i).distanceToSquared(
+                        vertices.get((i + 1) % num));
+                if (d > maxD) {
+                    longestID = i;
+                    maxD = d;
                 }
-                // insert mid point of longest segment in vertex list
-                Vec2D m = vertices.get(longestID)
-                        .add(vertices.get((longestID + 1) % num))
-                        .scaleSelf(0.5f);
-                vertices.add(longestID + 1, m);
-                num++;
             }
+            // insert mid point of longest segment in vertex list
+            Vec2D m = vertices.get(longestID)
+                    .add(vertices.get((longestID + 1) % num)).scaleSelf(0.5f);
+            vertices.add(longestID + 1, m);
+            num++;
         }
         return this;
     }
