@@ -123,6 +123,17 @@ public class Polygon2D implements Shape2D {
     /**
      * Adds a new vertex to the polygon (builder pattern).
      * 
+     * @param x
+     * @param y
+     * @return itself
+     */
+    public Polygon2D add(float x, float y) {
+        return add(new Vec2D(x, y));
+    }
+
+    /**
+     * Adds a new vertex to the polygon (builder pattern).
+     * 
      * @param p
      *            vertex point to add
      * @return itself
@@ -468,7 +479,7 @@ public class Polygon2D implements Shape2D {
      * be kept.
      * 
      * @param minEdgeLen
-     * @return
+     * @return itself
      */
     public Polygon2D reduceVertices(float minEdgeLen) {
         minEdgeLen *= minEdgeLen;
