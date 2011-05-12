@@ -466,6 +466,34 @@ public class Polygon2D implements Shape2D {
     }
 
     /**
+     * Reduces the number of vertices in the polygon based on the given minimum
+     * edge length. Only vertices with at least this distance between them will
+     * be kept.
+     * 
+     * @param minEdgeLen
+     * @return
+     */
+    public Polygon2D reduceVertices(float minEdgeLen) {
+        minEdgeLen *= minEdgeLen;
+        List<Vec2D> reduced = new ArrayList<Vec2D>();
+        Vec2D prev = vertices.get(0);
+        reduced.add(prev);
+        int num = vertices.size() - 1;
+        for (int i = 1; i < num; i++) {
+            Vec2D v = vertices.get(i);
+            if (prev.distanceToSquared(v) >= minEdgeLen) {
+                reduced.add(v);
+                prev = v;
+            }
+        }
+        if (vertices.get(0).distanceToSquared(vertices.get(num)) >= minEdgeLen) {
+            reduced.add(vertices.get(num));
+        }
+        vertices = reduced;
+        return this;
+    }
+
+    /**
      * Removes duplicate vertices from the polygon. Only successive points are
      * recognized as duplicates.
      * 

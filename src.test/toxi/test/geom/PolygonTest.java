@@ -51,4 +51,13 @@ public class PolygonTest extends TestCase {
         p.increaseVertexCount(6);
         assertEquals(6, p.getNumVertices());
     }
+
+    public void testReduce() {
+        Polygon2D p = new Circle(100).toPolygon2D(30);
+        float len = p.vertices.get(0).distanceTo(p.vertices.get(1));
+        p.reduceVertices(len * 0.99f);
+        assertEquals(30, p.getNumVertices());
+        p.reduceVertices(len * 1.5f);
+        assertEquals(15, p.getNumVertices());
+    }
 }
