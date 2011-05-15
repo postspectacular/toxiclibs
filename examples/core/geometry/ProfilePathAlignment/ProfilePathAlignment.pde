@@ -84,7 +84,7 @@ void draw() {
     mat.multiplySelf(alignment.toMatrix4x4());
     // then apply matrix to (copies of) all profile shape vertices
     // and append them to global vertex list
-    for(Vec2D p : profile.vertices) {
+    for(Vec2D p : profile) {
       tubeVertices.add(mat.applyToSelf(p.to3DXY()));
     }
     pathID++;
