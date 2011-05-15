@@ -349,12 +349,18 @@ public class ColorList implements Iterable<TColor> {
     }
 
     /**
-     * Returns the color at the given index.
+     * Returns the color at the given index. This function follows Python
+     * convention, in that if the index is negative, it is considered relative
+     * to the list end. Therefore the color at index -1 is the last color in the
+     * list.
      * 
      * @param i
      * @return color
      */
     public TColor get(int i) {
+        if (i < 0) {
+            i += colors.size();
+        }
         return colors.get(i);
     }
 
