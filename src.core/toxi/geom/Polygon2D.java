@@ -43,7 +43,7 @@ import toxi.math.MathUtils;
 /**
  * Container type for convex polygons. Implements {@link Shape2D}.
  */
-public class Polygon2D implements Shape2D {
+public class Polygon2D implements Shape2D, Iterable<Vec2D> {
 
     /**
      * Constructs a new regular polygon from the given base line/edge.
@@ -201,6 +201,23 @@ public class Polygon2D implements Shape2D {
     public Polygon2D flipVertexOrder() {
         Collections.reverse(vertices);
         return this;
+    }
+
+    /**
+     * Returns the vertex at the given index. This function follows Python
+     * convention, in that if the index is negative, it is considered relative
+     * to the list end. Therefore the vertex at index -1 is the last vertex in
+     * the list.
+     * 
+     * @param i
+     *            index
+     * @return vertex
+     */
+    public Vec2D get(int i) {
+        if (i < 0) {
+            i += vertices.size();
+        }
+        return vertices.get(i);
     }
 
     /**
@@ -371,6 +388,10 @@ public class Polygon2D implements Shape2D {
             }
         }
         return true;
+    }
+
+    public Iterator<Vec2D> iterator() {
+        return vertices.iterator();
     }
 
     /**

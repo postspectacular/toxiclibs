@@ -29,11 +29,12 @@ package toxi.geom;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class LineStrip3D {
+public class LineStrip3D implements Iterable<Vec3D> {
 
     @XmlElement(name = "v")
     public List<Vec3D> vertices = new ArrayList<Vec3D>();
@@ -55,6 +56,23 @@ public class LineStrip3D {
     public LineStrip3D add(Vec3D p) {
         vertices.add(p);
         return this;
+    }
+
+    /**
+     * Returns the vertex at the given index. This function follows Python
+     * convention, in that if the index is negative, it is considered relative
+     * to the list end. Therefore the vertex at index -1 is the last vertex in
+     * the list.
+     * 
+     * @param i
+     *            index
+     * @return vertex
+     */
+    public Vec3D get(int i) {
+        if (i < 0) {
+            i += vertices.size();
+        }
+        return vertices.get(i);
     }
 
     /**
@@ -137,5 +155,9 @@ public class LineStrip3D {
             segments.add(new Line3D(vertices.get(i - 1), vertices.get(i)));
         }
         return segments;
+    }
+
+    public Iterator<Vec3D> iterator() {
+        return vertices.iterator();
     }
 }
