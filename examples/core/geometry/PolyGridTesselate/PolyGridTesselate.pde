@@ -5,7 +5,7 @@ import toxi.processing.*;
 
 ToxiclibsSupport gfx;
 Polygon2D poly;
-GridTesselator tess=new GlobalGridTesselator(20);
+GridTesselator tess=new GlobalGridTesselator(30);
 
 boolean isGlobal=true;
 
@@ -28,10 +28,10 @@ void draw() {
 void mousePressed() {
   isGlobal=!isGlobal;
   if (isGlobal) {
-    tess=new GlobalGridTesselator(20);
+    tess=new GlobalGridTesselator(30);
   } 
   else {
-    tess=new LocalGridTesselator(20);
+    tess=new LocalGridTesselator(10);
   }
 }
 
