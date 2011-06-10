@@ -237,6 +237,29 @@ public class Rect implements Shape2D {
         return x;
     }
 
+    /**
+     * Computes the normalized position of the given point within this
+     * rectangle, so that a point at the top-left corner becomes {0,0} and
+     * bottom-right {1,1}.
+     * 
+     * @param p
+     *            point to be mapped
+     * @return mapped Vec2D
+     */
+    public Vec2D getMappedPointInRect(Vec2D p) {
+        return new Vec2D((p.x - x) / width, (p.y - y) / height);
+    }
+
+    /**
+     * Creates a random point within the rectangle.
+     * 
+     * @return Vec2D
+     */
+    public Vec2D getRandomPoint() {
+        return new Vec2D(MathUtils.random(x, x + width), MathUtils.random(y, y
+                + height));
+    }
+
     public float getRight() {
         return x + width;
     }
