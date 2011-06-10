@@ -28,11 +28,14 @@
 package toxi.geom;
 
 import toxi.math.MathUtils;
+import toxi.util.datatypes.BiasedFloatRange;
 
 /**
  * This class defines a 2D ellipse and provides several utility methods for it.
  */
 public class Ellipse extends Vec2D implements Shape2D {
+
+    public static int DEFAULT_RES = 20;
 
     protected Vec2D radius = new Vec2D();
     protected float focus;
@@ -130,6 +133,19 @@ public class Ellipse extends Vec2D implements Shape2D {
     }
 
     /**
+     * Creates a random point within the ellipse using a
+     * {@link BiasedFloatRange} to create a more uniform distribution.
+     * 
+     * @return Vec2D
+     */
+    public Vec2D getRandomPoint() {
+        float theta = MathUtils.random(MathUtils.TWO_PI);
+        BiasedFloatRange rnd = new BiasedFloatRange(0f, 1f, 1f, MathUtils.SQRT2);
+        return Vec2D.fromTheta(theta).scaleSelf(radius.scale(rnd.pickRandom()))
+                .addSelf(this);
+    }
+
+    /**
      * Sets the radii of the ellipse to the new values.
      * 
      * @param rx
@@ -150,6 +166,10 @@ public class Ellipse extends Vec2D implements Shape2D {
      */
     public Ellipse setRadii(ReadonlyVec3D r) {
         return setRadii(r.x(), r.y());
+    }
+
+    public Polygon2D toPolygon2D() {
+        return toPolygon2D(DEFAULT_RES);
     }
 
     /**

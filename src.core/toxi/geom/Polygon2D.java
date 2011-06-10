@@ -325,6 +325,29 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
     }
 
     /**
+     * Creates a random point within the polygon. This is only guaranteed to
+     * work with regular polygons.
+     * 
+     * @return Vec2D
+     */
+    public Vec2D getRandomPoint() {
+        List<Line2D> edges = getEdges();
+        int numEdges = edges.size();
+        Line2D ea = edges.get(MathUtils.random(numEdges));
+        Line2D eb = null;
+        // and another one, making sure it's different
+        while (eb == null || eb.equals(ea)) {
+            eb = edges.get(MathUtils.random(numEdges));
+        }
+        // pick a random point on edge A
+        Vec2D p = ea.a.interpolateTo(ea.b, MathUtils.random(1f));
+        // then randomly interpolate to another random point on edge B
+        return p.interpolateToSelf(
+                eb.a.interpolateTo(eb.b, MathUtils.random(1f)),
+                MathUtils.random(1f));
+    }
+
+    /**
      * Repeatedly inserts vertices as mid points of the longest edges until the
      * new vertex count is reached.
      * 
@@ -773,6 +796,15 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
             c = e;
             d = f;
         }
+    }
+
+    /**
+     * Only needed for {@link Shape2D} interface. Returns itself.
+     * 
+     * @return itself
+     */
+    public Polygon2D toPolygon2D() {
+        return this;
     }
 
     public String toString() {

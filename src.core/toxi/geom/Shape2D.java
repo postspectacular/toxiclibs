@@ -59,4 +59,19 @@ public interface Shape2D {
      * @return circumference
      */
     float getCircumference();
+
+    /**
+     * Computes a random point within the shape's perimeter.
+     * 
+     * @return Vec2D
+     */
+    Vec2D getRandomPoint();
+
+    /**
+     * Converts the shape into a {@link Polygon2D} instance (possibly via a
+     * default resolution, e.g. for circles/ellipses)
+     * 
+     * @return shape as polygon
+     */
+    Polygon2D toPolygon2D();
 }

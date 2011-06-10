@@ -27,6 +27,10 @@
 
 package toxi.geom;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -189,6 +193,21 @@ public class Triangle2D implements Shape2D {
     }
 
     /**
+     * Creates a random point within the triangle using barycentric coordinates.
+     * 
+     * @return Vec2D
+     */
+    public Vec2D getRandomPoint() {
+        List<Float> barycentric = new ArrayList<Float>(3);
+        barycentric.add(MathUtils.random(1f));
+        barycentric.add(MathUtils.random(1f - barycentric.get(0)));
+        barycentric.add(1 - (barycentric.get(0) + barycentric.get(1)));
+        Collections.shuffle(barycentric);
+        return fromBarycentric(new Vec3D(barycentric.get(0),
+                barycentric.get(1), barycentric.get(2)));
+    }
+
+    /**
      * Checks if this triangle intersects the given one. The check handles both
      * partial and total containment as well as intersections of all edges.
      * 
@@ -204,10 +223,13 @@ public class Triangle2D implements Shape2D {
                 || tri.containsPoint(c)) {
             return true;
         }
-        Line2D[] ea = new Line2D[] { new Line2D(a, b), new Line2D(b, c),
-                new Line2D(c, a) };
-        Line2D[] eb = new Line2D[] { new Line2D(tri.a, tri.b),
-                new Line2D(tri.b, tri.c), new Line2D(tri.c, tri.a) };
+        Line2D[] ea = new Line2D[] {
+                new Line2D(a, b), new Line2D(b, c), new Line2D(c, a)
+        };
+        Line2D[] eb = new Line2D[] {
+                new Line2D(tri.a, tri.b), new Line2D(tri.b, tri.c),
+                new Line2D(tri.c, tri.a)
+        };
         for (Line2D la : ea) {
             for (Line2D lb : eb) {
                 Type type = la.intersectLine(lb).getType();
