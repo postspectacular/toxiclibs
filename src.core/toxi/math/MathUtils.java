@@ -316,6 +316,38 @@ public final class MathUtils {
         return (int) Math.pow(2, (int) (Math.log(x) / LOG2));
     }
 
+    /**
+     * Creates a single normalized impulse signal with its peak at t=1/k. The
+     * attack and decay period is configurable via the k parameter. Code from:
+     * http://www.iquilezles.org/www/articles/functions/functions.htm
+     * 
+     * @param k
+     *            smoothness
+     * @param t
+     *            time position (should be >= 0)
+     * @return impulse value (as double)
+     */
+    public static double impulse(double k, double t) {
+        double h = k * t;
+        return h * Math.exp(1.0 - h);
+    }
+
+    /**
+     * Creates a single normalized impulse signal with its peak at t=1/k. The
+     * attack and decay period is configurable via the k parameter. Code from:
+     * http://www.iquilezles.org/www/articles/functions/functions.htm
+     * 
+     * @param k
+     *            smoothness
+     * @param t
+     *            time position (should be >= 0)
+     * @return impulse value (as float)
+     */
+    public static float impulse(float k, float t) {
+        float h = k * t;
+        return (float) (h * Math.exp(1.0f - h));
+    }
+
     public static final double max(double a, double b) {
         return a > b ? a : b;
     }
