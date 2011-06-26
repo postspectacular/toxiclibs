@@ -309,31 +309,31 @@ public class Quaternion {
      *            interpolation factor (0..1)
      * @return new interpolated quat
      */
-    public Quaternion interpolateToSelf(Quaternion target, float t) {
-        float scale;
-        float invscale;
-        float dot = MathUtils.clip(dot(target), -1, 1);
-        if ((1.0 - dot) >= MathUtils.EPS) {
-            double theta = Math.acos(dot);
-            double invsintheta = 1.0 / Math.sin(theta);
-            scale = (float) (Math.sin(theta * (1.0 - t)) * invsintheta);
-            invscale = (float) (Math.sin(theta * t) * invsintheta);
+    public Quaternion interpolateToSelf(Quaternion target, double t) {
+        double scale;
+        double invscale;
+        float dot = dot(target);
+        double theta = Math.acos(dot);
+        double sintheta = Math.sin(theta);
+        if (sintheta > 0.001f) {
+            scale = Math.sin(theta * (1.0 - t)) / sintheta;
+            invscale = Math.sin(theta * t) / sintheta;
         } else {
-            scale = 1f - t;
+            scale = 1 - t;
             invscale = t;
         }
-        if (dot < 0.0) {
-            w = scale * w - invscale * target.w;
-            x = scale * x - invscale * target.x;
-            y = scale * y - invscale * target.y;
-            z = scale * z - invscale * target.z;
+        if (dot < 0) {
+            w = (float) (scale * w - invscale * target.w);
+            x = (float) (scale * x - invscale * target.x);
+            y = (float) (scale * y - invscale * target.y);
+            z = (float) (scale * z - invscale * target.z);
         } else {
-            w = scale * w + invscale * target.w;
-            x = scale * x + invscale * target.x;
-            y = scale * y + invscale * target.y;
-            z = scale * z + invscale * target.z;
+            w = (float) (scale * w + invscale * target.w);
+            x = (float) (scale * x + invscale * target.x);
+            y = (float) (scale * y + invscale * target.y);
+            z = (float) (scale * z + invscale * target.z);
         }
-        return this;
+        return normalize();
     }
 
     /**
@@ -366,9 +366,9 @@ public class Quaternion {
     }
 
     public Quaternion normalize() {
-        float mag = (float) Math.sqrt(x * x + y * y + z * z + w * w);
+        double mag = Math.sqrt(x * x + y * y + z * z + w * w);
         if (mag > MathUtils.EPS) {
-            mag = 1f / mag;
+            mag = 1.0 / mag;
             x *= mag;
             y *= mag;
             z *= mag;

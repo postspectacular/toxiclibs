@@ -33,6 +33,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import toxi.color.theory.ColorTheoryRegistry;
 import toxi.color.theory.ColorTheoryStrategy;
 import toxi.math.MathUtils;
@@ -154,6 +157,8 @@ public class ColorList implements Iterable<TColor> {
         return list;
     }
 
+    @XmlElement(name = "col")
+    @XmlJavaTypeAdapter(TColorAdapter.class)
     protected List<TColor> colors = new ArrayList<TColor>();
 
     /**
