@@ -188,15 +188,9 @@ public class Triangle3D implements Shape3D {
         if (p.equals(a) || p.equals(b) || p.equals(c)) {
             return true;
         }
-        Vec3D v1 = p.sub(a).normalize();
-        Vec3D v2 = p.sub(b).normalize();
-        Vec3D v3 = p.sub(c).normalize();
-
-        double total_angles = Math.acos(v1.dot(v2));
-        total_angles += Math.acos(v2.dot(v3));
-        total_angles += Math.acos(v3.dot(v1));
-
-        return (MathUtils.abs((float) total_angles - MathUtils.TWO_PI) <= 0.005f);
+        Vec3D n = a.sub(c).crossSelf(a.sub(b)).normalize();
+        return isSameClockDir(a, b, p, n) && isSameClockDir(b, c, p, n)
+                && isSameClockDir(c, a, p, n);
     }
 
     public Triangle3D flipVertexOrder() {
@@ -261,6 +255,17 @@ public class Triangle3D implements Shape3D {
 
     public boolean isClockwiseInYZ() {
         return Triangle3D.isClockwiseInXY(a, b, c);
+    }
+
+    private boolean isSameClockDir(Vec3D a, Vec3D b, ReadonlyVec3D p, Vec3D norm) {
+        float nx = ((b.y - a.y) * (p.z() - a.z))
+                - ((p.y() - a.y) * (b.z - a.z));
+        float ny = ((b.z - a.z) * (p.x() - a.x))
+                - ((p.z() - a.z) * (b.x - a.x));
+        float nz = ((b.x - a.x) * (p.y() - a.y))
+                - ((p.x() - a.x) * (b.y - a.y));
+        float dotprod = nx * norm.x + ny * norm.y + nz * norm.z;
+        return dotprod < 0;
     }
 
     public void set(Vec3D a2, Vec3D b2, Vec3D c2) {

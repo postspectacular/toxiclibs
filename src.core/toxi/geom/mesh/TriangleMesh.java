@@ -650,9 +650,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
     public boolean intersectsRay(Ray3D ray) {
         Triangle3D tri = intersector.getTriangle();
         for (Face f : faces) {
-            tri.a = f.a;
-            tri.b = f.b;
-            tri.c = f.c;
+            tri.set(f.a, f.b, f.c);
             if (intersector.intersectsRay(ray)) {
                 return true;
             }
