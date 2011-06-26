@@ -46,10 +46,9 @@ void draw() {
   grad.addColorAt(width,TColor.BLUE);
   grad.addColorAt(mouseX,TColor.RED);
   grad.addColorAt(width-mouseX,TColor.YELLOW);
-  ColorList l=grad.calcGradient(0,width);
+  ColorList cols=grad.calcGradient(0,width);
   int x=0;
-  for(Iterator i=l.iterator(); i.hasNext();) {
-    TColor c=(TColor)i.next();
+  for(TColor c : cols) {
     stroke(c.toARGB());
     line(x,0,x,height);
     x++;

@@ -73,15 +73,14 @@ void keyPressed() {
 void drawSpline(ColorList list) {
   noStroke();
   float numCols = list.size();
-  Vec3D[] points=new Vec3D[NUM_POINTS];
-  points[0]=new Vec3D(-XRAD,random(0.2,0.9)*height,0);
+  Vec2D[] points=new Vec2D[NUM_POINTS];
+  points[0]=new Vec2D(-XRAD,random(0.2,0.9)*height);
   for(int i=1; i<points.length-1; i++) {
-    points[i]=new Vec3D(random(-1,1)*50+(float)i/points.length*width,random(0.25,0.75)*height,random(-1,1)*300);
+    points[i]=new Vec2D(random(-1,1)*50+(float)i/points.length*width,random(0.25,0.75)*height);
   }
-  points[points.length-1]=new Vec3D(width+XRAD,random(height),0);
-  java.util.List vertices=new Spline3D(points).computeVertices(width/RES);
-  for(Iterator i=vertices.iterator(); i.hasNext(); ) {
-    Vec3D v=(Vec3D)i.next();
+  points[points.length-1]=new Vec2D(width+XRAD,random(height));
+  List<Vec2D> vertices=new Spline2D(points).computeVertices(width/RES);
+  for(Vec2D v: vertices) {
     fill(list.get((int) random(numCols)).toARGB());
     ellipse(v.x,v.y,noise(v.y*0.01)*XRAD,noise(v.x*0.01)*YRAD);
   }

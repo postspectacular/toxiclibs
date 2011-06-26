@@ -28,7 +28,7 @@ import toxi.math.*;
 
 PImage img, workImg;
 
-float tolerance=0.2;
+float tolerance=0.33;
   
 void setup() {
   size(1000,500);

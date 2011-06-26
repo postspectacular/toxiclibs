@@ -40,22 +40,18 @@ int     SWATCH_GAP = 1;
 float   MAX_SIZE = 150;
 int     NUM_DISCS = 300;
 
-boolean showDiscs=true;
-
 void setup() {
   size(1024, 768);
   noLoop();
   textFont(createFont("arial", 9));
-
 }
 
 void draw() {
   background(0);
   TColor col = ColorRange.DARK.getColor();
   int yoff = 130;
-  ArrayList strategies = ColorTheoryRegistry.getRegisteredStrategies();
-  for (Iterator i=strategies.iterator(); i.hasNext();) {
-    ColorTheoryStrategy s = (ColorTheoryStrategy) i.next();
+  ArrayList<ColorTheoryStrategy> strategies = ColorTheoryRegistry.getRegisteredStrategies();
+  for (ColorTheoryStrategy s : strategies) {
     ColorList list = ColorList.createUsingStrategy(s, col);
     swatches(list, 235, yoff);
     list=new ColorRange(list).addBrightnessRange(0,1).getColors(null,100,0.05);
@@ -79,8 +75,7 @@ void swatch(TColor c, int x, int y) {
 
 void swatches(ColorList sorted, int x, int y) {
   noStroke();
-  for (Iterator i = sorted.iterator(); i.hasNext();) {
-    TColor c = (TColor) i.next();
+  for (TColor c : sorted) {
     swatch(c, x, y);
     x += SWATCH_WIDTH + SWATCH_GAP;
   }

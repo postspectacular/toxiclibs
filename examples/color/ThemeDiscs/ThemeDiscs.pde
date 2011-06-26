@@ -75,23 +75,23 @@ void draw() {
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByCriteria(AccessCriteria.LUMINANCE,false);
+    list.sortByCriteria(AccessCriteria.LUMINANCE, false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByCriteria(AccessCriteria.BRIGHTNESS,false);
+    list.sortByCriteria(AccessCriteria.BRIGHTNESS, false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByCriteria(AccessCriteria.SATURATION,false);
+    list.sortByCriteria(AccessCriteria.SATURATION, false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByCriteria(AccessCriteria.HUE,false);
+    list.sortByCriteria(AccessCriteria.HUE, false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
 
-    list.sortByProximityTo(NamedColor.WHITE,new RGBDistanceProxy(),false);
+    list.sortByProximityTo(NamedColor.WHITE, new RGBDistanceProxy(), false);
     swatches(list, 32, yoff);
     yoff+=SWATCH_HEIGHT+10;
   }
@@ -105,8 +105,7 @@ void keyPressed() {
 
 void swatches(ColorList sorted, int x, int y) {
   noStroke();
-  for (Iterator i = sorted.iterator(); i.hasNext();) {
-    TColor c = (TColor) i.next();
+  for (TColor c : sorted) {
     fill(c.toARGB());
     rect(x, y, SWATCH_WIDTH, SWATCH_HEIGHT);
     x += SWATCH_WIDTH + SWATCH_GAP;
@@ -114,15 +113,12 @@ void swatches(ColorList sorted, int x, int y) {
 }
 
 void discs(ColorList list) {
+  noStroke();
   float numCols = list.size();
   for (int i = 0; i < NUM_DISCS; i++) {
     TColor c = list.get((int) random(numCols)).copy();
     c.alpha = random(0.5, 1);
     fill(c.toARGB());
-    c = list.get((int) random(numCols));
-    //stroke(c.toARGB());
-    //strokeWeight(random(10));
-    noStroke();
     float r = random(MAX_SIZE);
     ellipse(random(width), random(height), r, r);
   }
