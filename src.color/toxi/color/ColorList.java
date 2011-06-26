@@ -355,6 +355,7 @@ public class ColorList implements Iterable<TColor> {
      * list.
      * 
      * @param i
+     *            index
      * @return color
      */
     public TColor get(int i) {

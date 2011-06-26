@@ -40,8 +40,10 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
 
     public static final String NAME = "analogous";
 
-    protected static final Vec2D[] tones = new Vec2D[] { new Vec2D(1, 2.2f),
-            new Vec2D(2, 1), new Vec2D(-1, -0.5f), new Vec2D(-2, 1) };
+    protected static final Vec2D[] tones = new Vec2D[] {
+            new Vec2D(1, 2.2f), new Vec2D(2, 1), new Vec2D(-1, -0.5f),
+            new Vec2D(-2, 1)
+    };
 
     protected float contrast = 0.25f;
     protected float theta = 10 * MathUtils.DEG2RAD;
@@ -82,7 +84,7 @@ public class AnalogousStrategy implements ColorTheoryStrategy {
         contrast = MathUtils.clipNormalized(contrast);
         ColorList colors = new ColorList(src);
         for (Vec2D currTone : tones) {
-            TColor c = src.getRotatedRYB((int) (theta * currTone.x));
+            TColor c = src.getRotatedRYB(theta * currTone.x);
             float t = 0.44f - currTone.y * 0.1f;
             if (src.brightness() - contrast * currTone.y < t) {
                 c.setBrightness(t);
