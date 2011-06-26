@@ -50,7 +50,7 @@ public class WEMeshTest extends TestCase {
     }
 
     public void testPerforate() {
-        m.removeFace((WEFace) m.getFaces().get(0));
+        m.removeFace(m.getFaces().get(0));
         WEFace f = (WEFace) m.getFaces().get(0);
         m.perforateFace(f, 0.5f);
         System.out.println(m.edges.size() + " edges");

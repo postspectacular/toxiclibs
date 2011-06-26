@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 import toxi.color.AccessCriteria;
+import toxi.color.ColorGradient;
 import toxi.color.ColorList;
 import toxi.color.ColorRange;
 import toxi.color.ColorTheme;
@@ -96,6 +97,16 @@ public class ColorTest extends TestCase {
         assertEquals(c.yellow(), d.yellow());
         assertEquals(c.black(), d.black());
         assertEquals(c.alpha(), d.alpha());
+    }
+
+    public void testGradient() {
+        ColorGradient grad = new ColorGradient();
+        grad.addColorAt(0, TColor.RED);
+        grad.addColorAt(0.5f, TColor.RED);
+        grad.addColorAt(2.5f, TColor.YELLOW);
+        grad.addColorAt(299f, TColor.BLUE);
+        ColorList cols = grad.calcGradient();
+        // assertEquals(TColor.BLUE, cols.get(-1));
     }
 
     public void testHues() {
