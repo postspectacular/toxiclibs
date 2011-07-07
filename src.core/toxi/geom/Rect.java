@@ -136,6 +136,25 @@ public class Rect implements Shape2D {
         return new Rect(x, y, width, height);
     }
 
+    /**
+     * Returns true if the Object o is of type Rect and all of the data members
+     * of o are equal to the corresponding data members in this rectangle.
+     * 
+     * @param o
+     *            the Object with which the comparison is made
+     * @return true or false
+     */
+    public boolean equals(Object o) {
+        try {
+            Rect r = (Rect) o;
+            return (x == r.x && y == r.y && width == r.width && height == r.height);
+        } catch (NullPointerException e) {
+            return false;
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
+
     public final float getArea() {
         return width * height;
     }
@@ -211,7 +230,7 @@ public class Rect implements Shape2D {
     public Line2D getEdge(int id) {
         Line2D edge = null;
         switch (id) {
-            // top
+        // top
             case 0:
                 edge = new Line2D(x, y, x + width, y);
                 break;
@@ -292,6 +311,45 @@ public class Rect implements Shape2D {
             }
         }
         return this;
+    }
+
+    /**
+     * Returns a hash code value based on the data values in this object. Two
+     * different Rect objects with identical data values (i.e., Rect.equals
+     * returns true) will return the same hash code value. Two objects with
+     * different data members may return the same hash value, although this is
+     * not likely.
+     * 
+     * @return the integer hash code value
+     */
+    public int hashCode() {
+        long bits = 1L;
+        bits = 31L * bits + VecMathUtil.floatToIntBits(x);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(y);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(width);
+        bits = 31L * bits + VecMathUtil.floatToIntBits(height);
+        return (int) (bits ^ (bits >> 32));
+    }
+
+    /**
+     * Creates a new rectangle by forming the intersection of this rectangle and
+     * the given other rect. The resulting bounds will be the rectangle of the
+     * overlay area or null if the rects do not intersect.
+     * 
+     * @param r
+     *            intersection partner rect
+     * @return new Rect or null
+     */
+    public final Rect intersectionRectWith(Rect r) {
+        Rect isec = null;
+        if (intersectsRect(r)) {
+            float x1 = MathUtils.max(x, r.x);
+            float y1 = MathUtils.max(y, r.y);
+            float x2 = MathUtils.min(getRight(), r.getRight());
+            float y2 = MathUtils.min(getBottom(), r.getBottom());
+            isec = new Rect(x1, y1, x2 - x1, y2 - y1);
+        }
+        return isec;
     }
 
     /**
@@ -420,20 +478,31 @@ public class Rect implements Shape2D {
     }
 
     /**
-     * Updates the bounds of this rectangle by forming an union with the given
-     * rect. If the rects are not overlapping, the resulting bounds will be
-     * inclusive of both.
+     * @deprecated use {@link #unionRectWith(Rect)} instead. Also note, that
+     *             {@link #unionRectWith(Rect)} does NOT modify the original
+     *             Rect anymore, but produces a new Rect instance.
+     * @param r
+     * @return new Rect
+     */
+    @Deprecated
+    public final Rect union(Rect r) {
+        return unionRectWith(r);
+    }
+
+    /**
+     * Creates a new rectangle by forming an union of this rectangle and the
+     * given other Rect. The resulting bounds will be inclusive of both.
      * 
      * @param r
-     * @return itself
+     * @return new Rect
      */
-    public final Rect union(Rect r) {
-        float tmp = MathUtils.max(x + width, r.x + r.width);
-        x = MathUtils.min(x, r.x);
-        width = tmp - x;
-        tmp = MathUtils.max(y + height, r.y + r.height);
-        y = MathUtils.min(y, r.y);
-        height = tmp - y;
-        return this;
+    public final Rect unionRectWith(Rect r) {
+        float x1 = MathUtils.min(x, r.x);
+        float x2 = MathUtils.max(x + width, r.x + r.width);
+        float w = x2 - x1;
+        float y1 = MathUtils.min(y, r.y);
+        float y2 = MathUtils.max(y + height, r.y + r.height);
+        float h = y2 - y1;
+        return new Rect(x1, y1, w, h);
     }
 }
