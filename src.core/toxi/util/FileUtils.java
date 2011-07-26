@@ -31,6 +31,7 @@ import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -51,9 +51,22 @@ import java.util.zip.GZIPOutputStream;
  */
 public class FileUtils {
 
+    /**
+     * {@link FileDialog} constant
+     */
     public static final int LOAD = FileDialog.LOAD;
+
+    /**
+     * {@link FileDialog} constant
+     */
     public static final int SAVE = FileDialog.SAVE;
 
+    /**
+     * Attempts to create the full path of directories as specified by the given
+     * target file.
+     * 
+     * @param file
+     */
     static public void createDirectories(File file) {
         try {
             String parentName = file.getParent();
@@ -69,6 +82,16 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Creates an {@link InputStream} for the given file. If the file extension
+     * ends with ".gz" the stream is automatically wrapped in a
+     * {@link GZIPInputStream} as well.
+     * 
+     * @param file
+     *            input file
+     * @return input stream
+     * @throws IOException
+     */
     static public InputStream createInputStream(File file) throws IOException {
         if (file == null) {
             throw new IllegalArgumentException("file can't be null");
@@ -80,6 +103,16 @@ public class FileUtils {
         return stream;
     }
 
+    /**
+     * Creates an {@link OutputStream} for the given file. If the file extension
+     * ends with ".gz" the stream is automatically wrapped in a
+     * {@link GZIPOutputStream} as well.
+     * 
+     * @param file
+     *            output file
+     * @return output stream
+     * @throws IOException
+     */
     static public OutputStream createOutputStream(File file) throws IOException {
         if (file == null) {
             throw new IllegalArgumentException("file can't be null");
@@ -92,14 +125,41 @@ public class FileUtils {
         return stream;
     }
 
+    /**
+     * Creates a {@link BufferedReader} for the given file using UTF-8 encoding.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static BufferedReader createReader(File file) throws IOException {
         return createReader(createInputStream(file));
     }
 
+    /**
+     * Creates a {@link BufferedReader} for the given {@link InputStream} using
+     * UTF-8 encoding.
+     * 
+     * @param input
+     *            stream
+     * @return
+     * @throws IOException
+     */
     public static BufferedReader createReader(InputStream input) {
         return createReader(input, "UTF-8");
     }
 
+    /**
+     * Creates a {@link BufferedReader} for the given {@link InputStream} and
+     * using the specified encoding.
+     * 
+     * @param input
+     *            stream
+     * @param encoding
+     *            text encoding to use
+     * @return
+     * @throws IOException
+     */
     public static BufferedReader createReader(InputStream input, String encoding) {
         InputStreamReader isr = null;
         try {
@@ -109,21 +169,47 @@ public class FileUtils {
         return new BufferedReader(isr, 0x10000);
     }
 
-    public static PrintWriter createWriter(File file) throws IOException {
+    /**
+     * Creates a {@link BufferedWriter} for the given file using UTF-8 encoding.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static BufferedWriter createWriter(File file) throws IOException {
         return createWriter(createOutputStream(file));
     }
 
-    public static PrintWriter createWriter(OutputStream out) {
+    /**
+     * Creates a {@link BufferedWriter} for the given {@link OutputStream} using
+     * UTF-8 encoding.
+     * 
+     * @param out
+     * @return
+     * @throws IOException
+     */
+    public static BufferedWriter createWriter(OutputStream out) {
         return createWriter(out, "UTF-8");
     }
 
-    public static PrintWriter createWriter(OutputStream out, String encoding) {
+    /**
+     * Creates a {@link BufferedWriter} for the given {@link OutputStream} and
+     * using the specified encoding.
+     * 
+     * @param out
+     *            stream
+     * @param encoding
+     *            text encoding to use
+     * @return
+     * @throws IOException
+     */
+    public static BufferedWriter createWriter(OutputStream out, String encoding) {
         OutputStreamWriter w = null;
         try {
             w = new OutputStreamWriter(out, encoding);
         } catch (UnsupportedEncodingException e) {
         }
-        return new PrintWriter(w);
+        return new BufferedWriter(w, 0x10000);
     }
 
     /**
@@ -170,6 +256,13 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Loads the given {@link InputStream} into a byte array buffer.
+     * 
+     * @param stream
+     * @return byte array
+     * @throws IOException
+     */
     static public byte[] loadBytes(InputStream stream) throws IOException {
         BufferedInputStream input = new BufferedInputStream(stream);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -180,33 +273,78 @@ public class FileUtils {
         return buffer.toByteArray();
     }
 
-    public static String loadText(BufferedReader r) throws IOException {
+    /**
+     * Loads the given {@link BufferedReader} as text, line by line into a
+     * {@link String}.
+     * 
+     * @param reader
+     * @return reader contents as string
+     * @throws IOException
+     */
+    public static String loadText(BufferedReader reader) throws IOException {
         StringBuilder result = new StringBuilder();
         String line;
-        while ((line = r.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             result.append(line).append("\n");
         }
         return result.toString();
     }
 
+    /**
+     * Loads the given {@link InputStream} as text, line by line into a
+     * {@link String} using UTF-8 encoding.
+     * 
+     * @param input
+     *            stream
+     * @return stream contents as string
+     * @throws IOException
+     */
     public static String loadText(InputStream input) throws IOException {
         return loadText(input, "UTF-8");
     }
 
+    /**
+     * Loads the given {@link InputStream} as text, line by line into a
+     * {@link String} using the specified encoding.
+     * 
+     * @param input
+     *            stream
+     * @param encoding
+     * @return
+     * @throws IOException
+     */
     public static String loadText(InputStream input, String encoding)
             throws IOException {
         byte[] raw = loadBytes(input);
         return new String(raw, encoding);
     }
 
-    static public void saveText(OutputStream output, String string) {
-        saveText(createWriter(output), string);
-    }
-
-    static public void saveText(PrintWriter writer, String string) {
-        writer.println(string);
+    /**
+     * Saves the given text to the specified {@link BufferedWriter} instance,
+     * then closes the writer afterwards.
+     * 
+     * @param writer
+     * @param string
+     * @throws IOException
+     */
+    static public void saveText(BufferedWriter writer, String string)
+            throws IOException {
+        writer.write(string);
         writer.flush();
         writer.close();
+    }
+
+    /**
+     * Saves the given text to the specified {@link OutputStream} instance, then
+     * closes the underlying writer afterwards.
+     * 
+     * @param output
+     * @param string
+     * @throws IOException
+     */
+    static public void saveText(OutputStream output, String string)
+            throws IOException {
+        saveText(createWriter(output), string);
     }
 
     /**
