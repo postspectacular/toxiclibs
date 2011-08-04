@@ -3,6 +3,13 @@ package toxi.geom;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Standard multi-segment bezier curve implementation with optional automatic
+ * handle alignment between segments. Can be used to create closed curves which
+ * can then be converted into {@link Polygon2D} instances. Also provides curve
+ * tangent calculation feature. Usage of this class is very similar to
+ * {@link Spline2D}.
+ */
 public class BezierCurve2D {
 
     private List<Vec2D> points;
