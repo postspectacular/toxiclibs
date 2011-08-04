@@ -27,14 +27,16 @@
 
 package toxi.geom;
 
+import toxi.geom.Vec3D.Axis;
+
 /**
  * This class defines an origin and set of axis vectors for a 3D cartesian
  * coordinate system.
  */
 public class Origin3D {
 
-    public final ReadonlyVec3D origin;
-    public final ReadonlyVec3D xAxis, yAxis, zAxis;
+    public ReadonlyVec3D origin;
+    public ReadonlyVec3D xAxis, yAxis, zAxis;
 
     /**
      * Creates a new origin at the world origin using the standard XYZ axes
@@ -68,8 +70,40 @@ public class Origin3D {
     }
 
     /**
+     * Attempts to create a cartesian coordinate system with the given point as
+     * its origin and the direction as its Z-axis. In cases when two of the
+     * direction vector components are equal, the constructor will throw an
+     * {@link IllegalArgumentException}.
+     * 
      * @param o
-     *            origin of the soordinate system
+     *            origin of the coordinate system
+     * @param dir
+     *            z-axis
+     */
+    public Origin3D(Vec3D o, Vec3D dir) {
+        this.origin = o;
+        this.zAxis = dir.getNormalized();
+        Vec3D av = null;
+        Axis a = zAxis.getClosestAxis();
+        if (a == Vec3D.Axis.X) {
+            av = Vec3D.Axis.Z.getVector().getInverted();
+        } else if (a == Vec3D.Axis.Y) {
+            av = Vec3D.Axis.Z.getVector().getInverted();
+        } else if (a == Vec3D.Axis.Z) {
+            av = Vec3D.Axis.X.getVector().getInverted();
+        }
+        if (av == null) {
+            throw new IllegalArgumentException(
+                    "can't create a coordinate system for direction: " + dir);
+        }
+        xAxis = av.cross(dir).normalize();
+        yAxis = xAxis.cross(zAxis).normalize();
+
+    }
+
+    /**
+     * @param o
+     *            origin of the coordinate system
      * @param x
      *            x-direction of the coordinate system
      * @param y
