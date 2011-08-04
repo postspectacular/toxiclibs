@@ -80,6 +80,14 @@ public class BezierCurve3D {
         return new Vec3D(x, y, z).normalize();
     }
 
+    /**
+     * Computes a list of intermediate curve points for all segments. For each
+     * curve segment the given number of points will be produced.
+     * 
+     * @param res
+     *            number of points per segment
+     * @return list of Vec3Ds
+     */
     public List<Vec3D> computeVertices(int res) {
         List<Vec3D> vertices = new ArrayList<Vec3D>();
         int i = 0;
@@ -99,6 +107,10 @@ public class BezierCurve3D {
         return vertices;
     }
 
+    /**
+     * @return true, if the curve is closed. I.e. the first and last control
+     *         point coincide.
+     */
     public boolean isClosed() {
         return points.get(0).equals(points.get(points.size() - 1));
     }

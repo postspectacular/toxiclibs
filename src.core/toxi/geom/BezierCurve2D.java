@@ -77,6 +77,14 @@ public class BezierCurve2D {
         return new Vec2D(x, y).normalize();
     }
 
+    /**
+     * Computes a list of intermediate curve points for all segments. For each
+     * curve segment the given number of points will be produced.
+     * 
+     * @param res
+     *            number of points per segment
+     * @return list of Vec2Ds
+     */
     public List<Vec2D> computeVertices(int res) {
         List<Vec2D> vertices = new ArrayList<Vec2D>();
         int i = 0;
@@ -96,6 +104,10 @@ public class BezierCurve2D {
         return vertices;
     }
 
+    /**
+     * @return true, if the curve is closed. I.e. the first and last control
+     *         point coincide.
+     */
     public boolean isClosed() {
         return points.get(0).equals(points.get(points.size() - 1));
     }
