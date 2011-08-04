@@ -1,6 +1,7 @@
 syntax: glob
 
 bin
+dev
 docs
 dist
 blog
