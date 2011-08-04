@@ -43,7 +43,9 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public static enum Axis {
 
-        X(Vec3D.X_AXIS), Y(Vec3D.Y_AXIS), Z(Vec3D.Z_AXIS);
+        X(Vec3D.X_AXIS),
+        Y(Vec3D.Y_AXIS),
+        Z(Vec3D.Z_AXIS);
 
         private final ReadonlyVec3D vector;
 
@@ -1497,11 +1499,15 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     }
 
     public float[] toArray() {
-        return new float[] { x, y, z };
+        return new float[] {
+                x, y, z
+        };
     }
 
     public float[] toArray4(float w) {
-        return new float[] { x, y, z, w };
+        return new float[] {
+                x, y, z, w
+        };
     }
 
     public final Vec3D toCartesian() {
@@ -1543,5 +1549,28 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public final float z() {
         return z;
+    }
+
+    /**
+     * Identifies the closest cartesian axis to this vector. If at leat two
+     * vector components are equal, no unique decision can be made and the
+     * method returns null.
+     * 
+     * @return Axis enum or null
+     */
+    public final Axis getClosestAxis() {
+        float ax = MathUtils.abs(x);
+        float ay = MathUtils.abs(y);
+        float az = MathUtils.abs(z);
+        if (ax > ay && ax > az) {
+            return Axis.X;
+        }
+        if (ay > ax && ay > az) {
+            return Axis.Y;
+        }
+        if (az > ax && az > ay) {
+            return Axis.Z;
+        }
+        return null;
     }
 }

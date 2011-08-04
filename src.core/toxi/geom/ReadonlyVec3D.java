@@ -202,6 +202,8 @@ public interface ReadonlyVec3D {
      */
     public Vec3D getCartesian();
 
+    public Axis getClosestAxis();
+
     public float getComponent(Axis id);
 
     public float getComponent(int id);
