@@ -365,8 +365,9 @@ public class Matrix4x4 {
     }
 
     private final void init() {
-        matrix = new double[][] { new double[4], new double[4], new double[4],
-                new double[4] };
+        matrix = new double[][] {
+                new double[4], new double[4], new double[4], new double[4]
+        };
     }
 
     /**
@@ -612,9 +613,7 @@ public class Matrix4x4 {
 
     public Matrix4x4 scaleSelf(double scaleX, double scaleY, double scaleZ) {
         TEMP.identity();
-        TEMP.matrix[0][0] = scaleX;
-        TEMP.matrix[1][1] = scaleY;
-        TEMP.matrix[2][2] = scaleZ;
+        TEMP.setScale(scaleX, scaleY, scaleZ);
         return this.multiplySelf(TEMP);
     }
 
@@ -657,6 +656,20 @@ public class Matrix4x4 {
             m[2] = n[2];
             m[3] = n[3];
         }
+        return this;
+    }
+
+    public Matrix4x4 setPosition(double x, double y, double z) {
+        matrix[0][3] = x;
+        matrix[1][3] = y;
+        matrix[2][3] = z;
+        return this;
+    }
+
+    public Matrix4x4 setScale(double scaleX, double scaleY, double scaleZ) {
+        matrix[0][0] = scaleX;
+        matrix[1][1] = scaleY;
+        matrix[2][2] = scaleZ;
         return this;
     }
 
@@ -745,9 +758,7 @@ public class Matrix4x4 {
 
     public Matrix4x4 translateSelf(double dx, double dy, double dz) {
         TEMP.identity();
-        TEMP.matrix[0][3] = dx;
-        TEMP.matrix[1][3] = dy;
-        TEMP.matrix[2][3] = dz;
+        TEMP.setPosition(dx, dy, dz);
         return this.multiplySelf(TEMP);
     }
 
