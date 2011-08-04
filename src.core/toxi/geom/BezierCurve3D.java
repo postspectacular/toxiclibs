@@ -1,0 +1,100 @@
+package toxi.geom;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BezierCurve3D {
+
+    private List<Vec3D> points;
+
+    public BezierCurve3D() {
+        points = new ArrayList<Vec3D>();
+    }
+
+    public BezierCurve3D(List<Vec3D> points) {
+        this.points = points;
+    }
+
+    public BezierCurve3D add(Vec3D p) {
+        points.add(p);
+        return this;
+    }
+
+    public void alignAllHandles() {
+        for (int i = 0, num = points.size() - 1; i < num; i += 3) {
+            alignHandlesForPoint(i);
+        }
+    }
+
+    public void alignHandlesForPoint(int id) {
+        if (id < points.size() - 1) {
+            Vec3D c;
+            if (id == 0 && isClosed()) {
+                c = points.get(points.size() - 2);
+            } else {
+                c = points.get(id - 1);
+            }
+            Vec3D d = points.get(id);
+            Vec3D e = points.get(id + 1);
+            Vec3D cd = d.sub(c);
+            Vec3D de = e.sub(d);
+            Vec3D cd2 = cd.interpolateTo(de, 0.5f);
+            c.set(d.sub(cd2));
+            e.set(d.add(de.interpolateToSelf(cd, 0.5f)));
+        } else {
+            throw new IllegalArgumentException("invalid point index");
+        }
+    }
+
+    public Vec3D computePointInSegment(Vec3D a, Vec3D b, Vec3D c, Vec3D d,
+            float t) {
+        float invT = 1.0f - t;
+        float invT2 = invT * invT;
+        float invT3 = invT2 * invT;
+        float t2 = t * t;
+        float t3 = t2 * t;
+        float x = a.x * invT3 + 3 * b.x * t * invT2 + 3 * c.x * t2 * invT + d.x
+                * t3;
+        float y = a.y * invT3 + 3 * b.y * t * invT2 + 3 * c.y * t2 * invT + d.y
+                * t3;
+        float z = a.z * invT3 + 3 * b.z * t * invT2 + 3 * c.z * t2 * invT + d.z
+                * t3;
+        return new Vec3D(x, y, z);
+    }
+
+    public Vec3D computeTangentInSegment(Vec3D a, Vec3D b, Vec3D c, Vec3D d,
+            float t) {
+        float t2 = t * t;
+        float x = (3 * t2 * (-a.x + 3 * b.x - 3 * c.x + d.x) + 6 * t
+                * (a.x - 2 * b.x + c.x) + 3 * (-a.x + b.x));
+        float y = (3 * t2 * (-a.y + 3 * b.y - 3 * c.y + d.y) + 6 * t
+                * (a.y - 2 * b.y + c.y) + 3 * (-a.y + b.y));
+        float z = (3 * t2 * (-a.z + 3 * b.z - 3 * c.z + d.z) + 6 * t
+                * (a.z - 2 * b.z + c.z) + 3 * (-a.z + b.z));
+        return new Vec3D(x, y, z).normalize();
+    }
+
+    public List<Vec3D> computeVertices(int res) {
+        List<Vec3D> vertices = new ArrayList<Vec3D>();
+        int i = 0;
+        int maxRes = res;
+        for (int num = points.size(); i < num - 3; i += 3) {
+            Vec3D a = points.get(i);
+            Vec3D b = points.get(i + 1);
+            Vec3D c = points.get(i + 2);
+            Vec3D d = points.get(i + 3);
+            if (i + 3 > num - 3) {
+                maxRes++;
+            }
+            for (int t = 0; t < maxRes; t++) {
+                vertices.add(computePointInSegment(a, b, c, d, (float) t / res));
+            }
+        }
+        return vertices;
+    }
+
+    public boolean isClosed() {
+        return points.get(0).equals(points.get(points.size() - 1));
+    }
+
+}
