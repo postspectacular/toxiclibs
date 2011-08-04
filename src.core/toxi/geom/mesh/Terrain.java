@@ -46,6 +46,7 @@ public class Terrain {
     protected Vec3D[] vertices;
 
     protected int width;
+
     protected int depth;
     protected float scale;
 
@@ -77,6 +78,10 @@ public class Terrain {
      */
     public int getDepth() {
         return depth;
+    }
+
+    public float[] getElevation() {
+        return elevation;
     }
 
     /**
