@@ -20,6 +20,7 @@ import toxi.math.MathUtils;
 public abstract class GridTesselator implements PolygonTesselator {
 
     protected float res;
+    private float rootSize;
 
     /**
      * Creates a new instance with the given grid resolution.
@@ -28,7 +29,18 @@ public abstract class GridTesselator implements PolygonTesselator {
      *            snap distance for grid points
      */
     public GridTesselator(float res) {
+        this(res, Voronoi.DEFAULT_SIZE);
+    }
+
+    /**
+     * Creates a new instance with the given grid resolution.
+     * 
+     * @param res
+     *            snap distance for grid points
+     */
+    public GridTesselator(float res, float rootSize) {
         this.res = res;
+        this.rootSize = rootSize;
     }
 
     protected abstract List<Vec2D> createInsidePoints(Polygon2D poly,
@@ -55,7 +67,7 @@ public abstract class GridTesselator implements PolygonTesselator {
         Rect bounds = poly.getBounds();
         // a Voronoi diagram relies on a Delaunay triangulation behind the
         // scenes
-        Voronoi voronoi = new Voronoi();
+        Voronoi voronoi = new Voronoi(rootSize);
         // add perimeter points
         for (Vec2D v : poly.vertices) {
             voronoi.addPoint(v);
