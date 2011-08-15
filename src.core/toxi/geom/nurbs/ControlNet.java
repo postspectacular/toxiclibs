@@ -32,7 +32,7 @@ import toxi.geom.Vec4D;
 public class ControlNet {
 
     private int nU, nV;
-    private Vec4D cps[][];
+    private Vec4D[][] cps;
 
     /**
      * Create a ControlNet from the given points the two dimensional array must
@@ -41,7 +41,7 @@ public class ControlNet {
      * @param cpnet
      *            "Matrix" of ControlPoints
      */
-    public ControlNet(Vec4D cpnet[][]) throws IllegalArgumentException {
+    public ControlNet(Vec4D[][] cpnet) throws IllegalArgumentException {
         if (cpnet.length < 1) {
             throw new IllegalArgumentException(
                     "Nurbs is not a Surface, to few ControlPoints in u Direction");

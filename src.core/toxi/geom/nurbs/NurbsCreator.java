@@ -38,13 +38,13 @@ import toxi.math.MathUtils;
  */
 public final class NurbsCreator {
 
-    private static KnotVector averaging(final float uk[], final int p) {
+    private static KnotVector averaging(final float[] uk, final int p) {
         int m = uk.length + p;
         int n = uk.length - 1;
         float ip = 1f / p;
-        float u[] = new float[m + 1];
+        float[] u = new float[m + 1];
         for (int i = 0; i <= p; i++) {
-            u[u.length - 1 - i] = 1;
+            u[m - i] = 1;
         }
         for (int j = 1; j <= n - p; j++) {
             float sum = 0;
@@ -56,12 +56,12 @@ public final class NurbsCreator {
         return new KnotVector(u, p);
     }
 
-    private static float[] centripetal(Vec3D points[]) {
+    private static float[] centripetal(Vec3D[] points) {
         int n = points.length - 1;
         float d = 0;
-        float uk[] = new float[n + 1];
+        float[] uk = new float[n + 1];
         uk[n] = 1;
-        double tmp[] = new double[n];
+        double[] tmp = new double[n];
         for (int k = 1; k <= n; k++) {
             tmp[k - 1] = Math.sqrt(points[k].distanceTo(points[k - 1]));
             d += tmp[k - 1];
@@ -118,7 +118,7 @@ public final class NurbsCreator {
         tmp.set(o.yAxis).scaleSelf(cosStart);
         Vec3D t0 = new Vec3D(o.xAxis).scaleSelf(-sinStart).addSelf(tmp);
 
-        Vec4D cps[] = new Vec4D[n + 1];
+        Vec4D[] cps = new Vec4D[n + 1];
         cps[0] = new Vec4D(p0, 1);
         int index = 0;
         double angle = thetaStart;
@@ -128,8 +128,8 @@ public final class NurbsCreator {
         Vec3D t2 = new Vec3D();
         for (int i = 1; i <= narcs; i++) {
             angle += dtheta;
-            double sin = Math.sin(angle);
-            double cos = Math.cos(angle);
+            final double sin = Math.sin(angle);
+            final double cos = Math.cos(angle);
 
             tmp.set(o.xAxis).scaleSelf((float) (r * cos));
             p2.set(o.origin).addSelf(tmp);
@@ -152,7 +152,7 @@ public final class NurbsCreator {
             }
         }
         int j = n + 1;
-        float uKnot[] = new float[j + 3];
+        float[] uKnot = new float[j + 3];
         for (int i = 0; i < 3; i++) {
             uKnot[i + j] = 1;
         }
@@ -191,7 +191,7 @@ public final class NurbsCreator {
      */
     public static NurbsCurve createFullCircleQuad7(Origin3D o, float r) {
 
-        Vec4D cp[] = new Vec4D[7];
+        Vec4D[] cp = new Vec4D[7];
         cp[0] = new Vec4D(o.xAxis.scale(r), 1);
         cp[3] = cp[0].getInvertedXYZ();
         cp[6] = cp[0].copy();
@@ -206,10 +206,10 @@ public final class NurbsCreator {
         for (int i = 0; i < 7; i++) {
             cp[i].addXYZSelf(o.origin);
         }
-        float uQ7[] = {
+        float[] u = {
                 0, 0, 0, 0.25f, 0.5f, 0.5f, 0.75f, 1, 1, 1
         };
-        return new BasicNurbsCurve(cp, uQ7, 2);
+        return new BasicNurbsCurve(cp, u, 2);
     }
 
     /**
@@ -224,9 +224,9 @@ public final class NurbsCreator {
      * @return A NurbsCurve for a full-circle
      */
     public static NurbsCurve createFullCircleQuad9(Origin3D o, float r) {
-        float w = (float) Math.sqrt(2) / 2;
+        final float w = MathUtils.SQRT2 / 2;
 
-        Vec4D cp[] = new Vec4D[9];
+        Vec4D[] cp = new Vec4D[9];
         cp[0] = new Vec4D(o.xAxis.scale(r), 1);
         cp[4] = cp[0].getInvertedXYZ();
         cp[8] = cp[0].copy();
@@ -244,16 +244,15 @@ public final class NurbsCreator {
         for (int i = 0; i < 9; i++) {
             cp[i].addXYZSelf(o.origin);
         }
-        float uQ9[] = {
+        float[] u = {
                 0, 0, 0, 0.25f, 0.25f, 0.5f, 0.5f, 0.75f, 0.75f, 1, 1, 1
         };
-        return new BasicNurbsCurve(cp, uQ9, 2);
+        return new BasicNurbsCurve(cp, u, 2);
     }
 
     /**
      * Create a revolved NurbsSurface from the given NurbsCurve around the given
-     * axis whith the angle theta. [TODO:call createRevolvedSurface(Axis3D a,
-     * NurbsCurve curve, double thetaStart, double thetaEnd) as as it is tested]
+     * axis whith the angle theta.
      * 
      * @param a
      *            Axis to revolve around.
@@ -263,6 +262,8 @@ public final class NurbsCreator {
      *            Angle to revolve
      * @return The revolved NurbsSurface
      */
+    // TODO:call createRevolvedSurface(Axis3D a, NurbsCurve curve, double
+    // thetaStart, double thetaEnd) as as it is tested
     public static NurbsSurface createRevolvedSurface(Axis3D a,
             NurbsCurve curve, double theta) {
         int narcs = 4;
@@ -274,9 +275,9 @@ public final class NurbsCreator {
             narcs = 3;
         }
 
-        double dtheta = theta / narcs;
         int j = 3 + 2 * (narcs - 1);
-        float uKnot[] = new float[j + 3];
+        final double dtheta = theta / narcs;
+        final float[] uKnot = new float[j + 3];
         for (int i = 0; i < 3; i++) {
             uKnot[j + i] = 1;
         }
@@ -300,29 +301,29 @@ public final class NurbsCreator {
         }
 
         double angle = 0;
-        double cos[] = new double[narcs + 1];
-        double sin[] = new double[narcs + 1];
+        final double[] cos = new double[narcs + 1];
+        final double[] sin = new double[narcs + 1];
         for (int i = 0; i <= narcs; i++) {
             cos[i] = Math.cos(angle);
             sin[i] = Math.sin(angle);
             angle += dtheta;
         }
 
-        Vec4D pj[] = curve.getControlPoints();
-        double wm = Math.cos(dtheta / 2);
-        Vec3D O = new Vec3D();
-        Vec3D P2 = new Vec3D();
-        Vec3D T2 = new Vec3D();
+        Vec4D[] pj = curve.getControlPoints();
         Vec3D P0 = new Vec3D();
-        Vec3D T0 = new Vec3D();
-        Vec3D tmp = new Vec3D();
-        Vec3D X = new Vec3D();
-        Vec3D Y = new Vec3D();
-        Vec4D pij[][] = new Vec4D[2 * narcs + 1][pj.length];
+        final Vec3D P2 = new Vec3D();
+        final Vec3D O = new Vec3D();
+        final Vec3D T2 = new Vec3D();
+        final Vec3D T0 = new Vec3D();
+        final Vec3D tmp = new Vec3D();
+        final Vec3D X = new Vec3D();
+        final Vec3D Y = new Vec3D();
+        final Vec4D[][] pij = new Vec4D[2 * narcs + 1][pj.length];
+        final double wm = Math.cos(dtheta / 2);
         for (j = 0; j < pj.length; j++) {
             pointToLine3D(a.origin, a.dir, pj[j].to3D(), O);
             X.set(pj[j].to3D().subSelf(O));
-            double r = X.magnitude();
+            final double r = X.magnitude();
             if (r == 0) {
                 X.set(O);
             }
@@ -361,7 +362,7 @@ public final class NurbsCreator {
 
     /**
      * Create a revolved NurbsSurface from the given NurbsCurve around the given
-     * axis whith the angle theta. [TODO: test]
+     * axis whith the angle theta.
      * 
      * @param a
      *            Axis to revolve around.
@@ -390,9 +391,9 @@ public final class NurbsCreator {
             narcs = 3;
         }
 
-        double dtheta = theta / narcs;
         int j = 3 + 2 * (narcs - 1);
-        float uKnot[] = new float[j + 3];
+        final double dtheta = theta / narcs;
+        final float[] uKnot = new float[j + 3];
         for (int i = 0; i < 3; i++) {
             uKnot[i] = 0;
             uKnot[j + i] = 1;
@@ -417,29 +418,29 @@ public final class NurbsCreator {
         }
 
         double angle = thetaStart;
-        double cos[] = new double[narcs + 1];
-        double sin[] = new double[narcs + 1];
+        final double[] cos = new double[narcs + 1];
+        final double[] sin = new double[narcs + 1];
         for (int i = 0; i <= narcs; i++) {
             cos[i] = Math.cos(angle);
             sin[i] = Math.sin(angle);
             angle += dtheta;
         }
 
-        Vec4D pj[] = curve.getControlPoints();
-        double wm = Math.cos(dtheta / 2);
-        Vec3D O = new Vec3D();
-        Vec3D P2 = new Vec3D();
-        Vec3D T2 = new Vec3D();
+        final Vec4D[] pj = curve.getControlPoints();
         Vec3D P0 = new Vec3D();
-        Vec3D T0 = new Vec3D();
-        Vec3D tmp = new Vec3D();
-        Vec3D X = new Vec3D();
-        Vec3D Y = new Vec3D();
-        Vec4D pij[][] = new Vec4D[2 * narcs + 1][pj.length];
+        final Vec3D O = new Vec3D();
+        final Vec3D P2 = new Vec3D();
+        final Vec3D T2 = new Vec3D();
+        final Vec3D T0 = new Vec3D();
+        final Vec3D tmp = new Vec3D();
+        final Vec3D X = new Vec3D();
+        final Vec3D Y = new Vec3D();
+        final Vec4D[][] pij = new Vec4D[2 * narcs + 1][pj.length];
+        final double wm = Math.cos(dtheta / 2);
         for (j = 0; j < pj.length; j++) {
             pointToLine3D(a.origin, a.dir, pj[j].to3D(), O);
             X.set(pj[j].to3D().subSelf(O));
-            double r = X.magnitude();
+            final double r = X.magnitude();
             if (r == 0) {
                 X.set(O);
             }
@@ -485,7 +486,7 @@ public final class NurbsCreator {
      * @return A NurbsCurve for a semi-circle
      */
     public static NurbsCurve createSemiCircle(Origin3D o, float r) {
-        Vec4D cp[] = new Vec4D[4];
+        Vec4D[] cp = new Vec4D[4];
         cp[0] = new Vec4D(o.xAxis.scale(r), 1);
         cp[3] = cp[0].getInvertedXYZ();
         cp[0].addXYZSelf(o.origin);
@@ -495,7 +496,7 @@ public final class NurbsCreator {
         cp[2] = new Vec4D(o.xAxis.getInverted().addSelf(o.yAxis).scaleSelf(r)
                 .addSelf(o.origin), 0.5f);
 
-        float u[] = {
+        float[] u = {
                 0, 0, 0, 0.5f, 1, 1, 1
         };
         return new BasicNurbsCurve(cp, u, 2);
@@ -588,64 +589,63 @@ public final class NurbsCreator {
      * 
      * @param points
      *            Points to interpolate
-     * @param p
+     * @param degree
      *            degree of the interpolated NurbsCurve
      * @return A NurbsCurve interpolating the given Points
      * @throws InterpolationException
      *             thrown if interpolation failed or is not possible.
      */
-    public static NurbsCurve globalCurveInterpolation(Vec3D points[], int p)
+    public static NurbsCurve globalCurveInterpolation(Vec3D[] points, int degree)
             throws InterpolationException {
         try {
+            final int n = points.length;
+            final double[] A = new double[n * n];
 
-            int n = points.length - 1;
-            double A[] = new double[(n + 1) * (n + 1)];
-
-            float uk[] = centripetal(points);
-            KnotVector uKnots = averaging(uk, p);
-            for (int i = 0; i <= n; i++) {
+            final float[] uk = centripetal(points);
+            KnotVector uKnots = averaging(uk, degree);
+            for (int i = 0; i < n; i++) {
                 int span = uKnots.findSpan(uk[i]);
-                double tmp[] = uKnots.basisFunctions(span, uk[i]);
-                System.arraycopy(tmp, 0, A, i * (n + 1) + span - p, tmp.length);
+                double[] tmp = uKnots.basisFunctions(span, uk[i]);
+                System.arraycopy(tmp, 0, A, i * n + span - degree, tmp.length);
             }
-            GMatrix a = new GMatrix(n + 1, n + 1, A);
-            GVector perm = new GVector(n + 1);
-            GMatrix lu = new GMatrix(n + 1, n + 1);
-            a.LUD(lu, perm);
+            final GMatrix a = new GMatrix(n, n, A);
+            final GVector perm = new GVector(n);
+            final GMatrix lu = new GMatrix(n, n);
+            a.computeLUD(lu, perm);
 
-            Vec4D cps[] = new Vec4D[n + 1];
+            final Vec4D[] cps = new Vec4D[n];
             for (int i = 0; i < cps.length; i++) {
-                cps[i] = new Vec4D(0f, 0f, 0f, 1f);
+                cps[i] = new Vec4D(0, 0, 0, 1);
             }
 
             // x-ccordinate
-            GVector b = new GVector(n + 1);
-            for (int j = 0; j <= n; j++) {
+            final GVector b = new GVector(n);
+            for (int j = 0; j < n; j++) {
                 b.setElement(j, points[j].x);
             }
-            GVector sol = new GVector(n + 1);
-            sol.LUDBackSolve(lu, b, perm);
-            for (int j = 0; j <= n; j++) {
+            final GVector sol = new GVector(n);
+            sol.backSolveLUD(lu, b, perm);
+            for (int j = 0; j < n; j++) {
                 cps[j].x = (float) sol.get(j);
             }
 
             // y-ccordinate
-            for (int j = 0; j <= n; j++) {
+            for (int j = 0; j < n; j++) {
                 b.setElement(j, points[j].y);
             }
             sol.zero();
-            sol.LUDBackSolve(lu, b, perm);
-            for (int j = 0; j <= n; j++) {
+            sol.backSolveLUD(lu, b, perm);
+            for (int j = 0; j < n; j++) {
                 cps[j].y = (float) sol.get(j);
             }
 
             // z-ccordinate
-            for (int j = 0; j <= n; j++) {
+            for (int j = 0; j < n; j++) {
                 b.setElement(j, points[j].z);
             }
             sol.zero();
-            sol.LUDBackSolve(lu, b, perm);
-            for (int j = 0; j <= n; j++) {
+            sol.backSolveLUD(lu, b, perm);
+            for (int j = 0; j < n; j++) {
                 cps[j].z = (float) sol.get(j);
             }
             return new BasicNurbsCurve(cps, uKnots);
@@ -661,30 +661,30 @@ public final class NurbsCreator {
      * 
      * @param points
      *            Points arranged in a net (matrix) to interpolate
-     * @param p
+     * @param uDegrees
      *            degree in u direction
-     * @param q
+     * @param vDegrees
      *            degree in v direction
      * @return A NurbsSurface interpolating the given points.
      * @throws InterpolationException
      *             thrown if interpolation failed or is not possible.
      */
-    public static NurbsSurface globalSurfaceInterpolation(Vec3D points[][],
-            int p, int q) throws InterpolationException {
-        int n = points.length - 1;
-        int m = points[0].length - 1;
-        float[][] uv = surfaceMeshParameters(points, n, m);
-        KnotVector u = averaging(uv[0], p);
-        KnotVector v = averaging(uv[1], q);
+    public static NurbsSurface globalSurfaceInterpolation(Vec3D[][] points,
+            int uDegrees, int vDegrees) throws InterpolationException {
+        final int n = points.length;
+        final int m = points[0].length;
+        float[][] uv = surfaceMeshParameters(points, n - 1, m - 1);
+        KnotVector u = averaging(uv[0], uDegrees);
+        KnotVector v = averaging(uv[1], vDegrees);
 
-        Vec4D[][] r = new Vec4D[m + 1][n + 1];
-        Vec3D[] tmp = new Vec3D[n + 1];
-        for (int l = 0; l <= m; l++) {
-            for (int i = 0; i <= n; i++) {
+        Vec4D[][] r = new Vec4D[m][n];
+        Vec3D[] tmp = new Vec3D[n];
+        for (int l = 0; l < m; l++) {
+            for (int i = 0; i < n; i++) {
                 tmp[i] = points[i][l];
             }
             try {
-                NurbsCurve curve = globalCurveInterpolation(tmp, p);
+                NurbsCurve curve = globalCurveInterpolation(tmp, uDegrees);
                 r[l] = curve.getControlPoints();
             } catch (InterpolationException ex) {
                 for (int i = 0; i < tmp.length; i++) {
@@ -694,14 +694,14 @@ public final class NurbsCreator {
 
         }
 
-        Vec4D[][] cp = new Vec4D[n + 1][m + 1];
-        tmp = new Vec3D[m + 1];
-        for (int i = 0; i <= n; i++) {
-            for (int j = 0; j <= m; j++) {
+        Vec4D[][] cp = new Vec4D[n][m];
+        tmp = new Vec3D[m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 tmp[j] = r[j][i].to3D();
             }
             try {
-                NurbsCurve curve = globalCurveInterpolation(tmp, q);
+                NurbsCurve curve = globalCurveInterpolation(tmp, vDegrees);
                 cp[i] = curve.getControlPoints();
             } catch (InterpolationException ex) {
                 for (int j = 0; j < tmp.length; j++) {
@@ -747,11 +747,10 @@ public final class NurbsCreator {
 
     private static float[][] surfaceMeshParameters(Vec3D points[][], int n,
             int m) {
-        float res[][] = new float[2][];
+        final float[][] res = new float[2][];
         int num = m + 1;
-        float cds[] = new float[(n + 1) * (m + 1)];
-
-        float uk[] = new float[n + 1];
+        final float[] cds = new float[(n + 1) * (m + 1)];
+        final float[] uk = new float[n + 1];
         uk[n] = 1;
         for (int l = 0; l <= m; l++) {
             float total = 0;
@@ -779,7 +778,7 @@ public final class NurbsCreator {
         }
 
         num = n + 1;
-        float vk[] = new float[m + 1];
+        final float[] vk = new float[m + 1];
         vk[m] = 1;
         for (int l = 0; l <= n; l++) {
             float total = 0;

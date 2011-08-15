@@ -83,7 +83,7 @@ public class CurveCreator {
             tmp = incp++;
         }
 
-        float u[] = new float[np + tmp + 1];
+        float[] u = new float[np + tmp + 1];
         for (int i = 0; i <= tmp; i++) {
             u[u.length - 1 - i] = 1;
         }

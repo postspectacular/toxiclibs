@@ -30,7 +30,7 @@ import toxi.geom.Vec4D;
  */
 public class BasicNurbsCurve implements NurbsCurve, Cloneable {
 
-    private Vec4D cpoly[];
+    private Vec4D[] cpoly;
     private KnotVector uKnots;
 
     /**
@@ -44,9 +44,7 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
      * @param degree
      *            Degree of the Nurbs Curve
      */
-    public BasicNurbsCurve(Vec4D cps[], float uK[], int degree) { // TODO:
-                                                                  // validate
-                                                                  // input
+    public BasicNurbsCurve(Vec4D[] cps, float[] uK, int degree) {
         this(cps, new KnotVector(uK, degree));
     }
 
@@ -99,28 +97,30 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
         return derivativesOnCurve(u, grade, new Vec3D[grade + 1]);
     }
 
-    public Vec3D[] derivativesOnCurve(float u, int grade, Vec3D[] ders) {
+    public Vec3D[] derivativesOnCurve(float u, int grade, Vec3D[] derivs) {
 
         int span = uKnots.findSpan(u);
         int degree = uKnots.getDegree();
 
         // TODO: compute derivatives also for NURBS
         // currently supports only non-rational B-Splines
-        float dersValues[][] = uKnots.dersBasisFuns(span, u, grade);
+        float derivVals[][] = uKnots.derivBasisFunctions(span, u, grade);
 
         // Zero values
         for (int k = (degree + 1); k <= grade; k++) {
-            ders[k] = new Vec3D();
+            derivs[k] = new Vec3D();
         }
 
         for (int k = 0; k <= grade; k++) {
-            Vec4D cw = new Vec4D();
+            Vec3D d = new Vec3D();
             for (int j = 0; j <= degree; j++) {
-                cw.addSelf(cpoly[(span - degree) + j].scale(dersValues[k][j]));
+                Vec4D v = cpoly[(span - degree) + j];
+                float s = derivVals[k][j];
+                d.addSelf(v.x * s, v.y * s, v.z * s);
             }
-            ders[k] = cw.to3D();
+            derivs[k] = d;
         }
-        return ders;
+        return derivs;
     }
 
     public Vec4D[] getControlPoints() {
@@ -157,7 +157,7 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
             return out;
         }
 
-        double bf[] = uKnots.basisFunctions(span, u);
+        double[] bf = uKnots.basisFunctions(span, u);
         Vec4D cw = new Vec4D();
         for (int i = 0; i <= degree; i++) {
             cw.addSelf(cpoly[(span - degree) + i].getWeighted().scaleSelf(

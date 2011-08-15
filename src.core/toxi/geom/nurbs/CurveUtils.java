@@ -21,7 +21,9 @@ public final class CurveUtils {
     };
 
     public static NurbsCurve connectCurves(NurbsCurve curve1, NurbsCurve curve2) {
-        return connectCurves(new NurbsCurve[] { curve1, curve2 });
+        return connectCurves(new NurbsCurve[] {
+                curve1, curve2
+        });
     }
 
     public static NurbsCurve connectCurves(NurbsCurve[] curves) {
@@ -50,7 +52,7 @@ public final class CurveUtils {
                 knots.addLast(lastU);
             }
 
-            Vec4D pts[] = curves[i].getControlPoints();
+            Vec4D[] pts = curves[i].getControlPoints();
             for (int j = 1; j < pts.length; j++) {
                 cps.addLast(pts[j]);
             }
@@ -78,7 +80,7 @@ public final class CurveUtils {
         Vec4D[] cph = new Vec4D[cp.length + t * seg];
         float[] uh = new float[u.length + t * seg];
 
-        float bezalfs[][] = new float[p + t + 1][p + 1];
+        float[][] bezalfs = new float[p + t + 1][p + 1];
         Vec4D[] bpts = new Vec4D[p + 1];
         Vec4D[] ebpts = new Vec4D[p + t + 1];
         Vec4D[] nextbpts = new Vec4D[p - 1];

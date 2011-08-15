@@ -95,11 +95,12 @@ public class KnotVector {
      * @return basis function values
      */
     public double[] basisFunctions(int span, float u) {
-        double res[] = new double[degree + 1];
+        final int d1 = degree + 1;
+        double res[] = new double[d1];
+        double left[] = new double[d1];
+        double right[] = new double[d1];
         res[0] = 1;
-        double left[] = new double[degree + 1];
-        double right[] = new double[degree + 1];
-        for (int j = 1; j <= degree; j++) {
+        for (int j = 1; j < d1; j++) {
             left[j] = u - knots[span + 1 - j];
             right[j] = knots[span + j] - u;
             double saved = 0;
@@ -130,9 +131,9 @@ public class KnotVector {
      * </code>
      * 
      */
-    public float[][] dersBasisFuns(float u, int grade) {
+    public float[][] derivBasisFunctions(float u, int grade) {
         int span = findSpan(u);
-        return dersBasisFuns(span, u, grade);
+        return derivBasisFunctions(span, u, grade);
     }
 
     /**
@@ -146,9 +147,9 @@ public class KnotVector {
      *            grade to calculate derivations for.
      * @return an array of basis function values or derivated basis functions
      *         values
-     * @see KnotVector#dersBasisFuns(float,int)
+     * @see KnotVector#derrivBasisFuns(float,int)
      */
-    public float[][] dersBasisFuns(int span, float u, int grade) {
+    public float[][] derivBasisFunctions(int span, float u, int grade) {
         float[][] ders = new float[grade + 1][degree + 1];
         float[][] ndu = new float[degree + 1][degree + 1];
         ndu[0][0] = 1.0f;

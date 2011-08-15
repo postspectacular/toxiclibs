@@ -51,7 +51,7 @@ public class BasicNurbsSurface implements NurbsSurface {
      * @param q
      *            degree in v direction
      */
-    public BasicNurbsSurface(ControlNet cps, float uK[], float vK[], int p,
+    public BasicNurbsSurface(ControlNet cps, float[] uK, float[] vK, int p,
             int q) throws IllegalArgumentException {
         this(cps, new KnotVector(uK, p), new KnotVector(vK, q));
     }
@@ -123,14 +123,14 @@ public class BasicNurbsSurface implements NurbsSurface {
         // Piegl -> Algorithm A4.3 -> page 134
 
         int uspan = uKnots.findSpan(u);
-        double bfu[] = uKnots.basisFunctions(uspan, u);
+        double[] bfu = uKnots.basisFunctions(uspan, u);
 
         int vspan = vKnots.findSpan(v);
-        double bfv[] = vKnots.basisFunctions(vspan, v);
+        double[] bfv = vKnots.basisFunctions(vspan, v);
 
         int p = uKnots.getDegree();
         int q = vKnots.getDegree();
-        Vec4D tmp[] = new Vec4D[q + 1];
+        Vec4D[] tmp = new Vec4D[q + 1];
         for (int l = 0; l <= q; l++) {
             Vec4D pw = new Vec4D();
             for (int k = 0; k <= p; k++) {
@@ -173,14 +173,15 @@ public class BasicNurbsSurface implements NurbsSurface {
         }
 
         for (int k = 0; k <= du; k++) {
+            final Vec4D[][] resk0 = result[k][0];
             for (int i = 0; i <= (r - k); i++) {
-                int length = result[k][0][i].length;
-                final Vec4D[] resk0i = result[k][0][i];
+                final int length = resk0[i].length;
+                final Vec4D[] resk0i = resk0[i];
                 Vec4D[] vcps = new Vec4D[length];
                 for (int idx = 0; idx < length; idx++) {
                     vcps[idx] = resk0i[idx];
                 }
-                int dd = (d - k) < dv ? (d - k) : dv;
+                final int dd = (d - k) < dv ? (d - k) : dv;
                 Vec4D[][] tmp = new BasicNurbsCurve(vcps, vKnots)
                         .curveDerivCpts(dd, 0, s);
                 for (int l = 1; l <= dd; l++) {
