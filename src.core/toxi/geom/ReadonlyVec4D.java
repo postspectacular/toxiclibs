@@ -248,6 +248,8 @@ public interface ReadonlyVec4D {
      */
     public Vec4D getRoundedXYZTo(float prec);
 
+    public Vec4D getUnweighted();
+
     public Vec4D getWeighted();
 
     /**
@@ -362,7 +364,11 @@ public interface ReadonlyVec4D {
 
     public float[] toArray();
 
+    public Vec3D unweightInto(Vec3D out);
+
     public float w();
+
+    public Vec3D weightInto(Vec3D out);
 
     public float x();
 

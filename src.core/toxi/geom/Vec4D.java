@@ -317,6 +317,10 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         return copy().roundXYZTo(prec);
     }
 
+    public Vec4D getUnweighted() {
+        return copy().unweight();
+    }
+
     public Vec4D getWeighted() {
         return copy().weight();
     }
@@ -648,10 +652,10 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         return "[x=" + x + ", y=" + y + ", z=" + z + ", w=" + w + "]";
     }
 
-    public final Vec4D translate(float x, float y, float z) {
-        this.x += this.w * x;
-        this.y += this.w * y;
-        this.z += this.w * z;
+    public final Vec4D translate(float xx, float yy, float zz) {
+        this.x += w * xx;
+        this.y += w * yy;
+        this.z += w * zz;
         return this;
     }
 
@@ -660,7 +664,7 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
      * newly calculatd ones.
      */
     public final Vec4D unweight() {
-        float iw = 1f / w;
+        float iw = MathUtils.abs(w) > MathUtils.EPS ? 1f / w : 0;
         x *= iw;
         y *= iw;
         z *= iw;
@@ -668,7 +672,7 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
     }
 
     public final Vec3D unweightInto(Vec3D out) {
-        float iw = 1f / w;
+        float iw = MathUtils.abs(w) > MathUtils.EPS ? 1f / w : 0;
         out.x = x * iw;
         out.y = y * iw;
         out.z = z * iw;
@@ -693,6 +697,13 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         y *= w;
         z *= w;
         return this;
+    }
+
+    public final Vec3D weightInto(Vec3D out) {
+        out.x = x * w;
+        out.y = y * w;
+        out.z = z * w;
+        return out;
     }
 
     /**
