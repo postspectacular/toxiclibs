@@ -40,12 +40,12 @@ public class BoxBrush extends VolumetricBrush {
 
     @Override
     public void drawAtGridPos(float cx, float cy, float cz, float density) {
-        int minX = MathUtils.max((int) (cx - cellRadiusX), 0);
-        int minY = MathUtils.max((int) (cy - cellRadiusY), 0);
-        int minZ = MathUtils.max((int) (cz - cellRadiusZ), 0);
-        int maxX = MathUtils.min((int) (cx + cellRadiusX), volume.resX);
-        int maxY = MathUtils.min((int) (cy + cellRadiusY), volume.resY);
-        int maxZ = MathUtils.min((int) (cz + cellRadiusZ), volume.resZ);
+        int minX = MathUtils.max(Math.round(cx - cellRadiusX), 0);
+        int minY = MathUtils.max(Math.round(cy - cellRadiusY), 0);
+        int minZ = MathUtils.max(Math.round(cz - cellRadiusZ), 0);
+        int maxX = MathUtils.min(Math.round(cx + cellRadiusX), volume.resX);
+        int maxY = MathUtils.min(Math.round(cy + cellRadiusY), volume.resY);
+        int maxZ = MathUtils.min(Math.round(cz + cellRadiusZ), volume.resZ);
         for (int z = minZ; z < maxZ; z++) {
             for (int y = minY; y < maxY; y++) {
                 for (int x = minX; x < maxX; x++) {
