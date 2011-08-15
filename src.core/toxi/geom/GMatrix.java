@@ -1,6 +1,4 @@
 /*
- * $RCSfile$
- *
  * Copyright 1997-2008 Sun Microsystems, Inc.  All Rights Reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -23,10 +21,6 @@
  * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
  * CA 95054 USA or visit www.sun.com if you need additional information or
  * have any questions.
- *
- * $Revision: 127 $
- * $Date: 2008-02-28 20:18:51 +0000 (Thu, 28 Feb 2008) $
- * $State$
  */
 
 package toxi.geom;
@@ -34,14 +28,79 @@ package toxi.geom;
 import toxi.math.MathUtils;
 
 /**
- * A double precision, general, dynamically-resizable, two-dimensional matrix
- * class. Row and column numbering begins with zero. The representation is row
- * major.
+ * A double precision, row major, general and dynamically-resizable,
+ * two-dimensional matrix class. Row and column numbering begins with zero.
  */
 public class GMatrix implements java.io.Serializable, Cloneable {
 
-    // Compatible with 1.1
-    static final long serialVersionUID = 2777097312029690941L;
+    static final long serialVersionUID = 1L;
+
+    /**
+     * Solves a set of linear equations. The input parameters "matrix1", and
+     * "row_perm" come from luDecompostion and do not change here. The parameter
+     * "matrix2" is a set of column vectors assembled into a nxn matrix of
+     * floating-point values. The procedure takes each column of "matrix2" in
+     * turn and treats it as the right-hand side of the matrix equation Ax = LUx
+     * = b. The solution vector replaces the original column of the matrix.
+     * 
+     * If "matrix2" is the identity matrix, the procedure replaces its contents
+     * with the inverse of the matrix from which "matrix1" was originally
+     * derived.
+     */
+    //
+    // Reference: Press, Flannery, Teukolsky, Vetterling,
+    // _Numerical_Recipes_in_C_, Cambridge University Press,
+    // 1988, pp 44-45.
+    //
+    public static void backSubstituteLU(int dim, double[] matrix1,
+            int[] row_perm, double[] matrix2) {
+
+        int i, ii, ip, j, k;
+        int rp;
+        int cv, rv, ri;
+        double tt;
+
+        // rp = row_perm;
+        rp = 0;
+
+        // For each column vector of matrix2 ...
+        for (k = 0; k < dim; k++) {
+            // cv = &(matrix2[0][k]);
+            cv = k;
+            ii = -1;
+
+            // Forward substitution
+            for (i = 0; i < dim; i++) {
+                double sum;
+
+                ip = row_perm[rp + i];
+                sum = matrix2[cv + dim * ip];
+                matrix2[cv + dim * ip] = matrix2[cv + dim * i];
+                if (ii >= 0) {
+                    // rv = &(matrix1[i][0]);
+                    rv = i * dim;
+                    for (j = ii; j <= i - 1; j++) {
+                        sum -= matrix1[rv + j] * matrix2[cv + dim * j];
+                    }
+                } else if (sum != 0.0) {
+                    ii = i;
+                }
+                matrix2[cv + dim * i] = sum;
+            }
+
+            // Backsubstitution
+            for (i = 0; i < dim; i++) {
+                ri = (dim - 1 - i);
+                rv = dim * (ri);
+                tt = 0.0;
+                for (j = 1; j <= i; j++) {
+                    tt += matrix1[rv + dim - j] * matrix2[cv + dim * (dim - j)];
+                }
+                matrix2[cv + dim * ri] = (matrix2[cv + dim * ri] - tt)
+                        / matrix1[rv + ri];
+            }
+        }
+    }
 
     private static void chase_across(double[] s, double[] e, int k, GMatrix u) {
         double f, g, r;
@@ -106,7 +165,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         }
     }
 
-    static int compute_2X2(double f, double g, double h,
+    private static int compute_2X2(double f, double g, double h,
             double[] single_values, double[] snl, double[] csl, double[] snr,
             double[] csr, int index) {
 
@@ -300,127 +359,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         return 0;
     }
 
-    static void compute_qr(int start, int end, double[] s, double[] e,
-            GMatrix u, GMatrix v) {
-
-        int i, j, k, n, sl;
-        boolean converged;
-        double shift, r, utemp, vtemp, f, g;
-        double[] cosl = new double[1];
-        double[] cosr = new double[1];
-        double[] sinl = new double[1];
-        double[] sinr = new double[1];
-        GMatrix m = new GMatrix(u.nCol, v.nRow);
-
-        final int MAX_INTERATIONS = 2;
-        final double CONVERGE_TOL = 4.89E-15;
-
-        double c_b48 = 1.0;
-        double c_b71 = -1.0;
-        converged = false;
-
-        f = 0.0;
-        g = 0.0;
-
-        for (k = 0; k < MAX_INTERATIONS && !converged; k++) {
-            for (i = start; i <= end; i++) {
-
-                // if at start of iterfaction compute shift
-                if (i == start) {
-                    if (e.length == s.length) {
-                        sl = end;
-                    } else {
-                        sl = end + 1;
-                    }
-
-                    shift = compute_shift(s[sl - 1], e[end], s[sl]);
-
-                    f = (MathUtils.abs(s[i]) - shift)
-                            * (MathUtils.dualSign(c_b48, s[i]) + shift / s[i]);
-                    g = e[i];
-                }
-
-                r = compute_rot(f, g, sinr, cosr);
-                if (i != start) {
-                    e[i - 1] = r;
-                }
-
-                f = cosr[0] * s[i] + sinr[0] * e[i];
-                e[i] = cosr[0] * e[i] - sinr[0] * s[i];
-                g = sinr[0] * s[i + 1];
-                s[i + 1] = cosr[0] * s[i + 1];
-
-                // if (debug) print_se(s,e);
-                update_v(i, v, cosr, sinr);
-
-                r = compute_rot(f, g, sinl, cosl);
-                s[i] = r;
-                f = cosl[0] * e[i] + sinl[0] * s[i + 1];
-                s[i + 1] = cosl[0] * s[i + 1] - sinl[0] * e[i];
-
-                if (i < end) {
-                    // if not last
-                    g = sinl[0] * e[i + 1];
-                    e[i + 1] = cosl[0] * e[i + 1];
-                }
-                // if (debug) print_se(s,e);
-
-                update_u(i, u, cosl, sinl);
-            }
-
-            // if extra off diagonal perform one more right side rotation
-            if (s.length == e.length) {
-                r = compute_rot(f, g, sinr, cosr);
-                f = cosr[0] * s[i] + sinr[0] * e[i];
-                e[i] = cosr[0] * e[i] - sinr[0] * s[i];
-                s[i + 1] = cosr[0] * s[i + 1];
-
-                update_v(i, v, cosr, sinr);
-            }
-
-            // check for convergence on off diagonals and reduce
-            while ((end - start > 1) && (MathUtils.abs(e[end]) < CONVERGE_TOL)) {
-                end--;
-            }
-
-            // check if need to split
-            for (n = end - 2; n > start; n--) {
-                if (MathUtils.abs(e[n]) < CONVERGE_TOL) { // split
-                    compute_qr(n + 1, end, s, e, u, v); // do lower matrix
-                    end = n - 1; // do upper matrix
-
-                    // check for convergence on off diagonals and reduce
-                    while ((end - start > 1)
-                            && (MathUtils.abs(e[end]) < CONVERGE_TOL)) {
-                        end--;
-                    }
-                }
-            }
-
-            if ((end - start <= 1)
-                    && (MathUtils.abs(e[start + 1]) < CONVERGE_TOL)) {
-                converged = true;
-            } else {
-                // check if zero on the diagonal
-            }
-
-        }
-
-        if (MathUtils.abs(e[1]) < CONVERGE_TOL) {
-            compute_2X2(s[start], e[start], s[start + 1], s, sinl, cosl, sinr,
-                    cosr, 0);
-            e[start] = 0.0;
-            e[start + 1] = 0.0;
-        }
-
-        i = start;
-        update_u(i, u, cosl, sinl);
-        update_v(i, v, cosr, sinr);
-    }
-
-    static double compute_rot(double f, double g, double[] sin, double[] cos) {
-        int i__1;
-        double d__1, d__2;
+    private static double compute_rot(double f, double g, double[] sin,
+            double[] cos) {
         double cs, sn;
         int i;
         double scale;
@@ -453,7 +393,6 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 r = Math.sqrt(f1 * f1 + g1 * g1);
                 cs = f1 / r;
                 sn = g1 / r;
-                i__1 = count;
                 for (i = 1; i <= count; ++i) {
                     r *= safmx2;
                 }
@@ -468,7 +407,6 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 r = Math.sqrt(f1 * f1 + g1 * g1);
                 cs = f1 / r;
                 sn = g1 / r;
-                i__1 = count;
                 for (i = 1; i <= count; ++i) {
                     r *= safmn2;
                 }
@@ -488,7 +426,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         return r;
     }
 
-    static double compute_shift(double f, double g, double h) {
+    private static double compute_shift(double f, double g, double h) {
         double d__1, d__2;
         double fhmn, fhmx, c, fa, ga, ha, as, at, au;
         double ssmin;
@@ -533,12 +471,123 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         return ssmin;
     }
 
-    static int computeSVD(GMatrix mat, GMatrix U, GMatrix W, GMatrix V) {
+    public static void computeQR(int start, int end, double[] s, double[] e,
+            GMatrix u, GMatrix v) {
+
+        int i, k, n, sl;
+        double shift, r, f, g;
+        double[] cosl = new double[1];
+        double[] cosr = new double[1];
+        double[] sinl = new double[1];
+        double[] sinr = new double[1];
+
+        final int MAX_INTERATIONS = 2;
+        final double CONVERGE_TOL = 4.89E-15;
+
+        boolean converged = false;
+
+        f = 0.0;
+        g = 0.0;
+
+        for (k = 0; k < MAX_INTERATIONS && !converged; k++) {
+            for (i = start; i <= end; i++) {
+
+                // if at start of iterfaction compute shift
+                if (i == start) {
+                    if (e.length == s.length) {
+                        sl = end;
+                    } else {
+                        sl = end + 1;
+                    }
+
+                    shift = compute_shift(s[sl - 1], e[end], s[sl]);
+
+                    f = (MathUtils.abs(s[i]) - shift)
+                            * (MathUtils.dualSign(1.0, s[i]) + shift / s[i]);
+                    g = e[i];
+                }
+
+                r = compute_rot(f, g, sinr, cosr);
+                if (i != start) {
+                    e[i - 1] = r;
+                }
+
+                f = cosr[0] * s[i] + sinr[0] * e[i];
+                e[i] = cosr[0] * e[i] - sinr[0] * s[i];
+                g = sinr[0] * s[i + 1];
+                s[i + 1] = cosr[0] * s[i + 1];
+
+                update_v(i, v, cosr, sinr);
+
+                r = compute_rot(f, g, sinl, cosl);
+                s[i] = r;
+                f = cosl[0] * e[i] + sinl[0] * s[i + 1];
+                s[i + 1] = cosl[0] * s[i + 1] - sinl[0] * e[i];
+
+                if (i < end) {
+                    // if not last
+                    g = sinl[0] * e[i + 1];
+                    e[i + 1] = cosl[0] * e[i + 1];
+                }
+                update_u(i, u, cosl, sinl);
+            }
+
+            // if extra off diagonal perform one more right side rotation
+            if (s.length == e.length) {
+                r = compute_rot(f, g, sinr, cosr);
+                f = cosr[0] * s[i] + sinr[0] * e[i];
+                e[i] = cosr[0] * e[i] - sinr[0] * s[i];
+                s[i + 1] = cosr[0] * s[i + 1];
+
+                update_v(i, v, cosr, sinr);
+            }
+
+            // check for convergence on off diagonals and reduce
+            while ((end - start > 1) && (MathUtils.abs(e[end]) < CONVERGE_TOL)) {
+                end--;
+            }
+
+            // check if need to split
+            for (n = end - 2; n > start; n--) {
+                if (MathUtils.abs(e[n]) < CONVERGE_TOL) { // split
+                    computeQR(n + 1, end, s, e, u, v); // do lower matrix
+                    end = n - 1; // do upper matrix
+
+                    // check for convergence on off diagonals and reduce
+                    while ((end - start > 1)
+                            && (MathUtils.abs(e[end]) < CONVERGE_TOL)) {
+                        end--;
+                    }
+                }
+            }
+
+            if ((end - start <= 1)
+                    && (MathUtils.abs(e[start + 1]) < CONVERGE_TOL)) {
+                converged = true;
+            } else {
+                // check if zero on the diagonal
+            }
+
+        }
+
+        if (MathUtils.abs(e[1]) < CONVERGE_TOL) {
+            compute_2X2(s[start], e[start], s[start + 1], s, sinl, cosl, sinr,
+                    cosr, 0);
+            e[start] = 0.0;
+            e[start + 1] = 0.0;
+        }
+
+        i = start;
+        update_u(i, u, cosl, sinl);
+        update_v(i, v, cosr, sinr);
+    }
+
+    public static int computeSVD(GMatrix mat, GMatrix U, GMatrix W, GMatrix V) {
         int i, j, k;
         int nr, nc, si;
 
-        int converged, rank;
-        double cs, sn, r, mag, scale, t;
+        int rank;
+        double mag, scale, t;
         int eLength, sLength, vecLength;
 
         GMatrix tmp = new GMatrix(mat.nRow, mat.nCol);
@@ -567,8 +616,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         rank = 0;
 
-        U.setIdentity();
-        V.setIdentity();
+        U.identity();
+        V.identity();
 
         nr = m.nRow;
         nc = m.nCol;
@@ -764,7 +813,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         }
 
         // compute_qr causes ArrayIndexOutOfBounds for 2x2 matrices
-        compute_qr(0, e.length - 1, single_values, e, U, V);
+        computeQR(0, e.length - 1, single_values, e, U, V);
 
         // compute rank = number of non zero singular values
         rank = single_values.length;
@@ -772,73 +821,6 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         // sort by order of size of single values
         // and check for zero's
         return rank;
-    }
-
-    /**
-     * Solves a set of linear equations. The input parameters "matrix1", and
-     * "row_perm" come from luDecompostion and do not change here. The parameter
-     * "matrix2" is a set of column vectors assembled into a nxn matrix of
-     * floating-point values. The procedure takes each column of "matrix2" in
-     * turn and treats it as the right-hand side of the matrix equation Ax = LUx
-     * = b. The solution vector replaces the original column of the matrix.
-     * 
-     * If "matrix2" is the identity matrix, the procedure replaces its contents
-     * with the inverse of the matrix from which "matrix1" was originally
-     * derived.
-     */
-    //
-    // Reference: Press, Flannery, Teukolsky, Vetterling,
-    // _Numerical_Recipes_in_C_, Cambridge University Press,
-    // 1988, pp 44-45.
-    //
-    static void luBacksubstitution(int dim, double[] matrix1, int[] row_perm,
-            double[] matrix2) {
-
-        int i, ii, ip, j, k;
-        int rp;
-        int cv, rv, ri;
-        double tt;
-
-        // rp = row_perm;
-        rp = 0;
-
-        // For each column vector of matrix2 ...
-        for (k = 0; k < dim; k++) {
-            // cv = &(matrix2[0][k]);
-            cv = k;
-            ii = -1;
-
-            // Forward substitution
-            for (i = 0; i < dim; i++) {
-                double sum;
-
-                ip = row_perm[rp + i];
-                sum = matrix2[cv + dim * ip];
-                matrix2[cv + dim * ip] = matrix2[cv + dim * i];
-                if (ii >= 0) {
-                    // rv = &(matrix1[i][0]);
-                    rv = i * dim;
-                    for (j = ii; j <= i - 1; j++) {
-                        sum -= matrix1[rv + j] * matrix2[cv + dim * j];
-                    }
-                } else if (sum != 0.0) {
-                    ii = i;
-                }
-                matrix2[cv + dim * i] = sum;
-            }
-
-            // Backsubstitution
-            for (i = 0; i < dim; i++) {
-                ri = (dim - 1 - i);
-                rv = dim * (ri);
-                tt = 0.0;
-                for (j = 1; j <= i; j++) {
-                    tt += matrix1[rv + dim - j] * matrix2[cv + dim * (dim - j)];
-                }
-                matrix2[cv + dim * ri] = (matrix2[cv + dim * ri] - tt)
-                        / matrix1[rv + ri];
-            }
-        }
     }
 
     /**
@@ -857,8 +839,8 @@ public class GMatrix implements java.io.Serializable, Cloneable {
     // _Numerical_Recipes_in_C_, Cambridge University Press,
     // 1988, pp 40-45.
     //
-    static boolean luDecomposition(int dim, double[] matrix0, int[] row_perm,
-            int[] even_row_xchg) {
+    public static boolean decomposeLU(int dim, double[] matrix0,
+            int[] row_perm, int[] even_row_xchg) {
 
         double row_scale[] = new double[dim];
 
@@ -1015,7 +997,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         System.out.println(" \nu  = \n" + u.toString());
         System.out.println(" \nv  = \n" + v.toString());
 
-        mtmp.setIdentity();
+        mtmp.identity();
         for (i = 0; i < s.length; i++) {
             mtmp.values[i][i] = s[i];
         }
@@ -1037,7 +1019,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
 
         for (i = 0; i < m.nRow; i++) {
             for (j = 0; j < m.nCol; j++) {
-                if (MathUtils.abs(m.values[i][j]) < .000000001) {
+                if (MathUtils.abs(m.values[i][j]) < MathUtils.EPS) {
                     buffer.append("0.0000 ");
                 } else {
                     buffer.append(m.values[i][j]).append(" ");
@@ -1285,6 +1267,147 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         }
 
         return m1;
+    }
+
+    /**
+     * LU Decomposition: this matrix must be a square matrix and the LU GMatrix
+     * parameter must be the same size as this matrix. The matrix LU will be
+     * overwritten as the combination of a lower diagonal and upper diagonal
+     * matrix decompostion of this matrix; the diagonal elements of L (unity)
+     * are not stored. The GVector parameter records the row permutation
+     * effected by the partial pivoting, and is used as a parameter to the
+     * GVector method LUDBackSolve to solve sets of linear equations. This
+     * method returns +/- 1 depending on whether the number of row interchanges
+     * was even or odd, respectively.
+     * 
+     * @param LU
+     *            The matrix into which the lower and upper decompositions will
+     *            be placed.
+     * @param permutation
+     *            The row permutation effected by the partial pivoting
+     * @return +-1 depending on whether the number of row interchanges was even
+     *         or odd respectively
+     */
+    public final int computeLUD(GMatrix LU, GVector permutation) {
+        int size = LU.nRow * LU.nCol;
+        double[] temp = new double[size];
+        int[] even_row_exchange = new int[1];
+        int[] row_perm = new int[LU.nRow];
+        int i, j;
+
+        if (nRow != nCol) {
+            throw new MatrixSizeException();
+        }
+
+        if (nRow != LU.nRow) {
+            throw new MatrixSizeException();
+        }
+
+        if (nCol != LU.nCol) {
+            throw new MatrixSizeException();
+        }
+
+        if (LU.nRow != permutation.size()) {
+            throw new MatrixSizeException();
+        }
+
+        for (i = 0; i < nRow; i++) {
+            for (j = 0; j < nCol; j++) {
+                temp[i * nCol + j] = values[i][j];
+            }
+        }
+
+        // Calculate LU decomposition: Is the matrix singular?
+        if (!decomposeLU(LU.nRow, temp, row_perm, even_row_exchange)) {
+            // Matrix has no inverse
+            throw new SingularMatrixException();
+        }
+
+        for (i = 0; i < nRow; i++) {
+            for (j = 0; j < nCol; j++) {
+                LU.values[i][j] = temp[i * nCol + j];
+            }
+        }
+
+        for (i = 0; i < LU.nRow; i++) {
+            permutation.values[i] = row_perm[i];
+        }
+
+        return even_row_exchange[0];
+    }
+
+    /**
+     * Finds the singular value decomposition (SVD) of this matrix such that
+     * this = U*W*transpose(V); and returns the rank of this matrix; the values
+     * of U,W,V are all overwritten. Note that the matrix V is output as V, and
+     * not transpose(V). If this matrix is mxn, then U is mxm, W is a diagonal
+     * matrix that is mxn, and V is nxn. Using the notation W = diag(w), then
+     * the inverse of this matrix is: inverse(this) = V*diag(1/w)*tranpose(U),
+     * where diag(1/w) is the same matrix as W except that the reciprocal of
+     * each of the diagonal components is used.
+     * 
+     * @param U
+     *            The computed U matrix in the equation this = U*W*transpose(V)
+     * @param W
+     *            The computed W matrix in the equation this = U*W*transpose(V)
+     * @param V
+     *            The computed V matrix in the equation this = U*W*transpose(V)
+     * @return The rank of this matrix.
+     */
+    public final int computeSVD(GMatrix U, GMatrix W, GMatrix V) {
+        // check for consistancy in dimensions
+        if (nCol != V.nCol || nCol != V.nRow) {
+            throw new MatrixSizeException();
+        }
+
+        if (nRow != U.nRow || nRow != U.nCol) {
+            throw new MatrixSizeException();
+        }
+
+        if (nRow != W.nRow || nCol != W.nCol) {
+            throw new MatrixSizeException();
+        }
+
+        // Fix ArrayIndexOutOfBounds for 2x2 matrices, which partially
+        // addresses bug 4348562 for J3D 1.2.1.
+        //
+        // Does *not* fix the following problems reported in 4348562,
+        // which will wait for J3D 1.3:
+        //
+        // 1) no output of W
+        // 2) wrong transposition of U
+        // 3) wrong results for 4x4 matrices
+        // 4) slow performance
+        if (nRow == 2 && nCol == 2) {
+            if (values[1][0] == 0.0) {
+                U.identity();
+                V.identity();
+
+                if (values[0][1] == 0.0) {
+                    return 2;
+                }
+
+                double[] sinl = new double[1];
+                double[] sinr = new double[1];
+                double[] cosl = new double[1];
+                double[] cosr = new double[1];
+                double[] single_values = new double[2];
+
+                single_values[0] = values[0][0];
+                single_values[1] = values[1][1];
+
+                compute_2X2(values[0][0], values[0][1], values[1][1],
+                        single_values, sinl, cosl, sinr, cosr, 0);
+
+                update_u(0, U, cosl, sinl);
+                update_v(0, V, cosr, sinr);
+
+                return 2;
+            }
+            // else call computeSVD() and check for 2x2 there
+        }
+
+        return computeSVD(this, U, W, V);
     }
 
     /**
@@ -1741,6 +1864,29 @@ public class GMatrix implements java.io.Serializable, Cloneable {
     }
 
     /**
+     * Sets this GMatrix to the identity matrix.
+     */
+    public final void identity() {
+        int i, j;
+        for (i = 0; i < nRow; i++) {
+            for (j = 0; j < nCol; j++) {
+                values[i][j] = 0.0;
+            }
+        }
+
+        int l;
+        if (nRow < nCol) {
+            l = nRow;
+        } else {
+            l = nCol;
+        }
+
+        for (i = 0; i < l; i++) {
+            values[i][i] = 1.0;
+        }
+    }
+
+    /**
      * Subtracts this matrix from the identity matrix and puts the values back
      * into this (this = I - this).
      */
@@ -1814,7 +1960,7 @@ public class GMatrix implements java.io.Serializable, Cloneable {
         }
 
         // Calculate LU decomposition: Is the matrix singular?
-        if (!luDecomposition(m1.nRow, temp, row_perm, even_row_exchange)) {
+        if (!decomposeLU(m1.nRow, temp, row_perm, even_row_exchange)) {
             // Matrix has no inverse
             throw new SingularMatrixException();
         }
@@ -1828,80 +1974,13 @@ public class GMatrix implements java.io.Serializable, Cloneable {
             result[i + i * nCol] = 1.0;
         }
 
-        luBacksubstitution(m1.nRow, temp, row_perm, result);
+        backSubstituteLU(m1.nRow, temp, row_perm, result);
 
         for (i = 0; i < nRow; i++) {
             for (j = 0; j < nCol; j++) {
                 values[i][j] = result[i * nCol + j];
             }
         }
-    }
-
-    /**
-     * LU Decomposition: this matrix must be a square matrix and the LU GMatrix
-     * parameter must be the same size as this matrix. The matrix LU will be
-     * overwritten as the combination of a lower diagonal and upper diagonal
-     * matrix decompostion of this matrix; the diagonal elements of L (unity)
-     * are not stored. The GVector parameter records the row permutation
-     * effected by the partial pivoting, and is used as a parameter to the
-     * GVector method LUDBackSolve to solve sets of linear equations. This
-     * method returns +/- 1 depending on whether the number of row interchanges
-     * was even or odd, respectively.
-     * 
-     * @param LU
-     *            The matrix into which the lower and upper decompositions will
-     *            be placed.
-     * @param permutation
-     *            The row permutation effected by the partial pivoting
-     * @return +-1 depending on whether the number of row interchanges was even
-     *         or odd respectively
-     */
-    public final int LUD(GMatrix LU, GVector permutation) {
-        int size = LU.nRow * LU.nCol;
-        double[] temp = new double[size];
-        int[] even_row_exchange = new int[1];
-        int[] row_perm = new int[LU.nRow];
-        int i, j;
-
-        if (nRow != nCol) {
-            throw new MatrixSizeException();
-        }
-
-        if (nRow != LU.nRow) {
-            throw new MatrixSizeException();
-        }
-
-        if (nCol != LU.nCol) {
-            throw new MatrixSizeException();
-        }
-
-        if (LU.nRow != permutation.size()) {
-            throw new MatrixSizeException();
-        }
-
-        for (i = 0; i < nRow; i++) {
-            for (j = 0; j < nCol; j++) {
-                temp[i * nCol + j] = values[i][j];
-            }
-        }
-
-        // Calculate LU decomposition: Is the matrix singular?
-        if (!luDecomposition(LU.nRow, temp, row_perm, even_row_exchange)) {
-            // Matrix has no inverse
-            throw new SingularMatrixException();
-        }
-
-        for (i = 0; i < nRow; i++) {
-            for (j = 0; j < nCol; j++) {
-                LU.values[i][j] = temp[i * nCol + j];
-            }
-        }
-
-        for (i = 0; i < LU.nRow; i++) {
-            permutation.values[i] = row_perm[i];
-        }
-
-        return even_row_exchange[0];
     }
 
     /**
@@ -2307,29 +2386,6 @@ public class GMatrix implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Sets this GMatrix to the identity matrix.
-     */
-    public final void setIdentity() {
-        int i, j;
-        for (i = 0; i < nRow; i++) {
-            for (j = 0; j < nCol; j++) {
-                values[i][j] = 0.0;
-            }
-        }
-
-        int l;
-        if (nRow < nCol) {
-            l = nRow;
-        } else {
-            l = nCol;
-        }
-
-        for (i = 0; i < l; i++) {
-            values[i][i] = 1.0;
-        }
-    }
-
-    /**
      * Copy the values from the array into the specified row of this matrix.
      * 
      * @param row
@@ -2487,80 +2543,6 @@ public class GMatrix implements java.io.Serializable, Cloneable {
                 values[i][j] = m1.values[i][j] - m2.values[i][j];
             }
         }
-    }
-
-    /**
-     * Finds the singular value decomposition (SVD) of this matrix such that
-     * this = U*W*transpose(V); and returns the rank of this matrix; the values
-     * of U,W,V are all overwritten. Note that the matrix V is output as V, and
-     * not transpose(V). If this matrix is mxn, then U is mxm, W is a diagonal
-     * matrix that is mxn, and V is nxn. Using the notation W = diag(w), then
-     * the inverse of this matrix is: inverse(this) = V*diag(1/w)*tranpose(U),
-     * where diag(1/w) is the same matrix as W except that the reciprocal of
-     * each of the diagonal components is used.
-     * 
-     * @param U
-     *            The computed U matrix in the equation this = U*W*transpose(V)
-     * @param W
-     *            The computed W matrix in the equation this = U*W*transpose(V)
-     * @param V
-     *            The computed V matrix in the equation this = U*W*transpose(V)
-     * @return The rank of this matrix.
-     */
-    public final int SVD(GMatrix U, GMatrix W, GMatrix V) {
-        // check for consistancy in dimensions
-        if (nCol != V.nCol || nCol != V.nRow) {
-            throw new MatrixSizeException();
-        }
-
-        if (nRow != U.nRow || nRow != U.nCol) {
-            throw new MatrixSizeException();
-        }
-
-        if (nRow != W.nRow || nCol != W.nCol) {
-            throw new MatrixSizeException();
-        }
-
-        // Fix ArrayIndexOutOfBounds for 2x2 matrices, which partially
-        // addresses bug 4348562 for J3D 1.2.1.
-        //
-        // Does *not* fix the following problems reported in 4348562,
-        // which will wait for J3D 1.3:
-        //
-        // 1) no output of W
-        // 2) wrong transposition of U
-        // 3) wrong results for 4x4 matrices
-        // 4) slow performance
-        if (nRow == 2 && nCol == 2) {
-            if (values[1][0] == 0.0) {
-                U.setIdentity();
-                V.setIdentity();
-
-                if (values[0][1] == 0.0) {
-                    return 2;
-                }
-
-                double[] sinl = new double[1];
-                double[] sinr = new double[1];
-                double[] cosl = new double[1];
-                double[] cosr = new double[1];
-                double[] single_values = new double[2];
-
-                single_values[0] = values[0][0];
-                single_values[1] = values[1][1];
-
-                compute_2X2(values[0][0], values[0][1], values[1][1],
-                        single_values, sinl, cosl, sinr, cosr, 0);
-
-                update_u(0, U, cosl, sinl);
-                update_v(0, V, cosr, sinr);
-
-                return 2;
-            }
-            // else call computeSVD() and check for 2x2 there
-        }
-
-        return computeSVD(this, U, W, V);
     }
 
     /**

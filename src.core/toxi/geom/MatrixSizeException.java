@@ -52,7 +52,6 @@ public class MatrixSizeException extends RuntimeException {
      *            the message string to be output.
      */
     public MatrixSizeException(String str) {
-
         super(str);
     }
 
