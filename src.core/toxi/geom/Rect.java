@@ -458,6 +458,23 @@ public class Rect implements Shape2D {
     }
 
     /**
+     * Adds corner vertices for rounded rectangles polygon construction.
+     * 
+     * @param poly
+     * @param o
+     * @param radius
+     * @param theta
+     * @param res
+     */
+    private void toPolyArc(Polygon2D poly, Vec2D o, float radius, float theta,
+            int res) {
+        for (int i = 0; i <= res; i++) {
+            poly.add(o.add(Vec2D.fromTheta(theta + i * MathUtils.HALF_PI / res)
+                    .scaleSelf(radius)));
+        }
+    }
+
+    /**
      * Creates a {@link Polygon2D} instance of the rect.
      * 
      * @return rect as polygon
@@ -468,6 +485,30 @@ public class Rect implements Shape2D {
         poly.add(new Vec2D(x + width, y));
         poly.add(new Vec2D(x + width, y + height));
         poly.add(new Vec2D(x, y + height));
+        return poly;
+    }
+
+    /**
+     * Turns this rectangle into a rounded rectangle shaped {@link Polygon2D}
+     * instance with the given corner radius. The number of corner vertices to
+     * be used, can be specified as well.
+     * 
+     * @param radius
+     *            corner radius
+     * @param res
+     *            number of vertices per corner
+     * @return rounded rect as polygon
+     */
+    public Polygon2D toPolygon2D(float radius, int res) {
+        Polygon2D poly = new Polygon2D();
+        toPolyArc(poly, new Vec2D(x + width - radius, y + radius), radius,
+                -MathUtils.HALF_PI, res);
+        toPolyArc(poly, new Vec2D(x + width - radius, y + height - radius),
+                radius, 0, res);
+        toPolyArc(poly, new Vec2D(x + radius, y + height - radius), radius,
+                MathUtils.HALF_PI, res);
+        toPolyArc(poly, new Vec2D(x + radius, y + radius), radius,
+                MathUtils.PI, res);
         return poly;
     }
 
