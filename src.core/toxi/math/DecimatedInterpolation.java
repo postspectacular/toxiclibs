@@ -47,6 +47,11 @@ public class DecimatedInterpolation implements InterpolateStrategy {
         this.strategy = strategy;
     }
 
+    public double interpolate(double a, double b, double f) {
+        double fd = (int) (f * numSteps) / (double) numSteps;
+        return strategy.interpolate(a, b, fd);
+    }
+
     public float interpolate(float a, float b, float f) {
         float fd = (int) (f * numSteps) / (float) numSteps;
         return strategy.interpolate(a, b, fd);

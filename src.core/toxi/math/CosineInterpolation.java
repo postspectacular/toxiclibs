@@ -34,6 +34,10 @@ package toxi.math;
  */
 public class CosineInterpolation implements InterpolateStrategy {
 
+    public double interpolate(double a, double b, double f) {
+        return b + (a - b) * (0.5 + 0.5 * Math.cos(f * Math.PI));
+    }
+
     /*
      * (non-Javadoc)
      * 

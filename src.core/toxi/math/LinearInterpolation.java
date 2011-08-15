@@ -34,6 +34,10 @@ package toxi.math;
  */
 public class LinearInterpolation implements InterpolateStrategy {
 
+    public double interpolate(double a, double b, double f) {
+        return a + (b - a) * f;
+    }
+
     public final float interpolate(float a, float b, float f) {
         return a + (b - a) * f;
     }

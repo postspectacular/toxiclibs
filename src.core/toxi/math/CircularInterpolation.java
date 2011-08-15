@@ -52,6 +52,15 @@ public class CircularInterpolation implements InterpolateStrategy {
         this.isFlipped = isFlipped;
     }
 
+    public double interpolate(double a, double b, double f) {
+        if (isFlipped) {
+            return a - (b - a) * (Math.sqrt(1 - f * f) - 1);
+        } else {
+            f = 1 - f;
+            return a + (b - a) * (Math.sqrt(1 - f * f));
+        }
+    }
+
     public float interpolate(float a, float b, float f) {
         if (isFlipped) {
             return a - (b - a) * ((float) Math.sqrt(1 - f * f) - 1);

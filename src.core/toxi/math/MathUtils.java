@@ -208,8 +208,7 @@ public final class MathUtils {
     }
 
     public static double dualSign(double a, double b) {
-        double x;
-        x = (a >= 0 ? a : -a);
+        double x = (a >= 0 ? a : -a);
         return (b >= 0 ? x : -x);
     }
 
