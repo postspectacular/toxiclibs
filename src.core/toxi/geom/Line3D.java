@@ -46,7 +46,7 @@ public class Line3D {
 
         private final Type type;
         private final Line3D line;
-        private float[] coeff;
+        private final float[] coeff;
 
         private LineIntersection(Type type) {
             this(type, null, 0, 0);
