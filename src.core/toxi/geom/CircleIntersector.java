@@ -34,11 +34,15 @@ package toxi.geom;
  */
 public class CircleIntersector implements Intersector2D {
 
-    private IsectData2D isec;
+    private IsectData2D isec = new IsectData2D();
     private Circle circle;
 
     public CircleIntersector(Circle circle) {
         this.circle = circle;
+    }
+
+    public Circle getCircle() {
+        return circle;
     }
 
     public IsectData2D getIntersectionData() {
@@ -59,5 +63,9 @@ public class CircleIntersector implements Intersector2D {
             isec.normal = isec.pos.sub(circle).normalize();
         }
         return isec.isIntersection;
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
     }
 }
