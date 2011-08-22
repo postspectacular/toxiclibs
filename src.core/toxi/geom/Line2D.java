@@ -185,6 +185,14 @@ public class Line2D {
         return new Line2D(a.copy(), b.copy());
     }
 
+    public float distanceToPoint(ReadonlyVec2D p) {
+        return closestPointTo(p).distanceTo(p);
+    }
+
+    public float distanceToPointSquared(ReadonlyVec2D p) {
+        return closestPointTo(p).distanceToSquared(p);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
