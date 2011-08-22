@@ -518,6 +518,18 @@ public class Rect implements Shape2D {
                 + height + "}";
     }
 
+    public Rect translate(float dx, float dy) {
+        x += dx;
+        y += dy;
+        return this;
+    }
+
+    public Rect translate(ReadonlyVec2D offset) {
+        x += offset.x();
+        y += offset.y();
+        return this;
+    }
+
     /**
      * @deprecated use {@link #unionRectWith(Rect)} instead. Also note, that
      *             {@link #unionRectWith(Rect)} does NOT modify the original
