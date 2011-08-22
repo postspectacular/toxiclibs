@@ -43,7 +43,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
 
     public static enum Axis {
 
-        X(Vec2D.X_AXIS), Y(Vec2D.Y_AXIS);
+        X(Vec2D.X_AXIS),
+        Y(Vec2D.Y_AXIS);
 
         private final ReadonlyVec2D vector;
 
@@ -284,6 +285,33 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     }
 
     /**
+     * Constraints this vector to the perimeter of the given polygon. Unlike the
+     * {@link #constrain(Rect)} version of this method, this version DOES NOT
+     * check containment automatically. If you want to only constrain a point if
+     * its (for example) outside the polygon, then check containment with
+     * {@link Polygon2D#containsPoint(ReadonlyVec2D)} first before calling this
+     * method.
+     * 
+     * @param poly
+     * @return itself
+     */
+    public final Vec2D constrain(Polygon2D poly) {
+        float minD = Float.MAX_VALUE;
+        Vec2D q = null;
+        for (Line2D l : poly.getEdges()) {
+            Vec2D c = l.closestPointTo(this);
+            float d = c.distanceToSquared(this);
+            if (d < minD) {
+                q = c;
+                minD = d;
+            }
+        }
+        x = q.x;
+        y = q.y;
+        return this;
+    }
+
+    /**
      * Forcefully fits the vector in the given rectangle.
      * 
      * @param r
@@ -449,6 +477,10 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
                 return y;
         }
         throw new IllegalArgumentException("index must be 0 or 1");
+    }
+
+    public final Vec2D getConstrained(Polygon2D poly) {
+        return new Vec2D(this).constrain(poly);
     }
 
     public final Vec2D getConstrained(Rect r) {
@@ -1039,7 +1071,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     }
 
     public float[] toArray() {
-        return new float[] { x, y };
+        return new float[] {
+                x, y
+        };
     }
 
     public final Vec2D toCartesian() {
