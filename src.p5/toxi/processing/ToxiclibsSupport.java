@@ -42,6 +42,8 @@ import toxi.geom.Cone;
 import toxi.geom.Ellipse;
 import toxi.geom.Line2D;
 import toxi.geom.Line3D;
+import toxi.geom.LineStrip2D;
+import toxi.geom.LineStrip3D;
 import toxi.geom.Plane;
 import toxi.geom.Polygon2D;
 import toxi.geom.Ray2D;
@@ -227,6 +229,10 @@ public class ToxiclibsSupport {
         }
     }
 
+    public final void lineStrip2D(LineStrip2D strip) {
+        lineStrip2D(strip.vertices);
+    }
+
     /**
      * Draws a 2D line strip using all points in the given list of vectors.
      * 
@@ -245,6 +251,10 @@ public class ToxiclibsSupport {
         gfx.fill = false;
         processVertices2D(points.iterator(), PConstants.POLYGON, false, scale);
         gfx.fill = isFilled;
+    }
+
+    public final void lineStrip3D(LineStrip3D strip) {
+        lineStrip3D(strip.vertices);
     }
 
     /**
