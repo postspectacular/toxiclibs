@@ -670,15 +670,16 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
      * @return true, if process completed succcessfully.
      */
     public boolean toOutline() {
-        List<Vec2D> newVerts = new ArrayList<Vec2D>();
         int corners = vertices.size();
         int maxSegs = corners * 3;
+        List<Vec2D> newVerts = new ArrayList<Vec2D>(corners);
         Vec2D[] segments = new Vec2D[maxSegs];
         Vec2D[] segEnds = new Vec2D[maxSegs];
         float[] segAngles = new float[maxSegs];
         Vec2D start = vertices.get(0).copy();
         float lastAngle = MathUtils.PI;
-        float a, b, c, d, e, f, angleDif, bestAngleDif;
+        float a, b, c, d, e, f;
+        double angleDif, bestAngleDif;
         int i, j = corners - 1, segs = 0;
 
         if (corners > maxSegs) {
