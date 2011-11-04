@@ -70,12 +70,16 @@ public class AABB extends Vec3D implements Shape3D {
      * @return bounding rect
      */
     public static final AABB getBoundingBox(List<? extends Vec3D> points) {
-        final Vec3D first = points.get(0);
-        final AABB bounds = new AABB(first, 0);
-        for (int i = 1, num = points.size(); i < num; i++) {
-            bounds.growToContainPoint(points.get(i));
+        if (points == null || points.size() == 0) {
+            return null;
         }
-        return bounds;
+        Vec3D min = Vec3D.MAX_VALUE.copy();
+        Vec3D max = Vec3D.MIN_VALUE.copy();
+        for (Vec3D p : points) {
+            min.minSelf(p);
+            max.maxSelf(p);
+        }
+        return fromMinMax(min, max);
     }
 
     @XmlElement(required = true)
@@ -138,6 +142,10 @@ public class AABB extends Vec3D implements Shape3D {
 
     public AABB copy() {
         return new AABB(this);
+    }
+
+    public Sphere getBoundingSphere() {
+        return new Sphere(this, extent.magnitude());
     }
 
     /**
@@ -510,32 +518,36 @@ public class AABB extends Vec3D implements Shape3D {
         if (mesh == null) {
             mesh = new TriangleMesh("aabb", 8, 12);
         }
-        Vec3D a = new Vec3D(min.x, max.y, max.z);
-        Vec3D b = new Vec3D(max.x, max.y, max.z);
-        Vec3D c = new Vec3D(max.x, min.y, max.z);
-        Vec3D d = new Vec3D(min.x, min.y, max.z);
-        Vec3D e = new Vec3D(min.x, max.y, min.z);
-        Vec3D f = new Vec3D(max.x, max.y, min.z);
-        Vec3D g = new Vec3D(max.x, min.y, min.z);
-        Vec3D h = new Vec3D(min.x, min.y, min.z);
-        // front
-        mesh.addFace(a, b, d, null, null, null, null);
-        mesh.addFace(b, c, d, null, null, null, null);
-        // back
-        mesh.addFace(f, e, g, null, null, null, null);
-        mesh.addFace(e, h, g, null, null, null, null);
-        // top
-        mesh.addFace(e, f, a, null, null, null, null);
-        mesh.addFace(f, b, a, null, null, null, null);
-        // bottom
-        mesh.addFace(g, h, d, null, null, null, null);
-        mesh.addFace(g, d, c, null, null, null, null);
+        Vec3D a = min;
+        Vec3D g = max;
+        Vec3D b = new Vec3D(a.x, a.y, g.z);
+        Vec3D c = new Vec3D(g.x, a.y, g.z);
+        Vec3D d = new Vec3D(g.x, a.y, a.z);
+        Vec3D e = new Vec3D(a.x, g.y, a.z);
+        Vec3D f = new Vec3D(a.x, g.y, g.z);
+        Vec3D h = new Vec3D(g.x, g.y, a.z);
+        Vec2D ua = new Vec2D(0, 0);
+        Vec2D ub = new Vec2D(1, 0);
+        Vec2D uc = new Vec2D(1, 1);
+        Vec2D ud = new Vec2D(0, 1);
         // left
-        mesh.addFace(e, a, h, null, null, null, null);
-        mesh.addFace(a, d, h, null, null, null, null);
+        mesh.addFace(a, b, f, ud, uc, ub);
+        mesh.addFace(a, f, e, ud, ub, ua);
+        // front
+        mesh.addFace(b, c, g, ud, uc, ub);
+        mesh.addFace(b, g, f, ud, ub, ua);
         // right
-        mesh.addFace(b, f, g, null, null, null, null);
-        mesh.addFace(b, g, c, null, null, null, null);
+        mesh.addFace(c, d, h, ud, uc, ub);
+        mesh.addFace(c, h, g, ud, ub, ua);
+        // back
+        mesh.addFace(d, a, e, ud, uc, ub);
+        mesh.addFace(d, e, h, ud, ub, ua);
+        // top
+        mesh.addFace(e, f, h, ua, ud, ub);
+        mesh.addFace(f, g, h, ud, uc, ub);
+        // bottom
+        mesh.addFace(a, d, b, ud, uc, ua);
+        mesh.addFace(b, d, c, ua, uc, ub);
         return mesh;
     }
 
@@ -549,6 +561,14 @@ public class AABB extends Vec3D implements Shape3D {
         sb.append("<aabb> pos: ").append(super.toString()).append(" ext: ")
                 .append(extent);
         return sb.toString();
+    }
+
+    public AABB union(AABB box) {
+        min.minSelf(box.getMin());
+        max.maxSelf(box.getMax());
+        set(min.interpolateTo(max, 0.5f));
+        extent.set(max.sub(min).scaleSelf(0.5f));
+        return this;
     }
 
     /**
