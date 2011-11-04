@@ -12,6 +12,25 @@ import java.util.List;
  */
 public class BezierCurve2D {
 
+    public static Vec2D computePointInSegment(Vec2D a, Vec2D b, Vec2D c,
+            Vec2D d, float t) {
+        float it = 1.0f - t;
+        float it2 = it * it;
+        float t2 = t * t;
+        return a.scale(it2 * it).addSelf(b.scale(3 * t * it2))
+                .addSelf(c.scale(3 * t2 * it)).addSelf(d.scale(t2 * t));
+    }
+
+    public static Vec2D computeTangentInSegment(Vec2D a, Vec2D b, Vec2D c,
+            Vec2D d, float t) {
+        float t2 = t * t;
+        float x = (3 * t2 * (-a.x + 3 * b.x - 3 * c.x + d.x) + 6 * t
+                * (a.x - 2 * b.x + c.x) + 3 * (-a.x + b.x));
+        float y = (3 * t2 * (-a.y + 3 * b.y - 3 * c.y + d.y) + 6 * t
+                * (a.y - 2 * b.y + c.y) + 3 * (-a.y + b.y));
+        return new Vec2D(x, y).normalize();
+    }
+
     private List<Vec2D> points;
 
     public BezierCurve2D() {
@@ -51,30 +70,6 @@ public class BezierCurve2D {
         } else {
             throw new IllegalArgumentException("invalid point index");
         }
-    }
-
-    public Vec2D computePointInSegment(Vec2D a, Vec2D b, Vec2D c, Vec2D d,
-            float t) {
-        float invT = 1.0f - t;
-        float invT2 = invT * invT;
-        float invT3 = invT2 * invT;
-        float t2 = t * t;
-        float t3 = t2 * t;
-        float x = a.x * invT3 + 3 * b.x * t * invT2 + 3 * c.x * t2 * invT + d.x
-                * t3;
-        float y = a.y * invT3 + 3 * b.y * t * invT2 + 3 * c.y * t2 * invT + d.y
-                * t3;
-        return new Vec2D(x, y);
-    }
-
-    public Vec2D computeTangentInSegment(Vec2D a, Vec2D b, Vec2D c, Vec2D d,
-            float t) {
-        float t2 = t * t;
-        float x = (3 * t2 * (-a.x + 3 * b.x - 3 * c.x + d.x) + 6 * t
-                * (a.x - 2 * b.x + c.x) + 3 * (-a.x + b.x));
-        float y = (3 * t2 * (-a.y + 3 * b.y - 3 * c.y + d.y) + 6 * t
-                * (a.y - 2 * b.y + c.y) + 3 * (-a.y + b.y));
-        return new Vec2D(x, y).normalize();
     }
 
     /**

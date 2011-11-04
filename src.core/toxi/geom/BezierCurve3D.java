@@ -11,6 +11,27 @@ import java.util.List;
  */
 public class BezierCurve3D {
 
+    public static Vec3D computePointInSegment(Vec3D a, Vec3D b, Vec3D c,
+            Vec3D d, float t) {
+        float it = 1.0f - t;
+        float it2 = it * it;
+        float t2 = t * t;
+        return a.scale(it2 * it).addSelf(b.scale(3 * t * it2))
+                .addSelf(c.scale(3 * t2 * it)).addSelf(d.scale(t2 * t));
+    }
+
+    public static Vec3D computeTangentInSegment(Vec3D a, Vec3D b, Vec3D c,
+            Vec3D d, float t) {
+        float t2 = t * t;
+        float x = (3 * t2 * (-a.x + 3 * b.x - 3 * c.x + d.x) + 6 * t
+                * (a.x - 2 * b.x + c.x) + 3 * (-a.x + b.x));
+        float y = (3 * t2 * (-a.y + 3 * b.y - 3 * c.y + d.y) + 6 * t
+                * (a.y - 2 * b.y + c.y) + 3 * (-a.y + b.y));
+        float z = (3 * t2 * (-a.z + 3 * b.z - 3 * c.z + d.z) + 6 * t
+                * (a.z - 2 * b.z + c.z) + 3 * (-a.z + b.z));
+        return new Vec3D(x, y, z).normalize();
+    }
+
     private List<Vec3D> points;
 
     public BezierCurve3D() {
@@ -50,34 +71,6 @@ public class BezierCurve3D {
         } else {
             throw new IllegalArgumentException("invalid point index");
         }
-    }
-
-    public Vec3D computePointInSegment(Vec3D a, Vec3D b, Vec3D c, Vec3D d,
-            float t) {
-        float invT = 1.0f - t;
-        float invT2 = invT * invT;
-        float invT3 = invT2 * invT;
-        float t2 = t * t;
-        float t3 = t2 * t;
-        float x = a.x * invT3 + 3 * b.x * t * invT2 + 3 * c.x * t2 * invT + d.x
-                * t3;
-        float y = a.y * invT3 + 3 * b.y * t * invT2 + 3 * c.y * t2 * invT + d.y
-                * t3;
-        float z = a.z * invT3 + 3 * b.z * t * invT2 + 3 * c.z * t2 * invT + d.z
-                * t3;
-        return new Vec3D(x, y, z);
-    }
-
-    public Vec3D computeTangentInSegment(Vec3D a, Vec3D b, Vec3D c, Vec3D d,
-            float t) {
-        float t2 = t * t;
-        float x = (3 * t2 * (-a.x + 3 * b.x - 3 * c.x + d.x) + 6 * t
-                * (a.x - 2 * b.x + c.x) + 3 * (-a.x + b.x));
-        float y = (3 * t2 * (-a.y + 3 * b.y - 3 * c.y + d.y) + 6 * t
-                * (a.y - 2 * b.y + c.y) + 3 * (-a.y + b.y));
-        float z = (3 * t2 * (-a.z + 3 * b.z - 3 * c.z + d.z) + 6 * t
-                * (a.z - 2 * b.z + c.z) + 3 * (-a.z + b.z));
-        return new Vec3D(x, y, z).normalize();
     }
 
     /**
