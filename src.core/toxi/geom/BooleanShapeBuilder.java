@@ -18,63 +18,45 @@ public class BooleanShapeBuilder {
         XOR;
     }
 
-    protected List<Shape2D> shapes;
     private int bezierRes;
 
-    public BooleanShapeBuilder() {
-        this(8);
+    private final Area area;
+    private final Type type;
+
+    public BooleanShapeBuilder(Type type) {
+        this(type, 8);
     }
 
-    public BooleanShapeBuilder(int bezierRes) {
-        this(new ArrayList<Shape2D>(), bezierRes);
-    }
-
-    public BooleanShapeBuilder(List<Shape2D> shapes) {
-        this(shapes, 8);
-    }
-
-    public BooleanShapeBuilder(List<Shape2D> shapes, int bezierRes) {
-        this.shapes = shapes;
+    public BooleanShapeBuilder(Type type, int bezierRes) {
+        this.type = type;
         this.bezierRes = bezierRes;
+        area = new Area();
     }
 
     public BooleanShapeBuilder addShape(Shape2D s) {
-        shapes.add(s);
+        return combineWithArea(new Area(convertToAWTShape(s)));
+    }
+
+    public BooleanShapeBuilder combineWithArea(Area a) {
+        switch (type) {
+            case UNION:
+                area.add(a);
+                break;
+            case INTERSECTION:
+                area.intersect(a);
+                break;
+            case DIFFERENCE:
+                area.subtract(a);
+                break;
+            case XOR:
+                area.exclusiveOr(a);
+                break;
+        }
         return this;
     }
 
-    public Area computeAreaForType(Type type) {
-        Area area = new Area();
-        for (Shape2D s : shapes) {
-            Shape s2d = convertToAWTShape(s);
-            if (s2d != null) {
-                Area a = new Area(s2d);
-                switch (type) {
-                    case UNION:
-                        area.add(a);
-                        break;
-                    case INTERSECTION:
-                        area.intersect(a);
-                        break;
-                    case DIFFERENCE:
-                        area.subtract(a);
-                        break;
-                    case XOR:
-                        area.exclusiveOr(a);
-                        break;
-                }
-            } else {
-                throw new IllegalArgumentException(
-                        "Can't convert shape type to area: "
-                                + s.getClass().getName());
-            }
-        }
-        return area;
-    }
-
-    public List<Polygon2D> computeBooleanShapes(Type type) {
-        Area area = computeAreaForType(type);
-        List<Polygon2D> results = new ArrayList<Polygon2D>();
+    public List<Polygon2D> computeShapes() {
+        List<Polygon2D> shapes = new ArrayList<Polygon2D>();
         PathIterator i = area.getPathIterator(null);
         float[] buf = new float[6];
         Vec2D prev = new Vec2D();
@@ -84,7 +66,7 @@ public class BooleanShapeBuilder {
             switch (id) {
                 case PathIterator.SEG_MOVETO:
                     s = new Polygon2D();
-                    results.add(s);
+                    shapes.add(s);
                     prev.set(buf[0], buf[1]);
                     s.add(prev.copy());
                     break;
@@ -110,7 +92,7 @@ public class BooleanShapeBuilder {
             }
             i.next();
         }
-        return results;
+        return shapes;
     }
 
     private Shape convertToAWTShape(Shape2D s) {
@@ -145,5 +127,9 @@ public class BooleanShapeBuilder {
         }
         path.closePath();
         return path;
+    }
+
+    public Area getArea() {
+        return area;
     }
 }
