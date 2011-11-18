@@ -27,6 +27,8 @@
 
 package toxi.geom;
 
+import toxi.math.MathUtils;
+
 /**
  * Implements a simple row-major 4x4 matrix class, all matrix operations are
  * applied to new instances. Use {@link #transpose()} to convert from
@@ -483,6 +485,15 @@ public class Matrix4x4 {
         return this;
     }
 
+    public Matrix4x4 lookAt(ReadonlyVec3D eye, ReadonlyVec3D target,
+            ReadonlyVec3D up) {
+        Vec3D f = eye.sub(target).normalize();
+        Vec3D s = up.cross(f).normalize();
+        Vec3D t = f.cross(s).normalize();
+        return set(s.x, s.y, s.z, -s.dot(eye), t.x, t.y, t.z, -t.dot(eye), f.x,
+                f.y, f.z, -f.dot(eye), 0, 0, 0, 1);
+    }
+
     public Matrix4x4 multiply(double factor) {
         return new Matrix4x4(this).multiply(factor);
     }
@@ -657,6 +668,29 @@ public class Matrix4x4 {
             m[3] = n[3];
         }
         return this;
+    }
+
+    public Matrix4x4 setFrustum(double left, double right, double top,
+            double bottom, double near, double far) {
+        return set((2.0 * near) / (right - left), 0, (left + right)
+                / (right - left), 0, 0, (2.0 * near) / (top - bottom),
+                (top + bottom) / (top - bottom), 0, 0, 0, -(near + far)
+                        / (far - near), (-2 * near * far) / (far - near), 0, 0,
+                -1, 0);
+    }
+
+    public Matrix4x4 setOrtho(double left, double right, double top,
+            double bottom, double near, double far) {
+        return set(2.0 / (right - left), 0, 0, (left + right) / (right - left),
+                0, 2.0 / (top - bottom), 0, (top + bottom) / (top - bottom), 0,
+                0, -2.0 / (far - near), (far + near) / (far - near), 0, 0, 0, 1);
+    }
+
+    public Matrix4x4 setPerspective(double fov, double aspect, double near,
+            double far) {
+        double y = near * Math.tan(0.5 * MathUtils.radians(fov));
+        double x = aspect * y;
+        return setFrustum(-x, x, y, -y, near, far);
     }
 
     public Matrix4x4 setPosition(double x, double y, double z) {
