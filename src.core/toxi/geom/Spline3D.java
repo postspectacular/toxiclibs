@@ -48,15 +48,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * 
  * <p>
  * Thanks to a bug report by Aaron Meyers (http://universaloscillation.com) the
- * {@linkplain #computeVertices(int)} method has a slightly changed behaviour
- * from version 0014 onwards. In earlier versions erroneous duplicate points
- * would be added near each given control point, which lead to various weird
- * results.
+ * {@linkplain #toLineStrip3D(int)} method has a slightly changed behaviour from
+ * version 0014 onwards. In earlier versions erroneous duplicate points would be
+ * added near each given control point, which lead to various weird results.
  * </p>
  * 
  * <p>
  * The new behaviour of the curve interpolation/computation is described in the
- * docs for the {@linkplain #computeVertices(int)} method below.
+ * docs for the {@linkplain #toLineStrip3D(int)} method below.
  * </p>
  * 
  * @version 0014 Added user adjustable curve tightness control
@@ -68,16 +67,11 @@ public class Spline3D {
 
     public static final float DEFAULT_TIGHTNESS = 0.25f;
 
-    public static final int DEFAULT_RES = 16;
-
     @XmlTransient
     protected Vec3D[] points;
 
     @XmlElement(name = "p")
     public List<Vec3D> pointList = new ArrayList<Vec3D>();
-
-    @XmlTransient
-    public List<Vec3D> vertices;
 
     @XmlTransient
     public BernsteinPolynomial bernstein;
@@ -166,62 +160,6 @@ public class Spline3D {
         return this;
     }
 
-    /**
-     * <p>
-     * Computes all curve vertices based on the resolution/number of
-     * subdivisions requested. The higher, the more vertices are computed:
-     * </p>
-     * <p>
-     * <strong>(number of control points - 1) * resolution + 1</strong>
-     * </p>
-     * <p>
-     * Since version 0014 the automatic placement of the curve handles can also
-     * be manipulated via the {@linkplain #setTightness(float)} method.
-     * </p>
-     * 
-     * @param res
-     *            the number of vertices to be computed per segment between
-     *            original control points (incl. control point always at the
-     *            start of each segment)
-     * @return list of Vec3D vertices along the curve
-     */
-    public List<Vec3D> computeVertices(int res) {
-        updateCoefficients();
-        if (res < 1) {
-            res = 1;
-        }
-        res++;
-        if (bernstein == null || bernstein.resolution != res) {
-            bernstein = new BernsteinPolynomial(res);
-        }
-        if (vertices == null) {
-            vertices = new ArrayList<Vec3D>();
-        } else {
-            vertices.clear();
-        }
-        findCPoints();
-        Vec3D deltaP = new Vec3D();
-        Vec3D deltaQ = new Vec3D();
-        res--;
-        for (int i = 0, numP = getNumPoints(); i < numP - 1; i++) {
-            Vec3D p = points[i];
-            Vec3D q = points[i + 1];
-            deltaP.set(delta[i]).addSelf(p);
-            deltaQ.set(q).subSelf(delta[i + 1]);
-            for (int k = 0; k < res; k++) {
-                float x = p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
-                        + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
-                float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
-                        + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
-                float z = p.z * bernstein.b0[k] + deltaP.z * bernstein.b1[k]
-                        + deltaQ.z * bernstein.b2[k] + q.z * bernstein.b3[k];
-                vertices.add(new Vec3D(x, y, z));
-            }
-        }
-        vertices.add(points[points.length - 1].copy());
-        return vertices;
-    }
-
     protected void findCPoints() {
         bi[1] = -tightness;
         coeffA[1].set((points[2].x - points[0].x - delta[0].x) * tightness,
@@ -243,36 +181,6 @@ public class Spline3D {
                     + delta[i + 1].y * bi[i], coeffA[i].z + delta[i + 1].z
                     * bi[i]);
         }
-    }
-
-    /**
-     * Computes a list of points along the spline which are uniformly separated
-     * by the given step distance.
-     * 
-     * @param step
-     * @return point list
-     */
-    public List<Vec3D> getDecimatedVertices(float step) {
-        return getDecimatedVertices(step, true);
-    }
-
-    /**
-     * Computes a list of points along the spline which are uniformly separated
-     * by the given step distance.
-     * 
-     * @param step
-     * @param doAddFinalVertex
-     *            true, if the last vertex computed by
-     *            {@link #computeVertices(int)} should be added regardless of
-     *            its distance.
-     * @return point list
-     */
-    public List<Vec3D> getDecimatedVertices(float step, boolean doAddFinalVertex) {
-        if (vertices == null || vertices.size() < 2) {
-            computeVertices(DEFAULT_RES);
-        }
-        return new LineStrip3D(vertices).getDecimatedVertices(step,
-                doAddFinalVertex);
     }
 
     /**
@@ -324,7 +232,7 @@ public class Spline3D {
      * 
      * @param tightness
      *            the tightness value used for the next call to
-     *            {@link #computeVertices(int)}
+     *            {@link #toLineStrip3D(int)}
      * @since 0014 (rev. 216)
      * @return itself
      */
@@ -332,6 +240,58 @@ public class Spline3D {
         this.tightness = tightness;
         this.invTightness = 1f / tightness;
         return this;
+    }
+
+    /**
+     * <p>
+     * Computes all curve vertices based on the resolution/number of
+     * subdivisions requested. The higher, the more vertices are computed:
+     * </p>
+     * <p>
+     * <strong>(number of control points - 1) * resolution + 1</strong>
+     * </p>
+     * <p>
+     * Since version 0014 the automatic placement of the curve handles can also
+     * be manipulated via the {@linkplain #setTightness(float)} method.
+     * </p>
+     * 
+     * @param res
+     *            the number of vertices to be computed per segment between
+     *            original control points (incl. control point always at the
+     *            start of each segment)
+     * @return list of Vec3D vertices along the curve
+     */
+    public LineStrip3D toLineStrip3D(int res) {
+        updateCoefficients();
+        if (res < 1) {
+            res = 1;
+        }
+        res++;
+        if (bernstein == null || bernstein.resolution != res) {
+            bernstein = new BernsteinPolynomial(res);
+        }
+        ArrayList<Vec3D> vertices = new ArrayList<Vec3D>();
+        findCPoints();
+        Vec3D deltaP = new Vec3D();
+        Vec3D deltaQ = new Vec3D();
+        res--;
+        for (int i = 0, numP = getNumPoints(); i < numP - 1; i++) {
+            Vec3D p = points[i];
+            Vec3D q = points[i + 1];
+            deltaP.set(delta[i]).addSelf(p);
+            deltaQ.set(q).subSelf(delta[i + 1]);
+            for (int k = 0; k < res; k++) {
+                float x = p.x * bernstein.b0[k] + deltaP.x * bernstein.b1[k]
+                        + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
+                float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
+                        + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
+                float z = p.z * bernstein.b0[k] + deltaP.z * bernstein.b1[k]
+                        + deltaQ.z * bernstein.b2[k] + q.z * bernstein.b3[k];
+                vertices.add(new Vec3D(x, y, z));
+            }
+        }
+        vertices.add(points[points.length - 1].copy());
+        return new LineStrip3D(vertices);
     }
 
     public void updateCoefficients() {
