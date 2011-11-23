@@ -170,6 +170,15 @@ public final class MathUtils {
         return a < min ? min : (a > max ? max : a);
     }
 
+    public static double clipNormalized(double a) {
+        if (a < 0) {
+            return 0;
+        } else if (a > 1) {
+            return 1;
+        }
+        return a;
+    }
+
     /**
      * Clips the value to the 0.0 .. 1.0 interval.
      * 
@@ -201,6 +210,10 @@ public final class MathUtils {
      */
     public static final float cos(final float theta) {
         return sin(theta + HALF_PI);
+    }
+
+    public static final double degrees(double radians) {
+        return radians * RAD2DEG;
     }
 
     public static final float degrees(float radians) {
@@ -316,6 +329,20 @@ public final class MathUtils {
     }
 
     /**
+     * Computes the Greatest Common Devisor of integers p and q.
+     * 
+     * @param p
+     * @param q
+     * @return gcd
+     */
+    public static final int gcd(int p, int q) {
+        if (q == 0) {
+            return p;
+        }
+        return gcd(q, p % q);
+    }
+
+    /**
      * Creates a single normalized impulse signal with its peak at t=1/k. The
      * attack and decay period is configurable via the k parameter. Code from:
      * http://www.iquilezles.org/www/articles/functions/functions.htm
@@ -345,6 +372,10 @@ public final class MathUtils {
     public static float impulse(float k, float t) {
         float h = k * t;
         return (float) (h * Math.exp(1.0f - h));
+    }
+
+    public static final int lcm(int p, int q) {
+        return abs(p * q) / gcd(p, q);
     }
 
     public static final double max(double a, double b) {
@@ -456,6 +487,10 @@ public final class MathUtils {
      */
     public static final float normalizedRandom(Random rnd) {
         return rnd.nextFloat() * 2 - 1;
+    }
+
+    public static double radians(double degrees) {
+        return degrees * DEG2RAD;
     }
 
     public static final float radians(float degrees) {
