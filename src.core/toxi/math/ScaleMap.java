@@ -71,11 +71,11 @@ public class ScaleMap {
      * @return mapped value
      */
     public double getClippedValueFor(double val) {
-        float t = MathUtils.clipNormalized((float) ((val - in.min) / interval));
-        if (Float.isNaN(t)) {
+        double t = MathUtils.clipNormalized((val - in.min) / interval);
+        if (Double.isNaN(t)) {
             t = 0;
         }
-        return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
+        return mapFunction.interpolate(0, mapRange, t) + out.min;
     }
 
     /**
@@ -109,8 +109,8 @@ public class ScaleMap {
      * @return mapped value
      */
     public double getMappedValueFor(double val) {
-        float t = (float) ((val - in.min) / interval);
-        if (Float.isNaN(t)) {
+        double t = ((val - in.min) / interval);
+        if (Double.isNaN(t)) {
             t = 0;
         }
         return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
