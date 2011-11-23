@@ -74,7 +74,7 @@ public class PolygonConstraint implements ParticleConstraint2D {
     }
 
     public Polygon2D getPolygon() {
-        return poly.copy();
+        return poly;
     }
 
     public boolean isContainer() {
@@ -86,6 +86,6 @@ public class PolygonConstraint implements ParticleConstraint2D {
     }
 
     public void setPolygon(Polygon2D poly) {
-        this.poly = poly.copy();
+        this.poly = poly;
     }
 }

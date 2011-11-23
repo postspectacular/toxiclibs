@@ -25,26 +25,44 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics2d;
+package toxi.physics2d.behaviors;
 
-/**
- * Creates a pullback spring (default restlength=0.5) between 2 particles and
- * locks the first one given at the current position. The spring is only
- * enforced if the current length of the spring exceeds the rest length. This
- * behaviour is the opposite to the {@link VerletMinDistanceSpring2D}.
- */
-class PullBackString2D extends VerletSpring2D {
+import toxi.geom.Vec2D;
+import toxi.physics2d.VerletParticle2D;
 
-    public PullBackString2D(VerletParticle2D a, VerletParticle2D b,
-            float strength) {
-        super(a, b, 0, strength);
-        a.lock();
-        setRestLength(0.5f);
+public class ConstantForceBehavior2D implements ParticleBehavior2D {
+
+    protected Vec2D force;
+    protected Vec2D scaledForce = new Vec2D();
+    protected float timeStep;
+
+    public ConstantForceBehavior2D(Vec2D force) {
+        this.force = force;
     }
 
-    protected void update(boolean applyConstraints) {
-        if (b.distanceToSquared(a) > restLengthSquared) {
-            super.update(applyConstraints);
-        }
+    public void apply(VerletParticle2D p) {
+        p.addForce(scaledForce);
     }
+
+    public void configure(float timeStep) {
+        this.timeStep = timeStep;
+        setForce(force);
+    }
+
+    /**
+     * @return the force
+     */
+    public Vec2D getForce() {
+        return force;
+    }
+
+    /**
+     * @param force
+     *            the force to set
+     */
+    public void setForce(Vec2D force) {
+        this.force = force;
+        this.scaledForce = force.scale(timeStep);
+    }
+
 }

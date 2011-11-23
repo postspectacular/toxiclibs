@@ -43,7 +43,7 @@ import toxi.geom.Vec2D;
  * this library).
  * </p>
  * 
- * @see toxi.physics.VerletPhysics
+ * @see toxi.physics3d.VerletPhysics3D
  */
 public class VerletSpring2D {
 

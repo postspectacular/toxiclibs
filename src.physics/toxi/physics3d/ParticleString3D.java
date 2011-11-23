@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +36,13 @@ import toxi.geom.Vec3D;
  * Utility builder/grouping/management class to connect a set of particles into
  * a physical string/thread. Custom spring types can be used by subclassing this
  * class and overwriting the
- * {@link #createSpring(VerletParticle, VerletParticle, float, float)} method.
+ * {@link #createSpring(VerletParticle3D, VerletParticle3D, float, float)} method.
  */
-public class ParticleString {
+public class ParticleString3D {
 
-    protected VerletPhysics physics;
-    public List<VerletParticle> particles;
-    public List<VerletSpring> links;
+    protected VerletPhysics3D physics;
+    public List<VerletParticle3D> particles;
+    public List<VerletSpring3D> links;
 
     /**
      * Takes a list of already created particles connects them into a continuous
@@ -55,16 +55,16 @@ public class ParticleString {
      * @param strength
      *            spring strength
      */
-    public ParticleString(VerletPhysics physics, List<VerletParticle> plist,
+    public ParticleString3D(VerletPhysics3D physics, List<VerletParticle3D> plist,
             float strength) {
         this.physics = physics;
-        particles = new ArrayList<VerletParticle>(plist);
-        links = new ArrayList<VerletSpring>(particles.size() - 1);
-        VerletParticle prev = null;
-        for (VerletParticle p : particles) {
+        particles = new ArrayList<VerletParticle3D>(plist);
+        links = new ArrayList<VerletSpring3D>(particles.size() - 1);
+        VerletParticle3D prev = null;
+        for (VerletParticle3D p : particles) {
             physics.addParticle(p);
             if (prev != null) {
-                VerletSpring s = createSpring(prev, p, prev.distanceTo(p),
+                VerletSpring3D s = createSpring(prev, p, prev.distanceTo(p),
                         strength);
                 links.add(s);
                 physics.addSpring(s);
@@ -91,20 +91,20 @@ public class ParticleString {
      * @param strength
      *            spring strength
      */
-    public ParticleString(VerletPhysics physics, Vec3D pos, Vec3D step,
+    public ParticleString3D(VerletPhysics3D physics, Vec3D pos, Vec3D step,
             int num, float mass, float strength) {
         this.physics = physics;
-        particles = new ArrayList<VerletParticle>(num);
-        links = new ArrayList<VerletSpring>(num - 1);
+        particles = new ArrayList<VerletParticle3D>(num);
+        links = new ArrayList<VerletSpring3D>(num - 1);
         float len = step.magnitude();
-        VerletParticle prev = null;
+        VerletParticle3D prev = null;
         pos = pos.copy();
         for (int i = 0; i < num; i++) {
-            VerletParticle p = new VerletParticle(pos.copy(), mass);
+            VerletParticle3D p = new VerletParticle3D(pos.copy(), mass);
             particles.add(p);
             physics.particles.add(p);
             if (prev != null) {
-                VerletSpring s = createSpring(prev, p, len, strength);
+                VerletSpring3D s = createSpring(prev, p, len, strength);
                 links.add(s);
                 physics.addSpring(s);
             }
@@ -118,7 +118,7 @@ public class ParticleString {
      * particles & springs.
      */
     public void clear() {
-        for (VerletSpring s : links) {
+        for (VerletSpring3D s : links) {
             physics.removeSpringElements(s);
         }
         particles.clear();
@@ -128,7 +128,7 @@ public class ParticleString {
     /**
      * Creates a spring instance connecting 2 successive particles of the
      * string. Overwrite this method to create a string custom spring types
-     * (subclassed from {@link VerletSpring}).
+     * (subclassed from {@link VerletSpring3D}).
      * 
      * @param a
      *            1st particle
@@ -139,9 +139,9 @@ public class ParticleString {
      * @param strength
      * @return spring
      */
-    protected VerletSpring createSpring(VerletParticle a, VerletParticle b,
+    protected VerletSpring3D createSpring(VerletParticle3D a, VerletParticle3D b,
             float len, float strength) {
-        return new VerletSpring(a, b, len, strength);
+        return new VerletSpring3D(a, b, len, strength);
     }
 
     /**
@@ -149,7 +149,7 @@ public class ParticleString {
      * 
      * @return first particle
      */
-    public VerletParticle getHead() {
+    public VerletParticle3D getHead() {
         return particles.get(0);
     }
 
@@ -167,7 +167,7 @@ public class ParticleString {
      * 
      * @return last particle
      */
-    public VerletParticle getTail() {
+    public VerletParticle3D getTail() {
         return particles.get(particles.size() - 1);
     }
 }

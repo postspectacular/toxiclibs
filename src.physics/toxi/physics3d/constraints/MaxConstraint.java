@@ -25,23 +25,23 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
 import toxi.geom.Vec3D.Axis;
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
-public class MinConstraint implements ParticleConstraint {
+public class MaxConstraint implements ParticleConstraint3D {
 
     public Axis axis;
     public float threshold;
 
-    public MinConstraint(Axis axis, float threshold) {
+    public MaxConstraint(Axis axis, float threshold) {
         this.axis = axis;
         this.threshold = threshold;
     }
 
-    public void apply(VerletParticle p) {
-        if (p.getComponent(axis) < threshold) {
+    public void apply(VerletParticle3D p) {
+        if (p.getComponent(axis) > threshold) {
             p.setComponent(axis, threshold);
         }
     }

@@ -25,9 +25,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
 /**
  * Defines an interface used to constrain VerletParticles based on a custom
@@ -36,7 +36,7 @@ import toxi.physics.VerletParticle;
  * are only applied to particles they've been assigned to and which are not
  * locked.
  */
-public interface ParticleConstraint {
+public interface ParticleConstraint3D {
 
     /**
      * Applies the constraint to the passed in particle. The method is assumed
@@ -45,5 +45,5 @@ public interface ParticleConstraint {
      * @param p
      *            particle
      */
-    public void apply(VerletParticle p);
+    public void apply(VerletParticle3D p);
 }

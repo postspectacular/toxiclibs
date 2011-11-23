@@ -33,7 +33,7 @@ import java.util.List;
 
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
-import toxi.physics2d.behaviors.GravityBehavior;
+import toxi.physics2d.behaviors.GravityBehavior2D;
 import toxi.physics2d.behaviors.ParticleBehavior2D;
 import toxi.physics2d.constraints.ParticleConstraint2D;
 
@@ -87,6 +87,9 @@ public class VerletPhysics2D {
     public final List<ParticleBehavior2D> behaviors = new ArrayList<ParticleBehavior2D>(
             1);
 
+    public final List<ParticleConstraint2D> constraints = new ArrayList<ParticleConstraint2D>(
+            1);
+
     protected float drag;
 
     /**
@@ -116,13 +119,17 @@ public class VerletPhysics2D {
         this.timeStep = timeStep;
         setDrag(drag);
         if (gravity != null) {
-            addBehavior(new GravityBehavior(gravity));
+            addBehavior(new GravityBehavior2D(gravity));
         }
     }
 
     public void addBehavior(ParticleBehavior2D behavior) {
         behavior.configure(timeStep);
         behaviors.add(behavior);
+    }
+
+    public void addConstraint(ParticleConstraint2D constraint) {
+        constraints.add(constraint);
     }
 
     /**
@@ -149,26 +156,31 @@ public class VerletPhysics2D {
         return this;
     }
 
+    /**
+     * Applies all global constraints and constrains all particle positions to
+     * the world bounding rect set.
+     */
+    protected void applyConstaints() {
+        boolean hasGlobalConstraints = constraints.size() > 0;
+        for (VerletParticle2D p : particles) {
+            if (hasGlobalConstraints) {
+                for (ParticleConstraint2D c : constraints) {
+                    c.apply(p);
+                }
+            }
+            if (p.bounds != null) {
+                p.constrain(p.bounds);
+            }
+            if (worldBounds != null) {
+                p.constrain(worldBounds);
+            }
+        }
+    }
+
     public VerletPhysics2D clear() {
         particles.clear();
         springs.clear();
         return this;
-    }
-
-    /**
-     * Constrains all particle positions to the world bounding box set
-     */
-    protected void constrainToBounds() {
-        for (VerletParticle2D p : particles) {
-            if (p.bounds != null) {
-                p.constrain(p.bounds);
-            }
-        }
-        if (worldBounds != null) {
-            for (VerletParticle2D p : particles) {
-                p.constrain(worldBounds);
-            }
-        }
     }
 
     public Rect getCurrentBounds() {
@@ -227,6 +239,10 @@ public class VerletPhysics2D {
 
     public boolean removeBehavior(ParticleBehavior2D c) {
         return behaviors.remove(c);
+    }
+
+    public boolean removeConstraint(ParticleConstraint2D c) {
+        return constraints.remove(c);
     }
 
     /**
@@ -309,7 +325,7 @@ public class VerletPhysics2D {
     public VerletPhysics2D update() {
         updateParticles();
         updateSprings();
-        constrainToBounds();
+        applyConstaints();
         return this;
     }
 

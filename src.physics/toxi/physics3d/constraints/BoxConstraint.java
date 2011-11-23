@@ -25,14 +25,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
 import toxi.geom.AABB;
 import toxi.geom.Ray3D;
 import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
-public class BoxConstraint implements ParticleConstraint {
+public class BoxConstraint implements ParticleConstraint3D {
 
     protected AABB box;
     protected Ray3D intersectRay;
@@ -47,7 +47,7 @@ public class BoxConstraint implements ParticleConstraint {
         this(AABB.fromMinMax(min, max));
     }
 
-    public void apply(VerletParticle p) {
+    public void apply(VerletParticle3D p) {
         if (p.isInAABB(box)) {
             Vec3D dir = p.getVelocity();
             Vec3D prev = p.getPreviousPosition();

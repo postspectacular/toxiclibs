@@ -30,7 +30,7 @@ package toxi.physics2d.behaviors;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
-public class AttractionBehavior implements ParticleBehavior2D {
+public class AttractionBehavior2D implements ParticleBehavior2D {
 
     protected Vec2D attractor;
     protected float attrStrength;
@@ -40,11 +40,11 @@ public class AttractionBehavior implements ParticleBehavior2D {
     protected float jitter;
     protected float timeStep;
 
-    public AttractionBehavior(Vec2D attractor, float radius, float strength) {
+    public AttractionBehavior2D(Vec2D attractor, float radius, float strength) {
         this(attractor, radius, strength, 0);
     }
 
-    public AttractionBehavior(Vec2D attractor, float radius, float strength,
+    public AttractionBehavior2D(Vec2D attractor, float radius, float strength,
             float jitter) {
         this.attractor = attractor;
         this.strength = strength;

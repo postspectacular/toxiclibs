@@ -25,38 +25,44 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
-import java.util.LinkedList;
-import java.util.List;
+import toxi.geom.AxisAlignedCylinder;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletParticle3D;
 
-import toxi.geom.AABB;
-import toxi.geom.Vec3D.Axis;
-import toxi.physics.VerletParticle;
+public class CylinderConstraint implements ParticleConstraint3D {
 
-public class SoftBoxConstraint implements ParticleConstraint {
+    protected AxisAlignedCylinder cylinder;
+    protected Vec3D centroid = new Vec3D();
+    protected Vec3D.Axis axis;
 
-    public AABB box;
-    public List<Axis> axes = new LinkedList<Axis>();
-    public float smooth;
-
-    public SoftBoxConstraint(AABB box, float smooth) {
-        this.box = box;
-        this.smooth = smooth;
+    public CylinderConstraint(AxisAlignedCylinder cylinder) {
+        setCylinder(cylinder);
     }
 
-    public SoftBoxConstraint addAxis(Axis a) {
-        axes.add(a);
-        return this;
-    }
-
-    public void apply(VerletParticle p) {
-        if (p.isInAABB(box)) {
-            for (Axis a : axes) {
-                float val = p.getComponent(a);
-                p.setComponent(a, val + (box.getComponent(a) - val) * smooth);
-            }
+    public void apply(VerletParticle3D p) {
+        if (cylinder.containsPoint(p)) {
+            centroid.setComponent(axis, p.getComponent(axis));
+            p.set(centroid.add(p.sub(centroid)
+                    .normalizeTo(cylinder.getRadius())));
         }
     }
 
+    /**
+     * @return the cylinder
+     */
+    public AxisAlignedCylinder getCylinder() {
+        return cylinder;
+    }
+
+    /**
+     * @param cylinder
+     *            the cylinder to set
+     */
+    public void setCylinder(AxisAlignedCylinder cylinder) {
+        this.cylinder = cylinder;
+        centroid.set(cylinder.getPosition());
+        axis = cylinder.getMajorAxis();
+    }
 }

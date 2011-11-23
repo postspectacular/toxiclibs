@@ -25,12 +25,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.behaviors;
+package toxi.physics3d.behaviors;
 
 import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
-public class AttractionBehavior implements ParticleBehavior {
+public class AttractionBehavior3D implements ParticleBehavior3D {
 
     protected Vec3D attractor;
     protected float attrStrength;
@@ -40,11 +40,11 @@ public class AttractionBehavior implements ParticleBehavior {
     protected float jitter;
     protected float timeStep;
 
-    public AttractionBehavior(Vec3D attractor, float radius, float strength) {
+    public AttractionBehavior3D(Vec3D attractor, float radius, float strength) {
         this(attractor, radius, strength, 0);
     }
 
-    public AttractionBehavior(Vec3D attractor, float radius, float strength,
+    public AttractionBehavior3D(Vec3D attractor, float radius, float strength,
             float jitter) {
         this.attractor = attractor;
         this.strength = strength;
@@ -52,7 +52,7 @@ public class AttractionBehavior implements ParticleBehavior {
         setRadius(radius);
     }
 
-    public void apply(VerletParticle p) {
+    public void apply(VerletParticle3D p) {
         Vec3D delta = attractor.sub(p);
         float dist = delta.magSquared();
         if (dist < radiusSquared) {

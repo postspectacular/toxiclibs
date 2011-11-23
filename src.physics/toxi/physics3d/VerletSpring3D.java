@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import toxi.geom.Vec3D;
 
@@ -43,16 +43,16 @@ import toxi.geom.Vec3D;
  * this library).
  * </p>
  * 
- * @see toxi.physics.VerletPhysics
+ * @see toxi.physics3d.VerletPhysics3D
  */
-public class VerletSpring {
+public class VerletSpring3D {
 
     protected static final float EPS = 1e-6f;
 
     /**
      * Spring end points / particles
      */
-    public VerletParticle a, b;
+    public VerletParticle3D a, b;
 
     /**
      * Spring rest length to which it always wants to return too
@@ -81,7 +81,7 @@ public class VerletSpring {
      * @param str
      *            spring strength
      */
-    public VerletSpring(VerletParticle a, VerletParticle b, float len, float str) {
+    public VerletSpring3D(VerletParticle3D a, VerletParticle3D b, float len, float str) {
         this.a = a;
         this.b = b;
         restLength = len;
@@ -99,12 +99,12 @@ public class VerletSpring {
     /**
      * (Un)Locks the 1st end point of the spring. <b>NOTE: this acts purely
      * within the scope of this spring instance and does NOT call
-     * {@link VerletParticle#lock()}</b>
+     * {@link VerletParticle3D#lock()}</b>
      * 
      * @param s
      * @return itself
      */
-    public VerletSpring lockA(boolean s) {
+    public VerletSpring3D lockA(boolean s) {
         isALocked = s;
         return this;
     }
@@ -116,18 +116,18 @@ public class VerletSpring {
      * @return itself
      */
 
-    public VerletSpring lockB(boolean s) {
+    public VerletSpring3D lockB(boolean s) {
         isBLocked = s;
         return this;
     }
 
-    public VerletSpring setRestLength(float len) {
+    public VerletSpring3D setRestLength(float len) {
         restLength = len;
         restLengthSquared = len * len;
         return this;
     }
 
-    public VerletSpring setStrength(float strength) {
+    public VerletSpring3D setStrength(float strength) {
         this.strength = strength;
         return this;
     }

@@ -25,44 +25,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics2d.behaviors;
+package toxi.physics3d.behaviors;
 
-import toxi.geom.Vec2D;
-import toxi.physics2d.VerletParticle2D;
+import toxi.physics3d.VerletParticle3D;
 
-public class ConstantForceBehavior implements ParticleBehavior2D {
-
-    protected Vec2D force;
-    protected Vec2D scaledForce = new Vec2D();
-    protected float timeStep;
-
-    public ConstantForceBehavior(Vec2D force) {
-        this.force = force;
-    }
-
-    public void apply(VerletParticle2D p) {
-        p.addForce(scaledForce);
-    }
-
-    public void configure(float timeStep) {
-        this.timeStep = timeStep;
-        setForce(force);
-    }
+public interface ParticleBehavior3D {
 
     /**
-     * @return the force
+     * Applies the constraint to the passed in particle. The method is assumed
+     * to manipulate the given instance directly.
+     * 
+     * @param p
+     *            particle
      */
-    public Vec2D getForce() {
-        return force;
-    }
+    public void apply(VerletParticle3D p);
 
-    /**
-     * @param force
-     *            the force to set
-     */
-    public void setForce(Vec2D force) {
-        this.force = force;
-        this.scaledForce = force.scale(timeStep);
-    }
-
+    public void configure(float timeStep);
 }

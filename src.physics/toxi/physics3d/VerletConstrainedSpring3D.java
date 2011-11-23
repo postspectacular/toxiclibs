@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import toxi.geom.Vec3D;
 
@@ -34,7 +34,7 @@ import toxi.geom.Vec3D;
  * be limited to achieve better (if physically incorrect) stability of the whole
  * spring system.
  */
-public class VerletConstrainedSpring extends VerletSpring {
+public class VerletConstrainedSpring3D extends VerletSpring3D {
 
     /**
      * Maximum relaxation distance for either end of the spring in world units
@@ -47,7 +47,7 @@ public class VerletConstrainedSpring extends VerletSpring {
      * @param len
      * @param str
      */
-    public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
+    public VerletConstrainedSpring3D(VerletParticle3D a, VerletParticle3D b,
             float len, float str) {
         super(a, b, len, str);
     }
@@ -59,7 +59,7 @@ public class VerletConstrainedSpring extends VerletSpring {
      * @param str
      * @param limit
      */
-    public VerletConstrainedSpring(VerletParticle a, VerletParticle b,
+    public VerletConstrainedSpring3D(VerletParticle3D a, VerletParticle3D b,
             float len, float str, float limit) {
         super(a, b, len, str);
         this.limit = limit;

@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,9 +33,9 @@ import java.util.List;
 
 import toxi.geom.AABB;
 import toxi.geom.Vec3D;
-import toxi.physics.behaviors.GravityBehavior;
-import toxi.physics.behaviors.ParticleBehavior;
-import toxi.physics.constraints.ParticleConstraint;
+import toxi.physics3d.behaviors.GravityBehavior3D;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
+import toxi.physics3d.constraints.ParticleConstraint3D;
 
 /**
  * 3D particle physics engine using Verlet integration based on:
@@ -43,18 +43,18 @@ import toxi.physics.constraints.ParticleConstraint;
  * http://www.teknikus.dk/tj/gdc2001.htm
  * 
  */
-public class VerletPhysics {
+public class VerletPhysics3D {
 
-    public static void addConstraintToAll(ParticleConstraint c,
-            List<VerletParticle> list) {
-        for (VerletParticle p : list) {
+    public static void addConstraintToAll(ParticleConstraint3D c,
+            List<VerletParticle3D> list) {
+        for (VerletParticle3D p : list) {
             p.addConstraint(c);
         }
     }
 
-    public static void removeConstraintFromAll(ParticleConstraint c,
-            List<VerletParticle> list) {
-        for (VerletParticle p : list) {
+    public static void removeConstraintFromAll(ParticleConstraint3D c,
+            List<VerletParticle3D> list) {
+        for (VerletParticle3D p : list) {
             p.removeConstraint(c);
         }
     }
@@ -62,11 +62,11 @@ public class VerletPhysics {
     /**
      * List of particles (Vec3D subclassed)
      */
-    public List<VerletParticle> particles;
+    public List<VerletParticle3D> particles;
     /**
      * List of spring/sticks connectors
      */
-    public List<VerletSpring> springs;
+    public List<VerletSpring3D> springs;
 
     /**
      * Default time step = 1.0
@@ -83,7 +83,10 @@ public class VerletPhysics {
      */
     protected AABB worldBounds;
 
-    public final List<ParticleBehavior> behaviors = new ArrayList<ParticleBehavior>(
+    public final List<ParticleBehavior3D> behaviors = new ArrayList<ParticleBehavior3D>(
+            1);
+
+    public final List<ParticleConstraint3D> constraints = new ArrayList<ParticleConstraint3D>(
             1);
 
     protected float drag;
@@ -91,7 +94,7 @@ public class VerletPhysics {
     /**
      * Initializes a Verlet engine instance using the default values.
      */
-    public VerletPhysics() {
+    public VerletPhysics3D() {
         this(null, 50, 0, 1);
     }
 
@@ -107,21 +110,25 @@ public class VerletPhysics {
      * @param timeStep
      *            time step for calculating forces
      */
-    public VerletPhysics(Vec3D gravity, int numIterations, float drag,
+    public VerletPhysics3D(Vec3D gravity, int numIterations, float drag,
             float timeStep) {
-        particles = new ArrayList<VerletParticle>();
-        springs = new ArrayList<VerletSpring>();
+        particles = new ArrayList<VerletParticle3D>();
+        springs = new ArrayList<VerletSpring3D>();
         this.numIterations = numIterations;
         this.timeStep = timeStep;
         setDrag(drag);
         if (gravity != null) {
-            addBehavior(new GravityBehavior(gravity));
+            addBehavior(new GravityBehavior3D(gravity));
         }
     }
 
-    public void addBehavior(ParticleBehavior behavior) {
+    public void addBehavior(ParticleBehavior3D behavior) {
         behavior.configure(timeStep);
         behaviors.add(behavior);
+    }
+
+    public void addConstraint(ParticleConstraint3D constraint) {
+        constraints.add(constraint);
     }
 
     /**
@@ -130,7 +137,7 @@ public class VerletPhysics {
      * @param p
      * @return itself
      */
-    public VerletPhysics addParticle(VerletParticle p) {
+    public VerletPhysics3D addParticle(VerletParticle3D p) {
         particles.add(p);
         return this;
     }
@@ -141,40 +148,45 @@ public class VerletPhysics {
      * @param s
      * @return itself
      */
-    public VerletPhysics addSpring(VerletSpring s) {
+    public VerletPhysics3D addSpring(VerletSpring3D s) {
         if (getSpring(s.a, s.b) == null) {
             springs.add(s);
         }
         return this;
     }
 
-    public VerletPhysics clear() {
-        particles.clear();
-        springs.clear();
-        return this;
-    }
-
     /**
-     * Constrains all particle positions to the world bounding box set
+     * Applies all global constraints and constrains all particle positions to
+     * the world bounding box set
      */
-    protected void constrainToBounds() {
-        for (VerletParticle p : particles) {
+    protected void applyConstaints() {
+        boolean hasGlobalConstraints = constraints.size() > 0;
+        for (VerletParticle3D p : particles) {
+            if (hasGlobalConstraints) {
+                for (ParticleConstraint3D c : constraints) {
+                    c.apply(p);
+                }
+            }
             if (p.bounds != null) {
                 p.constrain(p.bounds);
             }
-        }
-        if (worldBounds != null) {
-            for (VerletParticle p : particles) {
+            if (worldBounds != null) {
                 p.constrain(worldBounds);
             }
         }
     }
 
+    public VerletPhysics3D clear() {
+        particles.clear();
+        springs.clear();
+        return this;
+    }
+
     public AABB getCurrentBounds() {
         Vec3D min = new Vec3D(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
         Vec3D max = new Vec3D(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
-        for (Iterator<VerletParticle> i = particles.iterator(); i.hasNext();) {
-            VerletParticle p = i.next();
+        for (Iterator<VerletParticle3D> i = particles.iterator(); i.hasNext();) {
+            VerletParticle3D p = i.next();
             min.minSelf(p);
             max.maxSelf(p);
         }
@@ -201,8 +213,8 @@ public class VerletPhysics {
      *            particle 2
      * @return spring instance, or null if not found
      */
-    public VerletSpring getSpring(Vec3D a, Vec3D b) {
-        for (VerletSpring s : springs) {
+    public VerletSpring3D getSpring(Vec3D a, Vec3D b) {
+        for (VerletSpring3D s : springs) {
             if ((s.a == a && s.b == b) || (s.a == b && s.b == a)) {
                 return s;
             }
@@ -224,8 +236,12 @@ public class VerletPhysics {
         return worldBounds;
     }
 
-    public boolean removeBehavior(ParticleBehavior b) {
+    public boolean removeBehavior(ParticleBehavior3D b) {
         return behaviors.remove(b);
+    }
+
+    public boolean removeConstraint(ParticleConstraint3D c) {
+        return constraints.remove(c);
     }
 
     /**
@@ -235,7 +251,7 @@ public class VerletPhysics {
      *            particle to remove
      * @return true, if removed successfully
      */
-    public boolean removeParticle(VerletParticle p) {
+    public boolean removeParticle(VerletParticle3D p) {
         return particles.remove(p);
     }
 
@@ -246,7 +262,7 @@ public class VerletPhysics {
      *            spring to remove
      * @return true, if the spring has been removed
      */
-    public boolean removeSpring(VerletSpring s) {
+    public boolean removeSpring(VerletSpring3D s) {
         return springs.remove(s);
     }
 
@@ -258,7 +274,7 @@ public class VerletPhysics {
      *            spring to remove
      * @return true, only if spring AND particles have been removed successfully
      */
-    public boolean removeSpringElements(VerletSpring s) {
+    public boolean removeSpringElements(VerletSpring3D s) {
         if (removeSpring(s)) {
             return (removeParticle(s.a) && removeParticle(s.b));
         }
@@ -283,7 +299,7 @@ public class VerletPhysics {
      */
     public void setTimeStep(float timeStep) {
         this.timeStep = timeStep;
-        for (ParticleBehavior b : behaviors) {
+        for (ParticleBehavior3D b : behaviors) {
             b.configure(timeStep);
         }
     }
@@ -294,7 +310,7 @@ public class VerletPhysics {
      * @param world
      * @return itself
      */
-    public VerletPhysics setWorldBounds(AABB world) {
+    public VerletPhysics3D setWorldBounds(AABB world) {
         worldBounds = world;
         return this;
     }
@@ -305,10 +321,10 @@ public class VerletPhysics {
      * 
      * @return itself
      */
-    public VerletPhysics update() {
+    public VerletPhysics3D update() {
         updateParticles();
         updateSprings();
-        constrainToBounds();
+        applyConstaints();
         return this;
     }
 
@@ -316,12 +332,12 @@ public class VerletPhysics {
      * Updates all particle positions
      */
     protected void updateParticles() {
-        for (ParticleBehavior b : behaviors) {
-            for (VerletParticle p : particles) {
+        for (ParticleBehavior3D b : behaviors) {
+            for (VerletParticle3D p : particles) {
                 b.apply(p);
             }
         }
-        for (VerletParticle p : particles) {
+        for (VerletParticle3D p : particles) {
             p.scaleVelocity(drag);
             p.update();
         }
@@ -332,7 +348,7 @@ public class VerletPhysics {
      */
     protected void updateSprings() {
         for (int i = numIterations; i > 0; i--) {
-            for (VerletSpring s : springs) {
+            for (VerletSpring3D s : springs) {
                 s.update(i == 1);
             }
         }

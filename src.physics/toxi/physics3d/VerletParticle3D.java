@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +33,15 @@ import java.util.List;
 import toxi.geom.AABB;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
-import toxi.physics.behaviors.ParticleBehavior;
-import toxi.physics.constraints.ParticleConstraint;
+import toxi.physics3d.behaviors.ParticleBehavior3D;
+import toxi.physics3d.constraints.ParticleConstraint3D;
 
 /**
  * An individual 3D particle for use by the VerletPhysics and VerletSpring
  * classes. A particle has weight, can be locked in space and its position
  * constrained inside an (optional) axis-aligned bounding box.
  */
-public class VerletParticle extends Vec3D {
+public class VerletParticle3D extends Vec3D {
 
     protected Vec3D prev, temp;
     protected boolean isLocked;
@@ -55,9 +55,9 @@ public class VerletParticle extends Vec3D {
      * An optional particle constraints, called immediately after a particle is
      * updated (and only used if particle is unlocked (default)
      */
-    public List<ParticleConstraint> constraints;
+    public List<ParticleConstraint3D> constraints;
 
-    public List<ParticleBehavior> behaviors;
+    public List<ParticleBehavior3D> behaviors;
 
     /**
      * Particle weight, default = 1
@@ -73,7 +73,7 @@ public class VerletParticle extends Vec3D {
      * @param y
      * @param z
      */
-    public VerletParticle(float x, float y, float z) {
+    public VerletParticle3D(float x, float y, float z) {
         this(x, y, z, 1);
     }
 
@@ -85,7 +85,7 @@ public class VerletParticle extends Vec3D {
      * @param z
      * @param w
      */
-    public VerletParticle(float x, float y, float z, float w) {
+    public VerletParticle3D(float x, float y, float z, float w) {
         super(x, y, z);
         prev = new Vec3D(this);
         temp = new Vec3D();
@@ -98,7 +98,7 @@ public class VerletParticle extends Vec3D {
      * @param v
      *            position
      */
-    public VerletParticle(ReadonlyVec3D v) {
+    public VerletParticle3D(ReadonlyVec3D v) {
         this(v.x(), v.y(), v.z(), 1);
     }
 
@@ -110,7 +110,7 @@ public class VerletParticle extends Vec3D {
      * @param w
      *            weight
      */
-    public VerletParticle(ReadonlyVec3D v, float w) {
+    public VerletParticle3D(ReadonlyVec3D v, float w) {
         this(v.x(), v.y(), v.z(), w);
     }
 
@@ -119,18 +119,18 @@ public class VerletParticle extends Vec3D {
      * 
      * @param p
      */
-    public VerletParticle(VerletParticle p) {
+    public VerletParticle3D(VerletParticle3D p) {
         this(p.x, p.y, p.z, p.weight);
         isLocked = p.isLocked;
     }
 
-    public VerletParticle addBehavior(ParticleBehavior behavior) {
+    public VerletParticle3D addBehavior(ParticleBehavior3D behavior) {
         return addBehavior(behavior, 1);
     }
 
-    public VerletParticle addBehavior(ParticleBehavior behavior, float timeStep) {
+    public VerletParticle3D addBehavior(ParticleBehavior3D behavior, float timeStep) {
         if (behaviors == null) {
-            behaviors = new ArrayList<ParticleBehavior>(1);
+            behaviors = new ArrayList<ParticleBehavior3D>(1);
         }
         behavior.configure(timeStep);
         behaviors.add(behavior);
@@ -145,27 +145,27 @@ public class VerletParticle extends Vec3D {
      *            constraint instance
      * @return itself
      */
-    public VerletParticle addConstraint(ParticleConstraint c) {
+    public VerletParticle3D addConstraint(ParticleConstraint3D c) {
         if (constraints == null) {
-            constraints = new ArrayList<ParticleConstraint>(1);
+            constraints = new ArrayList<ParticleConstraint3D>(1);
         }
         constraints.add(c);
         return this;
     }
 
-    public VerletParticle addForce(Vec3D f) {
+    public VerletParticle3D addForce(Vec3D f) {
         force.addSelf(f);
         return this;
     }
 
-    public VerletParticle addVelocity(Vec3D v) {
+    public VerletParticle3D addVelocity(Vec3D v) {
         prev.subSelf(v);
         return this;
     }
 
     public void applyBehaviors() {
         if (behaviors != null) {
-            for (ParticleBehavior b : behaviors) {
+            for (ParticleBehavior3D b : behaviors) {
                 b.apply(this);
             }
         }
@@ -173,7 +173,7 @@ public class VerletParticle extends Vec3D {
 
     public void applyConstraints() {
         if (constraints != null) {
-            for (ParticleConstraint pc : constraints) {
+            for (ParticleConstraint3D pc : constraints) {
                 pc.apply(this);
             }
         }
@@ -191,17 +191,17 @@ public class VerletParticle extends Vec3D {
      * 
      * @return itself
      */
-    public VerletParticle clearConstraints() {
+    public VerletParticle3D clearConstraints() {
         constraints.clear();
         return this;
     }
 
-    public VerletParticle clearForce() {
+    public VerletParticle3D clearForce() {
         force.clear();
         return this;
     }
 
-    public VerletParticle clearVelocity() {
+    public VerletParticle3D clearVelocity() {
         prev.set(this);
         return this;
     }
@@ -245,12 +245,12 @@ public class VerletParticle extends Vec3D {
      * 
      * @return itself
      */
-    public VerletParticle lock() {
+    public VerletParticle3D lock() {
         isLocked = true;
         return this;
     }
 
-    public boolean removeBehavior(ParticleBehavior b) {
+    public boolean removeBehavior(ParticleBehavior3D b) {
         return behaviors.remove(b);
     }
 
@@ -262,16 +262,16 @@ public class VerletParticle extends Vec3D {
      *            constraint to remove
      * @return true, if successfully removed
      */
-    public boolean removeConstraint(ParticleConstraint c) {
+    public boolean removeConstraint(ParticleConstraint3D c) {
         return constraints.remove(c);
     }
 
-    public VerletParticle scaleVelocity(float scl) {
+    public VerletParticle3D scaleVelocity(float scl) {
         prev.interpolateToSelf(this, 1f - scl);
         return this;
     }
 
-    public VerletParticle setPreviousPosition(Vec3D p) {
+    public VerletParticle3D setPreviousPosition(Vec3D p) {
         prev.set(p);
         return this;
     }
@@ -286,7 +286,7 @@ public class VerletParticle extends Vec3D {
      * 
      * @return itself
      */
-    public VerletParticle unlock() {
+    public VerletParticle3D unlock() {
         clearVelocity();
         isLocked = false;
         return this;

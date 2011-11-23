@@ -25,19 +25,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
 import toxi.geom.Sphere;
 import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
 /**
  * This class implements a spherical constraint for 3D
- * {@linkplain VerletParticle}s. The constraint can be configured in two ways: A
+ * {@linkplain VerletParticle3D}s. The constraint can be configured in two ways: A
  * bounding sphere not allowing particles to escape or alternatively does not
  * allow particles to enter the space occupied by the sphere.
  */
-public class SphereConstraint implements ParticleConstraint {
+public class SphereConstraint implements ParticleConstraint3D {
 
     public Sphere sphere;
 
@@ -85,7 +85,7 @@ public class SphereConstraint implements ParticleConstraint {
      * toxi.physics.constraints.ParticleConstraint#apply(toxi.physics.VerletParticle
      * )
      */
-    public void apply(VerletParticle p) {
+    public void apply(VerletParticle3D p) {
         boolean isInside = sphere.containsPoint(p);
         if ((isBoundingSphere && !isInside) || (!isBoundingSphere && isInside)) {
             p.set(sphere.add(p.subSelf(sphere).normalizeTo(sphere.radius)));

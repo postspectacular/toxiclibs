@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 /**
  * Implements a string which will only enforce its rest length if the current
@@ -33,9 +33,9 @@ package toxi.physics;
  * ensure objects are at least a certain distance from each other, but don't
  * care if it's bigger than the enforced minimum.
  */
-public class VerletMinDistanceSpring extends VerletSpring {
+public class VerletMinDistanceSpring3D extends VerletSpring3D {
 
-    public VerletMinDistanceSpring(VerletParticle a, VerletParticle b,
+    public VerletMinDistanceSpring3D(VerletParticle3D a, VerletParticle3D b,
             float len, float str) {
         super(a, b, len, str);
     }

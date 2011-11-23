@@ -25,43 +25,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.behaviors;
+package toxi.physics3d;
 
-import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+/**
+ * Creates a pullback spring (default restlength=0.5) between 2 particles and
+ * locks the first one given at the current position. The spring is only
+ * enforced if the current length of the spring exceeds the rest length. This
+ * behaviour is the opposite to the {@link VerletMinDistanceSpring3D}.
+ */
+class PullBackSpring3D extends VerletSpring3D {
 
-public class ConstantForceBehavior implements ParticleBehavior {
-
-    protected Vec3D force;
-    protected Vec3D scaledForce = new Vec3D();
-    protected float timeStep;
-
-    public ConstantForceBehavior(Vec3D force) {
-        this.force = force;
+    public PullBackSpring3D(VerletParticle3D a, VerletParticle3D b, float strength) {
+        super(a, b, 0, strength);
+        a.lock();
+        setRestLength(0);
     }
 
-    public void apply(VerletParticle p) {
-        p.addForce(scaledForce);
-    }
-
-    public void configure(float timeStep) {
-        this.timeStep = timeStep;
-        setForce(force);
-    }
-
-    /**
-     * @return the force
-     */
-    public Vec3D getForce() {
-        return force;
-    }
-
-    /**
-     * @param force
-     *            the force to set
-     */
-    public void setForce(Vec3D force) {
-        this.force = force;
-        scaledForce = force.scale(timeStep);
+    protected void update(boolean applyConstraints) {
+        if (b.distanceToSquared(a) > 0.5f) {
+            super.update(applyConstraints);
+        }
     }
 }

@@ -25,25 +25,43 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.behaviors;
 
-import toxi.geom.Vec3D.Axis;
-import toxi.physics.VerletParticle;
+import toxi.geom.Vec3D;
+import toxi.physics3d.VerletParticle3D;
 
-public class MaxConstraint implements ParticleConstraint {
+public class ConstantForceBehavior3D implements ParticleBehavior3D {
 
-    public Axis axis;
-    public float threshold;
+    protected Vec3D force;
+    protected Vec3D scaledForce = new Vec3D();
+    protected float timeStep;
 
-    public MaxConstraint(Axis axis, float threshold) {
-        this.axis = axis;
-        this.threshold = threshold;
+    public ConstantForceBehavior3D(Vec3D force) {
+        this.force = force;
     }
 
-    public void apply(VerletParticle p) {
-        if (p.getComponent(axis) > threshold) {
-            p.setComponent(axis, threshold);
-        }
+    public void apply(VerletParticle3D p) {
+        p.addForce(scaledForce);
     }
 
+    public void configure(float timeStep) {
+        this.timeStep = timeStep;
+        setForce(force);
+    }
+
+    /**
+     * @return the force
+     */
+    public Vec3D getForce() {
+        return force;
+    }
+
+    /**
+     * @param force
+     *            the force to set
+     */
+    public void setForce(Vec3D force) {
+        this.force = force;
+        scaledForce = force.scale(timeStep);
+    }
 }

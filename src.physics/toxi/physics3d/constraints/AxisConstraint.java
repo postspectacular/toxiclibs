@@ -25,31 +25,27 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics3d.constraints;
 
-import toxi.geom.Vec3D;
 import toxi.geom.Vec3D.Axis;
-import toxi.physics.VerletParticle;
+import toxi.physics3d.VerletParticle3D;
 
 /**
- * Constrains a particle's movement by locking it to a fixed axis aligned plane.
+ * Constrains a particle's movement by locking a given axis to a fixed value.
  */
-public class PlaneConstraint implements ParticleConstraint {
+public class AxisConstraint implements ParticleConstraint3D {
 
-    public Vec3D constraint;
-    public Axis axis1, axis2;
+    public float constraint;
+    public Axis axis;
 
     /**
      * @param axis
-     *            1st axis to lock
-     * @param axis2
-     *            2d axis to lock
+     *            axis to lock
      * @param constraint
-     *            point on the desired constraint plane
+     *            constrain the axis to this value
      */
-    public PlaneConstraint(Axis axis, Axis axis2, Vec3D constraint) {
-        this.axis1 = axis;
-        this.axis2 = axis2;
+    public AxisConstraint(Axis axis, float constraint) {
+        this.axis = axis;
         this.constraint = constraint;
     }
 
@@ -58,9 +54,8 @@ public class PlaneConstraint implements ParticleConstraint {
      * 
      * @see toxi.physics.IParticleConstraint#apply(toxi.physics.VerletParticle)
      */
-    public void apply(VerletParticle p) {
-        p.setComponent(axis1, constraint.getComponent(axis1));
-        p.setComponent(axis2, constraint.getComponent(axis2));
+    public void apply(VerletParticle3D p) {
+        p.setComponent(axis, constraint);
     }
 
 }

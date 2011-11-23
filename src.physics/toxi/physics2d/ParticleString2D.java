@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec2D;
-import toxi.physics.VerletSpring;
+import toxi.physics3d.VerletSpring3D;
 
 /**
  * Utility builder/grouping/management class to connect a set of particles into
@@ -129,7 +129,7 @@ public class ParticleString2D {
     /**
      * Creates a spring instance connecting 2 successive particles of the
      * string. Overwrite this method to create a string custom spring types
-     * (subclassed from {@link VerletSpring}).
+     * (subclassed from {@link VerletSpring3D}).
      * 
      * @param a
      *            1st particle

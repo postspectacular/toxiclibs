@@ -25,20 +25,38 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.behaviors;
+package toxi.physics3d.constraints;
 
-import toxi.physics.VerletParticle;
+import java.util.LinkedList;
+import java.util.List;
 
-public interface ParticleBehavior {
+import toxi.geom.AABB;
+import toxi.geom.Vec3D.Axis;
+import toxi.physics3d.VerletParticle3D;
 
-    /**
-     * Applies the constraint to the passed in particle. The method is assumed
-     * to manipulate the given instance directly.
-     * 
-     * @param p
-     *            particle
-     */
-    public void apply(VerletParticle p);
+public class SoftBoxConstraint implements ParticleConstraint3D {
 
-    public void configure(float timeStep);
+    public AABB box;
+    public List<Axis> axes = new LinkedList<Axis>();
+    public float smooth;
+
+    public SoftBoxConstraint(AABB box, float smooth) {
+        this.box = box;
+        this.smooth = smooth;
+    }
+
+    public SoftBoxConstraint addAxis(Axis a) {
+        axes.add(a);
+        return this;
+    }
+
+    public void apply(VerletParticle3D p) {
+        if (p.isInAABB(box)) {
+            for (Axis a : axes) {
+                float val = p.getComponent(a);
+                p.setComponent(a, val + (box.getComponent(a) - val) * smooth);
+            }
+        }
+    }
+
 }

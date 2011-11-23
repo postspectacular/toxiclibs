@@ -25,44 +25,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics.constraints;
+package toxi.physics2d.behaviors;
 
-import toxi.geom.AxisAlignedCylinder;
-import toxi.geom.Vec3D;
-import toxi.physics.VerletParticle;
+import toxi.geom.Vec2D;
 
-public class CylinderConstraint implements ParticleConstraint {
+public class GravityBehavior2D extends ConstantForceBehavior2D {
 
-    protected AxisAlignedCylinder cylinder;
-    protected Vec3D centroid = new Vec3D();
-    protected Vec3D.Axis axis;
-
-    public CylinderConstraint(AxisAlignedCylinder cylinder) {
-        setCylinder(cylinder);
+    public GravityBehavior2D(Vec2D gravity) {
+        super(gravity);
     }
 
-    public void apply(VerletParticle p) {
-        if (cylinder.containsPoint(p)) {
-            centroid.setComponent(axis, p.getComponent(axis));
-            p.set(centroid.add(p.sub(centroid)
-                    .normalizeTo(cylinder.getRadius())));
-        }
-    }
-
-    /**
-     * @return the cylinder
-     */
-    public AxisAlignedCylinder getCylinder() {
-        return cylinder;
-    }
-
-    /**
-     * @param cylinder
-     *            the cylinder to set
-     */
-    public void setCylinder(AxisAlignedCylinder cylinder) {
-        this.cylinder = cylinder;
-        centroid.set(cylinder.getPosition());
-        axis = cylinder.getMajorAxis();
+    @Override
+    public void configure(float timeStep) {
+        this.timeStep = timeStep;
+        scaledForce = force.scale(timeStep * timeStep);
     }
 }

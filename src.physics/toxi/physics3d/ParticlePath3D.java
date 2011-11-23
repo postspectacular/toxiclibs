@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,20 +35,20 @@ import toxi.geom.Vec3D;
 
 /**
  * This class is used as a builder to dynamically construct a
- * {@link ParticleString} following a given spline path, sampled at a fixed
+ * {@link ParticleString3D} following a given spline path, sampled at a fixed
  * frequency/step distance. This functionality is needed especially when working
  * with various obstacles/mechanic constraints which the string should flow/wrap
  * around.
  */
-public class ParticlePath extends Spline3D {
+public class ParticlePath3D extends Spline3D {
 
-    List<VerletParticle> particles = new ArrayList<VerletParticle>();
+    List<VerletParticle3D> particles = new ArrayList<VerletParticle3D>();
 
-    public ParticlePath() {
+    public ParticlePath3D() {
         super();
     }
 
-    public ParticlePath(List<Vec3D> points) {
+    public ParticlePath3D(List<Vec3D> points) {
         super(points);
     }
 
@@ -68,12 +68,11 @@ public class ParticlePath extends Spline3D {
      *            desired particle mass
      * @return list of particles
      */
-    public List<VerletParticle> createParticles(VerletPhysics physics,
+    public List<VerletParticle3D> createParticles(VerletPhysics3D physics,
             int subDiv, float step, float mass) {
         particles.clear();
-        computeVertices(subDiv);
-        for (Vec3D v : getDecimatedVertices(step, true)) {
-            VerletParticle p = createSingleParticle(v, mass);
+        for (Vec3D v : toLineStrip3D(subDiv).getDecimatedVertices(step, true)) {
+            VerletParticle3D p = createSingleParticle(v, mass);
             particles.add(p);
             physics.addParticle(p);
         }
@@ -88,7 +87,7 @@ public class ParticlePath extends Spline3D {
      * @param mass
      * @return particle
      */
-    protected VerletParticle createSingleParticle(Vec3D pos, float mass) {
-        return new VerletParticle(pos, mass);
+    protected VerletParticle3D createSingleParticle(Vec3D pos, float mass) {
+        return new VerletParticle3D(pos, mass);
     }
 }

@@ -25,13 +25,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics2d.behaviors;
+package toxi.physics3d.behaviors;
 
-import toxi.geom.Vec2D;
+import toxi.geom.Vec3D;
 
-public class GravityBehavior extends ConstantForceBehavior {
+public class GravityBehavior3D extends ConstantForceBehavior3D {
 
-    public GravityBehavior(Vec2D gravity) {
+    public GravityBehavior3D(Vec3D gravity) {
         super(gravity);
     }
 
@@ -40,4 +40,5 @@ public class GravityBehavior extends ConstantForceBehavior {
         this.timeStep = timeStep;
         scaledForce = force.scale(timeStep * timeStep);
     }
+
 }

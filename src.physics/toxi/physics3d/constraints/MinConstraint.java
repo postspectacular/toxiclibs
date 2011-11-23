@@ -25,25 +25,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-package toxi.physics;
+package toxi.physics3d.constraints;
 
-/**
- * Creates a pullback spring (default restlength=0.5) between 2 particles and
- * locks the first one given at the current position. The spring is only
- * enforced if the current length of the spring exceeds the rest length. This
- * behaviour is the opposite to the {@link VerletMinDistanceSpring}.
- */
-class PullBackString extends VerletSpring {
+import toxi.geom.Vec3D.Axis;
+import toxi.physics3d.VerletParticle3D;
 
-    public PullBackString(VerletParticle a, VerletParticle b, float strength) {
-        super(a, b, 0, strength);
-        a.lock();
-        setRestLength(0);
+public class MinConstraint implements ParticleConstraint3D {
+
+    public Axis axis;
+    public float threshold;
+
+    public MinConstraint(Axis axis, float threshold) {
+        this.axis = axis;
+        this.threshold = threshold;
     }
 
-    protected void update(boolean applyConstraints) {
-        if (b.distanceToSquared(a) > 0.5f) {
-            super.update(applyConstraints);
+    public void apply(VerletParticle3D p) {
+        if (p.getComponent(axis) < threshold) {
+            p.setComponent(axis, threshold);
         }
     }
+
 }
