@@ -295,7 +295,7 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @param poly
      * @return itself
      */
-    public final Vec2D constrain(Polygon2D poly) {
+    public Vec2D constrain(Polygon2D poly) {
         float minD = Float.MAX_VALUE;
         Vec2D q = null;
         for (Line2D l : poly.getEdges()) {
@@ -317,7 +317,7 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @param r
      * @return itself
      */
-    public final Vec2D constrain(Rect r) {
+    public Vec2D constrain(Rect r) {
         x = MathUtils.clip(x, r.x, r.x + r.width);
         y = MathUtils.clip(y, r.y, r.y + r.height);
         return this;
@@ -330,7 +330,7 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @param max
      * @return itself
      */
-    public final Vec2D constrain(Vec2D min, Vec2D max) {
+    public Vec2D constrain(Vec2D min, Vec2D max) {
         x = MathUtils.clip(x, min.x, max.x);
         y = MathUtils.clip(y, min.y, max.y);
         return this;

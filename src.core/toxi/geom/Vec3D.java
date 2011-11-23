@@ -349,7 +349,7 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * 
      * @return itself
      */
-    public final Vec3D constrain(AABB box) {
+    public Vec3D constrain(AABB box) {
         return constrain(box.getMin(), box.getMax());
     }
 
@@ -361,7 +361,7 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
      * @param max
      * @return itself
      */
-    public final Vec3D constrain(Vec3D min, Vec3D max) {
+    public Vec3D constrain(Vec3D min, Vec3D max) {
         x = MathUtils.clip(x, min.x, max.x);
         y = MathUtils.clip(y, min.y, max.y);
         z = MathUtils.clip(z, min.z, max.z);
@@ -537,6 +537,29 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public Vec3D getCartesian() {
         return copy().toCartesian();
+    }
+
+    /**
+     * Identifies the closest cartesian axis to this vector. If at leat two
+     * vector components are equal, no unique decision can be made and the
+     * method returns null.
+     * 
+     * @return Axis enum or null
+     */
+    public final Axis getClosestAxis() {
+        float ax = MathUtils.abs(x);
+        float ay = MathUtils.abs(y);
+        float az = MathUtils.abs(z);
+        if (ax > ay && ax > az) {
+            return Axis.X;
+        }
+        if (ay > ax && ay > az) {
+            return Axis.Y;
+        }
+        if (az > ax && az > ay) {
+            return Axis.Z;
+        }
+        return null;
     }
 
     public final float getComponent(Axis id) {
@@ -1549,28 +1572,5 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
 
     public final float z() {
         return z;
-    }
-
-    /**
-     * Identifies the closest cartesian axis to this vector. If at leat two
-     * vector components are equal, no unique decision can be made and the
-     * method returns null.
-     * 
-     * @return Axis enum or null
-     */
-    public final Axis getClosestAxis() {
-        float ax = MathUtils.abs(x);
-        float ay = MathUtils.abs(y);
-        float az = MathUtils.abs(z);
-        if (ax > ay && ax > az) {
-            return Axis.X;
-        }
-        if (ay > ax && ay > az) {
-            return Axis.Y;
-        }
-        if (az > ax && az > ay) {
-            return Axis.Z;
-        }
-        return null;
     }
 }
