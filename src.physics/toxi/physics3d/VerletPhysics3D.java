@@ -177,6 +177,8 @@ public class VerletPhysics3D {
     }
 
     public VerletPhysics3D clear() {
+        behaviors.clear();
+        constraints.clear();
         particles.clear();
         springs.clear();
         return this;

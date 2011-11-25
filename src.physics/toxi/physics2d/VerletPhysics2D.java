@@ -178,6 +178,8 @@ public class VerletPhysics2D {
     }
 
     public VerletPhysics2D clear() {
+        behaviors.clear();
+        constraints.clear();
         particles.clear();
         springs.clear();
         return this;
