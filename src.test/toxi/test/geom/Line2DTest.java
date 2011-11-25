@@ -28,6 +28,9 @@ public class Line2DTest extends TestCase {
         k = l.copy();
         assertEquals(LineIntersection.Type.COINCIDENT, l.intersectLine(k)
                 .getType());
+        k = new Line2D(new Vec2D(110, 110), new Vec2D(220, 220));
+        assertEquals(LineIntersection.Type.COINCIDENT_NO_INTERSECT, l
+                .intersectLine(k).getType());
         k = new Line2D(new Vec2D(-100, -100), new Vec2D(100, 50));
         assertEquals(LineIntersection.Type.NON_INTERSECTING, l.intersectLine(k)
                 .getType());

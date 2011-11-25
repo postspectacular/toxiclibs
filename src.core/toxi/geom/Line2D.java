@@ -40,6 +40,7 @@ public class Line2D {
 
         public static enum Type {
             COINCIDENT,
+            COINCIDENT_NO_INTERSECT,
             PARALLEL,
             NON_INTERSECTING,
             INTERSECTING
@@ -310,7 +311,12 @@ public class Line2D {
             }
         } else {
             if (na == 0.0 && nb == 0.0) {
-                isec = new LineIntersection(Type.COINCIDENT, null);
+                if (distanceToPoint(l.a) == 0.0) {
+                    isec = new LineIntersection(Type.COINCIDENT, null);
+                } else {
+                    isec = new LineIntersection(Type.COINCIDENT_NO_INTERSECT,
+                            null);
+                }
             } else {
                 isec = new LineIntersection(Type.PARALLEL, null);
             }
