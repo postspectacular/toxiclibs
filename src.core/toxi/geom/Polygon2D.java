@@ -189,6 +189,15 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
         return oddNodes;
     }
 
+    public boolean containsPolygon(Polygon2D poly) {
+        for (Vec2D p : poly.vertices) {
+            if (!containsPoint(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Polygon2D copy() {
         return new Polygon2D(vertices);
     }
@@ -376,6 +385,25 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
             num++;
         }
         return this;
+    }
+
+    /**
+     * Checks if the given polygon intersect this one by checking all edges for
+     * line intersections.
+     * 
+     * @param poly
+     * @return
+     */
+    public boolean intersectsPolygon(Polygon2D poly) {
+        for (Line2D ea : getEdges()) {
+            for (Line2D eb : poly.getEdges()) {
+                final Type isec = ea.intersectLine(eb).getType();
+                if (isec == Type.INTERSECTING || isec == Type.COINCIDENT) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
