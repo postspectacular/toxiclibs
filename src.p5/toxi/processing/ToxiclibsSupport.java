@@ -230,7 +230,7 @@ public class ToxiclibsSupport {
     }
 
     public final void lineStrip2D(LineStrip2D strip) {
-        lineStrip2D(strip.vertices);
+        lineStrip2D(strip.getVertices());
     }
 
     /**
@@ -254,7 +254,7 @@ public class ToxiclibsSupport {
     }
 
     public final void lineStrip3D(LineStrip3D strip) {
-        lineStrip3D(strip.vertices);
+        lineStrip3D(strip.getVertices());
     }
 
     /**

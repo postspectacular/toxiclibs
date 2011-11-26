@@ -289,7 +289,7 @@ public class Spline2D {
         return new LineStrip2D(vertices);
     }
 
-    protected void updateCoefficients() {
+    public void updateCoefficients() {
         final int numP = getNumPoints();
         if (points == null || (points != null && points.length != numP)) {
             coeffA = new Vec2D[numP];

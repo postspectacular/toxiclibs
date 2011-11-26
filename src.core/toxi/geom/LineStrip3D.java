@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class LineStrip3D implements Iterable<Vec3D> {
 
     @XmlElement(name = "v")
-    public List<Vec3D> vertices = new ArrayList<Vec3D>();
+    protected List<Vec3D> vertices = new ArrayList<Vec3D>();
 
     protected float[] arcLenIndex;
 
@@ -157,7 +157,22 @@ public class LineStrip3D implements Iterable<Vec3D> {
         return segments;
     }
 
+    /**
+     * @return the vertices
+     */
+    public List<Vec3D> getVertices() {
+        return vertices;
+    }
+
     public Iterator<Vec3D> iterator() {
         return vertices.iterator();
+    }
+
+    /**
+     * @param vertices
+     *            the vertices to set
+     */
+    public void setVertices(List<Vec3D> vertices) {
+        this.vertices = vertices;
     }
 }

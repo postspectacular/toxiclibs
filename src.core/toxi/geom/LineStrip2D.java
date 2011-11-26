@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class LineStrip2D implements Iterable<Vec2D> {
 
     @XmlElement(name = "v")
-    public List<Vec2D> vertices = new ArrayList<Vec2D>();
+    protected List<Vec2D> vertices = new ArrayList<Vec2D>();
 
     protected float[] arcLenIndex;
 
@@ -157,7 +157,22 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return segments;
     }
 
+    /**
+     * @return the vertices
+     */
+    public List<Vec2D> getVertices() {
+        return vertices;
+    }
+
     public Iterator<Vec2D> iterator() {
         return vertices.iterator();
+    }
+
+    /**
+     * @param vertices
+     *            the vertices to set
+     */
+    public void setVertices(List<Vec2D> vertices) {
+        this.vertices = vertices;
     }
 }
