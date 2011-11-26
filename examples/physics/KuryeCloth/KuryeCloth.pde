@@ -36,16 +36,16 @@
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.math.*;
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.constraints.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.constraints.*;
 import toxi.processing.*;
 
 int DIM=30;
 int REST_LENGTH=20;
 float STRENGTH=1;
 
-VerletPhysics physics;
+VerletPhysics3D physics;
 ToxiclibsSupport gfx;
 TriangleMesh mesh;
 BoxConstraint ground;
@@ -115,10 +115,10 @@ void updateMesh() {
   for(int y=0; y<DIM-1; y++) {
     for(int x=0; x<DIM-1; x++) {
       int i=y*DIM+x;
-      VerletParticle a=physics.particles.get(i);
-      VerletParticle b=physics.particles.get(i+1);
-      VerletParticle c=physics.particles.get(i+1+DIM);
-      VerletParticle d=physics.particles.get(i+DIM);
+      VerletParticle3D a=physics.particles.get(i);
+      VerletParticle3D b=physics.particles.get(i+1);
+      VerletParticle3D c=physics.particles.get(i+1+DIM);
+      VerletParticle3D d=physics.particles.get(i+DIM);
       mesh.addFace(a,d,c);
       mesh.addFace(a,c,b);
     }

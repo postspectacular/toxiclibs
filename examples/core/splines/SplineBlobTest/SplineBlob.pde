@@ -1,16 +1,17 @@
 class SplineBlob {
 
-  Spline3D spline;
+  Spline2D spline;
   Spine spine;
 
-  Vec3D[] points;
-  Vec3D[] coeffA,delta;
+  Vec2D[] points;
+  Vec2D[] coeffA,delta;
   float[] bi,b0,b1,b2,b3;
 
   int numP;
   int subDiv;
 
-  ArrayList bodyTemplate;
+  List<Vec2D> bodyTemplate;
+  List<Vec2D> outline;
   float[] bodySpine;
 
   float width,height;
@@ -20,19 +21,19 @@ class SplineBlob {
     height=h;
     numP=6;
     subDiv=sd;
-    points=new Vec3D[numP];
+    points=new Vec2D[numP];
     int idx=0;
-    points[idx++]=new Vec3D();
-    points[idx++]=new Vec3D(random(0.5,0.85)*w,random(0.25,0.33)*h,0);
-    points[idx++]=new Vec3D(random(0.6,1.2)*points[idx-2].x,random(0.45,0.6)*h,0);
-    points[idx++]=new Vec3D(min(points[1].x*random(1.25,2),w),random(0.66,0.8)*h,0);
-    points[idx++]=new Vec3D(points[idx-2].x*random(1.02,1.1),0.9*h,0);
-    points[idx++]=new Vec3D(0,h,0);
-    spline=new Spline3D(points);
+    points[idx++]=new Vec2D();
+    points[idx++]=new Vec2D(random(0.5,0.85)*w,random(0.25,0.33)*h);
+    points[idx++]=new Vec2D(random(0.6,1.2)*points[idx-2].x,random(0.45,0.6)*h);
+    points[idx++]=new Vec2D(min(points[1].x*random(1.25,2),w),random(0.66,0.8)*h);
+    points[idx++]=new Vec2D(points[idx-2].x*random(1.02,1.1),0.9*h);
+    points[idx++]=new Vec2D(0,h);
+    spline=new Spline2D(points);
     spline.updateCoefficients();
-    spline.delta[0].set(points[1].x*0.75,0,0);
-    spline.delta[numP-1].set(-points[numP-2].x,0,0);
-    spline.computeVertices(subDiv);
+    spline.delta[0].set(points[1].x*0.75,0);
+    spline.delta[numP-1].set(-points[numP-2].x,0);
+    outline=spline.toLineStrip2D(subDiv).getVertices();
   }
 
   void draw() {
@@ -46,11 +47,12 @@ class SplineBlob {
   }
 
   void drawShape() {
+    
     beginShape();
-    Iterator i=spline.vertices.iterator();
+    Iterator i=outline.iterator();
     while(i.hasNext()) {
-      Vec3D v=(Vec3D)i.next();
-      vertex(v.x,v.y,v.z);
+      Vec2D v=(Vec2D)i.next();
+      vertex(v.x,v.y);
     }
     endShape();
     for (int k = 0; k < numP; k++) {

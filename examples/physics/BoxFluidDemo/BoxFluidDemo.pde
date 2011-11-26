@@ -46,9 +46,9 @@
 
 import processing.opengl.*;
 
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.constraints.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.constraints.*;
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.math.*;
@@ -66,9 +66,9 @@ Vec3D SCALE=new Vec3D(DIM,DIM,DIM).scale(2);
 float isoThreshold=3;
 
 int numP;
-VerletPhysics physics;
-ParticleConstraint boundingSphere;
-GravityBehavior gravity;
+VerletPhysics3D physics;
+ParticleConstraint3D boundingSphere;
+GravityBehavior3D gravity;
 
 VolumetricSpaceArray volume;
 IsoSurface surface;
@@ -107,8 +107,7 @@ void draw() {
   if (showPhysics) {
     strokeWeight(4);
     stroke(0);
-    for(Iterator i=physics.particles.iterator(); i.hasNext();) {
-      VerletParticle p=(VerletParticle)i.next();
+    for(VerletParticle3D p : physics.particles) {
       Vec3D col=p.add(colAmp).scaleSelf(0.5);
       stroke(col.x,col.y,col.z);
       point(p.x,p.y,p.z);

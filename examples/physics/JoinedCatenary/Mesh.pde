@@ -4,7 +4,7 @@
 // points on one or more other meshes
 class ParticleMesh {
 
-  List<VerletParticle> particles=new ArrayList<VerletParticle>();
+  List<VerletParticle3D> particles=new ArrayList<VerletParticle3D>();
   TriangleMesh mesh;
   ReadonlyTColor col;
   int gridSize;
@@ -15,15 +15,15 @@ class ParticleMesh {
     int totalWidth=gridSize*restLength;
     for(int y=0,idx=0; y<gridSize; y++) {
       for(int x=0; x<gridSize; x++) {
-        VerletParticle p=new VerletParticle(x*restLength-totalWidth/2,y*restLength-totalWidth/2,0);
+        VerletParticle3D p=new VerletParticle3D(x*restLength-totalWidth/2,y*restLength-totalWidth/2,0);
         physics.addParticle(p);
         particles.add(p);
         if (x>0) {
-          VerletSpring s=new VerletSpring(p,particles.get(idx-1),restLength,strength);
+          VerletSpring3D s=new VerletSpring3D(p,particles.get(idx-1),restLength,strength);
           physics.addSpring(s);
         }
         if (y>0) {
-          VerletSpring s=new VerletSpring(p,particles.get(idx-gridSize),restLength,strength);
+          VerletSpring3D s=new VerletSpring3D(p,particles.get(idx-gridSize),restLength,strength);
           physics.addSpring(s);
         }
         idx++;
@@ -38,10 +38,10 @@ class ParticleMesh {
     for(int y=0,idx=0; y<gridSize; y++) {
       for(int x=0; x<gridSize; x++) {
         if (x>0 && y>0) {
-          VerletParticle a=particles.get(idx-gridSize-1);
-          VerletParticle b=particles.get(idx-1);
-          VerletParticle c=particles.get(idx);
-          VerletParticle d=particles.get(idx-gridSize);
+          VerletParticle3D a=particles.get(idx-gridSize-1);
+          VerletParticle3D b=particles.get(idx-1);
+          VerletParticle3D c=particles.get(idx);
+          VerletParticle3D d=particles.get(idx-gridSize);
           mesh.addFace(a,b,c);
           mesh.addFace(a,c,d);
         }
@@ -52,7 +52,7 @@ class ParticleMesh {
   }
   
   // returns particle at the given grid position
-  VerletParticle getParticleAt(Vec2D gridPos) {
+  VerletParticle3D getParticleAt(Vec2D gridPos) {
     return particles.get(getIndexForPos(gridPos));
   }
   
@@ -64,7 +64,7 @@ class ParticleMesh {
   // ab,b,c,d in clockwise direction
   void joinMeshTo(ParticleMesh ma, Vec2D a, ParticleMesh mb, Vec2D b, ParticleMesh mc, Vec2D c, ParticleMesh md, Vec2D d) {
     // store & map this mesh's corners to particles from source mesh(es)
-    HashMap<Vec2D,VerletParticle> corners=new HashMap<Vec2D,VerletParticle>();
+    HashMap<Vec2D,VerletParticle3D> corners=new HashMap<Vec2D,VerletParticle3D>();
     corners.put(new Vec2D(0,0),ma.getParticleAt(a));
     corners.put(new Vec2D(gridSize-1,0),mb.getParticleAt(b));
     corners.put(new Vec2D(gridSize-1,gridSize-1),mc.getParticleAt(c));
@@ -72,9 +72,9 @@ class ParticleMesh {
   
     for(Vec2D pos : corners.keySet()) {
       int idx=getIndexForPos(pos);
-      VerletParticle p=particles.get(idx);
-      VerletParticle q=corners.get(pos);
-      physics.addSpring(new VerletSpring(p,q,0,1));
+      VerletParticle3D p=particles.get(idx);
+      VerletParticle3D q=corners.get(pos);
+      physics.addSpring(new VerletSpring3D(p,q,0,1));
     }
   }
 }

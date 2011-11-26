@@ -31,8 +31,9 @@
  */
 
 import toxi.geom.*;
+import toxi.processing.*;
 
-ArrayList points=new ArrayList();
+List<Vec2D> points=new ArrayList<Vec2D>();
 
 // desired distance between points/handles
 int sampleDistance=50;
@@ -41,8 +42,11 @@ boolean showLine=true;
 boolean showSpline=true;
 boolean showHandles=true;
 
+ToxiclibsSupport gfx;
+
 void setup() {
   size(600,600);
+  gfx=new ToxiclibsSupport(this);
   smooth();
 }
 
@@ -65,19 +69,14 @@ void draw() {
   numP=points.size();
   if (showLine) {
     stroke(255,0,0,50);
-    beginShape();
-    for(int i=0; i<numP; i++) {
-      Vec2D p=(Vec2D)points.get(i);
-      vertex(p.x,p.y);
-    }
-    endShape();
+    gfx.lineStrip2D(points);
   }
 
   stroke(0);
   // highlight the positions of the points with circles
   Vec2D[] handles=new Vec2D[numP];
   for(int i=0; i<numP; i++) {
-    Vec2D p=(Vec2D)points.get(i);
+    Vec2D p=points.get(i);
     handles[i]=p;
     if (showHandles) ellipse(p.x,p.y,5,5);    
   }
@@ -88,14 +87,9 @@ void draw() {
     Spline2D spline=new Spline2D(handles);
     // sample the curve at a higher resolution
     // so that we get extra 8 points between each original pair of points
-    java.util.List vertices=spline.computeVertices(8);
+    LineStrip2D vertices=spline.toLineStrip2D(8);
     // draw the smoothened curve
-    beginShape();
-    for(Iterator i=vertices.iterator(); i.hasNext(); ) {
-      Vec2D v=(Vec2D)i.next();
-      vertex(v.x,v.y);
-    }
-    endShape();
+    gfx.lineStrip2D(vertices);
   }
 }
 

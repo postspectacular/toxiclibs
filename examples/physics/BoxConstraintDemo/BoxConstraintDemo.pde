@@ -36,17 +36,17 @@
 import processing.opengl.*;
 
 import toxi.geom.*;
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.constraints.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.constraints.*;
 
 VisibleBoxConstraint[] boxes=new VisibleBoxConstraint[2];
 
 int NUM_PARTICLES = 90;
 int REST_LENGTH=10;
 
-VerletPhysics physics;
-VerletParticle head;
+VerletPhysics3D physics;
+VerletParticle3D head;
 
 void setup() {
   size(1024,576,OPENGL);
@@ -69,30 +69,28 @@ void draw() {
   }
   // draw all springs
   beginShape(LINES);
-  for(Iterator i=physics.springs.iterator(); i.hasNext();) {
-    VerletSpring s=(VerletSpring)i.next();
+  for(VerletSpring3D s : physics.springs) {
     vertex(s.a); 
     vertex(s.b);
   }
   endShape();
-  for(Iterator i=physics.particles.iterator(); i.hasNext();) {
-    VerletParticle p=(VerletParticle)i.next();
+  for(VerletParticle3D p : physics.particles) {
     ellipse(p.x,p.y,2,2);
   }
 }
 
 void initPhysics() {
   // setup physics engine
-  physics=new VerletPhysics();
-  physics.addBehavior(new GravityBehavior(Vec3D.Y_AXIS.scale(0.05)));
+  physics=new VerletPhysics3D();
+  physics.addBehavior(new GravityBehavior3D(Vec3D.Y_AXIS.scale(0.05)));
   // string start position & direction
   Vec3D startPos=new Vec3D(-NUM_PARTICLES/2*REST_LENGTH, -110, 0);
   Vec3D dir=new Vec3D(REST_LENGTH,0,0);
   // create the string as a line along the direction vector
-  ParticleString string=new ParticleString(physics,startPos, dir, NUM_PARTICLES, 1, 0.5);
+  ParticleString3D string=new ParticleString3D(physics,startPos, dir, NUM_PARTICLES, 1, 0.5);
   // add the 2 boxes as constraints to all string particles
   for(int j=0; j<boxes.length; j++) {
-    VerletPhysics.addConstraintToAll(boxes[j],string.particles);
+    VerletPhysics3D.addConstraintToAll(boxes[j],string.particles);
   }
   // anchor the 1st particle in space 
   string.particles.get(0).lock();

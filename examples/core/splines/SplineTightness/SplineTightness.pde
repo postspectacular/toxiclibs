@@ -57,12 +57,11 @@ void draw() {
 
   // sample the curve at a higher resolution
   // so that we get extra points between each original pair of points
-  java.util.List vertices=spline.computeVertices(32);
+  LineStrip2D vertices=spline.toLineStrip2D(32);
 
   // draw the smoothened curve
   beginShape();
-  for(Iterator i=vertices.iterator(); i.hasNext(); ) {
-    Vec2D v=(Vec2D)i.next();
+  for(Vec2D v : vertices) {
     vertex(v.x,v.y);
   }
   endShape();

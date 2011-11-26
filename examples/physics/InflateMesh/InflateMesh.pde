@@ -31,13 +31,13 @@
 import toxi.geom.*;
 import toxi.geom.mesh.subdiv.*;
 import toxi.geom.mesh.*;
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.constraints.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.constraints.*;
 import toxi.processing.*;
 
-VerletPhysics physics;
-AttractionBehavior inflate;
+VerletPhysics3D physics;
+AttractionBehavior3D inflate;
 WETriangleMesh box;
 
 ToxiclibsSupport gfx;
@@ -85,17 +85,17 @@ void initPhysics() {
     box.subdivide();
     box.subdivide();
     box.subdivide();
-    physics = new VerletPhysics();
+    physics = new VerletPhysics3D();
     physics.setWorldBounds(new AABB(new Vec3D(), 180));
     // turn mesh vertices into physics particles
     for (Vertex v : box.vertices.values()) {
-        physics.addParticle(new VerletParticle(v));
+        physics.addParticle(new VerletParticle3D(v));
     }
     // turn mesh edges into springs
     for (WingedEdge e : box.edges.values()) {
-        VerletParticle a = physics.particles.get(((WEVertex) e.a).id);
-        VerletParticle b = physics.particles.get(((WEVertex) e.b).id);
-        physics.addSpring(new VerletSpring(a, b, a.distanceTo(b), 0.005f));
+        VerletParticle3D a = physics.particles.get(((WEVertex) e.a).id);
+        VerletParticle3D b = physics.particles.get(((WEVertex) e.b).id);
+        physics.addSpring(new VerletSpring3D(a, b, a.distanceTo(b), 0.005f));
     }
 }
 
@@ -106,7 +106,7 @@ void keyPressed() {
 }
 
 void mousePressed() {
-  inflate=new AttractionBehavior(new Vec3D(), 400, -0.3f, 0.001f);
+  inflate=new AttractionBehavior3D(new Vec3D(), 400, -0.3f, 0.001f);
   physics.addBehavior(inflate);
 }
 

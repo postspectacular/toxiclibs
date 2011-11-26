@@ -32,9 +32,9 @@
 
 import processing.opengl.*;
 
-import toxi.physics.constraints.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.*;
+import toxi.physics3d.constraints.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.*;
 
 import toxi.geom.*;
 import toxi.math.*;
@@ -43,28 +43,28 @@ int NUM_PARTICLES = 100;
 int REST_LENGTH=10;
 int SPHERE_RADIUS=200;
 
-VerletPhysics physics;
-VerletParticle head;
+VerletPhysics3D physics;
+VerletParticle3D head;
 
 void setup() {
   size(1024,768,OPENGL);
   smooth();
   // create collision sphere at origin, replace OUTSIDE with INSIDE to keep particles inside the sphere
-  ParticleConstraint sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);
-  physics=new VerletPhysics();
+  ParticleConstraint3D sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);
+  physics=new VerletPhysics3D();
   // weak gravity along Y axis
-  physics.addBehavior(new GravityBehavior(new Vec3D(0,0.01,0)));
+  physics.addBehavior(new GravityBehavior3D(new Vec3D(0,0.01,0)));
   // set bounding box to 110% of sphere radius
   physics.setWorldBounds(new AABB(new Vec3D(),new Vec3D(SPHERE_RADIUS,SPHERE_RADIUS,SPHERE_RADIUS).scaleSelf(1.1)));
-  VerletParticle prev=null;
+  VerletParticle3D prev=null;
   for(int i=0; i<NUM_PARTICLES; i++) {
     // create particles at random positions outside sphere
-    VerletParticle p=new VerletParticle(Vec3D.randomVector().scaleSelf(SPHERE_RADIUS*2));
+    VerletParticle3D p=new VerletParticle3D(Vec3D.randomVector().scaleSelf(SPHERE_RADIUS*2));
     // set sphere as particle constraint
     p.addConstraint(sphere);
     physics.addParticle(p);
     if (prev!=null) {
-      physics.addSpring(new VerletSpring(prev,p,REST_LENGTH, 0.5));
+      physics.addSpring(new VerletSpring3D(prev,p,REST_LENGTH, 0.5));
     }
     prev=p;
   }
@@ -93,16 +93,14 @@ void draw() {
   physics.update();
   // draw all springs
   beginShape(LINES);
-  for(Iterator i=physics.springs.iterator(); i.hasNext();) {
-    VerletSpring s=(VerletSpring)i.next();
+  for(VerletSpring3D s : physics.springs) {
     vertex(s.a.x,s.a.y,s.a.z);
     vertex(s.b.x,s.b.y,s.b.z);
   }
   endShape();
   // then all particles as dots
   strokeWeight(4);
-  for(Iterator i=physics.particles.iterator(); i.hasNext();) {
-    VerletParticle p=(VerletParticle)i.next();
+  for(VerletParticle3D p : physics.particles) {
     if (abs(p.magnitude()-SPHERE_RADIUS)<1) {
       stroke(0,255,0);
     } 

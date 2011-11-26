@@ -56,8 +56,7 @@ void draw() {
   text("control points",-40,0);
   noFill();
   beginShape();
-  for(Iterator i=s.pointList.iterator(); i.hasNext();) {
-    Vec2D v=(Vec2D)i.next();
+  for(Vec2D v : s.pointList) {
     vertex(v.x, v.y);
   }
   endShape();
@@ -67,8 +66,8 @@ void draw() {
   text("tweened vertices",-40,0);
   noFill();
   int c=0;
-  for(Iterator i=s.computeVertices(RES).iterator(); i.hasNext();) {
-    Vec2D p=(Vec2D)i.next();
+  LineStrip2D strip=s.toLineStrip2D(RES);
+  for(Vec2D p : strip) {
     if (0 == c % RES) stroke(255,0,0);
     else stroke((c % RES)*(255f/RES));
     ellipse(p.x,p.y,5,5);
@@ -80,8 +79,7 @@ void draw() {
   fill(0,0,255);
   text("fixed interval",-40,0);
   noFill();
-  for(Iterator i=s.getDecimatedVertices(20,false).iterator(); i.hasNext();) {
-    Vec2D p=(Vec2D)i.next();
+  for(Vec2D p : strip.getDecimatedVertices(20,false)) {
     line(p.x-2,p.y,p.x+2,p.y);
     line(p.x,p.y-2,p.x,p.y+2);
   }

@@ -8,8 +8,8 @@
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
 import toxi.processing.*;
 
 // grid size
@@ -21,11 +21,11 @@ int SCALE=10;
 float ATT_RADIUS=20;
 float ATT_ELEVATION=50;
 
-VerletPhysics phys;
+VerletPhysics3D phys;
 ToxiclibsSupport gfx;
 WETriangleMesh mesh;
 
-AttractionBehavior attractor;
+AttractionBehavior3D attractor;
 
 // mesh render flags
 boolean isSmooth=true;
@@ -33,7 +33,7 @@ boolean isWireframe=false;
 
 void setup() {
   size(680, 382, P3D);
-  phys=new VerletPhysics();
+  phys=new VerletPhysics3D();
   // create & attach a custom attraction behavior (see below)
   attractor=new YAxisAttractor(new Vec3D(0, ATT_ELEVATION, 0), ATT_RADIUS, 4, 0.01);
   phys.addBehavior(attractor);
@@ -51,7 +51,7 @@ void setup() {
   mesh.scale(SCALE);
   // create a physics particle for each mesh vertex
   for (Vec3D v : mesh.getVertices()) {
-    phys.addParticle(new VerletParticle(v));
+    phys.addParticle(new VerletParticle3D(v));
   }
   // lock the 4 corners of the grid plane
   Vec3D min=mesh.getBoundingBox().getMin();
@@ -62,9 +62,9 @@ void setup() {
   phys.particles.get(mesh.getClosestVertexToPoint(new Vec3D(min.x, max.y, max.z)).id).lock();
   // connect all particles by creating a spring for each edge in the mesh
   for (WingedEdge e : mesh.getEdges()) {
-    VerletParticle a=phys.particles.get(((WEVertex)e.a).id);
-    VerletParticle b=phys.particles.get(((WEVertex)e.b).id);
-    phys.addSpring(new VerletSpring(a, b, a.distanceTo(b), 0.1));
+    VerletParticle3D a=phys.particles.get(((WEVertex)e.a).id);
+    VerletParticle3D b=phys.particles.get(((WEVertex)e.b).id);
+    phys.addSpring(new VerletSpring3D(a, b, a.distanceTo(b), 0.1));
   }
 }
 
@@ -122,13 +122,13 @@ void keyPressed() {
 
 // custom attractor only taking distance in XZ plane into account
 // (everything else inherited from standard AttractionBehavior)
-class YAxisAttractor extends AttractionBehavior {
+class YAxisAttractor extends AttractionBehavior3D {
 
   public YAxisAttractor(Vec3D attractor, float radius, float strength, float jitter) {
     super(attractor, radius, strength, jitter);
   }
 
-  public void apply(VerletParticle p) {
+  public void apply(VerletParticle3D p) {
     // compute 2D distance in XZ plane
     Vec2D delta = attractor.to2DXZ().sub(p.to2DXZ());
     float dist = delta.magSquared();

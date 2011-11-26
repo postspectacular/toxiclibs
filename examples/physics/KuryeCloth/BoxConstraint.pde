@@ -4,7 +4,7 @@
 // this class handles collision detection and resolution between an individual
 // particle and an axis-aligned bounding box (AABB). The intersection is done
 // casting a ray from from the particle in the current direction of movement
-class BoxConstraint implements ParticleConstraint {
+class BoxConstraint implements ParticleConstraint3D {
 
     protected AABB box;
     protected Ray3D intersectRay;
@@ -15,7 +15,7 @@ class BoxConstraint implements ParticleConstraint {
         this.intersectRay = new Ray3D(box, new Vec3D());
     }
 
-    void apply(VerletParticle p) {
+    void apply(VerletParticle3D p) {
         if (p.isInAABB(box)) {
             Vec3D dir = p.getVelocity();
             Vec3D prev = p.getPreviousPosition();

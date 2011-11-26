@@ -95,6 +95,6 @@ void draw() {
   stroke(0,255,255);
   Spline3D spline=new Spline3D();
   spline.add(cube).add(ball).add(cone).add(cyl.getPosition()).add(mesh.computeCentroid());
-  gfx.lineStrip3D(spline.computeVertices(16));
+  gfx.lineStrip3D(spline.toLineStrip3D(16));
 }
 

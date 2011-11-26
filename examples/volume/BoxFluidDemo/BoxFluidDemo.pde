@@ -46,9 +46,9 @@
 
 import processing.opengl.*;
 
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
-import toxi.physics.constraints.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
+import toxi.physics3d.constraints.*;
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.math.*;

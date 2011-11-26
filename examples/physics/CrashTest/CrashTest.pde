@@ -31,13 +31,13 @@
  
 import toxi.geom.*;
 import toxi.geom.mesh.*;
-import toxi.physics.*;
-import toxi.physics.behaviors.*;
+import toxi.physics3d.*;
+import toxi.physics3d.behaviors.*;
 import toxi.processing.*;
 import processing.opengl.*;
 
 ToxiclibsSupport gfx;
-VerletPhysics physics;
+VerletPhysics3D physics;
 WETriangleMesh box;
 
 void setup() {
@@ -76,7 +76,7 @@ void draw() {
 }
 
 void initPhysics() {
-    physics = new VerletPhysics();
+    physics = new VerletPhysics3D();
     box = new WETriangleMesh().addMesh(new STLReader().loadBinary(openStream("audi.stl"),"car",STLReader.WEMESH));
     // properly orient and scale mesh
     box.rotateX(HALF_PI);
@@ -90,16 +90,16 @@ void initPhysics() {
     physics.setWorldBounds(AABB.fromMinMax(min, max));
     box.translate(new Vec3D(ext.scale(3, 2, 0)));
     // set gravity along negative X axis with slight downward
-    physics.addBehavior(new GravityBehavior(new Vec3D(-0.1f, 0.001f, 0)));
+    physics.addBehavior(new GravityBehavior3D(new Vec3D(-0.1f, 0.001f, 0)));
     // turn mesh vertices into physics particles
     for (Vertex v : box.vertices.values()) {
-        physics.addParticle(new VerletParticle(v));
+        physics.addParticle(new VerletParticle3D(v));
     }
     // turn mesh edges into springs
     for (WingedEdge e : box.edges.values()) {
-        VerletParticle a = physics.particles.get(((WEVertex) e.a).id);
-        VerletParticle b = physics.particles.get(((WEVertex) e.b).id);
-        physics.addSpring(new VerletSpring(a, b, a.distanceTo(b), 1f));
+        VerletParticle3D a = physics.particles.get(((WEVertex) e.a).id);
+        VerletParticle3D b = physics.particles.get(((WEVertex) e.b).id);
+        physics.addSpring(new VerletSpring3D(a, b, a.distanceTo(b), 1f));
     }
 }
 
