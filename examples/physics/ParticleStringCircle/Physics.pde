@@ -3,7 +3,7 @@ void initPhysics() {
   // set screen bounds as bounds for physics sim
   physics.setWorldBounds(new Rect(0,0,width,height));
   // add gravity along positive Y axis
-  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.1)));
+  physics.addBehavior(new GravityBehavior2D(new Vec2D(0,0.1)));
   // compute spacing for string particles
   float delta=(float)width/(STRING_RES-1);
   for(int i=0; i<STRING_RES; i++) {
@@ -12,7 +12,7 @@ void initPhysics() {
     physics.addParticle(p);
     // define a repulsion field around each particle
     // this is used to push the ball away
-    physics.addBehavior(new AttractionBehavior(p,delta*1.5,-20));
+    physics.addBehavior(new AttractionBehavior2D(p,delta*1.5,-20));
     // connect each particle to its previous neighbour
     if (i>0) {
       VerletParticle2D q=physics.particles.get(i-1);

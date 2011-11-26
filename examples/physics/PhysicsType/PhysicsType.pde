@@ -11,10 +11,10 @@ VerletPhysics2D physics;
 VerletParticle2D selectedParticle;
  
 RShape font;
-String input = "Hi Tom!";
+String input = "Hello!";
  
 void setup() {
-    size( 1450, 850, OPENGL ); 
+    size( 1280, 720, OPENGL ); 
     initPhysics();
     fill(255);
     smooth();
@@ -38,7 +38,7 @@ void initPhysics() {
   // set screen bounds as bounds for physics sim
   physics.setWorldBounds(new Rect(0,0,width,height));
   // add gravity along positive Y axis
-  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.1)));
+  physics.addBehavior(new GravityBehavior2D(new Vec2D(0,0.1)));
   
   RG.init( this ); 
   RFont fnt = RG.loadFont("ReplicaBold.ttf");  // file name
@@ -50,7 +50,7 @@ void initPhysics() {
   
   RPoint[][] paths = font.getPointsInPaths();  // multidimensional array of x and y coordinates
   
-  Vec2D offset=new Vec2D(100,250);
+  Vec2D offset=new Vec2D(200,250);
   
   if ( paths != null ) {
       for ( int ii = 0; ii < paths.length; ii++ ) {

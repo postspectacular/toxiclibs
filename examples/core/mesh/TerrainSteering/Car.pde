@@ -9,9 +9,9 @@ class Car extends Vec2D {
   float targetSpeed;
   float speed;
 
-  public Car(float x, float y) {
-    super(x, y);
-    pos = new Vec3D(0,500,0);
+  public Car(float x, float z) {
+    super(x, z);
+    pos = new Vec3D(x,500,z);
   }
 
   public void accelerate(float a) {
