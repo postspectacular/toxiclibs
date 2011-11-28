@@ -864,6 +864,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         return transform(matrix.identity().scaleSelf(scale));
     }
 
+    public TriangleMesh scale(float x, float y, float z) {
+        return transform(matrix.identity().scaleSelf(x, y, z));
+    }
+
     public TriangleMesh scale(Vec3D scale) {
         return transform(matrix.identity().scaleSelf(scale));
     }
@@ -912,6 +916,10 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
             computeFaceNormals();
         }
         return this;
+    }
+
+    public TriangleMesh translate(float x, float y, float z) {
+        return transform(matrix.identity().translateSelf(x, y, z));
     }
 
     public TriangleMesh translate(Vec3D trans) {
