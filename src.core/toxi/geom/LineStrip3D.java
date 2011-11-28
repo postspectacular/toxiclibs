@@ -48,6 +48,11 @@ public class LineStrip3D implements Iterable<Vec3D> {
         this.vertices = new ArrayList<Vec3D>(vertices);
     }
 
+    public LineStrip3D add(float x, float y, float z) {
+        vertices.add(new Vec3D(x, y, z));
+        return this;
+    }
+
     public LineStrip3D add(ReadonlyVec3D p) {
         vertices.add(p.copy());
         return this;

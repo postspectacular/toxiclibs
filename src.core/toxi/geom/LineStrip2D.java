@@ -48,6 +48,11 @@ public class LineStrip2D implements Iterable<Vec2D> {
         this.vertices = new ArrayList<Vec2D>(vertices);
     }
 
+    public LineStrip2D add(float x, float y) {
+        vertices.add(new Vec2D(x, y));
+        return this;
+    }
+
     public LineStrip2D add(ReadonlyVec2D p) {
         vertices.add(p.copy());
         return this;
