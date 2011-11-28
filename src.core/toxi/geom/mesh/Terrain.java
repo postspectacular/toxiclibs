@@ -31,6 +31,7 @@ import toxi.geom.IsectData3D;
 import toxi.geom.Ray3D;
 import toxi.geom.Triangle3D;
 import toxi.geom.TriangleIntersector;
+import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.math.Interpolation2D;
 import toxi.math.MathUtils;
@@ -48,7 +49,7 @@ public class Terrain {
     protected int width;
 
     protected int depth;
-    protected float scale;
+    protected Vec2D scale;
 
     /**
      * Constructs a new and initially flat terrain of the given size in the XZ
@@ -59,16 +60,21 @@ public class Terrain {
      * @param scale
      */
     public Terrain(int width, int depth, float scale) {
+        this(width, depth, new Vec2D(scale, scale));
+    }
+
+    public Terrain(int width, int depth, Vec2D scale) {
         this.width = width;
         this.depth = depth;
         this.scale = scale;
         this.elevation = new float[width * depth];
         this.vertices = new Vec3D[elevation.length];
-        Vec3D offset = new Vec3D(width, 0, depth).scaleSelf(0.5f);
+        Vec3D offset = new Vec3D(width / 2, 0, depth / 2);
+        Vec3D scaleXZ = scale.to3DXZ();
         for (int z = 0, i = 0; z < depth; z++) {
             for (int x = 0; x < width; x++) {
                 vertices[i++] = new Vec3D(x, 0, z).subSelf(offset).scaleSelf(
-                        scale);
+                        scaleXZ);
             }
         }
     }
@@ -104,8 +110,8 @@ public class Terrain {
      * @return interpolated elevation
      */
     public float getHeightAtPoint(float x, float z) {
-        float xx = x / scale + width * 0.5f;
-        float zz = z / scale + depth * 0.5f;
+        float xx = x / scale.x + width * 0.5f;
+        float zz = z / scale.y + depth * 0.5f;
         float y = 0;
         if (xx >= 0 && xx < width && zz >= 0 && zz < depth) {
             int x2 = (int) MathUtils.min(xx + 1, width - 1);
@@ -137,6 +143,13 @@ public class Terrain {
         return idx;
     }
 
+    /**
+     * @return the scale
+     */
+    public Vec2D getScale() {
+        return scale;
+    }
+
     protected Vec3D getVertexAtCell(int x, int z) {
         return vertices[getIndex(x, z)];
     }
@@ -159,8 +172,8 @@ public class Terrain {
      * @return intersection data parcel
      */
     public IsectData3D intersectAtPoint(float x, float z) {
-        float xx = x / scale + width * 0.5f;
-        float zz = z / scale + depth * 0.5f;
+        float xx = x / scale.x + width * 0.5f;
+        float zz = z / scale.y + depth * 0.5f;
         IsectData3D isec = new IsectData3D();
         if (xx >= 0 && xx < width && zz >= 0 && zz < depth) {
             int x2 = (int) MathUtils.min(xx + 1, width - 1);
@@ -216,6 +229,25 @@ public class Terrain {
         elevation[index] = h;
         vertices[index].y = h;
         return this;
+    }
+
+    public void setScale(float scale) {
+        setScale(new Vec2D(scale, scale));
+    }
+
+    /**
+     * @param scale
+     *            the scale to set
+     */
+    public void setScale(Vec2D scale) {
+        this.scale.set(scale);
+        Vec3D offset = new Vec3D(width / 2, 0, depth / 2);
+        for (int z = 0, i = 0; z < depth; z++) {
+            for (int x = 0; x < width; x++, i++) {
+                vertices[i].set((x - offset.x) * scale.x, vertices[i].y,
+                        (z - offset.z) * scale.y);
+            }
+        }
     }
 
     public Mesh3D toMesh() {
@@ -283,32 +315,32 @@ public class Terrain {
         miz = MathUtils.clip(miz, 0, depth - 1);
         mxz = MathUtils.clip(mxz, 0, depth);
         Vec3D offset = new Vec3D(width, 0, depth).scaleSelf(0.5f);
-        float minX = (mix - offset.x) * scale;
-        float minZ = (miz - offset.z) * scale;
-        float maxX = (mxx - offset.x) * scale;
-        float maxZ = (mxz - offset.z) * scale;
+        float minX = (mix - offset.x) * scale.x;
+        float minZ = (miz - offset.z) * scale.y;
+        float maxX = (mxx - offset.x) * scale.x;
+        float maxZ = (mxz - offset.z) * scale.y;
         for (int z = miz + 1; z < mxz; z++) {
-            Vec3D a = new Vec3D(minX, groundLevel, (z - 1 - offset.z) * scale);
-            Vec3D b = new Vec3D(minX, groundLevel, (z - offset.z) * scale);
+            Vec3D a = new Vec3D(minX, groundLevel, (z - 1 - offset.z) * scale.y);
+            Vec3D b = new Vec3D(minX, groundLevel, (z - offset.z) * scale.y);
             // left
             mesh.addFace(getVertexAtCell(mix, z - 1), getVertexAtCell(mix, z),
                     a);
             mesh.addFace(getVertexAtCell(mix, z), b, a);
             // right
-            a.x = b.x = maxX - scale;
+            a.x = b.x = maxX - scale.x;
             mesh.addFace(getVertexAtCell(mxx - 1, z),
                     getVertexAtCell(mxx - 1, z - 1), b);
             mesh.addFace(getVertexAtCell(mxx - 1, z - 1), a, b);
         }
         for (int x = mix + 1; x < mxx; x++) {
-            Vec3D a = new Vec3D((x - 1 - offset.x) * scale, groundLevel, minZ);
-            Vec3D b = new Vec3D((x - offset.x) * scale, groundLevel, minZ);
+            Vec3D a = new Vec3D((x - 1 - offset.x) * scale.x, groundLevel, minZ);
+            Vec3D b = new Vec3D((x - offset.x) * scale.x, groundLevel, minZ);
             // back
             mesh.addFace(getVertexAtCell(x, miz), getVertexAtCell(x - 1, miz),
                     b);
             mesh.addFace(getVertexAtCell(x - 1, miz), a, b);
             // front
-            a.z = b.z = maxZ - scale;
+            a.z = b.z = maxZ - scale.y;
             mesh.addFace(getVertexAtCell(x - 1, mxz - 1),
                     getVertexAtCell(x, mxz - 1), a);
             mesh.addFace(getVertexAtCell(x, mxz - 1), b, a);
