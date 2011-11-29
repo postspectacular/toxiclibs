@@ -392,7 +392,7 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
      * line intersections.
      * 
      * @param poly
-     * @return
+     * @return true, if polygons intersect.
      */
     public boolean intersectsPolygon(Polygon2D poly) {
         for (Line2D ea : getEdges()) {

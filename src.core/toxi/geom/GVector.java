@@ -765,7 +765,7 @@ public class GVector implements java.io.Serializable, Cloneable {
      * 
      * @param tuple
      *            the source for the new GVector's new values
-     * @return
+     * @return itself
      */
     public final GVector set(ReadonlyVec4D tuple) {
         return set(new double[] {

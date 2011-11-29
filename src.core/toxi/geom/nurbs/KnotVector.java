@@ -147,7 +147,7 @@ public class KnotVector {
      *            grade to calculate derivations for.
      * @return an array of basis function values or derivated basis functions
      *         values
-     * @see KnotVector#derrivBasisFuns(float,int)
+     * @see KnotVector#derivBasisFunctions(float, int)
      */
     public float[][] derivBasisFunctions(int span, float u, int grade) {
         float[][] ders = new float[grade + 1][degree + 1];

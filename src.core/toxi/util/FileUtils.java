@@ -129,7 +129,7 @@ public class FileUtils {
      * Creates a {@link BufferedReader} for the given file using UTF-8 encoding.
      * 
      * @param file
-     * @return
+     * @return reader instance
      * @throws IOException
      */
     public static BufferedReader createReader(File file) throws IOException {
@@ -142,7 +142,7 @@ public class FileUtils {
      * 
      * @param input
      *            stream
-     * @return
+     * @return reader instance
      * @throws IOException
      */
     public static BufferedReader createReader(InputStream input) {
@@ -157,7 +157,7 @@ public class FileUtils {
      *            stream
      * @param encoding
      *            text encoding to use
-     * @return
+     * @return reader instance
      * @throws IOException
      */
     public static BufferedReader createReader(InputStream input, String encoding) {
@@ -173,7 +173,7 @@ public class FileUtils {
      * Creates a {@link BufferedWriter} for the given file using UTF-8 encoding.
      * 
      * @param file
-     * @return
+     * @return writer instance
      * @throws IOException
      */
     public static BufferedWriter createWriter(File file) throws IOException {
@@ -185,7 +185,7 @@ public class FileUtils {
      * UTF-8 encoding.
      * 
      * @param out
-     * @return
+     * @return writer instance
      * @throws IOException
      */
     public static BufferedWriter createWriter(OutputStream out) {
@@ -200,7 +200,7 @@ public class FileUtils {
      *            stream
      * @param encoding
      *            text encoding to use
-     * @return
+     * @return writer instance
      * @throws IOException
      */
     public static BufferedWriter createWriter(OutputStream out, String encoding) {
@@ -310,7 +310,7 @@ public class FileUtils {
      * @param input
      *            stream
      * @param encoding
-     * @return
+     * @return stream contents as single string
      * @throws IOException
      */
     public static String loadText(InputStream input, String encoding)
