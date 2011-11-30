@@ -223,6 +223,10 @@ public class Line2D {
         return b.sub(a).normalize();
     }
 
+    public float getHeading() {
+        return b.sub(a).heading();
+    }
+
     public float getLength() {
         return a.distanceTo(b);
     }
@@ -237,10 +241,6 @@ public class Line2D {
 
     public Vec2D getNormal() {
         return b.sub(a).perpendicular();
-    }
-
-    public float getTheta() {
-        return a.angleBetween(b, true);
     }
 
     public boolean hasEndPoint(Vec2D p) {
