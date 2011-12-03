@@ -211,6 +211,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
         bounds = null;
         numVertices = 0;
         numFaces = 0;
+        uniqueVertexID = 0;
         return this;
     }
 
