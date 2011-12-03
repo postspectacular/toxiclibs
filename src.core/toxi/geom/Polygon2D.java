@@ -259,6 +259,10 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
         return area;
     }
 
+    public Circle getBoundingCircle() {
+        return Circle.newBoundingCircle(vertices);
+    }
+
     /**
      * Returns the polygon's bounding rect.
      * 

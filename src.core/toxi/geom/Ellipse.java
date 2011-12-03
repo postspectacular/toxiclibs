@@ -82,6 +82,10 @@ public class Ellipse extends Vec2D implements Shape2D {
         return MathUtils.PI * radius.x * radius.y;
     }
 
+    public Circle getBoundingCircle() {
+        return new Circle(x, y, MathUtils.max(radius.x, radius.y));
+    }
+
     /**
      * Returns the ellipse's bounding rect.
      * 

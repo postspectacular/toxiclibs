@@ -80,6 +80,14 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return vertices.get(i);
     }
 
+    public Circle getBoundingCircle() {
+        return Circle.newBoundingCircle(vertices);
+    }
+
+    public Rect getBounds() {
+        return Rect.getBoundingRect(vertices);
+    }
+
     /**
      * Computes a list of points along the spline which are uniformly separated
      * by the given step distance.

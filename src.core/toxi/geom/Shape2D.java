@@ -46,6 +46,8 @@ public interface Shape2D {
      */
     float getArea();
 
+    Circle getBoundingCircle();
+
     /**
      * Returns the shape's axis-aligned bounding rect.
      * 

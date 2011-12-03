@@ -180,6 +180,11 @@ public class Rect implements Shape2D {
         return new Vec2D(x + width, y + height);
     }
 
+    public Circle getBoundingCircle() {
+        return new Circle(getCentroid(),
+                new Vec2D(width, height).magnitude() / 2);
+    }
+
     /**
      * Only provided because the Rect class implements {@link Shape2D}. The
      * bounding rect of a rectangle is itself.

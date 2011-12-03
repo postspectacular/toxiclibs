@@ -27,6 +27,8 @@
 
 package toxi.geom;
 
+import java.util.List;
+
 import toxi.math.MathUtils;
 
 /**
@@ -87,6 +89,22 @@ public class Circle extends Ellipse {
             }
         }
         return circle;
+    }
+
+    public static Circle newBoundingCircle(List<Vec2D> vertices) {
+        Vec2D origin = new Vec2D();
+        float maxD = 0;
+        for (Vec2D v : vertices) {
+            origin.addSelf(v);
+        }
+        origin.scaleSelf(1f / vertices.size());
+        for (Vec2D v : vertices) {
+            float d = origin.distanceToSquared(v);
+            if (d > maxD) {
+                maxD = d;
+            }
+        }
+        return new Circle(origin, (float) Math.sqrt(maxD));
     }
 
     public Circle() {
@@ -152,7 +170,9 @@ public class Circle extends Ellipse {
             delta.perpendicular().scaleSelf(h * d);
             Vec2D i1 = p.add(delta);
             Vec2D i2 = p.sub(delta);
-            res = new Vec2D[] { i1, i2 };
+            res = new Vec2D[] {
+                    i1, i2
+            };
         }
         return res;
     }

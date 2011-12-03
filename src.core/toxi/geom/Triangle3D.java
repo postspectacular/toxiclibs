@@ -245,6 +245,20 @@ public class Triangle3D implements Shape3D {
         return result;
     }
 
+    public Vec3D[] getVertexArray() {
+        return getVertexArray(null, 0);
+    }
+
+    public Vec3D[] getVertexArray(Vec3D[] array, int offset) {
+        if (array == null) {
+            array = new Vec3D[3];
+        }
+        array[offset++] = a;
+        array[offset++] = b;
+        array[offset] = c;
+        return array;
+    }
+
     public boolean isClockwiseInXY() {
         return Triangle3D.isClockwiseInXY(a, b, c);
     }

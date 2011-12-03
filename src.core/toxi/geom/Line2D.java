@@ -210,6 +210,10 @@ public class Line2D {
                 && (b.equals(l.b) || b.equals(l.a));
     }
 
+    public Circle getBoundingCircle() {
+        return Circle.from2Points(a, b);
+    }
+
     /**
      * Returns the line's bounding rect.
      * 

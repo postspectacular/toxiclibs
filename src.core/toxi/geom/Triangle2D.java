@@ -137,6 +137,10 @@ public class Triangle2D implements Shape2D {
         return b.sub(a).cross(c.sub(a)) * 0.5f;
     }
 
+    public Circle getBoundingCircle() {
+        return Circle.from3Points(a, b, c);
+    }
+
     public Rect getBounds() {
         return new Rect(Vec2D.min(Vec2D.min(a, b), c), Vec2D.max(
                 Vec2D.max(a, b), c));
@@ -205,6 +209,20 @@ public class Triangle2D implements Shape2D {
         Collections.shuffle(barycentric);
         return fromBarycentric(new Vec3D(barycentric.get(0),
                 barycentric.get(1), barycentric.get(2)));
+    }
+
+    public Vec2D[] getVertexArray() {
+        return getVertexArray(null, 0);
+    }
+
+    public Vec2D[] getVertexArray(Vec2D[] array, int offset) {
+        if (array == null) {
+            array = new Vec2D[3];
+        }
+        array[offset++] = a;
+        array[offset++] = b;
+        array[offset] = c;
+        return array;
     }
 
     /**
