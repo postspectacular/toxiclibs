@@ -306,6 +306,33 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
         return circ;
     }
 
+    public Vec2D getClosestPointTo(ReadonlyVec2D p) {
+        float minD = Float.MAX_VALUE;
+        Vec2D q = null;
+        for (Line2D l : getEdges()) {
+            Vec2D c = l.closestPointTo(p);
+            float d = c.distanceToSquared(p);
+            if (d < minD) {
+                q = c;
+                minD = d;
+            }
+        }
+        return q;
+    }
+
+    public Vec2D getClosestVertexTo(ReadonlyVec2D p) {
+        float minD = Float.MAX_VALUE;
+        Vec2D q = null;
+        for (Vec2D v : vertices) {
+            float d = v.distanceToSquared(p);
+            if (d < minD) {
+                q = v;
+                minD = d;
+            }
+        }
+        return q;
+    }
+
     /**
      * Returns a list of {@link Line2D} segments representing the polygon edges.
      * 
