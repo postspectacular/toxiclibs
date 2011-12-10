@@ -21,6 +21,7 @@ import toxi.util.datatypes.UniqueItemIndex;
 
 public class IndexedTriangleMesh {
 
+    public static final String ATTR_EDGES = "edges";
     public static final String ATTR_FNORMALS = "fnormals";
     public static final String ATTR_UVCOORDS = "uv";
     public static final String ATTR_VCOLORS = "col";
@@ -28,9 +29,9 @@ public class IndexedTriangleMesh {
     public static final String ATTR_VNORMALS = "vnormals";
 
     public SpatialIndex vertices = new SpatialIndex(0.001f);
+
     public ItemIndex<Vec3D> fnormals = new UniqueItemIndex<Vec3D>();
 
-    public ItemIndex<AttributedEdge> edges = new UniqueItemIndex<AttributedEdge>();
     public final ArrayList<AttributedFace> faces = new ArrayList<AttributedFace>();
 
     public final HashMap<String, UniqueItemIndex<Object>> attributes = new HashMap<String, UniqueItemIndex<Object>>();
@@ -44,15 +45,15 @@ public class IndexedTriangleMesh {
         int idB = vertices.index(b);
         int idC = vertices.index(c);
         if (idA != idB && idA != idC && idB != idC) {
-            AttributedFace f = new AttributedFace(idA, idB, idC, addFaceAttributes(null,
-                    attribs));
+            AttributedFace f = new AttributedFace(idA, idB, idC,
+                    addFaceAttributes(null, attribs));
             faces.add(f);
         }
         return this;
     }
 
-    public IndexedTriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uva, Vec2D uvb,
-            Vec2D uvc) {
+    public IndexedTriangleMesh addFace(Vec3D a, Vec3D b, Vec3D c, Vec2D uva,
+            Vec2D uvb, Vec2D uvc) {
         HashMap<String, Object[]> attribs = null;
         if (uva != null && uvb != null && uvc != null) {
             attribs = new HashMap<String, Object[]>();
@@ -63,8 +64,8 @@ public class IndexedTriangleMesh {
         return addFace(a, b, c, attribs);
     }
 
-    public HashMap<String, int[]> addFaceAttribute(AttributedFace f, String attrib,
-            Object attA, Object attB, Object attC) {
+    public HashMap<String, int[]> addFaceAttribute(AttributedFace f,
+            String attrib, Object attA, Object attB, Object attC) {
         if (f != null && attrib != null && attA != null && attB != null
                 && attC != null) {
             ItemIndex<Object> idx = getAttributeIndex(attrib);
@@ -123,7 +124,6 @@ public class IndexedTriangleMesh {
     public IndexedTriangleMesh clear() {
         vertices.clear();
         fnormals.clear();
-        edges.clear();
         attributes.clear();
         faces.clear();
         return this;
@@ -163,13 +163,14 @@ public class IndexedTriangleMesh {
         return buffers;
     }
 
-    public List<AttributedEdge> computeEdges() {
+    public List<Object> computeEdges() {
+        ItemIndex<Object> edges = getAttributeIndex(ATTR_EDGES);
         edges.clear();
         for (AttributedFace f : faces) {
             if (f.attribs == null) {
                 f.attribs = new HashMap<String, int[]>();
             }
-            f.attribs.put("edges", new int[] {
+            f.attribs.put(ATTR_EDGES, new int[] {
                     indexFaceEdge(f, f.a, f.b), indexFaceEdge(f, f.b, f.c),
                     indexFaceEdge(f, f.c, f.a)
             });
@@ -218,7 +219,8 @@ public class IndexedTriangleMesh {
         return idx.getItems();
     }
 
-    public IndexedTriangleMesh extrudeFace(AttributedFace f, Vec3D offset, float scale) {
+    public IndexedTriangleMesh extrudeFace(AttributedFace f, Vec3D offset,
+            float scale) {
         Vec3D[] v = getFaceVertices(f, null);
         Vec3D[] v2 = new Vec3D[3];
         Vec3D c = v[0].add(v[1]).addSelf(v[2]).scaleSelf(1 / 3f);
@@ -270,7 +272,7 @@ public class IndexedTriangleMesh {
         return this;
     }
 
-    protected ItemIndex<Object> getAttributeIndex(String attID) {
+    public ItemIndex<Object> getAttributeIndex(String attID) {
         UniqueItemIndex<Object> idx = attributes.get(attID);
         if (idx == null) {
             idx = new UniqueItemIndex<Object>();
@@ -314,6 +316,13 @@ public class IndexedTriangleMesh {
         return compilers;
     }
 
+    /**
+     * @return the edges
+     */
+    public List<Object> getEdges() {
+        return getAttributeIndex(ATTR_EDGES).getItems();
+    }
+
     public List<AttributedEdge> getEdgesForVertex(Vec3D v) {
         List<AttributedEdge> vedges = null;
         int id = vertices.getID(v);
@@ -325,12 +334,18 @@ public class IndexedTriangleMesh {
 
     public List<AttributedEdge> getEdgesForVertexID(int id) {
         List<AttributedEdge> vedges = new ArrayList<AttributedEdge>(2);
-        for (AttributedEdge e : edges.getItems()) {
+        for (Object o : getEdges()) {
+            AttributedEdge e = (AttributedEdge) o;
             if (e.a == id || e.b == id) {
                 vedges.add(e);
             }
         }
         return vedges;
+    }
+
+    public Triangle3D getFaceAsTriangle(AttributedFace f) {
+        Vec3D[] verts = getFaceVertices(f, null);
+        return new Triangle3D(verts[0], verts[1], verts[2]);
     }
 
     public HashMap<String, Object[]> getFaceAttribValues(AttributedFace f,
@@ -353,6 +368,20 @@ public class IndexedTriangleMesh {
                 idx.forID(fattribs[0]), idx.forID(fattribs[1]),
                 idx.forID(fattribs[2])
         };
+    }
+
+    /**
+     * @return the fnormals
+     */
+    public List<Vec3D> getFaceNormals() {
+        return fnormals.getItems();
+    }
+
+    /**
+     * @return the faces
+     */
+    public List<AttributedFace> getFaces() {
+        return faces;
     }
 
     public List<AttributedFace> getFacesForVertex(Vec3D v) {
@@ -412,6 +441,13 @@ public class IndexedTriangleMesh {
         return vertices.getDelta();
     }
 
+    /**
+     * @return the vertices
+     */
+    public List<Vec3D> getVertices() {
+        return vertices.getItems();
+    }
+
     public List<Vec3D> getVerticesForIDs(List<Vec3D> verts, int... ids) {
         if (verts == null) {
             verts = new ArrayList<Vec3D>(ids.length);
@@ -425,13 +461,14 @@ public class IndexedTriangleMesh {
     protected final int indexFaceEdge(AttributedFace f, int a, int b) {
         final AttributedEdge e1 = new AttributedEdge(a, b);
         final AttributedEdge e2 = new AttributedEdge(b, a);
+        ItemIndex<Object> edges = getAttributeIndex(ATTR_EDGES);
         final int id1 = edges.getID(e1);
         final int id2 = edges.getID(e2);
         if (id1 != -1) {
-            edges.forID(id1).addFace(f);
+            ((AttributedEdge) edges.forID(id1)).addFace(f);
             return id1;
         } else if (id2 != -1) {
-            edges.forID(id2).addFace(f);
+            ((AttributedEdge) edges.forID(id2)).addFace(f);
             return id2;
         } else {
             e1.addFace(f);
@@ -506,10 +543,10 @@ public class IndexedTriangleMesh {
 
     public IndexedTriangleMesh subdivide(NewSubdivStrategy strategy) {
         Vec3D[] v = null;
+        List<Vec3D[]> splitFaces = new ArrayList<Vec3D[]>();
         for (AttributedFace f : new ArrayList<AttributedFace>(faces)) {
             removeFace(f);
             v = getFaceVertices(f, v);
-            List<Vec3D[]> splitFaces = new ArrayList<Vec3D[]>();
             for (Vec3D[] fverts : strategy.subdivideTriangle(v[0], v[1], v[2],
                     splitFaces)) {
                 addFace(fverts[0], fverts[1], fverts[2], null);
