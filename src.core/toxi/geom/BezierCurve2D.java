@@ -73,6 +73,14 @@ public class BezierCurve2D {
     }
 
     /**
+     * @return true, if the curve is closed. I.e. the first and last control
+     *         point coincide.
+     */
+    public boolean isClosed() {
+        return points.get(0).equals(points.get(points.size() - 1));
+    }
+
+    /**
      * Computes a list of intermediate curve points for all segments. For each
      * curve segment the given number of points will be produced.
      * 
@@ -80,8 +88,8 @@ public class BezierCurve2D {
      *            number of points per segment
      * @return list of Vec2Ds
      */
-    public List<Vec2D> computeVertices(int res) {
-        List<Vec2D> vertices = new ArrayList<Vec2D>();
+    public LineStrip2D toLineStrip2D(int res) {
+        LineStrip2D strip = new LineStrip2D();
         int i = 0;
         int maxRes = res;
         for (int num = points.size(); i < num - 3; i += 3) {
@@ -93,22 +101,14 @@ public class BezierCurve2D {
                 maxRes++;
             }
             for (int t = 0; t < maxRes; t++) {
-                vertices.add(computePointInSegment(a, b, c, d, (float) t / res));
+                strip.add(computePointInSegment(a, b, c, d, (float) t / res));
             }
         }
-        return vertices;
-    }
-
-    /**
-     * @return true, if the curve is closed. I.e. the first and last control
-     *         point coincide.
-     */
-    public boolean isClosed() {
-        return points.get(0).equals(points.get(points.size() - 1));
+        return strip;
     }
 
     public Polygon2D toPolygon2D(int res) {
-        Polygon2D poly = new Polygon2D(computeVertices(res));
+        Polygon2D poly = new Polygon2D(toLineStrip2D(res).getVertices());
         if (isClosed()) {
             poly.vertices.remove(poly.vertices.get(poly.vertices.size() - 1));
         }

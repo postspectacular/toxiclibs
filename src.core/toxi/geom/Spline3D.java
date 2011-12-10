@@ -270,7 +270,7 @@ public class Spline3D {
         if (bernstein == null || bernstein.resolution != res) {
             bernstein = new BernsteinPolynomial(res);
         }
-        ArrayList<Vec3D> vertices = new ArrayList<Vec3D>();
+        LineStrip3D strip = new LineStrip3D();
         findCPoints();
         Vec3D deltaP = new Vec3D();
         Vec3D deltaQ = new Vec3D();
@@ -287,11 +287,11 @@ public class Spline3D {
                         + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
                 float z = p.z * bernstein.b0[k] + deltaP.z * bernstein.b1[k]
                         + deltaQ.z * bernstein.b2[k] + q.z * bernstein.b3[k];
-                vertices.add(new Vec3D(x, y, z));
+                strip.add(new Vec3D(x, y, z));
             }
         }
-        vertices.add(points[points.length - 1].copy());
-        return new LineStrip3D(vertices);
+        strip.add(points[points.length - 1].copy());
+        return strip;
     }
 
     public void updateCoefficients() {

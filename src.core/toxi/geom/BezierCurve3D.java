@@ -74,6 +74,14 @@ public class BezierCurve3D {
     }
 
     /**
+     * @return true, if the curve is closed. I.e. the first and last control
+     *         point coincide.
+     */
+    public boolean isClosed() {
+        return points.get(0).equals(points.get(points.size() - 1));
+    }
+
+    /**
      * Computes a list of intermediate curve points for all segments. For each
      * curve segment the given number of points will be produced.
      * 
@@ -81,8 +89,8 @@ public class BezierCurve3D {
      *            number of points per segment
      * @return list of Vec3Ds
      */
-    public List<Vec3D> computeVertices(int res) {
-        List<Vec3D> vertices = new ArrayList<Vec3D>();
+    public LineStrip3D toLineStrip3D(int res) {
+        LineStrip3D strip = new LineStrip3D();
         int i = 0;
         int maxRes = res;
         for (int num = points.size(); i < num - 3; i += 3) {
@@ -94,18 +102,10 @@ public class BezierCurve3D {
                 maxRes++;
             }
             for (int t = 0; t < maxRes; t++) {
-                vertices.add(computePointInSegment(a, b, c, d, (float) t / res));
+                strip.add(computePointInSegment(a, b, c, d, (float) t / res));
             }
         }
-        return vertices;
-    }
-
-    /**
-     * @return true, if the curve is closed. I.e. the first and last control
-     *         point coincide.
-     */
-    public boolean isClosed() {
-        return points.get(0).equals(points.get(points.size() - 1));
+        return strip;
     }
 
 }

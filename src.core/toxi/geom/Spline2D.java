@@ -271,7 +271,7 @@ public class Spline2D {
         Vec2D deltaP = new Vec2D();
         Vec2D deltaQ = new Vec2D();
         res--;
-        ArrayList<Vec2D> vertices = new ArrayList<Vec2D>();
+        LineStrip2D strip = new LineStrip2D();
         for (int i = 0, numP = getNumPoints(); i < numP - 1; i++) {
             Vec2D p = points[i];
             Vec2D q = points[i + 1];
@@ -282,11 +282,11 @@ public class Spline2D {
                         + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
                 float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
                         + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
-                vertices.add(new Vec2D(x, y));
+                strip.add(new Vec2D(x, y));
             }
         }
-        vertices.add(points[points.length - 1].copy());
-        return new LineStrip2D(vertices);
+        strip.add(points[points.length - 1].copy());
+        return strip;
     }
 
     public void updateCoefficients() {
