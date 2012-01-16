@@ -28,6 +28,7 @@
 package toxi.geom.mesh2d;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Voronoi {
         delaunay.delaunayPlace(new DelaunayVertex(p.x, p.y));
     }
 
-    public void addPoints(List<Vec2D> points) {
+    public void addPoints(Collection<? extends Vec2D> points) {
         for (Vec2D p : points) {
             addPoint(p);
         }
