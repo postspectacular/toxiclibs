@@ -654,6 +654,22 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
         return scale(scale.x(), scale.y());
     }
 
+    public Polygon2D scaleSize(float scale) {
+        return scaleSize(scale, scale);
+    }
+
+    public Polygon2D scaleSize(float x, float y) {
+        Vec2D centroid = getCentroid();
+        for (Vec2D v : vertices) {
+            v.subSelf(centroid).scaleSelf(x, y).addSelf(centroid);
+        }
+        return this;
+    }
+
+    public Polygon2D scaleSize(ReadonlyVec2D scale) {
+        return scaleSize(scale.x(), scale.y());
+    }
+
     /**
      * Applies a laplacian-style smooth operation to all polygon vertices,
      * causing sharp corners/angles to widen and results in a general smoother
