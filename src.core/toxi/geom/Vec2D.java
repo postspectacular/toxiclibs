@@ -107,8 +107,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * 
      * @return result as new vector
      */
-    public static final Vec2D max(Vec2D a, Vec2D b) {
-        return new Vec2D(MathUtils.max(a.x, b.x), MathUtils.max(a.y, b.y));
+    public static final Vec2D max(ReadonlyVec2D a, ReadonlyVec2D b) {
+        return new Vec2D(MathUtils.max(a.x(), b.x()), MathUtils.max(a.y(),
+                b.y()));
     }
 
     /**
@@ -122,8 +123,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * 
      * @return result as new vector
      */
-    public static final Vec2D min(Vec2D a, Vec2D b) {
-        return new Vec2D(MathUtils.min(a.x, b.x), MathUtils.min(a.y, b.y));
+    public static final Vec2D min(ReadonlyVec2D a, ReadonlyVec2D b) {
+        return new Vec2D(MathUtils.min(a.x(), b.x()), MathUtils.min(a.y(),
+                b.y()));
     }
 
     /**
@@ -252,7 +254,7 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         } else {
             theta = dot(v);
         }
-        return (float) Math.acos(theta);
+        return (float) Math.acos(MathUtils.clipNormalized(theta));
     }
 
     public Vec3D bisect(Vec2D b) {
@@ -734,8 +736,8 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
         return x * x + y * y;
     }
 
-    public final Vec2D max(Vec2D v) {
-        return new Vec2D(MathUtils.max(x, v.x), MathUtils.max(y, v.y));
+    public final Vec2D max(ReadonlyVec2D v) {
+        return new Vec2D(MathUtils.max(x, v.x()), MathUtils.max(y, v.y()));
     }
 
     /**
@@ -744,14 +746,14 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @param v
      * @return itself
      */
-    public final Vec2D maxSelf(Vec2D v) {
-        x = MathUtils.max(x, v.x);
-        y = MathUtils.max(y, v.y);
+    public final Vec2D maxSelf(ReadonlyVec2D v) {
+        x = MathUtils.max(x, v.x());
+        y = MathUtils.max(y, v.y());
         return this;
     }
 
-    public final Vec2D min(Vec2D v) {
-        return new Vec2D(MathUtils.min(x, v.x), MathUtils.min(y, v.y));
+    public final Vec2D min(ReadonlyVec2D v) {
+        return new Vec2D(MathUtils.min(x, v.x()), MathUtils.min(y, v.y()));
     }
 
     /**
@@ -760,9 +762,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
      * @param v
      * @return itself
      */
-    public final Vec2D minSelf(Vec2D v) {
-        x = MathUtils.min(x, v.x);
-        y = MathUtils.min(y, v.y);
+    public final Vec2D minSelf(ReadonlyVec2D v) {
+        x = MathUtils.min(x, v.x());
+        y = MathUtils.min(y, v.y());
         return this;
     }
 

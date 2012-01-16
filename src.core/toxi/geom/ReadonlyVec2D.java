@@ -400,7 +400,7 @@ public interface ReadonlyVec2D {
      * @param v
      * @return result as new vector
      */
-    public Vec2D max(Vec2D v);
+    public Vec2D max(ReadonlyVec2D v);
 
     /**
      * Constructs a new vector consisting of the smallest components of both
@@ -410,7 +410,7 @@ public interface ReadonlyVec2D {
      *            comparing vector
      * @return result as new vector
      */
-    public Vec2D min(Vec2D v);
+    public Vec2D min(ReadonlyVec2D v);
 
     /**
      * Scales vector uniformly and returns result as new vector.
