@@ -79,6 +79,13 @@ public class Terrain {
         }
     }
 
+    public Terrain clear() {
+        for (int i = 0; i < elevation.length; i++) {
+            elevation[i] = 0;
+        }
+        return updateElevation();
+    }
+
     /**
      * @return number of grid cells along the Z axis.
      */
@@ -205,12 +212,11 @@ public class Terrain {
      */
     public Terrain setElevation(float[] elevation) {
         if (this.elevation.length == elevation.length) {
-            for (int i = 0; i < elevation.length; i++) {
-                this.vertices[i].y = this.elevation[i] = elevation[i];
-            }
+            this.elevation = elevation;
+            updateElevation();
         } else {
             throw new IllegalArgumentException(
-                    "the given elevation array size does not match terrain");
+                    "the given elevation array size does not match existing terrain size");
         }
         return this;
     }
@@ -361,5 +367,12 @@ public class Terrain {
             }
         }
         return mesh;
+    }
+
+    public Terrain updateElevation() {
+        for (int i = 0; i < elevation.length; i++) {
+            vertices[i].y = elevation[i];
+        }
+        return this;
     }
 }
