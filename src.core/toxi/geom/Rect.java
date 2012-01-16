@@ -95,17 +95,18 @@ public class Rect implements Shape2D {
     }
 
     /**
-     * Constructs a new rectangle defined by its top left and bottom right
-     * points.
+     * Constructs a new rectangle defined by the two points given.
      * 
-     * @param topLeft
-     * @param bottomRight
+     * @param p1
+     * @param p2
      */
-    public Rect(ReadonlyVec2D topLeft, ReadonlyVec2D bottomRight) {
-        x = topLeft.x();
-        y = topLeft.y();
-        width = bottomRight.x() - x;
-        height = bottomRight.y() - y;
+    public Rect(ReadonlyVec2D p1, ReadonlyVec2D p2) {
+        Vec2D tl = Vec2D.min(p1, p2);
+        Vec2D br = Vec2D.min(p1, p2);
+        x = tl.x;
+        y = tl.y;
+        width = br.x - x;
+        height = br.y - y;
     }
 
     /**
@@ -563,4 +564,5 @@ public class Rect implements Shape2D {
         float h = y2 - y1;
         return new Rect(x1, y1, w, h);
     }
+
 }
