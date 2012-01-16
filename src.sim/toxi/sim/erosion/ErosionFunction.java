@@ -27,6 +27,10 @@
 
 package toxi.sim.erosion;
 
+import toxi.geom.Polygon2D;
+import toxi.geom.Rect;
+import toxi.geom.Vec2D;
+
 /**
  * Abstract parent class for various 2D erosion simulations, implemented as
  * sub-classes.
@@ -48,15 +52,8 @@ public abstract class ErosionFunction {
      * @param width
      * @param height
      */
-    public void erode(float[] elevation, final int width, final int height) {
-        this.elevation = elevation;
-        this.width = width;
-        this.height = height;
-        final int w1 = width - 1;
-        final int h1 = height - 1;
-        off = new int[] { -width - 1, -width, -width + 1, -1, 0, 1, w1, width,
-                width + 1 };
-        for (int y = 1; y < h1; y++) {
+    public void erodeAll() {
+        for (int y = 1, w1 = width - 1, h1 = height - 1; y < h1; y++) {
             for (int x = 1; x < w1; x++) {
                 erodeAt(x, y);
             }
@@ -64,4 +61,29 @@ public abstract class ErosionFunction {
     }
 
     public abstract void erodeAt(int x, int y);
+
+    public void erodeWithinPolygon(Polygon2D poly) {
+        Rect bounds = poly.getBounds().intersectionRectWith(
+                new Rect(1, 1, width - 2, height - 2));
+        Vec2D pos = new Vec2D();
+        for (int y = (int) bounds.getTop(), y2 = (int) bounds.getBottom(); y < y2; y++) {
+            for (int x = (int) bounds.getLeft(), x2 = (int) bounds.getRight(); x < x2; x++) {
+                if (poly.containsPoint(pos.set(x, y))) {
+                    erodeAt(x, y);
+                }
+            }
+        }
+    }
+
+    public void setElevation(float[] elevation, final int width,
+            final int height) {
+        this.elevation = elevation;
+        this.width = width;
+        this.height = height;
+        final int w1 = width - 1;
+        final int h1 = height - 1;
+        off = new int[] {
+                -width - 1, -width, -width + 1, -1, 0, 1, w1, width, width + 1
+        };
+    }
 }
