@@ -35,9 +35,14 @@ public class GravityBehavior2D extends ConstantForceBehavior2D {
         super(gravity);
     }
 
+    public GravityBehavior2D(Vec2D gravity, float timeStep) {
+        super(gravity);
+        configure(timeStep);
+    }
+
     @Override
-    public void configure(float timeStep) {
-        this.timeStep = timeStep;
-        scaledForce = force.scale(timeStep * timeStep);
+    public void setForce(Vec2D force) {
+        this.force = force;
+        this.scaledForce = force.scale(timeStep * timeStep);
     }
 }

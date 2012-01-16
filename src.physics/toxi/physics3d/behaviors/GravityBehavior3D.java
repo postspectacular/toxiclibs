@@ -35,10 +35,14 @@ public class GravityBehavior3D extends ConstantForceBehavior3D {
         super(gravity);
     }
 
-    @Override
-    public void configure(float timeStep) {
-        this.timeStep = timeStep;
-        scaledForce = force.scale(timeStep * timeStep);
+    public GravityBehavior3D(Vec3D gravity, float timeStep) {
+        super(gravity);
+        configure(timeStep);
     }
-
+    
+    @Override
+    public void setForce(Vec3D force) {
+        this.force = force;
+        this.scaledForce = force.scale(timeStep * timeStep);
+    }
 }

@@ -349,9 +349,11 @@ public class VerletPhysics3D {
      * Updates all spring connections based on new particle positions
      */
     protected void updateSprings() {
-        for (int i = numIterations; i > 0; i--) {
-            for (VerletSpring3D s : springs) {
-                s.update(i == 1);
+        if (springs.size() > 0) {
+            for (int i = numIterations; i > 0; i--) {
+                for (VerletSpring3D s : springs) {
+                    s.update(i == 1);
+                }
             }
         }
     }

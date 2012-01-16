@@ -63,21 +63,32 @@ public class RectConstraint implements ParticleConstraint2D {
 
     protected Rect rect;
     protected Ray2D intersectRay;
+    protected boolean isContainer;
 
     public RectConstraint(Rect rect) {
-        this.rect = rect.copy();
-        this.intersectRay = new Ray2D(rect.getCentroid(), new Vec2D());
+        this(rect, false);
+    }
+
+    public RectConstraint(Rect rect, boolean isContainer) {
+        this.isContainer = isContainer;
+        setBox(rect);
     }
 
     public RectConstraint(Vec2D min, Vec2D max) {
-        this(new Rect(min, max));
+        this(new Rect(min, max), false);
     }
 
     public void apply(VerletParticle2D p) {
-        if (rect.containsPoint(p)) {
-            p.set(rect.intersectsRay(
-                    intersectRay.setDirection(intersectRay.sub(p)), 0,
-                    Float.MAX_VALUE));
+        if (isContainer) {
+            if (!rect.containsPoint(p)) {
+                p.constrain(rect);
+            }
+        } else {
+            if (rect.containsPoint(p)) {
+                p.set(rect.intersectsRay(
+                        intersectRay.setDirection(intersectRay.sub(p)), 0,
+                        Float.MAX_VALUE));
+            }
         }
     }
 
@@ -87,6 +98,6 @@ public class RectConstraint implements ParticleConstraint2D {
 
     public void setBox(Rect rect) {
         this.rect = rect.copy();
-        intersectRay.set(rect.getCentroid());
+        this.intersectRay = new Ray2D(rect.getCentroid(), new Vec2D());
     }
 }
