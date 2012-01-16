@@ -36,6 +36,16 @@ import toxi.math.MathUtils;
 
 public class IntegerRange {
 
+    public static IntegerRange fromSamples(int... samples) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int s : samples) {
+            min = MathUtils.min(min, s);
+            max = MathUtils.max(max, s);
+        }
+        return new IntegerRange(min, max);
+    }
+
     public static IntegerRange fromSamples(List<Integer> samples) {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
