@@ -79,7 +79,9 @@ public class MeshLatticeBuilder {
     private VolumetricSpace volume;
 
     private float drawStep = 0.5f;
+
     private ScaleMap bboxToVoxelX;
+
     private ScaleMap bboxToVoxelY;
     private ScaleMap bboxToVoxelZ;
 
@@ -153,6 +155,13 @@ public class MeshLatticeBuilder {
     }
 
     /**
+     * @return the volume
+     */
+    public VolumetricSpace getVolume() {
+        return volume;
+    }
+
+    /**
      * Sets the distance between {@link VolumetricBrush} positions when tracing
      * mesh edges.
      * 
@@ -163,8 +172,7 @@ public class MeshLatticeBuilder {
         this.drawStep = drawStep;
     }
 
-    public void setMesh(WETriangleMesh mesh) {
-        AABB box = mesh.getBoundingBox();
+    public void setInputBounds(AABB box) {
         Vec3D bmin = box.getMin();
         Vec3D bmax = box.getMax();
         bboxToVoxelX = new ScaleMap(bmin.x, bmax.x, voxRangeX.min,
@@ -173,6 +181,10 @@ public class MeshLatticeBuilder {
                 voxRangeY.max);
         bboxToVoxelZ = new ScaleMap(bmin.z, bmax.z, voxRangeZ.min,
                 voxRangeZ.max);
+    }
+
+    public void setMesh(WETriangleMesh mesh) {
+        setInputBounds(mesh.getBoundingBox());
     }
 
     protected void setRangeMinMax(IntegerRange range, int min, int max,
@@ -189,6 +201,14 @@ public class MeshLatticeBuilder {
         }
         range.min = min;
         range.max = max;
+    }
+
+    /**
+     * @param volume
+     *            the volume to set
+     */
+    public void setVolume(VolumetricSpace volume) {
+        this.volume = volume;
     }
 
     public MeshLatticeBuilder setVoxelRangeX(int min, int max) {
