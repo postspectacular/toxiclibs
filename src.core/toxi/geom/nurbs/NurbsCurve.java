@@ -19,6 +19,7 @@
  */
 package toxi.geom.nurbs;
 
+import toxi.geom.Polygon2D;
 import toxi.geom.Vec3D;
 import toxi.geom.Vec4D;
 
@@ -92,4 +93,5 @@ public interface NurbsCurve {
      */
     Vec3D pointOnCurve(float u, Vec3D out);
 
+    Polygon2D toPolygon2D(int res);
 }

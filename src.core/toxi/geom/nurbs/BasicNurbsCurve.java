@@ -19,6 +19,7 @@
  */
 package toxi.geom.nurbs;
 
+import toxi.geom.Polygon2D;
 import toxi.geom.Vec3D;
 import toxi.geom.Vec4D;
 
@@ -164,5 +165,14 @@ public class BasicNurbsCurve implements NurbsCurve, Cloneable {
                     (float) bf[i]));
         }
         return cw.unweightInto(out);
+    }
+
+    public Polygon2D toPolygon2D(int res) {
+        float delta = 1f / (res - 1);
+        Polygon2D poly = new Polygon2D();
+        for (int i = 0; i < res; i++) {
+            poly.add(pointOnCurve(i * delta).to2DXY());
+        }
+        return poly;
     }
 }
