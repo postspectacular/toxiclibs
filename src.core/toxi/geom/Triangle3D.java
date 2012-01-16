@@ -178,19 +178,30 @@ public class Triangle3D implements Shape3D {
     /**
      * Checks if point vector is inside the triangle created by the points a, b
      * and c. These points will create a plane and the point checked will have
-     * to be on this plane in the region between a,b,c.
-     * 
-     * Note: The triangle must be defined in clockwise order a,b,c
+     * to be on this plane in the region between a,b,c (triangle vertices
+     * inclusive).
      * 
      * @return true, if point is in triangle.
      */
     public boolean containsPoint(ReadonlyVec3D p) {
-        if (p.equals(a) || p.equals(b) || p.equals(c)) {
-            return true;
-        }
-        Vec3D n = a.sub(c).crossSelf(a.sub(b)).normalize();
-        return isSameClockDir(a, b, p, n) && isSameClockDir(b, c, p, n)
-                && isSameClockDir(c, a, p, n);
+        Vec3D v0 = c.sub(a);
+        Vec3D v1 = b.sub(a);
+        Vec3D v2 = p.sub(a);
+
+        // Compute dot products
+        float dot00 = v0.dot(v0);
+        float dot01 = v0.dot(v1);
+        float dot02 = v0.dot(v2);
+        float dot11 = v1.dot(v1);
+        float dot12 = v1.dot(v2);
+
+        // Compute barycentric coordinates
+        float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
+        float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+        // Check if point is in triangle
+        return (u >= 0.0) && (v >= 0.0) && (u + v <= 1.0);
     }
 
     public Triangle3D flipVertexOrder() {
@@ -272,12 +283,15 @@ public class Triangle3D implements Shape3D {
     }
 
     private boolean isSameClockDir(Vec3D a, Vec3D b, ReadonlyVec3D p, Vec3D norm) {
-        float nx = ((b.y - a.y) * (p.z() - a.z))
-                - ((p.y() - a.y) * (b.z - a.z));
-        float ny = ((b.z - a.z) * (p.x() - a.x))
-                - ((p.z() - a.z) * (b.x - a.x));
-        float nz = ((b.x - a.x) * (p.y() - a.y))
-                - ((p.x() - a.x) * (b.y - a.y));
+        float bax = b.x - a.x;
+        float bay = b.y - a.y;
+        float baz = b.z - a.z;
+        float pax = p.x() - a.x;
+        float pay = p.y() - a.y;
+        float paz = p.z() - a.z;
+        float nx = bay * paz - pay * baz;
+        float ny = baz * pax - paz * bax;
+        float nz = bax * pay - pax * bay;
         float dotprod = nx * norm.x + ny * norm.y + nz * norm.z;
         return dotprod < 0;
     }
