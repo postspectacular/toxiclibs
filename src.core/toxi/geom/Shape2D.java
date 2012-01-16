@@ -46,6 +46,11 @@ public interface Shape2D {
      */
     float getArea();
 
+    /**
+     * Computes the bounding circle of the shape.
+     * 
+     * @return
+     */
     Circle getBoundingCircle();
 
     /**
