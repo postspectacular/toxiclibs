@@ -34,6 +34,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import toxi.geom.Line2D.LineIntersection;
+import toxi.geom.Line2D.LineIntersection.Type;
+
 public class LineStrip2D implements Iterable<Vec2D> {
 
     @XmlElement(name = "v")
@@ -177,8 +180,39 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return vertices;
     }
 
+    public LineIntersection intersectLine(Line2D line) {
+        Line2D l = new Line2D(new Vec2D(), new Vec2D());
+        for (int i = 1, num = vertices.size(); i < num; i++) {
+            l.set(vertices.get(i - 1), vertices.get(i));
+            LineIntersection isec = l.intersectLine(line);
+            if (isec.getType() == Type.INTERSECTING
+                    || isec.getType() == Type.COINCIDENT) {
+                return isec;
+            }
+        }
+        return null;
+    }
+
     public Iterator<Vec2D> iterator() {
         return vertices.iterator();
+    }
+
+    public LineStrip2D scale(float scale) {
+        for (Vec2D v : vertices) {
+            v.scaleSelf(scale);
+        }
+        return this;
+    }
+
+    public LineStrip2D scale(float x, float y) {
+        for (Vec2D v : vertices) {
+            v.scaleSelf(x, y);
+        }
+        return this;
+    }
+
+    public LineStrip2D scale(Vec2D scale) {
+        return scale(scale.x, scale.y);
     }
 
     /**
