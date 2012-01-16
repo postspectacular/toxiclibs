@@ -91,6 +91,11 @@ public class Ray2D extends Vec2D {
         return this;
     }
 
+    public Ray2D setNormalizedDirection(ReadonlyVec2D d) {
+        dir.set(d);
+        return this;
+    }
+
     /**
      * Converts the ray into a 2D Line segment with its start point coinciding
      * with the ray origin and its other end point at the given distance along

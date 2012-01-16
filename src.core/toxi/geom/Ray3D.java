@@ -98,6 +98,11 @@ public class Ray3D extends Vec3D {
         return this;
     }
 
+    public Ray3D setNormalizedDirection(ReadonlyVec3D d) {
+        dir.set(d);
+        return this;
+    }
+
     /**
      * Converts the ray into a 3D Line segment with its start point coinciding
      * with the ray origin and its other end point at the given distance along
