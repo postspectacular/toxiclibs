@@ -75,7 +75,7 @@ public class ScaleMap {
         if (Double.isNaN(t)) {
             t = 0;
         }
-        return mapFunction.interpolate(0, mapRange, t) + out.min;
+        return mapFunction.interpolate(out.min, out.max, t);
     }
 
     /**
@@ -113,7 +113,7 @@ public class ScaleMap {
         if (Double.isNaN(t)) {
             t = 0;
         }
-        return mapFunction.interpolate(0, (float) mapRange, t) + out.min;
+        return mapFunction.interpolate(out.min, out.max, t);
     }
 
     /**
