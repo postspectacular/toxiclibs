@@ -63,11 +63,33 @@ public class FileUtils {
 
     /**
      * Attempts to create the full path of directories as specified by the given
+     * target path. The path is assumed to be a directory, NOT a file in a
+     * directory. For the latter, use {@link #createDirectoriesForFile(File)}.
+     * 
+     * @param path
+     * @return true, if the operation succeeded
+     */
+    static public boolean createDirectories(File path) {
+        try {
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+            return true;
+        } catch (SecurityException se) {
+            System.err.println("No permissions to create "
+                    + path.getAbsolutePath());
+        }
+        return false;
+    }
+
+    /**
+     * Attempts to create the full path of directories as specified by the given
      * target file.
      * 
      * @param file
+     * @return true, if the operation succeeded
      */
-    static public void createDirectories(File file) {
+    static public boolean createDirectoriesForFile(File file) {
         try {
             String parentName = file.getParent();
             if (parentName != null) {
@@ -76,10 +98,12 @@ public class FileUtils {
                     parent.mkdirs();
                 }
             }
+            return true;
         } catch (SecurityException se) {
             System.err.println("No permissions to create "
                     + file.getAbsolutePath());
         }
+        return false;
     }
 
     /**
