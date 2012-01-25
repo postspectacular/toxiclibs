@@ -99,6 +99,36 @@ public class TalusAngleErosion extends ErosionFunction {
         }
     }
 
+    /**
+     * @return the amount
+     */
+    public float getAmount() {
+        return amount;
+    }
+
+    /**
+     * @return the theta
+     */
+    public float getTheta() {
+        return theta;
+    }
+
+    /**
+     * @param amount
+     *            the amount to set
+     */
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * @param theta
+     *            the theta to set
+     */
+    public void setTheta(float theta) {
+        this.theta = theta;
+    }
+
     public String toString() {
         return getClass().getName() + ": theta=" + theta + " amount=" + amount;
     }
