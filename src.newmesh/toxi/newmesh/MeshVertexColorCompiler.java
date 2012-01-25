@@ -1,4 +1,4 @@
-package toxi.geom.mesh;
+package toxi.newmesh;
 
 import toxi.color.ReadonlyTColor;
 import toxi.util.datatypes.ItemIndex;

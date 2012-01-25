@@ -1,33 +1,33 @@
-package toxi.geom.mesh;
+package toxi.newmesh;
 
-import toxi.geom.Vec3D;
+import toxi.geom.Vec2D;
 import toxi.util.datatypes.ItemIndex;
 
-public class MeshFaceNormalCompiler extends MeshAttributeCompiler {
+public class MeshUVCompiler extends MeshAttributeCompiler {
 
     @Override
     public void compileFace(AttributedFace f, ItemIndex<?> index, float[] buf,
             int offset) {
-        Vec3D v = (Vec3D) index.forID(f.normal);
+        int[] vn = f.attribs.get(IndexedTriangleMesh.ATTR_UVCOORDS);
+        Vec2D v = (Vec2D) index.forID(vn[0]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
-        buf[offset++] = v.z;
+        v = (Vec2D) index.forID(vn[1]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
-        buf[offset++] = v.z;
+        v = (Vec2D) index.forID(vn[2]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
-        buf[offset++] = v.z;
     }
 
     @Override
     public ItemIndex<?> getIndex() {
-        return mesh.fnormals;
+        return mesh.attributes.get(IndexedTriangleMesh.ATTR_UVCOORDS);
     }
 
     @Override
     public int getStride() {
-        return 3;
+        return 2;
     }
 
 }

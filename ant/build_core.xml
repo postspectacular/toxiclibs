@@ -46,11 +46,9 @@
 		<mkdir dir="${build.classes.dir}" />
 		<javac destdir="${build.classes.dir}" source="${lib.jdk.level}" target="${lib.jdk.level}">
 			<src path="${src.dir}" />
-			<!-- <src path="${doap.src.dir}" /> -->
 			<compilerarg value="-Xlint:unchecked" />
 			<classpath>
 				<pathelement location="${lib.libs.path}" />
-				<!-- <pathelement location="${lib.libs.path}/doapamine.jar" /> -->
 			</classpath>
 		</javac>
 	</target>

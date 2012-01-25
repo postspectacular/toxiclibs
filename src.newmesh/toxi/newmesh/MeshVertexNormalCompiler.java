@@ -1,22 +1,23 @@
-package toxi.geom.mesh;
+package toxi.newmesh;
 
 import toxi.geom.Vec3D;
 import toxi.util.datatypes.ItemIndex;
 
-public class MeshVertexCompiler extends MeshAttributeCompiler {
+public class MeshVertexNormalCompiler extends MeshAttributeCompiler {
 
     @Override
     public void compileFace(AttributedFace f, ItemIndex<?> index, float[] buf,
             int offset) {
-        Vec3D v = (Vec3D) index.forID(f.a);
+        int[] vn = f.attribs.get(IndexedTriangleMesh.ATTR_VNORMALS);
+        Vec3D v = (Vec3D) index.forID(vn[0]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
         buf[offset++] = v.z;
-        v = (Vec3D) index.forID(f.b);
+        v = (Vec3D) index.forID(vn[1]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
         buf[offset++] = v.z;
-        v = (Vec3D) index.forID(f.c);
+        v = (Vec3D) index.forID(vn[2]);
         buf[offset++] = v.x;
         buf[offset++] = v.y;
         buf[offset++] = v.z;
@@ -24,7 +25,7 @@ public class MeshVertexCompiler extends MeshAttributeCompiler {
 
     @Override
     public ItemIndex<?> getIndex() {
-        return mesh.vertices;
+        return mesh.attributes.get(IndexedTriangleMesh.ATTR_VNORMALS);
     }
 
     @Override
