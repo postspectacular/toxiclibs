@@ -7,7 +7,7 @@
  * laplacian smooth mesh filter).</p>
  *
  * <p><strong>Usage:</strong><ul>
- * <li>click to toggle wireframe on/off</li>
+ * <li>press 'w' to toggle wireframe on/off</li>
  * </ul></p>
  */
  
@@ -37,7 +37,7 @@ import toxi.color.*;
 import toxi.processing.*;
 
 int VOXEL_RES=64;
-int VOXEL_STROKE_WEIGHT=7;
+int VOXEL_STROKE_WEIGHT=5;
 int SPHERE_RES=8;
 int SMOOTH_ITER=6;
 
@@ -79,6 +79,8 @@ void draw() {
   gfx.mesh(mesh);
 }
 
-void mousePressed() {
-  isWireframe=!isWireframe;
+void keyPressed() {
+  if (key=='w') {
+    isWireframe=!isWireframe;
+  }
 }

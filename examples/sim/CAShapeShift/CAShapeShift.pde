@@ -61,7 +61,7 @@ void setup() {
   // see javadocs for list of names:
   // http://toxiclibs.org/docs/colorutils/toxi/color/NamedColor.html
   grad.addColorAt(0,NamedColor.WHITE);
-  grad.addColorAt(128,NamedColor.RED);
+  grad.addColorAt(rule.getStateCount(),NamedColor.RED);
   // the tone map will map cell states/ages to a gradient color
   toneMap=new ToneMap(0,rule.getStateCount()-1,grad);
   frameRate(999);

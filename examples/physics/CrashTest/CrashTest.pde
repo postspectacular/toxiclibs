@@ -28,17 +28,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+import processing.opengl.*;
  
 import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.physics3d.*;
 import toxi.physics3d.behaviors.*;
 import toxi.processing.*;
-import processing.opengl.*;
 
 ToxiclibsSupport gfx;
 VerletPhysics3D physics;
-WETriangleMesh box;
+WETriangleMesh mesh;
 
 void setup() {
     size(680, 382, OPENGL);
@@ -49,11 +50,11 @@ void setup() {
 void draw() {
     physics.update();
     // update mesh vertices based on the current particle positions
-    for (Vertex v : box.vertices.values()) {
+    for (Vertex v : mesh.vertices.values()) {
         v.set(physics.particles.get(v.id));
     }
     // update mesh normals
-    box.computeFaceNormals();
+    mesh.computeFaceNormals();
     // setup lighting
     background(51);
     lights();
@@ -61,7 +62,7 @@ void draw() {
     specular(255);
     shininess(16);
     // point camera at mesh centroid
-    Vec3D c = box.computeCentroid();
+    Vec3D c = mesh.computeCentroid();
     camera(-100, -50, 80, c.x, c.y, c.z, 0, 1, 0);
     // draw coordinate system
     gfx.origin(new Vec3D(), 50);
@@ -72,31 +73,31 @@ void draw() {
     // draw car
     fill(160);
     noStroke();
-    gfx.mesh(box, false, 0);
+    gfx.mesh(mesh, false, 0);
 }
 
 void initPhysics() {
     physics = new VerletPhysics3D();
-    box = new WETriangleMesh().addMesh(new STLReader().loadBinary(openStream("audi.stl"),"car",STLReader.WEMESH));
+    mesh = new WETriangleMesh().addMesh(new STLReader().loadBinary(openStream("audi.stl"),"car",STLReader.WEMESH));
     // properly orient and scale mesh
-    box.rotateX(HALF_PI);
-    box.scale(8);
+    mesh.rotateX(HALF_PI);
+    mesh.scale(8);
     // adjust physics bounding box based on car (but bigger)
     // and align car with bottom of the new box
-    AABB bounds = box.getBoundingBox();
+    AABB bounds = mesh.getBoundingBox();
     Vec3D ext = bounds.getExtent();
     Vec3D min = bounds.sub(ext.scale(4, 3, 2));
     Vec3D max = bounds.add(ext.scale(4, 3, 2));
     physics.setWorldBounds(AABB.fromMinMax(min, max));
-    box.translate(new Vec3D(ext.scale(3, 2, 0)));
+    mesh.translate(new Vec3D(ext.scale(3, 2, 0)));
     // set gravity along negative X axis with slight downward
     physics.addBehavior(new GravityBehavior3D(new Vec3D(-0.1f, 0.001f, 0)));
     // turn mesh vertices into physics particles
-    for (Vertex v : box.vertices.values()) {
+    for (Vertex v : mesh.vertices.values()) {
         physics.addParticle(new VerletParticle3D(v));
     }
     // turn mesh edges into springs
-    for (WingedEdge e : box.edges.values()) {
+    for (WingedEdge e : mesh.edges.values()) {
         VerletParticle3D a = physics.particles.get(((WEVertex) e.a).id);
         VerletParticle3D b = physics.particles.get(((WEVertex) e.b).id);
         physics.addSpring(new VerletSpring3D(a, b, a.distanceTo(b), 1f));

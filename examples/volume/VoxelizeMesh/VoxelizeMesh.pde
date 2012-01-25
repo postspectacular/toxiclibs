@@ -47,14 +47,15 @@ import toxi.geom.mesh.subdiv.*;
 import toxi.processing.*;
 import toxi.util.*;
 import toxi.volume.*;
+import toxi.color.*;
+
+int RES=64;
 
 ToxiclibsSupport gfx;
 WETriangleMesh mesh;
 
 boolean isWireframe;
 float currZoom = 1.25f;
-
-boolean showNormals;
 
 void setup() {
   size(1280, 720, OPENGL);
@@ -78,7 +79,7 @@ void draw() {
     noFill();
     stroke(0);
   }
-  gfx.meshNormalMapped(mesh, !isWireframe, showNormals ? 10 : 0);
+  gfx.meshNormalMapped(mesh, !isWireframe);
 }
 
 // creates a simple cube mesh and applies displacement subdivision
@@ -107,7 +108,7 @@ void initMesh() {
 // if you have enough RAM and would like less holes in the resulting surface
 // try a higher voxel resolution (e.g. 128, 192) and/or increase wall thickness
 void voxelizeMesh() {
-  MeshVoxelizer voxelizer=new MeshVoxelizer(64);
+  MeshVoxelizer voxelizer=new MeshVoxelizer(RES);
   // try setting to 1 or 2 (voxels)
   voxelizer.setWallThickness(0);
   VolumetricSpace vol = voxelizer.voxelizeMesh(mesh);
@@ -133,9 +134,6 @@ void keyPressed() {
   }
   if (key == 'v') {
     voxelizeMesh();
-  }
-  if (key == 'n') {
-    showNormals = !showNormals;
   }
   if (key=='r') {
     initMesh();

@@ -66,9 +66,9 @@ Vec3D SCALE=new Vec3D(DIM,DIM,DIM).scale(2);
 float isoThreshold=3;
 
 int numP;
-VerletPhysics physics;
-ParticleConstraint boundingSphere;
-GravityBehavior gravity;
+VerletPhysics3D physics;
+ParticleConstraint3D boundingSphere;
+GravityBehavior3D gravity;
 
 VolumetricSpaceArray volume;
 IsoSurface surface;
@@ -108,7 +108,7 @@ void draw() {
     strokeWeight(4);
     stroke(0);
     for(Iterator i=physics.particles.iterator(); i.hasNext();) {
-      VerletParticle p=(VerletParticle)i.next();
+      VerletParticle3D p=(VerletParticle3D)i.next();
       Vec3D col=p.add(colAmp).scaleSelf(0.5);
       stroke(col.x,col.y,col.z);
       point(p.x,p.y,p.z);
