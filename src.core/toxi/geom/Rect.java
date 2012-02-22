@@ -102,7 +102,7 @@ public class Rect implements Shape2D {
      */
     public Rect(ReadonlyVec2D p1, ReadonlyVec2D p2) {
         Vec2D tl = Vec2D.min(p1, p2);
-        Vec2D br = Vec2D.min(p1, p2);
+        Vec2D br = Vec2D.max(p1, p2);
         x = tl.x;
         y = tl.y;
         width = br.x - x;
