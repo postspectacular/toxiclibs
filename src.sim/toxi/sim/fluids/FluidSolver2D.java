@@ -287,6 +287,90 @@ public class FluidSolver2D {
     }
 
     /**
+     * @return the buoyancyA
+     */
+    public float getBuoyancyA() {
+        return buoyancyA;
+    }
+
+    /**
+     * @return the buoyancyB
+     */
+    public float getBuoyancyB() {
+        return buoyancyB;
+    }
+
+    /**
+     * @return the curl
+     */
+    public float[] getCurl() {
+        return curl;
+    }
+
+    /**
+     * @return the d
+     */
+    public float[] getDensityField() {
+        return d;
+    }
+
+    /**
+     * @return the diffusion
+     */
+    public float getDiffusion() {
+        return diffusion;
+    }
+
+    /**
+     * @return the numIterations
+     */
+    public int getNumIterations() {
+        return numIterations;
+    }
+
+    /**
+     * @return the timeStep
+     */
+    public float getTimeStep() {
+        return timeStep;
+    }
+
+    /**
+     * @return the totalHeight
+     */
+    public int getTotalHeight() {
+        return totalHeight;
+    }
+
+    /**
+     * @return the totalWidth
+     */
+    public int getTotalWidth() {
+        return totalWidth;
+    }
+
+    /**
+     * @return the u
+     */
+    public float[] getVelocityFieldU() {
+        return u;
+    }
+
+    /**
+     * @return the v
+     */
+    public float[] getVelocityFieldV() {
+        return v;
+    }
+
+    /**
+     * @return the viscosity
+     */
+    public float getViscosity() {
+        return viscosity;
+    }
+
+    /**
      * Iterative linear system solver using the Gauss-Seidel relaxation
      * technique. Room for much improvement here...
      * 
@@ -405,6 +489,62 @@ public class FluidSolver2D {
         x[width + 1] = 0.5f * (x[width] + x[width + 1 + totalWidth]);
         x[width + 1 + totalWidth + idn] = 0.5f * (x[width + totalWidth + idn] + x[width
                 + 1 + idn]);
+    }
+
+    /**
+     * @param buoyancyA
+     *            the buoyancyA to set
+     */
+    public void setBuoyancyA(float buoyancyA) {
+        this.buoyancyA = buoyancyA;
+    }
+
+    /**
+     * @param buoyancyB
+     *            the buoyancyB to set
+     */
+    public void setBuoyancyB(float buoyancyB) {
+        this.buoyancyB = buoyancyB;
+    }
+
+    /**
+     * @param curl
+     *            the curl to set
+     */
+    public void setCurl(float[] curl) {
+        this.curl = curl;
+    }
+
+    /**
+     * @param diffusion
+     *            the diffusion to set
+     */
+    public void setDiffusion(float diffusion) {
+        this.diffusion = diffusion;
+    }
+
+    /**
+     * @param numIterations
+     *            the numIterations to set
+     */
+    public void setNumIterations(int numIterations) {
+        this.numIterations = numIterations;
+    }
+
+    /**
+     * @param timeStep
+     *            the timeStep to set
+     */
+    public void setTimeStep(float timeStep) {
+        this.timeStep = timeStep;
+    }
+
+    /**
+     * @param viscosity
+     *            the viscosity to set
+     */
+    public void setViscosity(float viscosity) {
+        this.viscosity = viscosity;
     }
 
     /**

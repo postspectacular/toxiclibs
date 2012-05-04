@@ -49,6 +49,8 @@ public class TriangleTest extends TestCase {
         assertTrue(t.containsPoint(c));
         assertTrue(t.containsPoint(t.computeCentroid()));
         assertFalse(t.containsPoint(a.add(0.1f, 0, 0)));
+        t.flipVertexOrder();
+        assertTrue(t.containsPoint(t.computeCentroid()));
     }
 
     public void testEquilateral() {

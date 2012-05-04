@@ -174,7 +174,7 @@ public class Sphere extends Vec3D implements Shape3D {
      *         point.
      */
     public Vec3D tangentPlaneNormalAt(ReadonlyVec3D q) {
-        return sub(q).normalize();
+        return q.sub(this).normalize();
     }
 
     public Mesh3D toMesh(int res) {

@@ -129,21 +129,23 @@ public class LineStrip2D implements Iterable<Vec2D> {
             }
         }
         float arcLen = getEstimatedArcLength();
-        double delta = step / arcLen;
-        int currIdx = 0;
-        for (double t = 0; t < 1.0; t += delta) {
-            double currT = t * arcLen;
-            while (currT >= arcLenIndex[currIdx]) {
-                currIdx++;
+        if (arcLen > 0) {
+            double delta = step / arcLen;
+            int currIdx = 0;
+            for (double t = 0; t < 1.0; t += delta) {
+                double currT = t * arcLen;
+                while (currT >= arcLenIndex[currIdx]) {
+                    currIdx++;
+                }
+                ReadonlyVec2D p = vertices.get(currIdx - 1);
+                ReadonlyVec2D q = vertices.get(currIdx);
+                float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
+                Vec2D i = p.interpolateTo(q, frac);
+                uniform.add(i);
             }
-            ReadonlyVec2D p = vertices.get(currIdx - 1);
-            ReadonlyVec2D q = vertices.get(currIdx);
-            float frac = (float) ((currT - arcLenIndex[currIdx - 1]) / (arcLenIndex[currIdx] - arcLenIndex[currIdx - 1]));
-            Vec2D i = p.interpolateTo(q, frac);
-            uniform.add(i);
-        }
-        if (doAddFinalVertex) {
-            uniform.add(vertices.get(vertices.size() - 1).copy());
+            if (doAddFinalVertex) {
+                uniform.add(vertices.get(vertices.size() - 1).copy());
+            }
         }
         return uniform;
     }

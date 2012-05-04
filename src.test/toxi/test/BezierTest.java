@@ -48,8 +48,9 @@ public class BezierTest extends PApplet {
         gfx.polygon2D(bezier.toPolygon2D(20));
         stroke(255, 0, 0);
         for (int i = 0, res = 10; i <= res; i++) {
-            Vec2D p = bezier.computePointInSegment(a, b, c, d, (float) i / res);
-            Vec2D t = bezier.computeTangentInSegment(a, b, c, d,
+            Vec2D p = BezierCurve2D.computePointInSegment(a, b, c, d, (float) i
+                    / res);
+            Vec2D t = BezierCurve2D.computeTangentInSegment(a, b, c, d,
                     (float) i / res).scaleSelf(50);
             gfx.line(p, p.add(t));
         }

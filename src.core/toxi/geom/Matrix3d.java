@@ -1515,6 +1515,62 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     }
 
     /**
+     * Retrieves the value at the specified row and column of the specified
+     * matrix.
+     * 
+     * @param row
+     *            the row number to be retrieved (zero indexed)
+     * @param column
+     *            the column number to be retrieved (zero indexed)
+     * @return the value at the indexed element.
+     */
+    public final double get(int row, int column) {
+        switch (row) {
+            case 0:
+                switch (column) {
+                    case 0:
+                        return (this.m00);
+                    case 1:
+                        return (this.m01);
+                    case 2:
+                        return (this.m02);
+                    default:
+                        break;
+                }
+                break;
+            case 1:
+                switch (column) {
+                    case 0:
+                        return (this.m10);
+                    case 1:
+                        return (this.m11);
+                    case 2:
+                        return (this.m12);
+                    default:
+                        break;
+                }
+                break;
+
+            case 2:
+                switch (column) {
+                    case 0:
+                        return (this.m20);
+                    case 1:
+                        return (this.m21);
+                    case 2:
+                        return (this.m22);
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                break;
+        }
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
+    /**
      * Copies the matrix values in the specified column into the array
      * parameter.
      * 
@@ -1571,161 +1627,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Retrieves the value at the specified row and column of the specified
-     * matrix.
-     * 
-     * @param row
-     *            the row number to be retrieved (zero indexed)
-     * @param column
-     *            the column number to be retrieved (zero indexed)
-     * @return the value at the indexed element.
-     */
-    public final double getElement(int row, int column) {
-        switch (row) {
-            case 0:
-                switch (column) {
-                    case 0:
-                        return (this.m00);
-                    case 1:
-                        return (this.m01);
-                    case 2:
-                        return (this.m02);
-                    default:
-                        break;
-                }
-                break;
-            case 1:
-                switch (column) {
-                    case 0:
-                        return (this.m10);
-                    case 1:
-                        return (this.m11);
-                    case 2:
-                        return (this.m12);
-                    default:
-                        break;
-                }
-                break;
-
-            case 2:
-                switch (column) {
-                    case 0:
-                        return (this.m20);
-                    case 1:
-                        return (this.m21);
-                    case 2:
-                        return (this.m22);
-                    default:
-                        break;
-                }
-                break;
-
-            default:
-                break;
-        }
-
-        throw new ArrayIndexOutOfBoundsException();
-    }
-
-    /**
-     * Get the first matrix element in the first row.
-     * 
-     * @return Returns the m00.
-     * @since vecmath 1.5
-     */
-    public final double getM00() {
-        return m00;
-    }
-
-    /**
-     * Get the second matrix element in the first row.
-     * 
-     * @return Returns the m01.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM01() {
-        return m01;
-    }
-
-    /**
-     * Get the third matrix element in the first row.
-     * 
-     * @return Returns the m02.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM02() {
-        return m02;
-    }
-
-    /**
-     * Get first matrix element in the second row.
-     * 
-     * @return Returns the m10.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM10() {
-        return m10;
-    }
-
-    /**
-     * Get second matrix element in the second row.
-     * 
-     * @return Returns the m11.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM11() {
-        return m11;
-    }
-
-    /**
-     * Get the third matrix element in the second row.
-     * 
-     * @return Returns the m12.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM12() {
-        return m12;
-    }
-
-    /**
-     * Get the first matrix element in the third row.
-     * 
-     * @return Returns the m20.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM20() {
-        return m20;
-    }
-
-    /**
-     * Get the second matrix element in the third row.
-     * 
-     * @return Returns the m21.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM21() {
-        return m21;
-    }
-
-    /**
-     * Get the third matrix element in the third row .
-     * 
-     * @return Returns the m22.
-     * 
-     * @since vecmath 1.5
-     */
-    public final double getM22() {
-        return m22;
-    }
-
-    /**
      * Copies the matrix values in the specified row into the array parameter.
      * 
      * @param row
@@ -1749,7 +1650,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
         } else {
             throw new ArrayIndexOutOfBoundsException();
         }
-
     }
 
     /**

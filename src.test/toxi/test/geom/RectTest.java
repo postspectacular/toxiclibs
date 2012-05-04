@@ -6,7 +6,7 @@ import toxi.geom.Vec2D;
 
 public class RectTest extends TestCase {
 
-    public void testIntersection() {
+    public void testIntersectionRect() {
         Rect a = new Rect(100, 100, 100, 100);
         Rect b = new Rect(80, 80, 100, 100);
         Rect i = a.intersectionRectWith(b);
@@ -20,6 +20,15 @@ public class RectTest extends TestCase {
         b = new Rect(180, 180, 30, 50);
         i = a.intersectionRectWith(b);
         assertEquals(new Rect(180, 180, 20, 20), i);
+    }
+
+    public void testIsec() {
+        Rect a = new Rect(100, 100, 100, 100);
+        Rect b = new Rect(110, 110, 10, 10);
+        assertTrue(a.intersectsRect(b));
+        assertTrue(b.intersectsRect(a));
+        b = new Rect(80, 80, 30, 200);
+        assertTrue(a.intersectsRect(b));
     }
 
     public void testRectMerge() {

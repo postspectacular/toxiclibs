@@ -33,7 +33,7 @@ import java.util.List;
 
 import toxi.math.MathUtils;
 
-public class PointCloud implements Iterable<Vec3D> {
+public class PointCloud3D implements Iterable<Vec3D> {
 
     protected List<Vec3D> points;
 
@@ -42,23 +42,23 @@ public class PointCloud implements Iterable<Vec3D> {
 
     protected float radiusSquared;
 
-    public PointCloud() {
+    public PointCloud3D() {
         this(100);
     }
 
-    public PointCloud(int numPoints) {
+    public PointCloud3D(int numPoints) {
         points = new ArrayList<Vec3D>(numPoints);
         clear();
     }
 
-    public PointCloud addAll(List<? extends Vec3D> plist) {
+    public PointCloud3D addAll(List<? extends Vec3D> plist) {
         for (Vec3D p : plist) {
             addPoint(p);
         }
         return this;
     }
 
-    public PointCloud addPoint(Vec3D p) {
+    public PointCloud3D addPoint(Vec3D p) {
         points.add(p);
         min.minSelf(p);
         max.maxSelf(p);
@@ -75,7 +75,7 @@ public class PointCloud implements Iterable<Vec3D> {
      *            transformation matrix
      * @return itself
      */
-    public PointCloud applyMatrix(Matrix4x4 m) {
+    public PointCloud3D applyMatrix(Matrix4x4 m) {
         for (Vec3D p : points) {
             p.set(m.applyTo(p));
         }
@@ -89,7 +89,7 @@ public class PointCloud implements Iterable<Vec3D> {
      * 
      * @return itself
      */
-    public PointCloud center() {
+    public PointCloud3D center() {
         return center(null);
     }
 
@@ -101,7 +101,7 @@ public class PointCloud implements Iterable<Vec3D> {
      *            new centroid
      * @return itself
      */
-    public PointCloud center(ReadonlyVec3D origin) {
+    public PointCloud3D center(ReadonlyVec3D origin) {
         getCentroid();
         Vec3D delta = origin != null ? origin.sub(centroid) : centroid
                 .getInverted();
@@ -119,7 +119,7 @@ public class PointCloud implements Iterable<Vec3D> {
      * 
      * @return itself
      */
-    public PointCloud clear() {
+    public PointCloud3D clear() {
         points.clear();
         min = Vec3D.MAX_VALUE.copy();
         max = Vec3D.MIN_VALUE.copy();
@@ -132,8 +132,8 @@ public class PointCloud implements Iterable<Vec3D> {
      * 
      * @return copied instance
      */
-    public PointCloud copy() {
-        PointCloud c = new PointCloud(points.size());
+    public PointCloud3D copy() {
+        PointCloud3D c = new PointCloud3D(points.size());
         for (ReadonlyVec3D p : points) {
             c.addPoint(p.copy());
         }
@@ -187,7 +187,7 @@ public class PointCloud implements Iterable<Vec3D> {
      * 
      * @return itself
      */
-    public PointCloud updateBounds() {
+    public PointCloud3D updateBounds() {
         min = Vec3D.MAX_VALUE.copy();
         max = Vec3D.MIN_VALUE.copy();
         for (Vec3D p : points) {

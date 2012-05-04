@@ -42,9 +42,9 @@ public class PolyConstrain extends PApplet {
     }
 
     public void setup() {
-        size(1280, 720, OPENGL);
+        size(600, 600, OPENGL);
         gfx = new ToxiclibsSupport(this);
         poly = new Circle(200).toPolygon2D(9).translate(width / 2, height / 2);
-        poly.get(0).x *= 0.85f;
+        poly.get(0).x *= 0.66f;
     }
 }
