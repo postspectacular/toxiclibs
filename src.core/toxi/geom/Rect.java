@@ -358,6 +358,27 @@ public class Rect implements Shape2D {
         return isec;
     }
 
+    public boolean intersectsCircle(Vec2D c, float r) {
+        float s, d = 0;
+        float x2 = x + width;
+        float y2 = y + height;
+        if (c.x < x) {
+            s = c.x - x;
+            d = s * s;
+        } else if (c.x > x2) {
+            s = c.x - x2;
+            d += s * s;
+        }
+        if (c.y < y) {
+            s = c.y - y;
+            d += s * s;
+        } else if (c.y > y2) {
+            s = c.y - y2;
+            d += s * s;
+        }
+        return d <= r * r;
+    }
+
     /**
      * Checks if the rectangle intersects with the given ray and if so computes
      * the first intersection point. The method takes a min/max distance

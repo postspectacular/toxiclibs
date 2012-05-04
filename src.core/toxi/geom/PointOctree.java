@@ -303,7 +303,7 @@ public class PointOctree extends AABB implements Shape3D {
      *            AABB
      * @return all points with the box volume
      */
-    public ArrayList<Vec3D> getPointsWithinBox(AABB b) {
+    public List<Vec3D> getPointsWithinBox(AABB b) {
         ArrayList<Vec3D> results = null;
         if (this.intersectsBox(b)) {
             if (points != null) {
@@ -318,8 +318,7 @@ public class PointOctree extends AABB implements Shape3D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < 8; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec3D> points = children[i]
-                                .getPointsWithinBox(b);
+                        List<Vec3D> points = children[i].getPointsWithinBox(b);
                         if (points != null) {
                             if (results == null) {
                                 results = new ArrayList<Vec3D>();
@@ -340,7 +339,7 @@ public class PointOctree extends AABB implements Shape3D {
      *            sphere
      * @return selected points
      */
-    public ArrayList<Vec3D> getPointsWithinSphere(Sphere s) {
+    public List<Vec3D> getPointsWithinSphere(Sphere s) {
         ArrayList<Vec3D> results = null;
         if (this.intersectsSphere(s)) {
             if (points != null) {
@@ -355,7 +354,7 @@ public class PointOctree extends AABB implements Shape3D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < 8; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec3D> points = children[i]
+                        List<Vec3D> points = children[i]
                                 .getPointsWithinSphere(s);
                         if (points != null) {
                             if (results == null) {
@@ -377,7 +376,7 @@ public class PointOctree extends AABB implements Shape3D {
      * @param clipRadius
      * @return selected points
      */
-    public ArrayList<Vec3D> getPointsWithinSphere(Vec3D sphereOrigin,
+    public List<Vec3D> getPointsWithinSphere(Vec3D sphereOrigin,
             float clipRadius) {
         return getPointsWithinSphere(new Sphere(sphereOrigin, clipRadius));
     }

@@ -276,13 +276,50 @@ public class PointQuadtree extends Rect implements Shape2D {
     }
 
     /**
+     * Selects all stored points within the given circle
+     * 
+     * @param c
+     *            circle
+     * @return selected points
+     */
+    public List<Vec2D> getPointsWithinCircle(Circle c) {
+        ArrayList<Vec2D> results = null;
+        if (this.intersectsCircle(c, c.radius.x)) {
+            if (points != null) {
+                for (Vec2D q : points) {
+                    if (c.containsPoint(q)) {
+                        if (results == null) {
+                            results = new ArrayList<Vec2D>();
+                        }
+                        results.add(q);
+                    }
+                }
+            } else if (numChildren > 0) {
+                for (int i = 0; i < 4; i++) {
+                    if (children[i] != null) {
+                        List<Vec2D> points = children[i]
+                                .getPointsWithinCircle(c);
+                        if (points != null) {
+                            if (results == null) {
+                                results = new ArrayList<Vec2D>();
+                            }
+                            results.addAll(points);
+                        }
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+    /**
      * Selects all stored points within the given axis-aligned bounding box.
      * 
      * @param r
      *            clipping rect
      * @return all points with the rect
      */
-    public ArrayList<Vec2D> getPointsWithinRect(Rect r) {
+    public List<Vec2D> getPointsWithinRect(Rect r) {
         ArrayList<Vec2D> results = null;
         if (this.intersectsRect(r)) {
             if (points != null) {
@@ -297,8 +334,7 @@ public class PointQuadtree extends Rect implements Shape2D {
             } else if (numChildren > 0) {
                 for (int i = 0; i < children.length; i++) {
                     if (children[i] != null) {
-                        ArrayList<Vec2D> points = children[i]
-                                .getPointsWithinRect(r);
+                        List<Vec2D> points = children[i].getPointsWithinRect(r);
                         if (points != null) {
                             if (results == null) {
                                 results = new ArrayList<Vec2D>();

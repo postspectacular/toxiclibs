@@ -68,7 +68,7 @@ void setup() {
   // use points to compute a spline and
   // use resulting segments as DLA guidelines
   DLAGuideLines guides = new DLAGuideLines();
-  guides.addCurveStrip(new Spline3D(points).computeVertices(8));
+  guides.addCurveStrip(new Spline3D(points).toLineStrip3D(8).getVertices());
   // create DLA 3D simulation space 128 units wide (cubic)
   dla = new DLA(128);
   // use default configuration
@@ -76,7 +76,7 @@ void setup() {
   // add guide lines
   dla.setGuidelines(guides);
   // set leaf size of octree
-  dla.getParticleOctree().setMinNodeSize(1);
+  dla.getParticleOctree().setMinNodeSize(2);
   // add a listener for simulation events
   listener=new DLAListener();
   dla.addListener(listener);
