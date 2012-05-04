@@ -2,9 +2,9 @@ This is a module of the toxiclibs library release.
 
 Only the following packages are included:
 
-toxi.physics
-toxi.physics.behaviors
-toxi.physics.constraints
+toxi.physics3d
+toxi.physics3d.behaviors
+toxi.physics3d.constraints
 toxi.physics2d
 toxi.physics2d.behaviors
 toxi.physics2d.constraints

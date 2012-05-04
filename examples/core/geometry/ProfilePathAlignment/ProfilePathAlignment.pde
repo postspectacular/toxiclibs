@@ -57,8 +57,7 @@ void setup() {
   }
   // use points to compute a spline and sample at regular interval
   Spline3D s=new Spline3D(points);
-  s.computeVertices(10);
-  path=s.getDecimatedVertices(4);
+  path=s.toLineStrip3D(10).getDecimatedVertices(4);
 }
 
 void draw() {
