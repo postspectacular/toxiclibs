@@ -1,6 +1,6 @@
 package toxi.test;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import processing.core.PApplet;
 import toxi.geom.Circle;
@@ -32,7 +32,7 @@ public class QuadtreeTest extends PApplet {
         noFill();
         gfx.ellipse(c);
         gfx.rect(r);
-        ArrayList<Vec2D> sel = tree.getPointsWithinCircle(c);
+        List<Vec2D> sel = tree.getPointsWithinCircle(c);
         noStroke();
         fill(0);
         for (Vec2D p : sel) {

@@ -118,8 +118,8 @@ public class DLA {
      * @return true, if particle attached.
      */
     protected boolean checkParticle(DLAParticle p) {
-        ArrayList<Vec3D> parts = octree.getPointsWithinSphere(p,
-                config.snapDistance);
+        List<Vec3D> parts = octree
+                .getPointsWithinSphere(p, config.snapDistance);
         float stickiness = config.getStickiness();
         if (parts != null) {
             float minDist = Integer.MAX_VALUE;

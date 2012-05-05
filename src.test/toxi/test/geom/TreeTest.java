@@ -1,6 +1,6 @@
 package toxi.test.geom;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 import toxi.geom.AABB;
@@ -22,8 +22,8 @@ public class TreeTest extends TestCase {
         assertNotSame(leaf1, leaf2);
         assertEquals(t.addPoint(new Vec3D(0, 100, 0)), true);
         assertEquals(t.addPoint(new Vec3D(101, 0, 0)), false);
-        ArrayList<Vec3D> points = t.getPointsWithinSphere(new Sphere(new Vec3D(
-                50, 0, 0), 50));
+        List<Vec3D> points = t.getPointsWithinSphere(new Sphere(new Vec3D(50,
+                0, 0), 50));
         assertEquals(points.size() == 2, true);
         points = t.getPointsWithinBox(new AABB(new Vec3D(50, 50, 50),
                 new Vec3D(50, 50, 50)));
@@ -39,7 +39,7 @@ public class TreeTest extends TestCase {
         PointQuadtree leaf1 = t.getLeafForPoint(new Vec2D(0, 0));
         PointQuadtree leaf2 = t.getLeafForPoint(new Vec2D(4, 0));
         assertNotSame(leaf1, leaf2);
-        ArrayList<Vec2D> points = t.getPointsWithinRect(leaf1);
+        List<Vec2D> points = t.getPointsWithinRect(leaf1);
         assertEquals(2, points.size());
     }
 
