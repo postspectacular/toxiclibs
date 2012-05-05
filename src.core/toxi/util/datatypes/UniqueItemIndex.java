@@ -10,10 +10,8 @@ import java.util.List;
  * bi-directional mapping between items and their associated ID values. Items
  * are added via the {@link #index(Object)} method and removed via
  * {@link #unindex(Object)}. The item's {@link #hashCode()} is used as unique
- * identifier, so you MUST ensure the item class satifies the contract of
+ * identifier, so you MUST ensure the item class satisfies the contract of
  * {@link #hashCode()} and {@link #equals(Object)}.
- * 
- * @author toxi
  */
 public class UniqueItemIndex<T> implements ItemIndex<T> {
 
@@ -29,7 +27,9 @@ public class UniqueItemIndex<T> implements ItemIndex<T> {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#clear()
      */
     public void clear() {
@@ -37,14 +37,18 @@ public class UniqueItemIndex<T> implements ItemIndex<T> {
         index.clear();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#forID(int)
      */
     public T forID(int id) {
         return index.get(id);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#getID(T)
      */
     public int getID(T item) {
@@ -52,14 +56,18 @@ public class UniqueItemIndex<T> implements ItemIndex<T> {
         return (id != null) ? id : -1;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#getItems()
      */
     public List<T> getItems() {
         return index;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#index(T)
      */
     public int index(T item) {
@@ -72,14 +80,18 @@ public class UniqueItemIndex<T> implements ItemIndex<T> {
         return id;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#isIndexed(T)
      */
     public boolean isIndexed(T item) {
         return uniqueItems.get(item) != null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#reindex(T, T)
      */
     public int reindex(T item, T newItem) {
@@ -98,14 +110,18 @@ public class UniqueItemIndex<T> implements ItemIndex<T> {
         return id;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#size()
      */
     public int size() {
         return index.size();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see toxi.util.ItemIndex#unindex(T)
      */
     public int unindex(T item) {

@@ -49,7 +49,7 @@ public interface Shape2D {
     /**
      * Computes the bounding circle of the shape.
      * 
-     * @return
+     * @return circle
      */
     Circle getBoundingCircle();
 
