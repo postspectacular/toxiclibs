@@ -39,7 +39,7 @@ import java.util.List;
  * For further reference also see the QuadtreeDemo in the /examples folder.
  * 
  */
-public class PointQuadtree extends Rect implements Shape2D {
+public class PointQuadtree extends Rect implements Shape2D, SpatialIndex<Vec2D> {
 
     /**
      * alternative tree recursion limit, number of world units when cells are
@@ -108,46 +108,9 @@ public class PointQuadtree extends Rect implements Shape2D {
     public boolean addAll(Collection<Vec2D> points) {
         boolean addedAll = true;
         for (Vec2D p : points) {
-            addedAll &= addPoint(p);
+            addedAll &= index(p);
         }
         return addedAll;
-    }
-
-    /**
-     * Adds a new point/particle to the tree structure. All points are stored
-     * within leaf nodes only. The tree implementation is using lazy
-     * instantiation for all intermediate tree levels.
-     * 
-     * @param p
-     * @return true, if point has been added successfully
-     */
-    public boolean addPoint(Vec2D p) {
-        // check if point is inside
-        if (containsPoint(p)) {
-            // only add points to leaves for now
-            if (halfSize <= minNodeSize) {
-                if (points == null) {
-                    points = new ArrayList<Vec2D>();
-                }
-                points.add(p);
-                return true;
-            } else {
-                Vec2D plocal = p.sub(offset);
-                if (children == null) {
-                    children = new PointQuadtree[4];
-                }
-                int quadrant = getQuadrantID(plocal);
-                if (children[quadrant] == null) {
-                    Vec2D off = offset.add(new Vec2D(
-                            (quadrant & 1) != 0 ? halfSize : 0,
-                            (quadrant & 2) != 0 ? halfSize : 0));
-                    children[quadrant] = new PointQuadtree(this, off, halfSize);
-                    numChildren++;
-                }
-                return children[quadrant].addPoint(p);
-            }
-        }
-        return false;
     }
 
     /**
@@ -165,14 +128,14 @@ public class PointQuadtree extends Rect implements Shape2D {
         }
     }
 
-    public boolean containsPoint(ReadonlyVec2D p) {
-        return p.isInRectangle(this);
-    }
-
-    public void empty() {
+    public void clear() {
         numChildren = 0;
         children = null;
         points = null;
+    }
+
+    public boolean containsPoint(ReadonlyVec2D p) {
+        return p.isInRectangle(this);
     }
 
     /**
@@ -205,9 +168,9 @@ public class PointQuadtree extends Rect implements Shape2D {
         // if not a leaf node...
         if (p.isInRectangle(this)) {
             if (numChildren > 0) {
-                int octant = getQuadrantID(p.sub(offset));
-                if (children[octant] != null) {
-                    return children[octant].getLeafForPoint(p);
+                int quadrant = getQuadrantID(p.sub(offset));
+                if (children[quadrant] != null) {
+                    return children[quadrant].getLeafForPoint(p);
                 }
             } else if (points != null) {
                 return this;
@@ -276,43 +239,6 @@ public class PointQuadtree extends Rect implements Shape2D {
     }
 
     /**
-     * Selects all stored points within the given circle
-     * 
-     * @param c
-     *            circle
-     * @return selected points
-     */
-    public List<Vec2D> getPointsWithinCircle(Circle c) {
-        ArrayList<Vec2D> results = null;
-        if (this.intersectsCircle(c, c.radius.x)) {
-            if (points != null) {
-                for (Vec2D q : points) {
-                    if (c.containsPoint(q)) {
-                        if (results == null) {
-                            results = new ArrayList<Vec2D>();
-                        }
-                        results.add(q);
-                    }
-                }
-            } else if (numChildren > 0) {
-                for (int i = 0; i < 4; i++) {
-                    if (children[i] != null) {
-                        List<Vec2D> points = children[i]
-                                .getPointsWithinCircle(c);
-                        if (points != null) {
-                            if (results == null) {
-                                results = new ArrayList<Vec2D>();
-                            }
-                            results.addAll(points);
-                        }
-                    }
-                }
-            }
-        }
-        return results;
-    }
-
-    /**
      * Selects all stored points within the given axis-aligned bounding box.
      * 
      * @param r
@@ -366,6 +292,86 @@ public class PointQuadtree extends Rect implements Shape2D {
         return size;
     }
 
+    /**
+     * Adds a new point/particle to the tree structure. All points are stored
+     * within leaf nodes only. The tree implementation is using lazy
+     * instantiation for all intermediate tree levels.
+     * 
+     * @param p
+     * @return true, if point has been added successfully
+     */
+    public boolean index(Vec2D p) {
+        // check if point is inside
+        if (containsPoint(p)) {
+            // only add points to leaves for now
+            if (halfSize <= minNodeSize) {
+                if (points == null) {
+                    points = new ArrayList<Vec2D>();
+                }
+                points.add(p);
+                return true;
+            } else {
+                Vec2D plocal = p.sub(offset);
+                if (children == null) {
+                    children = new PointQuadtree[4];
+                }
+                int quadrant = getQuadrantID(plocal);
+                if (children[quadrant] == null) {
+                    Vec2D off = offset.add(new Vec2D(
+                            (quadrant & 1) != 0 ? halfSize : 0,
+                            (quadrant & 2) != 0 ? halfSize : 0));
+                    children[quadrant] = new PointQuadtree(this, off, halfSize);
+                    numChildren++;
+                }
+                return children[quadrant].index(p);
+            }
+        }
+        return false;
+    }
+
+    public boolean isIndexed(Vec2D item) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    /**
+     * Selects all stored points within the given circle
+     * 
+     * @param c
+     *            circle
+     * @return selected points
+     */
+    public List<Vec2D> itemsWithinRadius(Vec2D p, float radius) {
+        ArrayList<Vec2D> results = null;
+        if (this.intersectsCircle(p, radius)) {
+            if (points != null) {
+                float rsq = radius * radius;
+                for (Vec2D q : points) {
+                    if (p.distanceToSquared(q) < rsq) {
+                        if (results == null) {
+                            results = new ArrayList<Vec2D>();
+                        }
+                        results.add(q);
+                    }
+                }
+            } else if (numChildren > 0) {
+                for (int i = 0; i < 4; i++) {
+                    if (children[i] != null) {
+                        List<Vec2D> points = children[i].itemsWithinRadius(p,
+                                radius);
+                        if (points != null) {
+                            if (results == null) {
+                                results = new ArrayList<Vec2D>();
+                            }
+                            results.addAll(points);
+                        }
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
     private void reduceBranch() {
         if (points != null && points.size() == 0) {
             points = null;
@@ -382,32 +388,25 @@ public class PointQuadtree extends Rect implements Shape2D {
         }
     }
 
-    /**
-     * Removes a point from the tree and (optionally) tries to release memory by
-     * reducing now empty sub-branches.
-     * 
-     * @param p
-     *            point to delete
-     * @return true, if the point was found & removed
-     */
-    public boolean remove(ReadonlyVec2D p) {
-        boolean found = false;
-        PointQuadtree leaf = getLeafForPoint(p);
-        if (leaf != null) {
-            if (leaf.points.remove(p)) {
-                found = true;
-                if (isAutoReducing && leaf.points.size() == 0) {
-                    leaf.reduceBranch();
-                }
-            }
-        }
-        return found;
-    }
-
-    public void removeAll(Collection<Vec2D> points) {
-        for (ReadonlyVec2D p : points) {
-            remove(p);
-        }
+    public boolean reindex(Vec2D p, Vec2D q) {
+        unindex(p);
+        return index(q);
+        // PointQuadtree leaf1 = getLeafForPoint(p);
+        // PointQuadtree leaf2 = getLeafForPoint(q);
+        // if (leaf2 != null) {
+        // if (leaf2 != leaf1) {
+        // if (leaf1 != null && leaf1.points.remove(p)) {
+        // if (isAutoReducing && leaf1.points.size() == 0) {
+        // leaf1.reduceBranch();
+        // }
+        // }
+        // leaf2.points.add(q);
+        // } else {
+        // leaf1.points.remove(p);
+        // leaf1.points.add(q);
+        // }
+        // }
+        // return index(q);
     }
 
     /**
@@ -428,7 +427,43 @@ public class PointQuadtree extends Rect implements Shape2D {
         isAutoReducing = state;
     }
 
+    public int size() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
     public String toString() {
         return "<quadtree> offset: " + super.toString() + " size: " + size;
     }
+
+    /**
+     * Removes a point from the tree and (optionally) tries to release memory by
+     * reducing now empty sub-branches.
+     * 
+     * @param p
+     *            point to delete
+     * @return true, if the point was found & removed
+     */
+    public boolean unindex(Vec2D p) {
+        boolean found = false;
+        PointQuadtree leaf = getLeafForPoint(p);
+        if (leaf != null) {
+            if (leaf.points.remove(p)) {
+                found = true;
+                if (isAutoReducing && leaf.points.size() == 0) {
+                    leaf.reduceBranch();
+                }
+            }
+        }
+        return found;
+    }
+
+    public boolean unindexAll(Collection<Vec2D> points) {
+        boolean removedAll = true;
+        for (Vec2D p : points) {
+            removedAll &= unindex(p);
+        }
+        return removedAll;
+    }
+
 }

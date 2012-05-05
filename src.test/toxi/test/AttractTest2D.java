@@ -3,9 +3,9 @@ package toxi.test;
 import java.util.Iterator;
 
 import processing.core.PApplet;
-import toxi.geom.CoordinateExtractor;
+import toxi.geom.PointQuadtree;
+import toxi.geom.QuadtreeVisitor;
 import toxi.geom.Rect;
-import toxi.geom.SpatialBins;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 import toxi.physics2d.VerletPhysics2D;
@@ -52,6 +52,16 @@ public class AttractTest2D extends PApplet {
             VerletParticle2D p = i.next();
             ellipse(p.x, p.y, 5, 5);
         }
+        PointQuadtree tree = (PointQuadtree) physics.getIndex();
+        noFill();
+        stroke(255, 50);
+        tree.applyVisitor(new QuadtreeVisitor() {
+
+            public void visitNode(PointQuadtree node) {
+                gfx.rect(node);
+            }
+        });
+        fill(255);
         text("fps: " + frameRate, 20, 20);
     }
 
@@ -77,13 +87,16 @@ public class AttractTest2D extends PApplet {
         physics.setDrag(0.1f);
         physics.setWorldBounds(new Rect(0, 0, width, height));
         physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.15f)));
-        physics.setIndex(new SpatialBins<Vec2D>(0, width, 80,
-                new CoordinateExtractor<Vec2D>() {
-
-                    public final float coordinate(Vec2D p) {
-                        return p.x;
-                    }
-                }));
+        PointQuadtree index = new PointQuadtree(new Vec2D(), width);
+        index.setMinNodeSize(32);
+        physics.setIndex(index);
+        // physics.setIndex(new SpatialBins<Vec2D>(0, width, 80,
+        // new CoordinateExtractor<Vec2D>() {
+        //
+        // public final float coordinate(Vec2D p) {
+        // return p.x;
+        // }
+        // }));
         textFont(createFont("SansSerif", 10));
     }
 }

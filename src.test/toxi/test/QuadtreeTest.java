@@ -32,11 +32,13 @@ public class QuadtreeTest extends PApplet {
         noFill();
         gfx.ellipse(c);
         gfx.rect(r);
-        List<Vec2D> sel = tree.getPointsWithinCircle(c);
+        List<Vec2D> sel = tree.itemsWithinRadius(c, c.getRadius());
         noStroke();
         fill(0);
-        for (Vec2D p : sel) {
-            gfx.circle(p, 5);
+        if (sel != null) {
+            for (Vec2D p : sel) {
+                gfx.circle(p, 5);
+            }
         }
         if (doSave) {
             saveFrame("QuadtreeTest-" + DateUtils.timeStamp() + ".png");
@@ -57,7 +59,7 @@ public class QuadtreeTest extends PApplet {
         gfx = new ToxiclibsSupport(this);
         tree = new PointQuadtree(new Vec2D(), 1024);
         for (int i = 0; i < 5000; i++) {
-            tree.addPoint(new Vec2D(random(1024), random(1024)));
+            tree.index(new Vec2D(random(1024), random(1024)));
         }
     }
 }

@@ -45,13 +45,14 @@ public class SpatialBins<T> implements SpatialIndex<T> {
      * 
      * @see toxi.geom.SpatialIndex#index(T)
      */
-    public int index(T p) {
+    public boolean index(T p) {
         int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins - 1);
         if (bins.get(id).add(p)) {
             numItems++;
+            return true;
         }
-        return id;
+        return false;
     }
 
     /*
@@ -84,7 +85,7 @@ public class SpatialBins<T> implements SpatialIndex<T> {
      * 
      * @see toxi.geom.SpatialIndex#reindex(float, T)
      */
-    public int reindex(T p, T q) {
+    public boolean reindex(T p, T q) {
         int id1 = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins);
         int id2 = (int) MathUtils.clip((extractor.coordinate(q) - minOffset)
@@ -96,9 +97,9 @@ public class SpatialBins<T> implements SpatialIndex<T> {
             if (bins.get(id2).add(q)) {
                 numItems++;
             }
-            return id2;
+            return true;
         }
-        return id1;
+        return false;
     }
 
     /*
@@ -115,10 +116,9 @@ public class SpatialBins<T> implements SpatialIndex<T> {
      * 
      * @see toxi.geom.SpatialIndex#unindex(T)
      */
-    public int unindex(T p) {
+    public boolean unindex(T p) {
         int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins);
-        bins.get(id).remove(p);
-        return id;
+        return bins.get(id).remove(p);
     }
 }
