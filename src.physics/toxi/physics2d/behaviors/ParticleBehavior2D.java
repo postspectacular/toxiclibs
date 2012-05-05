@@ -27,6 +27,7 @@
 
 package toxi.physics2d.behaviors;
 
+import toxi.geom.SpatialBins;
 import toxi.physics2d.VerletParticle2D;
 
 public interface ParticleBehavior2D {
@@ -40,5 +41,9 @@ public interface ParticleBehavior2D {
      */
     public void apply(VerletParticle2D p);
 
+    public void applyWithSpaceHash(SpatialBins<VerletParticle2D> spaceHash);
+
     public void configure(float timeStep);
+
+    public boolean supportsSpatialIndex();
 }

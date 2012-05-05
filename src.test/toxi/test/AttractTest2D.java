@@ -3,7 +3,9 @@ package toxi.test;
 import java.util.Iterator;
 
 import processing.core.PApplet;
+import toxi.geom.CoordinateExtractor;
 import toxi.geom.Rect;
+import toxi.geom.SpatialBins;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 import toxi.physics2d.VerletPhysics2D;
@@ -14,7 +16,9 @@ import toxi.processing.ToxiclibsSupport;
 public class AttractTest2D extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main(new String[] { "toxi.test.AttractTest2D" });
+        PApplet.main(new String[] {
+            "toxi.test.AttractTest2D"
+        });
     }
 
     ToxiclibsSupport gfx;
@@ -29,13 +33,10 @@ public class AttractTest2D extends PApplet {
 
     private void addParticle() {
         VerletParticle2D p = new VerletParticle2D(Vec2D.randomVector().scale(5)
-                .addSelf(width / 2, 0));
+                .addSelf(width * 0.5f, 0));
         physics.addParticle(p);
-        for (int j = 0; j < physics.particles.size(); j++) {
-            physics.particles.get(j).addBehavior(
-                    new AttractionBehavior2D(p, 10, -2f, 0.01f),
-                    physics.getTimeStep());
-        }
+        // add a negative attraction force field around the new particle
+        physics.addBehavior(new AttractionBehavior2D(p, 20, -1.2f, 0.01f));
     }
 
     public void draw() {
@@ -51,6 +52,7 @@ public class AttractTest2D extends PApplet {
             VerletParticle2D p = i.next();
             ellipse(p.x, p.y, 5, 5);
         }
+        text("fps: " + frameRate, 20, 20);
     }
 
     public void mouseDragged() {
@@ -59,7 +61,7 @@ public class AttractTest2D extends PApplet {
 
     public void mousePressed() {
         mousePos = new Vec2D(mouseX, mouseY);
-        mouseAttractor = new AttractionBehavior2D(mousePos, 500, 0.9f);
+        mouseAttractor = new AttractionBehavior2D(mousePos, 400, 1.2f);
         physics.addBehavior(mouseAttractor);
     }
 
@@ -75,5 +77,13 @@ public class AttractTest2D extends PApplet {
         physics.setDrag(0.1f);
         physics.setWorldBounds(new Rect(0, 0, width, height));
         physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.15f)));
+        physics.setIndex(new SpatialBins<VerletParticle2D>(0, width, 80,
+                new CoordinateExtractor<VerletParticle2D>() {
+
+                    public final float coordinate(VerletParticle2D p) {
+                        return p.x;
+                    }
+                }));
+        textFont(createFont("SansSerif", 10));
     }
 }

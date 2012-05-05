@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import toxi.geom.Rect;
+import toxi.geom.SpatialBins;
 import toxi.geom.Vec2D;
 import toxi.physics2d.behaviors.GravityBehavior2D;
 import toxi.physics2d.behaviors.ParticleBehavior2D;
@@ -91,6 +92,8 @@ public class VerletPhysics2D {
             1);
 
     protected float drag;
+
+    protected SpatialBins<VerletParticle2D> index;
 
     /**
      * Initializes a Verlet engine instance using the default values.
@@ -208,6 +211,13 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @return the index
+     */
+    public SpatialBins<VerletParticle2D> getIndex() {
+        return index;
+    }
+
+    /**
      * Attempts to find the spring element between the 2 particles supplied
      * 
      * @param a
@@ -297,6 +307,14 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @param index
+     *            the index to set
+     */
+    public void setIndex(SpatialBins<VerletParticle2D> index) {
+        this.index = index;
+    }
+
+    /**
      * @param timeStep
      *            the timeStep to set
      */
@@ -328,6 +346,7 @@ public class VerletPhysics2D {
         updateParticles();
         updateSprings();
         applyConstaints();
+        updateIndex();
         return this;
     }
 
@@ -336,13 +355,26 @@ public class VerletPhysics2D {
      */
     protected void updateParticles() {
         for (ParticleBehavior2D b : behaviors) {
-            for (VerletParticle2D p : particles) {
-                b.apply(p);
+            if (index != null && b.supportsSpatialIndex()) {
+                b.applyWithSpaceHash(index);
+            } else {
+                for (VerletParticle2D p : particles) {
+                    b.apply(p);
+                }
             }
         }
         for (VerletParticle2D p : particles) {
             p.scaleVelocity(drag);
             p.update();
+        }
+    }
+
+    private void updateIndex() {
+        if (index != null) {
+            index.clear();
+            for (VerletParticle2D p : particles) {
+                index.index(p);
+            }
         }
     }
 
