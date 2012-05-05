@@ -6,7 +6,7 @@ import java.util.List;
 
 import toxi.math.MathUtils;
 
-public class SpatialBins<T> {
+public class SpatialBins<T> implements SpatialIndex<T> {
 
     private final float invBinWidth;
     private final float minOffset;
@@ -28,6 +28,11 @@ public class SpatialBins<T> {
         this.invBinWidth = numBins / (max - min);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#clear()
+     */
     public void clear() {
         for (HashSet<T> bin : bins) {
             bin.clear();
@@ -35,6 +40,11 @@ public class SpatialBins<T> {
         numItems = 0;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#index(T)
+     */
     public int index(T p) {
         int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins - 1);
@@ -44,14 +54,19 @@ public class SpatialBins<T> {
         return id;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#isIndexed(T)
+     */
     public boolean isIndexed(T item) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    public List<T> itemsWithin(float pos, float radius) {
-        int id = (int) MathUtils.clip((pos - minOffset) * invBinWidth, 0,
-                numBins);
+    public List<T> itemsWithinRadius(T p, float radius) {
+        int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
+                * invBinWidth, 0, numBins);
         int tol = (int) Math.ceil(radius * invBinWidth);
         List<T> items = null;
         for (int i = Math.max(id - tol, 0), n = Math.min(
@@ -64,16 +79,21 @@ public class SpatialBins<T> {
         return items;
     }
 
-    public int reindex(float oldPos, T p) {
-        int id1 = (int) MathUtils.clip((oldPos - minOffset) * invBinWidth, 0,
-                numBins);
-        int id2 = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#reindex(float, T)
+     */
+    public int reindex(T p, T q) {
+        int id1 = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
+                * invBinWidth, 0, numBins);
+        int id2 = (int) MathUtils.clip((extractor.coordinate(q) - minOffset)
                 * invBinWidth, 0, numBins);
         if (id1 != id2) {
             if (bins.get(id1).remove(p)) {
                 numItems--;
             }
-            if (bins.get(id2).add(p)) {
+            if (bins.get(id2).add(q)) {
                 numItems++;
             }
             return id2;
@@ -81,10 +101,20 @@ public class SpatialBins<T> {
         return id1;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#size()
+     */
     public int size() {
         return numItems;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see toxi.geom.SpatialIndex#unindex(T)
+     */
     public int unindex(T p) {
         int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins);

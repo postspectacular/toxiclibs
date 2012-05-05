@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import toxi.geom.Rect;
-import toxi.geom.SpatialBins;
+import toxi.geom.SpatialIndex;
 import toxi.geom.Vec2D;
 import toxi.physics2d.behaviors.GravityBehavior2D;
 import toxi.physics2d.behaviors.ParticleBehavior2D;
@@ -93,7 +93,7 @@ public class VerletPhysics2D {
 
     protected float drag;
 
-    protected SpatialBins<VerletParticle2D> index;
+    protected SpatialIndex<Vec2D> index;
 
     /**
      * Initializes a Verlet engine instance using the default values.
@@ -204,17 +204,17 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @return the index
+     */
+    public SpatialIndex<Vec2D> getIndex() {
+        return index;
+    }
+
+    /**
      * @return the numIterations
      */
     public int getNumIterations() {
         return numIterations;
-    }
-
-    /**
-     * @return the index
-     */
-    public SpatialBins<VerletParticle2D> getIndex() {
-        return index;
     }
 
     /**
@@ -299,19 +299,19 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @param index
+     *            the index to set
+     */
+    public void setIndex(SpatialIndex<Vec2D> index) {
+        this.index = index;
+    }
+
+    /**
      * @param numIterations
      *            the numIterations to set
      */
     public void setNumIterations(int numIterations) {
         this.numIterations = numIterations;
-    }
-
-    /**
-     * @param index
-     *            the index to set
-     */
-    public void setIndex(SpatialBins<VerletParticle2D> index) {
-        this.index = index;
     }
 
     /**
@@ -350,13 +350,22 @@ public class VerletPhysics2D {
         return this;
     }
 
+    private void updateIndex() {
+        if (index != null) {
+            index.clear();
+            for (VerletParticle2D p : particles) {
+                index.index(p);
+            }
+        }
+    }
+
     /**
      * Updates all particle positions
      */
     protected void updateParticles() {
         for (ParticleBehavior2D b : behaviors) {
             if (index != null && b.supportsSpatialIndex()) {
-                b.applyWithSpaceHash(index);
+                b.applyWithIndex(index);
             } else {
                 for (VerletParticle2D p : particles) {
                     b.apply(p);
@@ -366,15 +375,6 @@ public class VerletPhysics2D {
         for (VerletParticle2D p : particles) {
             p.scaleVelocity(drag);
             p.update();
-        }
-    }
-
-    private void updateIndex() {
-        if (index != null) {
-            index.clear();
-            for (VerletParticle2D p : particles) {
-                index.index(p);
-            }
         }
     }
 

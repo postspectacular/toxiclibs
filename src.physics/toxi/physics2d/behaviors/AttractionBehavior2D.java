@@ -29,7 +29,7 @@ package toxi.physics2d.behaviors;
 
 import java.util.List;
 
-import toxi.geom.SpatialBins;
+import toxi.geom.SpatialIndex;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
@@ -65,14 +65,14 @@ public class AttractionBehavior2D implements ParticleBehavior2D {
         }
     }
 
-    public void applyWithSpaceHash(SpatialBins<VerletParticle2D> spaceHash) {
-        List<VerletParticle2D> selection = spaceHash.itemsWithin(attractor.x,
-                radius);
+    public void applyWithIndex(SpatialIndex<Vec2D> spaceHash) {
+        List<Vec2D> selection = spaceHash.itemsWithinRadius(attractor, radius);
+        final Vec2D temp = new Vec2D();
         if (selection != null) {
-            for (VerletParticle2D p : selection) {
-                final float prev = p.x;
-                apply(p);
-                spaceHash.reindex(prev, p);
+            for (Vec2D p : selection) {
+                temp.set(p);
+                apply((VerletParticle2D) p);
+                spaceHash.reindex(temp, p);
             }
         }
     }

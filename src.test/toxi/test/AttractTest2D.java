@@ -77,10 +77,10 @@ public class AttractTest2D extends PApplet {
         physics.setDrag(0.1f);
         physics.setWorldBounds(new Rect(0, 0, width, height));
         physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.15f)));
-        physics.setIndex(new SpatialBins<VerletParticle2D>(0, width, 80,
-                new CoordinateExtractor<VerletParticle2D>() {
+        physics.setIndex(new SpatialBins<Vec2D>(0, width, 80,
+                new CoordinateExtractor<Vec2D>() {
 
-                    public final float coordinate(VerletParticle2D p) {
+                    public final float coordinate(Vec2D p) {
                         return p.x;
                     }
                 }));

@@ -27,7 +27,7 @@
 
 package toxi.physics2d.behaviors;
 
-import toxi.geom.SpatialBins;
+import toxi.geom.SpatialIndex;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
@@ -45,7 +45,7 @@ public class ConstantForceBehavior2D implements ParticleBehavior2D {
         p.addForce(scaledForce);
     }
 
-    public void applyWithSpaceHash(SpatialBins<VerletParticle2D> spaceHash) {
+    public void applyWithIndex(SpatialIndex<Vec2D> spaceHash) {
         throw new UnsupportedOperationException("not implemented");
     }
 
