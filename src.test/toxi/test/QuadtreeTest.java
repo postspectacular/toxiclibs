@@ -26,13 +26,15 @@ public class QuadtreeTest extends PApplet {
 
     public void draw() {
         background(255);
-        Circle c = new Circle(new Vec2D(mouseX, mouseY), 40);
+        Circle c = new Circle(new Vec2D(mouseX, mouseY), 100);
         Rect r = new Rect(200, 200, 300, 100);
         stroke(r.intersectsCircle(c, c.getRadius()) ? 0xffff0000 : 0xff000000);
         noFill();
         gfx.ellipse(c);
         gfx.rect(r);
-        List<Vec2D> sel = tree.itemsWithinRadius(c, c.getRadius());
+        List<Vec2D> sel = tree.itemsWithinRadius(c, c.getRadius(), null);
+        // List<Vec2D> sel = tree.itemsWithinRect(new Rect(mouseX, mouseY, 200,
+        // 100), null);
         noStroke();
         fill(0);
         if (sel != null) {
@@ -57,9 +59,9 @@ public class QuadtreeTest extends PApplet {
     public void setup() {
         size(1280, 720, OPENGL);
         gfx = new ToxiclibsSupport(this);
-        tree = new PointQuadtree(new Vec2D(), 1024);
+        tree = new PointQuadtree(null, 0, 0, width, height);
         for (int i = 0; i < 5000; i++) {
-            tree.index(new Vec2D(random(1024), random(1024)));
+            tree.index(new Vec2D(random(width), random(height)));
         }
     }
 }

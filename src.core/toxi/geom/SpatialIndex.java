@@ -10,7 +10,7 @@ public interface SpatialIndex<T> {
 
     public boolean isIndexed(T item);
 
-    public List<T> itemsWithinRadius(T p, float radius);
+    public List<T> itemsWithinRadius(T p, float radius, List<T> results);
 
     public boolean reindex(T p, T q);
 

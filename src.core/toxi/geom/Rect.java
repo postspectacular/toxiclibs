@@ -27,6 +27,7 @@
 
 package toxi.geom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -256,6 +257,14 @@ public class Rect implements Shape2D {
                 throw new IllegalArgumentException("edge ID needs to be 0...3");
         }
         return edge;
+    }
+
+    public List<Line2D> getEdges() {
+        List<Line2D> edges = new ArrayList<Line2D>();
+        for (int i = 0; i < 4; i++) {
+            edges.add(getEdge(i));
+        }
+        return edges;
     }
 
     public float getLeft() {

@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import toxi.geom.AABB;
 import toxi.geom.PointOctree;
 import toxi.geom.PointQuadtree;
+import toxi.geom.Rect;
 import toxi.geom.Sphere;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -31,15 +32,14 @@ public class TreeTest extends TestCase {
     }
 
     public void testQuadtree() {
-        PointQuadtree t = new PointQuadtree(new Vec2D(), 100);
-        t.setMinNodeSize(2);
-        assertEquals(t.addPoint(new Vec2D(0, 0)), true);
-        assertEquals(t.addPoint(new Vec2D(1, 1)), true);
-        assertEquals(t.addPoint(new Vec2D(4, 0)), true);
-        PointQuadtree leaf1 = t.getLeafForPoint(new Vec2D(0, 0));
-        PointQuadtree leaf2 = t.getLeafForPoint(new Vec2D(4, 0));
+        PointQuadtree t = new PointQuadtree(null, 0, 0, 100, 100);
+        assertEquals(t.index(new Vec2D(0, 0)), true);
+        assertEquals(t.index(new Vec2D(1, 1)), true);
+        assertEquals(t.index(new Vec2D(4, 0)), true);
+        PointQuadtree leaf1 = t.findNode(new Vec2D(0, 0));
+        PointQuadtree leaf2 = t.findNode(new Vec2D(4, 0));
         assertNotSame(leaf1, leaf2);
-        List<Vec2D> points = t.getPointsWithinRect(leaf1);
+        List<Vec2D> points = t.itemsWithinRect(new Rect(0, 0, 2, 2), null);
         assertEquals(2, points.size());
     }
 

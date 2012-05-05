@@ -66,7 +66,8 @@ public class AttractionBehavior2D implements ParticleBehavior2D {
     }
 
     public void applyWithIndex(SpatialIndex<Vec2D> spaceHash) {
-        List<Vec2D> selection = spaceHash.itemsWithinRadius(attractor, radius);
+        List<Vec2D> selection = spaceHash.itemsWithinRadius(attractor, radius,
+                null);
         final Vec2D temp = new Vec2D();
         if (selection != null) {
             for (Vec2D p : selection) {

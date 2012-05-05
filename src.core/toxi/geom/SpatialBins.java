@@ -65,19 +65,18 @@ public class SpatialBins<T> implements SpatialIndex<T> {
         return false;
     }
 
-    public List<T> itemsWithinRadius(T p, float radius) {
+    public List<T> itemsWithinRadius(T p, float radius, List<T> results) {
         int id = (int) MathUtils.clip((extractor.coordinate(p) - minOffset)
                 * invBinWidth, 0, numBins);
         int tol = (int) Math.ceil(radius * invBinWidth);
-        List<T> items = null;
         for (int i = Math.max(id - tol, 0), n = Math.min(
                 Math.min(id + tol, numBins), numBins - 1); i <= n; i++) {
-            if (items == null) {
-                items = new ArrayList<T>();
+            if (results == null) {
+                results = new ArrayList<T>();
             }
-            items.addAll(bins.get(i));
+            results.addAll(bins.get(i));
         }
-        return items;
+        return results;
     }
 
     /*

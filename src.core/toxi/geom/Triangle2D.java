@@ -196,6 +196,10 @@ public class Triangle2D implements Shape2D {
         return result;
     }
 
+    public List<Line2D> getEdges() {
+        return toPolygon2D().getEdges();
+    }
+
     /**
      * Creates a random point within the triangle using barycentric coordinates.
      * 

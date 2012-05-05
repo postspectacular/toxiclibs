@@ -1,10 +1,7 @@
 package toxi.test;
 
-import java.util.Iterator;
-
 import processing.core.PApplet;
 import toxi.geom.PointQuadtree;
-import toxi.geom.QuadtreeVisitor;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
@@ -23,7 +20,7 @@ public class AttractTest2D extends PApplet {
 
     ToxiclibsSupport gfx;
 
-    int NUM_PARTICLES = 1000;
+    int NUM_PARTICLES = 2000;
 
     VerletPhysics2D physics;
 
@@ -36,7 +33,7 @@ public class AttractTest2D extends PApplet {
                 .addSelf(width * 0.5f, 0));
         physics.addParticle(p);
         // add a negative attraction force field around the new particle
-        physics.addBehavior(new AttractionBehavior2D(p, 20, -1.2f, 0.01f));
+        physics.addBehavior(new AttractionBehavior2D(p, 30, -1.2f, 0.01f));
     }
 
     public void draw() {
@@ -47,22 +44,21 @@ public class AttractTest2D extends PApplet {
             addParticle();
         }
         physics.update();
-        for (Iterator<VerletParticle2D> i = physics.particles.iterator(); i
-                .hasNext();) {
-            VerletParticle2D p = i.next();
-            ellipse(p.x, p.y, 5, 5);
+        for (VerletParticle2D p : physics.particles) {
+            rect(p.x, p.y, 5, 5);
         }
-        PointQuadtree tree = (PointQuadtree) physics.getIndex();
-        noFill();
-        stroke(255, 50);
-        tree.applyVisitor(new QuadtreeVisitor() {
-
-            public void visitNode(PointQuadtree node) {
-                gfx.rect(node);
-            }
-        });
+        // Quadtree tree = (Quadtree) physics.getIndex();
+        // noFill();
+        // stroke(255, 50);
+        // tree.prewalk(new QuadtreeVisitor() {
+        //
+        // public void visitNode(Quadtree node) {
+        // gfx.rect(node);
+        // }
+        // });
         fill(255);
         text("fps: " + frameRate, 20, 20);
+        text("count: " + physics.particles.size(), 20, 40);
     }
 
     public void mouseDragged() {
@@ -87,9 +83,7 @@ public class AttractTest2D extends PApplet {
         physics.setDrag(0.1f);
         physics.setWorldBounds(new Rect(0, 0, width, height));
         physics.addBehavior(new GravityBehavior2D(new Vec2D(0, 0.15f)));
-        PointQuadtree index = new PointQuadtree(new Vec2D(), width);
-        index.setMinNodeSize(32);
-        physics.setIndex(index);
+        physics.setIndex(new PointQuadtree(null, 0, 0, width + 1, height + 1));
         // physics.setIndex(new SpatialBins<Vec2D>(0, width, 80,
         // new CoordinateExtractor<Vec2D>() {
         //
