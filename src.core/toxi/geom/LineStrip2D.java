@@ -91,6 +91,18 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return Rect.getBoundingRect(vertices);
     }
 
+    public Vec2D getCentroid() {
+        int num = vertices.size();
+        if (num > 0) {
+            Vec2D centroid = new Vec2D();
+            for (Vec2D v : vertices) {
+                centroid.addSelf(v);
+            }
+            return centroid.scaleSelf(1f / num);
+        }
+        return null;
+    }
+
     /**
      * Computes a list of points along the spline which are uniformly separated
      * by the given step distance.
@@ -199,11 +211,15 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return vertices.iterator();
     }
 
-    public LineStrip2D scale(float scale) {
+    public LineStrip2D rotate(float theta) {
         for (Vec2D v : vertices) {
-            v.scaleSelf(scale);
+            v.rotate(theta);
         }
         return this;
+    }
+
+    public LineStrip2D scale(float scale) {
+        return scale(scale, scale);
     }
 
     public LineStrip2D scale(float x, float y) {
@@ -213,8 +229,24 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return this;
     }
 
-    public LineStrip2D scale(Vec2D scale) {
-        return scale(scale.x, scale.y);
+    public LineStrip2D scale(ReadonlyVec2D scale) {
+        return scale(scale.x(), scale.y());
+    }
+
+    public LineStrip2D scaleSize(float scale) {
+        return scaleSize(scale, scale);
+    }
+
+    public LineStrip2D scaleSize(float x, float y) {
+        Vec2D centroid = getCentroid();
+        for (Vec2D v : vertices) {
+            v.subSelf(centroid).scaleSelf(x, y).addSelf(centroid);
+        }
+        return this;
+    }
+
+    public LineStrip2D scaleSize(ReadonlyVec2D scale) {
+        return scaleSize(scale.x(), scale.y());
     }
 
     /**
@@ -223,5 +255,16 @@ public class LineStrip2D implements Iterable<Vec2D> {
      */
     public void setVertices(List<Vec2D> vertices) {
         this.vertices = vertices;
+    }
+
+    public LineStrip2D translate(float x, float y) {
+        for (Vec2D v : vertices) {
+            v.addSelf(x, y);
+        }
+        return this;
+    }
+
+    public LineStrip2D translate(ReadonlyVec2D offset) {
+        return translate(offset.x(), offset.y());
     }
 }
