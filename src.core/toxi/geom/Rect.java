@@ -274,7 +274,9 @@ public class Rect implements Shape2D {
     /**
      * Computes the normalized position of the given point within this
      * rectangle, so that a point at the top-left corner becomes {0,0} and
-     * bottom-right {1,1}.
+     * bottom-right {1,1}. The original point is not modified. Together with
+     * {@link #getUnmappedPointInRect(Vec2D)} this function can be used to map a
+     * point from one rectangle to another.
      * 
      * @param p
      *            point to be mapped
@@ -308,6 +310,22 @@ public class Rect implements Shape2D {
 
     public Vec2D getTopRight() {
         return new Vec2D(x + width, y);
+    }
+
+    /**
+     * Inverse operation of {@link #getMappedPointInRect(Vec2D)}. Given a
+     * normalized point it computes the position within this rectangle, so that
+     * a point at {0,0} becomes the top-left corner and {1,1} bottom-right. The
+     * original point is not modified. Together with
+     * {@link #getUnmappedPointInRect(Vec2D)} this function can be used to map a
+     * point from one rectangle to another.
+     * 
+     * @param p
+     *            point to be mapped
+     * @return mapped Vec2D
+     */
+    public Vec2D getUnmappedPointInRect(Vec2D p) {
+        return new Vec2D(p.x * width + x, p.y * height + y);
     }
 
     public Rect growToContainPoint(ReadonlyVec2D p) {
