@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import toxi.geom.Line2D.LineIntersection;
 import toxi.geom.Line2D.LineIntersection.Type;
+import toxi.math.MathUtils;
 
 public class LineStrip2D implements Iterable<Vec2D> {
 
@@ -140,7 +141,7 @@ public class LineStrip2D implements Iterable<Vec2D> {
                 return null;
             }
         }
-        float arcLen = getEstimatedArcLength();
+        float arcLen = getLength();
         if (arcLen > 0) {
             double delta = step / arcLen;
             int currIdx = 0;
@@ -162,7 +163,7 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return uniform;
     }
 
-    public float getEstimatedArcLength() {
+    public float getLength() {
         if (arcLenIndex == null
                 || (arcLenIndex != null && arcLenIndex.length != vertices
                         .size())) {
@@ -176,6 +177,39 @@ public class LineStrip2D implements Iterable<Vec2D> {
             arcLenIndex[i] = arcLen;
         }
         return arcLen;
+    }
+
+    /**
+     * Computes point at position t, where t is the normalized position along
+     * the strip. If t&lt;0 then the first vertex of the strip is returned. If
+     * t&gt;=1.0 the last vertex is returned. If the strip contains less than 2
+     * vertices, this method returns null.
+     * 
+     * @param t
+     * @return
+     */
+    public Vec2D getPointAt(float t) {
+        int num = vertices.size();
+        if (num > 1) {
+            if (t <= 0.0) {
+                return vertices.get(0);
+            } else if (t >= 1.0) {
+                return vertices.get(num - 1);
+            }
+            float totalLength = this.getLength();
+            double offp = 0, offq = 0;
+            for (int i = 1; i < num; i++) {
+                Vec2D p = vertices.get(i - 1);
+                Vec2D q = vertices.get(i);
+                offq += q.distanceTo(p) / totalLength;
+                if (offp <= t && offq >= t) {
+                    return p.interpolateTo(q, (float) MathUtils.mapInterval(t,
+                            offp, offq, 0.0, 1.0));
+                }
+                offp = offq;
+            }
+        }
+        return null;
     }
 
     public List<Line2D> getSegments() {
