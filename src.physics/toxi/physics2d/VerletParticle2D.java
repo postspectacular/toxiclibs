@@ -28,6 +28,7 @@
 package toxi.physics2d;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import toxi.geom.ReadonlyVec2D;
@@ -135,6 +136,19 @@ public class VerletParticle2D extends Vec2D {
         return this;
     }
 
+    public VerletParticle2D addBehaviors(
+            Collection<ParticleBehavior2D> behaviors) {
+        return addBehaviors(behaviors, 1);
+    }
+
+    public VerletParticle2D addBehaviors(
+            Collection<ParticleBehavior2D> behaviors, float timeStemp) {
+        for (ParticleBehavior2D b : behaviors) {
+            addBehavior(b, timeStemp);
+        }
+        return this;
+    }
+
     /**
      * Adds the given constraint implementation to the list of constraints
      * applied to this particle at each time step.
@@ -148,6 +162,14 @@ public class VerletParticle2D extends Vec2D {
             constraints = new ArrayList<ParticleConstraint2D>(1);
         }
         constraints.add(c);
+        return this;
+    }
+
+    public VerletParticle2D addConstraints(
+            Collection<ParticleConstraint2D> constraints) {
+        for (ParticleConstraint2D c : constraints) {
+            addConstraint(c);
+        }
         return this;
     }
 
@@ -253,8 +275,12 @@ public class VerletParticle2D extends Vec2D {
         return this;
     }
 
-    public boolean removeBehavior(ParticleBehavior2D c) {
-        return behaviors.remove(c);
+    public boolean removeBehavior(ParticleBehavior2D b) {
+        return behaviors.remove(b);
+    }
+
+    public boolean removeBehaviors(Collection<ParticleBehavior2D> behaviors) {
+        return this.behaviors.removeAll(behaviors);
     }
 
     /**
@@ -267,6 +293,11 @@ public class VerletParticle2D extends Vec2D {
      */
     public boolean removeConstraint(ParticleConstraint2D c) {
         return constraints.remove(c);
+    }
+
+    public boolean removeConstraints(
+            Collection<ParticleConstraint2D> constraints) {
+        return this.constraints.removeAll(constraints);
     }
 
     public VerletParticle2D scaleVelocity(float scl) {
