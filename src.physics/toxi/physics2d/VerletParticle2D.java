@@ -216,6 +216,10 @@ public class VerletParticle2D extends Vec2D {
         return this;
     }
 
+    public Vec2D getForce() {
+        return force;
+    }
+
     /**
      * @return the inverse weight (1/weight)
      */
