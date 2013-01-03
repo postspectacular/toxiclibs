@@ -163,6 +163,21 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return uniform;
     }
 
+    /**
+     * Returns a list of {@link Line2D} segments representing the segments
+     * between the vertices of this strip.
+     * 
+     * @return list of lines
+     */
+    public List<Line2D> getEdges() {
+        int num = vertices.size();
+        List<Line2D> edges = new ArrayList<Line2D>(num - 1);
+        for (int i = 1; i < num; i++) {
+            edges.add(new Line2D(vertices.get(i - 1), vertices.get(i)));
+        }
+        return edges;
+    }
+
     public float getLength() {
         if (arcLenIndex == null
                 || (arcLenIndex != null && arcLenIndex.length != vertices
