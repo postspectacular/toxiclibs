@@ -69,7 +69,7 @@ public class DLA {
         octreeGuides = createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size),
                 size);
         minBounds = Vec3D.MAX_VALUE.copy();
-        maxBounds = Vec3D.MIN_VALUE.copy();
+        maxBounds = Vec3D.NEG_MAX_VALUE.copy();
     }
 
     public DLA(float size, DLAConfiguration config, DLAGuideLines guides) {

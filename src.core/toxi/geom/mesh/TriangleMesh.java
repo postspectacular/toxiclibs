@@ -302,7 +302,7 @@ public class TriangleMesh implements Mesh3D, Intersector3D {
 
     public AABB getBoundingBox() {
         final Vec3D minBounds = Vec3D.MAX_VALUE.copy();
-        final Vec3D maxBounds = Vec3D.MIN_VALUE.copy();
+        final Vec3D maxBounds = Vec3D.NEG_MAX_VALUE.copy();
         for (Vertex v : vertices.values()) {
             minBounds.minSelf(v);
             maxBounds.maxSelf(v);

@@ -84,6 +84,9 @@ public class Vec3D implements Comparable<ReadonlyVec3D>, ReadonlyVec3D {
     public static final ReadonlyVec3D MAX_VALUE = new Vec3D(Float.MAX_VALUE,
             Float.MAX_VALUE, Float.MAX_VALUE);
 
+    public static final ReadonlyVec3D NEG_MAX_VALUE = new Vec3D(
+            -Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE);
+
     /**
      * Creates a new vector from the given angle in the XY plane. The Z
      * component of the vector will be zero.

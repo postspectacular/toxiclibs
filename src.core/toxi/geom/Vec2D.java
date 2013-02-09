@@ -84,6 +84,9 @@ public class Vec2D implements Comparable<ReadonlyVec2D>, ReadonlyVec2D {
     public static final ReadonlyVec2D MAX_VALUE = new Vec2D(Float.MAX_VALUE,
             Float.MAX_VALUE);
 
+    public static final ReadonlyVec2D NEG_MAX_VALUE = new Vec2D(
+            -Float.MAX_VALUE, -Float.MAX_VALUE);
+
     /**
      * Creates a new vector from the given angle in the XY plane.
      * 
