@@ -54,6 +54,7 @@ import toxi.geom.mesh.*;
 import toxi.math.*;
 import toxi.volume.*;
 
+import java.util.Iterator;
 import controlP5.*;
 
 int NUM_PARTICLES = 200;
@@ -169,4 +170,3 @@ void toggleBoundary() {
   useBoundary=!useBoundary;
   initPhysics();
 }
-

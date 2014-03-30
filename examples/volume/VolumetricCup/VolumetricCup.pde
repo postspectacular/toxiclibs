@@ -72,7 +72,7 @@ ToxiclibsSupport gfx;
 
 void setup() {
   size(1024,768,OPENGL);
-  hint(ENABLE_OPENGL_4X_SMOOTH);
+  
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
   volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);
@@ -130,4 +130,3 @@ void keyPressed() {
   if (key=='0') density=0.5;
   if (key>='a' && key<='z') ISO_THRESHOLD=(key-'a')*0.019+0.01;
 }
-

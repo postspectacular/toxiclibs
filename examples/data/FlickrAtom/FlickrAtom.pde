@@ -33,6 +33,7 @@
  */
 
 import toxi.data.feeds.*;
+import java.util.List;
 
 String atomURL="http://api.flickr.com/services/feeds/photos_public.gne?id=73281046@N00&lang=en-us&format=atom";
 

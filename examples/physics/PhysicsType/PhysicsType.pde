@@ -4,8 +4,9 @@ import processing.opengl.*;
 import toxi.physics2d.constraints.*;
 import toxi.physics2d.behaviors.*;
 import toxi.physics2d.*;
-
 import toxi.geom.*;
+
+import java.util.List;
 
 VerletPhysics2D physics;
 VerletParticle2D selectedParticle;
@@ -71,4 +72,3 @@ void initPhysics() {
       }
   }
 }
-

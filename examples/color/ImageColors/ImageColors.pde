@@ -25,6 +25,7 @@
  
 import toxi.color.*;
 import toxi.math.*;
+import java.util.Iterator;
 
 PImage img, workImg;
 

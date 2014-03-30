@@ -37,33 +37,31 @@ TypedProperties config;
 
 float offset;
 
-public void init() {
-  super.init();
+void setup() {
+  
   config=new TypedProperties();
   config.load(sketchPath("app.properties"));
-}
 
-void setup() {
-  size(config.getInt("app.width",1280),config.getInt("app.height",720));
+  size(config.getInt("app.width", 1280), config.getInt("app.height", 720));
+
   textFont(createFont(
-    config.getProperty("font.name","SansSerif"),
-    config.getInt("font.size",72)
-  ));
+  config.getProperty("font.name", "SansSerif"), 
+  config.getInt("font.size", 72)
+    ));
 }
 
 void draw() {
-  background(TColor.newHex(config.getProperty("color.bg","ffffff")).toARGB());
-  fill(TColor.newHex(config.getProperty("color.text","ff0000")).toARGB());
-  String msg=config.getProperty("msg.text","hello world");
+  background(TColor.newHex(config.getProperty("color.bg", "ffffff")).toARGB());
+  fill(TColor.newHex(config.getProperty("color.text", "ff0000")).toARGB());
+  String msg=config.getProperty("msg.text", "hello world");
   float pos=-offset;
   float w=textWidth(msg)+100;
-  while(pos<width) {
-    text(msg,pos,height/2);
+  while (pos<width) {
+    text(msg, pos, height/2);
     pos+=w;
   }
-  offset+=config.getFloat("msg.speed",2);
+  offset+=config.getFloat("msg.speed", 2);
   if (offset>w) {
     offset-=w;
   }
 }
-

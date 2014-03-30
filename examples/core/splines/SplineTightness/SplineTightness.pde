@@ -57,7 +57,7 @@ void draw() {
 
   // sample the curve at a higher resolution
   // so that we get extra points between each original pair of points
-  LineStrip2D vertices=spline.toLineStrip2D(32);
+  LineStrip2D vertices = spline.toLineStrip2D(32);
 
   // draw the smoothened curve
   beginShape();
@@ -66,4 +66,3 @@ void draw() {
   }
   endShape();
 }
-

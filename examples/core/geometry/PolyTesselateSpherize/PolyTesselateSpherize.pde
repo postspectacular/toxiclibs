@@ -38,6 +38,7 @@ import toxi.geom.mesh2d.*;
 import toxi.geom.mesh.*;
 import toxi.processing.*;
 import toxi.math.*;
+import java.util.List;
 
 import processing.opengl.*;
 
@@ -204,4 +205,3 @@ TriangleMesh buildSurfaceMesh(List<Triangle2D> tris, float radius) {
   mesh.computeVertexNormals();
   return mesh;
 }
-

@@ -32,6 +32,9 @@ import toxi.color.*;
 import toxi.color.theory.*;
 import toxi.util.datatypes.*;
 
+import java.util.Iterator;
+import java.util.Collection;
+
 float   SWATCH_HEIGHT = 24;
 float   SWATCH_WIDTH = 5;
 int     SWATCH_GAP = 1;
@@ -129,5 +132,3 @@ void swatches(ColorList sorted, int x, int y) {
     x += SWATCH_WIDTH + SWATCH_GAP;
   }
 }
-
-

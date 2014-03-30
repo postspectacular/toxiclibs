@@ -32,6 +32,8 @@
 
 import toxi.geom.*;
 import toxi.processing.*;
+import java.util.List;
+
 
 List<Vec2D> points=new ArrayList<Vec2D>();
 
@@ -99,4 +101,3 @@ void keyPressed() {
   else if (key=='s') showSpline=!showSpline;
   else points.clear();
 }
-

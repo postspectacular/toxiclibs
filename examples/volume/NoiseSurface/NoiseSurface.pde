@@ -57,7 +57,6 @@ ToxiclibsSupport gfx;
 
 void setup() {
   size(1024,768,OPENGL);
-  hint(ENABLE_OPENGL_4X_SMOOTH);
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
   VolumetricSpace volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);

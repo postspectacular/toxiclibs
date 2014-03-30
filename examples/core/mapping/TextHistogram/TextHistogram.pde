@@ -47,6 +47,10 @@ import java.awt.FileDialog;
 import toxi.util.*;
 import toxi.math.*;
 
+import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+
 List<HistogramWord> uniqueWords;
 
 ZoomLensInterpolation zoomLens = new ZoomLensInterpolation();
@@ -75,7 +79,7 @@ void draw() {
   noStroke();
   textAlign(RIGHT);
   fill(0);
-  int space=10;
+  
   int maxWords=min(uniqueWords.size(),wordLimit);
   for(int i=0; i<maxWords; i++) {
     float relativePos=(float)i/maxWords;
@@ -172,5 +176,5 @@ void keyPressed() {
 // DONT REPEAT YOURSELF!
 void setSortFunction(HistogramSorter s) {
   sortFunction=s;
-  Collections.sort(uniqueWords,sortFunction);
+  Collections.sort(uniqueWords, sortFunction);
 }

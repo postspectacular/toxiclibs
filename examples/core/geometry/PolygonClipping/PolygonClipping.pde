@@ -31,6 +31,8 @@
 import toxi.geom.*;
 import toxi.math.waves.*;
 import toxi.processing.*;
+import java.util.List;
+import java.util.Iterator;
 
 int COLS = 8;
 int ROWS = 6;
@@ -112,4 +114,3 @@ class ClipCell {
     gfx.polygon2D(poly);
   }
 }
-

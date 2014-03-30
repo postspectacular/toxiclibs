@@ -33,6 +33,8 @@
 
 import toxi.util.events.*;
 
+import java.util.Date;
+
 DelayManager manager = new DelayManager();
 
 void setup() {
@@ -104,4 +106,3 @@ class DelayThread extends Thread {
     }
   }
 }
-

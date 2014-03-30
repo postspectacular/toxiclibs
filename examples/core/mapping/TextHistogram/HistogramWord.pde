@@ -19,7 +19,7 @@ abstract class HistogramSorter implements Comparator<HistogramWord> {
   abstract int getMetric(HistogramWord w);
 }
 
-class FrequencyComparator extends HistogramSorter {
+class FrequencyComparator extends HistogramSorter{
   
   int compare(HistogramWord a, HistogramWord b) {
    return b.count-a.count;
@@ -30,7 +30,7 @@ class FrequencyComparator extends HistogramSorter {
   }
 }
 
-class WordLengthComparator extends HistogramSorter {
+class WordLengthComparator extends HistogramSorter{
   
   int compare(HistogramWord a, HistogramWord b) {
    return b.word.length()-a.word.length();
@@ -40,4 +40,3 @@ class WordLengthComparator extends HistogramSorter {
     return w.word.length();
   }
 }
-

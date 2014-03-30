@@ -35,6 +35,9 @@
 import processing.opengl.*;
 import toxi.geom.*;
 
+import java.util.List;
+import java.util.Iterator;
+
 SplineBlob blob;
 SpineSplineBlob spineBlob;
 
@@ -64,4 +67,3 @@ void keyPressed() {
   if (key>='1' && key<='3') drawMode=key-'0';
   else newBlob=true;
 }
-

@@ -48,6 +48,8 @@ import toxi.geom.mesh.*;
 import toxi.physics3d.*;
 import toxi.physics3d.behaviors.*;
 
+import java.util.List;
+
 VerletPhysics3D physics;
 
 int DIM=40;

@@ -41,6 +41,8 @@ import toxi.physics3d.behaviors.*;
 import toxi.physics3d.constraints.*;
 import toxi.processing.*;
 
+import java.util.Iterator;
+
 int DIM=30;
 int REST_LENGTH=20;
 float STRENGTH=1;
@@ -124,4 +126,3 @@ void updateMesh() {
     }
   }
 }
-

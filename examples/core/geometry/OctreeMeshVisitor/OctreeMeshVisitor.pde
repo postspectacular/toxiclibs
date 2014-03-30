@@ -56,6 +56,7 @@ void setup() {
   // starting at the root node, recursively apply the mesh builder (see below) as visitor to all nodes
   builder=new TreeMeshBuilder();
   tree.applyVisitor(builder);
+  
   // export mesh
   builder.mesh.saveAsSTL(sketchPath("octree.stl"));
 }
@@ -85,4 +86,3 @@ class TreeMeshBuilder implements OctreeVisitor {
     mesh.addMesh(node.toMesh());
   }
 }
-

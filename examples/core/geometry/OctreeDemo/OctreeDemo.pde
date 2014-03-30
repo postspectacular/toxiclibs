@@ -33,6 +33,8 @@
 
 import processing.opengl.*;
 import toxi.geom.*;
+import toxi.processing.*;
+import java.util.List;
 
 // octree dimensions
 float DIM = 100;
@@ -57,23 +59,27 @@ float zrot = 0.1;
 VisibleOctree octree;
 Vec3D cursor = new Vec3D();
 
+ToxiclibsSupport gfx;
+
 // start with one particle
 int numParticles = 1;
 
 void setup() {
-  size(1024,768,OPENGL);
-  textFont(createFont("SansSerif",18));
+  size(1024, 768, OPENGL);
+  textFont(createFont("SansSerif", 18));
   // setup empty octree so that it's centered around the world origin
-  octree=new VisibleOctree(new Vec3D(-1,-1,-1).scaleSelf(DIM2),DIM);
+  octree=new VisibleOctree(new Vec3D(-1, -1, -1).scaleSelf(DIM2), DIM);
+  octree.setMinNodeSize(4);
   // add an initial particle at the origin
   octree.addPoint(new Vec3D());
+  gfx=new ToxiclibsSupport(this);
 }
 
 void draw() {
   background(255);
   pushMatrix();
   lights();
-  translate(width/2,height/2,0);
+  translate(width/2, height/2, 0);
   // rotate view on mouse drag
   if (mousePressed) {
     xrot+=(mouseY*0.01-xrot)*0.1;
@@ -90,52 +96,47 @@ void draw() {
   // show debug view of tree
   if (showOctree) octree.draw();
   // show crosshair 3D cursor
-  stroke(255,0,0);
+  stroke(255, 0, 0);
   noFill();
   beginShape(LINES);
-  vertex(cursor.x,-DIM2,0);
-  vertex(cursor.x,DIM2,0);
-  vertex(-DIM2,cursor.y,0);
-  vertex(DIM2,cursor.y,0);
+  vertex(cursor.x, -DIM2, 0);
+  vertex(cursor.x, DIM2, 0);
+  vertex(-DIM2, cursor.y, 0);
+  vertex(DIM2, cursor.y, 0);
   endShape();
   // show particles within the specific clip radius
   noStroke();
   long t0=System.nanoTime();
-  ArrayList points=null;
+  List<Vec3D> points=null;
   if (useSphere) {
-    points=octree.getPointsWithinSphere(cursor,RADIUS);
+    points=octree.getPointsWithinSphere(cursor, RADIUS);
   } 
   else {
-    points=octree.getPointsWithinBox(new AABB(cursor,new Vec3D(RADIUS,RADIUS,RADIUS)));
+    points=octree.getPointsWithinBox(new AABB(cursor, new Vec3D(RADIUS, RADIUS, RADIUS)));
   }
   float dt=(float)((System.nanoTime()-t0)*1e-6);
   int numClipped=0;
   if (points!=null) {
     numClipped=points.size();
-    Iterator iter=points.iterator();
-    while(iter.hasNext()) {
-      Vec3D p = (Vec3D)iter.next();
-      pushMatrix();
-      translate(p.x,p.y,p.z);
-      fill(abs(p.x)*8,abs(p.y)*8,abs(p.z)*8);
-      box(2);
-      popMatrix();
+    for (Vec3D p : points) {
+      fill(abs(p.x)*8, abs(p.y)*8, abs(p.z)*8);
+      gfx.box(new AABB(p, 1));
     }
   }
   // show clipping sphere
-  fill(0,30);
-  translate(cursor.x,cursor.y,0);
+  fill(0, 30);
+  translate(cursor.x, cursor.y, 0);
   sphere(RADIUS);
   popMatrix();
   fill(0);
-  text("total: "+numParticles,10,30);
-  text("clipped: "+numClipped+" (time: "+nf(dt,1,4)+"ms)",10,50);
+  text("total: "+numParticles, 10, 30);
+  text("clipped: "+numClipped+" (time: "+nf(dt, 1, 4)+"ms)", 10, 50);
 }
 
 void keyPressed() {
   if (key==' ') {
     // add NUM new particles within a sphere of radius DIM2
-    for(int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));
+    for (int i=0; i<NUM; i++) octree.addPoint(Vec3D.randomVector().scaleSelf(random(DIM2)));
     numParticles+=NUM;
   } 
   else if (key=='s') {
@@ -145,9 +146,9 @@ void keyPressed() {
     showOctree=!showOctree;
   }
   else if (key=='-') {
-    RADIUS=max(RADIUS-1,2);
+    RADIUS=max(RADIUS-1, 2);
   }
   else if (key=='=') {
-    RADIUS=min(RADIUS+1,DIM);
+    RADIUS=min(RADIUS+1, DIM);
   }
 }

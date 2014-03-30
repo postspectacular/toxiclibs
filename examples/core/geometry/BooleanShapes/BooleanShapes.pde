@@ -1,6 +1,9 @@
 import toxi.geom.*;
 import toxi.processing.*;
 import toxi.color.*;
+import toxi.geom.BooleanShapeBuilder.*;
+
+import java.util.List;
 
 ToxiclibsSupport gfx;
 

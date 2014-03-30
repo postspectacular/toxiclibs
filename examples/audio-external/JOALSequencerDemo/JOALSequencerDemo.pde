@@ -30,6 +30,7 @@ import toxi.audio.*;
 import toxi.geom.*;
 import toxi.math.waves.*;
 import toxi.util.datatypes.ArrayUtil;
+import java.util.Iterator;
 
 int CURR_PITCH=0;
 float PITCH_BEND_AMP=0;
@@ -123,4 +124,3 @@ void keyPressed() {
   if (key=='[') PITCH_BEND_AMP=max(PITCH_BEND_AMP-0.1,0);
   if (key==']') PITCH_BEND_AMP=min(PITCH_BEND_AMP+0.1,0.9);
 }
-

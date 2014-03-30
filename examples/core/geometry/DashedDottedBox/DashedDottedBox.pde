@@ -31,6 +31,7 @@
  
 import toxi.geom.*;
 import toxi.geom.mesh.*;
+import java.util.List;
 
 List<Line3D> edges = new ArrayList<Line3D>();
 // cube radius

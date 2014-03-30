@@ -44,6 +44,7 @@ import toxi.math.*;
 import toxi.util.*;
 import toxi.processing.*;
 
+import java.util.List;
 import processing.opengl.*;
 
 ToxiclibsSupport gfx;

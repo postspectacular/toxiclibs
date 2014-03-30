@@ -31,6 +31,7 @@
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
+import java.util.Iterator;
 
 TriangleMesh mesh=new TriangleMesh("doodle");
 

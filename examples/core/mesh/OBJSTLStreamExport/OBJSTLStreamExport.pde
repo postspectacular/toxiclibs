@@ -28,6 +28,7 @@
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
+import java.io.FileOutputStream;
 
 void setup() {
   // define a rounded cube using the SuperEllipsoid surface function
@@ -49,6 +50,3 @@ void setup() {
   }
   exit();
 }
-
-
-

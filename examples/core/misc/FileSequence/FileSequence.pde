@@ -31,6 +31,7 @@
 
 import toxi.util.*;
 import java.awt.FileDialog;
+import java.util.Iterator;
 
 FileSequenceDescriptor fsd;
 Iterator images;
@@ -80,4 +81,3 @@ void draw() {
   fill(255,0,0);
   text(imgPath,10,height-50, width-20,50);
 }
-

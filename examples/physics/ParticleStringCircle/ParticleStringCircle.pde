@@ -41,6 +41,8 @@ import toxi.physics2d.*;
 
 import toxi.geom.*;
 
+import java.util.List;
+
 // number of particles for string
 int STRING_RES=100;
 // number particles for ball

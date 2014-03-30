@@ -31,6 +31,7 @@
 import toxi.color.*;
 import toxi.geom.*;
 import toxi.util.datatypes.*;
+import java.util.List;
 
 float   XRAD = 300;
 float   YRAD = 500;
@@ -85,4 +86,3 @@ void drawSpline(ColorList list) {
     ellipse(v.x,v.y,noise(v.y*0.01)*XRAD,noise(v.x*0.01)*YRAD);
   }
 }
-

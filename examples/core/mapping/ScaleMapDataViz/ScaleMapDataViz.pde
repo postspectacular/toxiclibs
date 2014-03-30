@@ -34,6 +34,8 @@
 
 import toxi.color.*;
 import toxi.math.*;
+import java.util.Iterator;
+import java.util.Date;
 
 ArrayList clicks = new ArrayList();
 ClickParcel current;
@@ -183,4 +185,3 @@ class ClickParcel {
     duration = endTime - startTime;
   }
 }
-

@@ -30,9 +30,10 @@ import processing.opengl.*;
 
 import toxi.physics2d.behaviors.*;
 import toxi.physics2d.*;
-
 import toxi.geom.*;
 import toxi.math.*;
+
+import java.util.Iterator;
 
 int DIM=10;
 int REST_LENGTH=20;
@@ -86,5 +87,3 @@ void draw() {
     line(s.a.x,s.a.y,s.b.x,s.b.y);
   }
 }
-
-

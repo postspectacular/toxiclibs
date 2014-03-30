@@ -30,12 +30,12 @@
  */
 
 import processing.opengl.*;
-
 import toxi.physics2d.constraints.*;
 import toxi.physics2d.*;
-
 import toxi.geom.*;
 import toxi.math.*;
+
+import java.util.Iterator;
 
 int NUM_PARTICLES = 100;
 int REST_LENGTH=10;
@@ -83,5 +83,3 @@ void mousePressed() {
     tail.unlock();
   }
 }
-
-

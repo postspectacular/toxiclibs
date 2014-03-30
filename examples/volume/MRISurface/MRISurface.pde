@@ -55,7 +55,7 @@ boolean isWireframe=false;
 
 void setup() {
   size(1024,768,OPENGL);
-  hint(ENABLE_OPENGL_4X_SMOOTH);
+  
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
   // convert MRI scan data into floats
@@ -116,5 +116,3 @@ void vertex(Vec3D v) {
 void mousePressed() {
   isWireframe=!isWireframe;
 }
-
-
