@@ -27,6 +27,8 @@
 
 package toxi.physics2d.behaviors;
 
+import toxi.geom.SpatialIndex;
+import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
 public interface ParticleBehavior2D {
@@ -40,5 +42,9 @@ public interface ParticleBehavior2D {
      */
     public void apply(VerletParticle2D p);
 
+    public void applyWithIndex(SpatialIndex<Vec2D> index);
+
     public void configure(float timeStep);
+
+    public boolean supportsSpatialIndex();
 }

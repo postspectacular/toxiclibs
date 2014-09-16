@@ -73,8 +73,9 @@ public class AABB extends Vec3D implements Shape3D {
         if (points == null || points.size() == 0) {
             return null;
         }
-        Vec3D min = Vec3D.MAX_VALUE.copy();
-        Vec3D max = Vec3D.MIN_VALUE.copy();
+        Vec3D first = points.get(0);
+        Vec3D min = first.copy();
+        Vec3D max = first.copy();
         for (Vec3D p : points) {
             min.minSelf(p);
             max.maxSelf(p);

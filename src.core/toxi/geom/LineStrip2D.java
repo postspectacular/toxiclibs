@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import toxi.geom.Line2D.LineIntersection;
 import toxi.geom.Line2D.LineIntersection.Type;
+import toxi.math.MathUtils;
 
 public class LineStrip2D implements Iterable<Vec2D> {
 
@@ -91,6 +92,18 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return Rect.getBoundingRect(vertices);
     }
 
+    public Vec2D getCentroid() {
+        int num = vertices.size();
+        if (num > 0) {
+            Vec2D centroid = new Vec2D();
+            for (Vec2D v : vertices) {
+                centroid.addSelf(v);
+            }
+            return centroid.scaleSelf(1f / num);
+        }
+        return null;
+    }
+
     /**
      * Computes a list of points along the spline which are uniformly separated
      * by the given step distance.
@@ -128,7 +141,7 @@ public class LineStrip2D implements Iterable<Vec2D> {
                 return null;
             }
         }
-        float arcLen = getEstimatedArcLength();
+        float arcLen = getLength();
         if (arcLen > 0) {
             double delta = step / arcLen;
             int currIdx = 0;
@@ -150,7 +163,22 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return uniform;
     }
 
-    public float getEstimatedArcLength() {
+    /**
+     * Returns a list of {@link Line2D} segments representing the segments
+     * between the vertices of this strip.
+     * 
+     * @return list of lines
+     */
+    public List<Line2D> getEdges() {
+        int num = vertices.size();
+        List<Line2D> edges = new ArrayList<Line2D>(num - 1);
+        for (int i = 1; i < num; i++) {
+            edges.add(new Line2D(vertices.get(i - 1), vertices.get(i)));
+        }
+        return edges;
+    }
+
+    public float getLength() {
         if (arcLenIndex == null
                 || (arcLenIndex != null && arcLenIndex.length != vertices
                         .size())) {
@@ -164,6 +192,39 @@ public class LineStrip2D implements Iterable<Vec2D> {
             arcLenIndex[i] = arcLen;
         }
         return arcLen;
+    }
+
+    /**
+     * Computes point at position t, where t is the normalized position along
+     * the strip. If t&lt;0 then the first vertex of the strip is returned. If
+     * t&gt;=1.0 the last vertex is returned. If the strip contains less than 2
+     * vertices, this method returns null.
+     * 
+     * @param t
+     * @return
+     */
+    public Vec2D getPointAt(float t) {
+        int num = vertices.size();
+        if (num > 1) {
+            if (t <= 0.0) {
+                return vertices.get(0);
+            } else if (t >= 1.0) {
+                return vertices.get(num - 1);
+            }
+            float totalLength = this.getLength();
+            double offp = 0, offq = 0;
+            for (int i = 1; i < num; i++) {
+                Vec2D p = vertices.get(i - 1);
+                Vec2D q = vertices.get(i);
+                offq += q.distanceTo(p) / totalLength;
+                if (offp <= t && offq >= t) {
+                    return p.interpolateTo(q, (float) MathUtils.mapInterval(t,
+                            offp, offq, 0.0, 1.0));
+                }
+                offp = offq;
+            }
+        }
+        return null;
     }
 
     public List<Line2D> getSegments() {
@@ -199,11 +260,15 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return vertices.iterator();
     }
 
-    public LineStrip2D scale(float scale) {
+    public LineStrip2D rotate(float theta) {
         for (Vec2D v : vertices) {
-            v.scaleSelf(scale);
+            v.rotate(theta);
         }
         return this;
+    }
+
+    public LineStrip2D scale(float scale) {
+        return scale(scale, scale);
     }
 
     public LineStrip2D scale(float x, float y) {
@@ -213,8 +278,24 @@ public class LineStrip2D implements Iterable<Vec2D> {
         return this;
     }
 
-    public LineStrip2D scale(Vec2D scale) {
-        return scale(scale.x, scale.y);
+    public LineStrip2D scale(ReadonlyVec2D scale) {
+        return scale(scale.x(), scale.y());
+    }
+
+    public LineStrip2D scaleSize(float scale) {
+        return scaleSize(scale, scale);
+    }
+
+    public LineStrip2D scaleSize(float x, float y) {
+        Vec2D centroid = getCentroid();
+        for (Vec2D v : vertices) {
+            v.subSelf(centroid).scaleSelf(x, y).addSelf(centroid);
+        }
+        return this;
+    }
+
+    public LineStrip2D scaleSize(ReadonlyVec2D scale) {
+        return scaleSize(scale.x(), scale.y());
     }
 
     /**
@@ -223,5 +304,16 @@ public class LineStrip2D implements Iterable<Vec2D> {
      */
     public void setVertices(List<Vec2D> vertices) {
         this.vertices = vertices;
+    }
+
+    public LineStrip2D translate(float x, float y) {
+        for (Vec2D v : vertices) {
+            v.addSelf(x, y);
+        }
+        return this;
+    }
+
+    public LineStrip2D translate(ReadonlyVec2D offset) {
+        return translate(offset.x(), offset.y());
     }
 }

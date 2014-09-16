@@ -27,6 +27,8 @@
 
 package toxi.geom;
 
+import java.util.List;
+
 /**
  * Interface description of common operations supported by 2D geometry types.
  */
@@ -49,7 +51,7 @@ public interface Shape2D {
     /**
      * Computes the bounding circle of the shape.
      * 
-     * @return
+     * @return circle
      */
     Circle getBoundingCircle();
 
@@ -66,6 +68,13 @@ public interface Shape2D {
      * @return circumference
      */
     float getCircumference();
+
+    /**
+     * Returns a list of the shape's perimeter edges.
+     * 
+     * @return list of {@link Line2D} elements
+     */
+    List<Line2D> getEdges();
 
     /**
      * Computes a random point within the shape's perimeter.

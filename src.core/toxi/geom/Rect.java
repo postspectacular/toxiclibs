@@ -27,6 +27,7 @@
 
 package toxi.geom;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -258,6 +259,14 @@ public class Rect implements Shape2D {
         return edge;
     }
 
+    public List<Line2D> getEdges() {
+        List<Line2D> edges = new ArrayList<Line2D>();
+        for (int i = 0; i < 4; i++) {
+            edges.add(getEdge(i));
+        }
+        return edges;
+    }
+
     public float getLeft() {
         return x;
     }
@@ -265,7 +274,9 @@ public class Rect implements Shape2D {
     /**
      * Computes the normalized position of the given point within this
      * rectangle, so that a point at the top-left corner becomes {0,0} and
-     * bottom-right {1,1}.
+     * bottom-right {1,1}. The original point is not modified. Together with
+     * {@link #getUnmappedPointInRect(Vec2D)} this function can be used to map a
+     * point from one rectangle to another.
      * 
      * @param p
      *            point to be mapped
@@ -299,6 +310,22 @@ public class Rect implements Shape2D {
 
     public Vec2D getTopRight() {
         return new Vec2D(x + width, y);
+    }
+
+    /**
+     * Inverse operation of {@link #getMappedPointInRect(Vec2D)}. Given a
+     * normalized point it computes the position within this rectangle, so that
+     * a point at {0,0} becomes the top-left corner and {1,1} bottom-right. The
+     * original point is not modified. Together with
+     * {@link #getUnmappedPointInRect(Vec2D)} this function can be used to map a
+     * point from one rectangle to another.
+     * 
+     * @param p
+     *            point to be mapped
+     * @return mapped Vec2D
+     */
+    public Vec2D getUnmappedPointInRect(Vec2D p) {
+        return new Vec2D(p.x * width + x, p.y * height + y);
     }
 
     public Rect growToContainPoint(ReadonlyVec2D p) {
@@ -356,6 +383,27 @@ public class Rect implements Shape2D {
             isec = new Rect(x1, y1, x2 - x1, y2 - y1);
         }
         return isec;
+    }
+
+    public boolean intersectsCircle(Vec2D c, float r) {
+        float s, d = 0;
+        float x2 = x + width;
+        float y2 = y + height;
+        if (c.x < x) {
+            s = c.x - x;
+            d = s * s;
+        } else if (c.x > x2) {
+            s = c.x - x2;
+            d += s * s;
+        }
+        if (c.y < y) {
+            s = c.y - y;
+            d += s * s;
+        } else if (c.y > y2) {
+            s = c.y - y2;
+            d += s * s;
+        }
+        return d <= r * r;
     }
 
     /**

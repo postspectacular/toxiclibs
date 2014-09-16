@@ -122,7 +122,7 @@ public class PointCloud3D implements Iterable<Vec3D> {
     public PointCloud3D clear() {
         points.clear();
         min = Vec3D.MAX_VALUE.copy();
-        max = Vec3D.MIN_VALUE.copy();
+        max = Vec3D.NEG_MAX_VALUE.copy();
         centroid = new Vec3D();
         return this;
     }
@@ -189,7 +189,7 @@ public class PointCloud3D implements Iterable<Vec3D> {
      */
     public PointCloud3D updateBounds() {
         min = Vec3D.MAX_VALUE.copy();
-        max = Vec3D.MIN_VALUE.copy();
+        max = Vec3D.NEG_MAX_VALUE.copy();
         for (Vec3D p : points) {
             min.minSelf(p);
             max.maxSelf(p);

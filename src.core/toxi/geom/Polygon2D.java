@@ -418,6 +418,16 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
         return this;
     }
 
+    protected boolean intersectsLine(Line2D l, List<Line2D> edges) {
+        for (Line2D e : edges) {
+            final Type isec = l.intersectLine(e).getType();
+            if (isec == Type.INTERSECTING || isec == Type.COINCIDENT) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Checks if the given polygon intersect this one by checking all edges for
      * line intersections.
@@ -426,12 +436,20 @@ public class Polygon2D implements Shape2D, Iterable<Vec2D> {
      * @return true, if polygons intersect.
      */
     public boolean intersectsPolygon(Polygon2D poly) {
+        List<Line2D> edgesB = poly.getEdges();
         for (Line2D ea : getEdges()) {
-            for (Line2D eb : poly.getEdges()) {
-                final Type isec = ea.intersectLine(eb).getType();
-                if (isec == Type.INTERSECTING || isec == Type.COINCIDENT) {
-                    return true;
-                }
+            if (intersectsLine(ea, edgesB)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean intersectsRect(Rect r) {
+        List<Line2D> edges = r.getEdges();
+        for (Line2D ea : getEdges()) {
+            if (intersectsLine(ea, edges)) {
+                return true;
             }
         }
         return false;

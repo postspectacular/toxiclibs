@@ -378,6 +378,24 @@ public final class MathUtils {
         return abs(p * q) / gcd(p, q);
     }
 
+    public static double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
+    }
+
+    public static float lerp(float a, float b, float t) {
+        return a + (b - a) * t;
+    }
+
+    public static double mapInterval(double x, double minIn, double maxIn,
+            double minOut, double maxOut) {
+        return minOut + (maxOut - minOut) * (x - minIn) / (maxIn - minIn);
+    }
+
+    public static float mapInterval(float x, float minIn, float maxIn,
+            float minOut, float maxOut) {
+        return minOut + (maxOut - minOut) * (x - minIn) / (maxIn - minIn);
+    }
+
     public static final double max(double a, double b) {
         return a > b ? a : b;
     }

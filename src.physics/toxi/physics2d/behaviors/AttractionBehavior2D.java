@@ -27,6 +27,9 @@
 
 package toxi.physics2d.behaviors;
 
+import java.util.List;
+
+import toxi.geom.SpatialIndex;
 import toxi.geom.Vec2D;
 import toxi.physics2d.VerletParticle2D;
 
@@ -59,6 +62,19 @@ public class AttractionBehavior2D implements ParticleBehavior2D {
             Vec2D f = delta.normalizeTo((1.0f - dist / radiusSquared))
                     .jitter(jitter).scaleSelf(attrStrength);
             p.addForce(f);
+        }
+    }
+
+    public void applyWithIndex(SpatialIndex<Vec2D> spaceHash) {
+        List<Vec2D> selection = spaceHash.itemsWithinRadius(attractor, radius,
+                null);
+        final Vec2D temp = new Vec2D();
+        if (selection != null) {
+            for (Vec2D p : selection) {
+                temp.set(p);
+                apply((VerletParticle2D) p);
+                spaceHash.reindex(temp, p);
+            }
         }
     }
 
@@ -123,6 +139,10 @@ public class AttractionBehavior2D implements ParticleBehavior2D {
     public void setStrength(float strength) {
         this.strength = strength;
         this.attrStrength = strength * timeStep;
+    }
+
+    public boolean supportsSpatialIndex() {
+        return true;
     }
 
 }

@@ -130,7 +130,9 @@ public class FileUtils {
     /**
      * Creates an {@link OutputStream} for the given file. If the file extension
      * ends with ".gz" the stream is automatically wrapped in a
-     * {@link GZIPOutputStream} as well.
+     * {@link GZIPOutputStream} as well. Also attempts to create any
+     * intermediate directories for the file using
+     * {@link #createDirectoriesForFile(File)}.
      * 
      * @param file
      *            output file
@@ -141,7 +143,7 @@ public class FileUtils {
         if (file == null) {
             throw new IllegalArgumentException("file can't be null");
         }
-        createDirectories(file);
+        createDirectoriesForFile(file);
         OutputStream stream = new FileOutputStream(file);
         if (file.getName().toLowerCase().endsWith(".gz")) {
             stream = new GZIPOutputStream(stream);

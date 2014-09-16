@@ -69,7 +69,7 @@ public class DLA {
         octreeGuides = createOctree(new Vec3D(-0.5f, -0.5f, -0.5f).scale(size),
                 size);
         minBounds = Vec3D.MAX_VALUE.copy();
-        maxBounds = Vec3D.MIN_VALUE.copy();
+        maxBounds = Vec3D.NEG_MAX_VALUE.copy();
     }
 
     public DLA(float size, DLAConfiguration config, DLAGuideLines guides) {
@@ -118,8 +118,8 @@ public class DLA {
      * @return true, if particle attached.
      */
     protected boolean checkParticle(DLAParticle p) {
-        ArrayList<Vec3D> parts = octree.getPointsWithinSphere(p,
-                config.snapDistance);
+        List<Vec3D> parts = octree
+                .getPointsWithinSphere(p, config.snapDistance);
         float stickiness = config.getStickiness();
         if (parts != null) {
             float minDist = Integer.MAX_VALUE;

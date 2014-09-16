@@ -27,6 +27,8 @@
 
 package toxi.geom;
 
+import java.util.List;
+
 import toxi.math.MathUtils;
 import toxi.util.datatypes.BiasedFloatRange;
 
@@ -112,6 +114,10 @@ public class Ellipse extends Vec2D implements Shape2D {
         // return (float) (MathUtils.PI * (3 * (radius.x + radius.y) - Math
         // .sqrt((3 * radius.x + radius.y) * (radius.x + 3 * radius.y))));
         return (float) Math.sqrt(0.5 * radius.magSquared()) * MathUtils.TWO_PI;
+    }
+
+    public List<Line2D> getEdges() {
+        return toPolygon2D().getEdges();
     }
 
     /**

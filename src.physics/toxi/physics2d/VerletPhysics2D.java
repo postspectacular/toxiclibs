@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import toxi.geom.Rect;
+import toxi.geom.SpatialIndex;
 import toxi.geom.Vec2D;
 import toxi.physics2d.behaviors.GravityBehavior2D;
 import toxi.physics2d.behaviors.ParticleBehavior2D;
@@ -91,6 +92,8 @@ public class VerletPhysics2D {
             1);
 
     protected float drag;
+
+    protected SpatialIndex<Vec2D> index;
 
     /**
      * Initializes a Verlet engine instance using the default values.
@@ -201,6 +204,13 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @return the index
+     */
+    public SpatialIndex<Vec2D> getIndex() {
+        return index;
+    }
+
+    /**
      * @return the numIterations
      */
     public int getNumIterations() {
@@ -289,6 +299,14 @@ public class VerletPhysics2D {
     }
 
     /**
+     * @param index
+     *            the index to set
+     */
+    public void setIndex(SpatialIndex<Vec2D> index) {
+        this.index = index;
+    }
+
+    /**
      * @param numIterations
      *            the numIterations to set
      */
@@ -328,7 +346,17 @@ public class VerletPhysics2D {
         updateParticles();
         updateSprings();
         applyConstaints();
+        updateIndex();
         return this;
+    }
+
+    private void updateIndex() {
+        if (index != null) {
+            index.clear();
+            for (VerletParticle2D p : particles) {
+                index.index(p);
+            }
+        }
     }
 
     /**
@@ -336,8 +364,12 @@ public class VerletPhysics2D {
      */
     protected void updateParticles() {
         for (ParticleBehavior2D b : behaviors) {
-            for (VerletParticle2D p : particles) {
-                b.apply(p);
+            if (index != null && b.supportsSpatialIndex()) {
+                b.applyWithIndex(index);
+            } else {
+                for (VerletParticle2D p : particles) {
+                    b.apply(p);
+                }
             }
         }
         for (VerletParticle2D p : particles) {

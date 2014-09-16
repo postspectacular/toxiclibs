@@ -38,8 +38,8 @@ public class PlaneIntersector implements Intersector3D {
     }
 
     /**
-     * @param box
-     *            the box to set
+     * @param p
+     *            the plane to set
      */
     public void setPlane(Plane p) {
         this.plane = p;
