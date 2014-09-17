@@ -569,6 +569,28 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         return this;
     }
 
+    /**
+     * Overrides coordinates with the given values.
+     * 
+     * @param x
+     *            the x
+     * @param y
+     *            the y
+     * @param z
+     *            the z
+     * @param w
+     *            the w
+     * 
+     * @return itself
+     */
+    public Vec4D set(float x, float y, float z, float w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+        return this;
+    }
+
     public final Vec4D set(ReadonlyVec4D v) {
         this.x = v.x();
         this.y = v.y();
