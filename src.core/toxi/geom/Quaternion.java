@@ -125,16 +125,16 @@ public class Quaternion {
         double s = 0.0f;
         double[] q = new double[4];
         double trace = m.matrix[0][0] + m.matrix[1][1] + m.matrix[2][2];
-
         if (trace > 0.0f) {
-            s = Math.sqrt(trace + 1.0f);
-            q[3] = s * 0.5f;
-            s = 0.5f / s;
-            q[0] = (m.matrix[1][2] - m.matrix[2][1]) * s;
-            q[1] = (m.matrix[2][0] - m.matrix[0][2]) * s;
-            q[2] = (m.matrix[0][1] - m.matrix[1][0]) * s;
+            s = 0.5 / Math.sqrt(trace + 1.0);
+            q[0] = (m.matrix[2][1] - m.matrix[1][2]) * s;
+            q[1] = (m.matrix[0][2] - m.matrix[2][0]) * s;
+            q[2] = (m.matrix[1][0] - m.matrix[0][1]) * s;
+            q[3] = 0.25 / s;
         } else {
-            int[] nxt = new int[] { 1, 2, 0 };
+            int[] nxt = new int[] {
+                    1, 2, 0
+            };
             int i = 0, j = 0, k = 0;
 
             if (m.matrix[1][1] > m.matrix[0][0]) {
@@ -147,13 +147,14 @@ public class Quaternion {
 
             j = nxt[i];
             k = nxt[j];
-            s = Math.sqrt((m.matrix[i][i] - (m.matrix[j][j] + m.matrix[k][k])) + 1.0f);
+            s = 2.0f * Math
+                    .sqrt((m.matrix[i][i] - m.matrix[j][j] - m.matrix[k][k]) + 1.0f);
 
-            q[i] = s * 0.5f;
-            s = 0.5f / s;
-            q[3] = (m.matrix[j][k] - m.matrix[k][j]) * s;
-            q[j] = (m.matrix[i][j] + m.matrix[j][i]) * s;
-            q[k] = (m.matrix[i][k] + m.matrix[k][i]) * s;
+            double ss = 1.0 / s;
+            q[i] = s * 0.25f;
+            q[j] = (m.matrix[j][i] + m.matrix[i][j]) * ss;
+            q[k] = (m.matrix[k][i] + m.matrix[i][k]) * ss;
+            q[3] = (m.matrix[k][j] - m.matrix[j][k]) * ss;
         }
 
         return new Quaternion((float) q[3], (float) q[0], (float) q[1],
@@ -215,6 +216,18 @@ public class Quaternion {
         z += q.z;
         w += q.w;
         return this;
+    }
+
+    public Vec3D applyTo(Vec3D v) {
+        float ix = w * v.x + y * v.z - z * v.y;
+        float iy = w * v.y + z * v.x - x * v.z;
+        float iz = w * v.z + x * v.y - y * v.x;
+        float iw = -x * v.x - y * v.y - z * v.z;
+        float xx = ix * w - iw * x - iy * z + iz * y;
+        float yy = iy * w - iw * y - iz * x + ix * z;
+        float zz = iz * w - iw * z - ix * y + iy * x;
+        v.set(xx, yy, zz);
+        return v;
     }
 
     public Quaternion copy() {
@@ -426,7 +439,9 @@ public class Quaternion {
     }
 
     public float[] toArray() {
-        return new float[] { w, x, y, z };
+        return new float[] {
+                w, x, y, z
+        };
     }
 
     /**

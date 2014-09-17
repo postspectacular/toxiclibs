@@ -1,6 +1,7 @@
 package toxi.test.geom;
 
 import junit.framework.TestCase;
+import toxi.geom.Matrix4x4;
 import toxi.geom.Quaternion;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
@@ -27,6 +28,22 @@ public class QuaternionTest extends TestCase {
         System.out.println("toAxisAngle():");
         for (float f : reverse) {
             System.out.println(f);
+        }
+    }
+
+    public void testMatrixRoundtrip() {
+        for (int i = 0; i < 1000; i++) {
+            Quaternion q = Quaternion.createFromAxisAngle(Vec3D.randomVector(),
+                    MathUtils.random(MathUtils.TWO_PI)).normalize();
+            Matrix4x4 m = q.toMatrix4x4();
+            Quaternion q2 = Quaternion.createFromMatrix(m);
+            Vec3D p = Vec3D.randomVector();
+            Vec3D p2 = p.copy();
+            q.applyTo(p);
+            q2.applyTo(p2);
+            // floats are not very kind to round tripping
+            // hence quite large epsilon
+            assertTrue(p.equalsWithTolerance(p2, 0.0001f));
         }
     }
 
