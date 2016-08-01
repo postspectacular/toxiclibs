@@ -29,7 +29,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 import toxi.physics2d.constraints.*;
 import toxi.physics2d.*;
 import toxi.geom.*;
@@ -46,7 +46,7 @@ VerletParticle2D head,tail;
 boolean isTailLocked;
 
 void setup() {
-  size(1024,768,OPENGL);
+  size(1024,768,P3D);
   smooth();
   physics=new VerletPhysics2D();
   Vec2D stepDir=new Vec2D(1,1).normalizeTo(REST_LENGTH);

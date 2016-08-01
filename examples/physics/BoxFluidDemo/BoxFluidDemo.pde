@@ -44,7 +44,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.physics3d.*;
 import toxi.physics3d.behaviors.*;
@@ -83,7 +83,7 @@ boolean useBoundary=false;
 Vec3D colAmp=new Vec3D(400, 200, 200);
 
 void setup() {
-  size(1280,720,OPENGL);
+  size(1280,720,P3D);
   smooth();
   initPhysics();
   initGUI();

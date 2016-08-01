@@ -80,7 +80,8 @@ void drawSpline(ColorList list) {
     points[i]=new Vec2D(random(-1,1)*50+(float)i/points.length*width,random(0.25,0.75)*height);
   }
   points[points.length-1]=new Vec2D(width+XRAD,random(height));
-  List<Vec2D> vertices=new Spline2D(points).computeVertices(width/RES);
+  
+  List<Vec2D> vertices=new Spline2D(points).getPointList();
   for(Vec2D v: vertices) {
     fill(list.get((int) random(numCols)).toARGB());
     ellipse(v.x,v.y,noise(v.y*0.01)*XRAD,noise(v.x*0.01)*YRAD);

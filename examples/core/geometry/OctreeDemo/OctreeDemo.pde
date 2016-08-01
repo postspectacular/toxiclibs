@@ -31,7 +31,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 import toxi.geom.*;
 import toxi.processing.*;
 import java.util.List;
@@ -65,7 +65,7 @@ ToxiclibsSupport gfx;
 int numParticles = 1;
 
 void setup() {
-  size(1024, 768, OPENGL);
+  size(1024, 768, P3D);
   textFont(createFont("SansSerif", 18));
   // setup empty octree so that it's centered around the world origin
   octree=new VisibleOctree(new Vec3D(-1, -1, -1).scaleSelf(DIM2), DIM);

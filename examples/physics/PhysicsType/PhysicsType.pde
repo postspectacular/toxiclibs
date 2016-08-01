@@ -1,5 +1,5 @@
 import geomerative.*;    // import geomerative library
-import processing.opengl.*;
+
 
 import toxi.physics2d.constraints.*;
 import toxi.physics2d.behaviors.*;
@@ -15,7 +15,7 @@ RShape font;
 String input = "Hello!";
  
 void setup() {
-    size( 1280, 720, OPENGL ); 
+    size( 1280, 720, P3D ); 
     initPhysics();
     fill(255);
     smooth();

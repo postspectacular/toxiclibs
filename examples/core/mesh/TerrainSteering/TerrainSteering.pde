@@ -38,7 +38,7 @@ import toxi.geom.mesh.*;
 import toxi.math.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 float NOISE_SCALE = 0.08f;
 int DIM=80;
@@ -52,7 +52,7 @@ Vec3D camOffset = new Vec3D(0, 100, 300);
 Vec3D eyePos = new Vec3D(0, 1000, 0);
 
 void setup() {
-  size(1024, 576, OPENGL);
+  size(1024, 576, P3D);
   // create terrain & generate elevation data
   terrain = new Terrain(DIM,DIM, 50);
   float[] el = new float[DIM*DIM];

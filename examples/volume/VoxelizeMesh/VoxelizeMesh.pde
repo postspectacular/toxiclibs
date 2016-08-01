@@ -39,7 +39,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-import processing.opengl.*;
+
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
@@ -58,7 +58,7 @@ boolean isWireframe;
 float currZoom = 1.25f;
 
 void setup() {
-  size(1280, 720, OPENGL);
+  size(1280, 720, P3D);
   gfx = new ToxiclibsSupport(this);
   initMesh();
 }

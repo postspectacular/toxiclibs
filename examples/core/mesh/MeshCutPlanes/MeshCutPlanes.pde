@@ -30,7 +30,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.processing.*;
 
@@ -42,7 +42,7 @@ ToxiclibsSupport gfx;
 WETriangleMesh mesh;
 
 void setup() {
-  size(680,382, OPENGL);
+  size(680,382, P3D);
   gfx = new ToxiclibsSupport(this);
   mesh = (WETriangleMesh) new AABB(100).toMesh(new WETriangleMesh());
   MidpointSubdivision sd = new MidpointSubdivision();

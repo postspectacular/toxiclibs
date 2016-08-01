@@ -1,11 +1,11 @@
 /**
  * <p>A soft pendulum (series of connected springs)<br/>
- * <a href="http://www.shiffman.net/teaching/nature/toxiclibs/">The Nature of Code</a><br/>
+ * <a href="http://natureofcode.com/">The Nature of Code</a><br/>
  * Spring 2010</p>
  */
 
 /* 
- * Copyright (c) 2010 Daniel Schiffmann
+ * Copyright (c) 2010 Daniel Shiffmann
  * 
  * This demo & library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -67,4 +67,3 @@ void mouseReleased() {
   // Release the chain
   chain.release();
 }
-
