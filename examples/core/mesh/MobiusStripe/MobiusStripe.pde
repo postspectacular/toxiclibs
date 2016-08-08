@@ -34,7 +34,7 @@ import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 // radius of mobius strip
 float BASE_RADIUS=150;

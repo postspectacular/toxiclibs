@@ -30,7 +30,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-import processing.opengl.*;
+
 import toxi.processing.*;
 import toxi.geom.*;
 import toxi.geom.mesh.*;
@@ -50,7 +50,7 @@ Matrix4x4 colorMatrix=new Matrix4x4().scale(255f/(DIM*2)).translate(DIM,DIM,DIM)
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,576,OPENGL);
+  size(1024,576,P3D);
   gfx=new ToxiclibsSupport(this);
   flock = new Flock();
   // Add an initial set of boids into the system

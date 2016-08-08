@@ -50,7 +50,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 import toxi.math.waves.*;
 
 AbstractWave waveX,waveY;
@@ -61,7 +61,7 @@ int D2 = DIM/2;
 int AMP = 50;
 
 void setup() {
-  size(1024, 576, OPENGL);
+  size(1024, 576, P3D);
   noStroke();
   waveX=createRandomWave();
   waveY=createRandomWave();

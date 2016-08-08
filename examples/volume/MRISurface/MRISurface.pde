@@ -41,7 +41,7 @@ import toxi.volume.*;
 import toxi.math.noise.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 int DIM=128;
 float ISO_THRESHOLD = 0.1;
@@ -54,7 +54,7 @@ ToxiclibsSupport gfx;
 boolean isWireframe=false;
 
 void setup() {
-  size(1024,768,OPENGL);
+  size(1024,768,P3D);
   
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);

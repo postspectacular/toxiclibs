@@ -26,7 +26,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.physics2d.behaviors.*;
 import toxi.physics2d.*;
@@ -44,7 +44,7 @@ VerletPhysics2D physics;
 VerletParticle2D head,tail;
 
 void setup() {
-  size(1280,720,OPENGL);
+  size(1280,720,P3D);
   smooth();
   physics=new VerletPhysics2D();
   physics.addBehavior(new GravityBehavior2D(new Vec2D(0,0.1)));

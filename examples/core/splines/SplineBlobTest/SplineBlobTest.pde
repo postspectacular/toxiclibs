@@ -32,7 +32,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 import toxi.geom.*;
 
 import java.util.List;
@@ -45,7 +45,7 @@ boolean newBlob=true;
 int drawMode=1;
 
 void setup() {
-  size(800,800,OPENGL);
+  size(800,800,P3D);
   smooth();
   cursor(CROSS);
 }

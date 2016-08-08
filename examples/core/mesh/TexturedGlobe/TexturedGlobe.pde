@@ -3,7 +3,7 @@ import toxi.geom.mesh2d.*;
 import toxi.geom.mesh.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 float EARTH_RADIUS=300;
 Vec2D HOME=new Vec2D(0,51);
@@ -15,7 +15,7 @@ float texUOffset=180;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024, 768, OPENGL);
+  size(1024, 768, P3D);
   gfx = new ToxiclibsSupport(this);
   earthTex = loadImage("earth_1024.jpg");
   globe = (TriangleMesh)new SurfaceMeshBuilder(new SphereFunction()).createMesh(null, 36, EARTH_RADIUS);

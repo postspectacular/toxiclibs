@@ -47,7 +47,7 @@
 import toxi.sim.dla.*;
 import toxi.geom.*;
 
-import processing.opengl.*;
+
 
 DLA dla;
 DLAListener listener;
@@ -56,7 +56,7 @@ float currScale = 6;
 boolean isOctreeVisible=true;
 
 void setup() {
-  size(640, 480, OPENGL);
+  size(640, 480, P3D);
   // compute spiral key points (every 45 degrees)
   ArrayList points = new ArrayList();
   for (float theta=-TWO_PI, r=20; theta<3*TWO_PI; theta+=QUARTER_PI) {

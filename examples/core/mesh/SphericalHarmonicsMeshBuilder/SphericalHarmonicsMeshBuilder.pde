@@ -35,7 +35,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.math.waves.*;
 import toxi.geom.*;
@@ -51,7 +51,7 @@ boolean doSave;
 Matrix4x4 normalMap = new Matrix4x4().translateSelf(128,128,128).scaleSelf(127);
 
 void setup() {
-  size(1024,576, OPENGL);
+  size(1024,576, P3D);
   randomizeMesh();
 }
 

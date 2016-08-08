@@ -45,7 +45,7 @@ import toxi.util.*;
 import toxi.processing.*;
 
 import java.util.List;
-import processing.opengl.*;
+
 
 ToxiclibsSupport gfx;
 WETriangleMesh mesh;
@@ -56,7 +56,7 @@ float currZoom = 1;
 boolean isWireframe=true;
 
 void setup() {
-  size(1280, 720, OPENGL);
+  size(1280, 720, P3D);
   gfx = new ToxiclibsSupport(this);
   initMesh();
 }

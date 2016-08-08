@@ -31,7 +31,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 import toxi.geom.*;
 import toxi.processing.*;
 
@@ -54,7 +54,7 @@ Vec3D camRot = new Vec3D();
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(500,500,OPENGL);
+  size(500,500,P3D);
   gfx=new ToxiclibsSupport(this);
 }
 

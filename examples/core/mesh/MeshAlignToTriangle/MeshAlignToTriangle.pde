@@ -2,14 +2,14 @@ import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 Triangle3D tri;
 TriangleMesh mesh;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(400, 400, OPENGL);
+  size(400, 400, P3D);
   gfx=new ToxiclibsSupport(this);
   randomize();
 }

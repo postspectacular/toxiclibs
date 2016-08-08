@@ -37,7 +37,7 @@ import toxi.volume.*;
 import toxi.math.noise.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 int DIMX=48;
 int DIMY=48;
@@ -57,7 +57,7 @@ TriangleMesh mesh;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,576,OPENGL);
+  size(1024,576,P3D);
   gfx=new ToxiclibsSupport(this);
 }
 

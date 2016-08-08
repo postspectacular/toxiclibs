@@ -37,7 +37,7 @@ import toxi.volume.*;
 import toxi.math.noise.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 int DIMX=192;
 int DIMY=32;
@@ -56,7 +56,7 @@ float currScale=1;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,768,OPENGL);
+  size(1024,768,P3D);
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);
   VolumetricSpace volume=new VolumetricSpaceArray(SCALE,DIMX,DIMY,DIMZ);

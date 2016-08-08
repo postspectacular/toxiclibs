@@ -35,7 +35,7 @@
 
 import toxi.geom.*;
 import toxi.processing.*;
-import processing.opengl.*;
+
 
 final int EARTH_RADIUS = 200;
 
@@ -66,7 +66,7 @@ Vec2D[] cities = new Vec2D[] {
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,576,OPENGL);
+  size(1024,576,P3D);
   gfx=new ToxiclibsSupport(this);
   searchTwitter(SEARCH_QUERY);
 }

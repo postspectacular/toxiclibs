@@ -33,7 +33,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.geom.*;
 import toxi.physics3d.*;
@@ -49,7 +49,7 @@ VerletPhysics3D physics;
 VerletParticle3D head;
 
 void setup() {
-  size(1024,576,OPENGL);
+  size(1024,576,P3D);
   // create 2 boxes
   boxes[0]=new VisibleBoxConstraint(new Vec3D(100,-100,-100),new Vec3D(150,100,100));
   boxes[1]=new VisibleBoxConstraint(new Vec3D(-150,-100,-100),new Vec3D(-100,100,100));

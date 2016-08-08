@@ -42,7 +42,7 @@ import toxi.volume.*;
 import toxi.math.waves.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 int DIMX=96;
 int DIMY=96;
@@ -71,7 +71,7 @@ float Z_STEP=0.005;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,768,OPENGL);
+  size(1024,768,P3D);
   
   gfx=new ToxiclibsSupport(this);
   strokeWeight(0.5);

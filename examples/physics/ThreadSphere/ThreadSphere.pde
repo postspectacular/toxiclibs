@@ -30,7 +30,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.physics3d.constraints.*;
 import toxi.physics3d.behaviors.*;
@@ -47,7 +47,7 @@ VerletPhysics3D physics;
 VerletParticle3D head;
 
 void setup() {
-  size(1024,768,OPENGL);
+  size(1024,768,P3D);
   smooth();
   // create collision sphere at origin, replace OUTSIDE with INSIDE to keep particles inside the sphere
   ParticleConstraint3D sphere=new SphereConstraint(new Sphere(new Vec3D(),SPHERE_RADIUS),SphereConstraint.OUTSIDE);

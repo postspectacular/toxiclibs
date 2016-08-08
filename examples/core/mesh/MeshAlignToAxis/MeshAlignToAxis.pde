@@ -24,7 +24,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
@@ -38,7 +38,7 @@ TriangleMesh[] boxes=new TriangleMesh[600];
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(600,600,OPENGL);
+  size(600,600,P3D);
   gfx=new ToxiclibsSupport(this);
   for(int i=0; i<boxes.length; i++) {
     // create a new direction vector for each box

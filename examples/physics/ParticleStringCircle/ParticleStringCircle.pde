@@ -33,7 +33,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.physics2d.constraints.*;
 import toxi.physics2d.behaviors.*;
@@ -57,7 +57,7 @@ VerletPhysics2D physics;
 VerletParticle2D selectedParticle;
 
 void setup() {
-  size(1024,720,OPENGL);
+  size(1024,720,P3D);
   initPhysics();
 }
 

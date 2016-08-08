@@ -35,7 +35,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import processing.opengl.*;
+
 
 import toxi.geom.*;
 import toxi.geom.mesh.*;
@@ -53,7 +53,7 @@ boolean showNormals;
 ToxiclibsSupport gfx;
 
 void setup() {
-  size(1024,576, OPENGL);
+  size(1024,576, P3D);
   modX = new SineWave(0, 0.01f, 2.5f, 2.5f);
   modY = new SineWave(PI, 0.017f, 2.5f, 2.5f);
   gfx=new ToxiclibsSupport(this);

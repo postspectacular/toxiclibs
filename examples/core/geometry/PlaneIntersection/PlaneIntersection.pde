@@ -1,7 +1,7 @@
 import toxi.geom.*;
 import toxi.util.*;
 import toxi.processing.*;
-import processing.opengl.*;
+
 
 Plane p1, p2;
 
@@ -9,7 +9,7 @@ ToxiclibsSupport gfx;
 boolean doSave;
 
 void setup() {
-  size(1280, 720, OPENGL);
+  size(1280, 720, P3D);
   gfx = new ToxiclibsSupport(this);
   p1 = new Plane(new Vec3D(100, 100, 100), new Vec3D(0, 1, 0));
   p2 = new Plane(new Vec3D(100, 200, 100), Vec3D.randomVector());

@@ -34,14 +34,14 @@ import toxi.geom.mesh.*;
 import toxi.math.waves.*;
 import toxi.processing.*;
 
-import processing.opengl.*;
+
 
 ToxiclibsSupport gfx;
 
 AbstractWave sphereRes=new SineWave(0,0.02,15,18);
 
 void setup() {
-  size(680,382,OPENGL);
+  size(680,382,P3D);
   gfx=new ToxiclibsSupport(this);
 }
 

@@ -40,7 +40,7 @@ import toxi.processing.*;
 import toxi.math.*;
 import java.util.List;
 
-import processing.opengl.*;
+
 
 // radius of the root delaunay triangle which encompasses (MUST) all other points
 float DELAUNAY_SIZE = 10000;
@@ -62,7 +62,7 @@ TriangleMesh mesh;
 float res=6;
 
 void setup() {
-  size(1024, 768, OPENGL);
+  size(1024, 768, P3D);
   smooth();
   gfx = new ToxiclibsSupport(this);
 
