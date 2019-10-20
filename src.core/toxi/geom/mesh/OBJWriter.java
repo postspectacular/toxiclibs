@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import toxi.geom.Vec3D;
+import toxi.geom.VecD3D;
 
 /**
  * Extremely bare bones Wavefront OBJ 3D format exporter. Purely handles the
@@ -120,6 +121,15 @@ public class OBJWriter {
     }
 
     public void vertex(Vec3D v) {
+        objWriter.println("v " + v.x + " " + v.y + " " + v.z);
+        numVerticesWritten++;
+    }
+    public void normal(VecD3D n) {
+        objWriter.println("vn " + n.x + " " + n.y + " " + n.z);
+        numNormalsWritten++;
+    }
+
+    public void vertex(VecD3D v) {
         objWriter.println("v " + v.x + " " + v.y + " " + v.z);
         numVerticesWritten++;
     }

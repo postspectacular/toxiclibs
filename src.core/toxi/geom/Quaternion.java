@@ -205,6 +205,12 @@ public class Quaternion {
         this.y = q.y;
         this.z = q.z;
     }
+    public Quaternion(QuaternionD q) {
+        this.w = (float)q.w;
+        this.x = (float)q.x;
+        this.y = (float)q.y;
+        this.z = (float)q.z;
+    }
 
     public Quaternion add(Quaternion q) {
         return new Quaternion(x + q.x, y + q.y, z + q.z, w + q.w);

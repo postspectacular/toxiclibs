@@ -119,6 +119,12 @@ public class GVector implements java.io.Serializable, Cloneable {
         };
         length = 2;
     }
+    public GVector(ReadonlyVecD2D v) {
+        values = new double[] {
+                v.x(), v.y()
+        };
+        length = 2;
+    }
 
     /**
      * Constructs a new GVector and copies the initial values from the specified
@@ -133,6 +139,12 @@ public class GVector implements java.io.Serializable, Cloneable {
         };
         length = 3;
     }
+    public GVector(ReadonlyVecD3D v) {
+        values = new double[] {
+                v.x(), v.y(), v.z()
+        };
+        length = 3;
+    }
 
     /**
      * Constructs a new GVector and copies the initial values from the specified
@@ -142,6 +154,12 @@ public class GVector implements java.io.Serializable, Cloneable {
      *            the source for the new GVector's initial values
      */
     public GVector(ReadonlyVec4D v) {
+        values = new double[] {
+                v.x(), v.y(), v.z(), v.w()
+        };
+        length = 4;
+    }
+    public GVector(ReadonlyVecD4D v) {
         values = new double[] {
                 v.x(), v.y(), v.z(), v.w()
         };

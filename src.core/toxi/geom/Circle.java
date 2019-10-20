@@ -114,6 +114,9 @@ public class Circle extends Ellipse {
     public Circle(Circle c) {
         this(c, c.radius.x);
     }
+    public Circle(CircleD cd) {
+        this(new Vec2D((float)cd.x,(float)cd.y), (float)cd.radius.x);
+    }
 
     public Circle(float radius) {
         this(0, 0, radius);
