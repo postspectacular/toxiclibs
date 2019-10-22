@@ -310,6 +310,9 @@ public class Matrix4x4 {
     public Vec3D applyTo(ReadonlyVec3D v) {
         return applyToSelf(new Vec3D(v));
     }
+    public VecD3D applyTo(ReadonlyVecD3D v) {
+        return applyToSelf(new VecD3D(v));
+    }
 
     public Vec3D applyToSelf(Vec3D v) {
         for (int i = 0; i < 4; i++) {
@@ -318,6 +321,14 @@ public class Matrix4x4 {
         }
         v.set((float) temp[0], (float) temp[1], (float) temp[2]).scaleSelf(
                 (float) (1.0 / temp[3]));
+        return v;
+    }
+    public VecD3D applyToSelf(VecD3D v) {
+        for (int i = 0; i < 4; i++) {
+            double[] m = matrix[i];
+            temp[i] = v.x * m[0] + v.y * m[1] + v.z * m[2] + m[3];
+        }
+        v.set(temp[0], temp[1], temp[2]).scaleSelf((1.0 / temp[3]));
         return v;
     }
 
@@ -330,6 +341,9 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 getRotatedAroundAxis(ReadonlyVec3D axis, double theta) {
+        return new Matrix4x4(this).rotateAroundAxis(axis, theta);
+    }
+    public Matrix4x4 getRotatedAroundAxis(ReadonlyVecD3D axis, double theta) {
         return new Matrix4x4(this).rotateAroundAxis(axis, theta);
     }
 
@@ -485,14 +499,21 @@ public class Matrix4x4 {
         return this;
     }
 
-    public Matrix4x4 lookAt(ReadonlyVec3D eye, ReadonlyVec3D target,
-            ReadonlyVec3D up) {
+    public Matrix4x4 lookAt(ReadonlyVec3D eye, ReadonlyVec3D target, ReadonlyVec3D up) {
         Vec3D f = eye.sub(target).normalize();
         Vec3D s = up.cross(f).normalize();
         Vec3D t = f.cross(s).normalize();
         return set(s.x, s.y, s.z, -s.dot(eye), t.x, t.y, t.z, -t.dot(eye), f.x,
                 f.y, f.z, -f.dot(eye), 0, 0, 0, 1);
     }
+    public Matrix4x4 lookAt(ReadonlyVecD3D eye, ReadonlyVecD3D target, ReadonlyVecD3D up) {
+        VecD3D f = eye.sub(target).normalize();
+        VecD3D s = up.cross(f).normalize();
+        VecD3D t = f.cross(s).normalize();
+        return set(s.x, s.y, s.z, -s.dot(eye), t.x, t.y, t.z, -t.dot(eye), f.x,
+                f.y, f.z, -f.dot(eye), 0, 0, 0, 1);
+    }
+
 
     public Matrix4x4 multiply(double factor) {
         return new Matrix4x4(this).multiply(factor);
@@ -566,6 +587,21 @@ public class Matrix4x4 {
                 t * z * z + c, 0, 0, 0, 0, 1);
         return this.multiplySelf(TEMP);
     }
+    public Matrix4x4 rotateAroundAxis(ReadonlyVecD3D axis, double theta) {
+        double x, y, z, s, c, t, tx, ty;
+        x = axis.x();
+        y = axis.y();
+        z = axis.z();
+        s = Math.sin(theta);
+        c = Math.cos(theta);
+        t = 1 - c;
+        tx = t * x;
+        ty = t * y;
+        TEMP.set(tx * x + c, tx * y + s * z, tx * z - s * y, 0, tx * y - s * z,
+                ty * y + c, ty * z + s * x, 0, tx * z + s * y, ty * z - s * x,
+                t * z * z + c, 0, 0, 0, 0, 1);
+        return this.multiplySelf(TEMP);
+    }
 
     /**
      * Applies rotation about X to this matrix.
@@ -617,6 +653,9 @@ public class Matrix4x4 {
     public Matrix4x4 scale(ReadonlyVec3D scale) {
         return new Matrix4x4(this).scaleSelf(scale.x(), scale.y(), scale.z());
     }
+    public Matrix4x4 scale(ReadonlyVecD3D scale) {
+        return new Matrix4x4(this).scaleSelf(scale.x(), scale.y(), scale.z());
+    }
 
     public Matrix4x4 scaleSelf(double scale) {
         return scaleSelf(scale, scale, scale);
@@ -629,6 +668,9 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 scaleSelf(ReadonlyVec3D scale) {
+        return scaleSelf(scale.x(), scale.y(), scale.z());
+    }
+    public Matrix4x4 scaleSelf(ReadonlyVecD3D scale) {
         return scaleSelf(scale.x(), scale.y(), scale.z());
     }
 
@@ -789,6 +831,11 @@ public class Matrix4x4 {
         return new Matrix4x4(this).translateSelf(trans.x(), trans.y(),
                 trans.z());
     }
+    public Matrix4x4 translate(ReadonlyVecD3D trans) {
+        return new Matrix4x4(this).translateSelf(trans.x(), trans.y(),
+                trans.z());
+    }
+
 
     public Matrix4x4 translateSelf(double dx, double dy, double dz) {
         TEMP.identity();
@@ -799,6 +846,10 @@ public class Matrix4x4 {
     public Matrix4x4 translateSelf(ReadonlyVec3D trans) {
         return translateSelf(trans.x(), trans.y(), trans.z());
     }
+    public Matrix4x4 translateSelf(ReadonlyVecD3D trans) {
+        return translateSelf(trans.x(), trans.y(), trans.z());
+    }
+
 
     /**
      * Converts the matrix (in-place) between column-major to row-major order
