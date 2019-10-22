@@ -36,6 +36,8 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 import toxi.geom.Vec3D;
+import toxi.geom.VecD3D;
+import toxi.geom.mesh.FaceD;
 
 /**
  * A simple, but flexible and memory efficient exporter for binary STL files.
@@ -63,10 +65,10 @@ public class STLWriter {
     public static final int DEFAULT_BUFFER = 0x10000;
 
     protected OutputStream ds;
-    protected byte[] buf = new byte[4];
+    protected byte[] buf = new byte[8];
     protected int bufferSize;
 
-    protected Vec3D scale = new Vec3D(1, 1, 1);
+    protected VecD3D scale = new VecD3D(1, 1, 1);
     protected boolean useInvertedNormals = false;
 
     protected STLColorModel colorModel;
@@ -113,6 +115,9 @@ public class STLWriter {
     public void face(Vec3D a, Vec3D b, Vec3D c) {
         face(a, b, c, DEFAULT_RGB);
     }
+    public void faceD(VecD3D a, VecD3D b, VecD3D c) {
+        faceD(a, b, c, DEFAULT_RGB);
+    }
 
     public void face(Vec3D a, Vec3D b, Vec3D c, int rgb) {
         Vec3D normal = b.sub(a).crossSelf(c.sub(a)).normalize();
@@ -120,6 +125,13 @@ public class STLWriter {
             normal.invert();
         }
         face(a, b, c, normal, rgb);
+    }
+    public void faceD(VecD3D a, VecD3D b, VecD3D c, int rgb) {
+        VecD3D normal = b.sub(a).crossSelf(c.sub(a)).normalize();
+        if (useInvertedNormals) {
+            normal.invert();
+        }
+        faceD(a, b, c, normal, rgb);
     }
 
     public void face(Vec3D a, Vec3D b, Vec3D c, Vec3D normal, int rgb) {
@@ -139,6 +151,23 @@ public class STLWriter {
             e.printStackTrace();
         }
     }
+    public void faceD(VecD3D a, VecD3D b, VecD3D c, VecD3D normal, int rgb) {
+        try {
+            writeVectorD(normal);
+            // vertices
+            writeScaledVectorD(a);
+            writeScaledVectorD(b);
+            writeScaledVectorD(c);
+            // vertex attrib (color)
+            if (rgb != DEFAULT_RGB) {
+                writeShort(colorModel.formatRGB(rgb));
+            } else {
+                writeShort(colorModel.getDefaultRGB());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private final void prepareBuffer(int a) {
         buf[3] = (byte) (a >>> 24);
@@ -147,11 +176,18 @@ public class STLWriter {
         buf[0] = (byte) (a & 0xff);
     }
 
+
     public void setScale(float s) {
+        scale.set(s, s, s);
+    }
+    public void setScaleD(double s) {
         scale.set(s, s, s);
     }
 
     public void setScale(Vec3D s) {
+        scale.set(s);
+    }
+    public void setScaleD(VecD3D s) {
         scale.set(s);
     }
 
@@ -163,7 +199,7 @@ public class STLWriter {
         prepareBuffer(Float.floatToRawIntBits(a));
         ds.write(buf, 0, 4);
     }
-
+ 
     protected void writeHeader(int num) throws IOException {
         byte[] header = new byte[80];
         colorModel.formatHeader(header);
@@ -178,9 +214,18 @@ public class STLWriter {
 
     protected void writeScaledVector(Vec3D v) {
         try {
-            writeFloat(v.x * scale.x);
-            writeFloat(v.y * scale.y);
-            writeFloat(v.z * scale.z);
+            writeFloat((float)(v.x * scale.x));
+            writeFloat((float)(v.y * scale.y));
+            writeFloat((float)(v.z * scale.z));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void writeScaledVectorD(VecD3D v) {
+        try {
+            writeFloat((float)(v.x * scale.x));
+            writeFloat((float)(v.y * scale.y));
+            writeFloat((float)(v.z * scale.z));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,6 +242,15 @@ public class STLWriter {
             writeFloat(v.x);
             writeFloat(v.y);
             writeFloat(v.z);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void writeVectorD(VecD3D v) {
+        try {
+            writeFloat((float)(v.x));
+            writeFloat((float)(v.y));
+            writeFloat((float)(v.z));
         } catch (IOException e) {
             e.printStackTrace();
         }

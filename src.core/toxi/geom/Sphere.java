@@ -63,6 +63,9 @@ public class Sphere extends Vec3D implements Shape3D {
     public Sphere(Sphere s) {
         this(s, s.radius);
     }
+    public Sphere(SphereD s) {
+        this(new Vec3D((float)s.x,(float)s.y,(float)s.z), (float)s.radius);
+    }
 
     public boolean containsPoint(ReadonlyVec3D p) {
         float d = this.sub(p).magSquared();

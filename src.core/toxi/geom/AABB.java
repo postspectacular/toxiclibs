@@ -102,6 +102,16 @@ public class AABB extends Vec3D implements Shape3D {
     public AABB(AABB box) {
         this(box, box.getExtent());
     }
+    
+    /**
+     * Creates an independent copy of the passed in boxD
+     * 
+     * @param box
+     */
+    public AABB(AABBD boxd) {
+    	this(new Vec3D((float)boxd.x,(float)boxd.y,(float)boxd.z),new Vec3D(boxd.getExtent()));
+    	System.out.println("min="+min+" max="+max);
+    }
 
     /**
      * Creates a new box of the given size at the world origin.
@@ -559,8 +569,12 @@ public class AABB extends Vec3D implements Shape3D {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("<aabb> pos: ").append(super.toString()).append(" ext: ")
-                .append(extent);
+        //sb.append("<aabb> pos: ").append(super.toString()).append(" ext: ").append(extent);
+        sb.append(  "<aabb> pos: ").append(super.toString())
+          .append("\n       ext: ").append(extent)
+          .append("\n       min: ").append(getMin())
+          .append("\n       max: ").append(getMax())
+        ; 
         return sb.toString();
     }
 

@@ -35,9 +35,7 @@ public class IsectData2D {
     public ReadonlyVec2D dir;
     public ReadonlyVec2D normal;
 
-    public IsectData2D() {
-
-    }
+    public IsectData2D() {}
 
     public IsectData2D(IsectData2D isec) {
         isIntersection = isec.isIntersection;

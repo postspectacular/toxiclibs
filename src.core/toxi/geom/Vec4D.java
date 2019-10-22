@@ -60,6 +60,12 @@ public class Vec4D implements ReadonlyVec4D, Cloneable {
         this.z = z;
         this.w = w;
     }
+    public Vec4D(VecD4D v) {
+        this.x = (float)v.x;
+        this.y = (float)v.y;
+        this.z = (float)v.z;
+        this.w = (float)v.w;
+    }
 
     public Vec4D(ReadonlyVec3D v, float w) {
         this.x = v.x();
